@@ -1,7 +1,7 @@
 {
     "name": "All About Ken",
     "short_name": "AllAboutKen",
-    "start_url": ".",
+    "start_url": "/",
     "display": "minimal-ui",
     "description": "Me me me me. I do web architecture.",
     "icons": [
