@@ -1,4 +1,5 @@
 ---
+title: Hello
 subtitle: No homepage, yet.
 date: 2018-08-22 12:24:50
 layout: layouts/base.njk
@@ -12,77 +13,83 @@ templateEngineOverride: njk, md
   ]
 } %}
 
-<section class="embl-grid embl-grid--has-centered-content">
-  <div>
-    <!-- empty -->
-  </div>
-  <div class="vf-content">
-  {% markdown %}
+{% markdown %}
+<div class="padding-top-xlarge">
 
-  ## Quickstart
-
-  ```
-
-      yarn create @visual-framework/vf-eleventy your-new-site-name vf-eleventy   
-
-  ```
-
-  This will install a new [`vf-eleventy`](https://github.com/visual-framework/vf-eleventy/) to a folder named `your-new-site-name`.
-
-  Then follow the onscreen prompts and links below to develop and configure.
-
-  ## Longer install?
-
-  The above too easy or have questions? [Read this guide](https://github.com/visual-framework/vf-eleventy#1-creating-a-new-project-powered-by-vf-eleventy).
-
-  {% endmarkdown %}
-
-  </div>
-</section>
-
-
-<section class="vf-intro | embl-grid embl-grid--has-centered-content">
-
-<div>
-  <!-- empty -->
-</div>
-<div class="vf-content">
-
-## What you get
-
-- the Eleventy static site generator
-- access to the Visual Framework component system
-
-### Component installation
-
-To add a component you can use npm/Yarn or install it manually.
-
-In either case you'll need to re-run `gulp dev` to ensure the component is fully loaded.
-
-- installation: `yarn add @visual-framework/vf-logo`
-- updating: `yarn upgrade-interactive --latest`
-
-### Manual installation for customisation
-
-1. Download a pattern
-2. Copy it to `./src/components/vf-component-name`
-
-### Add your own local component
-
-You can add a custom VF-compatible component to `./src/components` and use it in
-your site.
-
-- `gulp vf-component`
-
-You'll find a `vf-sample` component there, we've used it below:
-
-<div class="vf-box">
-{% verbatim %}
-Code: {% render "@vf-sample", {text: "with some text"} %}
-{% endverbatim %}
-
-Returns: {% render "@vf-sample", {text: "with some text"} %}
+<div class="padding-top-xlarge padding-bottom-medium margin-bottom-xlarge">
+<h1 class="margin-top-none margin-bottom-none tight-leading">Hello.
+  <small>I am Ken Hawkins.</small>
+</h1>
 </div>
 
+- **I am a deep thinker:**
+  I have a strong conceptual background from years of crafting deadline-driven data-heavy infographics for newspapers,  online publications driven by data and inovating marketing and tracking tools.
+
+- **These are my descriptors:**
+  Creator of websites, information architect, data geek, designer, newspaper nerd, lover of UX, consultant,  [information acrobat](https://twitter.com/euroia/status/912695523118927873).
+  
+- **These are my methodologies:**
+  Content modelling, design thinking, content structure and organisation, responsive design, analytics and metrics, principles of graphing, user centred design, user stories, user behaviour, Kanban.
+{% endmarkdown %}
+
+<div class="padding-top-xlarge padding-bottom-medium margin-bottom-xlarge">
+<h2 class="margin-top-none margin-bottom-none tight-leading">Concisely: <small>Ken Hawkins,</small> <small>Web Design Architect.</small>
+</h2>
 </div>
-</section>
+
+<hr/>
+
+<div class="margin-top-xlarge">
+<h2 class="margin-top-none margin-bottom-none">Say hello<small class="">, dig deeper <span class="emoji">⤵</span></small>
+</h2>
+</div>
+
+<div class="grid-x grid-padding-x small-up-1 medium-up-4 padding-top-xlarge padding-bottom-xlarge">
+<div class="cell">
+<a class="block only-hover" href="{{root}}/blog">
+{% markdown %}
+- **<h3 class="emoji">📝</h3> My blog:**
+  If I've made something interesting and had a bit of time, I've hopefully done a post on it.
+
+  
+{% endmarkdown %}
+</a>
+&nbsp; &nbsp; &nbsp;<a href="{{root}}/rss.xml"><span class="emoji">📬</span> Get the RSS feed</a>
+</div>
+<div class="cell">
+{% markdown %}
+- **<h3 class="emoji">👋</h3> Social connections:**
+  - [Twitter @khawkins98](https://twitter.com/khawkins98): A bit of focus on design and the web, with a healthy dose of griping and trivia.
+  - [LinkedIn](https://www.linkedin.com/in/allaboutken): Let's swap virtual business cards.
+{% endmarkdown %}
+</div>
+<div class="cell">
+<a class="block only-hover" href="mailto:khawkins98@gmail.com">
+{% markdown %}
+- **<h3 class="emoji">📧</h3>khawkins98@gmail.com:**
+  Happy to take an e-mail about projects or to just say hello.
+{% endmarkdown %}
+</a>
+</div>
+<div class="cell">
+<a class="block only-hover" href="{{root}}cv">
+{% markdown %}
+- **<h3 class="emoji">ℹ️</h3> Want more details?**
+  Have a read of my CV.
+{% endmarkdown %}
+</a>
+</div>
+</div>
+
+<div class="cell">
+
+{% markdown %}
+- **<h3 class="emoji">🍻</h3> Or, beer:** If you're passing through Heidelberg, <a class="readmore" href="https://www.destilleonline.de/" target="_blank">let's grab a beer</a>
+{% endmarkdown %}
+</div>
+
+
+{% markdown %}
+
+
+{% endmarkdown %}
