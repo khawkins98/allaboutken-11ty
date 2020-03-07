@@ -10,7 +10,7 @@ layout: layouts/post.njk
 
 {# {{ siteConfig.short_description | safe }} #}
 
-{%- for post in collections.posts %}
+{%- for post in collections.posts | sort(true, true, attribute='date' ) %}
 
 <article class="vf-summary vf-summary--news">
   <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
@@ -27,7 +27,7 @@ layout: layouts/post.njk
       <p class="vf-summary__date">06 February 2018</p>
       <a href="JavaScript:Void(0);" class="vf-summary__link">Leave Comment</a>
   </div> #}
-  <p class="vf-summary__text">{{ post.data.teaser }}
+  <p class="vf-summary__text">{{ post.data.teaser | safe }}
 </p>
 
 </article>
