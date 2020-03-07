@@ -5,15 +5,18 @@ layout: layouts/post.njk
 #templateEngineOverride: njk, md
 ---
 {% set siteConfig = siteConfig.siteInformation %}
-# {{ siteConfig.title }} blog
 
-{{ siteConfig.short_description | safe }}
+# Ken Hawkins' blog
+
+{# {{ siteConfig.short_description | safe }} #}
 
 {%- for post in collections.posts %}
 
 <article class="vf-summary vf-summary--news">
   <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
-  <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image | url }}" alt="">
+  <a class="vf-summary__image" href="{{ post.url | url}}">
+    <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image | url }}" alt="{{ post.data.teaser }}" />
+  </a>
 
   <h3 class="vf-summary__title">
     <a href="{{ post.url | url}}" class="vf-summary__link">{{ post.data.title }}</a>
