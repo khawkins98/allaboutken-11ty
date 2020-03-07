@@ -1,0 +1,252 @@
+---
+title: "Introducing the Content-Action Model for Web Systems"
+layout: layouts/post.njk
+teaser: "Wiring ‘ugly truth’ UX diagnostics for better web strategy & IA."
+image: "/blog/drill-bits.jpg"
+date: 2018-01-22
+url: /posts/20180122-content-action-model.html
+active_path: blog
+topics:
+  - CAM for Web Systems, introducing
+---
+
+<style>ol ol { list-style-type: lower-alpha; } #main-content-area li { margin-bottom: .5rem; } p, li { max-width: 800px; } .card {color: #555; }</style>
+
+<div class="medium-12 cell padding-top-large">
+<div class="">
+
+{% markdown %}
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+  <figure class="large-10 medium-8 cell callout"><img class="padding-bottom-medium" src="{{root}}images/original/blog/drill-bits.jpg" />
+    <cite class="text-right">Thanks to Ian D. Keating for the Image of drill bits [<a href="https://www.flickr.com/photos/ian-arlett/16451711088">CC License</a>]</cite>
+    <figcaption>Content, IA and UX professionals are spoiled for choice when it comes to tooling. But we need to be clear about which ones are right for the job — and that means distilling our intentions.</figcaption>
+  </figure>
+</div>
+
+{{ date | dateDisplay }}&nbsp; &nbsp;
+
+<div class="grid-x">
+<div class="large-11 medium-12 cell">
+<h1>{{title}}</h1>
+</div>
+</div>
+
+<p class="lead">{{teaser}}</p>
+
+<!-- - Content goals: connecting the dots
+- Better layouts: using the right components
+- Redundancies: annoying, yet useful
+- Answers: To what questions?
+ -->
+
+Gleaning truth about what should be done — and undone — on our websites is the central quest of website strategy. There are many roads to the destination, and an arsenal of tools to make the journey smoother:
+
+<figure class="">
+<figcaption><h3 style="color:#fff;">Our diagnostic tools</h3></figcaption>
+
+<div class="grid-x grid-padding-x small-up-2 medium-up-3">
+  <div class="cell"><div class="card"><div class="card-section">
+    Surveys
+  </div></div></div>
+  <div class="cell"><div class="card"><div class="card-section">
+    anecdotal feedback
+  </div></div></div>
+  <div class="cell"><div class="card"><div class="card-section">
+    user journeys
+  </div></div></div>
+  <div class="cell"><div class="card"><div class="card-section">
+    metrics (i.e. Google Analytics)
+  </div></div></div>
+  <div class="cell"><div class="card"><div class="card-section">
+    you get the idea …
+  </div></div></div>
+</div>
+</figure>
+
+Our diagnostic tools are all-important methods towards achieving implementations, and optimising them. But just as you don’t start a quest by buying shoes, you need to take a step back before jumping into your Big Website Fix. Strategy — motivation, destination, and intent — is a much better place to begin a journey of discovery.
+
+<figure class="">
+<figcaption><h3 style="color:#fff;">Building a better journey</h3></figcaption>
+
+<div class="grid-x grid-padding-x small-up-1 medium-up-3">
+  <div class="cell"><div class="card"><div class="card-section">
+    <span class="h5">Strategy <span class="emoji">➡️</span></span>
+    <ul class="padding-top-large">
+      <li>Organisational direction</li>
+      <li>in-person interviews</li>
+      <li>big ideas&#8482;</li>
+      <li>…</li>
+    </ul>
+  </div></div></div>
+  <div class="cell"><div class="card"><div class="card-section">
+    <span class="h5">Diagnotic tools <span class="emoji">➡️</span></span>
+    <ul class="padding-top-large">
+      <li>Surveys</li>
+      <li>anecdotal feedback</li>
+      <li>metrics</li>
+      <li>…</li>
+    </ul>
+  </div></div></div>
+  <div class="cell"><div class="card"><div class="card-section">
+    <span class="h5">Evaluation <span class="emoji">↩</span></span>
+  </div></div></div>
+</div>
+</figure>
+
+This journey to better IA to in turn better the user experience must be built on a clear strategy, otherwise we risk losing our way. To enrich the wider strategy, and make the journey go well, we need to know when to use which diagnostic tools.
+
+<!-- We know a bit about our diagnostic tools, but what's happening in those strategy and evaluation boxes? -->
+
+## Let’s go.
+
+I’m the Web Design Architect for the European Bioinformatics Institute ([EMBL-EBI](https://www.ebi.ac.uk/)). This is a not-for-profit institute that serves data to all of the world’s life-science research communities, so it has a lot of different goals.
+
+Building consensus on the direction and evolution of the core website is not a one-off thing. It is a long-term, complex relationship amongst people with different priorities and perspectives, and demands communication tools that are fit for purpose.
+
+The main tool I’ve been working on to achieve this is our “Content-Action Method for Web Systems”. It helps decision-making on all levels, from layout adjustment to microsite building. (In the Web Development team we call it just the D.A.M. for Web Systems, or CAM for short, because shortening things is our culture, for better or worse.)
+
+{% endmarkdown %}
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+<div class="callout cell medium-6 small-10">
+{% markdown %}
+## Origin story?
+
+This method began after using Core Content Model methods — those were great, but not quite what we needed. For more about how the CAM method relates and doesn’t relate, check out the aside post: “[Beyond the Core Content Model](20180122-content-action-model-origin-story.html)”.
+{% endmarkdown %}
+</div>
+</div>
+
+{% markdown %}
+## How we use CAM for Web Systems
+
+We use CAM for Web Systems to clearly model:
+
+1. **Needs:** The organisation’s and our target users’
+2. **Content:** What it is, and what it isn’t
+3. **Users:** Who is visiting us now, and who we would like to join the party
+4. **Connections, paths, actions:** Wherever they are needed
+5. **Meta stuff:** Various contextual information about a model that helps us understand the affordances in motion
+
+We isolate each component as an individual item, then tie and untie them in the same conversation.
+At EMBL-EBI we use the CAM for Web Systems to compare peer concerns. This goes a long way to helping people understand one another, and the sometimes conflicting frustrations/desires/priorities of user communities. In other words, this is a discussion tool to reach agreement.
+
+We then record our shared understanding for future discussions and development work. Distilling our intentions in the CAM for Web Systems allows us to build our analytics appropriately, capturing metrics that are truly useful for understanding user journeys. Even documenting disagreements shows our reasoning clearly.
+
+Once we isolate ‘purpose’ (n.b. this is harder than it looks), we can test, evaluate, and iterate.
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+<figure class="callout large-12 cell">
+<img src="{{root}}images/original/blog/cam-process.svg" />
+<figcaption><strong>Figure 1.</strong> What CAM for Web Systems looks like in my brain: a riff on the <a href="https://www.designcouncil.org.uk/news-opinion/design-process-what-double-diamond">Double Diamond</a>.
+</figcaption>
+</figure>
+</div>
+
+## <a name="collect" href="#collect">What we collect in the CAM Record, and why</a>
+
+### <a name="in-a-record" href="#in-a-record">CAM for Web Systems contents</a>
+
+1. **Organisational documentation:** a firm organisational record about the agreed purpose of a portion of a website (such as an /about section)
+1. **Itemisation of components and actions:** specific components for each section; including:
+1. **Overall purpose:** informed by organisational priorities and UX research
+    1. URLs
+    1. Goals (user and organisation)
+    1. User types (prioritised)
+    1. Content (and who will make it)
+    1. Preceding and following actions (what pages and actions)
+    1. Organisational placement (which parts of the organisation are surfaced)
+    1. Organisation purpose (how does the content map to overall mission purposes in tone or external focus)
+    1. Content owner (who is “responsible” for the content overall)
+1. **Relations between components:** which user types are seeking this goal, and which content supports it?
+1. **Relations across CAM Records:** how this content relates to the content, goals or users in other parts of the website (e.g. jobs page). This exposes areas that may need new CAM for Web Systems record.
+1. **Record of change and knowledge transfer:** to avoid repeating previous missteps, and enable knowledge handover. The importance of capturing this cannot be overstated.
+1. **Truth through perspectives:** by asking the same question from many different perspectives, expose gaps/missed opportunities (e.g. website content, external content) or prioritise areas for improvement (e.g. page components that are surplus to requirements).
+
+### <a name="comparing" href="#comparing">Comparing CAM records</a>
+
+By collecting information consistently, we give ourselves — and our successors — clarity on how things have taken shape, what problems have been solved and what is in the pipeline (where the bodies are buried, essentially).
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+<figure class="callout large-12 cell">
+<img src="{{root}}images/original/blog/cam-logic-model.svg" />
+<figcaption><strong>Figure 2.</strong> Logic model: Comparing different CAM records.
+</figcaption>
+</figure>
+</div>
+
+### <a name="example" href="#example">Example: Components of a ‘Contact us’ system</a>
+
+Creating a network of CAM Records can pay dividends, as it reveals fragment goals, content and user types. A common diagnostic evaluation:
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+<figure class="callout large-12 cell">
+<img src="{{root}}images/original/blog/cam-flow.svg" />
+<figcaption><strong>Figure 3.</strong> Output of a CAM Record’s content, goals and users for a “Contact us” system.
+</figcaption>
+</figure>
+</div>
+
+In this simplified “Contact us” page for a shop, you can see clearly that the Twitter feed content needs looking at.
+
+This CAM Record shows:
+
+- the Twitter feed is superfluous to perceived requirements
+- we’ve missed a goal or user type
+
+So we can prioritise looking at the Twitter feed to see if people are using it. Then we can either strike it, or delve into which of our customers are utilising it, and why.
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+<figure class="callout large-12 cell">
+<img src="{{root}}images/original/blog/cam-flow-addition.svg" />
+<figcaption><strong>Figure 4.</strong> A content fragment often allows us to clearly identify a missed use case.
+</figcaption>
+</figure>
+</div>
+
+## <a name="using" href="#using">Where and when to use</a>
+
+<p class="lead">By modelling our systems consistently, we routinely surface and resolve logic issues.</p>
+
+ The CAM method allows us to develop hypotheses more clearly, and expose important knowledge gaps. This allows us to construct a shared narrative with legitimacy within the organisation, allowing us to cooperate as a group and avoid internal nitpicking.
+
+In the ‘Contact us’ example, looking closely at how people used the Twitter feed (which seemed superfluous) allowed us to add a new, validated goal: “Get info on sales and last-minute updates”. Very handy. But is that a genuine need of our two user types?
+
+Our framework allows us to see and prioritise areas we need to investigate. It helps us articulate our questions, and select the right tools to investigate and test our hypotheses.
+
+Importantly, we can share our findings easily with one another, and feed them back into iterations of the model. By doing so, we are continually improving the model and making it easier to **make decisions based on evidence**.
+
+## What’s next for the CAM for Web Systems?
+
+<p class="lead">This is the first of what I hope will be many posts exploring this new approach.</p>
+
+Depending on feedback on this post, and developments in our many digital communications fora, I’ll be writing about:
+
+- **CAM in Action:** A how-to on getting started with this methodology.
+- **Visualising insights:** A dashboard to give knowledgeable stakeholders a ‘forest from the trees’ view on our strategy, interconnected content and user activity;
+- **Goal-driven metrics:** Looking beyond page views, and using our CAM for Web Systems to capture metrics of success and failure that relate directly to our objectives;
+- **Programmatic solutions:** Going beyond paper, manipulating our data in lightweight databases like [Coda](https://coda.io/) and surfacing in-context through [RDFa in our website HTML markup](http://gavin.carothers.name/2009/08/13/trying-to-understand-microdata-rdfa/);
+- **Specialising:** How we take the general model and adapt it to bespoke use cases, such as EMBL-EBI’s free-to-use [scientific data services](https://www.ebi.ac.uk/services);
+- **UX + the CAM:** What does it mean to 'do UX' with our Content Action Model? Beyond the buzz.
+  - **Published**: [read it here](20180207-discovery-and-analysis.html).
+
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+<figure class="callout large-12 cell">
+<img src="https://lh3.googleusercontent.com/KlmXDvhCSpJZMslp4aimbVVe1IPSeSSAOqTvx1D_OcTMbYQcIBxJqeYKk4uuIuGk4LdsNwfU-mf5kt63GVk_PiNjV_o6Jx9UjqrNU_XXRiL2IJ7-2-cdYX07lAe57995wJ_04JJ1" />
+<figcaption><strong>Figure 5.</strong> The goal: clearly see and show connections to power dashboards and gather new insights.</figcaption>
+</figure>
+</div>
+
+## <a name="kudos" href="#kudos">Kudos in particular to this post</a>
+
+For the growth of this CAM method, I owe thanks to many for inspiration, support and indulgence. But to the writing of this article, I'd like to pass on some specific thanks:
+
+- **Mary Todd-Bergman** (<a href="https://twitter.com/themarytodd"><span class="emoji">🐦</span> @themarytodd</a>): For editing this, sure, but also for on-going support, testing and sounding-out of this approach.
+- **Ivan Labra** (<a href="https://twitter.com/ilabra"><span class="emoji">🐦</span> @ilabra</a>): For bouncing ideas about what I’m really getting at here and getting my speak out of the organisational bubble.
+
+
+If you're also interested in chatting about this evolving model or improving it: <a href="https://twitter.com/khawkins98"><span class="emoji">🐦</span> @khawkins98</a>
+{% endmarkdown %}
+</div>
+</div>

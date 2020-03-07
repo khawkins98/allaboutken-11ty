@@ -1,0 +1,102 @@
+---
+title: Muliple IPs on an Ubuntu EC2 VPC? Yes, please!
+teaser: "Configuring a second ethernet adapter on an Ubuntu EC2 VPC instance."
+image: "/blog/ethernet.jpg"
+date: 2013-06-12
+layout: layouts/post.njk
+oldurl: http://work.allaboutken.com/node/21
+url: /posts/20130612-ubuntu-ips-ec2-multiple.html
+active_path: blog
+---
+<div class="padding-top-xlarge"></div>
+<div class="columns medium-12">
+<img class="callout" src="{{root}}images/crop-cinema{{image}}" />
+
+{% markdown %}
+
+{{ date | dateDisplay }}
+
+# {{title}}
+
+<p class="lead">Subtitled: Configuring a second ethernet adapter on an Ubuntu EC2 VPC instance</p>
+
+If you're wanting to have multiple valid SSL certificates for many domains (say, for Drupal a multisite running on Aegir) on a single EC2 instance you'll, of course, need multiple IP addresses. While Amazon's VPC offerings seem like an easy win there are a few twists to get the server to respond to that second internal IP.
+
+Here are my notes, hopefully they'll be of some use to you. You might not need to do all of these, but I've found things to work better this way. These steps were used on Ubuntu 12.04 in June 2012 — things can change.
+
+> **Get set up:**
+- Have one unique internal IP address (10.0.0.70, 10.0.0.80, etc) per network adapter
+- Map the Elastic IP addresses to your internal IP
+- I'm running Aegir and needed to map the Apache server not to the public IP used for the domain name, but the private internal IP address
+
+Once you've done the the above, you'll likely find the server working fine on the first IP address but not responding on the second.
+
+Here's what to do next:
+
+1. In the Amazon VPC Route Table console ensure you have a route entry for 0.0.0.0/0 using your IGW (this will look like igw-xxxxxx)
+1. SSH into your server
+1. If not root: `sudo su - root`
+1. Initialize your secondary ethernet interface (don't do this for `eth0`)
+  - `ifconfig eth1 10.0.0.YOURIPHERE netmask 255.255.255.0`
+1. Set up your interfaces
+  - <code>vi /etc/network/interfaces</code>
+- For each adapter add (changing "1" for your adapter)
+  - `auto eth1`
+  - `iface eth1 inet dhcp`
+- Start each adapter <code>ifup eth1</code>
+- We should be able to <code>ifconfig</code> and see the ethernet adapters up
+- Reboot
+  - <code>init 6</code>
+- SSH into your server, become root
+- For each ethernet adapter follow this pattern:
+  - `ip route add default via 10.0.0.1 dev eth0 tab 1`
+  - `ip route add default via 10.0.0.1 dev eth1 tab 2`
+  - Similarly:
+    - `ip rule add from 10.0.0.170/32 tab 1 priority 500`
+    - `ip rule add from 10.0.0.190/32 tab 2 priority 600`
+
+### Almost done
+Good news is it works at this point, bad news is the ip routes and rules won't survive a reboot.
+
+Let's make changes survive a reboot:
+- Return to `vi /etc/network/interfaces`; our file should look like:
+  ```
+  # The loopback network interface
+  auto lo
+  iface lo inet loopback
+  # The primary network interface
+  auto eth0
+  iface eth0 inet dhcp
+  auto eth1
+  iface eth1 inet dhcp
+  ```
+
+- We modify the above, adding in the ip route and ip rule commands from before, but prefixing them with "post-up", like so:
+```
+# The loopback network interface
+auto lo
+iface lo inet loopback
+# The primary network interface
+auto eth0
+iface eth0 inet dhcp
+  post-up ip route add default via 10.0.0.1 dev eth0 tab 1
+  post-up ip rule add from 10.0.0.170/32 tab 1 priority 500
+auto eth1
+iface eth1 inet dhcp
+  post-up ip route add default via 10.0.0.1 dev eth1 tab 2
+  post-up ip rule add from 10.0.0.190/32 tab 2 priority 600
+```
+
+Now reboot `/etc/init.d/networking restart`
+
+All set!
+
+#### Related reading and things that helped me:
+
+- AWS Forums: <a href="https://forums.aws.amazon.com/message.jspa?messageID=404454">Unable to connect to EC2 instance in VPC</a>
+- Getting ip rules and routes to work on reboot: <a href="http://www.cyberciti.biz/faq/ubuntu-linux-add-static-routing/">Ubuntu Linux Add Static Route</a>
+- Video on EC2 VPC multiple IP basics: <a href="http://www.youtube.com/watch?v=Z_MWQ75GtvE">How to add extra IP addresses on one EC2 Instance</a>
+
+<cite>Image credit: <a href="https://www.flickr.com/photos/tueksta/839920747#">Flickr user "Andreas Beer"</a></cite>
+{% endmarkdown %}
+</div>

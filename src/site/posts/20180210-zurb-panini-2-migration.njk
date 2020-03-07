@@ -1,0 +1,149 @@
+---
+title: "Migrating to Zurb Panini 2.0"
+layout: layouts/post.njk
+teaser: "Not yet stable yet, but has some compelling features."
+image: "/blog/panini.jpg"
+date: 2018-02-10
+url: /posts/20180210-zurb-panini-2-migration.html
+active_path: blog
+topics:
+  - Panini
+  - static sites
+---
+
+<div class="medium-12 cell padding-top-large">
+<div class="">
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+  <figure class="large-10 medium-8 cell callout"><img class="padding-bottom-medium" src="{{root}}images/original{{image}}" />
+    <cite class="text-right">Thanks to Flickr user Stephanie Vacher for the image [<a href="https://www.flickr.com/photos/trufflepig/4647966991/">CC License</a>]</cite>
+    <figcaption>2.0 Paninis. Or is it just 2.0 Panini? Paninodes?</figcaption>
+  </figure>
+</div>
+{% markdown %}
+{{ date | dateDisplay }}&nbsp; &nbsp;
+
+<div class="grid-x">
+<div class="large-11 medium-12 cell">
+<h1>{{title}}</h1>
+</div>
+</div>
+
+<p class="lead">{{teaser}}</p>
+
+## Why upgrade to 2.0?
+
+I've been using [Zurb's Panini](https://foundation.zurb.com/sites/docs/panini.html) static site generating template to power this site. On the whole I've generally found it quite good, but there's been a couple rough edges that continued to paper cut when creating content (even though I realise Panini wasn't made with blogging in mind).
+
+One thorny limitation is there's no seamless way to generate a blog index or RSS feed. So in versions 1.X, I had to create and manually maintain a YML file with each blog entry.
+
+Not the end of the world, but it's a copy paste job that would occasionally lead to mistakes and was tedious; an excerpt of my old manually rolled [`data/blog.yml`](https://github.com/khawkins98/allaboutken/commit/4c49c644018c2639248a97f7e0d27bacbc8f2852#diff-1dfd1f9032506bbbc9e863db26d9e115L1) file:
+
+```
+- title: "Actioning web strategy & IA: The Content-Action Method for Web Systems"
+  layout: layouts/post.njk
+  teaser: "A method to distill content and user, organisational goals into an interconnected, holistic practice."
+  image: "/blog/drill-bits.jpg"
+  date: 2018-01-22
+  url: /posts/20180122-content-action-model.html
+```
+
+<br/>And beyond being tedious to create and maintain (copy-pasting each page's meta data), the method only gave me access to [what's in the YML file](https://github.com/khawkins98/allaboutken/commit/e0b010fcc664f61d32cce6f705ffa7d2fc760fec#diff-6a302f810e1ad4a49d70ada8954bfae1L12) — so that meant my RSS feed couldn't have the full blog posts:
+
+```
+{% raw %}
+\{{#each blog}}
+<item>
+  <title>\{{this.title}}</title>
+  <description>\{{this.teaser}}</description>
+  <link>\{{root}}\{{this.url}}</link>
+  <pubDate>\{{this.date}}</pubDate>
+</item>
+\{{/each blog}}
+{% endraw %}
+```
+
+<br/>But, lo! In version 2.0, a new [`\{{pages}}`](https://github.com/zurb/panini/wiki/Panini-2.0-Preview#pages) variable.
+
+```
+{% raw %}
+\{{#each-reverse pages}}
+  \{{#ifequal this.[2].active_path "blog"}}
+<item>
+  <title>\{{this.[2].title}}</title>
+  <description>
+<![CDATA[
+{{#markdown}}
+{{#compileBlogPostForRSS this}}\{{{ ../this }}}\{{/compileBlogPostForRSS}}
+{{/markdown}}
+]]>
+  </description>
+  <link>\{{root}}\{{this.[2].url}}</link>
+  <guid>\{{root}}\{{this.[2].url}}</guid>
+  <pubDate>\{{this.[2].date}}</pubDate>
+</item>
+  \{{/ifequal}}
+\{{/each-reverse}}
+{% endraw %}
+```
+
+<br/>The magic happens in my custom [`{% raw %}{{#compileBlogPostForRSS}}{% endraw %}` helper](https://github.com/khawkins98/allaboutken/blob/master/src/helpers/compileBlogPostForRSS.js), where I pass in the full body of each post and render it as a Handlebars template. Here's [a link to that helper](https://github.com/khawkins98/allaboutken/tree/master/src/helpers).
+
+The approach is slightly messy as I must reach into the second `[2]` spot of each page array, but it does the job. (n.b. This is meant to get better by [changing from an arraay to named object](https://github.com/zurb/panini/issues/155).)
+
+I now use the same approach [to build this site's Blog index](https://github.com/khawkins98/allaboutken/commit/4c49c644018c2639248a97f7e0d27bacbc8f2852#diff-3b336176286e237cdce7379d8db9442bL8).
+
+
+## Upgrading from 1.x to 2.0
+
+<p class="lead">It's not so bad.</p>
+
+Remember [Panini 2.0](https://github.com/zurb/panini/tree/v2.0#panini) isn't finalised yet, but as Zurb [points out](https://github.com/zurb/panini/tree/v2.0#panini):
+
+> It's pretty stable, and if you want to give it a try, we'd love some feedback or bug reports on anything you run into.
+
+Panini 1.X defaulted to use Gulp, and it was what worked best for me. So this guide is from gulp to gulp.
+
+1. Change your `packages.json` to use 2.0: `"panini": "^2.0.0-alpha.2"` (Previously I was using Panini 1.5.1)
+1. In your `gulpfile.js` drop `var panini = require('panini');` and add `const panini = require('panini/gulp');`
+1. Panini now has default expectations about the naming of layouts, partials, etc. So my Gulp Panini task is now just ([diff](https://github.com/khawkins98/allaboutken/commit/ebed803a7b33dedc217f5989614884b318c07596#diff-b9e12334e9eafd8341a6107dd98510c9L13)):
+    ```
+    gulp.task('panini', () => {
+      return panini('src', {
+        // builtins: false,
+        })
+        .pipe(gulp.dest('build'));
+    });
+    ```
+1. If you're using browserlab, `panini.refresh();` is a bit [harder to use](https://github.com/zurb/panini/issues/143#issuecomment-336227418) and is [going away](https://github.com/zurb/panini/issues/151#issuecomment-361343532). Instead my `gulp.watch` task now invokes `panini.create();`. That may not be the most efficient way, but it works.
+1. `#ifequal` is no longer a built in helper, [instead it's `eq`](https://github.com/zurb/panini/wiki/Panini-2.0-Preview#breaking-changes). But I didn't want to find-replace, so I just [added the ifequal helper back](https://github.com/khawkins98/allaboutken/commit/ebed803a7b33dedc217f5989614884b318c07596#diff-49044946986f4680452733de81822145).
+    - Apparently `#ifPage` is also out, but it still seems to be working.
+    - [Here's a short list of documented breaking changes](https://github.com/zurb/panini/wiki/Panini-2.0-Preview#breaking-changes).
+
+### Misc changes
+
+I had to do a few other things that were unique to my setup.
+
+1. I was generating my critical path CSS as a partial called `critical.min.css.html` (<span class="emoji">🚨</span>hack alert). It doesn't seem naming with dots are allowed in partials anymore, so I've called the file `criticalmincss.html`
+    - I also had a page called `rss.xml` that was ignored by Panini. So I named it `rss.html` and move the output to `rss.xml`. THis is meant be changing with [the addition of a `/static` build source](https://github.com/zurb/panini/issues/156).
+1. Previously I didn't have my `layouts,partials,data,pages` under a directory. I moved them to `./src`.
+
+Here's [the commit from my upgrade to 2.0](https://github.com/khawkins98/allaboutken/commit/ebed803a7b33dedc217f5989614884b318c07596).
+
+## Other neat things
+
+I've not yet used these yet, but they look like they'll really extend how long I can use Panini:
+
+- [Localisation and translation](https://github.com/zurb/panini/tree/v2.0#localization)
+- [Inject content into blocks](https://github.com/zurb/panini/tree/v2.0#content-blocks) A bit like inverse partials, you can inject from a local page back into the parent template.
+- The [Handlebars Helpers](https://github.com/helpers/handlebars-helpers) project [is now included](https://github.com/zurb/panini/issues/154), and it brings many helpful ways of sorting and conditionallys showing data, and [Moment.js](https://momentjs.com/) style date handling: `{% raw %}{{moment this.date format="YYYY MMM DD"}}{% endraw %}`.
+
+Panini still feels like a bit of unusual static templating engine. It's less feature complete than some, yet it also feels more light and tool-like than others. But I've enjoyed using it and it's been helpful, so thanks [Zurb and contributors](https://github.com/zurb/panini/graphs/contributors)!
+
+<a href="https://github.com/zurb/panini/tree/v2.0#panini" class="readmore">Check out Panini 2.0 here</a>
+
+N.b. I don't think there's an existing Panini sample/quick-start blog project, if there's interest I could convert this site into a "Panini blog boilerplate".
+
+{% endmarkdown %}
+</div>
+</div>

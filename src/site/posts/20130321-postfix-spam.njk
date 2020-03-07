@@ -1,0 +1,57 @@
+---
+title: Cutting down on Postfix spam relaying
+layout: layouts/post.njk
+oldurl: http://work.allaboutken.com/node/22
+teaser: "Postfix, it's used with many a LAMP stack to send out messages from a site, unfortunately it's prone to relaying many spam messages out of the box."
+image: "/blog/mail-pile.jpg"
+date: 2013-03-21
+url: /posts/20130321-postfix-spam.html
+active_path: blog
+---
+<div class="padding-top-xlarge"></div>
+<img class="callout" src="{{root}}images/crop-cinema{{image}}" />
+
+{% markdown %}
+
+{{ date | dateDisplay }}
+
+# {{title}}
+
+<p class="lead">Postfix, it's used with many a LAMP stack to send out messages from a site, unfortunately it's prone to relaying many spam messages out of the box.</p>
+
+The below code can be easily appended to Postfix's main.cf to drastically reduce the authorization hole.
+
+<p>On Ubuntu you'll find the file at <code>/etc/postfix/main.cf</code> </p>
+<code>smtpd_helo_required     = yes<br>
+strict_rfc821_envelopes = yes<br>
+disable_vrfy_command = yes<br>
+unknown_address_reject_code  = 554<br>
+unknown_hostname_reject_code = 554<br>
+unknown_client_reject_code   = 554<br>
+smtpd_helo_restrictions = permit_mynetworks, reject_invalid_hostname, permit<br>
+smtpd_recipient_restrictions =<br>
+   check_client_access hash:/etc/postfix/helo_client_exceptions<br>
+   check_sender_access    hash:/etc/postfix/sender_checks,<br>
+   reject_invalid_hostname,<br>
+   reject_non_fqdn_hostname,<br>
+   reject_non_fqdn_sender,<br>
+   reject_non_fqdn_recipient,<br>
+   reject_unknown_sender_domain,<br>
+   reject_unknown_recipient_domain,<br>
+   permit_mynetworks,<br>
+   reject_unauth_destination,<br>
+   reject_rbl_client cbl.abuseat.org,<br>
+   reject_rbl_client sbl-xbl.spamhaus.org,<br>
+   reject_rbl_client bl.spamcop.net,<br>
+   reject_rhsbl_sender    dsn.rfc-ignorant.org,<br>
+   permit<br></code>
+
+<p>Then restart postfix: <code>/etc/init.d/postfix restart</code></p>
+<p>A couple of other handy commands:</p>
+<p>- Check the mail queue with <code>mailq</code><br>
+- Empty the queue with <code>postsuper -d ALL</code></p>
+
+<cite>Image credit: <a href="https://www.flickr.com/photos/cogdog/2925889614">Flickr user "Alan Levine"</a></cite>
+
+
+{% endmarkdown %}

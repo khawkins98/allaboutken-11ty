@@ -1,0 +1,244 @@
+---
+title: "What if: A web font for data"
+layout: layouts/post.njk
+teaser: "Alphanumeric data works well for programmatic query, but less so for direct human consumption. What if a font was designed specifically with life sciences data in mind?"
+image: "/blog/blog_font_for_data_image.png"
+date: 2018-03-19
+url: /posts/20180319-data-font-for-life-sciences.html
+active_path: blog
+topics:
+  - Life Sciences, data, fonts, UX
+---
+
+
+<div class="medium-12 cell padding-top-large">
+<div class="">
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+  <figure class="large-10 medium-8 cell callout"><img class="padding-bottom-medium" src="{{root}}images/original{{image}}" />
+    <figcaption>
+      <cite class="text-right">Sources: <a href="https://wwwdev.ebi.ac.uk/gxa/genes/ENSMUSG00000030507?bs=%7B%22mus%20musculus%22%3A%5B%22ORGANISM_PART%22%5D%7D&amp;ds=%7B%22kingdom%22%3A%5B%22animals%22%5D%7D#information">1</a> <a href="http://www.ebi.ac.uk/interpro/entry/IPR004433">2</a> <a href="https://www.ebi.ac.uk/QuickGO/annotations?goUsage=descendants&amp;goUsageRelationships=is_a,part_of,occurs_in&amp;goId=GO:0006915">3</a></cite>
+      GO:9X09234: enolpyruvyl-6-text-like-this-is-fit-to-drive-you-batty-3-cyclohexene.
+    </figcaption>
+  </figure>
+</div>
+
+{{ date | dateDisplay }}&nbsp; &nbsp;
+
+<div class="grid-x">
+<div class="large-11 medium-12 cell">
+<h1>{{title}}</h1>
+</div>
+</div>
+
+<p class="lead">Alphanumeric data works well for programmatic query, but less so for direct human consumption. What if a font was designed specifically with <a href="https://www.ebi.ac.uk/about/news/press-releases/life-science-data-global-responsibility-2017">life sciences data</a> in mind?</p>
+
+{% markdown %}
+As EMBL-EBI’s web design architect, I help foster community standards for how services enable user tasks with consistently and predictably.
+
+Within the standards is a mix: things found on most websites — menus, accordions, layout, messaging, branding — plus application interactivity and data visualisation standards. It’s a hugely broad undertaking with complex technical implications.
+
+But, one of the biggest challenges is also the simplest: text readability.
+
+EMBL-EBI helps [enable](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5570174/) free access to massive amounts of data from life science experiments. This allows users to access lots and lots of tables with data identifiers that look like:
+- `ENSMUST00000032717 ENSMUSG00000030507`, and
+- `A_51_P156144, 4532657, 10563797, 129205_at, 4947113, 4910838, 1457012_at, 4962225, 5549684, 5020471, 4460390`
+
+Making these strings more understandable is partly a classic design problem of when, where and how these strings are presented.
+
+But it’s also a question of **what** is displayed.
+
+## <a name="problems" href="#problems">Problems to address</a>
+
+Here’s a starting list (ideas? comment? <span class="emoji">🐦</span> [@khawkins98](https://twitter.com/khawkins98)):
+
+- Multiple sequential numbers: it’s not uncommon to have 7 zeros `20000001` in a row. Oh wait, that was only 6 zeros.
+- Readability:
+    - `Distracing_under_scores`
+    - `BuMpy caPitiLiSation`
+    - Dropping descenders in letters like these: `jJlpP`
+    - Small openings ([counters](https://en.wikipedia.org/wiki/Counter_(typography))) in numbers at small sizes
+- Wide widths of monospacing: monospaced fonts are often not used as they can take up more room (particularly with spaces between words) and folks want to pack as much data as they can into one screen.
+   - Monospaced = false
+   - <span class="monospaced">Monospaced = true</span>
+
+## <a name="code-fonts" href="#code-fonts">A parallel in code fonts</a>
+
+Take computer code: monospaced fonts are an [immense help](https://en.wikipedia.org/wiki/Monospaced_font). Uniform character alignment makes it easier to navigate and compare parallel rows of commands.
+
+It’s much akin to how spreadsheets are good for lining up grids of numbers.
+
+Monospace fonts typically have sharp, angular edges. This helps prevents mixups of a lowercase `l` and a pipe `|` or a number one `1`. Likewise for an uppercase `O` and numeric zero `0`.
+
+You might call some of these monospace fonts “code” fonts.
+
+<div class="grid-x align-right padding-bottom-small">
+  <figure class="medium-10 cell callout">
+    <figcaption>
+      <span class="label black-background">Aside</span> There are also <a href="https://ia.net/topics/in-search-of-the-perfect-writing-font/">“duospace” fonts</a> that combine the discernibility of mono fonts, but with flexibility for letters like <span class="monospaced-ligatrues">w</span> and <span class="monospaced-ligatrues">m</span>
+    </figcaption>
+  </figure>
+</div>
+
+### <a name="code-2" href="#code-2">Code fonts 2.0</a>
+
+Further illustrating the potential of modern font usage across the desktop and web, the concept of [ligatures](link) has emerged for monospaced code fonts.
+
+Take the font [Fria Code](https://github.com/tonsky/FiraCode), it improves the readability of common code expressions and strings:
+- <span class="monospaced">!=&nbsp;&nbsp;</span> <span class="monospaced-ligatrues">-> !=</span>
+- <span class="monospaced">www&nbsp;</span> <span class="monospaced-ligatrues">-> www</span>
+- <span class="monospaced">***&nbsp;</span> <span class="monospaced-ligatrues">-> ***</span>
+- <span class="monospaced">?=&nbsp;&nbsp;</span> <span class="monospaced-ligatrues">-> ?=</span>
+
+These ligatures help with visual smoothness, readability and discernments of repetitive characters (i.e. <span class="monospaced-ligatrues">`**`</span> vs <span class="monospaced-ligatrues">`***`</span>)
+
+There is some controversy about how adding ligatures can dilute truth when syntax is gospel but, in general, the trend of code ligatures shows potential. It’s still fairly new, first appearing in earnest [in 2015](https://medium.com/larsenwork-andreas-larsen/ligatures-coding-fonts-5375ab47ef8e) and you can now [easily graft programming ligatures onto many monospaced fonts](https://github.com/ToxicFrog/Ligaturizer).
+
+<div class="grid-x align-right padding-bottom-small">
+  <figure class="medium-10 cell callout">
+    <figcaption>
+      <span class="label black-background">Aside</span> There are also <a href="https://www.sharelatex.com/learn/Mathematical_fonts">math fonts</a>, but those are designed to facilitate characters that aren’t easy to represent in ASCII, which is a different problem than the one we’re looking to address here (as most of the data we’re dealing with has ASCII representations)
+    </figcaption>
+  </figure>
+</div>
+
+## <a name="why" href="#why">Why code fonts matter for life science data</a>
+
+I’ve been talking about possible solutions to programming issues. It doesn’t fully map to the issues in data design, much less Life Science data but we can still draw inspiration from the solutions being worked on in the programming space.
+
+To venn:
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+<figure class="callout medium-8 large-6 small-10 cell">
+<img src="{{root}}images/original/blog/blog_font_for_data_venn.svg" />
+<figcaption>Something like that, anyways.</figcaption>
+</figure>
+</div>
+
+## <a name="tools" href="#tools">11 Tools and approaches we could use</a>
+
+A non-exclusive list, but some good places to look along with a few illustrative examples. I'm not saying all of these are **good** ideas, but they're possibilities that address some issue and this is my my way of airing everything. Oh, these are **not** technical demonstrations, only illustrations.
+
+### <a name="1" href="#1">1. Monospace fonts</a>
+
+Just using monospace could be a big win. With the extra readability of the letter forms we could save space by reducing the font size ever so slightly.
+
+<p data-height="105" data-theme-id="light" data-slug-hash="RMKwLm" data-default-tab="result" data-user="khawkins98" data-embed-version="2" data-pen-title="A data font: Monospace fonts" class="codepen">See the Pen <a href="https://codepen.io/khawkins98/pen/RMKwLm/">A data font: Monospace fonts</a> by Ken Hawkins (<a href="https://codepen.io/khawkins98">@khawkins98</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<!-- <script async src="https://static.codepen.io/assets/embed/ei.js"></script> -->
+
+<p>&nbsp;</p>
+
+### <a name="2" href="#2">2. Duospace fonts</a>
+
+Here I've used [iA Writer Duospace](https://ia.net/topics/in-search-of-the-perfect-writing-font) to illustrate how we can bend the rules of monospaced fonts for better readability.
+
+<p data-height="110" data-theme-id="light" data-slug-hash="mxOgoM" data-default-tab="result" data-user="khawkins98" data-embed-version="2" data-pen-title="A data font: duospace" class="codepen">See the Pen <a href="https://codepen.io/khawkins98/pen/mxOgoM/">A data font: duospace</a> by Ken Hawkins (<a href="https://codepen.io/khawkins98">@khawkins98</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<!-- <script async src="https://static.codepen.io/assets/embed/ei.js"></script> -->
+
+<p>&nbsp;</p>
+
+### <a name="3" href="#3">3. Ligatures</a>
+
+Particularly for grouping repeating numbers ever so slightly in the manner of <span class="monospaced">www</span> vs <span class="monospaced-ligatrues">www</span>. This one currently makes me nauseous.
+
+<p data-height="165" data-theme-id="light" data-slug-hash="pLNmGj" data-default-tab="result" data-user="khawkins98" data-embed-version="2" data-pen-title="A data font: ligatures" class="codepen">See the Pen <a href="https://codepen.io/khawkins98/pen/pLNmGj/">A data font: ligatures</a> by Ken Hawkins (<a href="https://codepen.io/khawkins98">@khawkins98</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<!-- <script async src="https://static.codepen.io/assets/embed/ei.js"></script> -->
+
+<p>&nbsp;</p>
+
+### <a name="4" href="#4">4. Ink traps</a>
+
+Bringing [ink traps](http://nicksherman.com/articles/bellCentennial.html) to the digital world could help [for small text on HiDPI (retina) screens](https://www.wired.com/2016/10/typographic-trickery-shifts-font-paper-pixels/).
+
+<p data-height="120" data-theme-id="light" data-slug-hash="OvWPZx" data-default-tab="result" data-user="khawkins98" data-embed-version="2" data-pen-title="A data font: Ink traps" class="codepen">See the Pen <a href="https://codepen.io/khawkins98/pen/OvWPZx/">A data font: Ink traps</a> by Ken Hawkins (<a href="https://codepen.io/khawkins98">@khawkins98</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+Second line is [Retina MicroPlus](https://frerejones.com/families/retina) and shown as SVG for licensing reasons.
+
+<p>&nbsp;</p>
+
+### <a name="5" href="#55">5. Avoid descenders</a>
+
+We could avoid descenders for `j` and similar. This is a similar readability case as [lining vs old style figures](https://www.chronicle.com/blogs/linguafranca/2012/03/14/old-style-versus-lining-figures/).
+
+<p data-height="265" data-theme-id="light" data-slug-hash="BrpBJv" data-default-tab="result" data-user="khawkins98" data-embed-version="2" data-pen-title="A data font: small descenders" class="codepen">See the Pen <a href="https://codepen.io/khawkins98/pen/BrpBJv/">A data font: small descenders</a> by Ken Hawkins (<a href="https://codepen.io/khawkins98">@khawkins98</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<!-- <script async src="https://static.codepen.io/assets/embed/ei.js"></script> -->
+
+<p>&nbsp;</p>
+
+### <a name="6" href="#6">6. Being width conscious</a>
+With a narrow monospace font [1](http://www.myfonts.com/fonts/martinlallier/kg-stuttgart-1930/) [2](https://fontlibrary.org/en/font/anka-coder-condensed) [3](https://github.com/fitojb/anka-coder-fonts); or follow the lead of duospace fonts and narrow the width of the space between words by 50%
+
+<p data-height="120" data-theme-id="light" data-slug-hash="pLRoaP" data-default-tab="result" data-user="khawkins98" data-embed-version="2" data-pen-title="A data font: Width conscious" class="codepen">See the Pen <a href="https://codepen.io/khawkins98/pen/pLRoaP/">A data font: Width conscious</a> by Ken Hawkins (<a href="https://codepen.io/khawkins98">@khawkins98</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<!-- <script async src="https://static.codepen.io/assets/embed/ei.js"></script> -->
+
+<p>&nbsp;</p>
+
+### <a name="7" href="#7">7. A mild-serif monospace for legibility</a>
+
+It's hard to be enthusiastic about this idea, but serifs on a monospaced font at small sizes might help readability on HiDPI screens. There are a few options [1](https://www.fontsquirrel.com/fonts/verily-serif-mono) [2](http://www.tug.dk/FontCatalogue/luximono/) [3](https://fonts.google.com/specimen/Cutive+Mono)
+
+<p data-height="165" data-theme-id="light" data-slug-hash="bvgGdG" data-default-tab="result" data-user="khawkins98" data-embed-version="2" data-pen-title="A data font: serif monospaced font" class="codepen">See the Pen <a href="https://codepen.io/khawkins98/pen/bvgGdG/">A data font: serif monospaced font</a> by Ken Hawkins (<a href="https://codepen.io/khawkins98">@khawkins98</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<!-- <script async src="https://static.codepen.io/assets/embed/ei.js"></script> -->
+
+<p>&nbsp;</p>
+
+### <a name="8" href="#8">8. Ordinal position highlighting</a>
+
+We could highlight every Nth character in a sequence.
+
+<p data-height="120" data-theme-id="light" data-slug-hash="XEpWEE" data-default-tab="result" data-user="khawkins98" data-embed-version="2" data-pen-title="A data font: Ordinal highlighting" class="codepen">See the Pen <a href="https://codepen.io/khawkins98/pen/XEpWEE/">A data font: Ordinal highlighting</a> by Ken Hawkins (<a href="https://codepen.io/khawkins98">@khawkins98</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<!-- <script async src="https://static.codepen.io/assets/embed/ei.js"></script> -->
+
+Unfortunately there [still](https://www.bram.us/2012/04/13/css-nth-letter/) is no `:nth-letter` pseudo selector in CSS and workarounds ([1](https://codepen.io/FWeinb/pen/djuIx) [2](https://github.com/FWeinb/nthEverything)) require JS.
+
+<p>&nbsp;</p>
+
+### <a name="9" href="#9">9. Utilise CSS support for OpenType features</a>
+
+Is you font too tightly kerned for numbers? That letter "g" not working?
+
+In addition to ligatures, contemporary CSS and browsers [support other advanced OpenType features](https://helpx.adobe.com/typekit/using/open-type-syntax.html) including [tabular figures (tnum)](https://helpx.adobe.com/typekit/using/open-type-syntax.html) and [Stylistic sets (ss##)](https://helpx.adobe.com/typekit/using/open-type-syntax.html#ss##).
+
+<p data-height="165" data-theme-id="light" data-slug-hash="RMKwYb" data-default-tab="result" data-user="khawkins98" data-embed-version="2" data-pen-title="A data font: Stylistic alternates, tabular numbers" class="codepen">See the Pen <a href="https://codepen.io/khawkins98/pen/RMKwYb/">A data font: Stylistic alternates, tabular numbers</a> by Ken Hawkins (<a href="https://codepen.io/khawkins98">@khawkins98</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<!-- <script async src="https://static.codepen.io/assets/embed/ei.js"></script> -->
+
+<p>&nbsp;</p>
+
+### <a name="10" href="#10">10. Use a legible base font</a>
+
+Obvious but important:
+
+<p data-height="265" data-theme-id="light" data-slug-hash="BrWLWL" data-default-tab="result" data-user="khawkins98" data-embed-version="2" data-pen-title="A data font: A legible base font" class="codepen">See the Pen <a href="https://codepen.io/khawkins98/pen/BrWLWL/">A data font: A legible base font</a> by Ken Hawkins (<a href="https://codepen.io/khawkins98">@khawkins98</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<!-- <script async src="https://static.codepen.io/assets/embed/ei.js"></script> -->
+
+
+<p>&nbsp;</p>
+
+### <a name="11" href="#11">Bonus number 11: Do the basics well</a>
+
+In addition to No. 10, we shouldn't forget just how much [we can achieve through good design of tables](http://alistapart.com/article/web-typography-tables).
+
+<p>&nbsp;</p>
+
+## <a name="next" href="#next">What’s next</a>
+
+Addressing these issues is on our backlog — if you’re also interested in the problem space or have comments, please get in touch: <span class="emoji">🐦</span> <a href="https://twitter.com/khawkins98">@khawkins98</a> or <span class="emoji">✉️</span> <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+
+{% endmarkdown %}
+</div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.rawgit.com/tonsky/FiraCode/1.205/distr/fira_code.css">
+<style type="text/css">
+.monospaced {
+  font-family: ibm-plex-code,Courier,monospace;
+}
+.monospaced-ligatrues {
+  font-family: "Fira Code",Courier,monospace;
+}
+
+.monospaced-ligatrues.small {
+  font-size: .85rem;
+}
+</style>

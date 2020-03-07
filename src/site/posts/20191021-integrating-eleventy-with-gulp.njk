@@ -1,0 +1,287 @@
+---
+title: "Integrating Eleventy with gulp, upstream JS"
+layout: layouts/post.njk
+teaser: "Eleventy <a href='https://www.11ty.io/docs'>notes that</a> it, \"works great with data — use both front matter and external data files\" but the static site generator stops short of working well with upstream in-memory data objects for local development."
+image: "/blog/dripping-faucet.jpg"
+date: 2019-10-21
+url: /posts/20191021-integrating-eleventy-with-gulp.html
+active_path: blog
+topics:
+  - gulp, Eleventy, EMBL
+---
+
+<div class="medium-12 cell padding-top-large">
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+  <figure class="large-10 medium-8 cell callout"><img class="padding-bottom-medium" src="{{root}}images/original{{image}}" />
+    <cite class="text-right">Thanks to Flickr user Paul B for the image [<a href="https://www.flickr.com/photos/eastbeach/24818842988/in/photolist-DPa4m1-4eQ9W-4bPwdN-APyyy-eXwGJg-4JZhcq-6wASuN-6wwH86-6wASy7-7zwzso-wGnk7F-8HPAJt-66a7wt-4fPSa-tzkuC-tMM3hb-5njkrD-5C83sD-tzkqk-5oynfL-4pnkBU-6ZfA9m-6iZaMo-7ECykH-9sAPMe-TcFhPs-6zJcWE-4eQ9Y-5styJG-9Tshp1-nu54P-6iUT2t-xZYcY-7DbDxo-6aVvan-gsyhW8-95sAwV-gsyhHn-2cL3sdx-unNuB-gxE7Hm-3fArXA-xxCk6-6iUYaX-gsxDY2-unNiy-67GWCn-xxCsQ-gsy2m3-4Cnf2b">CC License</a>]</cite>
+    <figcaption>Drip. Drop. Drip. Opening the tap of of upstream data objects for Eleventy.</figcaption>
+  </figure>
+</div>
+
+{% markdown %}
+{{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span>
+
+<div class="grid-x">
+<div class="large-11 medium-12 cell">
+<h1>{{title}}</h1>
+</div>
+</div>
+
+<p class="lead">{{teaser}}</p>
+
+This post is prompted by a project for a highly-modular design system as part of my work for [EMBL](https://www.embl.de) — a leading laboratory for the life sciences. We're [using](https://github.com/visual-framework/vf-eleventy) Eleventy with gulp (for task running and building) and [Fractal](https://fractal.build) (for design components). 
+
+We wanted to:
+
+1. Have gulp trigger builds of Eleventy
+1. Utilise Eleventy’s watch/refresh commands for local development
+1. Send variables to Eleventy’s JavaScript data files from gulp (or other Node JS tasks)
+
+There are methods to achieve part 1 but not with part 2 and 3. But we made a solution. 
+
+> #### tl;dr 
+> - We forked 11ty’s cmd.js to better integrate with gulp and other Node JS. 
+> - I made [a demo at khawkins98/gulp-eleventy-example](https://github.com/khawkins98/gulp-eleventy-example).
+> - I hope Eleventy’s maintainers can take some inspiration from this. <br/><br/>
+
+Still here? Great. Read on.
+
+<br/>
+
+#### Scenario
+
+## Here's some really useful data, please use it
+
+Fractal creates a really useful JavaScript object that lists component file structure, the contents of those files and compiles nested templates. 
+
+An illustrative example of the file structure:
+
+```js
+fractalComponents = {
+  component: “myComponent”,
+  files: {
+    “myComponent.css”: {
+       “Contents of the CSS”
+     },
+    “myComponent.njk”: {
+       “Contents of the NJK template”
+     },
+    “CHANGELOG.md”: {
+       “Contents of the changelog”
+     },
+    “README.md”: {
+       “Contents of the readme”
+     }
+     … and so on
+```
+<br/>Also, Fractal enables component Nunjucks templates can be invoked like:
+
+`{% render '@myNavComponent', {passedParam: 'An Example'} %}`
+
+Which is great as it allows us to `npm install` components and not have to move/symlink the Nunjucks templates into Eleventy `src/` directory — and it keeps syntax consistent across environments.
+
+In principle we could get Eleventy to do the same tasks, scanning the file system and rendering our templates — but we didn’t want to duplicate our build process — especially considering that both Eleventy and Fractal were already running in Node JS. 
+
+So, that means we've got some in-memory data we'd really like for Eleventy to receive, and receive updates to if a component is added or edited. 
+
+### This is important for local development
+
+In our use case we're editing files locally and want a Task A (Fractal) to be able to see changes, updates its data and feed it to Task B (Eleventy). 
+
+Eleventy's current design is a non-issue for our production builds. For production, Fractal generates the data and just hands it off to Eleventy. (That said: I could envision a scenario where part of the build process the Eleventy process might want to feed data to some Process C for dynamic rendering.)
+
+<br/>
+
+#### So what are you asking for?
+
+## Designing our solution 
+
+As previously mentioned, Eleventy has a very nice feature supporting [JavaScript data files](https://www.11ty.io/docs/data-js/). And as with most `watch` command's Eleventy's [watch](https://www.11ty.io/docs/usage/#re-run-eleventy-when-you-save) observes only file-system changes — that means we need our upstream task (gulp) to be able to trigger an Eleventy rebuild for local development. 
+
+So a conceptual example for our desired scenario looks like the below.
+
+1. Have some upstream data that we want to pass to Eleventy.
+
+```js
+// Generate a sample list of all files in a scope outside of Eleventy
+gulp.task('file-list', function () {
+  global.fileList = []; // we could pass by not using a `global`, but this is the simplest for an example 
+  return gulp.src(['./somePath/**/*.{njk,html,js,md}'])
+    .pipe(through.obj(function (file, enc, cb) {
+      global.fileList.push(file.path);
+      cb(null);
+    }));
+});
+``` 
+<br/>
+
+2. Have an Eleventy [data file](https://www.11ty.io/docs/data-js/) pull in a variable.
+
+```js
+// ./src/site/_data/fileList.js
+// Capture the sample list of all files from gulp
+// for demonstration Gulp integration with Eleventy
+module.exports = {
+  files: global.fileList
+};
+``` 
+<br/>
+
+3. On a targeted change event, have Gulp invoke ask Eleventy to rebuilt.
+
+```js
+// Watch something for changes
+gulp.task('watch', function() {
+  gulp.watch(['./src/**/*.{njk,html,js,md'], gulp.series('file-list', 'eleventy:reload'));
+});
+
+// Or another scenario with an `.on` event triggering a refresh
+let fractal = require(fractalConfig).initialize();
+fractal.components.on('updated', function() {
+  elev.restart();
+  elev.write();
+}
+
+// Refresh eleventy
+gulp.task('eleventy:reload', function(done) {
+  elev.restart()
+  elev.write()
+});
+```
+<br/>
+
+Recap: we want to do some local development, let a parent process update a variable and and then ask  Eleventy to trigger a rebuild, pulling in the new data by the Eleventy JS data file.
+
+{% endmarkdown %}
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+  <div class="large-1 medium-2 cell"></div>
+  <figure class="large-10 medium-8 cell">
+  <hr/>
+{% markdown %}
+
+#### Aside
+
+## A child process won’t get us there <a name="child_process" />
+### Unless you like dumping memory to disk
+
+One method we initially considered for our need was to use Node’s [`child_process`](https://nodejs.org/api/child_process.html). This is quite clean and is used below by zellwk.com; from [`zellwk/zellwk.com/blob/master/gulp/eleventy.js`](https://github.com/zellwk/zellwk.com/blob/master/gulp/eleventy.js)
+
+```js
+const exec = require('child_process').exec
+
+const eleventy = cb => {
+  const command = 'eleventy'
+
+  exec(command, function (err, stdout, stderr) {
+    console.log(stdout)
+    console.log(stderr)
+    cb(err)
+  })
+}
+```
+<br/>
+
+Using this method you’re also able to run Eleventy with a nice callback on completion — the downside to this method is there’s no clean way to pass in-memory objects to the `child_process`, you’d need to stringify your variables:
+
+```js
+require('child_process').fork('./child.js', [], { env: { FOO: 'bar' } });
+```
+
+For us there are two deal breakers with this method:
+
+- The object we want to pass is quite large and we'd rather not risk issues with stringification. 
+- We'd also need to destroy and re-invoke Eleventy every time during local development, losing access to `elev.restart()` and `elev.write()`
+{% endmarkdown %}
+  <hr/>
+  </figure>
+</div>
+
+<br/>
+
+{% markdown %}
+
+
+<br/>
+
+#### Eleventy, can you hear me? 
+
+## Making it happen
+
+
+Eleventy’s entry is [`cmd.js`](https://github.com/11ty/eleventy/blob/master/cmd.js) and we need access to `elev` — but that unfortunately is inside a `try` statement. 
+
+So I forked 11ty’s cmd.js in the local project. Those changes better integrate with external JS with a few minor changes but it's all about a key change: `module.exports = elev;`
+
+In this way Gulp, or any other Node process, can now use Eleventy as a child task.
+
+### How? Like this
+
+1. Set up Eleventy using our forked local command file.
+
+```js
+// Prepare eleventy
+process.argv.push('--config=eleventy.js'); // Eleventy config
+const elev = require('./eleventy-cmd.js');
+```
+<br/>
+
+2. We aks eleventy to do its initial build.
+
+```js
+gulp.task('eleventy:build', function(done) {
+  elev.write().then(function() {
+    console.log('Done building 11ty');
+    done();
+  });
+});
+```
+<br/>
+
+3. Do a deep rebuild of Eleventy when a file outside of Eleventy’s scope changes or an event trigger is received.
+
+```js
+gulp.task('eleventy:reload', function(done) {
+  elev.restart()
+  elev.write()
+});
+```
+
+<br/>
+
+This change works well for us but we'll of course need to make sure our local `cmd.js` incorporates any upstream changes (we forked it from Eleventy 0.9.0)
+
+<br/>
+
+#### Enough talking
+
+## Here's some code to try
+
+I made a demo repository using this approach that you can:
+
+- `git clone https://github.com/khawkins98/gulp-eleventy-example.git` and
+- `npm install`, or just:
+- <a href="https://github.com/khawkins98/gulp-eleventy-example" class="">Browse <span class="emoji">🔎</span> the demo at github.com/khawkins98/gulp-eleventy-example</a>
+- If you have feedback <span class="emoji">💬</span>, I'd love to hear it. Either [as an issue](https://github.com/khawkins98/gulp-eleventy-example/issues) or on [Twitter @khawkins98](https://twitter.com/khawkins98)
+
+### What's next
+
+- I'll likely make an issue on Eleventy about supporting this
+- If that doesn't get support (or I feel inspired) I may also make an npm `gulp-eleventy-example` package
+
+
+{% endmarkdown %}
+
+
+<!--
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+<figure class="callout large-12 cell">
+<img src="{{root}}images/original/blog/xxxx.jpg" />
+<figcaption><strong>Figure 1.</strong> Caption.
+</figcaption>
+</figure>
+</div>
+-->
+
+</div>

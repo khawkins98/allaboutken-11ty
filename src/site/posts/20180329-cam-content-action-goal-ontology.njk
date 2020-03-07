@@ -1,0 +1,108 @@
+---
+title: "Inside the Content-Action Model"
+layout: layouts/post.njk
+teaser: "An ontology to document, plan, define and implement CAM magic."
+image: "/blog/cam-model-terraced-farming.jpg"
+date: 2018-03-29
+url: /posts/20180329-cam-content-action-goal-ontology.html
+active_path: blog
+topics:
+  - CAM for Web Systems, ontology
+---
+
+<div class="medium-12 cell padding-top-large">
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+  <figure class="large-10 medium-8 cell callout"><img class="padding-bottom-medium" src="{{root}}images/original{{image}}" />
+    <cite class="text-right">Thanks to Flickr user David Wormley for the image [<a href="https://www.flickr.com/photos/sleepingseasons/26604658090/">CC License</a>]</cite>
+    <figcaption>Terraced rice farming: through sculpting and definition of an organic environment, we make better use of a resource. There's an parallel with interactive content.</figcaption>
+  </figure>
+</div>
+{% markdown %}
+{{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span>
+
+<div class="grid-x">
+<div class="large-11 medium-12 cell">
+<h1>{{title}}</h1>
+</div>
+</div>
+
+<p class="lead">{{teaser}}</p>
+
+I've [previously stated how the Content-Action Model for Web Systems]({{root}}posts/20180122-content-action-model.html) better unites strategy, user actions and content over time — that's a bold claim that's possible through [triples](https://en.wikipedia.org/wiki/Semantic_triple) of content, users and goals.
+
+This post details the first steps from theory to action.
+
+> <p class="lead">By placing our content, goals, users into an ontology we can derive logical queries of relationships, placement and <em>success</em>. — me, just now.</p>
+
+Below (in Figure 1) is a [WebVOWL visualisation](http://vowl.visualdataweb.org/webvowl.html) of an early draft (v.002).
+
+The takeaway I intend to show: `CAM Records` are the parent in the ontology with `CAM Goals` as the central hub. Pages, content units, and users play a strong supporting role.
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+<figure class="callout large-12 cell">
+<img src="{{root}}images/original/blog/cam-model-ontology.jpg" />
+<figcaption><strong>Figure 1.</strong> The ontology framework for the CAM model.
+</figcaption>
+</figure>
+</div>
+
+Want a closer look? <a class="" href="https://work.allaboutken.com/images/original/blog/cam-model-v002.owl"> Download a copy of the ontology (v.002)</a>.
+
+## <a name="sample" href="#sample">What's the point of doing this? A sample</a>
+
+Below (in Figure 2), I've illustrated a connection in the "Jobs" and "Front page" systems (`Records`). Here they have a join in through the goal of "Informing and understanding", however we can see the systems use different content to achieve this. Knowing this provide's a chance for sympathetic design between pages and ask if we're doing enough to re-use existing content.
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+<figure class="callout large-10 small-12 cell">
+<img src="{{root}}images/original/blog/cam-model-ontology-inferences.png" style="border: 1px solid #EEE" />
+<figcaption><strong>Figure 2.</strong> A sample view of inferences between <a href="{{root}}posts/20180122-content-action-model.html#in-a-record">CAM Records</a>.
+</figcaption>
+</figure>
+</div>
+
+This is one way that triples allow us to programatically "understand" content and make new observations; in a similar fashion to the above we can query for:
+
+- absence of `Content` supporting `Goals`;
+- users missing `Content` to support their needs;
+- `Records` with strong relationships or potential redundancies;
+- amongst others.
+
+## <a name="using" href="#using">Enabling use across the organisation</a>
+
+A risk of using an ontology [information architecture](https://en.wikipedia.org/wiki/Information_architecture) is creating a barrier of "IA speak" that only allows our most experienced content professionals to understand the system — and that's contrary to our aim of websites more responsive to needs of users and organisations.
+
+So our ontology functions as a reference and guide, and not the working implementation.
+
+### <a name="gathering-knowledge" href="#gathering-knowledge">Collecting knowledge</a>
+
+Instead of an overly formalised front end, we will collect information for this ontology in a conversational and flexible survey-style document and manage it in a human-approachable web application.
+
+Below (in Figure 3), three screenshots: first collecting the knowledge, managing and displaying inferences.
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+<figure class="callout large-12 cell">
+<img src="{{root}}images/original/blog/cam-model-ontology-collecting.png" />
+<figcaption><strong>Figure 3.</strong> Prototypes from left to right: loosely structured documents to collect information, user-accesible editing forms, processed and cross-referenced displays of information. The ontology will function below the surface and only be visible to users indirectly.
+</figcaption>
+</figure>
+</div>
+
+Use of a web application also allows us a path to future goals; including:
+
+- templating inferences; and
+- draw in third-party information, such as from web analytics.
+
+Interested in the ontology, CAM, or the application layer?
+<span class="emoji">👉</span> Get in touch: <span class="emoji">🐦</span> <a href="https://twitter.com/khawkins98">@khawkins98</a> or <span class="emoji">✉️</span> <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+
+## <a name="next" href="#next">Building the CAM, what's next?</a>
+
+The [Content-Action Model for Web Systems]({{root}}posts/20180122-content-action-model.html) is an emerging methodology that I'm blogging about throughout 2018.
+
+- [You can see previous posts here]({{root}}blog).
+- Next I'll write about the user-facing implementation of the ontology as a web application. That will allow us to better capture truth, derive observations and query metrics of success from our analytics.
+
+
+{% endmarkdown %}
+</div>

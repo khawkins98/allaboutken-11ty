@@ -1,0 +1,422 @@
+---
+title: "Building your first page with the Visual Framework 2.0"
+layout: layouts/post.njk
+teaser: "A quick start on how to work with <a href='https://visual-framework.github.io/vf-welcome/'>Visual Framework 2.0</a> CSS, JS and structure your HTML — and lots of links to learn more."
+image: "/blog/visual-framework-code-example.jpg"
+date: 2019-11-18
+url: /posts/20191118-first-page-with-the-visual-framework.html
+active_path: blog
+topics:
+  - gulp, Eleventy, EMBL, Fractal, Visual Framework
+---
+
+<div class="medium-12 cell padding-top-large">
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+  <figure class="large-10 medium-8 cell callout"><img class="padding-bottom-medium" alt="Tightly pairing Fractal and Eleventy can be done" src="{{root}}images/original{{image}}" />
+    <figcaption>It's not hard, it's just a matter of getting started.</figcaption>
+  </figure>
+</div>
+
+{% markdown %}
+{{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span>
+
+<div class="grid-x">
+<div class="large-11 medium-12 cell">
+<h1>{{title}}</h1>
+</div>
+</div>
+
+<p class="lead">{{teaser}}</p>
+
+The Visual Framework (VF) is designed to help [build life science websites and services](https://blogs.embl.org/communications/2018/09/12/faster-scientific-websites-through-reusability), this post is a kick-start to building sites with VF CSS, JS and HTML concepts.
+
+You’ll learn:
+
+- Part 1: [Where to find VF documentation](#part1)
+- Part 2: [Basic methodologies of VF CSS and JS](#part2)
+- Part 3: [How to structure your HTML and CSS classes](#part3)
+- Part 4: [Assorted tips and differences from other major frameworks (like Bootstrap)](#part4)
+
+This post assumes:
+
+- You are familiar with HTML, CSS and JS
+- You have probably used Bootstrap or Foundation
+- It is helpful to have knowledge of Sass and [CSS Custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/--*)
+- You want to use already-built CSS and JS
+  (To build VF components from their Sass and JS modules [see this guide](https://visual-framework.github.io/vf-welcome/building/))
+- You may or may not have used the [EMBL-EBI Visual Framework 1.0](https://www.ebi.ac.uk/style-lab/websites/)
+
+
+### Part 1
+
+## <a name="part1" href="#part1">Where to find VF documentation</a>
+
+To see demonstrations of each component and the HTML and CSS syntax of all “core” Visual Framework components, go to the “[VF 2.0 Component library](https://visual-framework.github.io/vf-core/#components)”. 
+
+Important: your organisation or project may have added custom components or removed some default components, if so you should ask the maintainers of your design system or component library.
+
+You can always see which components (and which version) are enabled by viewing the CSS source; from [the VF demo component library](https://dev.assets.emblstatic.net/vf/develop/css/styles.css):
+
+```css
+/*! 
+ * Component: @visual-framework/vf-badge 
+ * Version: 1.0.0-beta.8
+ * Location: components/vf-badge
+```
+The default VF build will maintain these comments even in the minified CSS build. For higher level information, [see the Visual Framework Welcome site](https://visual-framework.github.io/vf-welcome/).
+
+### Part 2
+
+## <a name="part2" href="#part2">CSS and JS methodologies</a>
+
+To optimise compatibility and flexibility, the Visual Framework does not target HTML elements like `<body>` `<div>` or `<button>` and instead relies only on CSS classes.
+
+Below is an example for a "large heading". 
+
+{% endmarkdown %}
+<figure class="cell callout">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="200" 
+  data-user="khawkins98" 
+  data-prefill='{"title":"Demo: vf-text","tags":[],"stylesheets":[],"scripts":[]}'
+  data-theme-id="1"
+  data-default-tab="html,result" 
+>
+<pre data-lang="html">
+&lt;h2 class="vf-text vf-text-heading--3">This heading size is large&lt;/h2>
+
+&lt;span class="vf-text vf-text-heading--3">This heading size is large&lt;/span>
+
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css">
+</pre>
+</div>
+<figcaption>Note the &lt;h2> is irrelevant for the Visual Framework; using &lt;span> works equally well (if semantically a bit daft).</figcaption>
+</figure>
+{% markdown %}
+
+<span class="emoji">👉</span> Tip: This approach is similar to [CSS Modules](https://css-tricks.com/css-modules-part-1-need/).
+
+The VF is primarily focused on display and structure and therefore [has minimal JS](https://visual-framework.github.io/vf-welcome/developing/guidelines/javascript/). This also helps if you’d like to use, say, Bootstrap for tab behaviour but use the VF look.
+
+Similar to our CSS approach, the VF JS never targets HTML elements or even CSS classes and instead uses [JS data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes#JavaScript_access); for example a partial look at [`vf-tabs`](https://visual-framework.github.io/vf-core/components/detail/vf-tabs.html):
+
+```html
+<div class="vf-tabs-content" data-vf-js-tabs-content>
+    <section class="vf-tabs__section" id="vf-tabs__section--1">
+        <h2>Section 1</h2>
+```
+The Visual Framework uses `class="vf-tabs-content"` for the visual styling and `data-vf-js-tabs-content` for the JS — exclusively. Use the VF JS where it’s helpful, if you don’t need it, don’t add the `data-*` and use your own JS.
+
+With that in mind, we’ll carry on and focus on the CSS. 
+
+### Part 3
+
+## <a name="part3" href="#part3">The structure of HTML, CSS classes</a>
+
+There are a few principles to understand when working with Visual Framework:
+
+1. **The grid and HTML nesting** 
+
+   The VF makes use of [CSS Grid Layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout) which is quite clever and you should have some basic understanding of how it works, but here are some common tips.
+
+   - By default  [`vf-grid`](https://visual-framework.github.io/vf-core/components/detail/vf-grid.html) will try to put your content into columns, if you only want one column:
+
+     ```html
+     <div class="vf-grid">
+       <div>All child content here</div>
+     </div>
+     
+     <div class="vf-grid">
+       <div>This layout</div>
+       <div>Makes two columns</div>
+     </div>
+     ```
+
+
+{% endmarkdown %}
+<figure class="cell callout">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="200" 
+  data-user="khawkins98" 
+  data-prefill='{"title":"Demo: vf-text","tags":[],"stylesheets":[],"scripts":[]}'
+  data-theme-id="1"
+  data-default-tab="result" 
+>
+<pre data-lang="html">&lt;div class="vf-grid">
+  &lt;div>All child content here&lt;/div>
+&lt;/div>
+
+&lt;div class="vf-grid">
+  &lt;div>This layout&lt;/div>
+  &lt;div>Makes two columns&lt;/div>
+&lt;/div>
+
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
+<pre data-lang="css" >.vf-grid > * { border:1px solid; }
+
+.vf-grid { margin-bottom: 1rem }</pre>
+</div>
+<figcaption></figcaption>
+</figure>
+{% markdown %}
+
+
+{% endmarkdown %}
+<figure class="cell callout">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="200" 
+  data-user="khawkins98" 
+  data-prefill='{"title":"Demo: vf-text","tags":[],"stylesheets":[],"scripts":[]}'
+  data-theme-id="1"
+  data-default-tab="result" 
+>
+<pre data-lang="html">&lt;div class="vf-grid vf-grid__col-3">
+  &lt;p>1&lt;/p>
+  &lt;p>1&lt;/p>
+  &lt;p>1&lt;/p>
+  &lt;p>1&lt;/p>
+  &lt;p>1&lt;/p>
+  &lt;p>1&lt;/p>
+&lt;/div>
+
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
+<pre data-lang="css" >.vf-grid > * { border:1px solid; }
+
+.vf-grid { margin-bottom: 1rem }</pre>
+</div>
+<figcaption>You can specify a set number of columns `vf-grid | vf-grid__col-3`.</figcaption>
+</figure>
+{% markdown %}
+
+   - If you want to make a custom layout
+     ```html
+     <div class="vf-grid vf-grid__col-3"> 
+       <div>I cover 1 of 3</div>
+       <div class="vf-grid__col--span-2">I cover 2 of 3 columns</div>
+     </div>
+     ```
+
+{% endmarkdown %}
+<figure class="cell callout">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="200" 
+  data-user="khawkins98" 
+  data-prefill='{"title":"Demo: vf-text","tags":[],"stylesheets":[],"scripts":[]}'
+  data-theme-id="1"
+  data-default-tab="result" 
+>
+<pre data-lang="html">&lt;div class="vf-grid vf-grid__col-3">
+  &lt;div>I cover 1 of 3&lt;/div>
+  &lt;div class="vf-grid__col--span-2">I cover 2 of 3 columns&lt;/div>
+&lt;/div>
+
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
+<pre data-lang="css" >.vf-grid > * { border:1px solid; }
+
+.vf-grid { margin-bottom: 1rem }</pre>
+</div>
+<figcaption></figcaption>
+</figure>
+{% markdown %}
+
+  The grid layout often expects child elements. If something doesn't look write, you're probably missing a `<div></div>`.
+
+2. **What dashes and underscores mean**
+
+   We namespace all universal components. For Visual Framework core components it is a prefix of `vf-`. This ensures that the component will not break an existing codebase.
+
+   Components in the Visual Framework follow the [BEM naming convention](http://getbem.com/naming/):
+
+   - `.vf-component {}`
+   - `.vf-component__item {}`
+   - `.vf-component--alternative {}`
+
+3. **Pipes, mixes and chaining CSS classes**
+
+   You may find that a component contains classes from another. This is a “[BEM mix](http://getbem.com/faq/#why-the-modifier-classes-are-prefixed)”, it might look like:
+   
+   ```html
+   <header class="vf-page-header">
+     <h1 class="vf-page-header__heading | vf-text vf-text--heading-l">Page title</h1>
+   </header>
+   ```
+   
+   Here the `vf-page-header` is utilising styling from the `vf-text` component. 
+   
+   When mixing classes you’ll see the pipe `|` character as a divider, it has no functional difference but improves the readability. 
+   
+   For more, [see the guidance on mixes](https://visual-framework.github.io/vf-welcome/developing/guidelines/css/).
+
+4. **Fake it until you make it**
+
+   If you’ve structured your component correctly but it doesn’t quite achieve what you need (and you can’t make your own local component) make use of the utility classes; for example:
+
+   - `.vf-u-type__text-body--1`
+   - `.vf-u-display-none`
+   - `.vf-u-background-color--red`
+
+   [See all the utility classes](https://visual-framework.github.io/vf-core/components/detail/vf-utility-classes.html).
+   
+{% endmarkdown %}
+<figure class="cell callout">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="200" 
+  data-user="khawkins98" 
+  data-prefill='{"title":"Demo: vf-text","tags":[],"stylesheets":[],"scripts":[]}'
+  data-theme-id="1"
+  data-default-tab="html,result" 
+>
+<pre data-lang="html">
+&lt;div class="vf-button | vf-u-background-color--red">I'm red&lt;/div>
+
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
+</div>
+</figure>
+{% markdown %}
+   
+5. **Use `vf-content` for content**
+
+   Most projects will have larger areas of text where it is either not technically possible or practical to add many classes. 
+
+   For those situations, wrap the content in a [parent element with `.vf-content`](https://visual-framework.github.io/vf-core/components/detail/vf-content.html)
+
+   ```html
+   <section class="vf-content">
+     <h1>My WYSIWYG-made text</h1>
+     <p>I'm some user-made content with <a href="#">a link</a>.</p>
+   </section>
+   ```
+   
+{% endmarkdown %}
+<figure class="cell callout">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="300" 
+  data-user="khawkins98" 
+  data-theme-id="1"
+  data-default-tab="html,result" 
+>
+<pre data-lang="html">
+&lt;section class="vf-content">
+    &lt;h1>My WYSIWYG-made text&lt;/h1>
+    &lt;p>I'm some user-made content with &lt;a href="#">a link&lt;/a> and I'm not using any element-level VF classes.&lt;/p>
+  &lt;/section>
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
+</div>
+</figure>
+{% markdown %}
+
+### Part 4
+
+## <a name="part4" href="#part4">Assorted tips, differences from other frameworks</a>
+
+A grab-bag of important things that you might not expect.
+
+1. **Visual Framework defers to your other CSS**
+
+   If you have a `<section class="my-local-style vf-tabs">` the VF CSS is designed to defer to any CSS you have for `section {}` and `.my-local-style`.
+
+{% endmarkdown %}
+<figure class="cell callout">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="250" 
+  data-user="khawkins98" 
+  data-theme-id="1"
+  data-default-tab="result" 
+>
+<pre data-lang="html">
+
+&lt;ul class="nav nav-tabs">
+  &lt;li class="nav-item">
+    &lt;a class="nav-link active" href="#">Active&lt;/a>
+  &lt;/li>
+  &lt;li class="nav-item">
+    &lt;a class="nav-link" href="#">Bootstrap tabs&lt;/a>
+  &lt;/li>
+&lt;/ul>
+
+&lt;br/>
+
+&lt;div classs="vf-tabs">
+  &lt;ul class="vf-tabs__list">
+    &lt;li class="vf-tabs__item">
+      &lt;a class="vf-tabs__link is-active" href="#">Active&lt;/a>
+    &lt;/li>
+    &lt;li class="vf-tabs__item">
+      &lt;a class="vf-tabs__link" href="#">VF Tabs&lt;/a>
+    &lt;/li>
+  &lt;/ul>
+&lt;/div>
+
+&lt;link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
+</div>
+<figcaption>The <a href="https://visual-framework.github.io/vf-core/components/detail/vf-tabs.html">VF tabs</a> have been "contaminated" by Bootstrap, but the VF has not impacted <a href="https://getbootstrap.com/docs/4.0/components/navs/#tabs">Bootstrap tabs</a>. This is by design to avoid breaking existing designs.</figcaption>
+</figure>
+{% markdown %}
+
+   
+
+   - ***Tip***: loading the VF CSS after your other CSS can affect this, latter-loaded CSS is favoured by the browser.
+
+2. **Low specificity**
+
+   We avoid CSS specificity to target styling of elements. This improves flexibility of HTML structure and allows simpler chaining of classes.
+
+   That is:
+
+   - We do: `.vf-tabs-content {}`
+   - We don’t: `.vf-tabs .vf-tabs-content {}`
+
+3. **Highly modular**
+
+   Like most Frameworks, the Visual Framework can be overridden or components can be selectively used. However, the Visual Framework takes this to the next level, allowing selective installation of components and a broad mix of component versions. 
+
+   For your organisation, the Visual Framework core documentation will likely not be the best source of truth on a component’s HTML, CSS and JS.
+
+   So in addition to reading guidance like this, you’ll want to consult the maintainer of your CSS and design systems about which versions of Visual Framework components they’re using and the best place for documentation on your systems. 
+
+   If you’re lost, [you can always as the Slack group for help](https://join.slack.com/t/visual-framework/shared_invite/enQtNDAxNzY0NDg4NTY0LWFhMjEwNGY3ZTk3NWYxNWVjOWQ1ZWE4YjViZmY1YjBkMDQxMTNlNjQ0N2ZiMTQ1ZTZiMGM4NjU5Y2E0MjM3ZGQ).
+
+4. **Atomic Design-like**
+
+   The Visual Framework makes use of [Atomic Design](http://atomicdesign.bradfrost.com/chapter-2/)-style concepts to define components. Instead of using Atoms, Molecules, Organisms the Visual Framework uses the terms Elements, Blocks, and Containers.
+
+   For more on blocks, elements and containers, [see the CSS guidelines](https://visual-framework.github.io/vf-welcome/developing/guidelines/css/)
+
+### Bonus
+
+## <a name="bonus" href="#bonus">Just give me a starter template</a>
+
+<span class="emoji">📑</span> [Here’s a simple boilerplate](https://codepen.io/khawkins98/pen/QWWzBNP?editors=1000) so you can see a simple page in action.
+
+## Stuck?
+
+<span class="emoji">🎈</span> [Ask the Slack group](https://join.slack.com/t/visual-framework/shared_invite/enQtNDAxNzY0NDg4NTY0LWFhMjEwNGY3ZTk3NWYxNWVjOWQ1ZWE4YjViZmY1YjBkMDQxMTNlNjQ0N2ZiMTQ1ZTZiMGM4NjU5Y2E0MjM3ZGQ).
+
+{% endmarkdown %}
+
+</div>
+
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
