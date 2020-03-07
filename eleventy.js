@@ -86,6 +86,7 @@ module.exports = function(config) {
   // pass some assets right through
   config.addPassthroughCopy("./src/site/images");
 
+  // mostly needed for redirecting from old drupal urls
   config.addPassthroughCopy("./src/site/**/*.html");
 
   return {

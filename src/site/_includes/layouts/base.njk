@@ -6,6 +6,7 @@
     {# <link rel="stylesheet" media="all" href="https://dev.assets.emblstatic.net/vf/develop/css/styles.css" /> #}
     <link rel="stylesheet" media="all" href="{{ '/css/styles.css' | url }}" />
     <title>{{ title or (renderData and renderData.title) or siteConfig.siteInformation.title}}</title>
+    {% render '@ken-favicon' %}
     {% render '@vf-no-js' %}
   </head>
   <body class="{{ bodyClass }} vf-body">
