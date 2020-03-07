@@ -1,27 +1,29 @@
 ---
 title: Hello
-subtitle: No homepage, yet.
+subtitle: I am Ken Hawkins.
 date: 2018-08-22 12:24:50
 layout: layouts/base.njk
 templateEngineOverride: njk, md
 ---
 
-{% render '@vf-intro', {"vf_intro_phase": "alpha", "vf_intro_heading": siteConfig.siteInformation.title,
-  "vf_intro_lede": siteConfig.siteInformation.short_description,
+{# {% render '@vf-intro', {"vf_intro_phase": "alpha", "vf_intro_heading": title,
+  "vf_intro_lede": subtitle,
   "vf_intro_text": [
     "☝️ that also means dynamic building of just the CSS and JS you need."
   ]
-} %}
+} %} #}
+
+<section class="embl-grid embl-grid--has-centered-content ">
+
+<div></div>
+
+<div class="vf-content">
+
+<h1 class="margin-top-none margin-bottom-none tight-leading">{{title}}.
+  <small>{{subtitle}}</small>
+</h1>
 
 {% markdown %}
-<div class="padding-top-xlarge">
-
-<div class="padding-top-xlarge padding-bottom-medium margin-bottom-xlarge">
-<h1 class="margin-top-none margin-bottom-none tight-leading">Hello.
-  <small>I am Ken Hawkins.</small>
-</h1>
-</div>
-
 - **I am a deep thinker:**
   I have a strong conceptual background from years of crafting deadline-driven data-heavy infographics for newspapers,  online publications driven by data and inovating marketing and tracking tools.
 
@@ -32,64 +34,46 @@ templateEngineOverride: njk, md
   Content modelling, design thinking, content structure and organisation, responsive design, analytics and metrics, principles of graphing, user centred design, user stories, user behaviour, Kanban.
 {% endmarkdown %}
 
-<div class="padding-top-xlarge padding-bottom-medium margin-bottom-xlarge">
-<h2 class="margin-top-none margin-bottom-none tight-leading">Concisely: <small>Ken Hawkins,</small> <small>Web Design Architect.</small>
-</h2>
-</div>
+<h2 class="margin-top-none margin-bottom-none tight-leading">Concisely: <small>Ken Hawkins,</small> <small>Web Design Architect.</small></h2>
 
 <hr/>
 
-<div class="margin-top-xlarge">
-<h2 class="margin-top-none margin-bottom-none">Say hello<small class="">, dig deeper <span class="emoji">⤵</span></small>
-</h2>
-</div>
+<h2 class="margin-top-none margin-bottom-none">Say hello<small class="">, dig deeper <span class="emoji">⤵</span></small></h2>
 
-<div class="grid-x grid-padding-x small-up-1 medium-up-4 padding-top-xlarge padding-bottom-xlarge">
-<div class="cell">
 <a class="block only-hover" href="/blog">
 {% markdown %}
 - **<h3 class="emoji">📝</h3> My blog:**
   If I've made something interesting and had a bit of time, I've hopefully done a post on it.
-
-  
 {% endmarkdown %}
 </a>
 &nbsp; &nbsp; &nbsp;<a href="/rss.xml"><span class="emoji">📬</span> Get the RSS feed</a>
-</div>
-<div class="cell">
+
 {% markdown %}
 - **<h3 class="emoji">👋</h3> Social connections:**
   - [Twitter @khawkins98](https://twitter.com/khawkins98): A bit of focus on design and the web, with a healthy dose of griping and trivia.
   - [LinkedIn](https://www.linkedin.com/in/allaboutken): Let's swap virtual business cards.
 {% endmarkdown %}
-</div>
-<div class="cell">
+
 <a class="block only-hover" href="mailto:khawkins98@gmail.com">
+
 {% markdown %}
 - **<h3 class="emoji">📧</h3>khawkins98@gmail.com:**
   Happy to take an e-mail about projects or to just say hello.
 {% endmarkdown %}
 </a>
-</div>
-<div class="cell">
+
 <a class="block only-hover" href="/cv">
 {% markdown %}
 - **<h3 class="emoji">ℹ️</h3> Want more details?**
   Have a read of my CV.
 {% endmarkdown %}
 </a>
-</div>
-</div>
 
-<div class="cell">
 
 {% markdown %}
 - **<h3 class="emoji">🍻</h3> Or, beer:** If you're passing through Heidelberg, <a class="readmore" href="https://www.destilleonline.de/" target="_blank">let's grab a beer</a>
 {% endmarkdown %}
+
 </div>
 
-
-{% markdown %}
-
-
-{% endmarkdown %}
+</section>
