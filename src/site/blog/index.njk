@@ -1,0 +1,25 @@
+---
+subtitle: No homepage, yet.
+date: 2018-08-22 12:24:50
+layout: layouts/post.njk
+templateEngineOverride: njk, md
+---
+{% set siteConfig = siteConfig.siteInformation %}
+# {{ siteConfig.title }} blog
+
+{{ siteConfig.short_description | safe }}
+
+{%- for post in collections.posts %}
+{% set absolutePostUrl %}{{ metadata.id }}{{ post.url }}{% endset %}
+
+## {{ post.data.title }}
+
+{{ absolutePostUrl }}
+
+  <updated>{{ post.date | dateDisplay }}</updated>
+  
+{{ absolutePostUrl }}
+
+{{ post.templateContent | safe }}
+
+{%- endfor %}
