@@ -2,7 +2,7 @@
 subtitle: No homepage, yet.
 date: 2018-08-22 12:24:50
 layout: layouts/post.njk
-templateEngineOverride: njk, md
+#templateEngineOverride: njk, md
 ---
 {% set siteConfig = siteConfig.siteInformation %}
 # {{ siteConfig.title }} blog
@@ -10,16 +10,23 @@ templateEngineOverride: njk, md
 {{ siteConfig.short_description | safe }}
 
 {%- for post in collections.posts %}
-{% set absolutePostUrl %}{{ metadata.id }}{{ post.url }}{% endset %}
 
-## {{ post.data.title }}
+<article class="vf-summary vf-summary--news">
+  <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
+  <img class="vf-summary__image" src="{{ post.data.image | url }}" alt="">
 
-{{ absolutePostUrl }}
+  <h3 class="vf-summary__title">
+    <a href="{{ post.url | url}}" class="vf-summary__link">{{ post.data.title }}</a>
+  </h3>
 
-  <updated>{{ post.date | dateDisplay }}</updated>
-  
-{{ absolutePostUrl }}
+  {# <div class="vf-summary__meta">
+      <a href="JavaScript:Void(0);" class="vf-summary__author vf-summary__link">Laura Howes</a>
+      <p class="vf-summary__date">06 February 2018</p>
+      <a href="JavaScript:Void(0);" class="vf-summary__link">Leave Comment</a>
+  </div> #}
+  <p class="vf-summary__text">{{ post.data.teaser }}
+</p>
 
-{{ post.templateContent | safe }}
+</article>
 
 {%- endfor %}
