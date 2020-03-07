@@ -13,3 +13,69 @@
 .vf-local-overrides {
   /* your settings here */
 }
+
+// Print utility classes
+@media print {
+  // .grid-container,
+  // hr,
+  // .print-12 {
+  //   max-width: 100%;
+  //   width: 100% !important;
+  // }
+  // body {
+  //   font-size: .8rem;
+  // }
+  .do-not-print {
+    display:none;
+  }
+  .for-print-only {
+    display:block
+  }
+  a[href]:after {
+    content: " ";
+    display: none;
+  }
+  // hr {
+  //   border-top-color: #222
+  // }
+  // .has-tip {
+  //   border-bottom: none !important;
+  //   font-weight: unset;
+  // }
+}
+@media screen {
+  .show-for-print-only,
+  .for-print-only {
+    display:none;
+  }
+}
+
+/* Anchors */
+.vf-grid a[name] {
+  // color: #fff;
+}
+.vf-grid a[name]:active {
+  // color: #ccc;
+}
+
+.vf-grid a[name]:link,
+.vf-grid a[name]:hover {
+  background: none;
+}
+
+.vf-grid h2 a[name]:hover:before,
+.vf-grid h3 a[name]:hover:before {
+  content: "⚓️";
+  font-weight: 400 !important;
+  font-family: 'Noto-Emoji';
+  position: relative;
+  display: inline-block;
+  width: 0;
+  left: -3rem;
+}
+
+.vf-grid h3 a[name]:hover:before {
+  left: -1.75rem;
+}
+
+
