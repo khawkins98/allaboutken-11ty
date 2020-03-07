@@ -1247,10 +1247,6 @@
     luxon "^1.22.0"
     touch "^3.1.0"
 
-"@visual-framework/vf-favicon@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@visual-framework/vf-favicon/-/vf-favicon-1.0.0.tgz#360bbc342c0a53e66920a880d9ceab86a79bcb7f"
-
 "@visual-framework/vf-figure@^1.0.0-beta.1":
   version "1.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/@visual-framework/vf-figure/-/vf-figure-1.0.0-beta.1.tgz#a87696b71493ffe5742b112220e69e571000bd65"
