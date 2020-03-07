@@ -14,7 +14,7 @@ topics:
 <div class="medium-12 cell padding-top-large">
 
 <div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
-  <figure class="large-10 medium-8 cell callout"><img class="padding-bottom-medium" alt="Tightly pairing Fractal and Eleventy can be done" src="{{root}}images/original{{image}}" />
+  <figure class="large-10 medium-8 cell callout"><img class="padding-bottom-medium" alt="Tightly pairing Fractal and Eleventy can be done" src="/images/original{{image}}" />
     <figcaption>What you get out of the box when you use the Visual Framework's boilerplate for Eleventy: static site development with a Fractal component library running in the same process. When you update a Fractal component, so does the Eleventy build.</figcaption>
   </figure>
 </div>
@@ -46,7 +46,7 @@ The two tools don't work like this by default, but I'll share how we've made it 
 
 ## How it feels
 
-![animated-GIF that shows how the Fractal components and Eleventy content are united]({{root}}images/original/blog/fractal-elventy-gulp-cycle.gif)
+![animated-GIF that shows how the Fractal components and Eleventy content are united](/images/original/blog/fractal-elventy-gulp-cycle.gif)
 
 _A 16-second animated-GIF that shows how the Fractal components and Eleventy content are united._
 
@@ -66,7 +66,7 @@ We were really excited by this in initial discussions as we can use similar buil
 
 Here's a high-level diagram:
 
-![Diagram of how Eleventy and Fractal talk]({{root}}images/original/blog/fractal-vf-eleventy-architecture.svg)
+![Diagram of how Eleventy and Fractal talk](/images/original/blog/fractal-vf-eleventy-architecture.svg)
 
 _When the developer runs `gulp dev` it allows Fractal and Eleventy to run as child process of gulp, sharing a Nunjucks environment._
 

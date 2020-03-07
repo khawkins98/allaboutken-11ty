@@ -13,7 +13,7 @@ layout: layouts/post.njk
 
 <article class="vf-summary vf-summary--news">
   <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
-  <img class="vf-summary__image" src="{{ post.data.image | url }}" alt="">
+  <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image | url }}" alt="">
 
   <h3 class="vf-summary__title">
     <a href="{{ post.url | url}}" class="vf-summary__link">{{ post.data.title }}</a>

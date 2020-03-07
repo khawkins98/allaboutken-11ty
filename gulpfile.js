@@ -22,13 +22,14 @@ gulp.task('images', function(done) {
     .pipe(gulp.dest('build/images/original/'));
 
   // Square crop
-  gulp.src('src/site/images/**/*{.jpg,.png,.gif}')
-    .pipe(resizer({
-      // format: "png",
-      width: 400,
-      height: 400
-    }))
-    .pipe(gulp.dest('build/images/crop-square/'));
+  // Not used anymore
+  // gulp.src('src/site/images/**/*{.jpg,.png,.gif}')
+  //   .pipe(resizer({
+  //     // format: "png",
+  //     width: 400,
+  //     height: 400
+  //   }))
+  //   .pipe(gulp.dest('build/images/crop-square/'));
 
   // Cinematic crop
   gulp.src('src/site/images/**/*{.jpg,.png,.gif}')
