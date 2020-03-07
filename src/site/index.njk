@@ -42,38 +42,70 @@ templateEngineOverride: njk, md
 
 <a class="block only-hover" href="/blog">
 {% markdown %}
-- **<h3 class="emoji">📝</h3> My blog:**
-  If I've made something interesting and had a bit of time, I've hopefully done a post on it.
+
+<h3 class="emoji">📝</h3> My blog:
+
+
+If I've made something interesting and had a bit of time, I've hopefully done a post on it.
+
 {% endmarkdown %}
 </a>
+
 &nbsp; &nbsp; &nbsp;<a href="/rss.xml"><span class="emoji">📬</span> Get the RSS feed</a>
 
 {% markdown %}
-- **<h3 class="emoji">👋</h3> Social connections:**
-  - [Twitter @khawkins98](https://twitter.com/khawkins98): A bit of focus on design and the web, with a healthy dose of griping and trivia.
-  - [LinkedIn](https://www.linkedin.com/in/allaboutken): Let's swap virtual business cards.
-{% endmarkdown %}
 
-<a class="block only-hover" href="mailto:khawkins98@gmail.com">
+<h3 class="emoji">👋</h3> Social connections
+  
+- [Twitter @khawkins98](https://twitter.com/khawkins98): A bit of focus on design and the web, with a healthy dose of griping and trivia.
+- [LinkedIn](https://www.linkedin.com/in/allaboutken): Let's swap virtual business cards.
 
-{% markdown %}
-- **<h3 class="emoji">📧</h3>khawkins98@gmail.com:**
-  Happy to take an e-mail about projects or to just say hello.
-{% endmarkdown %}
-</a>
-
-<a class="block only-hover" href="/cv">
-{% markdown %}
-- **<h3 class="emoji">ℹ️</h3> Want more details?**
-  Have a read of my CV.
-{% endmarkdown %}
-</a>
-
-
-{% markdown %}
-- **<h3 class="emoji">🍻</h3> Or, beer:** If you're passing through Heidelberg, <a class="readmore" href="https://www.destilleonline.de/" target="_blank">let's grab a beer</a>
 {% endmarkdown %}
 
 </div>
 
+</section>
+
+
+<section class="vf-card-container">
+  <div class="vf-card-container__inner">
+
+
+<a href="mailto:khawkins98@gmail.com" class="vf-card vf-card--is-link vf-card--very-easy">
+  {# <img src="../../assets/vf-card/assets/vf-card-example.png" alt="" class="vf-card__image"> #}
+  <div class="vf-card__content">
+    <h3 class="vf-card__title | emoji">
+      📧 khawkins98@gmail.com
+    </h3>
+    <p class="vf-card__text">
+      Happy to take an e-mail about projects or to just say hello.
+    </p>
+  </div>
+</a>
+
+<a href="/cv" class="vf-card vf-card--is-link vf-card--very-easy">
+  {# <img src="../../assets/vf-card/assets/vf-card-example.png" alt="" class="vf-card__image"> #}
+  <div class="vf-card__content">
+    <h3 class="vf-card__title | emoji">
+      ℹ️ Want specific details?
+    </h3>
+    <p class="vf-card__text">
+      Have a read of my CV.
+    </p>
+  </div>
+</a>
+
+<a href="https://www.destilleonline.de" class="vf-card vf-card--is-link vf-card--very-easy">
+  {# <img src="https://www.destilleonline.de" alt="" class="vf-card__image"> #}
+  <div class="vf-card__content">
+    <h3 class="vf-card__title | emoji">
+      🍻 Or, beer
+    </h3>
+    <p class="vf-card__text">
+      If you're passing through Heidelberg, let's grab a beer
+    </p>
+  </div>
+</a>
+
+</div>
 </section>

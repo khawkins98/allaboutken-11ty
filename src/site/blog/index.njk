@@ -4,11 +4,24 @@ date: 2018-08-22 12:24:50
 layout: layouts/post.njk
 #templateEngineOverride: njk, md
 ---
-{% set siteConfig = siteConfig.siteInformation %}
+{%- set siteConfig = siteConfig.siteInformation -%}
+
+
+{# {% render '@vf-intro', {"vf_intro_phase": "", "vf_intro_heading": "",
+  "vf_intro_lede": subtitle,
+  "vf_intro_text": [
+    "☝️ that also means dynamic building of just the CSS and JS you need."
+  ]
+} %} #}
+
+<div class="embl-grid embl-grid--has-centered-content">
+  <div></div>
+  <div>
 
 # Ken Hawkins' blog
 
-{# {{ siteConfig.short_description | safe }} #}
+<br/>
+<br/>
 
 {%- for post in collections.posts | sort(true, true, attribute='date' ) %}
 
@@ -33,3 +46,10 @@ layout: layouts/post.njk
 </article>
 
 {%- endfor %}
+  
+  </div>
+  <div></div>
+</div>
+
+{# {{ siteConfig.short_description | safe }} #}
+
