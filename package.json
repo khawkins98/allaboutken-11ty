@@ -1,17 +1,17 @@
 {
-  "name": "@visual-framework/vf-boilerplate-eleventy",
-  "version": "2.0.0-alpha.16",
-  "description": "Build a site with Visual Framework components using the the Eleventy templating engine.",
+  "name": "allaboutken-11ty",
+  "version": "1.0.0-alpha.1",
+  "description": "Ken's site.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/visual-framework/vf-eleventy.git"
   },
   "license": "Apache-2.0",
-  "author": "Ken Hawkins <ken.hawkins@embl.de> (https://www.embl.de/aboutus/communication_outreach/)",
+  "author": "Ken Hawkins <khawkins98@gmail.com> (https://work.allaboutken.com/)",
   "main": "gulpfile.js",
   "vfConfig": {
-    "vfName": "VF Boilerplate for Eleventy",
-    "vfNamespace": "vfeleventy-",
+    "vfName": "All about Ken",
+    "vfNamespace": "ken-",
     "vfComponentPath": "./src/components",
     "vfBuildDestination": "./build",
     "vfBuildFractalMode": "dataObject",
@@ -66,8 +66,8 @@
     "require-dir": "^1.0.0"
   },
   "bugs": {
-    "url": "https://github.com/visual-framework/vf-eleventy/issues"
+    "url": "https://github.com/khawkins98/allaboutken-11ty/issues"
   },
-  "homepage": "https://github.com/visual-framework/vf-eleventy#readme",
+  "homepage": "https://github.com/khawkins98/allaboutken-11ty#readme",
   "keywords": []
 }
