@@ -10,7 +10,7 @@ stages:
 before_script:
   # - npm install
   - yarn install
-  - yarn run-script build
+  - yarn run build
 
 deploy:
   provider: pages
