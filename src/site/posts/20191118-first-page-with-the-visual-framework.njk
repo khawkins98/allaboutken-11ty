@@ -11,11 +11,18 @@ topics:
   - gulp, Eleventy, EMBL, Fractal, Visual Framework
 ---
 
+{%- render '@vf-figure--default', {
+  "text": "It's not hard, it's just a matter of getting started.",
+  "alttext": "Tightly pairing Fractal and Eleventy can be done",
+  "imageUrl": "/images/original" + image | url
+} -%}
+
+
 <div class="medium-12 cell padding-top-large">
 
 <div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
-  <figure class="large-10 medium-8 cell callout"><img class="padding-bottom-medium" alt="Tightly pairing Fractal and Eleventy can be done" src="/images/original{{image}}" />
-    <figcaption>It's not hard, it's just a matter of getting started.</figcaption>
+  <figure class="large-10 medium-8 cell callout"><img class="padding-bottom-medium" alt="" src="" />
+    <figcaption>.</figcaption>
   </figure>
 </div>
 
