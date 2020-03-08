@@ -133,19 +133,19 @@ There are a few principles to understand when working with Visual Framework:
 
    - By default  [`vf-grid`](https://visual-framework.github.io/vf-core/components/detail/vf-grid.html) will try to put your content into columns, if you only want one column:
 
-     ```html
-     <div class="vf-grid">
-       <div>All child content here</div>
-     </div>
-     
-     <div class="vf-grid">
-       <div>This layout</div>
-       <div>Makes two columns</div>
-     </div>
-     ```
+    {% codeblock 'html' -%}
+    <div class="vf-grid">
+      <div>All child content here</div>
+    </div>
 
+    <div class="vf-grid">
+      <div>This layout</div>
+      <div>Makes two columns</div>
+    </div>
+    {% endcodeblock %}
 
 {% endmarkdown %}
+
 <figure class="cell callout">
 <div 
   class="codepen" 
@@ -207,12 +207,12 @@ There are a few principles to understand when working with Visual Framework:
 {% markdown %}
 
    - If you want to make a custom layout
-     ```html
-     <div class="vf-grid vf-grid__col-3"> 
-       <div>I cover 1 of 3</div>
-       <div class="vf-grid__col--span-2">I cover 2 of 3 columns</div>
-     </div>
-     ```
+    {% codeblock 'html' -%}
+<div class="vf-grid vf-grid__col-3"> 
+    <div>I cover 1 of 3</div>
+    <div class="vf-grid__col--span-2">I cover 2 of 3 columns</div>
+</div>
+    {% endcodeblock -%}
 
 {% endmarkdown %}
 <figure class="cell callout">
