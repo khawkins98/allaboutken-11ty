@@ -17,16 +17,10 @@ topics:
   "imageUrl": "/images/crop-cinema" + image | url
 } -%}
 
-
-
 {% markdown %}
 {{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span>
 
-<div class="grid-x">
-<div class="large-11 medium-12 cell">
 <h1>{{title}}</h1>
-</div>
-</div>
 
 <p class="lead">{{teaser}}</p>
 
@@ -205,7 +199,7 @@ There are a few principles to understand when working with Visual Framework:
     <div>I cover 1 of 3</div>
     <div class="vf-grid__col--span-2">I cover 2 of 3 columns</div>
 </div>
-    {% endcodeblock -%}
+    {%- endcodeblock -%}
 
 {% endmarkdown %}
 <figure class="cell callout">
@@ -297,12 +291,12 @@ There are a few principles to understand when working with Visual Framework:
 
    For those situations, wrap the content in a [parent element with `.vf-content`](https://visual-framework.github.io/vf-core/components/detail/vf-content.html)
 
-   ```html
-   <section class="vf-content">
-     <h1>My WYSIWYG-made text</h1>
-     <p>I'm some user-made content with <a href="#">a link</a>.</p>
-   </section>
-   ```
+    {% codeblock 'html' -%}
+<section class="vf-content">
+    <h1>My WYSIWYG-made text</h1>
+    <p>I'm some user-made content with <a href="#">a link</a>.</p>
+</section>
+    {%- endcodeblock -%}
    
 {% endmarkdown %}
 <figure class="cell callout">

@@ -1376,6 +1376,10 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@visual-framework/vf-text/-/vf-text-1.0.1.tgz#1c3581b59fd968fa4fc06a9d355bc21f34018a07"
 
+"@visual-framework/vf-utility-classes@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@visual-framework/vf-utility-classes/-/vf-utility-classes-1.0.1.tgz#04f36bd9ca94446c002085ea9d365e00e60aefee"
+
 "@yarnpkg/lockfile@^1.0.2":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz#e77a97fbd345b76d83245edcd17d393b1b41fb31"

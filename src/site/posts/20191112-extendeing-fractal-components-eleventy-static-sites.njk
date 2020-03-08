@@ -11,22 +11,20 @@ topics:
   - gulp, Eleventy, EMBL, Fractal, Visual Framework
 ---
 
-<div class="medium-12 cell padding-top-large">
 
-<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
-  <figure class="large-10 medium-8 cell callout"><img class="padding-bottom-medium" alt="Tightly pairing Fractal and Eleventy can be done" src="/images/original{{image}}" />
-    <figcaption>What you get out of the box when you use the Visual Framework's boilerplate for Eleventy: static site development with a Fractal component library running in the same process. When you update a Fractal component, so does the Eleventy build.</figcaption>
-  </figure>
-</div>
+{%- render '@ken-figure', {
+  "text": "What you get out of the box when you use the Visual Framework's boilerplate for Eleventy: static site development with a Fractal component library running in the same process. When you update a Fractal component, so does the Eleventy build.",
+  "alttext": "Tightly pairing Fractal and Eleventy can be done",
+  "imageUrl": "/images/crop-cinema" + image | url
+} -%}
+
+
+
 
 {% markdown %}
 {{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span>
 
-<div class="grid-x">
-<div class="large-11 medium-12 cell">
 <h1>{{title}}</h1>
-</div>
-</div>
 
 <p class="lead">{{teaser}}</p>
 
@@ -46,9 +44,16 @@ The two tools don't work like this by default, but I'll share how we've made it 
 
 ## How it feels
 
-![animated-GIF that shows how the Fractal components and Eleventy content are united](/images/original/blog/fractal-elventy-gulp-cycle.gif)
+{% endmarkdown %}
 
-_A 16-second animated-GIF that shows how the Fractal components and Eleventy content are united._
+
+{%- render '@ken-figure', {
+  "text": "A 16-second animated-GIF that shows how the Fractal components and Eleventy content are united.",
+  "alttext": "Animated-GIF that shows how the Fractal components and Eleventy content are united",
+  "imageUrl": "/images/original/blog/fractal-elventy-gulp-cycle.gif" 
+} -%}
+
+{% markdown %}
 
 Here's what's happening:
 
@@ -116,4 +121,3 @@ I took [a deeper look at this approach in a separate blog post](https://work.all
 
 {% endmarkdown %}
 
-</div>
