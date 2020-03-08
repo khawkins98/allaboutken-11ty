@@ -14,6 +14,16 @@
   /* your settings here */
 }
 
+// Default color
+.vf-body {
+  color: var(--vf-color--grey--darkest);
+  background: var(--vf-ui-color--grey--light);
+}
+
+html, body {
+  background: var(--vf-ui-color--grey--light);
+}
+
 // Print utility classes
 @media print {
   // .grid-container,
