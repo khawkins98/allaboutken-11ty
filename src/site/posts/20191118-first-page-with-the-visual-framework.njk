@@ -11,20 +11,13 @@ topics:
   - gulp, Eleventy, EMBL, Fractal, Visual Framework
 ---
 
-{%- render '@vf-figure--default', {
+{%- render '@ken-figure', {
   "text": "It's not hard, it's just a matter of getting started.",
   "alttext": "Tightly pairing Fractal and Eleventy can be done",
-  "imageUrl": "/images/original" + image | url
+  "imageUrl": "/images/crop-cinema" + image | url
 } -%}
 
 
-<div class="medium-12 cell padding-top-large">
-
-<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
-  <figure class="large-10 medium-8 cell callout"><img class="padding-bottom-medium" alt="" src="" />
-    <figcaption>.</figcaption>
-  </figure>
-</div>
 
 {% markdown %}
 {{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span>
@@ -425,6 +418,5 @@ A grab-bag of important things that you might not expect.
 
 {% endmarkdown %}
 
-</div>
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>

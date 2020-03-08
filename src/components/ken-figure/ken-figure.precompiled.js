@@ -1,7 +1,7 @@
 /**
- * Precompiled Nunjucks template: vf-figure.njk
+ * Precompiled Nunjucks template: ken-figure.njk
  */
-(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["vf-figure"] = (function() {
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["ken-figure"] = (function() {
 function root(env, context, frame, runtime, cb) {
 var lineno = 0;
 var colno = 0;
@@ -28,7 +28,7 @@ output += "\" alt=\"";
 output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "alttext"), env.opts.autoescape);
 output += "\">\n  <figcaption class=\"vf-figure__caption\">";
 output += runtime.suppressValue((runtime.contextOrFrameLookup(context, frame, "html")?env.getFilter("safe").call(context, runtime.contextOrFrameLookup(context, frame, "html")):runtime.contextOrFrameLookup(context, frame, "text")), env.opts.autoescape);
-output += "</figcaption>\n</figure>\n";
+output += "</figcaption>\n</figure>";
 if(parentTemplate) {
 parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
 } else {
