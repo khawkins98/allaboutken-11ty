@@ -7,8 +7,12 @@ templateEngineOverride: njk
 {# <p class="date">
   Posted as an example, on <time datetime="{{ date }}">{{ date | dateDisplay }}</time>
 </p> #}
-<main class="vf-content">
+<main class="embl-grid embl-grid--has-centered-content">
+  <div></div>
+  <section class="vf-content">
   {{ content | safe }}
+  </section>
+  <div></div>
   {# <div class="footnote">
     <p>
       This page is part of the posts section.
