@@ -6,6 +6,11 @@
   /* your settings here */
 }
 
+// minimal reset
+img {
+  max-width: 100%;
+}
+
 // extra spacing after header
 .vf-global-header {
   margin-bottom:  map-get($vf-spacing-map, vf-spacing--xl);
@@ -253,3 +258,4 @@ html, body {
 //   padding-top: 1.5rem;
 //   /* stylelint-enable */
 // }
+
