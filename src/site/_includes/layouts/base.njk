@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {# <link rel="stylesheet" media="all" href="https://dev.assets.emblstatic.net/vf/develop/css/styles.css" /> #}
     <link rel="stylesheet" media="all" href="{{ '/css/styles.css' | url }}" />
-    <title>{{ title or (renderData and renderData.title) or siteConfig.siteInformation.title}}</title>
+    <title>{{ title or (renderData and renderData.title) or siteConfig.siteInformation.title}} | All about Ken Hawkins</title>
     {% render '@ken-favicon' %}
     {% render '@vf-no-js' %}
 
@@ -31,7 +31,7 @@
     <meta name="twitter:image" content="https://work.allaboutken.com/images/crop-cinema{{image}}" />
     <meta name="dcterms.title" content="{{title}} > All About Ken Hawkins" />
     <meta name="dcterms.type" content="Text" />
-    <meta name="dcterms.identifier" content="http://allaboutken.com{{page.url | url }}" />
+    <meta name="dcterms.identifier" content="https://allaboutken.com{{page.url | url }}" />
     <meta name="dcterms.format" content="text/html" />
 
     <link rel="alternate" type="application/rss+xml" title="RSS" href="https://work.allaboutken.com/rss.xml">
