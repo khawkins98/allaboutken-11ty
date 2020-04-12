@@ -14,6 +14,12 @@ img {
 // extra spacing after header
 .vf-global-header {
   margin-bottom:  map-get($vf-spacing-map, vf-spacing--xl);
+  background-color: unset;
+  border-bottom-color: #fff;
+}
+
+.vf-logo__text {
+  // font-weight: unset;
 }
 
 // Default color
