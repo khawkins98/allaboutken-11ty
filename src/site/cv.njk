@@ -1,0 +1,316 @@
+---
+title: Ken Hawkins' CV
+subtitle: No homepage, yet.
+date: 2018-08-22 12:24:50
+layout: layouts/post.njk
+templateEngineOverride: njk, md
+active_path: front
+---
+
+<style>
+  .sticky {
+    opacity: 0;
+  }
+  .sticky.is-stuck {
+    opacity: 1;
+  }
+  #cv-menu a {
+    background: none;
+  }
+  #cv-menu a.is-active {
+    border-bottom: 1px dotted #fff;
+  }
+  #cv-menu a:hover {
+    border-bottom: 1px solid #fff;
+  }
+  .main-content-area h2,  
+  .main-content-area h3 {
+    margin-top: unset;
+  }
+</style>
+<!-- Add a Sticky Menu -->
+<!--<div data-sticky-container class="do-not-print">
+  <div class="black-background white-color padding-top-medium padding-bottom-medium no-underline" data-sticky data-margin-top="0" data-anchor="cvbody" id="cv-menu">
+    <ul class="menu" data-magellan>
+      <span class="lead padding-top-small padding-left-xlarge padding-right-large">Skip <span class="emoji">⤵</span></span>
+      <li><a class="" href="#experience">Experience</a></li>
+      <li><a class="" href="#history">History</a></li>
+      <li><a class="" href="#more">More</a></li>
+    </ul>
+  </div>
+</div>-->
+
+<div class="show-for-print-only">
+{% markdown %}
+# {{title}}
+<span class="emoji">📧</span>[khawkins98@gmail.com](mailto:khawkins98@gmail.com)  &nbsp;<span class="emoji">🐦</span> @khawkins98 &nbsp;<span class="emoji">🌎</span> AllAboutKen.com  &nbsp;<span class="emoji">📇</span> Online problem solver
+
+{% endmarkdown %}
+</div>
+
+<div id="cvbody">
+
+<div class="hide-for-print">
+<br/>
+{% markdown %}
+# {{title}} <small>aka, my longer resume</small>
+
+<p class="">My career and interests revolve on common points: distillation of unorganised information into clearer communication.</p>
+
+<!-- I've found this challenge a recurrent and beneficial problem to solve in newspaper reporting, e-commerce, corporate websites and often in things as simple as a rather messy brochure. Below I've attempted to show how my various work experience (left) equates to major areas of my knowledge (right), and I've added a few key lenses in the middle. -->
+
+{% endmarkdown %}
+</div>
+
+
+<style> /* set the CSS */
+
+.node rect {
+  cursor: move;
+  fill-opacity: .9;
+  shape-rendering: crispEdges;
+}
+
+.node text {
+  pointer-events: none;
+  fill: #fff;
+  /*text-shadow: 0 1px 0 #fff;*/
+}
+
+.link {
+  fill: none;
+  stroke: #FFF;
+}
+
+.link:hover {
+  stroke-opacity: .9;
+}
+
+@media print { 
+  .cv-clippings a:link:after, 
+  .cv-clippings a:visited:after { 
+    display: block;
+    content: "" attr(href) "";
+    font-size: 80%;
+  }
+
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+}
+
+
+h3 { margin-top: usnet;  }
+
+.label:first-child {
+  margin-left: -0.5rem;
+}
+
+</style>
+
+
+<a id="cv" name="cv"></a>
+{% markdown %}
+
+<div id="experience" data-magellan-target="experience"></div>
+<div class="hide-for-print padding-top-xlarge"></div>
+<div class="hide-for-print padding-top-xlarge"></div>
+
+## Professional experience
+
+### Areas of expertise: from concepts to technical
+
+My time tackling problems spans 20 years: beginning with printing presses, continuing through graphic design, information graphics, architecting startups and now centres on web publishing and design systems.
+
+- **Structuring the unstructured**
+  - Maximising content for discoverability and context-aware content
+  - Reusable content structures
+  - Storytelling through visualisations
+  - Utilising social media as a tool for content creation, collaboration
+  - Tooling abstraction for content editors
+  - Utilising the fundamentals of web technology and structured content (HTML)
+  - Documenting systems
+- **Project leadership**
+  - Content and project governance over time through abstracting content, actions and goals 
+  - Stakeholder consultation and expectation management through roadmapping
+  - Feature prioritisation and sprint-based project planning 
+  - Training and fostering web content creation from the general public to experienced developers
+- **Web expertise**
+  - Managing geographically distributed projects with, GitLab, GitHub, Kanban and Slack (and similar)
+  - HTML, CSS/Sass, JavaScript, browser consoles, Handlebars, D3.js, Mapbox, PHP, Apache, npm, Gulp, Browsersync, Markdown
+  - Bonus: Strong Web CMS knowledge: Drupal configuration and development, Eleventy, WordPress
+- **Contemporary techniques**
+  Design systems, component and pattern libraries, controlled taxonomies, prototyping, user stories, user research, user-centred design, principles of visualization and graphing, system governance, Kanban, Agile, Google Analytics custom events, responsive design and progressive web apps
+- **Versatile desktop publishing skills**
+  Adobe Illustrator, Photoshop, InDesign, from Google Docs to Microsoft Office, Linux, Mac, Windows
+
+<div id="history" data-magellan-target="history"></div>
+<div class="do-not-print padding-top-xlarge"></div>
+<div class="do-not-print padding-top-xlarge"></div>
+
+<div style="page-break-before: always"></div>
+
+## Professional work history
+
+### Lead web design architect (EMBL)
+<span class="label">European Molecular Biology Laboratory (EMBL)</span> <span class="label">June 2018 – ongoing</span> <span class="label">Heidelberg, Germany</span>
+- Continuation of my role for the European Bioinformatics Institute (EMBL-EBI)
+- Grow, evolve projects from EMBL-EBI into pan-EMBL solutions 
+- Information architecture and component tooling for EMBL web content, design systems
+- Architecting abstracted web content platform, navigation
+- Facilitate collaboration between UX, developers and content teams
+- Foster design system growth, adoption by coordinating with development leads
+
+<div class="cv-clippings">
+
+**Related writing**
+- [Fractal and Eleventy: Getting static sites closer to the design system](https://work.allaboutken.com/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html)
+- [Faster scientific websites through reusability](https://blogs.embl.org/communications/2018/09/12/faster-scientific-websites-through-reusability/)
+- [Unshackling content, and their authors](https://blogs.embl.org/communications/2018/08/21/unshackling-content-and-their-authors/)
+
+</div> 
+
+<!--
+- [The Visual Framework 2.0: Web developer outreach at EMBL-EBI Day 2019](https://blogs.embl.org/communications/2019/06/27/the-visual-framework-2-0-web-developer-outreach-at-embl-ebi-day-2019/)
+- [Flexibility, discoverability: using metadata for better user journeys](https://blogs.embl.org/communications/2017/09/25/flexibility-discoverability-using-metadata-for-better-user-journeys/)
+-->
+
+**Major technical tooling and processes:** HTML/JS/CSS, Sass, GitHub, GitLab CI, Visual Studio Code, Google Analytics, Gulp, npm, Eleventy, Fractal, Drupal, Continuous integration, Kanban
+
+<hr/>
+
+### Web design architect (EMBL-EBI)
+<span class="label">European Bioinformatics Institute (EMBL-EBI)</span> <span class="label">July 2015 – June 2018</span> <span class="label">Cambridge, UK</span>
+- Lead information architecture and design tooling for EMBL-EBI web content, design systems
+- Facilitate collaboration between UX, developers and content teams
+- Foster design system growth, adoption by coordinating with development leads
+- Drive for reusable patterns in web interfaces
+- Close gap between web analytics and content effectiveness
+- Improve intranet information architecture to focus on user activities 
+
+**Related writing**
+- [The EMBL Triangle Key: From brand structure to information architecture](https://blogs.embl.org/communications/2017/07/18/the-embl-triangle-key-from-brand-structure-to-information-architecture/)
+- [Mapping brand structure to support communication](https://blogs.embl.org/communications/2017/07/11/mapping-brand-structure-to-support-communication/)
+- [Introducing the Content-Action Model for Web Systems](https://work.allaboutken.com/posts/20180122-content-action-model.html)
+
+<!-- - [Inside the Content-Action Model](https://work.allaboutken.com/posts/20180329-cam-content-action-goal-ontology.html) -->
+<!-- - [What if: A web font for data](https://work.allaboutken.com/posts/20180319-data-font-for-life-sciences.html) -->
+
+**Major technical tooling and processes:** Content modelling and architecture, HTML/JS/CSS, Sass, Adobe Creative Suite, Atom, MapBox, Google Analytics, GitHub, Gulp, npm, Jekyll, Foundation Framework, Drupal, Travis, Continuous integration, Kanban
+
+<hr/>
+
+<div style="page-break-before: always"></div>
+
+
+### Web developer, information designer
+<span class="label">DRS Technical Solutions</span>  <span class="label">February 2011 – June 2015</span> <span class="label">Stuttgart, Germany</span>
+- Manage user-focused efforts (UX, research, metrics) for company web projects
+- Website project lead for a Drupal platform to support more than 150,000 user accounts, provide e-commerce tools
+- Information architecture and infographics for business proposals, strategic planning
+- Numerous intranet-style websites to manage contacts, resumes, documents by consuming JSON and XML feeds for custom dashboards and processing
+- Create and implement software projects with multi-company team members in the U.S., Europe and Middle East
+
+**Major technical tooling:** Drupal, HTML, CSS, JavaScript, Bitbucket, Agile, Amazon EC2, Route 53, Google Analytics
+
+<hr/>
+
+### Technical and editorial lead
+<span class="label">TheDigitel</span> <span class="label">May 2008 – February 2011</span> <span class="label">South Carolina, USA</span>
+- Co-founded TheDigitel.com to advance newspaper methodology in the age of websites
+- Lead team of eight staff and an array of freelancers and volunteers to report, market and implement web features
+- Lead community editor outreach with physical, online, podcast events
+- Help our students grow through our intern partnership with the local college
+- Pioneer use of Twitter hashtags for local media community reporting
+- Dynamic Advertising: a new advertising model powered by social media
+- Speak at events for the creative community about code, reporting, startups
+- Refine Drupal UX and content editing experience for community collaboration with staff editors
+- Raise funding, manage investors, expand TheDigitel to three cities
+
+**Major technical tooling:** HTML, CSS, JavaScript, Drupal, LAMP hosting optimisation, daily briefing newsletter automations, reverse proxy caching, Adobe Creative Suite, Google Analytics, Google G Suite admin, A/B testing, Google AdSense and AdWords, podcasting
+
+<hr/>
+
+### Graphics reporter
+<span class="label">The Post and Courier</span> <span class="label">March 2006 - May 2008</span> <span class="label">South Carolina, USA</span>
+Newspaper infographic design and reporting
+- Produce daily deadline-driven information graphics based on news reports
+- Create interactive HTML and Flash information graphics for the Web
+- Process geographic data to create maps (GIS)
+- Design and produce newspaper pages
+- Photo management and copy editing
+
+**Major technical tooling:** Adobe Illustrator, Photoshop, InDesign, Acrobat, QuarkXPress, Flash, ArcGIS, Modo 3D modelling, HTML, CSS, JavaScript, Mac OS
+
+<hr/>
+
+### Graphics reporter
+<span class="label">The Beaufort Gazette</span> <span class="label">May 2003 - March 2006</span> <span class="label">South Carolina, USA</span>
+Newspaper infographic and page design
+- Produce daily deadline-driven information graphics based on news reports
+- Help lead the visual design of newspaper pages
+- Work to educate staff on photo cropping, type kerning, general principles of visual structure and directing the reader's focus
+
+**Major technical tooling:** Adobe Illustrator, Photoshop, InDesign, Acrobat, QuarkXPress, Mac OS
+
+<hr/>
+
+### Production manager
+<span class="label">The Daily Journal</span> <span class="label">May 2000 - April 2003</span> <span class="label">South Carolina, USA</span>
+Newspaper pre-press production, advertising
+- <span data-tooltip aria-haspopup="true" class="has-tip" data-disable-hover="false" tabindex="1" title="If you ever want to talk about the properties of ink on paper, let me know.">Pre-flight</span> and technical management of daily newspaper pre-press production
+- Lead production of in-house creatives for advertising clients
+- Manage pre-press team of 4 individuals
+
+**Major technical tooling utilised:** Adobe Illustrator, Photoshop, Acrobat, QuarkXPress, Mac OS
+
+<!-- <span class="label">January 2000 - May 2008</span> <span class="label">Ending at The Post and Courier</span> <span class="label">South Carolina, USA</span>
+#### Newspaper infographic design and reporting -->
+
+<div class="do-not-print padding-top-xlarge"></div>
+<div class="do-not-print padding-top-xlarge"></div>
+
+<div style="page-break-before: always"></div>
+
+## Education, collaboration, speaking
+- **Clemson University, Bachelor of Science in Graphic Communications, May 2003**
+  - Internships: Electric City Printing prepress, Seneca Daily Journal prepress
+- **Charleston Drupal meet-up and co-working**
+  Founding member of the local co-working and Drupal user group
+- **Co-founder of Fuse843**
+  A regional group of "creative class" individuals, we hosted local networking events, speakers and an online social networking tool
+- **Speaking events**
+  Charleston PechaKucha, Charleston Drupal user group, Create South conference, Startup Stuttgart, various others
+
+<div class="do-not-print padding-top-xlarge"></div>
+<div class="do-not-print padding-top-xlarge"></div>
+
+<div id="more" data-magellan-target="more"></div>
+
+## Other things
+ <span class="emoji">📐</span>  Clean design  <span class="emoji">🎭</span> creative approaches  <span class="emoji">💫</span> culture  <span class="emoji">🔰</span> Japanese eccentricities
+ <span class="emoji">💬</span>  puns <span class="emoji">🍻</span>  crisp lagers<span class="emoji">🎾</span> tennis  <span class="emoji">🚣</span> kayaking  <span class="emoji">😇</span>  exploring where tech meets culture <small>(that's why I've used these seemingly silly emoji, however I'd argue the [Noto Emoji](https://www.google.com/get/noto/#emoji-zsye) font has provided one of the first open source ways to have consistent emoji communication from content creation to consumption... Hello? Is anyone still there?)</small>
+
+ {% endmarkdown %}
+
+<div class="do-not-print padding-top-xlarge"></div>
+<div class="do-not-print padding-top-xlarge"></div>
+
+<span class="do-not-print">
+{% markdown %}
+## Want more about me?
+
+<a href="/blog" class="">Head to the blog</a> or <span class="emoji">📧</span>[khawkins98@gmail.com](mailto:khawkins98@gmail.com)
+{% endmarkdown %}
+<br/>
+</span>
+
+<span class="for-print-only">
+{% markdown %}
+<span class="emoji">📧</span>[khawkins98@gmail.com](mailto:khawkins98@gmail.com) &nbsp;<span class="emoji">🐦</span> @khawkins98 &nbsp;<span class="emoji">🌎</span> AllAboutKen.com  &nbsp;<span class="emoji">📇</span> Online problem solver
+{% endmarkdown %}
+</span>
+
+</div> <!-- /cvbody -->
+
+
+

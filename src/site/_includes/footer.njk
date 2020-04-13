@@ -1,9 +1,35 @@
 <div class="vf-grid">
   <div class="vf-body--text">
-    Geting started links:
-    <a href="https://github.com/visual-framework/vf-eleventy" class="vf-link">View vf-eleventy on GitHub</a> |
-    <a href="https://github.com/visual-framework/vf-core" class="vf-link">VF-Core v2.0</a> |
-    <a href="https://join.slack.com/t/visual-framework/shared_invite/enQtNDAxNzY0NDg4NTY0LWFhMjEwNGY3ZTk3NWYxNWVjOWQ1ZWE4YjViZmY1YjBkMDQxMTNlNjQ0N2ZiMTQ1ZTZiMGM4NjU5Y2E0MjM3ZGQ" class="vf-link">Chat for help</a>
+
+    <div class="vf-content">
+
+      {# {{#ifequal 'blog' active_path}} #}
+      <p><a href="/blog" class=""><span class="emoji">⬅️</span> There's more to read on the blog overview</a></p>
+      {# {{/ifequal}} #}
+      
+      {% markdown %}
+      ### I'm Ken Hawkins
+      I do web architecture, holistic design, and a bit of UX and development.
+      If you want to learn more about me and what I do [head to the front page](/), or:
+      {% endmarkdown %}
+
+      <div class="margin-left-medium">
+        <ul class="no-bullet">
+          <li class="">&nbsp; <span class="emoji">🐦</span> <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a></li>
+          <li class="">&nbsp; <span class="emoji">📬</span> <a href="/rss.xml">RSS feed</a></li>
+          <li class="">&nbsp; <span class="emoji">📈</span> <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a></li>
+          <li class="show-for-medium-only">&nbsp; <span class="emoji">✉️</span> <a href="mailto:khawkins98@gmail.com">E-mail</a></li>
+          <li class="show-for-large">&nbsp; <span class="emoji">✉️</span> <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a></li>
+        </ul>
+
+      {% markdown %}
+      ### This site is a playground <span class="emoji">🙈</span>
+
+      What you're seeing was made with a combination <sup>[1](https://github.com/khawkins98/allaboutken/blob/master/gulpfile.js)</sup> <sup>[2](https://github.com/khawkins98/allaboutken/blob/master/package.json)</sup> of the Foundation Framework, CSS/Sass, responsive design, Gulp, Panini static site generator, Markdown and some other stuff and then hosted through Travis CI and Github pages<sup>[3](https://github.com/khawkins98/allaboutken/blob/master/.travis.yml)</sup>.
+
+      In years past I would have likely made this site with Drupal, but for smaller sites with savvy editors I've been using static site combinations to simplify maintenance.
+      {% endmarkdown %}
+    </div>
 
     {% if serverInfo.environment == "development" %}
     <code class="vf-code-example">
@@ -12,6 +38,11 @@
       </pre>
     </code>
     {% endif %}
+
+    <div class="small-12 do-not-print cell">
+      <p><a class="float-right small" href="/privacy">Curious about privacy?</a></p>
+    </div>
+    <code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
 
   </div>
 </div>

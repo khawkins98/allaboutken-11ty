@@ -1,15 +1,280 @@
 // vf-local-overrides
 
-// **Thinking about deleting this file?**
-// If your component needs no CSS/Sass, we still recommend leaving the
-// scss files in place. As this is primarily a CSS framework, it is better to
-// leave the empty files so you know a file wasn't accidently omitted.
-// If you don't have any Sass, you can trim this block down to:
-// "This page was intentionally left blank"
-
-
 @import 'vf-local-overrides.variables.scss';
 
 .vf-local-overrides {
   /* your settings here */
 }
+
+// minimal reset
+img {
+  max-width: 100%;
+}
+
+// extra spacing after header
+.vf-global-header {
+  margin-bottom:  map-get($vf-spacing-map, vf-spacing--xl);
+  background-color: unset;
+  border-bottom: none;
+}
+
+.vf-logo__text {
+  // font-weight: unset;
+}
+
+// Default color
+.vf-body {
+  // color: var(--vf-color--grey--darkest);
+  // background: var(--vf-ui-color--grey--light);
+  // background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23252525' fill-opacity='1' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+html, body {
+  // background: var(--vf-ui-color--grey--light);
+}
+
+// .vf-content dl
+.vf-content {
+  dt:not([class*='vf-']) {
+    @include set-type(text-body--2, $custom-margin-bottom: 0);
+    font-weight: 700;
+  }
+  
+  dd:not([class*='vf-']) {
+    @include set-type(text-body--2, $custom-margin-bottom: 24px);
+  }
+}
+
+
+// Print utility classes
+@media print {
+  // .grid-container,
+  // hr,
+  // .print-12 {
+  //   max-width: 100%;
+  //   width: 100% !important;
+  // }
+  // body {
+  //   font-size: .8rem;
+  // }
+  .do-not-print {
+    display:none;
+  }
+  .for-print-only {
+    display:block
+  }
+  a[href]:after {
+    content: " ";
+    display: none;
+  }
+  // hr {
+  //   border-top-color: #222
+  // }
+  // .has-tip {
+  //   border-bottom: none !important;
+  //   font-weight: unset;
+  // }
+}
+@media screen {
+  .show-for-print-only,
+  .for-print-only {
+    display:none;
+  }
+}
+
+/* Anchors */
+.vf-grid a[name] {
+  // color: #fff;
+}
+.vf-grid a[name]:active {
+  // color: #ccc;
+}
+
+.vf-grid a[name]:link,
+.vf-grid a[name]:hover {
+  background: none;
+}
+
+.vf-grid h2 a[name]:hover:before,
+.vf-grid h3 a[name]:hover:before {
+  content: "⚓️";
+  font-weight: 400 !important;
+  font-family: 'Noto-Emoji';
+  position: relative;
+  display: inline-block;
+  width: 0;
+  left: -3rem;
+}
+
+.vf-grid h3 a[name]:hover:before {
+  left: -1.75rem;
+}
+
+// post layout tweaks
+.ken-post--content {
+  background: rgba(255,255,255,.6);
+  padding: 20px;
+}
+
+// no need for block
+.vf-content small:not([class*='vf-']) {
+  display: inline;
+}
+
+// ken-grid
+// embl-grid
+
+@import 'package.variables.scss';
+// Debug information from component's `package.json`:
+// ---
+/*!
+ * Component: #{map-get($componentInfo, 'name')}
+ * Version: #{map-get($componentInfo, 'version')}
+ * Location: #{map-get($componentInfo, 'location')}
+ */
+
+
+.ken-grid {
+  grid-column: main;
+  margin-bottom: 48px;
+
+  & > :first-child {
+    grid-column: 1 / -1;
+    margin-right: var(--embl-grid-spacing-normaliser);
+
+    @media (min-width: 846px) {
+      grid-column: span 1;
+    }
+  }
+
+  & > *:not(:first-child) {
+    @media (max-width: 845px) {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: $vf-breakpoint--sm) {
+    display: grid;
+    grid-column-gap: var(--page-grid-gap);
+    /* stylelint-disable declaration-colon-space-after */
+    grid-template-columns: 
+      calc(var(--embl-grid-module--prime) + var(--embl-grid-spacing-normaliser)) 
+      [main-start] 
+      repeat(auto-fit, minmax(288px, 1fr)) 
+      [main-end]
+    ;
+    /* stylelint-enable */
+  }
+  
+}
+
+.ken-grid--has-centered-content {
+  --embl-grid-spacing-normaliser: 0; // removes margin from first child
+  --page-grid-gap: 0; //
+
+  @media (min-width: $vf-breakpoint--lg) {
+    --page-grid-gap: 36px;
+
+    /* stylelint-disable declaration-colon-space-after */
+    grid-template-columns:
+      var(--embl-grid-module--prime)
+      auto
+      var(--embl-grid-module--prime)
+    ;
+    /* stylelint-enable */
+  }
+}
+
+// 2 of 3 layout
+.ken-grid--left-justified {
+  --embl-grid-spacing-normaliser: 0; // removes margin from first child
+  --page-grid-gap: 0; //
+
+  @media (min-width: $vf-breakpoint--lg) {
+    --page-grid-gap: 36px;
+
+    /* stylelint-disable declaration-colon-space-after */
+    grid-template-columns:
+      // var(--embl-grid-module--prime)
+      auto
+      var(--embl-grid-module--prime)
+    ;
+    /* stylelint-enable */
+  }
+}
+
+
+.ken-grid--has-sidebar {
+
+  & > *:nth-child(3n+2) {
+    grid-column: span 2;
+  }
+
+  @media (max-width: 845px) {
+    & > *:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 846px) and (max-width: 1219px) {
+    & > *:last-child {
+      grid-column: 2 / -1;
+    }
+  }
+  @media (min-width: 1220px) {
+    & > *:last-child {
+      position: relative;
+    }
+    & > *:last-child::before {
+      background-color: set-ui-color(vf-ui-color--grey--light);
+      content: '';
+      height: 100%;
+      left: calc(var(--page-grid-gap) / -2);
+      position: absolute;
+      width: 1px;
+    }
+  }
+}
+
+// .ken-grid--alt {
+//   --page-grid-gap: 0;
+//   background-color: set-ui-color(vf-ui-color--black);
+//   color: set-ui-color(vf-ui-color--white);
+//   grid-column: 1 / -1;
+//   /* stylelint-disable declaration-colon-space-after */
+//   grid-template-columns:
+//     minmax(1em, auto)
+//     calc(var(--embl-grid-module--prime) + var(--embl-grid-spacing-normaliser))
+//     minmax(288px, calc(76.5em - 206px))
+//     minmax(1em, auto)
+//   ;
+//   /* stylelint-enable */
+//   justify-content: center;
+//   position: relative;
+
+//   & > :first-child {
+//     grid-column: 2 / -2;
+//   }
+//   & > :last-child {
+//     grid-column: 2 / -2;
+//   }
+
+//   @media (min-width: $vf-breakpoint--md) {
+//     & > :first-child {
+//       grid-column: 2 / span 1;
+//     }
+//     & > :last-child {
+//       grid-column: 3;
+//       margin-left: 16px;
+//     }
+//   }
+//   @media (min-width: 1200px) {
+//     & > :last-child {
+//       margin-left: 30px;
+//     }
+//   }
+
+//   // HACK: put here for now
+//   /* stylelint-disable order/properties-alphabetical-order, order/order  */
+//   padding-top: 1.5rem;
+//   /* stylelint-enable */
+// }
+

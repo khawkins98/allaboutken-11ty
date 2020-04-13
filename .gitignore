@@ -9,7 +9,7 @@ src/site/_includes/css
 src/site/_includes/js
 .env
 yarn-error.log
-dist
+# dist
 build
 temp
 package.variables.scss

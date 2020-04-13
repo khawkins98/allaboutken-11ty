@@ -1,0 +1,32 @@
+# The title shown on the component page
+title: ken-favicon
+# Label shown on index pages
+label: ken-favicon
+status: alpha
+# The template used from /components/_previews
+#
+# Per-variant options
+# variants:
+  # - name: default
+  #   hidden: true
+context:
+  component-type: element
+  # custom-values: passed as {{custom-values}}
+  # - note: you in your custom-values you should use dashes `-` 
+  #         and not underscores `_` as underscores prevent inherited template use
+  # title: Title text
+  # text: String of text
+  # image: ../../assets/vf-component-name/assets/vf-component-name.png
+  # - note on paths: be sure to prefix with `../../`
+  # - Why? https://github.com/visual-framework/vf-core/issues/364
+variants:
+  - name: default
+    context:
+      apple_touch_icon: /assets/ken-favicon/assets/apple-touch-icon.png
+      icon_32: /assets/ken-favicon/assets/favicon-32x32.png
+      icon_16: /assets/ken-favicon/assets/favicon-16x16.png
+      manifest: /assets/ken-favicon/assets/site.webmanifest
+      icon_mask: /assets/ken-favicon/assets/safari-pinned-tab.svg
+      color_mask: '#ffffff'
+      color_msapplication: '#ffffff'
+      color_theme: '#ffffff'

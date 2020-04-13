@@ -23,7 +23,7 @@ module.exports = function(config) {
   // });
 
   // Add any utiliuty filters
-  config.addFilter("dateDisplay", (dateObj, format = "LLL d, y") => {
+  config.addFilter("dateDisplay", (dateObj, format = "d LLL y") => {
     return DateTime.fromJSDate(dateObj, {
       zone: "utc"
     }).toFormat(format);
@@ -86,6 +86,9 @@ module.exports = function(config) {
   // pass some assets right through
   config.addPassthroughCopy("./src/site/images");
 
+  // mostly needed for redirecting from old drupal urls
+  config.addPassthroughCopy("./src/site/**/*.html");
+
   return {
     dir: {
       input: "src/site",
@@ -99,7 +102,7 @@ module.exports = function(config) {
     htmlTemplateEngine : ["njk", "md"],
     markdownTemplateEngine : "njk",
     passthroughFileCopy: true,
-    pathPrefix: "/vf-eleventy/" // if your site is deployed to a sub-url, otherwise comment out
+    // pathPrefix: "/vf-eleventy/" // if your site is deployed to a sub-url, otherwise comment out
   };
 
 };

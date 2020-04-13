@@ -1,17 +1,21 @@
 ---
 layout: layouts/base.njk
 pageClass: posts
-templateEngineOverride: njk, md
+templateEngineOverride: njk
 ---
 
-<p class="date">
+{# <p class="date">
   Posted as an example, on <time datetime="{{ date }}">{{ date | dateDisplay }}</time>
-</p>
-<main>
+</p> #}
+<main class="embl-grid embl-grid--has-centered-content">
+  <div></div>
+  <section class="vf-content | ken-post--content">
   {{ content | safe }}
-  <div class="footnote">
+  </section>
+  <div></div>
+  {# <div class="footnote">
     <p>
       This page is part of the posts section.
     </p>
-  </div>
+  </div> #}
 </main>

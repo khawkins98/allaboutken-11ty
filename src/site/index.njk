@@ -1,88 +1,133 @@
 ---
-subtitle: No homepage, yet.
+title: Hello
+subtitle: I am Ken Hawkins.
 date: 2018-08-22 12:24:50
 layout: layouts/base.njk
 templateEngineOverride: njk, md
 ---
 
-{% render '@vf-intro', {"vf_intro_phase": "alpha", "vf_intro_heading": siteConfig.siteInformation.title,
-  "vf_intro_lede": siteConfig.siteInformation.short_description,
+{# {% render '@vf-intro', {"vf_intro_phase": "alpha", "vf_intro_heading": title,
+  "vf_intro_lede": subtitle,
   "vf_intro_text": [
     "☝️ that also means dynamic building of just the CSS and JS you need."
   ]
-} %}
+} %} #}
 
-<section class="embl-grid embl-grid--has-centered-content">
-  <div>
-    <!-- empty -->
-  </div>
-  <div class="vf-content">
-  {% markdown %}
+<section class="ken-grid ken-grid--left-justified">
 
-  ## Quickstart
+<div class="vf-content">
 
-  ```
+<h1 class="">{{title}}. {{subtitle}}</h1>
 
-      yarn create @visual-framework/vf-eleventy your-new-site-name vf-eleventy   
+<h2>I bring strucutre and process to complex web projects.</h2>
 
-  ```
+{% markdown %}
 
-  This will install a new [`vf-eleventy`](https://github.com/visual-framework/vf-eleventy/) to a folder named `your-new-site-name`.
+**I am a deep thinker** who applies a strong conceptual background from years of crafting deadline-driven data-heavy infographics for newspapers, online publications driven by data and inovating marketing and tracking tools. 
 
-  Then follow the onscreen prompts and links below to develop and configure.
+{% endmarkdown %}
 
-  ## Longer install?
+<dl>
+  <dt>Descriptors</dt>
+  <dd>Creator of websites, information architect, data geek, designer, newspaper nerd, lover of UX, consultant,  [information acrobat](https://twitter.com/euroia/status/912695523118927873). </dd>
 
-  The above too easy or have questions? [Read this guide](https://github.com/visual-framework/vf-eleventy#1-creating-a-new-project-powered-by-vf-eleventy).
+  <dt>Methodologies</dt>
+  <dd>Content modelling, design thinking, content structure and organisation, responsive design, analytics and metrics, principles of graphing, user centred design, user stories, user behaviour, Kanban.</dd>
 
-  {% endmarkdown %}
+  <dt>Concisely</dt>
+  <dd>Ken Hawkins, Web Design Architect.</dd>
+</dl>
 
-  </div>
+<p>Say hello or dig deeper <span class="emoji">⤵</span></p>
+
+</div>
+
 </section>
 
 
-<section class="vf-intro | embl-grid embl-grid--has-centered-content">
+<section class="vf-card-container">
+  <div class="vf-card-container__inner">
 
-<div>
-  <!-- empty -->
+<a href="/blog" class="vf-card vf-card--is-link vf-card--very-easy">
+  {# <img src="../../assets/vf-card/assets/vf-card-example.png" alt="" class="vf-card__image"> #}
+  <div class="vf-card__content">
+    <h3 class="vf-card__title | emoji">
+      📝 My blog
+    </h3>
+    <p class="vf-card__text">
+      If I've made something interesting and had a bit of time, I've hopefully done a post on it.
+    </p>
+  </div>
+</a>
+
+
+<a href="https://twitter.com/khawkins98" class="vf-card vf-card--is-link vf-card--very-easy">
+  {# <img src="../../assets/vf-card/assets/vf-card-example.png" alt="" class="vf-card__image"> #}
+  <div class="vf-card__content">
+    <h3 class="vf-card__title | emoji">
+      🐦 Twitter @khawkins98
+    </h3>
+    <p class="vf-card__text">
+Some web culture commentary and plenty of banality
+    </p>
+  </div>
+</a>
+
+<a href="https://www.linkedin.com/in/allaboutken" class="vf-card vf-card--is-link vf-card--very-easy">
+  {# <img src="../../assets/vf-card/assets/vf-card-example.png" alt="" class="vf-card__image"> #}
+  <div class="vf-card__content">
+    <h3 class="vf-card__title | emoji">
+      📇 LinkedIn
+    </h3>
+    <p class="vf-card__text">
+Let's swap virtual business cards.
+    </p>
+  </div>
+</a>
+
+<a href="mailto:khawkins98@gmail.com" class="vf-card vf-card--is-link vf-card--very-easy">
+  {# <img src="../../assets/vf-card/assets/vf-card-example.png" alt="" class="vf-card__image"> #}
+  <div class="vf-card__content">
+    <h3 class="vf-card__title | emoji">
+      📧 khawkins98@gmail.com
+    </h3>
+    <p class="vf-card__text">
+      Happy to take an e-mail about projects or to just say hello.
+    </p>
+  </div>
+</a>
+
+<a href="/cv" class="vf-card vf-card--is-link vf-card--very-easy">
+  {# <img src="../../assets/vf-card/assets/vf-card-example.png" alt="" class="vf-card__image"> #}
+  <div class="vf-card__content">
+    <h3 class="vf-card__title | emoji">
+      ℹ️ Want specific details?
+    </h3>
+    <p class="vf-card__text">
+      Have a read of my CV.
+    </p>
+  </div>
+</a>
+
+<a href="https://www.destilleonline.de" class="vf-card vf-card--is-link vf-card--very-easy">
+  {# <img src="https://www.destilleonline.de" alt="" class="vf-card__image"> #}
+  <div class="vf-card__content">
+    <h3 class="vf-card__title | emoji">
+      🍻 Or, beer
+    </h3>
+    <p class="vf-card__text">
+      If you're passing through Heidelberg, let's grab a beer
+    </p>
+  </div>
+</a>
+
 </div>
+</section>
+
+
+
+<section class="ken-grid ken-grid--left-justified">
 <div class="vf-content">
-
-## What you get
-
-- the Eleventy static site generator
-- access to the Visual Framework component system
-
-### Component installation
-
-To add a component you can use npm/Yarn or install it manually.
-
-In either case you'll need to re-run `gulp dev` to ensure the component is fully loaded.
-
-- installation: `yarn add @visual-framework/vf-logo`
-- updating: `yarn upgrade-interactive --latest`
-
-### Manual installation for customisation
-
-1. Download a pattern
-2. Copy it to `./src/components/vf-component-name`
-
-### Add your own local component
-
-You can add a custom VF-compatible component to `./src/components` and use it in
-your site.
-
-- `gulp vf-component`
-
-You'll find a `vf-sample` component there, we've used it below:
-
-<div class="vf-box">
-{% verbatim %}
-Code: {% render "@vf-sample", {text: "with some text"} %}
-{% endverbatim %}
-
-Returns: {% render "@vf-sample", {text: "with some text"} %}
-</div>
-
+<a href="/rss.xml"><span class="emoji">📬</span> Get the RSS feed</a>
 </div>
 </section>
