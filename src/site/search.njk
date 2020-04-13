@@ -1,7 +1,7 @@
 ---
 permalink: search.json
 ---
-[
+{# [
 {%- for page in collections.all -%}
   {%- if page.data.layout %}
   {
@@ -11,4 +11,4 @@ permalink: search.json
   }{% if not loop.last %},{% endif %}
   {%- endif -%}
 {%- endfor -%}
-]
+] #}

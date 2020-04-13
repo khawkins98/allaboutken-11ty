@@ -1,0 +1,123 @@
+---
+title: "Fractal and Eleventy: Getting static sites closer to the design system"
+layout: layouts/post.njk
+teaser: "For the <a href='https://visual-framework.github.io/vf-welcome/'>Visual Framework 2.0</a> component system we recommend <a href='https://www.11ty.io'>Eleventy</a> for static sites: Eleventy sites get direct access to component templates with associated metadata and a focused component library."
+image: "/blog/fractal-eleventy.jpg"
+date: 2019-11-12
+url: /posts/20191112-extendeing-fractal-components-eleventy-static-sites.html
+active_path: blog
+tags: posts
+topics:
+  - gulp, Eleventy, EMBL, Fractal, Visual Framework
+---
+
+
+{%- render '@ken-figure', {
+  "text": "What you get out of the box when you use the Visual Framework's boilerplate for Eleventy: static site development with a Fractal component library running in the same process. When you update a Fractal component, so does the Eleventy build.",
+  "alttext": "Tightly pairing Fractal and Eleventy can be done",
+  "imageUrl": "/images/crop-cinema" + image | url
+} -%}
+
+
+
+
+{% markdown %}
+{{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span>
+
+<h1>{{title}}</h1>
+
+<p class="lead">{{teaser}}</p>
+
+This combo eases site building by giving developers visibility on Fractal templates and documentation in their particular install. The integration also allows project-level [Fractal](https://fractal.build/) components that can extend core Sass and re-use component templates, with full access to Fractal `{% raw %}{% render %}{% endraw %}` tags, context data, and other component metadata. 
+
+Features:
+
+- Eleventy static sites
+- Fractal components can be `npm install`-ed
+- Fractal Nunjucks templates and component data
+- Local project-level components and templates can be added, and run in the same Fractal environment
+- Fractal web UI with local instance components, documentation
+
+Heard enough? [Try it out at visual-framework/vf-eleventy](https://github.com/visual-framework/vf-eleventy).
+
+The two tools don't work like this by default, but I'll share how we've made it happen.
+
+## How it feels
+
+{% endmarkdown %}
+
+
+{%- render '@ken-figure', {
+  "text": "A 16-second animated-GIF that shows how the Fractal components and Eleventy content are united.",
+  "alttext": "Animated-GIF that shows how the Fractal components and Eleventy content are united",
+  "imageUrl": "/images/original/blog/fractal-elventy-gulp-cycle.gif" 
+} -%}
+
+{% markdown %}
+
+Here's what's happening:
+
+1. Unified templating: Add a Fractal Nunjucks template to an Eleventy page
+2. A unified Eleventy-Fractal watch process: Update a Fractal Nunjucks template and Eleventy rebuilds
+3. Assets are also integrated: Update a component's Sass and gulp asks Eleventy to rebuild
+
+## How it works
+
+For component management of the [Visual Framework 2.0](https://github.com/visual-framework/vf-core), we’ve used the Node JS-based [Fractal](https://fractal.build/) — it ticks a lot of boxes for what we needed, including support for [Nunjucks templating](https://mozilla.github.io/nunjucks/). That templating allows the Visual Framework component system to stay relatively agnostic of technology.
+
+[Eleventy](https://github.com/visual-framework/vf-eleventy) is also Node JS-based and can use Nunjucks templating.
+
+We were really excited by this in initial discussions as we can use similar build environments and templates across our component library and static-site generator. 
+
+Here's a high-level diagram:
+
+![Diagram of how Eleventy and Fractal talk](/images/original/blog/fractal-vf-eleventy-architecture.svg)
+
+_When the developer runs `gulp dev` it allows Fractal and Eleventy to run as child process of gulp, sharing a Nunjucks environment._
+
+There were a couple of _gotchas_ that we had to work around, if you're interested in how we got there, read on, otherwise [I suggest you just try out the `vf-eleventy` boilerplate](https://github.com/visual-framework/vf-eleventy).
+
+## Making it happen
+
+### All the same, but not
+
+When attempting to achieve our flow, we quickly found issues as we weren't able to directly use our `npm install`-ed components in Eleventy for two reasons:
+
+1.  Eleventy [wants to look](https://www.11ty.io/docs/languages/nunjucks/) in a single place for our templates and we want to individually install components from `npm` a la: `yarn add --dev @visual-framework/vf-button`
+
+    We could work around this by some fancy copy-and-paste task that scans `node_modules` and copies `**/*.njk` to the directory used by Eleventy. Unpleasant, but possible.
+
+2.  The Nunjucks template syntax isn’t exactly the same between the Fractal and Eleventy. The [United States Web Design System](https://designsystem.digital.gov/documentation/developers/) also uses Fractal and [notes](https://github.com/uswds/uswds#template-compatibility):  
+  
+    > Components that reference other components use a Fractal-specific `{% raw %}{% render %}{% endraw %}` tag that will either need to be implemented in other environments or replaced with the appropriate `{% raw %}{% include %}{% endraw %}` tags.  
+    
+    Which means using nested container-level templates — like using a `logo` component inside a `page-header` template — is out, unless you have one set of templates for Fractal and one for "generic" Nunjucks environments. While replacing `render` with `include` might seem trivial at first, there are issues around path lookups and other whack-a-mole issues with other Njk tags.
+
+Maintaining two sets of templates adds significant overhead and a large risk for typos and tests, it would also prevent us from being able to `yarn add` components. 
+
+But there's a way to sidestep both of these issues.
+
+### Playing nice
+
+We can avoid both of these by resolving Eleventy's expectation to run in a separate Node process. 
+
+Fractal has already prepared a list of all the components (Issue 1) and made available the custom Nunjucks templates (Issue 2), if we can get Eleventy to use (and extend) the same Node process as  Fractal's Nunjucks environment we'll get all the benefits outlined above.
+
+To do this we’ve had to make a couple tweaks to how Eleventy executes; here's a summary:
+
+1. We forked Eleventy's `cmd.js` to so we can use it as a child task (i.e. `elev.write().then`)
+2. Gulp triggers the build of Fractal and then Eleventy 
+3. Utilise Eleventy’s watch and refresh commands for local development
+4. Send variables to Eleventy’s JavaScript data files from Gulp (or other Node JS tasks)
+
+I took [a deeper look at this approach in a separate blog post](https://work.allaboutken.com/posts/20191021-integrating-eleventy-with-gulp.html).
+
+## Links
+
+- [Try this out with visual-framework/vf-eleventy](https://github.com/visual-framework/vf-eleventy)
+- [How we connect Eleventy with Gulp](https://work.allaboutken.com/posts/20191021-integrating-eleventy-with-gulp.html)
+- [How we use fractal with `vf-core`](https://github.com/visual-framework/vf-core#the-visual-framework-core-vf-core)
+- [About the Visual Framework 2.0](https://visual-framework.github.io/vf-welcome/)
+
+{% endmarkdown %}
+

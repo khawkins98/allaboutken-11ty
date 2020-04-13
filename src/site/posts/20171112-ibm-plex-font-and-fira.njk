@@ -1,0 +1,109 @@
+---
+title: Comparing IBM Plex and Fira Sans
+layout: layouts/post.njk
+teaser: "Here's a quick comparison between, Plex, Helvetica, Fira and a couple of other stand-ins."
+image: "/blog/plex-art.jpg"
+date: 2017-11-12
+url: /posts/20171112-ibm-plex-font-and-fira.html
+active_path: blog
+tags: posts
+---
+
+<div class="medium-12 cell padding-top-large">
+<div class="">
+
+{% markdown %}
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+  <div class="large-10 medium-8 cell"><img class="callout" src="/images/original/blog/plex-art.jpg" />
+  </div>
+  <div class="large-10 medium-12 cell">
+  <small><span class="emoji">ℹ️</span> At the time of publishing this post was set in Plex — I'm trying to get my hands a little dirty.</small>
+  </div>
+</div>
+
+{{ date | dateDisplay }}&nbsp; &nbsp;
+
+
+# {{title}}
+
+<p class="lead">I won't dwell on it, but Helvetica and Helvetica Neue are not ideal fonts for the web for technical, brand and usability purposes, particularly when you're showing a lot of scientific data tables, <a href="https://github.com/ebiwd/EBI-Icon-fonts/issues/8">as we do at EMBL-EBI</a>.</p>
+
+Small note: Within [EMBL-EBI](https://www.ebi.ac.uk) we've used Helvetica Neue as our "corporate" font both in print and online for many years, now we're considering a change. The below blog post is shaped by that discussion, but the thoughts here are my own.
+
+After a lengthy [discussion](https://github.com/ebiwd/EBI-Icon-fonts/issues/8) and [consultation](https://blogs.embl.org/communications/2017/07/17/selecting-a-new-typeface-for-embl-fira/) we're currently analysing Fira Sans as our likely next font for both corporate and data uses. For those that don't recall, Fira is an Erik Spiekermann typeface that [was developed](https://en.wikipedia.org/wiki/Fira_Sans) for Mozilla's now defunct Firefox OS.
+
+We're working through the best way to utilise Fira Sans (and the great [Fira Code](https://github.com/tonsky/FiraCode)). A major concern are fonts when it [comes to data tables](https://github.com/ebiwd/EBI-Icon-fonts/issues/8#issuecomment-343096004).
+
+## On with it, already
+
+But what I want to chat about is what IBM has been up to: unveiling their new Plex font family [made by Bold Monday](https://www.boldmonday.com/custom/ibm/).
+
+<div class="grid-x padding-bottom-medium padding-top-large padding-bottom-large">
+<div class="callout large-8 medium-10 cell">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/xcs9snQnkJs" frameborder="0" gesture="media" allowfullscreen></iframe>
+<cite>IBM discusses their change in typeface.</code>
+</div>
+</div>
+
+The typeface is impressive stuff that captures my interest for a few reasons:
+
+1. IBM is looking to solve many of the same issues that we are at EMBL: Helvetica is an imperfect and bland go-to choice.
+2. Plex has a nice bit of personality in its letter forms
+3. Plex is a full family with many weights (8) and a serif, sans and mono style (it's also due to land on Google Fonts)
+4. Plex has an open licence
+5. Plex has a wide international character support
+6. It has an active development community
+
+With the exception of the serif style (and perhaps the development community), Fira has many of the same advantages. I also noticed that Fira and Plex share quite a bit in style, so I wanted to take a quick look at some of the letterforms.
+
+Here's a quick comparison between, Plex, Helvetica, Fira and a couple of other stand-ins — these are SVGs, if you want to download and compare glyphs without having to install fonts.
+
+<div class="callout">
+<img src="../images/original/blog/plex.svg" />
+</div>
+
+Like Fira, Plex seems to play well where Helvetica was once used and both Fira and Plex fix a number of long-standing issues around the lowercase "L" and overly tight "c" and "e".
+
+<div class="callout">
+<img src="../images/original/blog/plex-letters.svg" />
+</div>
+
+Fira  and Plex have personality in the letterforms. Plex might be a bit more conservative than Fira, and the uppercase "i" is a clear win for environments where you don't want to confuse a vertical pipe "|" and lowercase "l". The uppercase "E" has also been shortened less than Fira.
+
+<div class="callout">
+<img src="../images/original/blog/plex-numbers.svg" />
+</div>
+
+The wide width of Plex's numbers is notable. Again, this may be a concession for data environments, particularly the styling of the number "1".
+
+<div class="callout">
+<img src="../images/original/blog/fira-italic.svg" />
+</div>
+
+The Plex <em>italics</em> also add [a big flair](https://twitter.com/ThunderNixon/status/929043150383075329). Especially in the mono style (where both Fira Code and Mono lack a true italic). However my main interest at the moment is data compatibility — but personality in italics could be quite nice.
+
+<div class="callout">
+<img src="../images/original/blog/plex-notching.svg" />
+</div>
+
+On the style side, there are two major differences:
+- Plex has distinct narrowing on some of the lowercase letters that are reminiscent of "[ink traps](https://nicksherman.com/articles/bellCentennial.html)"
+- Fira has a slightly whimsy feel with the top and lower cap on some letters (look at the ascenders of the b, h and h, and the q's descender).
+
+Also note Plex's very square "t", it feels like a mono style.
+
+## That's all for now
+
+<p class="lead">On the whole, Plex seems a bit more conservative, practical and airier than Fira.</p>
+
+I'm sure we'll hear much more about Plex in the coming months (I'll also be very interested in  the nice [tooling](https://github.com/ibm/type-checker) around their design system), but I did want to compare and contrast Plex and Fira specifically -- or, at least a little bit of them.
+
+If you want to have a play with Fira or Plex on your desktop, here are links (they're open licensed):
+<span class="emoji">🔡</span>  [Fira desktop fonts](https://github.com/mozilla/Fira/archive/master.zip)
+<span class="emoji">🔡</span>  [Plex desktop fonts](https://github.com/IBM/type/archive/master.zip)
+
+If you're also interested in using Plex in a data-heavy environment, I'd be curious to know how you get on with it: <a href="https://twitter.com/khawkins98"><span class="emoji">🐦</span> @khawkins98</a>
+{% endmarkdown %}
+</div>
+</div>
