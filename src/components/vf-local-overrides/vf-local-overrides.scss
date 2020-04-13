@@ -15,7 +15,7 @@ img {
 .vf-global-header {
   margin-bottom:  map-get($vf-spacing-map, vf-spacing--xl);
   background-color: unset;
-  border-bottom-color: #fff;
+  border-bottom: none;
 }
 
 .vf-logo__text {
@@ -30,8 +30,21 @@ img {
 }
 
 html, body {
-  background: var(--vf-ui-color--grey--light);
+  // background: var(--vf-ui-color--grey--light);
 }
+
+// .vf-content dl
+.vf-content {
+  dt:not([class*='vf-']) {
+    @include set-type(text-body--2, $custom-margin-bottom: 0);
+    font-weight: 700;
+  }
+  
+  dd:not([class*='vf-']) {
+    @include set-type(text-body--2, $custom-margin-bottom: 24px);
+  }
+}
+
 
 // Print utility classes
 @media print {
