@@ -14,10 +14,7 @@
   padding: 16px;
   border-top: 1px solid #d0d0ce;
 }
-.vf-swatch:nth-of-type(6),
-.vf-swatch:nth-of-type(11) {
-  grid-column-start: 1;
-}
+
 .vf-swatch__colour {
   /* margin: 16px;
   height: calc(100% - 32px);
@@ -80,7 +77,7 @@
 
 
 <main class="vf-swatches | vf-grid vf-grid__col-3">
-{% for item in colors.properties %}
+{% for item in uiColors.properties %}
 
 
 <article class="vf-swatch">
