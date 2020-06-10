@@ -1,36 +1,41 @@
-<div class="vf-grid">
+<div class="vf-grid | vf-content">
+    {# {{#ifequal 'blog' active_path}} #}
+    <p><a href="/blog" class=""><span class="emoji">⬅️</span> There's more to read on the blog overview</a></p>
+    {# {{/ifequal}} #}
+</div>
+
+<div class="vf-grid vf-grid__col-3 | vf-content">
+  <div class="vf-body--text vf-grid__col--span-2">
+    
+    {% markdown %}
+    ### I'm Ken Hawkins
+    I do web architecture, holistic design, and a bit of UX and development.
+    If you want to learn more about me and what I do [head to the front page](/), or:
+    {% endmarkdown %}
+
+    <ul class="no-bullet">
+      <li class="">&nbsp; <span class="emoji">🐦</span> <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a></li>
+      <li class="">&nbsp; <span class="emoji">📬</span> <a href="/rss.xml">RSS feed</a></li>
+      <li class="">&nbsp; <span class="emoji">📈</span> <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a></li>
+      <li class="show-for-medium-only">&nbsp; <span class="emoji">✉️</span> <a href="mailto:khawkins98@gmail.com">E-mail</a></li>
+      <li class="show-for-large">&nbsp; <span class="emoji">✉️</span> <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a></li>
+    </ul>
+  </div>
+
   <div class="vf-body--text">
 
-    <div class="vf-content">
+    {% markdown %}
+    ### This site is a playground <span class="emoji">🙈</span>
 
-      {# {{#ifequal 'blog' active_path}} #}
-      <p><a href="/blog" class=""><span class="emoji">⬅️</span> There's more to read on the blog overview</a></p>
-      {# {{/ifequal}} #}
-      
-      {% markdown %}
-      ### I'm Ken Hawkins
-      I do web architecture, holistic design, and a bit of UX and development.
-      If you want to learn more about me and what I do [head to the front page](/), or:
-      {% endmarkdown %}
+    What you're seeing was made with a combination <sup>[1](https://github.com/khawkins98/allaboutken/blob/master/gulpfile.js)</sup> <sup>[2](https://github.com/khawkins98/allaboutken/blob/master/package.json)</sup> of the Visual Framework an Eleventy and served up Github pages and Cloudflare<sup>[3](https://github.com/khawkins98/allaboutken/blob/master/.travis.yml)</sup>.
 
-      <div class="margin-left-medium">
-        <ul class="no-bullet">
-          <li class="">&nbsp; <span class="emoji">🐦</span> <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a></li>
-          <li class="">&nbsp; <span class="emoji">📬</span> <a href="/rss.xml">RSS feed</a></li>
-          <li class="">&nbsp; <span class="emoji">📈</span> <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a></li>
-          <li class="show-for-medium-only">&nbsp; <span class="emoji">✉️</span> <a href="mailto:khawkins98@gmail.com">E-mail</a></li>
-          <li class="show-for-large">&nbsp; <span class="emoji">✉️</span> <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a></li>
-        </ul>
+    Until 2012 I would have likely made this site with Drupal, but I dable in build process and distributed content systems to increase their complexity but simplify maintenance and improve versitility.
+    {% endmarkdown %}
+  </div>
+</div>
 
-      {% markdown %}
-      ### This site is a playground <span class="emoji">🙈</span>
-
-      What you're seeing was made with a combination <sup>[1](https://github.com/khawkins98/allaboutken/blob/master/gulpfile.js)</sup> <sup>[2](https://github.com/khawkins98/allaboutken/blob/master/package.json)</sup> of the Foundation Framework, CSS/Sass, responsive design, Gulp, Panini static site generator, Markdown and some other stuff and then hosted through Travis CI and Github pages<sup>[3](https://github.com/khawkins98/allaboutken/blob/master/.travis.yml)</sup>.
-
-      In years past I would have likely made this site with Drupal, but for smaller sites with savvy editors I've been using static site combinations to simplify maintenance.
-      {% endmarkdown %}
-    </div>
-
+<div class="vf-grid">
+  <div class="vf-body--text">
     {% if serverInfo.environment == "development" %}
     <code class="vf-code-example">
       <pre class="vf-code-example__pre">
@@ -47,5 +52,5 @@
   </div>
 </div>
 
-<!-- This page was generated on {{ site.buildTime | dateDisplay('LLL d, yyyy - HH:mm') }} -->
+{# <!-- This page was generated on {{ site.buildTime | dateDisplay('LLL d, yyyy - HH:mm') }} --> #}
 <script src="{{ '/scripts/scripts.js' | url }}"></script>

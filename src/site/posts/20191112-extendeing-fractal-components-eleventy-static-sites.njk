@@ -26,7 +26,7 @@ topics:
 
 <h1>{{title}}</h1>
 
-<p class="lead">{{teaser}}</p>
+<p class="lead">{{ teaser | safe }}</p>
 
 This combo eases site building by giving developers visibility on Fractal templates and documentation in their particular install. The integration also allows project-level [Fractal](https://fractal.build/) components that can extend core Sass and re-use component templates, with full access to Fractal `{% raw %}{% render %}{% endraw %}` tags, context data, and other component metadata. 
 
