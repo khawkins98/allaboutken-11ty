@@ -234,6 +234,27 @@ html, body {
   }
 }
 
+// link beutification
+// https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-color
+.vf-link,
+.vf-content a, 
+.vf-content a:not([class*='vf-']),
+.vf-content .vf-link {
+  text-decoration-color: #3b6fb6;
+  text-decoration-line: underline;
+  color: #333;
+}
+
+
+.vf-link:visited,
+.vf-content a:visited 
+.vf-content a:not([class*='vf-']):visited,
+.vf-content .vf-link:visited {
+  text-decoration-color: #734595;
+  text-decoration-line: underline;
+  color: #333;
+}
+
 // .ken-grid--alt {
 //   --page-grid-gap: 0;
 //   background-color: set-ui-color(vf-ui-color--black);
