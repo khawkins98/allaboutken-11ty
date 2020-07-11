@@ -3,7 +3,7 @@ title: Hello
 subtitle: I am Ken Hawkins.
 date: 2018-08-22 12:24:50
 layout: layouts/base.njk
-templateEngineOverride: njk, md
+templateEngineOverride: njk
 ---
 
 {# {% render '@vf-intro', {"vf_intro_phase": "alpha", "vf_intro_heading": title,
@@ -13,6 +13,7 @@ templateEngineOverride: njk, md
   ]
 } %} #}
 
+<div class="vf-u-fullbleed vf-u-background-color-ui--grey">
 <section class="ken-grid ken-grid--left-justified">
 
 <div class="vf-content">
@@ -38,47 +39,48 @@ templateEngineOverride: njk, md
   <dd>Ken Hawkins, Web Design Architect.</dd>
 </dl>
 
-<p>Say hello or dig deeper <span class="emoji">⤵</span></p>
+{# <p>Say hello or dig deeper <span class="emoji">⤵</span></p> #}
 
 </div>
 
 </section>
+</div>
 
 
 <section class="vf-card-container">
   <div class="vf-grid vf-grid__col-4">
 
-<a href="/blog" class="vf-box vf-box--is-link vf-box--easy">
-  <h3 class="vf-box__heading">📝 My blog</h3>
-  <p class="vf-box__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p>
-</a>
+    <a href="/blog" class="vf-box vf-box--is-link vf-box--easy vf-box--outline">
+      <h3 class="vf-box__heading">📝 My blog</h3>
+      <p class="vf-box__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p>
+    </a>
 
-<a href="https://twitter.com/khawkins98" class="vf-box vf-box--is-link vf-box--easy">
-  <h3 class="vf-box__heading">🐦 Twitter @khawkins98</h3>
-  <p class="vf-box__text">Some web culture commentary and plenty of banality.</p>
-</a>
+    <a href="https://twitter.com/khawkins98" class="vf-box vf-box--is-link vf-box--easy vf-box--outline">
+      <h3 class="vf-box__heading">🐦 Twitter @khawkins98</h3>
+      <p class="vf-box__text">Some web culture commentary and plenty of banality.</p>
+    </a>
 
-<a href="https://www.linkedin.com/in/allaboutken" class="vf-box vf-box--is-link vf-box--easy">
-  <h3 class="vf-box__heading">📇 LinkedIn</h3>
-  <p class="vf-box__text">Let's swap virtual business cards.</p>
-</a>
+    <a href="https://www.linkedin.com/in/allaboutken" class="vf-box vf-box--is-link vf-box--easy vf-box--outline">
+      <h3 class="vf-box__heading">📇 LinkedIn</h3>
+      <p class="vf-box__text">Let's swap virtual business cards.</p>
+    </a>
 
-<a href="mailto:khawkins98@gmail.com" class="vf-box vf-box--is-link vf-box--easy">
-  <h3 class="vf-box__heading">📧 khawkins98@gmail.com</h3>
-  <p class="vf-box__text">Happy to take an e-mail about projects or to just say hello.</p>
-</a>
+    <a href="mailto:khawkins98@gmail.com" class="vf-box vf-box--is-link vf-box--easy vf-box--outline">
+      <h3 class="vf-box__heading">📧 khawkins98@gmail.com</h3>
+      <p class="vf-box__text">Happy to take an e-mail about projects or to just say hello.</p>
+    </a>
 
-<a href="/cv" class="vf-box vf-box--is-link vf-box--easy">
-  <h3 class="vf-box__heading">ℹ️ Want specific details?</h3>
-  <p class="vf-box__text">Have a read of my CV.</p>
-</a>
+    <a href="/cv" class="vf-box vf-box--is-link vf-box--easy vf-box--outline">
+      <h3 class="vf-box__heading">ℹ️ Want specific details?</h3>
+      <p class="vf-box__text">Have a read of my CV.</p>
+    </a>
 
-<a href="https://www.destilleonline.de" class="vf-box vf-box--is-link vf-box--easy">
-  <h3 class="vf-box__heading">🍻 Or, beer</h3>
-  <p class="vf-box__text">If you're passing through Heidelberg, let's grab a beer.</p>
-</a>
+    <a href="https://www.destilleonline.de" class="vf-box vf-box--is-link vf-box--easy vf-box--outline">
+      <h3 class="vf-box__heading">🍻 Or, beer</h3>
+      <p class="vf-box__text">If you're passing through Heidelberg, let's grab a beer.</p>
+    </a>
 
-</div>
+  </div>
 </section>
 
 
