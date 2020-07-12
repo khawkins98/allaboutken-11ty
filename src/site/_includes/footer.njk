@@ -4,51 +4,47 @@
     {# {{/ifequal}} #}
 </div>
 
-<div class="vf-grid vf-grid__col-3 | vf-content">
-  <div class="vf-body--text vf-grid__col--span-2">
-    
-    {% markdown %}
-    ### I'm Ken Hawkins
-    I do web architecture, holistic design, and a bit of UX and development.
-    If you want to learn more about me and what I do [head to the front page](/), or:
-    {% endmarkdown %}
+<hr class="vf-divider" />
 
-    <ul class="no-bullet">
-      <li class="">&nbsp; <span class="emoji">🐦</span> <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a></li>
-      <li class="">&nbsp; <span class="emoji">📬</span> <a href="/rss.xml">RSS feed</a></li>
-      <li class="">&nbsp; <span class="emoji">📈</span> <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a></li>
-      <li class="show-for-medium-only">&nbsp; <span class="emoji">✉️</span> <a href="mailto:khawkins98@gmail.com">E-mail</a></li>
-      <li class="show-for-large">&nbsp; <span class="emoji">✉️</span> <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a></li>
-    </ul>
-  </div>
+<div class="vf-body--text | vf-content">
+  
+  {% markdown %}
+  ### I'm Ken Hawkins
+  I do web architecture, holistic design, and a bit of UX and development.
+  If you want to learn more about me and what I do [head to the front page](/), or:
+  {% endmarkdown %}
 
-  <div class="vf-body--text">
-    {% markdown %}
-    ### This site is a playground <span class="emoji">🙈</span>
-
-    What you're seeing was made with a combination <sup>[1](https://github.com/khawkins98/allaboutken/blob/master/gulpfile.js)</sup> <sup>[2](https://github.com/khawkins98/allaboutken/blob/master/package.json)</sup> of the Visual Framework an Eleventy and served up Github pages and Cloudflare<sup>[3](https://github.com/khawkins98/allaboutken/blob/master/.travis.yml)</sup>.
-
-    Until 2012 I would have likely made this site with Drupal, but I dable in build process and distributed content systems to increase their complexity but simplify maintenance and improve versitility.
-    {% endmarkdown %}
-  </div>
+  <p>
+    <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
+    &nbsp; <a href="/rss.xml">RSS feed</a>
+    &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+    &nbsp; <a href="mailto:khawkins98@gmail.com">E-mail</a>
+    &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+  </p>
 </div>
 
-<div class="vf-grid">
-  <div class="vf-body--text">
+<div class="vf-grid vf-u-background-color-ui--off-white vf-u-fullbleed">
+  <div class="vf-body--text | vf-content | do-not-print | vf-u-margin__top--lg vf-u-margin__bottom--lg">
+    <a class="" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+    <a class="" href="/privacy">Curious about privacy?</a>
+
+
     {% if serverInfo.environment == "development" %}
-    <code class="vf-code-example">
-      <pre class="vf-code-example__pre">
-⚠️ You're running the {{serverInfo.environment}} command.
-      </pre>
-    </code>
+      <div class=" vf-u-margin__top--lg">
+        <div class="vf-banner vf-banner--alert vf-banner--warning">
+          <p class="vf-banner__text">
+            ⚠️ You're running the {{serverInfo.environment}} command.
+          </p>
+        </div>
+      </div>
     {% endif %}
 
-    <div class="small-12 do-not-print cell">
-      <p><a class="float-right small" href="/privacy">Curious about privacy?</a></p>
-    </div>
+
+
     <code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
   </div>
 </div>
+
 
 {# <!-- This page was generated on {{ site.buildTime | dateDisplay('LLL d, yyyy - HH:mm') }} --> #}
 <script src="{{ '/scripts/scripts.js' | url }}"></script>
