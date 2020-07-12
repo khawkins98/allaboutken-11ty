@@ -13,9 +13,16 @@ img {
 
 // extra spacing after header
 .vf-global-header {
-  margin-bottom:  map-get($vf-spacing-map, vf-spacing--xl);
+  // margin-bottom:  map-get($vf-spacing-map, vf-spacing--xl);
   background-color: unset;
   border-bottom: none;
+}
+
+// custom outlines for focus
+.vf-content a:focus,
+[class*="vf-"]:focus {
+  outline: 1px dashed rgba(0,0,0,.6);
+  outline-offset: 4px;
 }
 
 // Default color
