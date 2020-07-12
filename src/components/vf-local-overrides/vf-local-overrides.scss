@@ -25,6 +25,31 @@ img {
   outline-offset: 4px;
 }
 
+// horizontal summaries
+.summary-inline .vf-summary {
+  grid-template-columns: none;
+}
+
+.summary-inline .vf-summary > .vf-summary__date {
+  grid-row: 7;
+}
+
+.summary-inline .vf-summary > .vf-summary__image {
+  max-width: 100%;
+  margin-bottom: 16px;
+}
+
+.summary-inline .vf-summary__image {
+  max-width: 100% !important;
+}
+
+@media (max-width: 600px) {
+  .summary-inline .vf-summary {
+    grid-row-gap: 0;
+  }
+}
+
+
 // Default color
 .vf-body {
   // color: var(--vf-color--grey--darkest);
