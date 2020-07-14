@@ -213,6 +213,26 @@ html, body {
   }
 }
 
+// responsive display
+.show-for-medium-only {
+  @media (min-width: $vf-breakpoint--lg) {
+    display: none !important;
+  }
+  @media (max-width: $vf-breakpoint--sm) {
+    display: none !important;
+  }
+}
+.show-for-large {
+  @media (max-width: $vf-breakpoint--lg) {
+    display: none !important;
+  }
+}
+
+// always right-float nav
+.vf-navigation--global {
+  margin-left: auto;
+}
+
 // 2 of 3 layout
 .ken-grid--left-justified {
   --embl-grid-spacing-normaliser: 0; // removes margin from first child
