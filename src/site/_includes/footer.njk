@@ -1,7 +1,7 @@
-<div class="vf-grid | vf-content">
-    {# {{#ifequal 'blog' active_path}} #}
-    <p><a href="/blog" class=""><span class="emoji">⬅️</span> There's more to read on the blog overview</a></p>
-    {# {{/ifequal}} #}
+<div class="vf-grid">
+  {% if page.url != '/blog/' %}
+  <p><a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ To the blog index</a></p>
+  {% endif %}
 </div>
 
 <hr class="vf-divider" />
@@ -10,8 +10,7 @@
   
   {% markdown %}
   ### I'm Ken Hawkins
-  I do web architecture, holistic design, and a bit of UX and development.
-  If you want to learn more about me and what I do [head to the front page](/), or:
+  I do web platform and content architecture. Learn more about me [on the front page](/), or:
   {% endmarkdown %}
 
   <p>
