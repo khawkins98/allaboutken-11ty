@@ -1,0 +1,53 @@
+---
+title: "Moving from Panini to Eleventy"
+layout: layouts/post.njk
+teaser: "Back in February 2018, I wrote about <a href='/posts/20180210-zurb-panini-2-migration.html'>updating this site</a> to use a static-site generator by Zurb (makers of the Foundation Framework) called <a href='https://get.foundation/sites/docs/panini.html'>Panini</a>."
+image: "/blog/allaboutken-panini.jpg"
+date: 2020-07-13
+url: /posts/20200713-moving-from-panini-to-eleventy.html
+active_path: blog
+tags: posts
+topics:
+  - static sites, blogging
+---
+
+<figure class=""><img class="" alt="It felt good to snapshot the look of the site back in late 2017" src="/images/original{{image}}" />
+  <figcaption>A 100 percent misleading screenshot, the change to Eleventy has zero requirement on the look of the site. But like the design change, Eleventy has an improved technical design over the older and un-updated Panini.</figcaption>
+</figure>
+
+{% markdown %}
+
+<date class="vf-summary__date">{{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span></date>
+
+<h1 class="vf-text-heading--1">{{title}}</h1>
+
+<h2 class="vf-text-heading--2">{{ teaser | safe }}</h2>
+
+
+In July 2020 I've moved the site to the [Eleventy static-site generator](https://www.11ty.dev/).
+
+Both are based on Node.js and while Eleventy does bring an updated architecture, the truly distinguishing difference is that Panini hasn't had major development work in [two years](https://github.com/foundation/panini/releases) — Eleventy's development started shortly before that and continues at pace.
+
+With the changes Eleventy brings more flexibility. It's better at importing external data, has more robust templating and generally it has more flexibility and more consistent behaviour (thanks in _part_ to the amount of momentum Eleventy collected). If you want to know what Eleventy can do, [look at the docs](https://www.11ty.dev/docs/).
+
+The migration was a fairly straightforward affair, changing some template syntax and spending most of my time on the look, content and page performance. But it's left me with a better platform to do all those things that I likely won't.
+
+So why bother at all? Because I can't help myself and: 
+
+## Visual Framework and ulterior motives
+
+I've also moved to Eleventy as it is an [officially supported](https://visual-framework.github.io/vf-welcome/building/) implementation of [the Visual Framework 2.0](https://visual-framework.github.io/vf-welcome/), a highly-componentised front-end framework for life science websites. 
+
+This is _not_ a life-science website, however it is a good chance to test the flexibility of a framework that I'm personally invested in.
+
+## Here's some code
+
+If you want to dig deeper on the code:
+
+- [My site on Panini circa 2018](https://github.com/khawkins98/allaboutken/)
+- [My site on Eleventy circa 2020](https://github.com/khawkins98/allaboutken-11ty/)
+- [Visual Framework boilerplate for Eleventy](https://github.com/visual-framework/vf-eleventy)
+
+{% endmarkdown %}
+
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
