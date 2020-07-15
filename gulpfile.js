@@ -35,6 +35,7 @@ gulp.task('images', function(done) {
   gulp.src('src/site/images/**/*{.jpg,.png,.gif}')
     .pipe(resizer({
       verbose: true,
+      quality: 60,
       // format: "png",
       width: 900,
       height: 600
