@@ -2,49 +2,21 @@
 subtitle: No homepage, yet.
 date: 2018-08-22 12:24:50
 layout: layouts/base.njk
-#templateEngineOverride: njk, md
+#templateEngineOverride: njk
 ---
 {%- set siteConfig = siteConfig.siteInformation -%}
-
-
-{# {% render '@vf-intro', {"vf_intro_phase": "", "vf_intro_heading": "",
-  "vf_intro_lede": subtitle,
-  "vf_intro_text": [
-    "☝️ that also means dynamic building of just the CSS and JS you need."
-  ]
-} %} #}
-
-<div class="vf-grid">
-  <div>
-
-<h1 class="vf-text-heading--1">Ken Hawkins' blog</h1>
-
-{%- for post in collections.posts | sort(true, true, attribute='date' ) %}
-
-<article class="vf-summary vf-summary--news">
-  <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
-  <a class="vf-summary__image" href="{{ post.url | url}}">
-    <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image | url }}" alt="{{ post.data.teaser }}" />
-  </a>
-
-  <h3 class="vf-summary__title">
-    <a href="{{ post.url | url}}" class="vf-summary__link">{{ post.data.title }}</a>
-  </h3>
-
-  {# <div class="vf-summary__meta">
-      <a href="JavaScript:Void(0);" class="vf-summary__author vf-summary__link">Laura Howes</a>
-      <p class="vf-summary__date">06 February 2018</p>
-      <a href="JavaScript:Void(0);" class="vf-summary__link">Leave Comment</a>
-  </div> #}
-  <p class="vf-summary__text">{{ post.data.teaser | safe }}
-</p>
-
-</article>
-
-{%- endfor %}
-  
-  </div>
+<div class="vf-grid vf-grid__col-1">
+  <h1 class="vf-text-heading--1">Ken Hawkins' blog</h1>
+  {%- for post in collections.posts | sort(true, true, attribute='date' ) -%}
+  <article class="vf-summary vf-summary--news">
+    <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
+    <a class="vf-summary__image" href="{{ post.url | url}}">
+      <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image | url }}" alt="{{ post.data.teaser }}" />
+    </a>
+    <h3 class="vf-summary__title">
+      <a href="{{ post.url | url}}" class="vf-summary__link">{{ post.data.title }}</a>
+    </h3>
+    <p class="vf-summary__text">{{ post.data.teaser | safe }}</p>
+  </article>
+  {%- endfor -%}
 </div>
-
-{# {{ siteConfig.short_description | safe }} #}
-

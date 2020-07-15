@@ -2,63 +2,54 @@
 title: Hello
 subtitle: I am Ken Hawkins.
 date: 2018-08-22 12:24:50
+image: "/blog/drill-bits.jpg"
 layout: layouts/base.njk
 templateEngineOverride: njk
 ---
-
 <div class="vf-u-fullbleed vf-u-background-color-ui--grey">
 <section class="vf-grid | vf-u-padding__top--lg">
+  <div class="vf-content">
+    <h1 class="vf-text-heading--1">{{title}}. <span class="vf-u-text--nowrap">I am</span> <span class="vf-u-text--nowrap">Ken Hawkins.</span></h1>
+    <h2>I bring structure and process to complex web projects.</h2>
+    {% markdown -%}
 
-<div class="vf-content">
+    With [20 years](/cv/) experience in publishing and technology, I help projects move beyond content and problems into performant web platforms that [deliver](/posts/20180122-content-action-model/) organisational goals. 
 
-  <h1 class="vf-text-heading--1">{{title}}. {{subtitle}}</h1>
+    {%- endmarkdown %}
+    {# **I am a deep thinker** who applies a strong conceptual background from years of crafting deadline-driven data-heavy infographics for newspapers, online publications driven by data and inovating marketing and tracking tools.  #}
 
-  <h2>I bring strucutre and process to complex web projects.</h2>
+    {# <dl>
+      <dt>Descriptors</dt>
+      <dd>Creator of websites, information architect, data geek, designer, newspaper nerd, lover of UX, consultant, <a href="https://twitter.com/euroia/status/912695523118927873" class="vf-link">information acrobat</a>. </dd>
 
-  {% markdown %}
+      <dt>Methodologies</dt>
+      <dd>Content modelling, design thinking, content structure and organisation, responsive design, analytics and metrics, principles of graphing, user centred design, user stories, user behaviour, Kanban.</dd>
 
-  With [20 years](/cv/) experience in publishing and technology, I help projects move beyond content and problems into performant web platforms that [deliver](/posts/20180122-content-action-model/) organisational goals. 
+      <dt>Concisely</dt>
+      <dd>Ken Hawkins, Web Design Architect.</dd>
+    </dl> #}
 
-  {# **I am a deep thinker** who applies a strong conceptual background from years of crafting deadline-driven data-heavy infographics for newspapers, online publications driven by data and inovating marketing and tracking tools.  #}
-
-  {% endmarkdown %}
-
-  {# <dl>
-    <dt>Descriptors</dt>
-    <dd>Creator of websites, information architect, data geek, designer, newspaper nerd, lover of UX, consultant, <a href="https://twitter.com/euroia/status/912695523118927873" class="vf-link">information acrobat</a>. </dd>
-
-    <dt>Methodologies</dt>
-    <dd>Content modelling, design thinking, content structure and organisation, responsive design, analytics and metrics, principles of graphing, user centred design, user stories, user behaviour, Kanban.</dd>
-
-    <dt>Concisely</dt>
-    <dd>Ken Hawkins, Web Design Architect.</dd>
-  </dl> #}
-
-  {# <p>Say hello or dig deeper <span class="emoji">⤵</span></p> #}
-
-</div>
-
+    {# <p>Say hello or dig deeper <span class="emoji">⤵</span></p> #}
+  </div>
 </section>
 </div>
 
 <section class="vf-card-container">
-  <h3 class="vf-text-heading--3">Recently </h3>
-  {# <p class=" vf-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> #}
-
+  <h3 class="vf-text-heading--3">Recently</h3>
+  {#- <p class=" vf-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> -#}
   <div class="vf-grid vf-grid__col-3 | summary-inline">
-    {%- for post in collections.posts.slice(-3) | reverse -%}
-    <article class="vf-summary vf-summary--news">
-      <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
-      <a href="{{ post.url }}" class="vf-summary__image">
-        <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="">
-      </a>  
-      <h3 class="vf-summary__title">
-        <a href="{{ post.url }}" class="vf-summary__link">{{ post.data.title }}</a>
-      </h3>
-      {# {{loop.index}} #}
-      {# <p class="vf-summary__text">{{ post.data.teaser | safe }} #}
-    </article>
-    {%- endfor -%}
+  {%- for post in collections.posts.slice(-3) | reverse -%}
+  <article class="vf-summary vf-summary--news">
+    <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
+    <a href="{{ post.url }}" class="vf-summary__image">
+      <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
+    </a>  
+    <h3 class="vf-summary__title">
+      <a href="{{ post.url }}" class="vf-summary__link">{{ post.data.title }}</a>
+    </h3>
+    {#- {{loop.index}} -#}
+  </article>
+  {%- endfor -%}
   </div>
 </section>
 
@@ -71,7 +62,6 @@ templateEngineOverride: njk
     <a href="mailto:khawkins98@gmail.com" class="vf-link">khawkins98@gmail.com</a> &nbsp; &nbsp;
     <a href="https://untappd.com/user/khawkins98" class="vf-link">Beer</a>
   </span>
-
   <div class="vf-grid vf-grid__col-3">
     <p class="vf-text-body--4 vf-u-margin__top--xxl | vf-grid__col--span-2">I'm currently fully engaged for the <a href="https://www.embl.org/" class="vf-link">European Molecular Biology Laboratory</a> (EMBL). I'm helping architect a better front-end platform for life-science resources and to communicate their global impact, but you can still say hi.</p>
   </div>
