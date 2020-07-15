@@ -41,6 +41,7 @@ img {
 
 .summary-inline .vf-summary__image {
   max-width: 100% !important;
+  margin-right: 0; // fix right overflow on mobile
 }
 
 @media (max-width: 600px) {
