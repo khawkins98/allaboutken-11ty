@@ -3,88 +3,83 @@ title: Hello
 subtitle: I am Ken Hawkins.
 date: 2018-08-22 12:24:50
 layout: layouts/base.njk
-templateEngineOverride: njk, md
+templateEngineOverride: njk
 ---
 
-{# {% render '@vf-intro', {"vf_intro_phase": "alpha", "vf_intro_heading": title,
-  "vf_intro_lede": subtitle,
-  "vf_intro_text": [
-    "☝️ that also means dynamic building of just the CSS and JS you need."
-  ]
-} %} #}
-
-<section class="ken-grid ken-grid--left-justified">
+<div class="vf-u-fullbleed vf-u-background-color-ui--grey">
+<section class="vf-grid | vf-u-padding__top--lg">
 
 <div class="vf-content">
 
-<h1 class="">{{title}}. {{subtitle}}</h1>
+  <h1 class="vf-text-heading--1">{{title}}. {{subtitle}}</h1>
 
-<h2>I bring strucutre and process to complex web projects.</h2>
+  <h2>I bring strucutre and process to complex web projects.</h2>
 
-{% markdown %}
+  {% markdown %}
 
-**I am a deep thinker** who applies a strong conceptual background from years of crafting deadline-driven data-heavy infographics for newspapers, online publications driven by data and inovating marketing and tracking tools. 
+  With [20 years](/cv/) experience in publishing and technology, I help projects move beyond content and problems into performant web platforms that [deliver](/posts/20180122-content-action-model/) organisational goals. 
 
-{% endmarkdown %}
+  {# **I am a deep thinker** who applies a strong conceptual background from years of crafting deadline-driven data-heavy infographics for newspapers, online publications driven by data and inovating marketing and tracking tools.  #}
 
-<dl>
-  <dt>Descriptors</dt>
-  <dd>Creator of websites, information architect, data geek, designer, newspaper nerd, lover of UX, consultant, <a href="https://twitter.com/euroia/status/912695523118927873" class="vf-link">information acrobat</a>. </dd>
+  {% endmarkdown %}
 
-  <dt>Methodologies</dt>
-  <dd>Content modelling, design thinking, content structure and organisation, responsive design, analytics and metrics, principles of graphing, user centred design, user stories, user behaviour, Kanban.</dd>
+  {# <dl>
+    <dt>Descriptors</dt>
+    <dd>Creator of websites, information architect, data geek, designer, newspaper nerd, lover of UX, consultant, <a href="https://twitter.com/euroia/status/912695523118927873" class="vf-link">information acrobat</a>. </dd>
 
-  <dt>Concisely</dt>
-  <dd>Ken Hawkins, Web Design Architect.</dd>
-</dl>
+    <dt>Methodologies</dt>
+    <dd>Content modelling, design thinking, content structure and organisation, responsive design, analytics and metrics, principles of graphing, user centred design, user stories, user behaviour, Kanban.</dd>
 
-<p>Say hello or dig deeper <span class="emoji">⤵</span></p>
+    <dt>Concisely</dt>
+    <dd>Ken Hawkins, Web Design Architect.</dd>
+  </dl> #}
+
+  {# <p>Say hello or dig deeper <span class="emoji">⤵</span></p> #}
 
 </div>
 
 </section>
-
+</div>
 
 <section class="vf-card-container">
-  <div class="vf-grid vf-grid__col-4">
+  <h3 class="vf-text-heading--3">Recently </h3>
+  {# <p class=" vf-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> #}
 
-<a href="/blog" class="vf-box vf-box--is-link vf-box--easy">
-  <h3 class="vf-box__heading">📝 My blog</h3>
-  <p class="vf-box__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p>
-</a>
-
-<a href="https://twitter.com/khawkins98" class="vf-box vf-box--is-link vf-box--easy">
-  <h3 class="vf-box__heading">🐦 Twitter @khawkins98</h3>
-  <p class="vf-box__text">Some web culture commentary and plenty of banality.</p>
-</a>
-
-<a href="https://www.linkedin.com/in/allaboutken" class="vf-box vf-box--is-link vf-box--easy">
-  <h3 class="vf-box__heading">📇 LinkedIn</h3>
-  <p class="vf-box__text">Let's swap virtual business cards.</p>
-</a>
-
-<a href="mailto:khawkins98@gmail.com" class="vf-box vf-box--is-link vf-box--easy">
-  <h3 class="vf-box__heading">📧 khawkins98@gmail.com</h3>
-  <p class="vf-box__text">Happy to take an e-mail about projects or to just say hello.</p>
-</a>
-
-<a href="/cv" class="vf-box vf-box--is-link vf-box--easy">
-  <h3 class="vf-box__heading">ℹ️ Want specific details?</h3>
-  <p class="vf-box__text">Have a read of my CV.</p>
-</a>
-
-<a href="https://www.destilleonline.de" class="vf-box vf-box--is-link vf-box--easy">
-  <h3 class="vf-box__heading">🍻 Or, beer</h3>
-  <p class="vf-box__text">If you're passing through Heidelberg, let's grab a beer.</p>
-</a>
-
-</div>
+  <div class="vf-grid vf-grid__col-3 | summary-inline">
+    {%- for post in collections.posts.slice(-3) | reverse -%}
+    <article class="vf-summary vf-summary--news">
+      <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
+      <a href="{{ post.url }}" class="vf-summary__image">
+        <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="">
+      </a>  
+      <h3 class="vf-summary__title">
+        <a href="{{ post.url }}" class="vf-summary__link">{{ post.data.title }}</a>
+      </h3>
+      {# {{loop.index}} #}
+      {# <p class="vf-summary__text">{{ post.data.teaser | safe }} #}
+    </article>
+    {%- endfor -%}
+  </div>
 </section>
 
+{# Contact #}
+<section class="vf-card-container">
+  <h3 class="vf-text-heading--3 vf-u-float__left--lg">Say hello</h3> &nbsp;
+  <a href="https://twitter.com/khawkins98" class="vf-button vf-button--sm vf-button--secondary">Twitter @khawkins98</a> &nbsp;
+  <span class="vf-u-text--nowrap">
+    <a href="https://www.linkedin.com/in/allaboutken" class="vf-link">LinkedIn</a> &nbsp; &nbsp;
+    <a href="mailto:khawkins98@gmail.com" class="vf-link">khawkins98@gmail.com</a> &nbsp; &nbsp;
+    <a href="https://untappd.com/user/khawkins98" class="vf-link">Beer</a>
+  </span>
 
+  <div class="vf-grid vf-grid__col-3">
+    <p class="vf-text-body--4 vf-u-margin__top--xxl | vf-grid__col--span-2">I'm currently fully engaged for the <a href="https://www.embl.org/" class="vf-link">European Molecular Biology Laboratory</a> (EMBL). I'm helping architect a better front-end platform for life-science resources and to communicate their global impact, but you can still say hi.</p>
+  </div>
+</section>
 
-<section class="ken-grid ken-grid--left-justified">
-<div class="vf-content">
-<a href="/rss.xml"><span class="emoji">📬</span> Get the RSS feed</a>
-</div>
+<hr class="vf-divider" />
+
+{# RSS #}
+<section class="vf-card-container">
+  <a href="/rss.xml" class="vf-link">RSS</a> <span class="vf-text-body--5">(Get updates with the hotest tech from 20 years ago)</span>
 </section>
