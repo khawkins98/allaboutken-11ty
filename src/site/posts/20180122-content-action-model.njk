@@ -12,14 +12,16 @@ topics:
   - CAM for Web Systems, introducing
 ---
 
+{% render '@vf-figure--align-centered', {
+  text: 'Content, IA and UX professionals are spoiled for choice when it comes to tooling. But we need to be clear about which ones are right for the job — and that means distilling our intentions. <cite class="text-right">Thanks to Ian D. Keating for the Image of drill bits [<a href="https://www.flickr.com/photos/ian-arlett/16451711088">CC License</a>]</cite>',
+  alttext: 'It is all about the tooling',
+  imageUrl: '/images/original' + image,
+  vf_figure__align_centered: true
+} %}
+
 {% markdown %}
 
-<figure class=""><img class="padding-bottom-medium" src="/images/original{{image}}" />
-  <cite class="text-right">Thanks to Ian D. Keating for the Image of drill bits [<a href="https://www.flickr.com/photos/ian-arlett/16451711088">CC License</a>]</cite>
-  <figcaption>Content, IA and UX professionals are spoiled for choice when it comes to tooling. But we need to be clear about which ones are right for the job — and that means distilling our intentions.</figcaption>
-</figure>
-
-{{ date | dateDisplay }}&nbsp; &nbsp;
+<date><small>{{ date | dateDisplay }}&nbsp; &nbsp;</small></date>
 
 <div class="grid-x">
 <div class="large-11 medium-12 cell">
