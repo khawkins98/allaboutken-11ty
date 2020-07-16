@@ -1,4 +1,5 @@
 # Deploy to gh-pages
+# https://docs.travis-ci.com/user/deployment-v2/providers/pages/
 dist: trusty
 language: node_js
 node_js:
@@ -13,12 +14,14 @@ before_script:
   - yarn run build
 
 deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN #https://docs.travis-ci.com/user/deployment/pages/
-  keep-history: true
-  target-branch: gh-pages
-  local-dir: build
+  provider: pages:git
+  token: $GITHUB_TOKEN #https://docs.travis-ci.com/user/deployment/pages/
+  edge: true # opt in to dpl v2
+  fqdn: work.allaboutken.com
+  cleanup: false
+  keep_history: false
+  target_branch: gh-pages
+  local_dir: build
   cache:
     paths:
       - node_modules
