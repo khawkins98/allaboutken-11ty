@@ -1,10 +1,10 @@
 ---
-permalink: feed.xml
+permalink: rss.xml
 metadata:
-  filename: feed.xml
-  path: feed/feed.xml
-  url: https://visual-framework.github.io/vf-eleventy/feed.xml
-  id: https://visual-framework.github.io/vf-eleventy
+  filename: rss.xml
+  path: feed/rss.xml
+  url: https://work.allaboutken.com/rss.xml
+  id: https://work.allaboutken.com
 ---
 <?xml version="1.0" encoding="utf-8"?>
 {% set siteConfig = siteConfig.siteInformation %}
@@ -19,7 +19,7 @@ metadata:
     <name>{{ siteConfig.author }}</name>
     <email>{{ siteConfig.email }}</email>
   </author>
-  {%- for post in collections.posts %}
+  {%- for post in collections.posts | reverse %}
   {% set absolutePostUrl %}{{ metadata.id }}{{ post.url }}{% endset %}
   <entry>
     <title>{{ post.data.title }}</title>
