@@ -6,7 +6,7 @@ const resizer = require('gulp-images-resizer');
 const {componentPath, componentDirectories, buildDestionation} = require('@visual-framework/vf-config');
 
 // Tasks to build/run vf-core component system
-require('./node_modules/\@visual-framework/vf-core/tools/gulp-tasks/_gulp_rollup.js')(gulp, path, componentPath, componentDirectories, buildDestionation);
+require('./node_modules/\@visual-framework/vf-core/gulp-tasks/_gulp_rollup.js')(gulp, path, componentPath, componentDirectories, buildDestionation);
 require('./node_modules/\@visual-framework/vf-extensions/gulp-tasks/_gulp_rollup.js')(gulp, path, componentPath, componentDirectories, buildDestionation);
 
 // Watch folders for changess
