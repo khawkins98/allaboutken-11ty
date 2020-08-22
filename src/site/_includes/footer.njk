@@ -8,10 +8,10 @@
 
 <div class="vf-body--text | vf-content">
   
-  {% markdown %}
+  {%- markdown %}
   ### I'm Ken Hawkins
   I do web platform and content architecture. Learn more about me [on the front page](/), or:
-  {% endmarkdown %}
+  {% endmarkdown -%}
 
   <p>
     <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
@@ -27,8 +27,7 @@
     <a class="" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
     &nbsp; <a class="" href="/privacy">Curious about privacy?</a>
 
-
-    {% if serverInfo.environment == "development" %}
+    {%- if serverInfo.environment == "development" %}
       <div class=" vf-u-margin__top--lg">
         <div class="vf-banner vf-banner--alert vf-banner--warning">
           <p class="vf-banner__text">
@@ -36,14 +35,8 @@
           </p>
         </div>
       </div>
-    {% endif %}
-
-
+    {% endif -%}
 
     <code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
   </div>
 </div>
-
-
-{# <!-- This page was generated on {{ site.buildTime | dateDisplay('LLL d, yyyy - HH:mm') }} --> #}
-<script src="{{ '/scripts/scripts.js' | url }}"></script>
