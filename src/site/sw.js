@@ -1,5 +1,4 @@
 // This is the "Offline copy of pages" service worker
-
 const CACHE = "pwabuilder-offline";
 
 // TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "index.html";
