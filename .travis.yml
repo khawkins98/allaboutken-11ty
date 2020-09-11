@@ -17,7 +17,7 @@ deploy:
   provider: pages:git
   token: $GITHUB_TOKEN #https://docs.travis-ci.com/user/deployment/pages/
   edge: true # opt in to dpl v2
-  fqdn: work.allaboutken.com
+  fqdn: allaboutken.com
   cleanup: false
   keep_history: false
   target_branch: gh-pages
