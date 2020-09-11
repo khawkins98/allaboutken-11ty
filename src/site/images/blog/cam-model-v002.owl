@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="https://work.allaboutken.com/posts/20180329-cam-content-action-goal-ontology.html"
-     xml:base="https://work.allaboutken.com/posts/20180329-cam-content-action-goal-ontology.html"
+<rdf:RDF xmlns="https://www.allaboutken.com/posts/20180329-cam-content-action-goal-ontology.html"
+     xml:base="https://www.allaboutken.com/posts/20180329-cam-content-action-goal-ontology.html"
      xmlns:webprotege="http://webprotege.stanford.edu/"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
@@ -8,8 +8,8 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:project="http://webprotege.stanford.edu/project/"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
-    <owl:Ontology rdf:about="https://work.allaboutken.com/posts/20180329-cam-content-action-goal-ontology.html">
-        <owl:versionIRI rdf:resource="https://work.allaboutken.com/posts/20180329-cam-content-action-goal-ontology.html#v.002"/>
+    <owl:Ontology rdf:about="https://www.allaboutken.com/posts/20180329-cam-content-action-goal-ontology.html">
+        <owl:versionIRI rdf:resource="https://www.allaboutken.com/posts/20180329-cam-content-action-goal-ontology.html#v.002"/>
     </owl:Ontology>
     
 

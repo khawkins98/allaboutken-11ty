@@ -7,7 +7,7 @@
     "url": "git+https://github.com/visual-framework/vf-eleventy.git"
   },
   "license": "Apache-2.0",
-  "author": "Ken Hawkins <khawkins98@gmail.com> (https://work.allaboutken.com/)",
+  "author": "Ken Hawkins <khawkins98@gmail.com> (https://www.allaboutken.com/)",
   "main": "gulpfile.js",
   "vfConfig": {
     "vfName": "All about Ken",
