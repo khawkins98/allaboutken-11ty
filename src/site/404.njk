@@ -4,19 +4,30 @@ subtitle: No homepage, yet.
 date: 2018-08-22 12:24:50
 layout: layouts/post.njk
 templateEngineOverride: njk, md
+permalink: 404.html
 ---
 
-{# {% render '@vf-intro', {"vf_intro_phase": "alpha", "vf_intro_heading": siteConfig.siteInformation.title,
-  "vf_intro_lede": siteConfig.siteInformation.short_description,
-  "vf_intro_text": [
-    "☝️ that also means dynamic building of just the CSS and JS you need."
-  ]
-} %} #}
+<section class="vf-u-padding__top--xl">
+{# <div><!-- empty --></div> #}
+<div>
+  <h1 class="vf-intro__heading"> 4-oh-no-4! <span class="emoji">😨</span></h1>
+  <p class="vf-lede">This link is busted. Maybe these will help?</p>
 
+  <p class="vf-intro__text">You can see search results for it below.</p>
+</div>
+</section>
 
-### 4-oh-no-4! <span class="emoji">😨</span>
+{% render '@vf-search-client-side--default', {
+  "search_client_prompt": "Search components and documentation",
+  "search_client_script": "search_index.js",
+  "search_client_button": true,
+  "search_client_button_text": "Search",
+  "search_client_action": "/search/",
+  "search_client_results": true
+} %}
 
-This link is busted. Maybe these will help?
-
-- [Front page](/)
-- [Blog](//blog)
+<script>
+  // pre-populate the search with the query string
+  var truncatedUrl = window.location.pathname.replace('.html','').replace('components/detail/','').replace('/',' ');
+  document.getElementById('search').value = truncatedUrl;
+</script>
