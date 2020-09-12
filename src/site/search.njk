@@ -1,14 +1,18 @@
 ---
-permalink: search.json
+title: Search
+subtitle: No homepage, yet.
+date: 2020-09-12 21:24:50
+layout: layouts/post.njk
+templateEngineOverride: njk, md
 ---
-{# [
-{%- for page in collections.all -%}
-  {%- if page.data.layout %}
-  {
-    "url": "{{ page.url }}",
-    "title": "{{ page.data.title }}",
-    "index": "{{ page.templateContent | squash }}"
-  }{% if not loop.last %},{% endif %}
-  {%- endif -%}
-{%- endfor -%}
-] #}
+
+<section>
+{% render '@vf-search-client-side--default', {
+  "search_client_prompt": "Search the site",
+  "search_client_script": "/search_index.js",
+  "search_client_button": true,
+  "search_client_button_text": "Search",
+  "search_client_action": "/search/",
+  "search_client_results": true
+} %}
+</section>

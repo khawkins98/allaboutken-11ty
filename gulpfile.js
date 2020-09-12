@@ -9,10 +9,15 @@ const {componentPath, componentDirectories, buildDestionation} = require('@visua
 require('./node_modules/\@visual-framework/vf-core/gulp-tasks/_gulp_rollup.js')(gulp, path, componentPath, componentDirectories, buildDestionation);
 require('./node_modules/\@visual-framework/vf-extensions/gulp-tasks/_gulp_rollup.js')(gulp, path, componentPath, componentDirectories, buildDestionation);
 
+// search index
+require('./node_modules/\@visual-framework/vf-extensions/gulp-tasks/gulp-build-search-index.js')(gulp, path, buildDestionation);
+
 // Watch folders for changess
 gulp.task('watch', function() {
   // left for convience for local watch additions
   gulp.watch(['./build/css/styles.css'], gulp.series('eleventy:reload'));
+  // build search index after search page is compiled
+  gulp.watch(['./build/search/index.html'], gulp.parallel('vf-build-search-index'));
 });
 
 // Process images
@@ -54,6 +59,7 @@ gulp.task('build', gulp.series(
   'fractal',
   'eleventy:init',
   'eleventy:build',
+  'vf-build-search-index',
   'images'
 ));
 
@@ -65,6 +71,7 @@ gulp.task('dev', gulp.series(
   'fractal',
   'eleventy:init',
   'eleventy:develop',
+  'vf-build-search-index',
   'images',
   gulp.parallel('watch','vf-watch')
 ));
