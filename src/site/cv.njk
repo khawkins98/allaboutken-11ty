@@ -23,10 +23,6 @@ active_path: front
   #cv-menu a:hover {
     border-bottom: 1px solid #fff;
   }
-  .main-content-area h2,  
-  .main-content-area h3 {
-    margin-top: unset;
-  }
 </style>
 <!-- Add a Sticky Menu -->
 <!--<div data-sticky-container class="do-not-print">
@@ -39,6 +35,16 @@ active_path: front
     </ul>
   </div>
 </div>-->
+
+{% set divider %}
+<div class="do-not-print vf-u-padding__top--xl"></div>
+
+---
+
+<div class="do-not-print vf-u-padding__top--xl"></div>
+<div style="page-break-before: always"></div>
+{% endset %}
+
 
 <div class="show-for-print-only">
 {% markdown %}
@@ -73,20 +79,20 @@ active_path: front
   }
 
   h1 { font-size: 2rem; }
-  h2 { font-size: 1.5rem; }
 }
 
 h3 { margin-top: usnet;  }
 </style>
 
 <a id="cv" name="cv"></a>
-{% markdown %}
 
 <div id="experience" data-magellan-target="experience"></div>
 <div class="hide-for-print vf-u-padding__top--xl"></div>
 <div class="hide-for-print vf-u-padding__top--xl"></div>
 
-## Professional experience
+{% markdown %}
+
+<h2 class="vf-badge vf-badge--outline">Professional experience</h2>
 
 ### Areas of expertise: from concepts to technical
 
@@ -115,12 +121,10 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
   Adobe Illustrator, Photoshop, InDesign, from Google Docs to Microsoft Office, Linux, Mac, Windows
 
 <div id="history" data-magellan-target="history"></div>
-<div class="do-not-print vf-u-padding__top--xl"></div>
-<div class="do-not-print vf-u-padding__top--xl"></div>
 
-<div style="page-break-before: always"></div>
+{{ divider | safe }}
 
-## Professional work history
+<h2 class="vf-badge vf-badge--outline">Professional work history</h2>
 
 ### Lead web design architect (EMBL)
 <span class="label">European Molecular Biology Laboratory (EMBL)</span> <span class="label">June 2018 – ongoing</span> <span class="label">Heidelberg, Germany</span>
@@ -168,9 +172,7 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 **Major technical tooling and processes:** Content modelling and architecture, HTML/JS/CSS, Sass, Adobe Creative Suite, Atom, MapBox, Google Analytics, GitHub, Gulp, npm, Jekyll, Foundation Framework, Drupal, Travis, Continuous integration, Kanban
 
-<hr/>
-
-<div style="page-break-before: always"></div>
+{{ divider | safe }}
 
 ### Web developer, information designer
 <span class="label">DRS Technical Solutions</span>  <span class="label">February 2011 – June 2015</span> <span class="label">Stuttgart, Germany</span>
@@ -236,12 +238,10 @@ Newspaper pre-press production, advertising
 <!-- <span class="label">January 2000 - May 2008</span> <span class="label">Ending at The Post and Courier</span> <span class="label">South Carolina, USA</span>
 #### Newspaper infographic design and reporting -->
 
-<div class="do-not-print vf-u-padding__top--xl"></div>
-<div class="do-not-print vf-u-padding__top--xl"></div>
+{{ divider | safe }}
 
-<div style="page-break-before: always"></div>
+<h2 class="vf-badge vf-badge--outline">Education, collaboration, speaking</h2>
 
-## Education, collaboration, speaking
 - **Clemson University, Bachelor of Science in Graphic Communications, May 2003**
   - Internships: Electric City Printing prepress, Seneca Daily Journal prepress
 - **Charleston Drupal meet-up and co-working**
@@ -256,7 +256,7 @@ Newspaper pre-press production, advertising
 
 <div id="more" data-magellan-target="more"></div>
 
-## Other things
+<h2 class="vf-badge vf-badge--outline">Other things</h2>
 
 <span class="emoji">📐</span>  Clean design  <span class="emoji">🎭</span> creative approaches  <span class="emoji">💫</span> culture  <span class="emoji">🔰</span> Japanese eccentricities
 <span class="emoji">💬</span>  puns <span class="emoji">🍻</span>  crisp lagers<span class="emoji">🎾</span> tennis  <span class="emoji">🚣</span> kayaking  <span class="emoji">😇</span>  exploring where tech meets culture)
@@ -268,7 +268,8 @@ Newspaper pre-press production, advertising
 
 <span class="do-not-print">
 {% markdown %}
-## Want more about me?
+
+<h2 class="vf-badge vf-badge--outline">Want more about me?</h2>
 
 <a href="/blog" class="">Head to the blog</a> or <span class="emoji">📧</span>[khawkins98@gmail.com](mailto:khawkins98@gmail.com)
 {% endmarkdown %}
