@@ -1,9 +1,3 @@
-<div class="vf-grid | do-not-print">
-  {% if page.url != '/blog/' %}
-  <p><a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ To the blog index</a></p>
-  {% endif %}
-</div>
-
 <div class="do-not-print vf-u-padding__top--xl"></div>
 <hr class="vf-divider" />
 
@@ -23,6 +17,16 @@
   </p>
 </div>
 
+{% if page.url != '/blog/' %}
+<div class="vf-grid | do-not-print vf-u-padding__top--xl">
+  <p><a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ To the blog index</a></p>
+</div>
+{% endif %}
+
+<div class="do-not-print vf-u-padding__top--xl"></div>
+<div class="do-not-print vf-u-padding__top--xl"></div>
+
+
 <div class="vf-grid vf-u-background-color-ui--off-white vf-u-fullbleed">
   <div class="vf-body--text | vf-content | do-not-print | vf-u-margin__top--lg vf-u-margin__bottom--lg">
     <a class="" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
@@ -41,3 +45,4 @@
     <code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
   </div>
 </div>
+
