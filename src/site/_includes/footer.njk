@@ -1,12 +1,7 @@
-<div class="vf-grid">
-  {% if page.url != '/blog/' %}
-  <p><a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ To the blog index</a></p>
-  {% endif %}
-</div>
-
+<div class="do-not-print vf-u-padding__top--xl"></div>
 <hr class="vf-divider" />
 
-<div class="vf-body--text | vf-content">
+<div class="vf-body--text | vf-content | do-not-print">
   
   {%- markdown %}
   ### I'm Ken Hawkins
@@ -17,10 +12,20 @@
     <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
     &nbsp; <a href="/rss.xml">RSS feed</a>
     &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
-    &nbsp; <a href="mailto:khawkins98@gmail.com">E-mail</a>
+    {# &nbsp; <a href="mailto:khawkins98@gmail.com">E-mail</a> #}
     &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
   </p>
 </div>
+
+{% if page.url != '/blog/' %}
+<div class="vf-grid | do-not-print vf-u-padding__top--xl">
+  <p><a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ To the blog index</a></p>
+</div>
+{% endif %}
+
+<div class="do-not-print vf-u-padding__top--xl"></div>
+<div class="do-not-print vf-u-padding__top--xl"></div>
+
 
 <div class="vf-grid vf-u-background-color-ui--off-white vf-u-fullbleed">
   <div class="vf-body--text | vf-content | do-not-print | vf-u-margin__top--lg vf-u-margin__bottom--lg">
@@ -40,3 +45,4 @@
     <code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
   </div>
 </div>
+
