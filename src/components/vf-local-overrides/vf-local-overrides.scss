@@ -140,12 +140,6 @@ html, body {
   left: -1.75rem;
 }
 
-// post layout tweaks
-.ken-post--content {
-  background: rgba(255,255,255,.6);
-  padding: 20px;
-}
-
 // no need for block
 .vf-content small:not([class*='vf-']) {
   display: inline;
