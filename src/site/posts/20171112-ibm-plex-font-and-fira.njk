@@ -10,15 +10,13 @@ active_path: blog
 tags: posts
 ---
 
-{% markdown %}
+{% render '@vf-figure--default', {
+  "text": 'At the time of publishing this post was set in Plex — I\'m getting my hands dirty.',
+  "alttext": "Plex example",
+  "imageUrl": "/images/original/blog/plex-art.jpg"
+} %}
 
-<div class="vf-u-padding__bottom--400 vf-u-padding__top--500 vf-u-padding__bottom--500">
-  <div class="large-10 medium-8 cell"><img class="callout" src="/images/original/blog/plex-art.jpg" />
-  </div>
-  <div class="large-10 medium-12 cell">
-  <small><span class="emoji">ℹ️</span> At the time of publishing this post was set in Plex — I'm trying to get my hands a little dirty.</small>
-  </div>
-</div>
+{% markdown %}
 
 {{ date | dateDisplay }}&nbsp; &nbsp;
 
@@ -58,36 +56,42 @@ Here's a quick comparison between, Plex, Helvetica, Fira and a couple of other s
 
 {% endmarkdown %}
 
-{% render '@vf-figure--default', {
-  "text": 'Like Fira, Plex seems to play well where Helvetica was once used and both Fira and Plex fix a number of long-standing issues around the lowercase "L" and overly tight "c" and "e".',
-  "alttext": "Plex example",
-  "imageUrl": "../images/original/blog/plex.svg"
-} %}
+<section class="vf-grid vf-grid__col-3">
+
+  <div class="vf-grid__col--span-2 | vf-stack vf-stack--800">
+
+  {% render '@vf-figure--default', {
+    "text": 'Like Fira, Plex seems to play well where Helvetica was once used and both Fira and Plex fix a number of long-standing issues around the lowercase "L" and overly tight "c" and "e".',
+    "alttext": "Plex example",
+    "imageUrl": "../images/original/blog/plex.svg"
+  } %}
 
 
-{% render '@vf-figure--default', {
-  "text": 'Fira and Plex have personality in the letterforms. Plex might be a bit more conservative than Fira, and the uppercase "i" is a clear win for environments where you don\'t want to confuse a vertical pipe "|" and lowercase "l". The uppercase "E" has also been shortened less than Fira.',
-  "alttext": "Plex letters",
-  "imageUrl": "../images/original/blog/plex-letters.svg"
-} %}
+  {% render '@vf-figure--default', {
+    "text": 'Fira and Plex have personality in the letterforms. Plex might be a bit more conservative than Fira, and the uppercase "i" is a clear win for environments where you don\'t want to confuse a vertical pipe "|" and lowercase "l". The uppercase "E" has also been shortened less than Fira.',
+    "alttext": "Plex letters",
+    "imageUrl": "../images/original/blog/plex-letters.svg"
+  } %}
 
-{% render '@vf-figure--default', {
-  "text": 'The wide width of Plex\'s numbers is notable. Again, this may be a concession for data environments, particularly the styling of the number "1".',
-  "alttext": "Plex numbers",
-  "imageUrl": "../images/original/blog/plex-numbers.svg"
-} %}
+  {% render '@vf-figure--default', {
+    "text": 'The wide width of Plex\'s numbers is notable. Again, this may be a concession for data environments, particularly the styling of the number "1".',
+    "alttext": "Plex numbers",
+    "imageUrl": "../images/original/blog/plex-numbers.svg"
+  } %}
 
-{% render '@vf-figure--default', {
-  "text": 'The Plex italics add <a href="https://twitter.com/ThunderNixon/status/929043150383075329">a big flair</a> Especially in the mono style (where both Fira Code and Mono lack a true italic). However my main interest at the moment is data compatibility — but personality in italics could be quite nice.',
-  "alttext": "Fira italics",
-  "imageUrl": "../images/original/blog/fira-italic.svg"
-} %}
+  {% render '@vf-figure--default', {
+    "text": 'The Plex italics add <a href="https://twitter.com/ThunderNixon/status/929043150383075329">a big flair</a> Especially in the mono style (where both Fira Code and Mono lack a true italic). However my main interest at the moment is data compatibility — but personality in italics could be quite nice.',
+    "alttext": "Fira italics",
+    "imageUrl": "../images/original/blog/fira-italic.svg"
+  } %}
 
-{% render '@vf-figure--default', {
-  "text": 'Plex\'s very square "t", it feels like a mono style.',
-  "alttext": "Plex notches",
-  "imageUrl": "../images/original/blog/plex-notching.svg"
-} %}
+  {% render '@vf-figure--default', {
+    "text": 'Plex\'s very square "t", it feels like a mono style.',
+    "alttext": "Plex notches",
+    "imageUrl": "../images/original/blog/plex-notching.svg"
+  } %}
+</div>
+</section>
 
 {% markdown %}
 
