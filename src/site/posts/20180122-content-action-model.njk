@@ -21,13 +21,9 @@ topics:
 
 {% markdown %}
 
-<date><small>{{ date | dateDisplay }}&nbsp; &nbsp;</small></date>
+<p><time class="vf-summary__date">{{ date | dateDisplay }}</time> &nbsp; &nbsp;<span class="vf-summary__author">Filed in: {{topics}}</span></p> 
 
-<div class="grid-x">
-<div class="large-11 medium-12 cell">
 <h1>{{title}}</h1>
-</div>
-</div>
 
 <p class="lead">{{ teaser | safe }}</p>
 

@@ -10,13 +10,16 @@ permalink: posts/20130612-ubuntu-ips-ec2-multiple.html
 active_path: blog
 tags: posts
 ---
-<div class="vf-u-padding__top--600"></div>
-<div class="columns medium-12">
-<img class="callout" src="/images/crop-cinema{{image}}" />
+
+{% render '@vf-figure', {
+  "text": 'Image credit: <a href="https://www.flickr.com/photos/tueksta/839920747#">Flickr user "Andreas Beer"</a>',
+  "alttext": "Ethernet cable",
+  "imageUrl": "/images/crop-cinema" + image
+} %}
 
 {% markdown %}
 
-{{ date | dateDisplay }}
+<p><time class="vf-summary__date">{{ date | dateDisplay }}</time></p>
 
 # {{title}}
 
@@ -99,6 +102,4 @@ All set!
 - Getting ip rules and routes to work on reboot: <a href="https://www.cyberciti.biz/faq/ubuntu-linux-add-static-routing/">Ubuntu Linux Add Static Route</a>
 - Video on EC2 VPC multiple IP basics: <a href="https://www.youtube.com/watch?v=Z_MWQ75GtvE">How to add extra IP addresses on one EC2 Instance</a>
 
-<cite>Image credit: <a href="https://www.flickr.com/photos/tueksta/839920747#">Flickr user "Andreas Beer"</a></cite>
 {% endmarkdown %}
-</div>

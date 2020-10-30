@@ -10,13 +10,16 @@ permalink: posts/20130321-postfix-spam.html
 active_path: blog
 tags: posts
 ---
-<div class="vf-u-padding__top--600"></div>
-<img class="callout" src="/images/crop-cinema{{image}}" />
+
+{% render '@vf-figure', {
+  "text": 'Image credit: <a href="https://www.flickr.com/photos/cogdog/2925889614">Flickr user "Alan Levine"</a>',
+  "alttext": "Spam mail",
+  "imageUrl": "/images/crop-cinema" + image
+} %}
 
 {% markdown %}
 
-{{ date | dateDisplay }}
-
+<p><time class="vf-summary__date">{{ date | dateDisplay }}</time></p>
 # {{title}}
 
 <p class="lead">Postfix, it's used with many a LAMP stack to send out messages from a site, unfortunately it's prone to relaying many spam messages out of the box.</p>
@@ -52,8 +55,6 @@ smtpd_recipient_restrictions =<br>
 <p>A couple of other handy commands:</p>
 <p>- Check the mail queue with <code>mailq</code><br>
 - Empty the queue with <code>postsuper -d ALL</code></p>
-
-<cite>Image credit: <a href="https://www.flickr.com/photos/cogdog/2925889614">Flickr user "Alan Levine"</a></cite>
 
 
 {% endmarkdown %}

@@ -10,15 +10,15 @@ active_path: blog
 tags: posts
 ---
 
-{% render '@vf-figure--default', {
+{% render '@vf-figure', {
   "text": 'At the time of publishing this post was set in Plex — I\'m getting my hands dirty.',
   "alttext": "Plex example",
   "imageUrl": "/images/original/blog/plex-art.jpg"
 } %}
 
-{% markdown %}
+<p><time class="vf-summary__date">{{ date | dateDisplay }}</time></p>
 
-{{ date | dateDisplay }}&nbsp; &nbsp;
+{% markdown %}
 
 # {{title}}
 
@@ -34,14 +34,22 @@ We're working through the best way to utilise Fira Sans (and the great [Fira Cod
 
 But what I want to chat about is what IBM has been up to: unveiling their new Plex font family [made by Bold Monday](https://www.boldmonday.com/custom/ibm/).
 
-<div class="vf-u-padding__bottom--400 vf-u-padding__top--500 vf-u-padding__bottom--500">
-<div class="vf-box vf-box-theme--tertiary vf-box--easy">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/xcs9snQnkJs" frameborder="0" gesture="media" allowfullscreen></iframe>
-<br/><cite>IBM discusses their change in typeface.</code>
-</div>
-</div>
+{% endmarkdown %}
 
-The typeface is impressive stuff that captures my interest for a few reasons:
+<section class="vf-grid vf-grid__col-3">
+  <div class="vf-grid__col--span-2 | vf-stack vf-stack--800">
+    <figure class="vf-figure">
+      {% render '@vf-embed', {
+        "vf_embedded_content": '<iframe src="https://www.youtube.com/embed/xcs9snQnkJs" frameborder="0" gesture="media" allowfullscreen></iframe>',
+        "vf_embed_variant_16x9": true
+      } %}
+      <figcaption class="vf-figure__caption">IBM discusses their change in typeface.</figcaption>
+    </figure>
+  </div>
+</section>
+
+{% markdown %}
+The typeface is impressive stuff that captures my interest:
 
 1. IBM is looking to solve many of the same issues that we are at EMBL: Helvetica is an imperfect and bland go-to choice.
 2. Plex has a nice bit of personality in its letter forms

@@ -23,7 +23,9 @@ topics:
 
 
 {% markdown %}
-{{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span>
+{{ date | dateDisplay }}
+
+<p><time class="vf-summary__date">{{ date | dateDisplay }}</time> &nbsp; &nbsp;<span class="vf-summary__author">Filed in: {{topics}}</span></p> 
 
 <h1>{{title}}</h1>
 

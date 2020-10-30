@@ -19,7 +19,8 @@ topics:
 } -%}
 
 {% markdown %}
-{{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span>
+
+<p><time class="vf-summary__date">{{ date | dateDisplay }}</time> &nbsp; &nbsp;<span class="vf-summary__author">Filed in: {{topics}}</span></p> 
 
 <h1>{{title}}</h1>
 
@@ -412,6 +413,5 @@ A grab-bag of important things that you might not expect.
 <span class="emoji">🎈</span> [Ask the Slack group](https://join.slack.com/t/visual-framework/shared_invite/enQtNDAxNzY0NDg4NTY0LWFhMjEwNGY3ZTk3NWYxNWVjOWQ1ZWE4YjViZmY1YjBkMDQxMTNlNjQ0N2ZiMTQ1ZTZiMGM4NjU5Y2E0MjM3ZGQ).
 
 {% endmarkdown %}
-
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>

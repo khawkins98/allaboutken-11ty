@@ -1256,6 +1256,11 @@
   resolved "https://registry.yarnpkg.com/@visual-framework/vf-divider/-/vf-divider-2.0.0.tgz#1a23ebc5475be7f7e927c09ed2b6ce6e75e88fc0"
   integrity sha512-TVRB3Jg6wcKZi7TlQvWjAX7nzGdS9kJTMtvOMWfyM8+rFnM8A+VZ32vkT+UXHGa/8Lxl5ccTsCCnHgsRZu2mgA==
 
+"@visual-framework/vf-embed@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@visual-framework/vf-embed/-/vf-embed-1.1.0.tgz#4d90c16ec014b3ea627a7b7b8f9e07beebd3abeb"
+  integrity sha512-sbiGmAjbMXAOkgyECRXH7PhzFbRfYtb3JUA1xrlT6s5HPK513WB1/mFeGoOpKjH6coMcDEwpHWs4CanP78cqpw==
+
 "@visual-framework/vf-extensions@1.0.0-alpha.9":
   version "1.0.0-alpha.9"
   resolved "https://registry.yarnpkg.com/@visual-framework/vf-extensions/-/vf-extensions-1.0.0-alpha.9.tgz#76744a67b6a93745e59db779d5e776860fa327be"
@@ -1391,10 +1396,10 @@
   resolved "https://registry.yarnpkg.com/@visual-framework/vf-logo/-/vf-logo-1.4.0.tgz#084d8335605f13f89386539ea8eeb5947ab40070"
   integrity sha512-EQKnp83RT0jOrauki6jVyPDzkCz5hPeFC+eM09OOHE2/noeUHeviUK/xzEP163IpMQy9mS20NRrUSGeapbWmcg==
 
-"@visual-framework/vf-navigation@1.2.5":
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/@visual-framework/vf-navigation/-/vf-navigation-1.2.5.tgz#d7d1c5329d947957943573f86f9d3503bd40d26f"
-  integrity sha512-NtwAul3FtBYZ3ujje3TIus4f04Ie8gXNb1sChDkUbuVQwFSvz/mU5pUr8er5p+TXpbMsZgK+aLWF38YY8CGZzA==
+"@visual-framework/vf-navigation@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@visual-framework/vf-navigation/-/vf-navigation-2.0.0.tgz#2724727685672a211d6f539ef34724e8d3c5127f"
+  integrity sha512-HDlSJPhMRR6838ry14cVKDdS/23ADv4sv5jdkhkg3gaMoeKP8dmpsdmQ9cdmHG7v+cW4cTrj5UVYT6ZuLUfDVA==
 
 "@visual-framework/vf-no-js@1.0.1":
   version "1.0.1"
@@ -8114,10 +8119,10 @@ no-case@^2.2.0:
   dependencies:
     lower-case "^1.1.1"
 
-node-html-parser@1.4.2:
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/node-html-parser/-/node-html-parser-1.4.2.tgz#391f5a9a13fa152b67bab6dc951327adc5965e30"
-  integrity sha512-Vpau3BwNoJZFBshIUbceT1SYPYAxlPOawbn2xXneMjQd4G+Qu4BQ2+gFiENQ4Dr2fI/j2iCC45P//qBtfkdZGg==
+node-html-parser@1.4.5:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/node-html-parser/-/node-html-parser-1.4.5.tgz#0697045ccaf4e5f8f99b78d0a5579d096b7da6d2"
+  integrity sha512-sNm4Tdc8zj5HnFtkNEcK/1tpvyfRxEuz1d4rkVceGPeMTfzd2twPTiEo/UbqxOexSt9AzJ/cvQXSTj7fa6Ey1w==
   dependencies:
     he "1.2.0"
 

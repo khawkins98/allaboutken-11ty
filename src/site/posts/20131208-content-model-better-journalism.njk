@@ -11,18 +11,22 @@ active_path: blog
 tags: posts
 ---
 
-<div class="vf-u-padding__top--600"></div>
-<img class="callout" src="/images/crop-cinema{{image}}" />
+{% render '@vf-figure', {
+  "text": 'Image credit: <a href="https://www.flickr.com/photos/statusfrustration/169995469">Flickr user "J E Smith"</a>',
+  "alttext": "Newspapers",
+  "imageUrl": "/images/crop-cinema" + image
+} %}
 
 {% markdown %}
 
-{{ date | dateDisplay }}
+<p><time class="vf-summary__date">{{ date | dateDisplay }}</time></p> 
 
 # {{title}}
 
 <p class="lead">Six years ago my then roommate and I founded TheDigitel on the idea that the future of news was changing and that the service was in curating and linking content, and that curation was going to be bigger than the massive link mills then in existence.</p>
 
-<p>We were right, but failed to realize that social radius service like Facebook, Google+, Twitter, and the like would organically become almost zero cost curators.</p>
+We were right, but failed to realize that social radius service like Facebook, Google+, Twitter, and the like would organically become almost zero cost curators.
+
 <p>But hindsight quickly made something else more clear: The market was driving low-cost content that was appealing to low interest readers, and there was oft little reason to click through a blog post or Facebook share to the source material. </p>
 <p>This scarcity of quality will in turn, likely, drive a desire for premium grade content. </p>
 <p>If today's shell of journalism is akin to leaflets, there would in turn be a demand for well researched writing, more akin to scientific journal content.</p>
@@ -33,5 +37,4 @@ tags: posts
 <p>Not only will we be able to fund "real" journalism, but the readers of such content will be looking for more well reasoned writing and that's something that should help stop publications from pandering to attention grabbing headlines that belong more in tabloids of yesteryear.</p>
 <p>If we were to start TheDigitel in 2013, this is the direction we would have pushed.</p>
 
-<cite>Image credit: <a href="https://www.flickr.com/photos/statusfrustration/169995469">Flickr user "J E Smith"</a></cite>
 {% endmarkdown %}

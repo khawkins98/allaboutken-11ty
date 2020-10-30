@@ -11,18 +11,21 @@ topics:
   - static sites, blogging
 ---
 
-<figure class=""><img class="" alt="It felt good to snapshot the look of the site back in late 2017" src="/images/original{{image}}" />
-  <figcaption>A 100 percent misleading screenshot, the change to Eleventy has zero requirement on the look of the site. But like the design change, Eleventy has an improved technical design over the older and un-updated Panini.</figcaption>
-</figure>
+{% render '@vf-figure', {
+  "text": 'A 100 percent misleading screenshot, the change to Eleventy has zero requirement on the look of the site. But like the design change, Eleventy has an improved technical design over the older and un-updated Panini.',
+  "alttext": "It felt good to snapshot the look of the site back in late 2017",
+  "imageUrl": "/images/crop-cinema" + image
+} %}
 
 {% markdown %}
 
-<date class="vf-summary__date">{{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span></date>
+<p><time class="vf-summary__date">{{ date | dateDisplay }}</time></p>
+
+<span class="label">Filed in: {{topics}}</span></date>
 
 <h1 class="vf-text-heading--1">{{title}}</h1>
 
 <h2 class="vf-text-heading--2">{{ teaser | safe }}</h2>
-
 
 In July 2020 I've moved the site to the [Eleventy static-site generator](https://www.11ty.dev/).
 

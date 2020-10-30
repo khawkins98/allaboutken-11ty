@@ -10,8 +10,6 @@ active_path: blog
 tags: posts
 ---
 
-<div class="vf-u-padding__top--500">
-<div class="">
 
 {% markdown %}
 
@@ -24,7 +22,7 @@ tags: posts
   </div>
 </div>
 
-{{ date | dateDisplay }}
+<p><time class="vf-summary__date">{{ date | dateDisplay }}</time></p>
 
 # {{title}}
 
@@ -135,6 +133,3 @@ This metadata tethers content independent of placement, and affixes it to the or
 
 Check back on this blog around mid-November for more.<br/>You could also [get the RSS feed](/rss.xml) or [follow me on Twitter <span class="emoji">🐧</span>@khawkins98](https://twitter.com/khawkins98).
 {% endmarkdown %}
-</div>
-
-</div>

@@ -16,14 +16,13 @@ topics:
   <cite class="text-right">Thanks to Flickr user isa for the image [<a href="https://www.flickr.com/photos/58231478@N00/7739966376/">CC License</a>]</cite>
   <figcaption>Three options, but which does a user want? Maybe they don't want any of the three.</figcaption>
 </figure>
-{% markdown %}
-{{ date | dateDisplay }}&nbsp; &nbsp;
 
-<div class="grid-x">
-<div class="large-11 medium-12 cell">
-<h1>{{title}}</h1>
-</div>
-</div>
+<p><time class="vf-summary__date">{{ date | dateDisplay }}</time> &nbsp; &nbsp;<span class="vf-summary__author">Filed in: {{topics}}</span></p> 
+
+{% markdown %}
+
+
+# {{title}}
 
 <p class="lead">{{ teaser | safe }}</p>
 
