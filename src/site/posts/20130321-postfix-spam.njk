@@ -4,6 +4,9 @@ layout: layouts/post.njk
 oldurl: https://www.allaboutken.com/node/22
 teaser: "Postfix, it's used with many a LAMP stack to send out messages from a site, unfortunately it's prone to relaying many spam messages out of the box."
 image: "/blog/mail-pile.jpg"
+image_meta:
+  text: 'Image credit: <a href="https://www.flickr.com/photos/cogdog/2925889614">Flickr user "Alan Levine"</a>'
+  altext: Spam mail.
 date: 2013-03-21
 url: /posts/20130321-postfix-spam.html
 permalink: posts/20130321-postfix-spam.html
@@ -11,18 +14,7 @@ active_path: blog
 tags: posts
 ---
 
-{% render '@vf-figure', {
-  "text": 'Image credit: <a href="https://www.flickr.com/photos/cogdog/2925889614">Flickr user "Alan Levine"</a>',
-  "alttext": "Spam mail",
-  "imageUrl": "/images/crop-cinema" + image
-} %}
-
 {% markdown %}
-
-<p><time class="vf-summary__date">{{ date | dateDisplay }}</time></p>
-# {{title}}
-
-<p class="lead">Postfix, it's used with many a LAMP stack to send out messages from a site, unfortunately it's prone to relaying many spam messages out of the box.</p>
 
 The below code can be easily appended to Postfix's main.cf to drastically reduce the authorization hole.
 

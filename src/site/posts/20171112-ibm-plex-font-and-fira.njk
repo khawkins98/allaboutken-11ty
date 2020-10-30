@@ -3,6 +3,9 @@ title: Comparing IBM Plex and Fira Sans
 layout: layouts/post.njk
 teaser: "Here's a quick comparison between, Plex, Helvetica, Fira and a couple of other stand-ins."
 image: "/blog/plex-art.jpg"
+image_meta:
+  text: At the time of publishing this post was set in Plex — I\'m getting my hands dirty..
+  altext: Plex example.
 date: 2017-11-12
 url: /posts/20171112-ibm-plex-font-and-fira.html
 permalink: posts/20171112-ibm-plex-font-and-fira.html
@@ -10,17 +13,7 @@ active_path: blog
 tags: posts
 ---
 
-{% render '@vf-figure', {
-  "text": 'At the time of publishing this post was set in Plex — I\'m getting my hands dirty.',
-  "alttext": "Plex example",
-  "imageUrl": "/images/original/blog/plex-art.jpg"
-} %}
-
-<p><time class="vf-summary__date">{{ date | dateDisplay }}</time></p>
-
 {% markdown %}
-
-# {{title}}
 
 I won't dwell on it, but Helvetica and Helvetica Neue are not ideal fonts for the web for technical, brand and usability purposes, particularly when you're showing a lot of scientific data tables, <a href="https://github.com/ebiwd/EBI-Icon-fonts/issues/8">as we do at EMBL-EBI</a>.
 

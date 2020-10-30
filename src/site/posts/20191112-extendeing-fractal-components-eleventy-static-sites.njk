@@ -3,6 +3,9 @@ title: "Fractal and Eleventy: Getting static sites closer to the design system"
 layout: layouts/post.njk
 teaser: "For the <a href='https://visual-framework.github.io/vf-welcome/'>Visual Framework 2.0</a> component system we recommend <a href='https://www.11ty.io'>Eleventy</a> for static sites: Eleventy sites get direct access to component templates with associated metadata and a focused component library."
 image: "/blog/fractal-eleventy.jpg"
+image_meta:
+  text: 'What you get out of the box when you use the Visual Framework boilerplate for Eleventy: static site development with a Fractal component library running in the same process. When you update a Fractal component, so does the Eleventy build.'
+  altext: Tightly pairing Fractal and Eleventy can be done.
 date: 2019-11-12
 url: /posts/20191112-extendeing-fractal-components-eleventy-static-sites.html
 permalink: posts/20191112-extendeing-fractal-components-eleventy-static-sites.html
@@ -12,24 +15,7 @@ topics:
   - gulp, Eleventy, EMBL, Fractal, Visual Framework
 ---
 
-
-{%- render '@ken-figure', {
-  "text": "What you get out of the box when you use the Visual Framework's boilerplate for Eleventy: static site development with a Fractal component library running in the same process. When you update a Fractal component, so does the Eleventy build.",
-  "alttext": "Tightly pairing Fractal and Eleventy can be done",
-  "imageUrl": "/images/crop-cinema" + image | url
-} -%}
-
-
-
-
 {% markdown %}
-{{ date | dateDisplay }}
-
-<p><time class="vf-summary__date">{{ date | dateDisplay }}</time> &nbsp; &nbsp;<span class="vf-summary__author">Filed in: {{topics}}</span></p> 
-
-<h1>{{title}}</h1>
-
-<p class="lead">{{ teaser | safe }}</p>
 
 This combo eases site building by giving developers visibility on Fractal templates and documentation in their particular install. The integration also allows project-level [Fractal](https://fractal.build/) components that can extend core Sass and re-use component templates, with full access to Fractal `{% raw %}{% render %}{% endraw %}` tags, context data, and other component metadata. 
 

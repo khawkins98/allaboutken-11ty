@@ -1,8 +1,11 @@
 ---
 title: "What if: A web font for data"
 layout: layouts/post.njk
-teaser: "Alphanumeric data works well for programmatic query, but less so for direct human consumption. What if a font was designed specifically with life sciences data in mind?"
+teaser: "Alphanumeric data works well for programmatic query, but less so for direct human consumption. What if a font was designed specifically with <a href='https://www.ebi.ac.uk/about/news/press-releases/life-science-data-global-responsibility-2017'>life sciences data</a> in mind?"
 image: "/blog/blog_font_for_data_image.png"
+image_meta:
+  text: 'GO:9X09234: enolpyruvyl-6-text-like-this-is-fit-to-drive-you-batty-3-cyclohexene. Sources: <a href="https://wwwdev.ebi.ac.uk/gxa/genes/ENSMUSG00000030507?bs=%7B%22mus%20musculus%22%3A%5B%22ORGANISM_PART%22%5D%7D&amp;ds=%7B%22kingdom%22%3A%5B%22animals%22%5D%7D#information">1</a> <a href="https://www.ebi.ac.uk/interpro/entry/IPR004433">2</a> <a href="https://www.ebi.ac.uk/QuickGO/annotations?goUsage=descendants&amp;goUsageRelationships=is_a,part_of,occurs_in&amp;goId=GO:0006915">3</a>'
+  altext: Long text strings can often be hard to decifer.
 date: 2018-03-19
 url: /posts/20180319-data-font-for-life-sciences.html
 permalink: posts/20180319-data-font-for-life-sciences.html
@@ -12,20 +15,8 @@ topics:
   - Life Sciences, data, fonts, UX
 ---
 
-<figure class=""><img class="vf-u-padding__bottom--400" src="/images/original{{image}}" />
-  <figcaption>
-    <cite class="text-right">Sources: <a href="https://wwwdev.ebi.ac.uk/gxa/genes/ENSMUSG00000030507?bs=%7B%22mus%20musculus%22%3A%5B%22ORGANISM_PART%22%5D%7D&amp;ds=%7B%22kingdom%22%3A%5B%22animals%22%5D%7D#information">1</a> <a href="https://www.ebi.ac.uk/interpro/entry/IPR004433">2</a> <a href="https://www.ebi.ac.uk/QuickGO/annotations?goUsage=descendants&amp;goUsageRelationships=is_a,part_of,occurs_in&amp;goId=GO:0006915">3</a></cite>
-    GO:9X09234: enolpyruvyl-6-text-like-this-is-fit-to-drive-you-batty-3-cyclohexene.
-  </figcaption>
-</figure>
-
-<p><time class="vf-summary__date">{{ date | dateDisplay }}</time> &nbsp; &nbsp;<span class="vf-summary__author">Filed in: {{topics}}</span></p> 
-
-<h1>{{title}}</h1>
-
-<p class="lead">Alphanumeric data works well for programmatic query, but less so for direct human consumption. What if a font was designed specifically with <a href="https://www.ebi.ac.uk/about/news/press-releases/life-science-data-global-responsibility-2017">life sciences data</a> in mind?</p>
-
 {% markdown %}
+
 As EMBL-EBI’s web design architect, I help foster community standards for how services enable user tasks with consistently and predictably.
 
 Within the standards is a mix: things found on most websites — menus, accordions, layout, messaging, branding — plus application interactivity and data visualisation standards. It’s a hugely broad undertaking with complex technical implications.
@@ -33,6 +24,7 @@ Within the standards is a mix: things found on most websites — menus, accordio
 But, one of the biggest challenges is also the simplest: text readability.
 
 EMBL-EBI helps [enable](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5570174/) free access to massive amounts of data from life science experiments. This allows users to access lots and lots of tables with data identifiers that look like:
+
 - `ENSMUST00000032717 ENSMUSG00000030507`, and
 - `A_51_P156144, 4532657, 10563797, 129205_at, 4947113, 4910838, 1457012_at, 4962225, 5549684, 5020471, 4460390`
 

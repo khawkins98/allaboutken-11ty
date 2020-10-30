@@ -4,6 +4,9 @@ layout: layouts/post.njk
 oldurl: https://www.allaboutken.com/node/20
 teaser: "Six years ago my then roommate and I founded TheDigitel on the idea that the future of news was changing and that the service was in curating and linking content, and that curation was going to be bigger than the massive link mills then in existence. "
 image: "/blog/newspapers.jpg"
+image_meta:
+  text: 'Image credit: <a href="https://www.flickr.com/photos/statusfrustration/169995469">Flickr user "J E Smith"</a>'
+  altext: Newspapers
 date: 2013-12-08
 url: /posts/20131208-content-model-better-journalism.html
 permalink: posts/20131208-content-model-better-journalism.html
@@ -11,19 +14,7 @@ active_path: blog
 tags: posts
 ---
 
-{% render '@vf-figure', {
-  "text": 'Image credit: <a href="https://www.flickr.com/photos/statusfrustration/169995469">Flickr user "J E Smith"</a>',
-  "alttext": "Newspapers",
-  "imageUrl": "/images/crop-cinema" + image
-} %}
-
 {% markdown %}
-
-<p><time class="vf-summary__date">{{ date | dateDisplay }}</time></p> 
-
-# {{title}}
-
-<p class="lead">Six years ago my then roommate and I founded TheDigitel on the idea that the future of news was changing and that the service was in curating and linking content, and that curation was going to be bigger than the massive link mills then in existence.</p>
 
 We were right, but failed to realize that social radius service like Facebook, Google+, Twitter, and the like would organically become almost zero cost curators.
 

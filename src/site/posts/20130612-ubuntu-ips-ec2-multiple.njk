@@ -1,7 +1,10 @@
 ---
 title: Muliple IPs on an Ubuntu EC2 VPC? Yes, please!
-teaser: "Configuring a second ethernet adapter on an Ubuntu EC2 VPC instance."
+teaser: "How to configure a second ethernet adapter on an Ubuntu EC2 VPC instance."
 image: "/blog/ethernet.jpg"
+image_meta:
+  text: 'Image credit: <a href="https://www.flickr.com/photos/tueksta/839920747#">Flickr user "Andreas Beer"</a>'
+  altext: Ethernet cable
 date: 2013-06-12
 layout: layouts/post.njk
 oldurl: https://www.allaboutken.com/node/21
@@ -11,19 +14,7 @@ active_path: blog
 tags: posts
 ---
 
-{% render '@vf-figure', {
-  "text": 'Image credit: <a href="https://www.flickr.com/photos/tueksta/839920747#">Flickr user "Andreas Beer"</a>',
-  "alttext": "Ethernet cable",
-  "imageUrl": "/images/crop-cinema" + image
-} %}
-
 {% markdown %}
-
-<p><time class="vf-summary__date">{{ date | dateDisplay }}</time></p>
-
-# {{title}}
-
-<p class="lead">Subtitled: Configuring a second ethernet adapter on an Ubuntu EC2 VPC instance</p>
 
 If you're wanting to have multiple valid SSL certificates for many domains (say, for Drupal a multisite running on Aegir) on a single EC2 instance you'll, of course, need multiple IP addresses. While Amazon's VPC offerings seem like an easy win there are a few twists to get the server to respond to that second internal IP.
 

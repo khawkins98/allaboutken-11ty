@@ -1,8 +1,11 @@
 ---
 title: Fluid IA to enable user discovery, prepare for change
 layout: layouts/post.njk
-teaser: "Resisting entropy and preparing for change by binding content to mission."
+teaser: "Subtitled: Resisting entropy and preparing for change by binding content to mission."
 image: "/blog/corridor.jpg"
+image_meta:
+  text: Organised, yes, but not useful to non-domain experts.
+  altext: '<a href="https://www.flickr.com/photos/thomashawk/415552741/in/photolist-CHPmr-cdEh6U-5vUaWt-Cu2JT-7EVjzq-4YzCwE-qGX8i4-87p7ru-7QdGA4-97P4wp-52uPwU-bWj3Q-8FiJoE-ckKcRU-5AA9uc-fEqUWy-48nMo7-PsrnH-fHFJfa-2JFYK-6ppduU-7P7e8D-q3tjzp-dRkdJt-9cvC4M-C1Ndcf-pk43WC-eg4Uzw-5L7Pcg-5kmrZL-63nogj-dYJvoD-4ioQoH-4MnVTv-hDYEsf-q9YJqB-ceAoAL-575hr-2kmTxP-4nHfg6-ddK5Fd-4tGXMr-4JEmpu-e15uFw-5Uy8qL-dD1sMJ-6jbebm-4qQedF-2PaBpP-6xsYLf"><small class="float-right">CC Credit: Thomas Hawk</small></a>'
 date: 2017-09-13
 url: /posts/20170913-fluid-information-architecture.html
 permalink: posts/20170913-fluid-information-architecture.html
@@ -10,8 +13,11 @@ active_path: blog
 tags: posts
 ---
 
-
 {% markdown %}
+
+As Web Design Architect at EMBL (The European Molecular Biology Laboratory), [I've been helping](https://embl-design-language.github.io/Springboard/information-architecture/) a team in its efforts to better understand the structure of the organisation and how we can utilise information architecture to facilitate interconnectivity and reusability of content. It's an issue that isn't unique to EMBL.
+
+Robust information architecture can help organisations ease content access and make their own internal structure more obvious. But exposing too much of the architecture's structure and facets can confuse non-expert users with information superfluous to their use case.
 
 <div class="vf-u-padding__bottom--400 vf-u-padding__top--500 vf-u-padding__bottom--500">
   <div class="large-4 medium-6 cell"><img class="callout" src="/images/original/blog/ia-paths.svg" />
@@ -20,23 +26,6 @@ tags: posts
   <div class="large-10 medium-6 cell">
   <small>A snapshot of the major IA facets utilised within EMBL. After engaging with content in one domain (green circle), we need to facilitate navigation paths within the Who, What, Where pyramid. <a href="https://localhost:3000/posts/20170723-corporate-design-through-ia.html">For more background read this</a>.</small>
   </div>
-</div>
-
-<p><time class="vf-summary__date">{{ date | dateDisplay }}</time></p>
-
-# {{title}}
-
-### Subtitled: {{ teaser | safe }}
-
-As Web Design Architect at EMBL (The European Molecular Biology Laboratory), [I've been helping](https://embl-design-language.github.io/Springboard/information-architecture/) a team in its efforts to better understand the structure of the organisation and how we can utilise information architecture to facilitate interconnectivity and reusability of content. It's an issue that isn't unique to EMBL.
-
-Robust information architecture can help organisations ease content access and make their own internal structure more obvious. But exposing too much of the architecture's structure and facets can confuse non-expert users with information superfluous to their use case.
-
-<div class="grid-x">
-<div class="medium-9 padding-left-xlarge cell margin-bottom-large"><img class="callout margin-bottom-small" src="/images/original{{image}}" />
-<a href="https://www.flickr.com/photos/thomashawk/415552741/in/photolist-CHPmr-cdEh6U-5vUaWt-Cu2JT-7EVjzq-4YzCwE-qGX8i4-87p7ru-7QdGA4-97P4wp-52uPwU-bWj3Q-8FiJoE-ckKcRU-5AA9uc-fEqUWy-48nMo7-PsrnH-fHFJfa-2JFYK-6ppduU-7P7e8D-q3tjzp-dRkdJt-9cvC4M-C1Ndcf-pk43WC-eg4Uzw-5L7Pcg-5kmrZL-63nogj-dYJvoD-4ioQoH-4MnVTv-hDYEsf-q9YJqB-ceAoAL-575hr-2kmTxP-4nHfg6-ddK5Fd-4tGXMr-4JEmpu-e15uFw-5Uy8qL-dD1sMJ-6jbebm-4qQedF-2PaBpP-6xsYLf"><small class="float-right">CC Credit: Thomas Hawk</small></a>
-<small>Organised, yes, but not useful to non-domain experts.</small>
-</div>
 </div>
 
 Exposed complexity creates confusion, not complexity itself. We should strive for a rich system that gradually exposes functionality to be learned as a service is utilised.

@@ -3,6 +3,9 @@ title: "Moving from Panini to Eleventy"
 layout: layouts/post.njk
 teaser: "Back in February 2018, I wrote about <a href='/posts/20180210-zurb-panini-2-migration.html'>updating this site</a> to use a static-site generator by Zurb (makers of the Foundation Framework) called <a href='https://get.foundation/sites/docs/panini.html'>Panini</a>."
 image: "/blog/allaboutken-panini.jpg"
+image_meta:
+  text: 'A 100 percent misleading screenshot, the change to Eleventy has zero requirement on the look of the site. But like the design change, Eleventy has an improved technical design over the older and un-updated Panini.'
+  altext: "It felt good to snapshot the look of the site back in late 2017"
 date: 2020-07-13
 url: /posts/20200713-moving-from-panini-to-eleventy.html
 active_path: blog
@@ -11,21 +14,7 @@ topics:
   - static sites, blogging
 ---
 
-{% render '@vf-figure', {
-  "text": 'A 100 percent misleading screenshot, the change to Eleventy has zero requirement on the look of the site. But like the design change, Eleventy has an improved technical design over the older and un-updated Panini.',
-  "alttext": "It felt good to snapshot the look of the site back in late 2017",
-  "imageUrl": "/images/crop-cinema" + image
-} %}
-
 {% markdown %}
-
-<p><time class="vf-summary__date">{{ date | dateDisplay }}</time></p>
-
-<span class="label">Filed in: {{topics}}</span></date>
-
-<h1 class="vf-text-heading--1">{{title}}</h1>
-
-<h2 class="vf-text-heading--2">{{ teaser | safe }}</h2>
 
 In July 2020 I've moved the site to the [Eleventy static-site generator](https://www.11ty.dev/).
 
