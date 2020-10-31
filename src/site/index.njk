@@ -57,7 +57,9 @@ templateEngineOverride: njk
 <hr class="vf-divider" />
 
 <section class="vf-grid vf-grid__col-1">
-  <h3 class="vf-text-heading--3 | vf-u-margin__bottom--0">Say hello</h3> 
+  {% render '@vf-section-header--default', {
+    "section_title": "Say hello"
+  } %}
   <p class="vf-text-body--2">
     I'm currently fully engaged, helping a <a href="https://www.embl.org/" class="vf-link">global leader</a> create a better front-end platform for life-science resources. 
     But you can still say hello:
@@ -73,7 +75,7 @@ templateEngineOverride: njk
 <hr class="vf-divider" />
 
 <section>
-  <p class="vf-text-body--3 vf-u-margin__top--600">
+  <p class="vf-text-body--3">
     <a href="/rss.xml" class="vf-link">RSS</a> <span class="vf-text-body--5">(Instant updates with the hottest tech from 20 years ago)</span>
   </p>
 </section>
