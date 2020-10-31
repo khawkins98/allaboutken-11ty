@@ -20,9 +20,9 @@ templateEngineOverride: njk
 
   <h1>{{title}}</h1>
 
-  {% if teaser %}
-  <h2 class="lead">{{ teaser | safe }}</h2>
-  {% endif %}
+  {% if teaser -%}
+  <p class="vf-text-body--1">{{ teaser | safe }}</p>
+  {%- endif %}
   
   {{ content | safe }}
   </section>
