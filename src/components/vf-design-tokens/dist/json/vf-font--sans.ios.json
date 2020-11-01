@@ -150,7 +150,7 @@
       "name": "textHeading2",
       "value": {
         "fontSize": "30px",
-        "fontWeight": 300,
+        "fontWeight": 500,
         "lineHeight": 1.333
       },
       "meta": {
