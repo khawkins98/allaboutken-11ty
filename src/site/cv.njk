@@ -7,8 +7,6 @@ templateEngineOverride: njk, md
 active_path: front
 ---
 
-<section class="vf-content">
-
 <style>
   .sticky {
     opacity: 0;
@@ -38,15 +36,21 @@ active_path: front
   </div>
 </div>-->
 
-{% set divider %}
+{# Page dividers #}
+{%- set divider %}
 <div class="do-not-print vf-u-padding__top--600"></div>
 
 ---
 
 <div class="do-not-print vf-u-padding__top--600"></div>
 <div style="page-break-before: always"></div>
-{% endset %}
+{% endset -%}
 
+{# Position templates #}
+{%- macro position(name, employer='', years='', location='') %}
+<h2 class="vf-text-heading--2">{{ name }}</h2>
+<h4 class="vf-text-heading--4">{{ employer }} <small>{{ years }} {{ location }}</small></h4>
+{% endmacro -%}
 
 <div class="show-for-print-only">
 {% markdown %}
@@ -56,20 +60,15 @@ active_path: front
 {% endmarkdown %}
 </div>
 
-<div id="cvbody">
+<div class="vf-content">
 
 <div class="do-not-print">
-<br/>
 {% markdown %}
 # {{title}} <small>aka, my longer resume</small>
-
 <p class="">My career and interests revolve on common points: distillation of unorganised information into clearer communication.</p>
-
 <!-- I've found this challenge a recurrent and beneficial problem to solve in newspaper reporting, e-commerce, corporate websites and often in things as simple as a rather messy brochure. Below I've attempted to show how my various work experience (left) equates to major areas of my knowledge (right), and I've added a few key lenses in the middle. -->
-
 {% endmarkdown %}
 </div>
-
 
 <style> /* set the CSS */
 @media print { 
@@ -79,18 +78,12 @@ active_path: front
     content: "" attr(href) "";
     font-size: 80%;
   }
-
-  h1 { font-size: 2rem; }
 }
-
-h3 { margin-top: usnet;  }
 </style>
 
 <a id="cv" name="cv"></a>
 
 <div id="experience" data-magellan-target="experience"></div>
-<div class="do-not-print vf-u-padding__top--600"></div>
-<div class="do-not-print vf-u-padding__top--600"></div>
 
 {% markdown %}
 
@@ -128,9 +121,9 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 <h2 class="vf-badge vf-badge--outline">Professional work history</h2>
 
-### Lead web design architect, European Molecular Biology Laboratory (EMBL)
-<small><span class="label">June 2018 – ongoing</span> <span class="label">Heidelberg, Germany</span></small>
-- Continuation of my role for the European Bioinformatics Institute (EMBL-EBI)
+{{ position('Web Front End Lead', 'European Molecular Biology Laboratory (EMBL)', 'June 2018 – ongoing', 'Heidelberg, Germany' ) }}
+
+- Expansion of my role for the European Bioinformatics Institute (EMBL-EBI)
 - Grow, evolve projects from EMBL-EBI into pan-EMBL solutions 
 - Information architecture and component tooling for EMBL web content, design systems
 - Architecting abstracted web content platform, navigation
@@ -155,8 +148,7 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 <hr/>
 
-### Web design architect, European Bioinformatics Institute (EMBL-EBI)
-<small><span class="label">July 2015 – June 2018</span> <span class="label">Cambridge, UK</span></small>
+{{ position('Web design architect', 'European Bioinformatics Institute (EMBL-EBI)', 'July 2015 – June 2018', 'Cambridge, UK' ) }}
 
 - Lead information architecture and design tooling for EMBL-EBI web content, design systems
 - Facilitate collaboration between UX, developers and content teams
@@ -165,10 +157,14 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 - Close gap between web analytics and content effectiveness
 - Improve intranet information architecture to focus on user activities 
 
+<div class="cv-clippings">
+
 **Related writing**
 - [The EMBL Triangle Key: From brand structure to information architecture](https://blogs.embl.org/communications/2017/07/18/the-embl-triangle-key-from-brand-structure-to-information-architecture/)
 - [Mapping brand structure to support communication](https://blogs.embl.org/communications/2017/07/11/mapping-brand-structure-to-support-communication/)
 - [Introducing the Content-Action Model for Web Systems](https://www.allaboutken.com/posts/20180122-content-action-model.html)
+
+</div>
 
 <!-- - [Inside the Content-Action Model](https://www.allaboutken.com/posts/20180329-cam-content-action-goal-ontology.html) -->
 <!-- - [What if: A web font for data](https://www.allaboutken.com/posts/20180319-data-font-for-life-sciences.html) -->
@@ -177,8 +173,8 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 {{ divider | safe }}
 
-### Web developer and information designer, DRS Technical Solutions
-<small><span class="label">February 2011 – June 2015</span> <span class="label">Stuttgart, Germany</span></small>
+{{ position('Web developer and information designer', 'DRS Technical Solutions', 'February 2011 – June 2015', 'Stuttgart, Germany' ) }}
+
 - Manage user-focused efforts (UX, research, metrics) for company web projects
 - Website project lead for a Drupal platform to support more than 150,000 user accounts, provide e-commerce tools
 - Information architecture and infographics for business proposals, strategic planning
@@ -189,8 +185,8 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 <hr/>
 
-### Technical and editorial lead, TheDigitel
-<small><span class="label">May 2008 – February 2011</span> <span class="label">South Carolina, USA</span></small>
+{{ position('Technical and editorial lead', 'TheDigitel', 'May 2008 – February 2011', 'South Carolina, USA' ) }}
+
 - Co-founded TheDigitel.com to advance newspaper methodology in the age of websites
 - Lead team of eight staff and an array of freelancers and volunteers to report, market and implement web features
 - Lead community editor outreach with physical, online, podcast events
@@ -205,8 +201,8 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 <hr/>
 
-### Graphics reporter, The Post and Courier
-<small><span class="label">March 2006 - May 2008</span> <span class="label">South Carolina, USA</span></small>
+{{ position('Graphics reporter', 'The Post and Courier', 'March 2006 - May 2008', 'South Carolina, USA' ) }}
+
 - Newspaper infographic design and reporting
 - Produce daily deadline-driven information graphics based on news reports
 - Create interactive HTML and Flash information graphics for the Web
@@ -218,8 +214,8 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 <hr/>
 
-### Graphics reporter, The Beaufort Gazette
-<small><span class="label">May 2003 - March 2006</span> <span class="label">South Carolina, USA</span></small>
+{{ position('Graphics reporter', 'The Beaufort Gazette', 'May 2003 - March 2006', 'South Carolina, USA' ) }}
+
 - Newspaper infographic and page design
 - Produce daily deadline-driven information graphics based on news reports
 - Help lead the visual design of newspaper pages
@@ -229,21 +225,21 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 <hr/>
 
-### Production manager, The Daily Journal
-<small><span class="label">May 2000 - April 2003</span> <span class="label">South Carolina, USA</span></small>
+{{ position('Production manager', 'The Daily Journal', 'May 2000 - April 2003', 'South Carolina, USA' ) }}
+
 - Newspaper pre-press production, advertising
 - <span data-tooltip aria-haspopup="true" class="has-tip" data-disable-hover="false" tabindex="1" title="If you ever want to talk about the properties of ink on paper, let me know.">Pre-flight</span> and technical management of daily newspaper pre-press production
 - Lead production of in-house creatives for advertising clients
 - Manage pre-press team of 4 individuals
 
-**Major technical tooling utilised:** Adobe Illustrator, Photoshop, Acrobat, QuarkXPress, Mac OS
+**Major technical tooling:** Adobe Illustrator, Photoshop, Acrobat, QuarkXPress, Mac OS
 
 <!-- <span class="label">January 2000 - May 2008</span> <span class="label">Ending at The Post and Courier</span> <span class="label">South Carolina, USA</span>
 #### Newspaper infographic design and reporting -->
 
 {{ divider | safe }}
 
-<h2 class="vf-badge vf-badge--outline">Education, collaboration, speaking</h2>
+{{ position('Education, collaboration, speaking') }}
 
 - Clemson University, Bachelor of Science in Graphic Communications, May 2003 {# - Internships: Electric City Printing prepress, Seneca Daily Journal prepress #}
 - Charleston Drupal meet-up and co-working {# Founding member of the local co-working and Drupal user group #}
@@ -263,27 +259,10 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 {% endmarkdown %}
 
-{# <div class="do-not-print vf-u-padding__top--600"></div>
-<div class="do-not-print vf-u-padding__top--600"></div>
+<p class="for-print-only">
+  <span class="emoji">📧</span>[khawkins98@gmail.com](mailto:khawkins98@gmail.com) &nbsp;<span class="emoji">🐦</span> @khawkins98 &nbsp;<span class="emoji">🌎</span> AllAboutKen.com  &nbsp;<span class="emoji">📇</span> Online problem solver
+</p>
 
-<span class="do-not-print">
-{% markdown %}
-
-<h2 class="vf-badge vf-badge--outline">Want more about me?</h2>
-
-<a href="/blog" class="">Head to the blog</a> or <span class="emoji">📧</span>[khawkins98@gmail.com](mailto:khawkins98@gmail.com)
-{% endmarkdown %}
-<br/>
-</span> #}
-
-<span class="for-print-only">
-{% markdown %}
-<span class="emoji">📧</span>[khawkins98@gmail.com](mailto:khawkins98@gmail.com) &nbsp;<span class="emoji">🐦</span> @khawkins98 &nbsp;<span class="emoji">🌎</span> AllAboutKen.com  &nbsp;<span class="emoji">📇</span> Online problem solver
-{% endmarkdown %}
-</span>
-
-</div> <!-- /cvbody -->
+</div> 
 
 <div class="do-not-print vf-u-padding__top--600"></div>
-
-</section>
