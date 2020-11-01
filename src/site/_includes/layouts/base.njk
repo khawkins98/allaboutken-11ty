@@ -32,10 +32,10 @@
     <meta name="dcterms.format" content="text/html" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
   </head>
-  <body class="{{ bodyClass }} vf-body">
+  <body class="vf-body vf-stack{% if bodyClass %} {{ bodyClass }}{% endif %}">
     <header class="vf-global-header">
       <a href="/" class="vf-logo"><span class="vf-logo__text">AllAboutKen.com</span></a>
-      <nav class="vf-navigation vf-navigation--global | show-for-medium">
+      <nav class="vf-navigation vf-navigation--global | show-for-medium | do-not-print">
         <ul class="vf-navigation__list | vf-list--inline">
           <li class="vf-navigation__item">
             <a href="/blog" class="vf-navigation__link">Blog</a>

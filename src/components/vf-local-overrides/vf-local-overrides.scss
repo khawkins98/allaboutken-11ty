@@ -50,7 +50,6 @@ img {
   }
 }
 
-
 // Default color
 .vf-body {
   // color: var(--vf-color--grey--darkest);
@@ -346,4 +345,17 @@ html, body {
 // don't grow centred images
 .vf-figure--align.vf-figure--align-centered .vf-figure__image {
   max-width: 100%;
+}
+
+// Vf core has no margin on blockuopte
+body .vf-content blockquote:not([class*=vf-]) {
+  margin-bottom: 16px;
+}
+
+// footer stroke overrride
+body .vf-footer {
+  border-color: #3B6FB6;
+  &:after {
+    background-color: #3B6FB6;
+  }
 }

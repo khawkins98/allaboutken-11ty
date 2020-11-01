@@ -3,6 +3,9 @@ title: "Integrating Eleventy with gulp, upstream JS"
 layout: layouts/post.njk
 teaser: "Eleventy <a href='https://www.11ty.io/docs'>notes that</a> it, \"works great with data — use both front matter and external data files\" but the static site generator stops short of working well with upstream in-memory data objects for local development."
 image: "/blog/dripping-faucet.jpg"
+image_meta:
+  text: Drip. Drop. Drip. Opening the tap of of upstream data objects for Eleventy. Thanks to Flickr user Paul B for the image [<a href="https://www.flickr.com/photos/eastbeach/24818842988/in/photolist-DPa4m1-4eQ9W-4bPwdN-APyyy-eXwGJg-4JZhcq-6wASuN-6wwH86-6wASy7-7zwzso-wGnk7F-8HPAJt-66a7wt-4fPSa-tzkuC-tMM3hb-5njkrD-5C83sD-tzkqk-5oynfL-4pnkBU-6ZfA9m-6iZaMo-7ECykH-9sAPMe-TcFhPs-6zJcWE-4eQ9Y-5styJG-9Tshp1-nu54P-6iUT2t-xZYcY-7DbDxo-6aVvan-gsyhW8-95sAwV-gsyhHn-2cL3sdx-unNuB-gxE7Hm-3fArXA-xxCk6-6iUYaX-gsxDY2-unNiy-67GWCn-xxCsQ-gsy2m3-4Cnf2b">CC License</a>].
+  altext: A leaky tap
 date: 2019-10-21
 url: /posts/20191021-integrating-eleventy-with-gulp.html
 permalink: posts/20191021-integrating-eleventy-with-gulp.html
@@ -12,17 +15,7 @@ topics:
   - gulp, Eleventy, EMBL
 ---
 
-<figure class=""><img class="vf-u-padding__bottom--md" src="/images/original{{image}}" />
-  <cite class="text-right">Thanks to Flickr user Paul B for the image [<a href="https://www.flickr.com/photos/eastbeach/24818842988/in/photolist-DPa4m1-4eQ9W-4bPwdN-APyyy-eXwGJg-4JZhcq-6wASuN-6wwH86-6wASy7-7zwzso-wGnk7F-8HPAJt-66a7wt-4fPSa-tzkuC-tMM3hb-5njkrD-5C83sD-tzkqk-5oynfL-4pnkBU-6ZfA9m-6iZaMo-7ECykH-9sAPMe-TcFhPs-6zJcWE-4eQ9Y-5styJG-9Tshp1-nu54P-6iUT2t-xZYcY-7DbDxo-6aVvan-gsyhW8-95sAwV-gsyhHn-2cL3sdx-unNuB-gxE7Hm-3fArXA-xxCk6-6iUYaX-gsxDY2-unNiy-67GWCn-xxCsQ-gsy2m3-4Cnf2b">CC License</a>]</cite>
-  <figcaption>Drip. Drop. Drip. Opening the tap of of upstream data objects for Eleventy.</figcaption>
-</figure>
-
 {% markdown %}
-{{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span>
-
-<h1>{{title}}</h1>
-
-<p class="lead">{{ teaser | safe }}</p>
 
 This post is prompted by a project for a highly-modular design system as part of my work for [EMBL](https://www.embl.de) — a leading laboratory for the life sciences. We're [using](https://github.com/visual-framework/vf-eleventy) Eleventy with gulp (for task running and building) and [Fractal](https://fractal.build) (for design components). 
 
@@ -149,7 +142,7 @@ Recap: we want to do some local development, let a parent process update a varia
 
 {% endmarkdown %}
 
-<div class="grid-x vf-u-padding__bottom--md vf-u-padding__top--lg vf-u-padding__bottom--lg">
+<div class="vf-u-padding__bottom--400 vf-u-padding__top--500 vf-u-padding__bottom--500">
   <div class="large-1 medium-2 cell"></div>
   <figure class="large-10 medium-8 cell">
   <hr/>

@@ -2,10 +2,12 @@
 title: Ken Hawkins' CV
 subtitle: No homepage, yet.
 date: 2018-08-22 12:24:50
-layout: layouts/post.njk
+layout: layouts/base.njk
 templateEngineOverride: njk, md
 active_path: front
 ---
+
+<section class="vf-content">
 
 <style>
   .sticky {
@@ -26,9 +28,9 @@ active_path: front
 </style>
 <!-- Add a Sticky Menu -->
 <!--<div data-sticky-container class="do-not-print">
-  <div class="black-background white-color vf-u-padding__top--md vf-u-padding__bottom--md no-underline" data-sticky data-margin-top="0" data-anchor="cvbody" id="cv-menu">
+  <div class="black-background white-color vf-u-padding__top--400 vf-u-padding__bottom--400 no-underline" data-sticky data-margin-top="0" data-anchor="cvbody" id="cv-menu">
     <ul class="menu" data-magellan>
-      <span class="lead vf-u-padding__top--sm padding-left-xlarge padding-right-large">Skip <span class="emoji">⤵</span></span>
+      <span class="lead vf-u-padding__top--200 padding-left-xlarge padding-right-large">Skip <span class="emoji">⤵</span></span>
       <li><a class="" href="#experience">Experience</a></li>
       <li><a class="" href="#history">History</a></li>
       <li><a class="" href="#more">More</a></li>
@@ -37,11 +39,11 @@ active_path: front
 </div>-->
 
 {% set divider %}
-<div class="do-not-print vf-u-padding__top--xl"></div>
+<div class="do-not-print vf-u-padding__top--600"></div>
 
 ---
 
-<div class="do-not-print vf-u-padding__top--xl"></div>
+<div class="do-not-print vf-u-padding__top--600"></div>
 <div style="page-break-before: always"></div>
 {% endset %}
 
@@ -87,8 +89,8 @@ h3 { margin-top: usnet;  }
 <a id="cv" name="cv"></a>
 
 <div id="experience" data-magellan-target="experience"></div>
-<div class="do-not-print vf-u-padding__top--xl"></div>
-<div class="do-not-print vf-u-padding__top--xl"></div>
+<div class="do-not-print vf-u-padding__top--600"></div>
+<div class="do-not-print vf-u-padding__top--600"></div>
 
 {% markdown %}
 
@@ -249,8 +251,8 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 - Speaking events: 
   Charleston PechaKucha, Charleston Drupal user group, Create South conference, Startup Stuttgart, various others
 
-{# <div class="do-not-print vf-u-padding__top--xl"></div>
-<div class="do-not-print vf-u-padding__top--xl"></div>
+{# <div class="do-not-print vf-u-padding__top--600"></div>
+<div class="do-not-print vf-u-padding__top--600"></div>
 
 <div id="more" data-magellan-target="more"></div>
 
@@ -261,8 +263,8 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 {% endmarkdown %}
 
-{# <div class="do-not-print vf-u-padding__top--xl"></div>
-<div class="do-not-print vf-u-padding__top--xl"></div>
+{# <div class="do-not-print vf-u-padding__top--600"></div>
+<div class="do-not-print vf-u-padding__top--600"></div>
 
 <span class="do-not-print">
 {% markdown %}
@@ -282,4 +284,6 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 </div> <!-- /cvbody -->
 
-<div class="do-not-print vf-u-padding__top--xl"></div>
+<div class="do-not-print vf-u-padding__top--600"></div>
+
+</section>
