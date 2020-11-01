@@ -16,15 +16,15 @@
   </p>
 </div>
 
-{% if page.url != '/blog/' %}
+{% if page.url != '/blog/' and page.url != '/cv/' %}
 <div class="vf-grid | do-not-print">
   <p><a href="/blog" class="vf-button vf-button--outline vf-button--200"> ⇤ To the blog index</a></p>
 </div>
 {% endif %}
 
-<footer class="vf-footer">
+<footer class="vf-footer | do-not-print">
   <div class="vf-footer__inner">
-    <div class="vf-footer__notice | do-not-print">
+    <div class="vf-footer__notice">
       <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
       &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a>
       {%- if serverInfo.environment == "development" %}
