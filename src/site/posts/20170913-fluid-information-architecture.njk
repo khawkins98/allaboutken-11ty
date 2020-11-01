@@ -1,8 +1,11 @@
 ---
 title: Fluid IA to enable user discovery, prepare for change
 layout: layouts/post.njk
-teaser: "Resisting entropy and preparing for change by binding content to mission."
+teaser: "Subtitled: Resisting entropy and preparing for change by binding content to mission."
 image: "/blog/corridor.jpg"
+image_meta:
+  text: Organised, yes, but not useful to non-domain experts.
+  altext: '<a href="https://www.flickr.com/photos/thomashawk/415552741/in/photolist-CHPmr-cdEh6U-5vUaWt-Cu2JT-7EVjzq-4YzCwE-qGX8i4-87p7ru-7QdGA4-97P4wp-52uPwU-bWj3Q-8FiJoE-ckKcRU-5AA9uc-fEqUWy-48nMo7-PsrnH-fHFJfa-2JFYK-6ppduU-7P7e8D-q3tjzp-dRkdJt-9cvC4M-C1Ndcf-pk43WC-eg4Uzw-5L7Pcg-5kmrZL-63nogj-dYJvoD-4ioQoH-4MnVTv-hDYEsf-q9YJqB-ceAoAL-575hr-2kmTxP-4nHfg6-ddK5Fd-4tGXMr-4JEmpu-e15uFw-5Uy8qL-dD1sMJ-6jbebm-4qQedF-2PaBpP-6xsYLf"><small class="float-right">CC Credit: Thomas Hawk</small></a>'
 date: 2017-09-13
 url: /posts/20170913-fluid-information-architecture.html
 permalink: posts/20170913-fluid-information-architecture.html
@@ -10,12 +13,13 @@ active_path: blog
 tags: posts
 ---
 
-<div class="medium-12 cell vf-u-padding__top--lg">
-<div class="">
-
 {% markdown %}
 
-<div class="grid-x vf-u-padding__bottom--md vf-u-padding__top--lg vf-u-padding__bottom--lg">
+As Web Design Architect at EMBL (The European Molecular Biology Laboratory), [I've been helping](https://embl-design-language.github.io/Springboard/information-architecture/) a team in its efforts to better understand the structure of the organisation and how we can utilise information architecture to facilitate interconnectivity and reusability of content. It's an issue that isn't unique to EMBL.
+
+Robust information architecture can help organisations ease content access and make their own internal structure more obvious. But exposing too much of the architecture's structure and facets can confuse non-expert users with information superfluous to their use case.
+
+<div class="vf-u-padding__bottom--400 vf-u-padding__top--500 vf-u-padding__bottom--500">
   <div class="large-4 medium-6 cell"><img class="callout" src="/images/original/blog/ia-paths.svg" />
     <a name="pyramid"></a>
   </div>
@@ -24,36 +28,23 @@ tags: posts
   </div>
 </div>
 
-{{ date | dateDisplay }}
-
-# {{title}}
-
-### Subtitled: {{ teaser | safe }}
-
-As Web Design Architect at EMBL (The European Molecular Biology Laboratory), [I've been helping](https://embl-design-language.github.io/Springboard/information-architecture/) a team in its efforts to better understand the structure of the organisation and how we can utilise information architecture to facilitate interconnectivity and reusability of content. It's an issue that isn't unique to EMBL.
-
-Robust information architecture can help organisations ease content access and make their own internal structure more obvious. But exposing too much of the architecture's structure and facets can confuse non-expert users with information superfluous to their use case.
-
-<div class="grid-x">
-<div class="medium-9 padding-left-xlarge cell margin-bottom-large"><img class="callout margin-bottom-small" src="/images/original{{image}}" />
-<a href="https://www.flickr.com/photos/thomashawk/415552741/in/photolist-CHPmr-cdEh6U-5vUaWt-Cu2JT-7EVjzq-4YzCwE-qGX8i4-87p7ru-7QdGA4-97P4wp-52uPwU-bWj3Q-8FiJoE-ckKcRU-5AA9uc-fEqUWy-48nMo7-PsrnH-fHFJfa-2JFYK-6ppduU-7P7e8D-q3tjzp-dRkdJt-9cvC4M-C1Ndcf-pk43WC-eg4Uzw-5L7Pcg-5kmrZL-63nogj-dYJvoD-4ioQoH-4MnVTv-hDYEsf-q9YJqB-ceAoAL-575hr-2kmTxP-4nHfg6-ddK5Fd-4tGXMr-4JEmpu-e15uFw-5Uy8qL-dD1sMJ-6jbebm-4qQedF-2PaBpP-6xsYLf"><small class="float-right">CC Credit: Thomas Hawk</small></a>
-<small>Organised, yes, but not useful to non-domain experts.</small>
-</div>
-</div>
-
 Exposed complexity creates confusion, not complexity itself. We should strive for a rich system that gradually exposes functionality to be learned as a service is utilised.
 
 We see some lessons in the common kitchen knife: a knife has many ways it can be utilised but advanced functionality of the object is dependent on the skill of the user — advanced uses do not obstruct the most basic uses.
 
 ## Passive enabling 'pro' features
 
-<p class="lead">If you're reading this blog, you've likely logged a few hundred hours on computers and have learned shortcuts like `⌘+s` and `ctrl+s`.</p>
+<p class="vf-text-body--1">If you're reading this blog, you've likely logged a few hundred hours on computers and have learned shortcuts like `⌘+s` and `ctrl+s`.</p>
 
-<div class="grid-x">
-<div class="large-6 medium-10 padding-left-xlarge cell"><img class="callout" src="/images/original/blog/passive-education.png" />
-<!-- <small>Organised, yes, but not useful to non-domain experts.</small> -->
-</div>
-</div>
+{% endmarkdown %}
+
+{% render '@ken-figure', {
+  "text": "Computer shortcuts can be discovered in-context.",
+  "alttext": "Saving shortcuts",
+  "imageUrl": "/images/original/blog/passive-education.png"
+} %}
+
+{% markdown %}
 
 Knowledge of these keyboard shortcuts to save a document is not required to use your Mac or Windows computer, but the shortcuts are passively, persistently and consistently indicated across the operating system menus, this allows it to be learned as a value add over time. It's an osmotic process that comes without reading a detailed operating manual.
 
@@ -63,7 +54,7 @@ To be clear, this does not mean we should go about adding keyboard shortcuts to 
 
 ## Shortcuts: Terribly useful but not required
 
-<p class="lead">You might not see it the first time, but when you discover these optional paths they offer new gateways of discovery.</p>
+<p class="vf-text-body--1">You might not see it the first time, but when you discover these optional paths they offer new gateways of discovery.</p>
 
 We've been [working to better understand EMBL's architecture](https://blogs.embl.org/communications/tag/design/) and have seen evidence that users descend into content silos with fixed and limited contexts, muting other voices and personas of EMBL.
 
@@ -72,22 +63,26 @@ For some users this is fine if they seek to discover an endpoint of information 
 But for repeat users — including staff — this view creates a siloed perspective of the organisation. The existing page structure and faceting exclusively looks inward into geographic-based facets, there's no ability to shift context upwards.
 
 For example this scenario is currently not possible through fewer than five clicks:
-> <p class="lead">I'm viewing a team in Rome about research, but instead wish to see a research team in Hamburg in the same research field.</p>
 
-<div class="grid-x vf-u-padding__bottom--md vf-u-padding__top--lg">
-  <div class="large-8 medium-10 cell"><img class="callout" src="/images/original/blog/ia-silos.svg" />
-  </div>
-  <div class="large-10 medium-6 cell">
-  <small>A siloed view of the of our content pyramid from [the top](#pyramid) of this article. If this was paths in a field, someone would traipse over lawn as a shortcut across these information silos. Fighting against these silos, a user's curiosity compells them to backtrack up an information channel and then descend a seperate silo. It's a doubly perilous situation when your staff already functions across six geographically distinct areas.</small>
-  </div>
-</div>
+> I'm viewing a team in Rome about research, but instead wish to see a research team in Hamburg in the same research field.
 
-#### Try it yourself
-Find the best path to get from [EMBL Rome research group](https://www.embl.it/research/unit/asari/index.html) to an [EMBL Heidelberg research group](https://www.embl.de/research/units/dev_biology/de_renzis/index.html).
+{% endmarkdown %}
+
+{% render '@ken-figure', {
+  "text": "A siloed view of the of our content pyramid from <a href='#pyramid'>the top</a> of this article. If this was paths in a field, someone would traipse over lawn as a shortcut across these information silos. Fighting against these silos, a user's curiosity compells them to backtrack up an information channel and then descend a seperate silo. It's a doubly perilous situation when your staff already functions across six geographically distinct areas.",
+  "alttext": "Information silos",
+  "imageUrl": "/images/original/blog/ia-silos.svg"
+} %}
+
+{% markdown %}
+
+#### Experience the pain yourself
+
+Find an easy path from an [EMBL Rome research group](https://www.embl.it/research/unit/asari/index.html) to an [EMBL Heidelberg research group](https://www.embl.de/research/units/dev_biology/de_renzis/index.html).
 
 <!-- Instead we're looking to add "menu facets" that casually blend as breadcrumbs, but enable powerful context shifting.
 
-<div class="grid-x vf-u-padding__bottom--md vf-u-padding__top--lg">
+<div class="vf-u-padding__bottom--400 vf-u-padding__top--500">
   <div class="large-8 medium-10 cell"><img class="callout" src="/images/original/blog/ia-xxx.svg" />
     [insert screengrab of menu facets]
   </div>
@@ -128,13 +123,3 @@ These facet shortcuts are driven by document metatags specified in [our informat
 This metadata tethers content independent of placement, and affixes it to the organisation's core facets (who, what, where). A tether as firm as the organisation's mission. Our breadcumbs to the future.
 
 {% endmarkdown %}
-
-<div class="">
-{% markdown %}
-## <span class="emoji">📰</span> More soon
-
-Check back on this blog around mid-November for more.<br/>You could also [get the RSS feed](/rss.xml) or [follow me on Twitter <span class="emoji">🐧</span>@khawkins98](https://twitter.com/khawkins98).
-{% endmarkdown %}
-</div>
-
-</div>

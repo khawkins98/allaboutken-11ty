@@ -3,6 +3,9 @@ title: "Inside the Content-Action Model"
 layout: layouts/post.njk
 teaser: "An ontology to document, plan, define and implement CAM magic."
 image: "/blog/cam-model-terraced-farming.jpg"
+image_meta:
+  text: 'Terraced rice farming: through sculpting and definition of an organic environment, we make better use of a resource. There is an parallel with interactive content. Thanks to Flickr user David Wormley for the image [<a href="https://www.flickr.com/photos/sleepingseasons/26604658090/">CC License</a>]'
+  altext: Terraced rice farming
 date: 2018-03-29
 url: /posts/20180329-cam-content-action-goal-ontology.html
 permalink: posts/20180329-cam-content-action-goal-ontology.html
@@ -12,29 +15,22 @@ topics:
   - CAM for Web Systems, ontology
 ---
 
-<figure class=""><img class="vf-u-padding__bottom--md" src="/images/original{{image}}" />
-  <cite class="text-right">Thanks to Flickr user David Wormley for the image [<a href="https://www.flickr.com/photos/sleepingseasons/26604658090/">CC License</a>]</cite>
-  <figcaption>Terraced rice farming: through sculpting and definition of an organic environment, we make better use of a resource. There's an parallel with interactive content.</figcaption>
-</figure>
+
 
 {% markdown %}
-{{ date | dateDisplay }}&nbsp; &nbsp;<span class="label">Filed in: {{topics}}</span>
 
-<h1>{{title}}</h1>
-
-<p class="lead">{{ teaser | safe }}</p>
 
 I've [previously stated how the Content-Action Model for Web Systems](/posts/20180122-content-action-model.html) better unites strategy, user actions and content over time — that's a bold claim that's possible through [triples](https://en.wikipedia.org/wiki/Semantic_triple) of content, users and goals.
 
 This post details the first steps from theory to action.
 
-> <p class="lead">By placing our content, goals, users into an ontology we can derive logical queries of relationships, placement and <em>success</em>. — me, just now.</p>
+> <p class="vf-text-body--1">By placing our content, goals, users into an ontology we can derive logical queries of relationships, placement and <em>success</em>. — me, just now.</p>
 
 Below (in Figure 1) is a [WebVOWL visualisation](https://vowl.visualdataweb.org/webvowl.html) of an early draft (v.002).
 
 The takeaway I intend to show: `CAM Records` are the parent in the ontology with `CAM Goals` as the central hub. Pages, content units, and users play a strong supporting role.
 
-<div class="grid-x vf-u-padding__bottom--md vf-u-padding__top--lg vf-u-padding__bottom--lg">
+<div class="vf-u-padding__bottom--400 vf-u-padding__top--500 vf-u-padding__bottom--500">
 <figure class="callout large-12 cell">
 <img src="/images/original/blog/cam-model-ontology.jpg" />
 <figcaption><strong>Figure 1.</strong> The ontology framework for the CAM model.
@@ -48,7 +44,7 @@ Want a closer look? <a class="" href="https://www.allaboutken.com/images/origina
 
 Below (in Figure 2), I've illustrated a connection in the "Jobs" and "Front page" systems (`Records`). Here they have a join in through the goal of "Informing and understanding", however we can see the systems use different content to achieve this. Knowing this provide's a chance for sympathetic design between pages and ask if we're doing enough to re-use existing content.
 
-<div class="grid-x vf-u-padding__bottom--md vf-u-padding__top--lg vf-u-padding__bottom--lg">
+<div class="vf-u-padding__bottom--400 vf-u-padding__top--500 vf-u-padding__bottom--500">
 <figure class="callout large-10 small-12 cell">
 <img src="/images/original/blog/cam-model-ontology-inferences.png" style="border: 1px solid #EEE" />
 <figcaption><strong>Figure 2.</strong> A sample view of inferences between <a href="/posts/20180122-content-action-model.html#in-a-record">CAM Records</a>.

@@ -1,4 +1,3 @@
-<div class="do-not-print vf-u-padding__top--xl"></div>
 <hr class="vf-divider" />
 
 <div class="vf-body--text | vf-content | do-not-print">
@@ -17,32 +16,26 @@
   </p>
 </div>
 
-{% if page.url != '/blog/' %}
-<div class="vf-grid | do-not-print vf-u-padding__top--xl">
-  <p><a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ To the blog index</a></p>
+{% if page.url != '/blog/' and page.url != '/cv/' %}
+<div class="vf-grid | do-not-print">
+  <p><a href="/blog" class="vf-button vf-button--outline vf-button--200"> ⇤ To the blog index</a></p>
 </div>
 {% endif %}
 
-<div class="do-not-print vf-u-padding__top--xl"></div>
-<div class="do-not-print vf-u-padding__top--xl"></div>
-
-
-<div class="vf-grid vf-u-background-color-ui--off-white vf-u-fullbleed">
-  <div class="vf-body--text | vf-content | do-not-print | vf-u-margin__top--lg vf-u-margin__bottom--lg">
-    <a class="" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
-    &nbsp; <a class="" href="/privacy">Curious about privacy?</a>
-
-    {%- if serverInfo.environment == "development" %}
-      <div class=" vf-u-margin__top--lg">
-        <div class="vf-banner vf-banner--alert vf-banner--warning">
-          <p class="vf-banner__text">
-            ⚠️ You're running the {{serverInfo.environment}} command.
-          </p>
+<footer class="vf-footer | do-not-print">
+  <div class="vf-footer__inner">
+    <div class="vf-footer__notice">
+      <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+      &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a>
+      {%- if serverInfo.environment == "development" %}
+          <div class="vf-banner vf-banner--alert vf-banner--warning">
+            <p class="vf-banner__text">
+              ⚠️ You're running the {{serverInfo.environment}} command.
+            </p>
         </div>
-      </div>
-    {% endif -%}
-
-    <code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
+      {% endif -%}
+    </div>
   </div>
-</div>
+</footer>
 
+<code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
