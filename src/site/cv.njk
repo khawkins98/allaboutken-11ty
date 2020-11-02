@@ -7,6 +7,7 @@ templateEngineOverride: njk, md
 active_path: front
 ---
 
+{# 
 <style>
   .sticky {
     opacity: 0;
@@ -25,7 +26,7 @@ active_path: front
   }
 </style>
 <!-- Add a Sticky Menu -->
-<!--<div data-sticky-container class="do-not-print">
+<div data-sticky-container class="do-not-print">
   <div class="black-background white-color vf-u-padding__top--400 vf-u-padding__bottom--400 no-underline" data-sticky data-margin-top="0" data-anchor="cvbody" id="cv-menu">
     <ul class="menu" data-magellan>
       <span class="lead vf-u-padding__top--200 padding-left-xlarge padding-right-large">Skip <span class="emoji">⤵</span></span>
@@ -34,7 +35,8 @@ active_path: front
       <li><a class="" href="#more">More</a></li>
     </ul>
   </div>
-</div>-->
+</div>
+#}
 
 {# Page dividers #}
 {%- set divider %}
@@ -46,6 +48,13 @@ active_path: front
 <div style="page-break-before: always"></div>
 {% endset -%}
 
+{# Contact info print #}
+{%- set contactInfoPrint %}
+<div class="show-for-print-only">
+<span class="emoji">📧</span>&nbsp; khawkins98@gmail.com &nbsp;<span class="emoji">🐦</span>&nbsp; @khawkins98 &nbsp;<span class="emoji">🌎</span>&nbsp; AllAboutKen.com  &nbsp;<span class="emoji">📇</span>&nbsp; Online problem solver
+</div>
+{% endset -%}
+
 {# Position templates #}
 {%- macro position(name, employer='', years='', location='') %}
 <h2 class="vf-text-heading--2">{{ name }}</h2>
@@ -53,27 +62,44 @@ active_path: front
 {% endmacro -%}
 
 <div class="show-for-print-only">
-{% markdown %}
-# {{title}}
-<span class="emoji">📧</span>[khawkins98@gmail.com](mailto:khawkins98@gmail.com)  &nbsp;<span class="emoji">🐦</span> @khawkins98 &nbsp;<span class="emoji">🌎</span> AllAboutKen.com  &nbsp;<span class="emoji">📇</span> Online problem solver
+  <h1>{{title}}</h1>
+</div>
 
-{% endmarkdown %}
+{{ contactInfoPrint | safe }}
+
+<div class="vf-u-fullbleed vf-u-background-color-ui--grey | do-not-print">
+<section class="vf-grid | vf-u-padding__top--500">
+  <div class="vf-content">
+    <h1 class="vf-text-heading--1">{{title}} <small>aka, my longer resume</small></h1>
+    <h2>My career and interests revolve on common points: distillation of unorganised information into clearer communication.</h2>
+    {% markdown -%}
+    My time tackling problems spans 20 years: beginning with printing presses, continuing through graphic design, information graphics, architecting startups and now centres on web publishing and design systems.
+    {%- endmarkdown %}
+  </div>
+</section>
 </div>
 
 <div class="vf-content">
 
-<div class="do-not-print">
-{% markdown %}
-# {{title}} <small>aka, my longer resume</small>
-<p class="">My career and interests revolve on common points: distillation of unorganised information into clearer communication.</p>
-<!-- I've found this challenge a recurrent and beneficial problem to solve in newspaper reporting, e-commerce, corporate websites and often in things as simple as a rather messy brochure. Below I've attempted to show how my various work experience (left) equates to major areas of my knowledge (right), and I've added a few key lenses in the middle. -->
-{% endmarkdown %}
-</div>
+{# I've found this challenge a recurrent and beneficial problem to solve in newspaper reporting, e-commerce, corporate websites and often in things as simple as a rather messy brochure. Below I've attempted to show how my various work experience (left) equates to major areas of my knowledge (right), and I've added a few key lenses in the middle. #}
 
-<style> /* set the CSS */
+<style> /* set the printable link CSS */
 @media print { 
-  .cv-clippings a:link:after, 
-  .cv-clippings a:visited:after { 
+  .vf-content a:not([class*=vf-]),
+  .vf-content a:not([class*=vf-]):visited, 
+  .vf-content a:not([class*=vf-]),
+  .vf-content a:not([class*=vf-]):visited {
+    color: #000;
+    border-bottom: none;
+    text-decoration-color: #666;
+  }
+  .vf-content .cv-clippings a,
+  .vf-content .cv-clippings a:visited {
+    text-decoration-line: none;
+    color: #000;
+  }
+  .vf-content .cv-clippings a:link:after, 
+  .vf-content .cv-clippings a:visited:after { 
     display: block;
     content: "" attr(href) "";
     font-size: 80%;
@@ -90,8 +116,6 @@ active_path: front
 <h2 class="vf-badge vf-badge--outline">Professional experience</h2>
 
 ### Areas of expertise: from concepts to technical
-
-My time tackling problems spans 20 years: beginning with printing presses, continuing through graphic design, information graphics, architecting startups and now centres on web publishing and design systems.
 
 - **Structuring the unstructured**
     - Maximising content for discoverability and context-aware content
@@ -259,9 +283,8 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 {% endmarkdown %}
 
-<p class="for-print-only">
-  <span class="emoji">📧</span>[khawkins98@gmail.com](mailto:khawkins98@gmail.com) &nbsp;<span class="emoji">🐦</span> @khawkins98 &nbsp;<span class="emoji">🌎</span> AllAboutKen.com  &nbsp;<span class="emoji">📇</span> Online problem solver
-</p>
+
+{{ contactInfoPrint | safe }}
 
 </div> 
 
