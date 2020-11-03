@@ -1,6 +1,6 @@
 ---
 title: Ken Hawkins' CV
-subtitle: No homepage, yet.
+subtitle: I'm a front end lead who empathizes with people and organisations to help deliver the potential of the web to achieve goals.
 date: 2018-08-22 12:24:50
 layout: layouts/base.njk
 templateEngineOverride: njk, md
@@ -53,7 +53,7 @@ active_path: front
 {# Position templates #}
 {%- macro position(name, employer='', years='', location='', topMargin='true') %}
 <h2 class="vf-text-heading--2{% if topMargin %} | vf-u-padding__top--1200 vf-u-margin__top--1200{% endif %}">{{ name }}</h2>
-<h4 class="vf-text-heading--4">{{ employer }} <small>{{ years }} {{ location }}</small></h4>
+<h4 class="vf-text-heading--4 | vf-u-text-color--grey">{{ employer }} <small>{{ years }} {{ location }}</small></h4>
 {% endmacro -%}
 
 {# Section header #}
@@ -67,21 +67,43 @@ active_path: front
 
 {{ contactInfoPrint | safe }}
 
-<div class="vf-u-fullbleed vf-u-background-color-ui--grey">
+<style>
+.kh-intro-unit {
+  margin-top: 4.5em !important;
+}
+.kh-intro-unit .kh-intro-unit--inner {
+  position: relative;
+  top: -4.5em;
+}
+.kh-intro-unit .vf-text-heading--1 {
+  font-size: 64px;
+}
+.kh-intro-unit::before {
+  background: var(--vf-ui-color--black);
+}
+</style>
+
+<div class="vf-u-fullbleed | kh-intro-unit | do-not-print">
+  <section class="kh-intro-unit--inner">
+    <h1 class="vf-text-heading--1 vf-u-margin__bottom--0">Ken Hawkins<span class="show-for-medium-up">'s CV</span></h1>
+    <p class="vf-u-type__text-body--1 vf-u-margin--0 vf-u-text-color--ui--white">{{subtitle}}</p>
+  </section>
+</div>
+
+
+<h2 class="for-print-only">{{subtitle}}</h2>
+
+<div class="vf-u-fullbleed">
 <section class="vf-grid | vf-u-padding__top--500">
   <div class="vf-content">
-    <h1 class="vf-text-heading--1 | do-not-print">{{title}} <small>aka, my longer resume</small></h1>
-    <h2>I'm a front end lead who relies on empathy with people and their organisations to help deliever the potential of the web to achieve goals.</h2>
-    {% markdown -%}
-    I use code, design and information architecture. I am drawn to interesting challenges and creative tooling.  My current daily tools are front-end oriented and involve design and component systems, Eleventy, Fractal, Sass, documentation, developer outreach, JavaScript, npm and content modelling
 
-    {#. And I do it to lead a global leader in creating a better front-end platform for life-science websites.
- #}
-    {# Originally from South Carolina (USA), I've been in Europe since 2011.  #}
-    
-    My total time tackling problems spans 20 years: beginning with printing presses, continuing through graphic design, information graphics and innovative startups. Since 2015 I've been work with [EMBL](https://www.embl.org/) to make a better front-end platform for life-science websites.
-    {%- endmarkdown %}
+{% markdown -%}
+I use code, design and information architecture — plus a generous amount of consultation. I am drawn to interesting challenges and creative tooling. My current daily tools are front-end oriented and involve design and component systems, Eleventy, Fractal, Sass, documentation, developer outreach, JavaScript, npm and content modelling.
 
+{# Originally from South Carolina (USA), I've been in Europe since 2011.  #}
+
+My experience spans 20 years: beginning with printing presses, continuing through graphic design, information graphics and an online media startup. Since 2015 I've been work with [EMBL](https://www.embl.org/) to make a better front-end platform for life-science websites.
+{%- endmarkdown %}
   </div>
 </section>
 </div>
@@ -151,6 +173,10 @@ active_path: front
 {{ sectionHeader('Professional work history') }}
 
 {{ position('Web Front End Lead', 'European Molecular Biology Laboratory (EMBL)', 'June 2018 – ongoing', 'Heidelberg, Germany', false ) }}
+
+EMBL is Europe’s flagship laboratory for the life sciences and employees hundreds of developers to deliver online scientific services. We've created reusable front end tooling to speed development, reduce cost and improve UX. It's been especially interesting for the breadth of technology and wide the range of user needs and developer backgrounds. 
+
+I lead the creation of the that tooling, the Visual Framework, and serve as its lead advocate to help developers and product designers to utilise and implement. I also ensure the Visual Framework adapts to those needs. 
 
 - Expansion of my role for the European Bioinformatics Institute (EMBL-EBI)
 - Grow, evolve projects from EMBL-EBI into pan-EMBL solutions 
