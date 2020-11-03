@@ -1,12 +1,13 @@
 ---
 title: Ken Hawkins' CV
-subtitle: No homepage, yet.
+subtitle: I'm a front end lead who empathizes with people and organisations to help deliver the potential of the web to achieve goals.
 date: 2018-08-22 12:24:50
 layout: layouts/base.njk
 templateEngineOverride: njk, md
 active_path: front
 ---
 
+{# 
 <style>
   .sticky {
     opacity: 0;
@@ -25,7 +26,7 @@ active_path: front
   }
 </style>
 <!-- Add a Sticky Menu -->
-<!--<div data-sticky-container class="do-not-print">
+<div data-sticky-container class="do-not-print">
   <div class="black-background white-color vf-u-padding__top--400 vf-u-padding__bottom--400 no-underline" data-sticky data-margin-top="0" data-anchor="cvbody" id="cv-menu">
     <ul class="menu" data-magellan>
       <span class="lead vf-u-padding__top--200 padding-left-xlarge padding-right-large">Skip <span class="emoji">⤵</span></span>
@@ -34,46 +35,102 @@ active_path: front
       <li><a class="" href="#more">More</a></li>
     </ul>
   </div>
-</div>-->
+</div>
+#}
 
 {# Page dividers #}
 {%- set divider %}
-<div class="do-not-print vf-u-padding__top--600"></div>
-
----
-
-<div class="do-not-print vf-u-padding__top--600"></div>
 <div style="page-break-before: always"></div>
 {% endset -%}
 
+{# Contact info print #}
+{%- set contactInfoPrint %}
+<div class="show-for-print-only">
+<span class="emoji">📧</span>&nbsp; khawkins98@gmail.com &nbsp;<span class="emoji">🐦</span>&nbsp; @khawkins98 &nbsp;<span class="emoji">🌎</span>&nbsp; AllAboutKen.com  &nbsp;<span class="emoji">📇</span>&nbsp; Online problem solver
+</div>
+{% endset -%}
+
 {# Position templates #}
-{%- macro position(name, employer='', years='', location='') %}
-<h2 class="vf-text-heading--2">{{ name }}</h2>
-<h4 class="vf-text-heading--4">{{ employer }} <small>{{ years }} {{ location }}</small></h4>
+{%- macro position(name, employer='', years='', location='', topMargin='true') %}
+<h2 class="vf-text-heading--2{% if topMargin %} | vf-u-padding__top--1200 vf-u-margin__top--1200{% endif %}">{{ name }}</h2>
+<h4 class="vf-text-heading--4 | vf-u-text-color--grey">{{ employer }} <small>{{ years }} {{ location }}</small></h4>
+{% endmacro -%}
+
+{# Section header #}
+{%- macro sectionHeader(tilte) %}
+<h2 class="vf-badge vf-badge--outline | vf-u-margin__top--1200 vf-u-margin__bottom--600">{{ tilte }}</h2>
 {% endmacro -%}
 
 <div class="show-for-print-only">
-{% markdown %}
-# {{title}}
-<span class="emoji">📧</span>[khawkins98@gmail.com](mailto:khawkins98@gmail.com)  &nbsp;<span class="emoji">🐦</span> @khawkins98 &nbsp;<span class="emoji">🌎</span> AllAboutKen.com  &nbsp;<span class="emoji">📇</span> Online problem solver
-
-{% endmarkdown %}
+  <h1>{{title}}</h1>
 </div>
+
+{{ contactInfoPrint | safe }}
+
+<style>
+.kh-intro-unit {
+  margin-top: 4.5em !important;
+}
+.kh-intro-unit .kh-intro-unit--inner {
+  position: relative;
+  top: -4.5em;
+}
+.kh-intro-unit .vf-text-heading--1 {
+  font-size: 64px;
+}
+.kh-intro-unit::before {
+  background: var(--vf-ui-color--black);
+}
+</style>
+
+<div class="vf-u-fullbleed | kh-intro-unit | do-not-print">
+  <section class="kh-intro-unit--inner">
+    <h1 class="vf-text-heading--1 vf-u-margin__bottom--0">Ken Hawkins<span class="show-for-medium-up">'s CV</span></h1>
+    <p class="vf-u-type__text-body--1 vf-u-margin--0 vf-u-text-color--ui--white">{{subtitle}}</p>
+  </section>
+</div>
+
+
+<h2 class="for-print-only">{{subtitle}}</h2>
+
+<div class="vf-u-fullbleed">
+<section class="vf-grid | vf-u-padding__top--500">
+  <div class="vf-content">
+
+{% markdown -%}
+I use code, design and information architecture — plus a generous amount of consultation. I am drawn to interesting challenges and creative tooling. My current daily tools are front-end oriented and involve design and component systems, Eleventy, Fractal, Sass, documentation, developer outreach, JavaScript, npm and content modelling.
+
+{# Originally from South Carolina (USA), I've been in Europe since 2011.  #}
+
+My experience spans 20 years: beginning with printing presses, continuing through graphic design, information graphics and an online media startup. Since 2015 I've been work with [EMBL](https://www.embl.org/) to make a better front-end platform for life-science websites.
+{%- endmarkdown %}
+  </div>
+</section>
+</div>
+
+{{ divider | safe }}
 
 <div class="vf-content">
 
-<div class="do-not-print">
-{% markdown %}
-# {{title}} <small>aka, my longer resume</small>
-<p class="">My career and interests revolve on common points: distillation of unorganised information into clearer communication.</p>
-<!-- I've found this challenge a recurrent and beneficial problem to solve in newspaper reporting, e-commerce, corporate websites and often in things as simple as a rather messy brochure. Below I've attempted to show how my various work experience (left) equates to major areas of my knowledge (right), and I've added a few key lenses in the middle. -->
-{% endmarkdown %}
-</div>
+{# I've found this challenge a recurrent and beneficial problem to solve in newspaper reporting, e-commerce, corporate websites and often in things as simple as a rather messy brochure. Below I've attempted to show how my various work experience (left) equates to major areas of my knowledge (right), and I've added a few key lenses in the middle. #}
 
-<style> /* set the CSS */
+<style> /* set the printable link CSS */
 @media print { 
-  .cv-clippings a:link:after, 
-  .cv-clippings a:visited:after { 
+  .vf-content a:not([class*=vf-]),
+  .vf-content a:not([class*=vf-]):visited, 
+  .vf-content a:not([class*=vf-]),
+  .vf-content a:not([class*=vf-]):visited {
+    color: #000;
+    border-bottom: none;
+    text-decoration-color: #666;
+  }
+  .vf-content .cv-clippings a,
+  .vf-content .cv-clippings a:visited {
+    text-decoration-line: none;
+    color: #000;
+  }
+  .vf-content .cv-clippings a:link:after, 
+  .vf-content .cv-clippings a:visited:after { 
     display: block;
     content: "" attr(href) "";
     font-size: 80%;
@@ -87,41 +144,39 @@ active_path: front
 
 {% markdown %}
 
-<h2 class="vf-badge vf-badge--outline">Professional experience</h2>
+{{ sectionHeader('Professional experience') }}
 
-### Areas of expertise: from concepts to technical
+### Web expertise
 
-My time tackling problems spans 20 years: beginning with printing presses, continuing through graphic design, information graphics, architecting startups and now centres on web publishing and design systems.
+- Managing geographically distributed projects with, GitLab, GitHub, Kanban and Slack (and similar)
+- HTML, CSS/Sass, JavaScript, browser consoles, Handlebars, D3.js, Mapbox, PHP, Apache, npm, Gulp, Browsersync, Markdown
+- Strong content experience: Drupal configuration and development, Eleventy, WordPress, metrics and so on
 
-- **Structuring the unstructured**
-    - Maximising content for discoverability and context-aware content
-    - Reusable content structures
-    - Storytelling through visualisations
-    - Utilising social media as a tool for content creation, collaboration
-    - Tooling abstraction for content editors
-    - Utilising the fundamentals of web technology and structured content (HTML)
-    - Documenting systems
-- **Project leadership**
-    - Content and project governance over time through abstracting content, actions and goals 
-    - Stakeholder consultation and expectation management through roadmapping
-    - Feature prioritisation and sprint-based project planning 
-    - Training and fostering web content creation from the general public to experienced developers
-- **Web expertise**
-    - Managing geographically distributed projects with, GitLab, GitHub, Kanban and Slack (and similar)
-    - HTML, CSS/Sass, JavaScript, browser consoles, Handlebars, D3.js, Mapbox, PHP, Apache, npm, Gulp, Browsersync, Markdown
-    - Bonus: Strong Web CMS knowledge: Drupal configuration and development, Eleventy, WordPress
-- **Contemporary techniques**
-  Design systems, component and pattern libraries, controlled taxonomies, prototyping, user stories, user research, user-centred design, principles of visualization and graphing, system governance, Kanban, Agile, Google Analytics custom events, responsive design and progressive web apps
-- **Versatile desktop publishing skills**
-  Adobe Illustrator, Photoshop, InDesign, from Google Docs to Microsoft Office, Linux, Mac, Windows
+### Structure
+
+- Maximising content for discoverability and context-aware content
+- Storytelling through visualisations
+- Utilising social media as a tool for content creation, collaboration
+- Tooling abstraction for content editors
+
+### Project leadership
+
+- Content and project governance over time through abstracting content, actions and goals 
+- Stakeholder consultation and expectation management through roadmapping
+- Feature prioritisation and sprint-based project planning 
+- Training and fostering web content creation from the general public to experienced developers
 
 <div id="history" data-magellan-target="history"></div>
 
 {{ divider | safe }}
 
-<h2 class="vf-badge vf-badge--outline">Professional work history</h2>
+{{ sectionHeader('Professional work history') }}
 
-{{ position('Web Front End Lead', 'European Molecular Biology Laboratory (EMBL)', 'June 2018 – ongoing', 'Heidelberg, Germany' ) }}
+{{ position('Web Front End Lead', 'European Molecular Biology Laboratory (EMBL)', 'June 2018 – ongoing', 'Heidelberg, Germany', false ) }}
+
+EMBL is Europe’s flagship laboratory for the life sciences and employees hundreds of developers to deliver online scientific services. We've created reusable front end tooling to speed development, reduce cost and improve UX. It's been especially interesting for the breadth of technology and wide the range of user needs and developer backgrounds. 
+
+I lead the creation of the that tooling, the Visual Framework, and serve as its lead advocate to help developers and product designers to utilise and implement. I also ensure the Visual Framework adapts to those needs. 
 
 - Expansion of my role for the European Bioinformatics Institute (EMBL-EBI)
 - Grow, evolve projects from EMBL-EBI into pan-EMBL solutions 
@@ -145,8 +200,6 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 -->
 
 **Major technical tooling and processes:** HTML/JS/CSS, Sass, GitHub, GitLab CI, Visual Studio Code, Google Analytics, Gulp, npm, Eleventy, Fractal, Drupal, Continuous integration, Kanban
-
-<hr/>
 
 {{ position('Web design architect', 'European Bioinformatics Institute (EMBL-EBI)', 'July 2015 – June 2018', 'Cambridge, UK' ) }}
 
@@ -183,8 +236,6 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 **Major technical tooling:** Drupal, HTML, CSS, JavaScript, Bitbucket, Agile, Amazon EC2, Route 53, Google Analytics
 
-<hr/>
-
 {{ position('Technical and editorial lead', 'TheDigitel', 'May 2008 – February 2011', 'South Carolina, USA' ) }}
 
 - Co-founded TheDigitel.com to advance newspaper methodology in the age of websites
@@ -199,8 +250,6 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 **Major technical tooling:** HTML, CSS, JavaScript, Drupal, LAMP hosting optimisation, daily briefing newsletter automations, reverse proxy caching, Adobe Creative Suite, Google Analytics, Google G Suite admin, A/B testing, Google AdSense and AdWords, podcasting
 
-<hr/>
-
 {{ position('Graphics reporter', 'The Post and Courier', 'March 2006 - May 2008', 'South Carolina, USA' ) }}
 
 - Newspaper infographic design and reporting
@@ -212,8 +261,6 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 **Major technical tooling:** Adobe Illustrator, Photoshop, InDesign, Acrobat, QuarkXPress, Flash, ArcGIS, Modo 3D modelling, HTML, CSS, JavaScript, Mac OS
 
-<hr/>
-
 {{ position('Graphics reporter', 'The Beaufort Gazette', 'May 2003 - March 2006', 'South Carolina, USA' ) }}
 
 - Newspaper infographic and page design
@@ -222,8 +269,6 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 - Work to educate staff on photo cropping, type kerning, general principles of visual structure and directing the reader's focus
 
 **Major technical tooling:** Adobe Illustrator, Photoshop, InDesign, Acrobat, QuarkXPress, Mac OS
-
-<hr/>
 
 {{ position('Production manager', 'The Daily Journal', 'May 2000 - April 2003', 'South Carolina, USA' ) }}
 
@@ -239,13 +284,14 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 {{ divider | safe }}
 
-{{ position('Education, collaboration, speaking') }}
+{# {{ position('Education, collaboration, speaking') }} #}
+
+{{ sectionHeader('Education, speaking') }}
 
 - Clemson University, Bachelor of Science in Graphic Communications, May 2003 {# - Internships: Electric City Printing prepress, Seneca Daily Journal prepress #}
 - Charleston Drupal meet-up and co-working {# Founding member of the local co-working and Drupal user group #}
 - Co-founder of Fuse843 networking and business development group {# A regional group of "creative class" individuals, we hosted local networking events, speakers and an online social networking tool #}
-- Speaking events: 
-  Charleston PechaKucha, Charleston Drupal user group, Create South conference, Startup Stuttgart, various others
+- Charleston PechaKucha, Charleston Drupal user group, Create South conference, Startup Stuttgart, various others
 
 {# <div class="do-not-print vf-u-padding__top--600"></div>
 <div class="do-not-print vf-u-padding__top--600"></div>
@@ -259,9 +305,8 @@ My time tackling problems spans 20 years: beginning with printing presses, conti
 
 {% endmarkdown %}
 
-<p class="for-print-only">
-  <span class="emoji">📧</span>[khawkins98@gmail.com](mailto:khawkins98@gmail.com) &nbsp;<span class="emoji">🐦</span> @khawkins98 &nbsp;<span class="emoji">🌎</span> AllAboutKen.com  &nbsp;<span class="emoji">📇</span> Online problem solver
-</p>
+
+{{ contactInfoPrint | safe }}
 
 </div> 
 
