@@ -208,11 +208,21 @@ html, body {
 }
 
 // responsive display
+.show-for-mobile-only {
+  @media (min-width: $vf-breakpoint--sm) {
+    display: none !important;
+  }
+}
+.show-for-medium-up {
+  @media (max-width: $vf-breakpoint--md) {
+    display: none !important;
+  }
+}
 .show-for-medium-only {
   @media (min-width: $vf-breakpoint--lg) {
     display: none !important;
   }
-  @media (max-width: $vf-breakpoint--sm) {
+  @media (max-width: $vf-breakpoint--md) {
     display: none !important;
   }
 }
