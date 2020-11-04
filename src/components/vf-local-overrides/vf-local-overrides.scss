@@ -214,7 +214,7 @@ html, body {
   }
 }
 .show-for-medium-up {
-  @media (max-width: $vf-breakpoint--md) {
+  @media (max-width: $vf-breakpoint--sm) {
     display: none !important;
   }
 }
