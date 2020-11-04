@@ -85,11 +85,11 @@ active_path: front
 
 <div class="vf-u-fullbleed | kh-intro-unit | do-not-print">
   <section class="kh-intro-unit--inner">
-    <h1 class="vf-text-heading--1 vf-u-margin__bottom--0">Ken Hawkins<span class="show-for-medium-up">'s CV</span></h1>
+    <h1 class="vf-text-heading--1 vf-u-margin__bottom--0 | show-for-mobile-only">CV</span></h1>
+    <h1 class="vf-text-heading--1 vf-u-margin__bottom--0 | show-for-medium-up">{{title}}</span></h1>
     <p class="vf-u-type__text-body--1 vf-u-margin--0 vf-u-text-color--ui--white">{{subtitle}}</p>
   </section>
 </div>
-
 
 <h2 class="for-print-only">{{subtitle}}</h2>
 
@@ -98,7 +98,7 @@ active_path: front
   <div class="vf-content">
 
 {% markdown -%}
-I use code, design and information architecture — plus a generous amount of consultation. I am drawn to interesting challenges and creative tooling. My current daily tools are front-end oriented and involve design and component systems, Eleventy, Fractal, Sass, documentation, developer outreach, JavaScript, npm and content modelling.
+<span class="show-for-mobile-only">I'm Ken Hawkins.</span> I use code, design and information architecture — plus a generous amount of consultation. I seek out challenges of efficiency and am drawn to creative tooling. My current daily tools are front-end oriented and involve design and component systems, Eleventy, Fractal, Sass, documentation, developer outreach, JavaScript, npm and content modelling.
 
 {# Originally from South Carolina (USA), I've been in Europe since 2011.  #}
 
@@ -176,7 +176,7 @@ My experience spans 20 years: beginning with printing presses, continuing throug
 
 EMBL is Europe’s flagship laboratory for the life sciences and employees hundreds of developers to deliver online scientific services. We've created reusable front end tooling to speed development, reduce cost and improve UX. It's been especially interesting for the breadth of technology and wide the range of user needs and developer backgrounds. 
 
-I lead the creation of the that tooling, the Visual Framework, and serve as its lead advocate to help developers and product designers to utilise and implement. I also ensure the Visual Framework adapts to those needs. 
+I lead the creation of this tooling, the Visual Framework, and serve as its lead advocate to help developers and product designers to utilise and implement. I also ensure the Visual Framework adapts to those needs. 
 
 - Expansion of my role for the European Bioinformatics Institute (EMBL-EBI)
 - Grow, evolve projects from EMBL-EBI into pan-EMBL solutions 
@@ -223,8 +223,6 @@ I lead the creation of the that tooling, the Visual Framework, and serve as its 
 <!-- - [What if: A web font for data](https://www.allaboutken.com/posts/20180319-data-font-for-life-sciences.html) -->
 
 **Major technical tooling and processes:** Content modelling and architecture, HTML/JS/CSS, Sass, Adobe Creative Suite, Atom, MapBox, Google Analytics, GitHub, Gulp, npm, Jekyll, Foundation Framework, Drupal, Travis, Continuous integration, Kanban
-
-{{ divider | safe }}
 
 {{ position('Web developer and information designer', 'DRS Technical Solutions', 'February 2011 – June 2015', 'Stuttgart, Germany' ) }}
 
