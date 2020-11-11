@@ -369,3 +369,12 @@ body .vf-footer {
     background-color: #3B6FB6;
   }
 }
+
+// code sizing inheritence too big
+.vf-content code, .vf-code-example {
+  font-size: 14px;
+}
+// .vf-content pre, .vf-content code, .vf-code-example__pre, .vf-code-example {
+//   color: #fff;
+//   background: #333;
+// }

@@ -4,27 +4,20 @@ pageClass: posts
 templateEngineOverride: njk
 ---
 
-{# <p class="date">
-  Posted as an example, on <time datetime="{{ date }}">{{ date | dateDisplay }}</time>
-</p> #}
-<main class="vf-grid">
-  <section class="vf-content">
+<section class="vf-content">
+{% render '@ken-figure', {
+  "text": image_meta.text,
+  "alttext": image_meta.alttext,
+  "imageUrl": "/images/crop-cinema" + image
+} %}
 
-  {% render '@ken-figure', {
-    "text": image_meta.text,
-    "alttext": image_meta.alttext,
-    "imageUrl": "/images/crop-cinema" + image
-  } %}
+<p><time datetime="{{ date }}" class="vf-summary__date">{{ date | dateDisplay }}</time> {% if topics %}&nbsp;&nbsp;<span class="vf-summary__author">Filed in: {{topics}}</span>{% endif %}</p>
 
-  <p><time class="vf-summary__date">{{ date | dateDisplay }}</time> {% if topics %}&nbsp;&nbsp;<span class="vf-summary__author">Filed in: {{topics}}</span>{% endif %}</p>
+<h1 class="vf-text-heading--1">{{title}}</h1>
 
-  <h1>{{title}}</h1>
+{% if teaser -%}
+<p class="vf-text-body--1">{{ teaser | safe }}</p>
+{%- endif %}
 
-  {% if teaser -%}
-  <p class="vf-text-body--1">{{ teaser | safe }}</p>
-  {%- endif %}
-  
-  {{ content | safe }}
-  </section>
-  <div></div>
-</main>
+{{ content | safe }}
+</section>
