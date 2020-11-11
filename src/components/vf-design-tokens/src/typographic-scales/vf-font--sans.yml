@@ -92,7 +92,7 @@ props:
     value:
       fontSize: 42px
       fontWeight: 700
-      lineHeight: 1.547
+      lineHeight: 1.147
     meta:
       friendlyName: Heading, extra large
       sassMap: text-heading--1
