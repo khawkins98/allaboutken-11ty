@@ -1,32 +1,18 @@
-<hr class="vf-divider" />
-
-<div class="vf-body--text | vf-content | do-not-print">
-  
-  {%- markdown %}
-  ### I'm Ken Hawkins
-  I do web platform and content architecture. Learn more about me [on the front page](/), or:
-  {% endmarkdown -%}
-
-  <p>
-    <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
-    &nbsp; <a href="/rss.xml">RSS feed</a>
-    &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
-    {# &nbsp; <a href="mailto:khawkins98@gmail.com">E-mail</a> #}
-    &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
-  </p>
-</div>
-
-{% if page.url != '/blog/' and page.url != '/cv/' %}
-<div class="vf-grid | do-not-print">
-  <p><a href="/blog" class="vf-button vf-button--outline vf-button--200"> ⇤ To the blog index</a></p>
-</div>
-{% endif %}
 
 <footer class="vf-footer | do-not-print">
   <div class="vf-footer__inner">
     <div class="vf-footer__notice">
+
+      <div class="vf-body--text | vf-content | do-not-print">
+        {%- markdown %}
+        <strong>I'm Ken Hawkins</strong> 
+        I bring structure and process to complex web projects. Learn more about me <a class="vf-footer__link" href="/">on the front page</a> or <a class="vf-footer__link" href="/#hello">get in touch</a>.
+        {% endmarkdown -%}
+      </div>
+
       <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
       &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a>
+
       {%- if serverInfo.environment == "development" %}
           <div class="vf-banner vf-banner--alert vf-banner--warning">
             <p class="vf-banner__text">

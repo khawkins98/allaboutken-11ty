@@ -7,10 +7,11 @@ layout: layouts/base.njk
 templateEngineOverride: njk
 ---
 <div class="vf-u-fullbleed vf-u-background-color-ui--grey">
-<section class="vf-grid | vf-u-padding__top--500">
+<section class="embl-grid embl-grid--has-centered-content | vf-u-padding__top--500">
+  <div></div>
   <div class="vf-content">
     <h1 class="vf-text-heading--1">{{title}}. <span class="vf-u-text--nowrap">I am</span> <span class="vf-u-text--nowrap">Ken Hawkins.</span></h1>
-    <h2>I bring structure and process to complex web projects.</h2>
+    <h2 class="vf-text-heading--2">I bring structure and process to complex web projects.</h2>
     {% markdown -%}
 
     With [20 years](/cv/) experience in publishing and technology, I help projects move beyond content and problems into performant web platforms that [deliver](/posts/20180122-content-action-model.html) organisational goals. 
@@ -34,42 +35,47 @@ templateEngineOverride: njk
 </section>
 </div>
 
-<section class="vf-card-container">
+<section class="vf-card-container embl-grid embl-grid--has-centered-content">
   <h3 class="vf-text-heading--3">Recently</h3>
   {#- <p class=" vf-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> -#}
-  <div class="vf-grid vf-grid__col-3 | summary-inline">
-  {%- for post in collections.posts.slice(-3) | reverse -%}
-  <article class="vf-summary vf-summary--news">
-    <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
-    <a href="{{ post.url }}" class="vf-summary__image">
-      <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
-    </a>  
-    <h3 class="vf-summary__title">
-      <a href="{{ post.url }}" class="vf-summary__link">{{ post.data.title }}</a>
-    </h3>
-    {#- {{loop.index}} -#}
-  </article>
-  {%- endfor -%}
-  </div>
+  <section>
+    <div class="vf-grid vf-grid__col-3 | summary-inline">
+    {%- for post in collections.posts.slice(-3) | reverse -%}
+    <article class="vf-summary vf-summary--news">
+      <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
+      <a href="{{ post.url }}" class="vf-summary__image">
+        <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
+      </a>  
+      <h3 class="vf-summary__title">
+        <a href="{{ post.url }}" class="vf-summary__link">{{ post.data.title }}</a>
+      </h3>
+      {#- {{loop.index}} -#}
+    </article>
+    {%- endfor -%}
+    </div>
+  </section>
+
 </section>
 
 {#- Contact -#}
-<hr class="vf-divider" />
+{# <hr class="vf-divider" /> #}
 
-<section class="vf-grid vf-grid__col-1">
+<section class="embl-grid embl-grid--has-centered-content">
   {% render '@vf-section-header--default', {
-    "section_title": "Say hello"
+    "section_title": "Say hello",
+    "id": "hello"
   } %}
-  <p class="vf-text-body--2">
-    I'm currently fully engaged, helping a <a href="https://www.embl.org/" class="vf-link">global leader</a> create a better front-end platform for life-science resources. 
-    But you can still say hello:
-  </p>
-  <p class="vf-text-body--2">
-    <a href="https://twitter.com/khawkins98" class="vf-link">Twitter @khawkins98</a> &nbsp; &nbsp;
-    <a href="https://www.linkedin.com/in/allaboutken" class="vf-link">LinkedIn</a> &nbsp; &nbsp;
-    <a href="mailto:khawkins98@gmail.com" class="vf-link">khawkins98@gmail.com</a> &nbsp; &nbsp;
-    <a href="https://untappd.com/user/khawkins98" class="vf-link">Beer</a>
-  </p>
+  <section>
+    <p class="vf-text-body--2">
+      I'm currently fully engaged, helping a <a href="https://www.embl.org/" class="vf-link">global leader</a> create a better front-end platform for life-science resources — but you can still say hello.
+    </p>
+    <p class="vf-text-body--2">
+      <a href="https://twitter.com/khawkins98" class="vf-link">Twitter @khawkins98</a> &nbsp; &nbsp;
+      <a href="https://www.linkedin.com/in/allaboutken" class="vf-link">LinkedIn</a> &nbsp; &nbsp;
+      <a href="mailto:khawkins98@gmail.com" class="vf-link">khawkins98@gmail.com</a> &nbsp; &nbsp;
+      <a href="https://untappd.com/user/khawkins98" class="vf-link">Beer</a>
+    </p>
+  </section>
 </section>
 
 <hr class="vf-divider" />
