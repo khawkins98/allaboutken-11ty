@@ -4,8 +4,8 @@ layout: layouts/post.njk
 teaser: "In a career of 20 years, the more things change the more they stay the same."
 image: "/blog/20years-ibook-g4.jpg"
 image_meta:
-  text: Top-notch web design circa 2001.
-  altext: 'Thanks to the Wayback Machine miracle, we can enjoy <a href="https://web.archive.org/web/20020120145620/https://envmedia.com/">this snapshot</a> of one of my more serious early websites: made for the video company Environmental Media, it had search, Flash video clips and an online shop with a shopping basket and checkout, way back in 2001! Quite a feat for a young me. &mdash; I really liked that little laptop. Background image of that iBook G4 <a href="https://www.flickr.com/photos/adrians/60475676/in/photolist-6kXj5-6kXju-vLsWz-4vP5r-6kXiE-8XfChT-3nMs4M-8tW8x-4vP4p-3HbLZ-4vP4R-39rR4-tgYum-JFXpj-2WpK-sNPvX-3G1TX-4kYng-avNgY-3G1Ya-5yBD6-3G1ZW-22W9V-4pEAaE-4dFecP-8MtD4L-cjrci-92fzYP-92iGn7-5CTN5t-36qRks-3HbHh-95nW-2E7io-4MHkbU-3HbGM-3G22i-2vrNs1-2UJcTG-3HbLd-8DfTn-3HbPf-3G1Wa-3G1WY-68JV5-7RbA7t-36Szh-3HbMx-3G1Vk-3HbKv">by Adriam MB</a>.'
+  text: 'Top-notch web design circa 2001. Thanks to the Wayback Machine miracle, we can enjoy <a href="https://web.archive.org/web/20020120145620/https://envmedia.com/">this snapshot</a> of one of my more serious early websites: made for the video company Environmental Media, it had search, Flash video clips and an online shop with a shopping basket and checkout, way back in 2001! Quite a feat for a young me. &mdash; I really liked that little laptop. Background image of that iBook G4 <a href="https://www.flickr.com/photos/adrians/60475676/in/photolist-6kXj5-6kXju-vLsWz-4vP5r-6kXiE-8XfChT-3nMs4M-8tW8x-4vP4p-3HbLZ-4vP4R-39rR4-tgYum-JFXpj-2WpK-sNPvX-3G1TX-4kYng-avNgY-3G1Ya-5yBD6-3G1ZW-22W9V-4pEAaE-4dFecP-8MtD4L-cjrci-92fzYP-92iGn7-5CTN5t-36qRks-3HbHh-95nW-2E7io-4MHkbU-3HbGM-3G22i-2vrNs1-2UJcTG-3HbLd-8DfTn-3HbPf-3G1Wa-3G1WY-68JV5-7RbA7t-36Szh-3HbMx-3G1Vk-3HbKv">by Adriam MB</a>.'
+  altext: 'Screenshot of archived webpage on computer'
 date: 2020-02-08
 url: /posts/20200208-its-been-20-years.html
 permalink: posts/20200208-its-been-20-years.html
@@ -27,10 +27,15 @@ It's hard to not notice the change in technology and speed. Partly that’s from
 
 But in print publishing and online, technology changes have been tremendous — so much so you’d think it was _the_ change.
 
-<figure class="">
-  <img class="" alt="Tightly pairing Fractal and Eleventy can be done" src="/images/original/blog/20years-rebuilding-quark.gif" />
-    <figcaption>A fabricated bit of Mac OS 7 and Quark nostalgia &mdash; just like the good ol' days.</figcaption>
-</figure>
+{% endmarkdown %}
+
+{% render '@ken-figure', {
+  "text": "A fabricated bit of Mac OS 7 and Quark nostalgia &mdash; just like the good ol' days.",
+  "alttext": "QuarkXPress.",
+  "imageUrl": "/images/original/blog/20years-rebuilding-quark.gif"
+} %}
+
+{% markdown %}
 
 My daily software in 2000 was Quark 4 on Mac OS 7. I don’t think there's anything about that duo to be nostalgic for, other than for a fragile software environment encouraged you to focus. Or you could use ["cooperative" multitasking](https://en.wikipedia.org/wiki/MultiFinder) that would eat away at your dozens of MBs of RAM and likely bring a reboot. 
 
@@ -66,8 +71,8 @@ From a [MacWorld column](https://www.macworld.com/article/1013910/quarkvsindesig
 
 And there were still very analogue parts of the workflow, like lifting and pasting ads and copy.
 
-<figure class="">
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/CwrePe4-ID4?start=144' frameborder='0' allowfullscreen></iframe></div>
+<figure class="vf-figure">
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container vf-figure__image'><iframe src='https://www.youtube.com/embed/CwrePe4-ID4?start=144' frameborder='0' allowfullscreen></iframe></div>
   <figcaption>Waxing nostalgic for the tactile processes: advertisements were physically lifted and pasted across editions and typos from final proofs were cut and arranged away before being sent to the press cameras. Highly nostalgic, but I don't know that I'd go back.</figcaption>
 </figure>
 
@@ -81,12 +86,19 @@ Although my years in print publishing until 2008 were filled machine-locking sys
 
 The acronym WYSIWYG still haunts web publishing in 2020.
 
-<figure class="sidebar-figure callout">
-  <img class="" alt="Dreamweaver 4 circa 2000 as it scanned a website's files" src="/images/original/blog/20years-dreamweaver-2.jpg" />
-  <figcaption>Dreamweaver allowed you to build websites as though they were QuarkXPress documents. A fine idea if the web were a book. For a decade that thought stunted my understanding of the potential of the web.</figcaption>
-</figure>
+{% endmarkdown %}
 
-If you designed print documents you know the importance of using your document styles to manage text properties and images, however it was a concept that didn't really exist for the web until CSS arrived in 1996 and it took CSS some time to go from managing styling to empowering layout. Internet Explorer would dominate and we would have to wait until mid-2000s for meaningful CSS innovations to arrive. 
+{% render '@ken-figure', {
+  "text": 'Dreamweaver allowed you to build websites as though they were QuarkXPress documents. A fine idea if the web were a book. For a decade that thought stunted my understanding of the potential of the web.',
+  "alttext": "Dreamweaver 4 circa 2000 as it scanned a website's files.",
+  "imageUrl": "/images/original/blog/20years-dreamweaver-2.jpg"
+} %}
+
+{% markdown %}
+
+If you designed print documents you know the importance of using your document styles to manage text properties and images, however it was a concept that didn't really exist for the web until CSS arrived in 1996 — it was a while before CSS could truly empower layout. 
+
+Internet Explorer would dominate. We'd have to wait until the mid-2000s for meaningful CSS innovations to arrive. 
 
 It was a rough time.
 
@@ -98,12 +110,17 @@ Fortunately, I won’t have to retell it all, with serendipitous timing, develop
 
 New and incredible features were coming all the time (oh how [Firebug](https://getfirebug.com/) was magical), but there were so few established best practices and fewer people to get good advice from. And software didn't always point you in the best direction. 
 
-Why use code templating and partials? Use Dreamweaver's library and export hundreds of pages in Word-like interface! ... It will only be error prone and ridiculously slow.
+Why use code templates and partials? Instead you could use Dreamweaver's library and export hundreds of pages in Word-like interface! ... It will only be error prone and ridiculously slow.
 
-<figure class="callout">
-  <img class="" alt="Dreamweaver was not a speed champ. One update and you had to re-render hundreds of files." src="/images/original/blog/20years-rebuilding-envmedia.gif" />
-  <figcaption>Dreamweaver was a (slow) static site generator before they were the hotness, but it was also a WYSIWYG, FTP client and pretty much everything else. A real <A href="https://en.wikipedia.org/wiki/Jack_of_all_trades,_master_of_none">jack of all trades</a>. </figcaption>
-</figure>
+{% endmarkdown %}
+
+{% render '@ken-figure', {
+  "text": 'Dreamweaver was a (slow) static site generator before they were the hotness, but it was also a WYSIWYG, FTP client and pretty much everything else. A real <a href="https://en.wikipedia.org/wiki/Jack_of_all_trades,_master_of_none">jack of all trades</a>.',
+  "alttext": "Dreamweaver was not a speed champ. One update and you had to re-render hundreds of files.",
+  "imageUrl": "/images/original/blog/20years-rebuilding-envmedia.gif"
+} %}
+
+{% markdown %}
 
 The tools and their developers did their best to fill the gaps, but if I never have to upload a site by FTP again, it will be too soon. 
 

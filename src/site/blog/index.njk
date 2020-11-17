@@ -5,7 +5,9 @@ layout: layouts/base.njk
 #templateEngineOverride: njk
 ---
 {%- set siteConfig = siteConfig.siteInformation -%}
-<div class="vf-grid vf-grid__col-1">
+<div class="embl-grid embl-grid--has-centered-content">
+  <div></div>
+  <section>
   <h1 class="vf-text-heading--1">Ken Hawkins' blog</h1>
   {%- for post in collections.posts | sort(true, true, attribute='date' ) -%}
   <article class="vf-summary vf-summary--news">
@@ -19,4 +21,5 @@ layout: layouts/base.njk
     <p class="vf-summary__text">{{ post.data.teaser | safe }}</p>
   </article>
   {%- endfor -%}
+  </section>
 </div>

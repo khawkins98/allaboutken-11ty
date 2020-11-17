@@ -51,9 +51,11 @@ active_path: front
 {% endset -%}
 
 {# Position templates #}
-{%- macro position(name, employer='', years='', location='', topMargin='true') %}
-<h2 class="vf-text-heading--2{% if topMargin %} | vf-u-padding__top--1200 vf-u-margin__top--1200{% endif %}">{{ name }}</h2>
-<h4 class="vf-text-heading--4 | vf-u-text-color--grey">{{ employer }} <small>{{ years }} {{ location }}</small></h4>
+{%- macro position(name, employer='', years='', location='') %}
+<h2 class="vf-text-heading--2">{{ name }}</h2>
+<h4 class="vf-text-heading--4 | vf-u-text-color--grey">{{ employer }}</h4>
+<p><small class="vf-summary__date">{{ years }}</small><br/>
+   <small class="vf-summary__date">{{ location }}</small></p>
 {% endmacro -%}
 
 {# Section header #}
@@ -94,23 +96,22 @@ active_path: front
 <h2 class="for-print-only">{{subtitle}}</h2>
 
 <div class="vf-u-fullbleed">
-<section class="vf-grid | vf-u-padding__top--500">
+  <section class="embl-grid | vf-u-padding__top--500">
+  <div></div>
   <div class="vf-content">
-
-{% markdown -%}
+{% markdown %}
 <span class="show-for-mobile-only">I'm Ken Hawkins.</span> I use code, design and information architecture — plus a generous amount of consultation. I seek out challenges of efficiency and am drawn to creative tooling. My current daily tools are front-end oriented and involve design and component systems, Eleventy, Fractal, Sass, documentation, developer outreach, JavaScript, npm and content modelling.
 
 {# Originally from South Carolina (USA), I've been in Europe since 2011.  #}
 
 My experience spans 20 years: beginning with printing presses, continuing through graphic design, information graphics and an online media startup. Since 2015 I've been work with [EMBL](https://www.embl.org/) to make a better front-end platform for life-science websites.
-{%- endmarkdown %}
+{% endmarkdown %}
   </div>
-</section>
+  </section>
 </div>
 
 {{ divider | safe }}
 
-<div class="vf-content">
 
 {# I've found this challenge a recurrent and beneficial problem to solve in newspaper reporting, e-commerce, corporate websites and often in things as simple as a rather messy brochure. Below I've attempted to show how my various work experience (left) equates to major areas of my knowledge (right), and I've added a few key lenses in the middle. #}
 
@@ -141,38 +142,75 @@ My experience spans 20 years: beginning with printing presses, continuing throug
 <a id="cv" name="cv"></a>
 
 <div id="experience" data-magellan-target="experience"></div>
-
-{% markdown %}
-
 {{ sectionHeader('Professional experience') }}
 
-### Web expertise
+<section class="embl-grid embl-grid--has-centered-content">
+  {% render '@vf-section-header--default', {
+    "section_title": "Web expertise"
+  } %}
+  <div class="vf-content">
+{% markdown %}
 
 - Managing geographically distributed projects with, GitLab, GitHub, Kanban and Slack (and similar)
 - HTML, CSS/Sass, JavaScript, browser consoles, Handlebars, D3.js, Mapbox, PHP, Apache, npm, Gulp, Browsersync, Markdown
 - Strong content experience: Drupal configuration and development, Eleventy, WordPress, metrics and so on
+{% endmarkdown %}
 
-### Structure
+  </div>
+</section>
+
+<section class="embl-grid embl-grid--has-centered-content">
+  {% render '@vf-section-header--default', {
+    "section_title": "Structure"
+  } %}
+  <div class="vf-content">
+{% markdown %}
 
 - Maximising content for discoverability and context-aware content
 - Storytelling through visualisations
 - Utilising social media as a tool for content creation, collaboration
 - Tooling abstraction for content editors
 
-### Project leadership
+{% endmarkdown %}
+
+  </div>
+</section>
+
+<section class="embl-grid embl-grid--has-centered-content">
+  {% render '@vf-section-header--default', {
+    "section_title": "Project leadership"
+  } %}
+  <div class="vf-content">
+{% markdown %}
 
 - Content and project governance over time through abstracting content, actions and goals 
 - Stakeholder consultation and expectation management through roadmapping
 - Feature prioritisation and sprint-based project planning 
 - Training and fostering web content creation from the general public to experienced developers
+{% endmarkdown %}
+
+  </div>
+</section>
+
+
+{# --- #}
+
+<div class="vf-content">
 
 <div id="history" data-magellan-target="history"></div>
+
+{% markdown %}
 
 {{ divider | safe }}
 
 {{ sectionHeader('Professional work history') }}
 
-{{ position('Web Front End Lead', 'European Molecular Biology Laboratory (EMBL)', 'June 2018 – ongoing', 'Heidelberg, Germany', false ) }}
+
+<section class="embl-grid embl-grid--has-centered-content">
+  <div>
+    {{ position('Web Front End Lead', 'European Molecular Biology Laboratory (EMBL)', 'June 2018 – ongoing', 'Heidelberg, Germany', false ) }}
+  </div>
+  <div class="vf-content">
 
 EMBL is Europe’s flagship laboratory for the life sciences and employees hundreds of developers to deliver online scientific services. We've created reusable front end tooling to speed development, reduce cost and improve UX. It's been especially interesting for the breadth of technology and wide the range of user needs and developer backgrounds. 
 
@@ -201,7 +239,16 @@ I lead the creation of this tooling, the Visual Framework, and serve as its lead
 
 **Major technical tooling and processes:** HTML/JS/CSS, Sass, GitHub, GitLab CI, Visual Studio Code, Google Analytics, Gulp, npm, Eleventy, Fractal, Drupal, Continuous integration, Kanban
 
-{{ position('Web design architect', 'European Bioinformatics Institute (EMBL-EBI)', 'July 2015 – June 2018', 'Cambridge, UK' ) }}
+  </div>
+</section>
+
+
+
+<section class="embl-grid embl-grid--has-centered-content">
+  <div>
+    {{ position('Web design architect', 'European Bioinformatics Institute (EMBL-EBI)', 'July 2015 – June 2018', 'Cambridge, UK' ) }}
+  </div>
+  <div class="vf-content">
 
 - Lead information architecture and design tooling for EMBL-EBI web content, design systems
 - Facilitate collaboration between UX, developers and content teams
@@ -224,7 +271,14 @@ I lead the creation of this tooling, the Visual Framework, and serve as its lead
 
 **Major technical tooling and processes:** Content modelling and architecture, HTML/JS/CSS, Sass, Adobe Creative Suite, Atom, MapBox, Google Analytics, GitHub, Gulp, npm, Jekyll, Foundation Framework, Drupal, Travis, Continuous integration, Kanban
 
-{{ position('Web developer and information designer', 'DRS Technical Solutions', 'February 2011 – June 2015', 'Stuttgart, Germany' ) }}
+  </div>
+</section>
+
+<section class="embl-grid embl-grid--has-centered-content">
+  <div>
+    {{ position('Web developer and information designer', 'DRS Technical Solutions', 'February 2011 – June 2015', 'Stuttgart, Germany' ) }}
+  </div>
+  <div class="vf-content">
 
 - Manage user-focused efforts (UX, research, metrics) for company web projects
 - Website project lead for a Drupal platform to support more than 150,000 user accounts, provide e-commerce tools
@@ -234,7 +288,15 @@ I lead the creation of this tooling, the Visual Framework, and serve as its lead
 
 **Major technical tooling:** Drupal, HTML, CSS, JavaScript, Bitbucket, Agile, Amazon EC2, Route 53, Google Analytics
 
-{{ position('Technical and editorial lead', 'TheDigitel', 'May 2008 – February 2011', 'South Carolina, USA' ) }}
+  </div>
+</section>
+
+<section class="embl-grid embl-grid--has-centered-content">
+  <div>
+    {{ position('Technical and editorial lead', 'TheDigitel', 'May 2008 – February 2011', 'South Carolina, USA' ) }}
+  </div>
+  <div class="vf-content">
+  
 
 - Co-founded TheDigitel.com to advance newspaper methodology in the age of websites
 - Lead team of eight staff and an array of freelancers and volunteers to report, market and implement web features
@@ -248,7 +310,15 @@ I lead the creation of this tooling, the Visual Framework, and serve as its lead
 
 **Major technical tooling:** HTML, CSS, JavaScript, Drupal, LAMP hosting optimisation, daily briefing newsletter automations, reverse proxy caching, Adobe Creative Suite, Google Analytics, Google G Suite admin, A/B testing, Google AdSense and AdWords, podcasting
 
-{{ position('Graphics reporter', 'The Post and Courier', 'March 2006 - May 2008', 'South Carolina, USA' ) }}
+  </div>
+</section>
+
+<section class="embl-grid embl-grid--has-centered-content">
+  <div>
+    {{ position('Graphics reporter', 'The Post and Courier', 'March 2006 - May 2008', 'South Carolina, USA' ) }}
+  </div>
+  <div class="vf-content">
+
 
 - Newspaper infographic design and reporting
 - Produce daily deadline-driven information graphics based on news reports
@@ -259,7 +329,15 @@ I lead the creation of this tooling, the Visual Framework, and serve as its lead
 
 **Major technical tooling:** Adobe Illustrator, Photoshop, InDesign, Acrobat, QuarkXPress, Flash, ArcGIS, Modo 3D modelling, HTML, CSS, JavaScript, Mac OS
 
-{{ position('Graphics reporter', 'The Beaufort Gazette', 'May 2003 - March 2006', 'South Carolina, USA' ) }}
+  </div>
+</section>
+
+<section class="embl-grid embl-grid--has-centered-content">
+  <div>
+    {{ position('Graphics reporter', 'The Beaufort Gazette', 'May 2003 - March 2006', 'South Carolina, USA' ) }}
+  </div>
+  <div class="vf-content">
+
 
 - Newspaper infographic and page design
 - Produce daily deadline-driven information graphics based on news reports
@@ -268,7 +346,15 @@ I lead the creation of this tooling, the Visual Framework, and serve as its lead
 
 **Major technical tooling:** Adobe Illustrator, Photoshop, InDesign, Acrobat, QuarkXPress, Mac OS
 
-{{ position('Production manager', 'The Daily Journal', 'May 2000 - April 2003', 'South Carolina, USA' ) }}
+  </div>
+</section>
+
+<section class="embl-grid embl-grid--has-centered-content">
+  <div>
+    {{ position('Production manager', 'The Daily Journal', 'May 2000 - April 2003', 'South Carolina, USA' ) }}
+  </div>
+  <div class="vf-content">
+  
 
 - Newspaper pre-press production, advertising
 - <span data-tooltip aria-haspopup="true" class="has-tip" data-disable-hover="false" tabindex="1" title="If you ever want to talk about the properties of ink on paper, let me know.">Pre-flight</span> and technical management of daily newspaper pre-press production
@@ -279,6 +365,9 @@ I lead the creation of this tooling, the Visual Framework, and serve as its lead
 
 <!-- <span class="label">January 2000 - May 2008</span> <span class="label">Ending at The Post and Courier</span> <span class="label">South Carolina, USA</span>
 #### Newspaper infographic design and reporting -->
+
+  </div>
+</section>
 
 {{ divider | safe }}
 
