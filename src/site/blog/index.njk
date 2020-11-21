@@ -1,14 +1,16 @@
 ---
+title: The blog
 subtitle: No homepage, yet.
 date: 2018-08-22 12:24:50
 layout: layouts/base.njk
 #templateEngineOverride: njk
 ---
 {%- set siteConfig = siteConfig.siteInformation -%}
-<div class="embl-grid embl-grid--has-centered-content">
-  <div></div>
+<div class="embl-grid ">
+  <div>
+    <h1 class="vf-text-heading--1">{{title}}</h1>
+  </div>
   <section>
-  <h1 class="vf-text-heading--1">Ken Hawkins' blog</h1>
   {%- for post in collections.posts | sort(true, true, attribute='date' ) -%}
   <article class="vf-summary vf-summary--news">
     <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
