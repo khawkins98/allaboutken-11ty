@@ -22,31 +22,55 @@ templateEngineOverride: njk
         {%- endif %}
 
         {{ content | safe }}
-
-        <hr class="vf-divider" />
-
-        <h2 class="vf-text-heading--2">Comment?</h2>
-        
-        <p>Thanks for reading, if you have comment I'd love to hear it.</p>
-  
-        <p>
-          <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
-          {# &nbsp; <a href="/rss.xml">RSS feed</a> #}
-          &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
-          {# &nbsp; <a href="mailto:khawkins98@gmail.com">E-mail</a> #}
-          &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
-        </p>
-
-        {# <h2 class="vf-text-heading--2">Read more</h2> #}
-
-        {% if page.url != '/blog/' and page.url != '/cv/' %}
-        <div class="vf-grid | do-not-print">
-          <p><a href="/blog" class="vf-button vf-button--outline vf-button--200"> ⇤ Read more posts</a></p>
-        </div>
-        {% endif %}
       </div>
       <div class="vf-grid__col--span-1">
       </div>
     </section>
   </div>
 </article>
+
+<div class="vf-u-background-color-ui--grey--light vf-u-fullbleed | vf-stack vf-u-padding__top--800">
+{% if comment != false %}
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Comment?</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      <p>Thanks for reading, if you have comment I'd love to hear it.</p>
+
+      <p>
+        <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
+        {# &nbsp; <a href="/rss.xml">RSS feed</a> #}
+        &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+        {# &nbsp; <a href="mailto:khawkins98@gmail.com">E-mail</a> #}
+        &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+      </p>
+    </div>
+  </article>
+  {% endif %}
+
+
+  {% if page.url != '/privacy/' %}
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Read more</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      {% set previousPost = collections.posts | getPreviousCollectionItem(page) %}
+      {% set nextPost = collections.posts | getNextCollectionItem(page) %}
+
+      {% if previousPost %}
+      <p class="vf-text-body--3">Previously: <a href="{{ previousPost.url | url}}" class="vf-link">{{ previousPost.data.title }}</a></p>
+      {% endif %}
+
+      {% if nextPost %}
+      <p class="vf-text-body--3">Next: <a href="{{ previousPost.url | url}}" class="vf-link">{{ nextPost.data.title }}</a></p>
+      {% endif %}
+
+      <p>
+        <a href="/blog" class="vf-button vf-button--outline vf-button--200 vf-button--sm"> ⇤ Blog index</a>
+      </p>
+    </div>
+  </article>
+  {% endif %}
+</div>
