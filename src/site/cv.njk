@@ -1,6 +1,6 @@
 ---
-title: Ken Hawkins' CV
-subtitle: I'm a front end lead who empathizes with people and organisations to help deliver the potential of the web to achieve goals.
+title: "Ken Hawkins' CV"
+subtitle: Web front end lead
 date: 2018-08-22 12:24:50
 layout: layouts/base.njk
 templateEngineOverride: njk, md
@@ -59,8 +59,8 @@ active_path: front
 {% endmacro -%}
 
 {# Section header #}
-{%- macro sectionHeader(tilte) %}
-<h2 class="vf-badge vf-badge--outline | vf-u-margin__top--1200 vf-u-margin__bottom--600">{{ tilte }}</h2>
+{%- macro sectionHeader(title) %}
+<h2 class="vf-badge vf-badge--outline | vf-u-margin__top--1200 vf-u-margin__bottom--600">{{ title }}</h2>
 {% endmacro -%}
 
 <div class="show-for-print-only">
@@ -69,46 +69,33 @@ active_path: front
 
 {{ contactInfoPrint | safe }}
 
-<style>
-.kh-intro-unit {
-  margin-top: 4.5em !important;
-}
-.kh-intro-unit .kh-intro-unit--inner {
-  position: relative;
-  top: -3.75em;
-}
-.kh-intro-unit .vf-text-heading--1 {
-  font-size: 64px;
-}
-.kh-intro-unit::before {
-  background: var(--vf-ui-color--black);
-}
-</style>
 
-<div class="vf-u-fullbleed | kh-intro-unit | do-not-print">
-  <section class="kh-intro-unit--inner">
-    <h1 class="vf-text-heading--1 vf-u-margin__bottom--0 | show-for-mobile-only">CV</span></h1>
-    <h1 class="vf-text-heading--1 vf-u-margin__bottom--0 | show-for-medium-up">{{title}}</span></h1>
-    <p class="vf-u-type__text-body--1 vf-u-margin--0 vf-u-text-color--ui--white">{{subtitle}}</p>
-  </section>
-</div>
-
-<h2 class="for-print-only">{{subtitle}}</h2>
-
-<div class="vf-u-fullbleed">
-  <section class="embl-grid | vf-u-padding__top--500">
+<div class="vf-u-fullbleed vf-u-background-color-ui--grey | embl-grid embl-grid--has-centered-content">
   <div></div>
-  <div class="vf-content">
+  <section class="vf-u-margin__top--800 vf-content">
+    <div class="do-not-print">
+      <h1 class="vf-text-heading--1 | show-for-mobile-only">Ken Hawkins' CV</span></h1>
+      <h1 class="vf-text-heading--1 | show-for-medium-up">{{title}}</span></h1>
+      <h2 class="vf-text-heading--2">{{subtitle}}</h2>
+      <p class="">
+      I empathise with people and organisations to help deliver the potential of the web. With developer outreach and content modelling, I work to understand their issues with the web front end. 
+      </p>
+    </div>
+    <h2 class="for-print-only">{{subtitle}}</h2>
+
+    {# I use code, design and information architecture — plus a generous amount of consultation.  #}
+    
 {% markdown %}
-<span class="show-for-mobile-only">I'm Ken Hawkins.</span> I use code, design and information architecture — plus a generous amount of consultation. I seek out challenges of efficiency and am drawn to creative tooling. My current daily tools are front-end oriented and involve design and component systems, Eleventy, Fractal, Sass, documentation, developer outreach, JavaScript, npm and content modelling.
+Since 2015 I've been working with [EMBL](https://www.embl.org/) to make a better front end platform for life-science websites. 
 
-{# Originally from South Carolina (USA), I've been in Europe since 2011.  #}
+My work is used by more than 500 developers at EMBL across a range of systems from Angular to React, to static sites and CMSs like WordPress and Drupal. My most-frequent tools are CSS (Sass), vanilla JavaScript, Eleventy, Lerna, Fractal, npm and writing lots of documentation.
 
-My experience spans 20 years: beginning with printing presses, continuing through graphic design, information graphics and an online media startup. Since 2015 I've been working with [EMBL](https://www.embl.org/) to make a better front-end platform for life-science websites.
+I seek out challenges of efficiency and communication. 
 {% endmarkdown %}
-  </div>
+
   </section>
 </div>
+
 
 {{ divider | safe }}
 
@@ -143,6 +130,12 @@ My experience spans 20 years: beginning with printing presses, continuing throug
 
 <div id="experience" data-magellan-target="experience"></div>
 {{ sectionHeader('Professional experience') }}
+
+{# <div class="vf-content">
+{% markdown %}
+My experience spans 20 years: beginning with printing presses, continuing through graphic design, information graphics and an online media startup. 
+{% endmarkdown %}
+</div> #}
 
 <section class="embl-grid embl-grid--has-centered-content">
   {% render '@vf-section-header--default', {
@@ -214,12 +207,11 @@ My experience spans 20 years: beginning with printing presses, continuing throug
 
 EMBL is Europe’s flagship laboratory for the life sciences and employees hundreds of developers to deliver online scientific services. We've created reusable front end tooling to speed development, reduce cost and improve UX. It's been especially interesting for the breadth of technology and wide the range of user needs and developer backgrounds. 
 
-I lead the creation of this tooling, the Visual Framework, and serve as its lead advocate to help developers and product designers to utilise and implement. I also ensure the Visual Framework adapts to those needs. 
+I lead the creation of this tooling, the Visual Framework, and serve as its lead advocate to help developers and product designers to utilise and implement. I also ensure the Visual Framework adapts to those needs. This is an expansion of my role for the European Bioinformatics Institute (EMBL-EBI).
 
-- Expansion of my role for the European Bioinformatics Institute (EMBL-EBI)
 - Grow, evolve projects from EMBL-EBI into pan-EMBL solutions 
 - Information architecture and component tooling for EMBL web content, design systems
-- Architecting abstracted web content platform, navigation
+- Architect abstracted web content platform, navigation
 - Facilitate collaboration between UX, developers and content teams
 - Foster design system growth, adoption by coordinating with development leads
 
