@@ -1,8 +1,0 @@
-title: Font Knewave
-label: Font Knewave
-preview: '@preview--elements'
-status: beta
-variants:
-  - name: default
-context:
-  component-type: element
