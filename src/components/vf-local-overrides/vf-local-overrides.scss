@@ -364,7 +364,7 @@ body .vf-content blockquote:not([class*=vf-]) {
   margin-bottom: 16px;
 }
 
-// footer stroke overrride
+// footer stroke override
 body .vf-footer {
   border-color: #3B6FB6;
   &:after {
@@ -372,7 +372,7 @@ body .vf-footer {
   }
 }
 
-// code sizing inheritence too big
+// code sizing inheritance too big
 .vf-content code, .vf-code-example {
   font-size: 14px;
 }
@@ -380,3 +380,26 @@ body .vf-footer {
 //   color: #fff;
 //   background: #333;
 // }
+
+/* set the printable link CSS */
+@media print { 
+  .vf-content a:not([class*=vf-]),
+  .vf-content a:not([class*=vf-]):visited, 
+  .vf-content a:not([class*=vf-]),
+  .vf-content a:not([class*=vf-]):visited {
+    color: #000;
+    border-bottom: none;
+    text-decoration-color: #666;
+  }
+  .ken-link--print a,
+  .ken-link--print a:visited {
+    text-decoration-line: none;
+    color: #000;
+  }
+  .ken-link--print a:link:after, 
+  .ken-link--print a:visited:after { 
+    display: block;
+    content: "" attr(href) "";
+    font-size: 80%;
+  }
+}
