@@ -8,7 +8,7 @@ layout: layouts/base.njk
 {%- set siteConfig = siteConfig.siteInformation -%}
 <div class="embl-grid ">
   <div>
-    <h1 class="vf-text-heading--1 vf-font-now-alt--display">{{title}}</h1>
+    <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display">{{title}}</h1>
   </div>
   <section>
   {%- for post in collections.posts | sort(true, true, attribute='date' ) -%}

@@ -64,7 +64,7 @@ active_path: front
 {% endmacro -%}
 
 <div class="show-for-print-only">
-  <h1 class="vf-text-heading--1 vf-font-now-alt--display">{{title}}</h1>
+  <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display">{{title}}</h1>
 </div>
 
 {{ contactInfoPrint | safe }}
@@ -74,11 +74,11 @@ active_path: front
   <div></div>
   <section class="vf-u-margin__top--800 vf-content">
     <div class="do-not-print">
-      <h1 class="vf-text-heading--1 | show-for-mobile-only">Ken Hawkins' CV</span></h1>
-      <h1 class="vf-text-heading--1 | show-for-medium-up">{{title}}</span></h1>
-      <h2 class="vf-text-heading--2">{{subtitle}}</h2>
+      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display vf-u-margin__bottom--200 | show-for-mobile-only">Ken <br/> Hawkins.</span></h1>
+      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display vf-u-margin__bottom--200 | show-for-medium-up">Ken Hawkins.</span></h1>
+      <h2 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display">{{subtitle}}.</h2>
       <p class="">
-      I empathise with people and organisations to help deliver the potential of the web. With developer outreach and content modelling, I work to understand their issues with the web front end. 
+      I empathise with people and organisations to help deliver the potential of the web. With developer outreach and content modelling, I work to understand the root causes of issues. 
       </p>
     </div>
     <h2 class="for-print-only">{{subtitle}}</h2>
@@ -86,9 +86,9 @@ active_path: front
     {# I use code, design and information architecture — plus a generous amount of consultation.  #}
     
 {% markdown %}
-Since 2015 I've been working with [EMBL](https://www.embl.org/) to make a better front end platform for life-science websites. 
+Since 2015 I've been using this approach to help [EMBL](https://www.embl.org/) make a better front end toolkit for life-science websites. 
 
-My work is used by more than 500 developers at EMBL across a range of systems from Angular to React, to static sites and CMSs like WordPress and Drupal. My most-frequent tools are CSS (Sass), vanilla JavaScript, Eleventy, Lerna, Fractal, npm and writing lots of documentation.
+My work is used by more than 500 developers at EMBL across a range of systems from Angular to React, to static sites and CMSs like WordPress and Drupal. My most-frequent tools are CSS (Sass), JavaScript, Eleventy, Lerna, npm, component systems and writing lots of documentation.
 
 I seek out challenges of efficiency and communication. 
 {% endmarkdown %}
@@ -98,7 +98,6 @@ I seek out challenges of efficiency and communication.
 
 
 {{ divider | safe }}
-
 
 {# I've found this challenge a recurrent and beneficial problem to solve in newspaper reporting, e-commerce, corporate websites and often in things as simple as a rather messy brochure. Below I've attempted to show how my various work experience (left) equates to major areas of my knowledge (right), and I've added a few key lenses in the middle. #}
 
