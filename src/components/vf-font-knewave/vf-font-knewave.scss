@@ -1,0 +1,45 @@
+@font-face {
+  font-family: 'KnewaveRegular';
+  src: url("../assets/vf-font-knewave/assets/knewave-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.vf-knewave {
+  font-family: 'KnewaveRegular' !important;
+  font-weight: 100 !important;
+  font-size: 73px !important;
+  // color: #fff;
+
+  background: repeating-linear-gradient(45deg, #fff, #fff 15px, orange 2px, orange 20px);
+
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: rgba(0,0,0,0);
+  
+  // -webkit-filter: 
+  //   drop-shadow(2px -2px #000)
+  //   drop-shadow(2px 2px #000)
+  //   drop-shadow(-2px 2px #000)
+  //   drop-shadow(-2px -2px #000)
+  //   drop-shadow(-6px 6px grey);
+
+  filter: 
+    drop-shadow(2px -2px #000)
+    drop-shadow(2px 2px #000)
+    drop-shadow(-2px 2px #000)
+    drop-shadow(-2px -2px #000)
+    drop-shadow(-6px 6px grey);
+
+
+
+  // text-shadow: 
+  //   -12px 12px 0 rgba(0,0,0,.3), 
+  //   -9px 9px 0 rgba(0,0,0,.6), 
+  //   -6px 6px 0 rgba(0,0,0,.9), 
+  //   -3px 3px 0 rgba(0,0,0,.99),
+
+  //   -2px 2px 0 rgba(0,0,0,.99),
+  //   -2px -2px 0 rgba(0,0,0,.99),
+  //    2px -2px 0 rgba(0,0,0,.99),
+  //    2px 2px 0 rgba(0,0,0,.99);
+  }
