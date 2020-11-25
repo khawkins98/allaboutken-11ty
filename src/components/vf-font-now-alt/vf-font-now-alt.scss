@@ -1,0 +1,53 @@
+@font-face {
+  font-family: 'NowAlt-Bold';
+  src: url("../assets/vf-font-now-alt/assets/NowAlt-Bold.woff2") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+// @font-face {
+//   font-family: 'NowAlt-Regular';
+//   src: url("../assets/vf-font-now-alt/assets/NowAlt-Regular.woff2") format("woff");
+//   font-weight: normal;
+//   font-style: normal;
+// }
+
+.vf-font-now-alt {
+  font-family: 'NowAlt-Bold' !important;
+  // font-weight: 100 !important;
+}
+
+.vf-font-now-alt--display {
+  // font-family: 'NowAlt-Bold' !important;
+  // font-weight: 100 !important;
+  font-size: 70px !important;
+  letter-spacing: -1px;
+  // color: #fff;
+
+  // // background: #4d596d;
+  // // background-image: linear-gradient(135deg, #4d596d 0%, #818ea9 100%);
+  // // -webkit-background-clip: text !important;
+  // // -webkit-text-fill-color: rgba(0,0,0,0);
+
+  // --vf-font-now-alt--display--color: var(--vf-color--blue--dark);
+  
+  // // -webkit-filter: 
+  // //   drop-shadow(2px -2px #000)
+  // //   drop-shadow(2px 2px #000)
+  // //   drop-shadow(-2px 2px #000)
+  // //   drop-shadow(-2px -2px #000)
+  // //   drop-shadow(-6px 6px grey);
+
+  // filter: 
+  //   // drop-shadow(2px -2px #000)
+  //   // drop-shadow(2px 2px #000)
+  //   // drop-shadow(-2px 2px #000)
+  //   // drop-shadow(-2px -2px #000)
+  //   drop-shadow(-1px 1px var(--vf-font-now-alt--display--color))
+  //   drop-shadow(-2px 2px var(--vf-font-now-alt--display--color))
+  //   drop-shadow(-3px 3px var(--vf-font-now-alt--display--color))
+  //   drop-shadow(-4px 4px var(--vf-font-now-alt--display--color))
+  //   drop-shadow(-5px 5px var(--vf-font-now-alt--display--color))
+  //   drop-shadow(-6px 6px var(--vf-font-now-alt--display--color))
+  //   ;
+}
