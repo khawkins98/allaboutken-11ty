@@ -14,6 +14,7 @@
 
 .vf-font-now-alt {
   font-family: 'NowAlt-Bold' !important;
+  font-display: swap;
   // font-weight: 100 !important;
 }
 
@@ -29,25 +30,14 @@
   // // -webkit-background-clip: text !important;
   // // -webkit-text-fill-color: rgba(0,0,0,0);
 
-  // --vf-font-now-alt--display--color: var(--vf-color--blue--dark);
+  --vf-font-now-alt--display--color: var(--vf-ui-color--grey);
   
-  // // -webkit-filter: 
-  // //   drop-shadow(2px -2px #000)
-  // //   drop-shadow(2px 2px #000)
-  // //   drop-shadow(-2px 2px #000)
-  // //   drop-shadow(-2px -2px #000)
-  // //   drop-shadow(-6px 6px grey);
-
-  // filter: 
-  //   // drop-shadow(2px -2px #000)
-  //   // drop-shadow(2px 2px #000)
-  //   // drop-shadow(-2px 2px #000)
-  //   // drop-shadow(-2px -2px #000)
-  //   drop-shadow(-1px 1px var(--vf-font-now-alt--display--color))
-  //   drop-shadow(-2px 2px var(--vf-font-now-alt--display--color))
-  //   drop-shadow(-3px 3px var(--vf-font-now-alt--display--color))
-  //   drop-shadow(-4px 4px var(--vf-font-now-alt--display--color))
-  //   drop-shadow(-5px 5px var(--vf-font-now-alt--display--color))
-  //   drop-shadow(-6px 6px var(--vf-font-now-alt--display--color))
-  //   ;
+  filter: 
+    drop-shadow(-1px 1px var(--vf-font-now-alt--display--color))
+    drop-shadow(-2px 2px var(--vf-font-now-alt--display--color))
+    drop-shadow(-3px 3px var(--vf-font-now-alt--display--color))
+    drop-shadow(-4px 4px var(--vf-font-now-alt--display--color))
+    drop-shadow(-5px 5px var(--vf-font-now-alt--display--color))
+    drop-shadow(-6px 6px var(--vf-font-now-alt--display--color))
+    ;
 }
