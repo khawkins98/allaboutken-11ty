@@ -403,3 +403,21 @@ body .vf-footer {
     font-size: 80%;
   }
 }
+
+// reduce spacing in summaries
+.vf-summary__title {
+  margin-bottom: 0;
+}
+
+@media (min-width: 1024px) {
+  .kh-bleed-out {
+    margin-right: -50%;
+    margin-left: -50%;
+  }
+}
+@media (min-width: 767px) {
+  .kh-bleed-out {
+    margin-right: -30%;
+    margin-left: -30%;
+  }
+}

@@ -34,9 +34,11 @@ Lerna works out of the box quite well, allowing us to manage all of our componen
 
 We run the aliased command `yarn run releasenotes` that invokes a git dump:
 
+<section class="kh-bleed-out">
 {% codeblock 'bash' -%}
 git show -U0 --raw $(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1  --max-count=1))..$(git describe --abbrev=0 --tags $(git rev-list --tags  --max-count=1)) --pretty=format:'commit: %H %n abbreviated_commit: %h %n subject: %s %n   sanitized_subject_line:  %f %n  date :  %aD %n  commiter : %cN %n' --output=tools/vf-component-library/src/site/updates/$(date +%F)-component-updates.md -- **/CHANGELOG.md 
 {% endcodeblock %}
+</section>
 
 <br/>I'll walk through that chunk of code:
 
@@ -53,6 +55,8 @@ git show -U0 --raw $(git describe --abbrev=0 --tags $(git rev-list --tags --skip
 
 That still leaves us to add on the frontmatter and massage the content, but with the help of a macro it's a pretty quick task:
 
+{% endmarkdown %}
+<section class="kh-bleed-out">
 {% codeblock 'markdown' -%}
 {% verbatim %}
 {% macro notes(component='vf-xxx', componentVersion='9.9.9', commitId='0123456789') %}
@@ -66,6 +70,8 @@ That still leaves us to add on the frontmatter and massage the content, but with
 {% endmacro %}
 {% endverbatim %}
 {% endcodeblock %}
+</section>
+{% markdown %}
 
 <br/>Here's [an example release notes update](https://stable.visual-framework.dev/updates/2020-11-06-component-updates/) and [its 11ty source code](https://github.com/visual-framework/vf-core/blob/develop/tools/vf-component-library/src/site/updates/2020-11-06-component-updates.md). 
 

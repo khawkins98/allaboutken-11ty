@@ -35,11 +35,13 @@ The two tools don't work like this by default, but I'll share how we've made it 
 
 {% endmarkdown %}
 
+<section class="kh-bleed-out">
 {%- render '@ken-figure', {
   "text": "A 16-second animated-GIF that shows how the Fractal components and Eleventy content are united.",
   "alttext": "Animated-GIF that shows how the Fractal components and Eleventy content are united",
   "imageUrl": "/images/original/blog/fractal-elventy-gulp-cycle.gif" 
 } -%}
+</section>
 
 {% markdown %}
 
@@ -59,9 +61,12 @@ We were really excited by this in initial discussions as we can use similar buil
 
 Here's a high-level diagram:
 
-![Diagram of how Eleventy and Fractal talk](/images/original/blog/fractal-vf-eleventy-architecture.svg)
+<section class="kh-bleed-out">
 
+![Diagram of how Eleventy and Fractal talk](/images/original/blog/fractal-vf-eleventy-architecture.svg)
 _When the developer runs `gulp dev` it allows Fractal and Eleventy to run as child process of gulp, sharing a Nunjucks environment._
+
+</section>
 
 There were a couple of _gotchas_ that we had to work around, if you're interested in how we got there, read on, otherwise [I suggest you just try out the `vf-eleventy` boilerplate](https://github.com/visual-framework/vf-eleventy).
 
