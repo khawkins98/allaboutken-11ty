@@ -22,9 +22,6 @@
 // @import 'vf-font-plex-mono/vf-font-plex-mono.scss';
 // @import 'vf-font-plex-sans/vf-font-plex-sans.scss';
 
-// @import 'vf-font-knewave/vf-font-knewave.scss';
-@import 'vf-font-now-alt/vf-font-now-alt.scss';
-
 html,
 button {
   @if $use-global-typography == true {
@@ -176,4 +173,5 @@ button {
 
 // If you have any locoal overrides, put them in:
 @import 'ken-favicon/ken-favicon.scss';
+@import 'vf-font-now-alt/vf-font-now-alt.scss';
 @import 'vf-local-overrides/vf-local-overrides.scss';
