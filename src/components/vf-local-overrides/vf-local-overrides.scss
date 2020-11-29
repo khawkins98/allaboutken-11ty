@@ -87,7 +87,7 @@ html, body {
   //   font-size: .8rem;
   // }
   .do-not-print {
-    display:none;
+    display:none !important;
   }
   .for-print-only {
     display:block
@@ -128,8 +128,8 @@ html, body {
 .vf-grid h2 a[name]:hover:before,
 .vf-grid h3 a[name]:hover:before {
   content: "⚓️";
-  font-weight: 400 !important;
-  font-family: 'Noto-Emoji';
+  // font-weight: 400 !important;
+  // font-family: 'Noto-Emoji';
   position: relative;
   display: inline-block;
   height: 0;
@@ -308,6 +308,11 @@ html, body {
   text-decoration-color: #734595;
   text-decoration-line: underline;
   color: #333;
+}
+
+.vf-content .vf-footer__link,
+.vf-content .vf-footer__link:visited { 
+  color: #fff;
 }
 
 // .ken-grid--alt {
