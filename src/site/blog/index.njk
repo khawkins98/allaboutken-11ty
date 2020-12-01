@@ -6,7 +6,7 @@ layout: layouts/base.njk
 #templateEngineOverride: njk
 ---
 {%- set siteConfig = siteConfig.siteInformation -%}
-<div class="embl-grid ">
+<div class="embl-grid">
   <div>
     <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display">{{title}}</h1>
   </div>
@@ -20,7 +20,7 @@ layout: layouts/base.njk
     <h3 class="vf-summary__title | vf-font-now-alt">
       <a href="{{ post.url | url}}" class="vf-summary__link">{{ post.data.title }}</a>
     </h3>
-    <p class="vf-summary__text">{{ post.data.teaser | safe }}</p>
+    <p class="vf-summary__text | vf-content">{{ post.data.teaser | safe }}</p>
   </article>
   {%- endfor -%}
   </section>
