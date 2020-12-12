@@ -1,0 +1,170 @@
+---
+title: "Using Nunjucks templates with React"
+layout: layouts/post.njk
+teaser: "A lightweight React wrapper with precompiled Nunjucks"
+image: "/blog/chocolate-component-wrappers.jpg"
+image_meta:
+  text: 'Entering the React wrapper. Thanks to <a href="https://www.flickr.com/photos/honzasoukup/15910008548/in/photolist-qeUXfd-VPrPCk-2v51LF-aexEWC-4ShMi8-iBrGk8-4ZUFmT-8B2aez-7zDgvQ-aeuR3X-7RaE2Q-96aZZq-zkbi6-wuRD6-dFYQ8d-b8tx2i-aioVT6-2feM7mz-4rvVkB-4jLVdo-4fDRaz-bbKeaK-63pqX2-65GuUB-f8EFFf-4xEosE-iNqn2y-9ZVEeA-vqR4r-afTaU-4yBY-6SUYH-4f3x6e-dDQ9v-5vkwRh-eum2nV-74c2LL-74ZatA-5QXy2g-nQRTLG-eum2ZM-8mcn9-c8Sftd-dmXBA5-74Vh8x-PyVN5f-74Z597-7QuB7g-74V7mF-7uvJF7">Honza Soukup</a> for the CC licnesed photo.'
+  altext: "Chocolate sweet wrapper"
+date: 2020-12-12
+# url: /posts/20201105-using-lerna-with-fewer-tags-and-custom-release-notes.html
+active_path: blog
+tags: posts
+topics:
+  - component systems
+---
+
+{% markdown %}
+
+For [Visual Framework component's](https://stable.visual-framework.dev/) we’re using the [Nunjucks](https://mozilla.github.io/nunjucks/) JavaScript templating engine. 
+It's a JS-runtime and based off [jinja2](https://jinja.palletsprojects.com/en/2.11.x/). 
+
+Here’s a simplified `vf-button.njk` template:
+
+{% codeblock 'html' -%}
+{%- raw -%}<a 
+  href="{{ button_href }}" 
+  class="vf-button
+  {%- if variant %} vf-button--{{ variant }}{% endif %}
+">
+{{- text | safe -}}
+</a>
+{% endraw %}
+{% endcodeblock %}
+
+<br/>
+
+If you've used jinja2, Handlebars or Twig templating, you'll probably find Nunjucks familiar. 
+
+But what to do when we want to use our nice Nunjucks template in React? It’s all just JS, _right_?
+
+### Requirements
+
+- Use our `*.precompiled.js` templates so we don’t have to maintain a second set of templates for React. Or with minimal changes.
+- Compatible with a non-ejected [Create React App](https://create-react-app.dev/). CRA limits you by not allowing customisation to the webpack config and has some other restricitions for consistency.
+- Minimal local project changes and code.
+- A “JS callback" to support client-side JS for basic UI elements like tabs. Much as you would for integrating jQuery.
+- Conceivably reusable in Angular.
+- Bonus points for using [React memo components](https://reactjs.org/docs/react-api.html#reactmemo).
+
+### Step 1: Precompiling nunjukcs
+
+While you don’t have to precompile your Nunjucks templates to use them in other systems, doing so will make them portable, faster and require a smaller JS runtime (8KB vs 20KB)
+
+This is is fairly standard business for Nunjucks and we’ve [already been doing it](https://github.com/visual-framework/vf-core/blob/develop/tools/vf-core/gulp-tasks/vf-templates-precompile.js#L53) as part of the Visual Framework npm distributable. 
+
+For more [you can follow the Nunjucks guide on precompiling](https://mozilla.github.io/nunjucks/api.html#precompiling).
+
+### Step 2: Common assets 
+
+To use our Nunjucks templates in react we’ll need two dependencies:
+
+- The [`nunjucks-slim.js`](https://mozilla.github.io/nunjucks/api.html#setup-2-always-precompile) runtime. It’s 8KB.
+- We'll need some extra help implement React's "fragments" to avoid extanious `div`s, so we've added [`react-dom-fragment`](https://www.npmjs.com/package/react-dom-fragment).
+
+To deliver and somre reusable central logic, we made a small npm package: [`vf-extensions-react`](https://github.com/visual-framework/vf-core/tree/develop/tools/vf-extensions-react/).
+
+### Step 3: Template wrappers and callback
+
+We're aiming for a simple React integration and usage process.
+
+1. Install the npm dependencies
+2. Import the template `import { VfButton } from "@visual-framework/vf-button/vf-button.react.js"; `
+3. Use `<VfButton href="#mylink" variant="big" title="React for the VF 2.0" />`
+4. Do any needed JS callback for tabs, or similar
+
+To facilitate this, each Visual Framework component will need a small template wrapper in the monorepo; here's `components/vf-button/vf-button.react.js`:
+
+<div class="kh-bleed-out">
+
+{% codeblock 'js' -%}
+// vf-button for React
+// See vf-extensions-react for usage guidance
+// We use vanilla JS templates for react for compatibility with create react app
+// ---
+import React from "react";
+import Fragment from "react-dom-fragment";
+import VfButtonTemplate from "./vf-button.precompiled.js";  // import templates before the nunjucks env
+import { vfNunjucksEnv } from "@visual-framework/vf-extensions-react/vf-extensions-react.js";
+
+// any JS actions needed on component insertion
+class VfButtonCallback extends React.Component {
+  componentDidMount() {
+    // console.log("any JS actions needed");
+  }
+
+  render() {
+    return React.createElement(React.Fragment, null);
+  }
+}
+
+const VfButton = React.memo(({
+  text, button_href, theme
+}) => {
+  return React.createElement(React.Fragment, null,
+    React.createElement(Fragment, {
+      dangerouslySetInnerHTML: {
+        // our HTML is handled by nunjucks, this should not receive user input
+        __html: vfNunjucksEnv.render("vf-button", {
+          text: text, button_href: button_href, theme: theme
+        })
+      }
+    }),
+    React.createElement(VfButtonCallback, null)
+  );
+}
+);
+
+export { VfButton };
+{% endcodeblock %}
+
+</div>
+<br/>
+
+Most of this code is from a template and we only need:
+
+1. pass any context properties (href, text, variant, etc)
+2. add any JS callbacks
+
+### Step 4: demo 
+
+Install the requirements:
+
+<div class="kh-bleed-out">
+
+{% codeblock 'html' -%}
+yarn add @visual-framework/vf-extensions-react @visual-framework/vf-button
+{% endcodeblock %}
+
+</div>
+
+<br/>
+
+And here’s a usage example in a React template:
+
+<div class="kh-bleed-out">
+
+{% codeblock 'html' -%}
+import { VfButton } from "@visual-framework/vf-button/vf-button.react.js"
+<VfButton href="#mylink" variant="big" title="React for the VF 2.0" />
+{% endcodeblock %}
+
+</div>
+
+<br/>You can see all this in action in the Visual Framework’s example React app:
+
+- [Project code](https://github.com/visual-framework/vf-react)
+- [Demo site](https://visual-framework.github.io/vf-react/)
+
+### Notes, caveats
+
+- [`nunjucks-loader`](https://github.com/at0g/nunjucks-loader): an interesting looking project that has some additional Nunjucks features. However it could require additional configuration to the `webpack.config.js`, which would make usage with Create React App very hard. 
+    - Similarly we'er not using [Webpack to integrate our Nunjucks templates](https://www.npmjs.com/package/simple-nunjucks-loader)
+- User input: currently not supported. We plan to use [`dompurify`](https://github.com/cure53/DOMPurify).
+- Client-side JavaScript: we know that for things like tabs we won’t be doing JavaScript in the true React way, however we’re mainly interested in content templates (cards, buttons, intros, heroes and other containers/patterns). We accept that for any high-performance DOM-updating element it should be written as a “native" React component. 
+- Realted discussion, projects in the Visual Framework:
+    - [vf-react](https://github.com/visual-framework/vf-react), [demo](https://visual-framework.github.io/vf-react/)
+    - [vf-extensions-react/README.md](https://github.com/visual-framework/vf-core/blob/develop/tools/vf-extensions-react/README.md)
+    - [Issue: a basic how-to on integrating VF JavaScript into React #1271](https://github.com/visual-framework/vf-core/issues/1271)
+
+{% endmarkdown %}
