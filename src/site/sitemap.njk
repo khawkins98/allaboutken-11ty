@@ -2,11 +2,12 @@
 permalink: sitemap.xml
 ---
 <?xml version="1.0" encoding="UTF-8"?>
+{%- set siteConfig = siteConfig.siteInformation -%}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {%- for page in collections.all %}
   {%- if page.data.layout %}
   <url>
-    <loc>{{ site.rootUrl }}{{ page.url }}</loc>
+    <loc>{{ siteConfig.url }}{{ page.url }}</loc>
   </url>
   {%- endif %}
   {%- endfor %}
