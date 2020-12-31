@@ -2,6 +2,10 @@
 
 @import 'vf-local-overrides.variables.scss';
 
+.vf-body {
+  background: #fbf6ef;
+}
+
 .vf-local-overrides {
   /* your settings here */
 }
@@ -364,7 +368,7 @@ html, body {
   max-width: 100%;
 }
 
-// Vf core has no margin on blockuopte
+// Vf core has no margin on blockquote
 body .vf-content blockquote:not([class*=vf-]) {
   margin-bottom: 16px;
 }
@@ -381,10 +385,10 @@ body .vf-footer {
 .vf-content code, .vf-code-example {
   font-size: 14px;
 }
-// .vf-content pre, .vf-content code, .vf-code-example__pre, .vf-code-example {
+.vf-content pre, .vf-content code, .vf-code-example__pre, .vf-code-example {
 //   color: #fff;
-//   background: #333;
-// }
+  background: #fff;
+}
 
 /* set the printable link CSS */
 @media print { 

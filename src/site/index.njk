@@ -6,7 +6,7 @@ image: "/blog/drill-bits.jpg"
 layout: layouts/base.njk
 templateEngineOverride: njk
 ---
-<div class="vf-u-fullbleed vf-u-background-color-ui--grey">
+<div class="vf-u-fullbleed vf-u-background-color--yellow--dark">
 <section class="embl-grid embl-grid--has-centered-content | vf-u-padding__top--500">
   <div></div>
   <div class="vf-content">
@@ -17,7 +17,7 @@ templateEngineOverride: njk
     With [20 years](/cv/) experience in publishing and technology, I help projects move beyond content and problems into performant web platforms that [deliver](/posts/20180122-content-action-model.html) organisational goals. 
 
     {%- endmarkdown %}
-    {# **I am a deep thinker** who applies a strong conceptual background from years of crafting deadline-driven data-heavy infographics for newspapers, online publications driven by data and inovating marketing and tracking tools.  #}
+    {# **I am a deep thinker** who applies a strong conceptual background from years of crafting deadline-driven data-heavy infographics for newspapers, online publications driven by data and invocating marketing and tracking tools.  #}
 
     {#- <dl>
       <dt>Descriptors</dt>
@@ -35,11 +35,14 @@ templateEngineOverride: njk
 </section>
 </div>
 
-<section class="vf-card-container embl-grid embl-grid--has-centered-content">
-  <h3 class="vf-text-heading--3">Recently</h3>
+<section class="vf-card-container embl-grid">
+  {% render '@vf-section-header--default', {
+    "section_title": "Recently",
+    "id": "recently"
+  } %}
   {#- <p class=" vf-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> -#}
   <section>
-    <div class="vf-grid vf-grid__col-3 | summary-inline">
+    <div class="vf-grid vf-grid__col-4 | summary-inline">
     {%- for post in collections.posts.slice(-3) | reverse -%}
     <article class="vf-summary vf-summary--news">
       <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
@@ -52,6 +55,16 @@ templateEngineOverride: njk
       {#- {{loop.index}} -#}
     </article>
     {%- endfor -%}
+    <article class="vf-summary vf-summary--news">
+      {# <span class="vf-summary__date">{{ post.date | dateDisplay }}</span> #}
+      {# <a href="{{ post.url }}" class="vf-summary__image">
+        <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
+      </a>   #}
+      <h3 class="vf-summary__title">
+        <a href="/blog" class="vf-summary__link">Read {{ collections.posts | length - 3}} more posts on the blog ↦</a>
+      </h3>
+      {#- {{loop.index}} -#}
+    </article>
     </div>
   </section>
 

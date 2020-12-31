@@ -6,7 +6,25 @@ templateEngineOverride: njk
 
 <article class="vf-grid vf-grid__col-3">
   <div class="vf-grid__col--span-1">
-    <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display" style="margin-top: 10rem;">{{title}}</h1>
+    <section class="vf-u-fullbleed vf-u-background-color--yellow--dark">
+    <style>
+    .kh-post-title {
+      padding: 2rem 0 2rem 2rem;
+      left: -1.5rem;
+      position: relative;
+    }
+
+    @media (min-width: 768px) {
+      .kh-post-title {
+        margin-top: 10rem;
+      }
+    }
+    .kh-post-title.vf-u-fullbleed::before {
+      --context-margin--inline: 31rem;
+    }
+    </style>
+      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display | kh-post-title">{{title}}</h1>
+    </section>
     <p><time datetime="{{ date }}" class="vf-summary__date">{{ date | dateDisplay }}</time> {% if topics %}&nbsp;&nbsp;<span class="vf-summary__author">Filed in: {{topics}}</span>{% endif %}</p>
   </div>
   <div class="vf-grid__col--span-2 vf-content">
@@ -29,7 +47,7 @@ templateEngineOverride: njk
   </div>
 </article>
 
-<div class="vf-u-background-color-ui--grey--light vf-u-fullbleed | vf-stack vf-u-padding__top--800">
+<div class="vf-stack vf-u-padding__top--800">
 {% if comment != false %}
   <article class="vf-grid vf-grid__col-3 | do-not-print">
     <div class="vf-grid__col--span-1">
