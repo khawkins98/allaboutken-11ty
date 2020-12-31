@@ -30,7 +30,8 @@
   // // -webkit-background-clip: text !important;
   // // -webkit-text-fill-color: rgba(0,0,0,0);
 
-  --vf-font-now-alt--display--color: var(--vf-ui-color--grey);
+  // --vf-font-now-alt--display--color: var(--vf-ui-color--grey);
+  --vf-font-now-alt--display--color: var(--vf-color--orange);
   
   filter: 
     drop-shadow(-1px 1px var(--vf-font-now-alt--display--color))
