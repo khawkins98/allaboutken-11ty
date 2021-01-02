@@ -373,12 +373,32 @@ body .vf-content blockquote:not([class*=vf-]) {
   margin-bottom: 16px;
 }
 
+.vf-summary__category, .vf-summary__date {
+  color: #000;
+}
+
 // footer stroke override
 body .vf-footer {
   border-color: #3B6FB6;
   &:after {
     background-color: #3B6FB6;
   }
+}
+
+// styling for post titles
+.kh-post-title {
+  padding: 2rem 0 2rem 2rem;
+  left: -1.5rem;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .kh-post-title {
+    margin-top: 10rem;
+  }
+}
+.kh-post-title.vf-u-fullbleed::before {
+  --context-margin--inline: 31rem;
 }
 
 // code sizing inheritance too big
