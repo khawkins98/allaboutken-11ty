@@ -33,7 +33,7 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
   </head>
   <body class="vf-body{% if bodyClass %} {{ bodyClass }}{% endif %}">
-    <header class="vf-global-header vf-u-margin__bottom--400">
+    <header class="vf-global-header vf-u-margin__bottom--400" role="banner">
       <a href="/" class="vf-logo"><span class="vf-logo__text">AllAboutKen.com</span></a>
       <nav class="vf-navigation vf-navigation--global | show-for-medium | do-not-print">
         <ul class="vf-navigation__list | vf-list--inline">
@@ -55,7 +55,9 @@
         </ul>
       </nav>
     </header>
+    <main role="main">
     {{ content | safe }}
+    </main>
     {% if  page.url != '/' %}
       {% include "footer.njk" %}
     {% endif %}
