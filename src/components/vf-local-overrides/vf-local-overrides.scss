@@ -387,13 +387,14 @@ body .vf-footer {
 
 // styling for post titles
 .kh-post-title {
-  padding: 2rem 0 2rem 2rem;
-  left: -1.5rem;
+  padding: 2rem 0 2rem 0;
   position: relative;
 }
 
 @media (min-width: 768px) {
   .kh-post-title {
+    padding-left: 2rem;
+    left: -1.5rem;
     margin-top: 10rem;
   }
 }

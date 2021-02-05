@@ -1124,10 +1124,10 @@
   resolved "https://registry.yarnpkg.com/@visual-framework/vf-blockquote/-/vf-blockquote-1.0.2.tgz#115df82feb36505c505e94597aa947bd0b988b4f"
   integrity sha512-6LpVfTXHFkFxfjzsM7Z9emyolP5pYWYSRyHNPQYnJVBrKvvITjD7t1rArgMGgfMKHXcOY2pLVuzKFCi5lTFSXA==
 
-"@visual-framework/vf-body@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@visual-framework/vf-body/-/vf-body-1.0.0.tgz#aa015427fa176a7d6da5e57a8ee016377e3189d3"
-  integrity sha512-P7/GJtnVSqhs45Byz3xi6QLvEeG7BdTRGf5K0JNTVLFMougiS/J1WDopIAz805nJe6oJInCnMxvUhVuveD56EQ==
+"@visual-framework/vf-body@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@visual-framework/vf-body/-/vf-body-1.1.0.tgz#94cd849af13ea298fbe8946f2923827eae631002"
+  integrity sha512-GeHXQKzBAEVczaGeB2wGovlfiE1XkcHDhH3FsC62w7Ib2rkSYb0b7n7TBgj0wuXXEs5/mXf8wpHgEgDehbe0Hw==
 
 "@visual-framework/vf-box@2.3.0", "@visual-framework/vf-box@^2.3.0":
   version "2.3.0"
@@ -1193,15 +1193,15 @@
     "@visual-framework/vf-list" "^1.0.0"
     "@visual-framework/vf-text" "^1.0.2"
 
-"@visual-framework/vf-core@2.2.16":
-  version "2.2.16"
-  resolved "https://registry.yarnpkg.com/@visual-framework/vf-core/-/vf-core-2.2.16.tgz#7ece31a7a5ab03e35c7a1a198bc0733af65432d4"
-  integrity sha512-ihg8BgMqvpgFFeIOpi/dLlavt+vfDB6P3Q5x8SGd0iOT1FQ27ocP1ci4lqcCGPAgms5gNNqyFii+CffDPYT89g==
+"@visual-framework/vf-core@2.2.17":
+  version "2.2.17"
+  resolved "https://registry.yarnpkg.com/@visual-framework/vf-core/-/vf-core-2.2.17.tgz#29d2e420fa112c6f1a26e315205d01230ce7aec5"
+  integrity sha512-GWg3EDaR6C4NCf+ulysaKf/H6Uj1F82gGLLfrx+DWEeWR6Wi6ZLla5tucDG2EbCvp9IHykQ/+j/hvB41e6mdDg==
   dependencies:
     "@visual-framework/vf-component-generator" "^1.1.2"
     "@visual-framework/vf-component-initialization" "^1.1.2"
     "@visual-framework/vf-frctl-extensions" "^1.0.0-alpha.2"
-    "@visual-framework/vf-sass-compilation" "^1.1.1"
+    "@visual-framework/vf-sass-compilation" "^1.1.2"
     chalk "^4.0.0"
     del "^6.0.0"
     fast-glob "^3.1.0"
@@ -1380,10 +1380,10 @@
   resolved "https://registry.yarnpkg.com/@visual-framework/vf-no-js/-/vf-no-js-1.0.1.tgz#c0c02713616705e2408a041e67588afc5aa7f845"
   integrity sha512-T/LEPJ+JAsYRnf55gIbRs6AtolB1cuJsuVuACQHvUzam+RqFa3n42NjkGm5h/hBCZpNPmMUeftWq3VFrKAdffg==
 
-"@visual-framework/vf-sass-compilation@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@visual-framework/vf-sass-compilation/-/vf-sass-compilation-1.1.1.tgz#100b23e7849d4bb1a13ffb3edff1be4e6afd6b48"
-  integrity sha512-axRz7Q29xq9u8+wbAgVimVLQEDrlQeIyl8wqq6alk0f7C5TA0JhT2Q7ra8UYVhqpn47FN4yfzqKeC2Cn5DFUEQ==
+"@visual-framework/vf-sass-compilation@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@visual-framework/vf-sass-compilation/-/vf-sass-compilation-1.1.2.tgz#942c5f366d2c193240d369f2b1bd751097cd455b"
+  integrity sha512-EVBZ5P58ovmxDLsrhrQPCHi7tEl1driNhmSjbr7+4EkmJILp9kZV2eKI74rFoQTiGuJSiEsgz58k9L6JQp2jog==
   dependencies:
     "@babel/preset-env" "7.12.11"
     eslint "^7.15.0"
@@ -1399,16 +1399,16 @@
     prettier-stylelint "0.4.2"
     rollup "^2.35.1"
     rollup-plugin-includepaths "^0.2.4"
-    sass "1.32.2"
+    sass "1.32.5"
     stylelint "^13.8.0"
     stylelint-order "^4.1.0"
     stylelint-scss "^3.18.0"
     vinyl-source-stream "^2.0.0"
 
-"@visual-framework/vf-sass-config@2.3.1":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@visual-framework/vf-sass-config/-/vf-sass-config-2.3.1.tgz#6720e7912f127c38651c2eb0732291ef0946d7ad"
-  integrity sha512-HkUcJ50mgE6sFg0va1esD1ad1o7LbVoYTmTeYm8Ul0Vn0xvlj7NobXukmofCLb1YqT2UsDhzPxriTE3/pVNzhw==
+"@visual-framework/vf-sass-config@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@visual-framework/vf-sass-config/-/vf-sass-config-2.4.0.tgz#f7963dcc7c01eb1159f2a4d371237515e8ced2c5"
+  integrity sha512-EzCjoIJMGCiWhK1hHS2GBJcN3U2P3T0FBQf134LnTqCJN3wJ8ef72HwF9XaGDs0thp6tXgDf77kWFKo9Mi5uCw==
 
 "@visual-framework/vf-sass-utilities@1.0.1":
   version "1.0.1"
@@ -7860,10 +7860,10 @@ no-case@^2.2.0:
   dependencies:
     lower-case "^1.1.1"
 
-node-html-parser@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/node-html-parser/-/node-html-parser-2.0.2.tgz#168c9cfb77ae58fe4038d84862a0fc8f2ad8e3fd"
-  integrity sha512-N2000Ho9dkabvRZcyiwm6zOpdiAzxAxcJ0Z0WNoh/yXHG0YCuiK2WpNQfN+9vheLNY/h/It11Gk7uwT4QTfk9Q==
+node-html-parser@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/node-html-parser/-/node-html-parser-2.1.0.tgz#36345804d743a5a1f672d4821a53f6b0e60629a9"
+  integrity sha512-kbCNfqjrwHAbG+mevL8aqjwVtF0Qv66XurWHoGLOc5G9rPR1L3k602jfeczAUUBldLNnCrdsDmO5G5nqAoMW+g==
   dependencies:
     he "1.2.0"
 
@@ -9943,10 +9943,10 @@ sass-lint@^1.12.0:
     path-is-absolute "^1.0.0"
     util "^0.10.3"
 
-sass@1.32.2:
-  version "1.32.2"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.32.2.tgz#66dc0250bc86c15d19ddee7135e93d0cf3d3257b"
-  integrity sha512-u1pUuzqwz3SAgvHSWp1k0mRhX82b2DdlVnP6UIetQPZtYbuJUDaPQhZE12jyjB7vYeOScfz9WPsZJB6Rpk7heA==
+sass@1.32.5:
+  version "1.32.5"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.32.5.tgz#2882d22ad5748c05fa9bff6c3b0ffbc4f4b9e1dc"
+  integrity sha512-kU1yJ5zUAmPxr7f3q0YXTAd1oZjSR1g3tYyv+xu0HZSl5JiNOaE987eiz7wCUvbm4I9fGWGU2TgApTtcP4GMNQ==
   dependencies:
     chokidar ">=2.0.0 <4.0.0"
 

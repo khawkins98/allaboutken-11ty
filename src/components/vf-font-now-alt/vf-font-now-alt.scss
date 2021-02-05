@@ -3,6 +3,7 @@
   src: url("../assets/vf-font-now-alt/assets/NowAlt-Bold.woff2") format("woff");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 // @font-face {
@@ -13,18 +14,20 @@
 // }
 
 .vf-font-now-alt {
-  font-family: 'NowAlt-Bold' !important;
-  font-display: swap;
+  font-family: 'NowAlt-Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Open Sans', serif !important;
   // font-weight: 100 !important;
 }
 
 .vf-font-now-alt--display {
   // font-family: 'NowAlt-Bold' !important;
   // font-weight: 100 !important;
-  font-size: 70px !important;
+  font-size: 60px !important;
   letter-spacing: -1px;
   // color: #fff;
 
+  @media (min-width: 768px) {
+    font-size: 70px !important;
+  }
   // // background: #4d596d;
   // // background-image: linear-gradient(135deg, #4d596d 0%, #818ea9 100%);
   // // -webkit-background-clip: text !important;
@@ -42,3 +45,4 @@
     drop-shadow(-6px 6px var(--vf-font-now-alt--display--color))
     ;
 }
+
