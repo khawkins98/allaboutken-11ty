@@ -79,7 +79,7 @@ module.exports = function(config) {
   // });
 
   // copy js files
-  // this is neccesary now that 11ty tries to compile JS files as templates
+  // this is necessary now that 11ty tries to compile JS files as templates
   // @todo: backport to vf-eleventy
   config.addPassthroughCopy("./src/site/**/*.js");
 
