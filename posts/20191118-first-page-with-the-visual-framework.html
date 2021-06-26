@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en" class="vf-no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="all" href="/css/styles.css" />
+    <title>Building your first page with the Visual Framework 2.0 | All about Ken Hawkins</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/ken-favicon/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+    <script>
+// Detect if JS is on and swap vf-no-js for vf-js on the html element
+(function(H){H.className=H.className.replace(/\bvf-no-js\b/,'vf-js')})(document.documentElement);
+</script>
+
+    <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="abstract" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="Drupal, web development, Ken Hawkins, UX, information architecture" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="All About Ken Hawkins" />
+    <meta property="og:url" content="https://www.allaboutken.com/posts/20191118-first-page-with-the-visual-framework.html" />
+    <meta property="og:title" content="Building your first page with the Visual Framework 2.0 > All About Ken Hawkins" />
+    <meta property="og:image" content="https://www.allaboutken.com/images/crop-cinema/blog/visual-framework-code-example.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@khawkins98" />
+    <meta name="twitter:site:id" content="3723201" />
+    <meta name="twitter:creator" content="@khawkins98" />
+    <meta name="twitter:creator:id" content="3723201" />
+    <meta name="twitter:url" content="https://www.allaboutken.com/posts/20191118-first-page-with-the-visual-framework.html" />
+    <meta name="twitter:description" content="A quick start on how to work with <a href='https://visual-framework.github.io/vf-welcome/'>Visual Framework 2.0</a> CSS, JS and structure your HTML — and lots of links to learn more." />
+    <meta name="twitter:image" content="https://www.allaboutken.com/images/crop-cinema/blog/visual-framework-code-example.jpg" />
+    <meta name="dcterms.title" content="Building your first page with the Visual Framework 2.0 > All About Ken Hawkins" />
+    <meta name="dcterms.type" content="Text" />
+    <meta name="dcterms.identifier" content="https://allaboutken.com/posts/20191118-first-page-with-the-visual-framework.html" />
+    <meta name="dcterms.format" content="text/html" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
+  </head>
+  <body class="vf-body vf-stack vf-stack--400">
+    <header class="vf-global-header" role="banner">
+      <a href="/" class="vf-logo"><span class="vf-logo__text">AllAboutKen.com</span></a>
+      <nav class="vf-navigation vf-navigation--global | vf-cluster | show-for-medium | do-not-print">
+        <ul class="vf-navigation__list | vf-list--inline">
+          <li class="vf-navigation__item">
+            <a href="/blog" class="vf-navigation__link">Blog</a>
+          </li>
+          <li class="vf-navigation__item | show-for-medium-only">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">E-mail</a>
+          </li>
+          <li class="vf-navigation__item | show-for-large">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">khawkins98@gmail.com</a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://twitter.com/khawkins98" class="vf-navigation__link">Twitter<span class="show-for-large"> @khawkins98</span></a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://www.linkedin.com/in/allaboutken" class="vf-navigation__link">LinkedIn</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main role="main">
+    
+<article class="vf-grid vf-grid__col-3">
+  <div class="vf-grid__col--span-1">
+    <section class="vf-u-fullbleed vf-u-background-color--yellow--dark">
+      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display | kh-post-title">Building your first page with the Visual Framework 2.0</h1>
+    </section>
+    <p><time datetime="Mon Nov 18 2019 00:00:00 GMT+0000 (Coordinated Universal Time)" class="vf-summary__date">18 Nov 2019</time> &nbsp;&nbsp;<span class="vf-summary__author">Filed in: gulp, Eleventy, EMBL, Fractal, Visual Framework</span></p>
+  </div>
+  <div class="vf-grid__col--span-2 vf-content">
+    <figure
+
+class="vf-figure">
+  <img class="vf-figure__image" src="/images/crop-cinema/blog/visual-framework-code-example.jpg" alt="">
+  <figcaption class="vf-figure__caption">It's not hard, it's just a matter of getting started.</figcaption>
+</figure>
+    <section class="vf-grid vf-grid__col-3">
+      <div class="vf-grid__col--span-2">
+        <p class="vf-text-body--1">A quick start on how to work with <a href='https://visual-framework.github.io/vf-welcome/'>Visual Framework 2.0</a> CSS, JS and structure your HTML — and lots of links to learn more.</p>
+
+        
+<p>The Visual Framework (VF) is designed to help <a href="https://blogs.embl.org/communications/2018/09/12/faster-scientific-websites-through-reusability">build life science websites and services</a>, this post is a kick-start to building sites with VF CSS, JS and HTML concepts.</p>
+<p>You’ll learn:</p>
+<ul>
+<li>Part 1: <a href="#part1">Where to find VF documentation</a></li>
+<li>Part 2: <a href="#part2">Basic methodologies of VF CSS and JS</a></li>
+<li>Part 3: <a href="#part3">How to structure your HTML and CSS classes</a></li>
+<li>Part 4: <a href="#part4">Assorted tips and differences from other major frameworks (like Bootstrap)</a></li>
+</ul>
+<p>This post assumes:</p>
+<ul>
+<li>You are familiar with HTML, CSS and JS</li>
+<li>You have probably used Bootstrap or Foundation</li>
+<li>It is helpful to have knowledge of Sass and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/--*">CSS Custom properties</a></li>
+<li>You want to use already-built CSS and JS
+(To build VF components from their Sass and JS modules <a href="https://visual-framework.github.io/vf-welcome/building/">see this guide</a>)</li>
+<li>You may or may not have used the <a href="https://www.ebi.ac.uk/style-lab/websites/">EMBL-EBI Visual Framework 1.0</a></li>
+</ul>
+<h3>Part 1</h3>
+<h2><a name="part1" href="#part1">Where to find VF documentation</a></h2>
+<p>To see demonstrations of each component and the HTML and CSS syntax of all “core” Visual Framework components, go to the “<a href="https://visual-framework.github.io/vf-core/#components">VF 2.0 Component library</a>”.</p>
+<p>Important: your organisation or project may have added custom components or removed some default components, if so you should ask the maintainers of your design system or component library.</p>
+<p>You can always see which components (and which version) are enabled by viewing the CSS source; from <a href="https://dev.assets.emblstatic.net/vf/develop/css/styles.css">the VF demo component library</a>:</p>
+<pre class="vf-code-example__pre"><code class="Code Code--lang-css vf-code-example"><span class="hljs-comment">/*! 
+* Component: @visual-framework/vf-badge 
+* Version: 1.0.0-beta.8
+* Location: components/vf-badge
+</span></code></pre>
+<p>The default VF build will maintain these comments even in the minified CSS build. For higher level information, <a href="https://visual-framework.github.io/vf-welcome/">see the Visual Framework Welcome site</a>.</p>
+<h3>Part 2</h3>
+<h2><a name="part2" href="#part2">CSS and JS methodologies</a></h2>
+<p>To optimise compatibility and flexibility, the Visual Framework does not target HTML elements like <code>&lt;body&gt;</code> <code>&lt;div&gt;</code> or <code>&lt;button&gt;</code> and instead relies only on CSS classes.</p>
+<p>Below is an example for a &quot;large heading&quot;.</p>
+
+<figure class="vf-figure | kh-bleed-out">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="200" 
+  data-user="khawkins98" 
+  data-prefill='{"title":"Demo: vf-text","tags":[],"stylesheets":[],"scripts":[]}'
+  data-theme-id="1"
+  data-default-tab="html,result" 
+>
+<pre data-lang="html">
+&lt;h2 class="vf-text vf-text-heading--3">This heading size is large&lt;/h2>
+
+&lt;span class="vf-text vf-text-heading--3">This heading size is large&lt;/span>
+
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css">
+</pre>
+</div>
+<figcaption>Note the &lt;h2&gt; is irrelevant for the Visual Framework; using &lt;span> works equally well (if semantically a bit daft).</figcaption>
+</figure>
+<p><span class="emoji">👉</span> Tip: This approach is similar to <a href="https://css-tricks.com/css-modules-part-1-need/">CSS Modules</a>.</p>
+<p>The VF is primarily focused on display and structure and therefore <a href="https://visual-framework.github.io/vf-welcome/developing/guidelines/javascript/">has minimal JS</a>. This also helps if you’d like to use, say, Bootstrap for tab behaviour but use the VF look.</p>
+<p>Similar to our CSS approach, the VF JS never targets HTML elements or even CSS classes and instead uses <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes#JavaScript_access">JS data attributes</a>; for example a partial look at <a href="https://visual-framework.github.io/vf-core/components/detail/vf-tabs.html"><code>vf-tabs</code></a>:</p>
+<pre><code class="language-html">&lt;div class=&quot;vf-tabs-content&quot; data-vf-js-tabs-content&gt;
+  &lt;section class=&quot;vf-tabs__section&quot; id=&quot;vf-tabs__section--1&quot;&gt;
+      &lt;h2&gt;Section 1&lt;/h2&gt;
+</code></pre>
+<p>The Visual Framework uses <code>class=&quot;vf-tabs-content&quot;</code> for the visual styling and <code>data-vf-js-tabs-content</code> for the JS — exclusively. Use the VF JS where it’s helpful, if you don’t need it, don’t add the <code>data-*</code> and use your own JS.</p>
+<p>With that in mind, we’ll carry on and focus on the CSS.</p>
+<h3>Part 3</h3>
+<h2><a name="part3" href="#part3">The structure of HTML, CSS classes</a></h2>
+<p>There are a few principles to understand when working with Visual Framework:</p>
+<ol>
+<li><strong>The grid and HTML nesting</strong></li>
+</ol>
+<p>The VF makes use of <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout">CSS Grid Layout</a> which is quite clever and you should have some basic understanding of how it works, but here are some common tips.</p>
+<ul>
+<li>By default  <a href="https://visual-framework.github.io/vf-core/components/detail/vf-grid.html"><code>vf-grid</code></a> will try to put your content into columns, if you only want one column:</li>
+</ul>
+  <pre class="vf-code-example__pre"><code class="Code Code--lang-html vf-code-example"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;vf-grid&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>All child content here<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;vf-grid&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>This layout<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Makes two columns<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  </code></pre>
+
+
+<figure class="vf-figure | kh-bleed-out">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="200" 
+  data-user="khawkins98" 
+  data-prefill='{"title":"Demo: vf-text","tags":[],"stylesheets":[],"scripts":[]}'
+  data-theme-id="1"
+  data-default-tab="result" 
+>
+<pre data-lang="html">&lt;div class="vf-grid">
+  &lt;div>All child content here&lt;/div>
+&lt;/div>
+
+&lt;div class="vf-grid">
+  &lt;div>This layout&lt;/div>
+  &lt;div>Makes two columns&lt;/div>
+&lt;/div>
+
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
+<pre data-lang="css" >.vf-grid > * { border:1px solid; }
+
+.vf-grid { margin-bottom: 1rem }</pre>
+</div>
+<figcaption></figcaption>
+</figure>
+
+<figure class="vf-figure | kh-bleed-out">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="200" 
+  data-user="khawkins98" 
+  data-prefill='{"title":"Demo: vf-text","tags":[],"stylesheets":[],"scripts":[]}'
+  data-theme-id="1"
+  data-default-tab="result" 
+>
+<pre data-lang="html">&lt;div class="vf-grid vf-grid__col-3">
+  &lt;p>1&lt;/p>
+  &lt;p>1&lt;/p>
+  &lt;p>1&lt;/p>
+  &lt;p>1&lt;/p>
+  &lt;p>1&lt;/p>
+  &lt;p>1&lt;/p>
+&lt;/div>
+
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
+<pre data-lang="css" >.vf-grid > * { border:1px solid; }
+
+.vf-grid { margin-bottom: 1rem }</pre>
+</div>
+<figcaption>You can specify a set number of columns `vf-grid | vf-grid__col-3`.</figcaption>
+</figure>
+<ul>
+<li>If you want to make a custom layout</li>
+</ul>
+  <pre class="vf-code-example__pre"><code class="Code Code--lang-html vf-code-example"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;vf-grid vf-grid__col-3&quot;</span>&gt;</span> 
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>I cover 1 of 3<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;vf-grid__col--span-2&quot;</span>&gt;</span>I cover 2 of 3 columns<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<figure class="vf-figure | kh-bleed-out">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="200" 
+  data-user="khawkins98" 
+  data-prefill='{"title":"Demo: vf-text","tags":[],"stylesheets":[],"scripts":[]}'
+  data-theme-id="1"
+  data-default-tab="result" 
+>
+<pre data-lang="html">&lt;div class="vf-grid vf-grid__col-3">
+  &lt;div>I cover 1 of 3&lt;/div>
+  &lt;div class="vf-grid__col--span-2">I cover 2 of 3 columns&lt;/div>
+&lt;/div>
+
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
+<pre data-lang="css" >.vf-grid > * { border:1px solid; }
+
+.vf-grid { margin-bottom: 1rem }</pre>
+</div>
+<figcaption></figcaption>
+</figure>
+<p>The grid layout often expects child elements. If something doesn't look write, you're probably missing a <code>&lt;div&gt;&lt;/div&gt;</code>.</p>
+<ol start="2">
+<li><strong>What dashes and underscores mean</strong></li>
+</ol>
+<p>We namespace all universal components. For Visual Framework core components it is a prefix of <code>vf-</code>. This ensures that the component will not break an existing codebase.</p>
+<p>Components in the Visual Framework follow the <a href="https://getbem.com/naming/">BEM naming convention</a>:</p>
+<ul>
+<li><code>.vf-component {}</code></li>
+<li><code>.vf-component__item {}</code></li>
+<li><code>.vf-component--alternative {}</code></li>
+</ul>
+<ol start="3">
+<li><strong>Pipes, mixes and chaining CSS classes</strong></li>
+</ol>
+<p>You may find that a component contains classes from another. This is a “<a href="https://getbem.com/faq/#why-the-modifier-classes-are-prefixed">BEM mix</a>”, it might look like:</p>
+<pre><code class="language-html">&lt;header class=&quot;vf-page-header&quot;&gt;
+  &lt;h1 class=&quot;vf-page-header__heading | vf-text vf-text--heading-l&quot;&gt;Page title&lt;/h1&gt;
+&lt;/header&gt;
+</code></pre>
+<p>Here the <code>vf-page-header</code> is utilising styling from the <code>vf-text</code> component.</p>
+<p>When mixing classes you’ll see the pipe <code>|</code> character as a divider, it has no functional difference but improves the readability.</p>
+<p>For more, <a href="https://visual-framework.github.io/vf-welcome/developing/guidelines/css/">see the guidance on mixes</a>.</p>
+<ol start="4">
+<li><strong>Fake it until you make it</strong></li>
+</ol>
+<p>If you’ve structured your component correctly but it doesn’t quite achieve what you need (and you can’t make your own local component) make use of the utility classes; for example:</p>
+<ul>
+<li><code>.vf-u-type__text-body--1</code></li>
+<li><code>.vf-u-display-none</code></li>
+<li><code>.vf-u-background-color--red</code></li>
+</ul>
+<p><a href="https://visual-framework.github.io/vf-core/components/detail/vf-utility-classes.html">See all the utility classes</a>.</p>
+
+<figure class="vf-figure | kh-bleed-out">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="200" 
+  data-user="khawkins98" 
+  data-prefill='{"title":"Demo: vf-text","tags":[],"stylesheets":[],"scripts":[]}'
+  data-theme-id="1"
+  data-default-tab="html,result" 
+>
+<pre data-lang="html">
+&lt;div class="vf-button | vf-u-background-color--red">I'm red&lt;/div>
+
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
+</div>
+</figure>
+<ol start="5">
+<li><strong>Use <code>vf-content</code> for content</strong></li>
+</ol>
+<p>Most projects will have larger areas of text where it is either not technically possible or practical to add many classes.</p>
+<p>For those situations, wrap the content in a <a href="https://visual-framework.github.io/vf-core/components/detail/vf-content.html">parent element with <code>.vf-content</code></a></p>
+  <pre class="vf-code-example__pre"><code class="Code Code--lang-html vf-code-example"><span class="hljs-tag">&lt;<span class="hljs-name">section</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;vf-content&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>My WYSIWYG-made text<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>I&#x27;m some user-made content with <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>&gt;</span>a link<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span></code></pre>
+<figure class="vf-figure | kh-bleed-out">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="300" 
+  data-user="khawkins98" 
+  data-theme-id="1"
+  data-default-tab="html,result" 
+>
+<pre data-lang="html">
+&lt;section class="vf-content">
+    &lt;h1>My WYSIWYG-made text&lt;/h1>
+    &lt;p>I'm some user-made content with &lt;a href="#">a link&lt;/a> and I'm not using any element-level VF classes.&lt;/p>
+  &lt;/section>
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
+</div>
+</figure>
+<h3>Part 4</h3>
+<h2><a name="part4" href="#part4">Assorted tips, differences from other frameworks</a></h2>
+<p>A grab-bag of important things that you might not expect.</p>
+<ol>
+<li><strong>Visual Framework defers to your other CSS</strong></li>
+</ol>
+<p>If you have a <code>&lt;section class=&quot;my-local-style vf-tabs&quot;&gt;</code> the VF CSS is designed to defer to any CSS you have for <code>section {}</code> and <code>.my-local-style</code>.</p>
+
+<figure class="vf-figure | kh-bleed-out">
+<div 
+  class="codepen" 
+  data-prefill 
+  data-theme-id="dark" 
+  data-height="250" 
+  data-user="khawkins98" 
+  data-theme-id="1"
+  data-default-tab="result" 
+>
+<pre data-lang="html">
+
+&lt;ul class="nav nav-tabs">
+  &lt;li class="nav-item">
+    &lt;a class="nav-link active" href="#">Active&lt;/a>
+  &lt;/li>
+  &lt;li class="nav-item">
+    &lt;a class="nav-link" href="#">Bootstrap tabs&lt;/a>
+  &lt;/li>
+&lt;/ul>
+
+&lt;br/>
+
+&lt;div classs="vf-tabs">
+  &lt;ul class="vf-tabs__list">
+    &lt;li class="vf-tabs__item">
+      &lt;a class="vf-tabs__link is-active" href="#">Active&lt;/a>
+    &lt;/li>
+    &lt;li class="vf-tabs__item">
+      &lt;a class="vf-tabs__link" href="#">VF Tabs&lt;/a>
+    &lt;/li>
+  &lt;/ul>
+&lt;/div>
+
+&lt;link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
+</div>
+<figcaption>The <a href="https://visual-framework.github.io/vf-core/components/detail/vf-tabs.html">VF tabs</a> have been "contaminated" by Bootstrap, but the VF has not impacted <a href="https://getbootstrap.com/docs/4.0/components/navs/#tabs">Bootstrap tabs</a>. This is by design to avoid breaking existing designs.</figcaption>
+</figure>
+<ul>
+<li><em><strong>Tip</strong></em>: loading the VF CSS after your other CSS can affect this, latter-loaded CSS is favoured by the browser.</li>
+</ul>
+<ol start="2">
+<li><strong>Low specificity</strong></li>
+</ol>
+<p>We avoid CSS specificity to target styling of elements. This improves flexibility of HTML structure and allows simpler chaining of classes.</p>
+<p>That is:</p>
+<ul>
+<li>We do: <code>.vf-tabs-content {}</code></li>
+<li>We don’t: <code>.vf-tabs .vf-tabs-content {}</code></li>
+</ul>
+<ol start="3">
+<li><strong>Highly modular</strong></li>
+</ol>
+<p>Like most Frameworks, the Visual Framework can be overridden or components can be selectively used. However, the Visual Framework takes this to the next level, allowing selective installation of components and a broad mix of component versions.</p>
+<p>For your organisation, the Visual Framework core documentation will likely not be the best source of truth on a component’s HTML, CSS and JS.</p>
+<p>So in addition to reading guidance like this, you’ll want to consult the maintainer of your CSS and design systems about which versions of Visual Framework components they’re using and the best place for documentation on your systems.</p>
+<p>If you’re lost, <a href="https://join.slack.com/t/visual-framework/shared_invite/enQtNDAxNzY0NDg4NTY0LWFhMjEwNGY3ZTk3NWYxNWVjOWQ1ZWE4YjViZmY1YjBkMDQxMTNlNjQ0N2ZiMTQ1ZTZiMGM4NjU5Y2E0MjM3ZGQ">you can always as the Slack group for help</a>.</p>
+<ol start="4">
+<li><strong>Atomic Design-like</strong></li>
+</ol>
+<p>The Visual Framework makes use of <a href="https://atomicdesign.bradfrost.com/chapter-2/">Atomic Design</a>-style concepts to define components. Instead of using Atoms, Molecules, Organisms the Visual Framework uses the terms Elements, Blocks, and Containers.</p>
+<p>For more on blocks, elements and containers, <a href="https://visual-framework.github.io/vf-welcome/developing/guidelines/css/">see the CSS guidelines</a></p>
+<h3>Bonus</h3>
+<h2><a name="bonus" href="#bonus">Just give me a starter template</a></h2>
+<p><span class="emoji">📑</span> <a href="https://codepen.io/khawkins98/pen/QWWzBNP?editors=1000">Here’s a simple boilerplate</a> so you can see a simple page in action.</p>
+<h2>Stuck?</h2>
+<p><span class="emoji">🎈</span> <a href="https://join.slack.com/t/visual-framework/shared_invite/enQtNDAxNzY0NDg4NTY0LWFhMjEwNGY3ZTk3NWYxNWVjOWQ1ZWE4YjViZmY1YjBkMDQxMTNlNjQ0N2ZiMTQ1ZTZiMGM4NjU5Y2E0MjM3ZGQ">Ask the Slack group</a>.</p>
+
+
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+      </div>
+      <div class="vf-grid__col--span-1">
+      </div>
+    </section>
+  </div>
+</article>
+
+<div class="vf-stack vf-u-padding__top--800">
+
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Comment?</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      <p>Thanks for reading, if you have comment I'd love to hear it.</p>
+
+      <p>
+        <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
+        
+        &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+        
+        &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+      </p>
+    </div>
+  </article>
+  
+
+
+  
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Read more</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      
+      
+
+      
+      <p class="vf-text-body--3">Previously: <a href="/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html" class="vf-link">Fractal and Eleventy: Getting static sites closer to the design system</a></p>
+      
+
+      
+      <p class="vf-text-body--3">Next: <a href="/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html" class="vf-link">Publishing since the 2000s</a></p>
+      
+
+      <p>
+        <a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ Blog index</a>
+      </p>
+    </div>
+  </article>
+  
+</div>
+    </main>
+    
+      <footer class="vf-footer | do-not-print" role="contentinfo">
+  <div class="vf-footer__inner">
+    <div class="vf-footer__notice">
+
+      <div class="vf-body--text | vf-content | do-not-print"><p><strong>I'm Ken Hawkins</strong>
+I bring structure and process to complex web projects. Learn more about me <a class="vf-footer__link" href="/">on the front page</a> or <a class="vf-footer__link" href="/#hello">get in touch</a>.</p>
+</div>
+
+      <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+      &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a></div>
+  </div>
+</footer>
+
+<code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
+
+    
+    
+    <script src="/scripts/scripts.js"></script>
+  </body>
+</html>

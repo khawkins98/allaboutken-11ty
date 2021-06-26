@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en" class="vf-no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="all" href="/css/styles.css" />
+    <title>Fractal and Eleventy: Getting static sites closer to the design system | All about Ken Hawkins</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/ken-favicon/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+    <script>
+// Detect if JS is on and swap vf-no-js for vf-js on the html element
+(function(H){H.className=H.className.replace(/\bvf-no-js\b/,'vf-js')})(document.documentElement);
+</script>
+
+    <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="abstract" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="Drupal, web development, Ken Hawkins, UX, information architecture" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="All About Ken Hawkins" />
+    <meta property="og:url" content="https://www.allaboutken.com/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html" />
+    <meta property="og:title" content="Fractal and Eleventy: Getting static sites closer to the design system > All About Ken Hawkins" />
+    <meta property="og:image" content="https://www.allaboutken.com/images/crop-cinema/blog/fractal-eleventy.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@khawkins98" />
+    <meta name="twitter:site:id" content="3723201" />
+    <meta name="twitter:creator" content="@khawkins98" />
+    <meta name="twitter:creator:id" content="3723201" />
+    <meta name="twitter:url" content="https://www.allaboutken.com/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html" />
+    <meta name="twitter:description" content="For the <a href='https://visual-framework.github.io/vf-welcome/'>Visual Framework 2.0</a> component system we recommend <a href='https://www.11ty.io'>Eleventy</a> for static sites: Eleventy sites get direct access to component templates with associated metadata and a focused component library." />
+    <meta name="twitter:image" content="https://www.allaboutken.com/images/crop-cinema/blog/fractal-eleventy.jpg" />
+    <meta name="dcterms.title" content="Fractal and Eleventy: Getting static sites closer to the design system > All About Ken Hawkins" />
+    <meta name="dcterms.type" content="Text" />
+    <meta name="dcterms.identifier" content="https://allaboutken.com/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html" />
+    <meta name="dcterms.format" content="text/html" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
+  </head>
+  <body class="vf-body vf-stack vf-stack--400">
+    <header class="vf-global-header" role="banner">
+      <a href="/" class="vf-logo"><span class="vf-logo__text">AllAboutKen.com</span></a>
+      <nav class="vf-navigation vf-navigation--global | vf-cluster | show-for-medium | do-not-print">
+        <ul class="vf-navigation__list | vf-list--inline">
+          <li class="vf-navigation__item">
+            <a href="/blog" class="vf-navigation__link">Blog</a>
+          </li>
+          <li class="vf-navigation__item | show-for-medium-only">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">E-mail</a>
+          </li>
+          <li class="vf-navigation__item | show-for-large">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">khawkins98@gmail.com</a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://twitter.com/khawkins98" class="vf-navigation__link">Twitter<span class="show-for-large"> @khawkins98</span></a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://www.linkedin.com/in/allaboutken" class="vf-navigation__link">LinkedIn</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main role="main">
+    
+<article class="vf-grid vf-grid__col-3">
+  <div class="vf-grid__col--span-1">
+    <section class="vf-u-fullbleed vf-u-background-color--yellow--dark">
+      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display | kh-post-title">Fractal and Eleventy: Getting static sites closer to the design system</h1>
+    </section>
+    <p><time datetime="Tue Nov 12 2019 00:00:00 GMT+0000 (Coordinated Universal Time)" class="vf-summary__date">12 Nov 2019</time> &nbsp;&nbsp;<span class="vf-summary__author">Filed in: gulp, Eleventy, EMBL, Fractal, Visual Framework</span></p>
+  </div>
+  <div class="vf-grid__col--span-2 vf-content">
+    <figure
+
+class="vf-figure">
+  <img class="vf-figure__image" src="/images/crop-cinema/blog/fractal-eleventy.jpg" alt="">
+  <figcaption class="vf-figure__caption">What you get out of the box when you use the Visual Framework boilerplate for Eleventy: static site development with a Fractal component library running in the same process. When you update a Fractal component, so does the Eleventy build.</figcaption>
+</figure>
+    <section class="vf-grid vf-grid__col-3">
+      <div class="vf-grid__col--span-2">
+        <p class="vf-text-body--1">For the <a href='https://visual-framework.github.io/vf-welcome/'>Visual Framework 2.0</a> component system we recommend <a href='https://www.11ty.io'>Eleventy</a> for static sites: Eleventy sites get direct access to component templates with associated metadata and a focused component library.</p>
+
+        
+<p>This combo eases site building by giving developers visibility on Fractal templates and documentation in their particular install. The integration also allows project-level <a href="https://fractal.build/">Fractal</a> components that can extend core Sass and re-use component templates, with full access to Fractal <code>{% render %}</code> tags, context data, and other component metadata.</p>
+<p>Features:</p>
+<ul>
+<li>Eleventy static sites</li>
+<li>Fractal components can be <code>npm install</code>-ed</li>
+<li>Fractal Nunjucks templates and component data</li>
+<li>Local project-level components and templates can be added, and run in the same Fractal environment</li>
+<li>Fractal web UI with local instance components, documentation</li>
+</ul>
+<p>Heard enough? <a href="https://github.com/visual-framework/vf-eleventy">Try it out at visual-framework/vf-eleventy</a>.</p>
+<p>The two tools don't work like this by default, but I'll share how we've made it happen.</p>
+<h2>How it feels</h2>
+
+
+<section class="kh-bleed-out"><figure
+
+class="vf-figure">
+  <img class="vf-figure__image" src="/images/original/blog/fractal-elventy-gulp-cycle.gif" alt="Animated-GIF that shows how the Fractal components and Eleventy content are united">
+  <figcaption class="vf-figure__caption">A 16-second animated-GIF that shows how the Fractal components and Eleventy content are united.</figcaption>
+</figure></section>
+
+<p>Here's what's happening:</p>
+<ol>
+<li>Unified templating: Add a Fractal Nunjucks template to an Eleventy page</li>
+<li>A unified Eleventy-Fractal watch process: Update a Fractal Nunjucks template and Eleventy rebuilds</li>
+<li>Assets are also integrated: Update a component's Sass and gulp asks Eleventy to rebuild</li>
+</ol>
+<h2>How it works</h2>
+<p>For component management of the <a href="https://github.com/visual-framework/vf-core">Visual Framework 2.0</a>, we’ve used the Node JS-based <a href="https://fractal.build/">Fractal</a> — it ticks a lot of boxes for what we needed, including support for <a href="https://mozilla.github.io/nunjucks/">Nunjucks templating</a>. That templating allows the Visual Framework component system to stay relatively agnostic of technology.</p>
+<p><a href="https://github.com/visual-framework/vf-eleventy">Eleventy</a> is also Node JS-based and can use Nunjucks templating.</p>
+<p>We were really excited by this in initial discussions as we can use similar build environments and templates across our component library and static-site generator.</p>
+<p>Here's a high-level diagram:</p>
+<section class="kh-bleed-out">
+<p><img src="/images/original/blog/fractal-vf-eleventy-architecture.svg" alt="Diagram of how Eleventy and Fractal talk">
+<em>When the developer runs <code>gulp dev</code> it allows Fractal and Eleventy to run as child process of gulp, sharing a Nunjucks environment.</em></p>
+</section>
+<p>There were a couple of <em>gotchas</em> that we had to work around, if you're interested in how we got there, read on, otherwise <a href="https://github.com/visual-framework/vf-eleventy">I suggest you just try out the <code>vf-eleventy</code> boilerplate</a>.</p>
+<h2>Making it happen</h2>
+<h3>All the same, but not</h3>
+<p>When attempting to achieve our flow, we quickly found issues as we weren't able to directly use our <code>npm install</code>-ed components in Eleventy for two reasons:</p>
+<ol>
+<li>Eleventy <a href="https://www.11ty.io/docs/languages/nunjucks/">wants to look</a> in a single place for our templates and we want to individually install components from <code>npm</code> a la: <code>yarn add --dev @visual-framework/vf-button</code></li>
+</ol>
+<p>We could work around this by some fancy copy-and-paste task that scans <code>node_modules</code> and copies <code>**/*.njk</code> to the directory used by Eleventy. Unpleasant, but possible.</p>
+<ol start="2">
+<li>The Nunjucks template syntax isn’t exactly the same between the Fractal and Eleventy. The <a href="https://designsystem.digital.gov/documentation/developers/">United States Web Design System</a> also uses Fractal and <a href="https://github.com/uswds/uswds#template-compatibility">notes</a>:</li>
+</ol>
+<blockquote>
+<p>Components that reference other components use a Fractal-specific <code>{% render %}</code> tag that will either need to be implemented in other environments or replaced with the appropriate <code>{% include %}</code> tags.</p>
+</blockquote>
+<p>Which means using nested container-level templates — like using a <code>logo</code> component inside a <code>page-header</code> template — is out, unless you have one set of templates for Fractal and one for &quot;generic&quot; Nunjucks environments. While replacing <code>render</code> with <code>include</code> might seem trivial at first, there are issues around path lookups and other whack-a-mole issues with other Njk tags.</p>
+<p>Maintaining two sets of templates adds significant overhead and a large risk for typos and tests, it would also prevent us from being able to <code>yarn add</code> components.</p>
+<p>But there's a way to sidestep both of these issues.</p>
+<h3>Playing nice</h3>
+<p>We can avoid both of these by resolving Eleventy's expectation to run in a separate Node process.</p>
+<p>Fractal has already prepared a list of all the components (Issue 1) and made available the custom Nunjucks templates (Issue 2), if we can get Eleventy to use (and extend) the same Node process as  Fractal's Nunjucks environment we'll get all the benefits outlined above.</p>
+<p>To do this we’ve had to make a couple tweaks to how Eleventy executes; here's a summary:</p>
+<ol>
+<li>We forked Eleventy's <code>cmd.js</code> to so we can use it as a child task (i.e. <code>elev.write().then</code>)</li>
+<li>Gulp triggers the build of Fractal and then Eleventy</li>
+<li>Utilise Eleventy’s watch and refresh commands for local development</li>
+<li>Send variables to Eleventy’s JavaScript data files from Gulp (or other Node JS tasks)</li>
+</ol>
+<p>I took <a href="https://www.allaboutken.com/posts/20191021-integrating-eleventy-with-gulp.html">a deeper look at this approach in a separate blog post</a>.</p>
+<h2>Links</h2>
+<ul>
+<li><a href="https://github.com/visual-framework/vf-eleventy">Try this out with visual-framework/vf-eleventy</a></li>
+<li><a href="https://www.allaboutken.com/posts/20191021-integrating-eleventy-with-gulp.html">How we connect Eleventy with Gulp</a></li>
+<li><a href="https://github.com/visual-framework/vf-core#the-visual-framework-core-vf-core">How we use fractal with <code>vf-core</code></a></li>
+<li><a href="https://visual-framework.github.io/vf-welcome/">About the Visual Framework 2.0</a></li>
+</ul>
+
+
+
+      </div>
+      <div class="vf-grid__col--span-1">
+      </div>
+    </section>
+  </div>
+</article>
+
+<div class="vf-stack vf-u-padding__top--800">
+
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Comment?</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      <p>Thanks for reading, if you have comment I'd love to hear it.</p>
+
+      <p>
+        <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
+        
+        &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+        
+        &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+      </p>
+    </div>
+  </article>
+  
+
+
+  
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Read more</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      
+      
+
+      
+      <p class="vf-text-body--3">Previously: <a href="/posts/20191021-integrating-eleventy-with-gulp.html" class="vf-link">Integrating Eleventy with gulp, upstream JS</a></p>
+      
+
+      
+      <p class="vf-text-body--3">Next: <a href="/posts/20191021-integrating-eleventy-with-gulp.html" class="vf-link">Building your first page with the Visual Framework 2.0</a></p>
+      
+
+      <p>
+        <a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ Blog index</a>
+      </p>
+    </div>
+  </article>
+  
+</div>
+    </main>
+    
+      <footer class="vf-footer | do-not-print" role="contentinfo">
+  <div class="vf-footer__inner">
+    <div class="vf-footer__notice">
+
+      <div class="vf-body--text | vf-content | do-not-print"><p><strong>I'm Ken Hawkins</strong>
+I bring structure and process to complex web projects. Learn more about me <a class="vf-footer__link" href="/">on the front page</a> or <a class="vf-footer__link" href="/#hello">get in touch</a>.</p>
+</div>
+
+      <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+      &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a></div>
+  </div>
+</footer>
+
+<code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
+
+    
+    
+    <script src="/scripts/scripts.js"></script>
+  </body>
+</html>

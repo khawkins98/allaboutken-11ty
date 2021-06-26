@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 353.5 202.6" style="enable-background:new 0 0 353.5 202.6;" xml:space="preserve">
+<style type="text/css">
+	.st0{clip-path:url(#SVGID_2_);}
+	.st1{fill:#FFFFFF;}
+	.st2{fill:none;stroke:#999999;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st3{fill-opacity:0;}
+	.st4{fill:none;stroke:#666666;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st5{fill:#666666;stroke:#666666;stroke-miterlimit:10;}
+	.st6{font-family:'IBMPlexSans-SemiBold';}
+	.st7{font-size:6.7246px;}
+	.st8{font-family:'IBMPlexSans';}
+	.st9{font-family:'IBMPlexMono-SemiBold';}
+</style>
+<g>
+	<defs>
+		<rect id="SVGID_1_" y="-17.3" width="353.5" height="245.2"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+	</clipPath>
+	<g class="st0">
+		<path class="st1" d="M0,0h353.5v202.4H0V0z"/>
+		<path class="st1" d="M109.6,40.8h199.7v30.4H109.6V40.8z"/>
+		<path class="st2" d="M109.6,40.8h199.7v30.4H109.6V40.8z"/>
+		<path class="st3" d="M33.7,12.6h59.7v25.3H33.7V12.6z"/>
+		<path class="st1" d="M219,95h90.2v30.4H219V95z"/>
+		<path class="st2" d="M219,95h90.2v30.4H219V95z"/>
+		<path class="st1" d="M109.6,95h90.2v30.4h-90.2V95z"/>
+		<path class="st2" d="M109.6,95h90.2v30.4h-90.2V95z"/>
+		<path class="st3" d="M93.5,25.3h115.9v11.4"/>
+		<path class="st4" d="M93.5,25.3h115.9v9.6"/>
+		<path class="st5" d="M207.7,34.8l1.7,4.5l1.7-4.5H207.7z"/>
+		<path class="st3" d="M154.6,72.2v11.4l0,0V95"/>
+		<path class="st4" d="M154.6,72.2V89"/>
+		<path class="st5" d="M153,89l1.7,4.5l1.7-4.5H153z"/>
+		<path class="st1" d="M226.4,181.4H109.6V151h116.8"/>
+		<path class="st2" d="M226.4,181.4H109.6V151h116.8"/>
+		<path class="st1" d="M221.6,151h90.2v30.4h-90.2V151z"/>
+		<path class="st2" d="M221.6,151h90.2v30.4h-90.2V151z"/>
+		<path class="st3" d="M154.6,125.4v11.9h0.1v11.9"/>
+		<path class="st4" d="M154.7,125.4v17.8"/>
+		<path class="st5" d="M153,143.2l1.7,4.5l1.7-4.5H153z"/>
+		<path class="st3" d="M264.1,126.3v11.9h0.1v11.9"/>
+		<path class="st4" d="M264.1,126.3v17.8"/>
+		<path class="st5" d="M262.5,144.1l1.7,4.5l1.7-4.5H262.5z"/>
+		<path class="st4" d="M187.6,94.4l0-16.2"/>
+		<path class="st5" d="M189.2,78.2l-1.7-4.5l-1.7,4.5H189.2z"/>
+		<path class="st3" d="M234.6,72.2v11.4h0.1V95"/>
+		<path class="st4" d="M234.6,72.2l0.1,16.8"/>
+		<path class="st5" d="M233,89l1.7,4.5l1.7-4.5H233z"/>
+		<path class="st3" d="M267.5,94.3V83.2h0.1V72.2"/>
+		<path class="st4" d="M267.5,94.3l0.1-16.2"/>
+		<path class="st5" d="M269.2,78.2l-1.7-4.5l-1.7,4.5H269.2z"/>
+	</g>
+</g>
+<text transform="matrix(1 0 0 1 115.1367 54.1745)"><tspan x="0" y="0" class="st6 st7">Node environment (Gulp)</tspan><tspan x="0" y="8.1" class="st8 st7">Parent task running</tspan></text>
+<text transform="matrix(1 0 0 1 115.1367 107.3532)"><tspan x="0" y="0" class="st6 st7">Fractal</tspan><tspan x="0" y="8.1" class="st8 st7">Component management</tspan></text>
+<text transform="matrix(1 0 0 1 225.3108 107.5163)"><tspan x="0" y="0" class="st6 st7">Eleventy</tspan><tspan x="0" y="8.1" class="st8 st7">Static site generation</tspan></text>
+<text transform="matrix(1 0 0 1 227.3235 163.5075)"><tspan x="0" y="0" class="st6 st7">Nunjucks</tspan><tspan x="0" y="8.1" class="st8 st7">Page templates</tspan></text>
+<text transform="matrix(1 0 0 1 115.6657 163.1169)"><tspan x="0" y="0" class="st6 st7">Nunjucks</tspan><tspan x="0" y="8.1" class="st8 st7">Component templates</tspan></text>
+<text transform="matrix(1 0 0 1 42.3387 27.7008)" class="st9 st7">$ gulp dev</text>
+</svg>

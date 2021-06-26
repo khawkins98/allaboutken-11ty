@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en" class="vf-no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="all" href="/css/styles.css" />
+    <title>Muliple IPs on an Ubuntu EC2 VPC? Yes, please! | All about Ken Hawkins</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/ken-favicon/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+    <script>
+// Detect if JS is on and swap vf-no-js for vf-js on the html element
+(function(H){H.className=H.className.replace(/\bvf-no-js\b/,'vf-js')})(document.documentElement);
+</script>
+
+    <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="abstract" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="Drupal, web development, Ken Hawkins, UX, information architecture" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="All About Ken Hawkins" />
+    <meta property="og:url" content="https://www.allaboutken.com/posts/20130612-ubuntu-ips-ec2-multiple.html" />
+    <meta property="og:title" content="Muliple IPs on an Ubuntu EC2 VPC? Yes, please! > All About Ken Hawkins" />
+    <meta property="og:image" content="https://www.allaboutken.com/images/crop-cinema/blog/ethernet.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@khawkins98" />
+    <meta name="twitter:site:id" content="3723201" />
+    <meta name="twitter:creator" content="@khawkins98" />
+    <meta name="twitter:creator:id" content="3723201" />
+    <meta name="twitter:url" content="https://www.allaboutken.com/posts/20130612-ubuntu-ips-ec2-multiple.html" />
+    <meta name="twitter:description" content="How to configure a second ethernet adapter on an Ubuntu EC2 VPC instance." />
+    <meta name="twitter:image" content="https://www.allaboutken.com/images/crop-cinema/blog/ethernet.jpg" />
+    <meta name="dcterms.title" content="Muliple IPs on an Ubuntu EC2 VPC? Yes, please! > All About Ken Hawkins" />
+    <meta name="dcterms.type" content="Text" />
+    <meta name="dcterms.identifier" content="https://allaboutken.com/posts/20130612-ubuntu-ips-ec2-multiple.html" />
+    <meta name="dcterms.format" content="text/html" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
+  </head>
+  <body class="vf-body vf-stack vf-stack--400">
+    <header class="vf-global-header" role="banner">
+      <a href="/" class="vf-logo"><span class="vf-logo__text">AllAboutKen.com</span></a>
+      <nav class="vf-navigation vf-navigation--global | vf-cluster | show-for-medium | do-not-print">
+        <ul class="vf-navigation__list | vf-list--inline">
+          <li class="vf-navigation__item">
+            <a href="/blog" class="vf-navigation__link">Blog</a>
+          </li>
+          <li class="vf-navigation__item | show-for-medium-only">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">E-mail</a>
+          </li>
+          <li class="vf-navigation__item | show-for-large">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">khawkins98@gmail.com</a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://twitter.com/khawkins98" class="vf-navigation__link">Twitter<span class="show-for-large"> @khawkins98</span></a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://www.linkedin.com/in/allaboutken" class="vf-navigation__link">LinkedIn</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main role="main">
+    
+<article class="vf-grid vf-grid__col-3">
+  <div class="vf-grid__col--span-1">
+    <section class="vf-u-fullbleed vf-u-background-color--yellow--dark">
+      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display | kh-post-title">Muliple IPs on an Ubuntu EC2 VPC? Yes, please!</h1>
+    </section>
+    <p><time datetime="Wed Jun 12 2013 00:00:00 GMT+0000 (Coordinated Universal Time)" class="vf-summary__date">12 Jun 2013</time> </p>
+  </div>
+  <div class="vf-grid__col--span-2 vf-content">
+    <figure
+
+class="vf-figure">
+  <img class="vf-figure__image" src="/images/crop-cinema/blog/ethernet.jpg" alt="">
+  <figcaption class="vf-figure__caption">Image credit: <a href="https://www.flickr.com/photos/tueksta/839920747#">Flickr user "Andreas Beer"</a></figcaption>
+</figure>
+    <section class="vf-grid vf-grid__col-3">
+      <div class="vf-grid__col--span-2">
+        <p class="vf-text-body--1">How to configure a second ethernet adapter on an Ubuntu EC2 VPC instance.</p>
+
+        
+<p>If you're wanting to have multiple valid SSL certificates for many domains (say, for Drupal a multisite running on Aegir) on a single EC2 instance you'll, of course, need multiple IP addresses. While Amazon's VPC offerings seem like an easy win there are a few twists to get the server to respond to that second internal IP.</p>
+<p>Here are my notes, hopefully they'll be of some use to you. You might not need to do all of these, but I've found things to work better this way. These steps were used on Ubuntu 12.04 in June 2012 — things can change.</p>
+<blockquote>
+<p><strong>Get set up:</strong></p>
+</blockquote>
+<ul>
+<li>Have one unique internal IP address (10.0.0.70, 10.0.0.80, etc) per network adapter</li>
+<li>Map the Elastic IP addresses to your internal IP</li>
+<li>I'm running Aegir and needed to map the Apache server not to the public IP used for the domain name, but the private internal IP address</li>
+</ul>
+<p>Once you've done the the above, you'll likely find the server working fine on the first IP address but not responding on the second.</p>
+<p>Here's what to do next:</p>
+<ol>
+<li>In the Amazon VPC Route Table console ensure you have a route entry for 0.0.0.0/0 using your IGW (this will look like igw-xxxxxx)</li>
+<li>SSH into your server</li>
+<li>If not root: <code>sudo su - root</code></li>
+<li>Initialize your secondary ethernet interface (don't do this for <code>eth0</code>)</li>
+</ol>
+<ul>
+<li><code>ifconfig eth1 10.0.0.YOURIPHERE netmask 255.255.255.0</code></li>
+</ul>
+<ol>
+<li>Set up your interfaces</li>
+</ol>
+<ul>
+<li><code>vi /etc/network/interfaces</code></li>
+<li>For each adapter add (changing &quot;1&quot; for your adapter)</li>
+<li><code>auto eth1</code></li>
+<li><code>iface eth1 inet dhcp</code></li>
+<li>Start each adapter <code>ifup eth1</code></li>
+<li>We should be able to <code>ifconfig</code> and see the ethernet adapters up</li>
+<li>Reboot</li>
+<li><code>init 6</code></li>
+<li>SSH into your server, become root</li>
+<li>For each ethernet adapter follow this pattern:</li>
+<li><code>ip route add default via 10.0.0.1 dev eth0 tab 1</code></li>
+<li><code>ip route add default via 10.0.0.1 dev eth1 tab 2</code></li>
+<li>Similarly:
+<ul>
+<li><code>ip rule add from 10.0.0.170/32 tab 1 priority 500</code></li>
+<li><code>ip rule add from 10.0.0.190/32 tab 2 priority 600</code></li>
+</ul>
+</li>
+</ul>
+<h3>Almost done</h3>
+<p>Good news is it works at this point, bad news is the ip routes and rules won't survive a reboot.</p>
+<p>Let's make changes survive a reboot:</p>
+<ul>
+<li>Return to <code>vi /etc/network/interfaces</code>; our file should look like:</li>
+</ul>
+<pre><code># The loopback network interface
+auto lo
+iface lo inet loopback
+# The primary network interface
+auto eth0
+iface eth0 inet dhcp
+auto eth1
+iface eth1 inet dhcp
+</code></pre>
+<ul>
+<li>We modify the above, adding in the ip route and ip rule commands from before, but prefixing them with &quot;post-up&quot;, like so:</li>
+</ul>
+<pre><code># The loopback network interface
+auto lo
+iface lo inet loopback
+# The primary network interface
+auto eth0
+iface eth0 inet dhcp
+post-up ip route add default via 10.0.0.1 dev eth0 tab 1
+post-up ip rule add from 10.0.0.170/32 tab 1 priority 500
+auto eth1
+iface eth1 inet dhcp
+post-up ip route add default via 10.0.0.1 dev eth1 tab 2
+post-up ip rule add from 10.0.0.190/32 tab 2 priority 600
+</code></pre>
+<p>Now reboot <code>/etc/init.d/networking restart</code></p>
+<p>All set!</p>
+<h4>Related reading and things that helped me:</h4>
+<ul>
+<li>AWS Forums: <a href="https://forums.aws.amazon.com/message.jspa?messageID=404454">Unable to connect to EC2 instance in VPC</a></li>
+<li>Getting ip rules and routes to work on reboot: <a href="https://www.cyberciti.biz/faq/ubuntu-linux-add-static-routing/">Ubuntu Linux Add Static Route</a></li>
+<li>Video on EC2 VPC multiple IP basics: <a href="https://www.youtube.com/watch?v=Z_MWQ75GtvE">How to add extra IP addresses on one EC2 Instance</a></li>
+</ul>
+
+
+      </div>
+      <div class="vf-grid__col--span-1">
+      </div>
+    </section>
+  </div>
+</article>
+
+<div class="vf-stack vf-u-padding__top--800">
+
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Comment?</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      <p>Thanks for reading, if you have comment I'd love to hear it.</p>
+
+      <p>
+        <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
+        
+        &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+        
+        &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+      </p>
+    </div>
+  </article>
+  
+
+
+  
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Read more</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      
+      
+
+      
+      <p class="vf-text-body--3">Previously: <a href="/posts/20130321-postfix-spam.html" class="vf-link">Cutting down on Postfix spam relaying</a></p>
+      
+
+      
+      <p class="vf-text-body--3">Next: <a href="/posts/20130321-postfix-spam.html" class="vf-link">A model for better content, better readers, better journalism</a></p>
+      
+
+      <p>
+        <a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ Blog index</a>
+      </p>
+    </div>
+  </article>
+  
+</div>
+    </main>
+    
+      <footer class="vf-footer | do-not-print" role="contentinfo">
+  <div class="vf-footer__inner">
+    <div class="vf-footer__notice">
+
+      <div class="vf-body--text | vf-content | do-not-print"><p><strong>I'm Ken Hawkins</strong>
+I bring structure and process to complex web projects. Learn more about me <a class="vf-footer__link" href="/">on the front page</a> or <a class="vf-footer__link" href="/#hello">get in touch</a>.</p>
+</div>
+
+      <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+      &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a></div>
+  </div>
+</footer>
+
+<code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
+
+    
+    
+    <script src="/scripts/scripts.js"></script>
+  </body>
+</html>

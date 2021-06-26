@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en" class="vf-no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="all" href="/css/styles.css" />
+    <title>Migrating to Zurb Panini 2.0 | All about Ken Hawkins</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/ken-favicon/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+    <script>
+// Detect if JS is on and swap vf-no-js for vf-js on the html element
+(function(H){H.className=H.className.replace(/\bvf-no-js\b/,'vf-js')})(document.documentElement);
+</script>
+
+    <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="abstract" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="Drupal, web development, Ken Hawkins, UX, information architecture" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="All About Ken Hawkins" />
+    <meta property="og:url" content="https://www.allaboutken.com/posts/20180210-zurb-panini-2-migration.html" />
+    <meta property="og:title" content="Migrating to Zurb Panini 2.0 > All About Ken Hawkins" />
+    <meta property="og:image" content="https://www.allaboutken.com/images/crop-cinema/blog/panini.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@khawkins98" />
+    <meta name="twitter:site:id" content="3723201" />
+    <meta name="twitter:creator" content="@khawkins98" />
+    <meta name="twitter:creator:id" content="3723201" />
+    <meta name="twitter:url" content="https://www.allaboutken.com/posts/20180210-zurb-panini-2-migration.html" />
+    <meta name="twitter:description" content="Not yet stable yet, but has some compelling features." />
+    <meta name="twitter:image" content="https://www.allaboutken.com/images/crop-cinema/blog/panini.jpg" />
+    <meta name="dcterms.title" content="Migrating to Zurb Panini 2.0 > All About Ken Hawkins" />
+    <meta name="dcterms.type" content="Text" />
+    <meta name="dcterms.identifier" content="https://allaboutken.com/posts/20180210-zurb-panini-2-migration.html" />
+    <meta name="dcterms.format" content="text/html" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
+  </head>
+  <body class="vf-body vf-stack vf-stack--400">
+    <header class="vf-global-header" role="banner">
+      <a href="/" class="vf-logo"><span class="vf-logo__text">AllAboutKen.com</span></a>
+      <nav class="vf-navigation vf-navigation--global | vf-cluster | show-for-medium | do-not-print">
+        <ul class="vf-navigation__list | vf-list--inline">
+          <li class="vf-navigation__item">
+            <a href="/blog" class="vf-navigation__link">Blog</a>
+          </li>
+          <li class="vf-navigation__item | show-for-medium-only">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">E-mail</a>
+          </li>
+          <li class="vf-navigation__item | show-for-large">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">khawkins98@gmail.com</a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://twitter.com/khawkins98" class="vf-navigation__link">Twitter<span class="show-for-large"> @khawkins98</span></a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://www.linkedin.com/in/allaboutken" class="vf-navigation__link">LinkedIn</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main role="main">
+    
+<article class="vf-grid vf-grid__col-3">
+  <div class="vf-grid__col--span-1">
+    <section class="vf-u-fullbleed vf-u-background-color--yellow--dark">
+      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display | kh-post-title">Migrating to Zurb Panini 2.0</h1>
+    </section>
+    <p><time datetime="Sat Feb 10 2018 00:00:00 GMT+0000 (Coordinated Universal Time)" class="vf-summary__date">10 Feb 2018</time> &nbsp;&nbsp;<span class="vf-summary__author">Filed in: Panini,static sites</span></p>
+  </div>
+  <div class="vf-grid__col--span-2 vf-content">
+    <figure
+
+class="vf-figure">
+  <img class="vf-figure__image" src="/images/crop-cinema/blog/panini.jpg" alt="">
+  <figcaption class="vf-figure__caption">2.0 Paninis. Or is it just 2.0 Panini? Paninodes? Thanks to Flickr user Stephanie Vacher for the image [<a href="https://www.flickr.com/photos/trufflepig/4647966991/">CC License</a>]</figcaption>
+</figure>
+    <section class="vf-grid vf-grid__col-3">
+      <div class="vf-grid__col--span-2">
+        <p class="vf-text-body--1">Not yet stable yet, but has some compelling features.</p>
+
+        
+<h2>Why upgrade to 2.0?</h2>
+<p>I've been using <a href="https://foundation.zurb.com/sites/docs/panini.html">Zurb's Panini</a> static site generating template to power this site. On the whole I've generally found it quite good, but there's been a couple rough edges that continued to paper cut when creating content (even though I realise Panini wasn't made with blogging in mind).</p>
+<p>One thorny limitation is there's no seamless way to generate a blog index or RSS feed. So in versions 1.X, I had to create and manually maintain a YML file with each blog entry.</p>
+<p>Not the end of the world, but it's a copy paste job that would occasionally lead to mistakes and was tedious; an excerpt of my old manually rolled <a href="https://github.com/khawkins98/allaboutken/commit/4c49c644018c2639248a97f7e0d27bacbc8f2852#diff-1dfd1f9032506bbbc9e863db26d9e115L1"><code>data/blog.yml</code></a> file:</p>
+<pre><code>- title: &quot;Actioning web strategy &amp; IA: The Content-Action Method for Web Systems&quot;
+layout: layouts/post.njk
+teaser: &quot;A method to distill content and user, organisational goals into an interconnected, holistic practice.&quot;
+image: &quot;/blog/drill-bits.jpg&quot;
+date: 2018-01-22
+url: /posts/20180122-content-action-model.html
+</code></pre>
+<p><br/>And beyond being tedious to create and maintain (copy-pasting each page's meta data), the method only gave me access to <a href="https://github.com/khawkins98/allaboutken/commit/e0b010fcc664f61d32cce6f705ffa7d2fc760fec#diff-6a302f810e1ad4a49d70ada8954bfae1L12">what's in the YML file</a> — so that meant my RSS feed couldn't have the full blog posts:</p>
+<pre><code>
+\{{#each blog}}
+&lt;item&gt;
+&lt;title&gt;\{{this.title}}&lt;/title&gt;
+&lt;description&gt;\{{this.teaser}}&lt;/description&gt;
+&lt;link&gt;\{{root}}\{{this.url}}&lt;/link&gt;
+&lt;pubDate&gt;\{{this.date}}&lt;/pubDate&gt;
+&lt;/item&gt;
+\{{/each blog}}
+
+</code></pre>
+<p><br/>But, lo! In version 2.0, a new <a href="https://github.com/zurb/panini/wiki/Panini-2.0-Preview#pages"><code>\</code></a> variable.</p>
+<pre><code>
+\{{#each-reverse pages}}
+\{{#ifequal this.[2].active_path &quot;blog&quot;}}
+&lt;item&gt;
+&lt;title&gt;\{{this.[2].title}}&lt;/title&gt;
+&lt;description&gt;
+&lt;![CDATA[
+{{#markdown}}
+{{#compileBlogPostForRSS this}}\{{{ ../this }}}\{{/compileBlogPostForRSS}}
+{{/markdown}}
+]]&gt;
+&lt;/description&gt;
+&lt;link&gt;\{{root}}\{{this.[2].url}}&lt;/link&gt;
+&lt;guid&gt;\{{root}}\{{this.[2].url}}&lt;/guid&gt;
+&lt;pubDate&gt;\{{this.[2].date}}&lt;/pubDate&gt;
+&lt;/item&gt;
+\{{/ifequal}}
+\{{/each-reverse}}
+
+</code></pre>
+<p><br/>The magic happens in my custom <a href="https://github.com/khawkins98/allaboutken/blob/master/src/helpers/compileBlogPostForRSS.js"><code>{{#compileBlogPostForRSS}}</code> helper</a>, where I pass in the full body of each post and render it as a Handlebars template. Here's <a href="https://github.com/khawkins98/allaboutken/tree/master/src/helpers">a link to that helper</a>.</p>
+<p>The approach is slightly messy as I must reach into the second <code>[2]</code> spot of each page array, but it does the job. (n.b. This is meant to get better by <a href="https://github.com/zurb/panini/issues/155">changing from an arraay to named object</a>.)</p>
+<p>I now use the same approach <a href="https://github.com/khawkins98/allaboutken/commit/4c49c644018c2639248a97f7e0d27bacbc8f2852#diff-3b336176286e237cdce7379d8db9442bL8">to build this site's Blog index</a>.</p>
+<h2>Upgrading from 1.x to 2.0</h2>
+<p class="vf-text-body--1">It's not so bad.</p>
+<p>Remember <a href="https://github.com/zurb/panini/tree/v2.0#panini">Panini 2.0</a> isn't finalised yet, but as Zurb <a href="https://github.com/zurb/panini/tree/v2.0#panini">points out</a>:</p>
+<blockquote>
+<p>It's pretty stable, and if you want to give it a try, we'd love some feedback or bug reports on anything you run into.</p>
+</blockquote>
+<p>Panini 1.X defaulted to use Gulp, and it was what worked best for me. So this guide is from gulp to gulp.</p>
+<ol>
+<li>Change your <code>packages.json</code> to use 2.0: <code>&quot;panini&quot;: &quot;^2.0.0-alpha.2&quot;</code> (Previously I was using Panini 1.5.1)</li>
+<li>In your <code>gulpfile.js</code> drop <code>var panini = require('panini');</code> and add <code>const panini = require('panini/gulp');</code></li>
+<li>Panini now has default expectations about the naming of layouts, partials, etc. So my Gulp Panini task is now just (<a href="https://github.com/khawkins98/allaboutken/commit/ebed803a7b33dedc217f5989614884b318c07596#diff-b9e12334e9eafd8341a6107dd98510c9L13">diff</a>):</li>
+</ol>
+<pre><code>gulp.task('panini', () =&gt; {
+  return panini('src', {
+    // builtins: false,
+    })
+    .pipe(gulp.dest('build'));
+});
+</code></pre>
+<ol>
+<li>If you're using browserlab, <code>panini.refresh();</code> is a bit <a href="https://github.com/zurb/panini/issues/143#issuecomment-336227418">harder to use</a> and is <a href="https://github.com/zurb/panini/issues/151#issuecomment-361343532">going away</a>. Instead my <code>gulp.watch</code> task now invokes <code>panini.create();</code>. That may not be the most efficient way, but it works.</li>
+<li><code>#ifequal</code> is no longer a built in helper, <a href="https://github.com/zurb/panini/wiki/Panini-2.0-Preview#breaking-changes">instead it's <code>eq</code></a>. But I didn't want to find-replace, so I just <a href="https://github.com/khawkins98/allaboutken/commit/ebed803a7b33dedc217f5989614884b318c07596#diff-49044946986f4680452733de81822145">added the ifequal helper back</a>.</li>
+</ol>
+<ul>
+<li>Apparently <code>#ifPage</code> is also out, but it still seems to be working.</li>
+<li><a href="https://github.com/zurb/panini/wiki/Panini-2.0-Preview#breaking-changes">Here's a short list of documented breaking changes</a>.</li>
+</ul>
+<h3>Misc changes</h3>
+<p>I had to do a few other things that were unique to my setup.</p>
+<ol>
+<li>I was generating my critical path CSS as a partial called <code>critical.min.css.html</code> (<span class="emoji">🚨</span>hack alert). It doesn't seem naming with dots are allowed in partials anymore, so I've called the file <code>criticalmincss.html</code></li>
+</ol>
+<ul>
+<li>I also had a page called <code>rss.xml</code> that was ignored by Panini. So I named it <code>rss.html</code> and move the output to <code>rss.xml</code>. THis is meant be changing with <a href="https://github.com/zurb/panini/issues/156">the addition of a <code>/static</code> build source</a>.</li>
+</ul>
+<ol>
+<li>Previously I didn't have my <code>layouts,partials,data,pages</code> under a directory. I moved them to <code>./src</code>.</li>
+</ol>
+<p>Here's <a href="https://github.com/khawkins98/allaboutken/commit/ebed803a7b33dedc217f5989614884b318c07596">the commit from my upgrade to 2.0</a>.</p>
+<h2>Other neat things</h2>
+<p>I've not yet used these yet, but they look like they'll really extend how long I can use Panini:</p>
+<ul>
+<li><a href="https://github.com/zurb/panini/tree/v2.0#localization">Localisation and translation</a></li>
+<li><a href="https://github.com/zurb/panini/tree/v2.0#content-blocks">Inject content into blocks</a> A bit like inverse partials, you can inject from a local page back into the parent template.</li>
+<li>The <a href="https://github.com/helpers/handlebars-helpers">Handlebars Helpers</a> project <a href="https://github.com/zurb/panini/issues/154">is now included</a>, and it brings many helpful ways of sorting and conditionallys showing data, and <a href="https://momentjs.com/">Moment.js</a> style date handling: <code>{{moment this.date format=&quot;YYYY MMM DD&quot;}}</code>.</li>
+</ul>
+<p>Panini still feels like a bit of unusual static templating engine. It's less feature complete than some, yet it also feels more light and tool-like than others. But I've enjoyed using it and it's been helpful, so thanks <a href="https://github.com/zurb/panini/graphs/contributors">Zurb and contributors</a>!</p>
+<p><a href="https://github.com/zurb/panini/tree/v2.0#panini" class="readmore">Check out Panini 2.0 here</a></p>
+<p>N.b. I don't think there's an existing Panini sample/quick-start blog project, if there's interest I could convert this site into a &quot;Panini blog boilerplate&quot;.</p>
+
+
+      </div>
+      <div class="vf-grid__col--span-1">
+      </div>
+    </section>
+  </div>
+</article>
+
+<div class="vf-stack vf-u-padding__top--800">
+
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Comment?</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      <p>Thanks for reading, if you have comment I'd love to hear it.</p>
+
+      <p>
+        <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
+        
+        &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+        
+        &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+      </p>
+    </div>
+  </article>
+  
+
+
+  
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Read more</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      
+      
+
+      
+      <p class="vf-text-body--3">Previously: <a href="/posts/20180207-discovery-and-analysis.html" class="vf-link">UX, discovery, analysis + the CAM</a></p>
+      
+
+      
+      <p class="vf-text-body--3">Next: <a href="/posts/20180207-discovery-and-analysis.html" class="vf-link">What if: A web font for data</a></p>
+      
+
+      <p>
+        <a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ Blog index</a>
+      </p>
+    </div>
+  </article>
+  
+</div>
+    </main>
+    
+      <footer class="vf-footer | do-not-print" role="contentinfo">
+  <div class="vf-footer__inner">
+    <div class="vf-footer__notice">
+
+      <div class="vf-body--text | vf-content | do-not-print"><p><strong>I'm Ken Hawkins</strong>
+I bring structure and process to complex web projects. Learn more about me <a class="vf-footer__link" href="/">on the front page</a> or <a class="vf-footer__link" href="/#hello">get in touch</a>.</p>
+</div>
+
+      <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+      &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a></div>
+  </div>
+</footer>
+
+<code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
+
+    
+    
+    <script src="/scripts/scripts.js"></script>
+  </body>
+</html>
