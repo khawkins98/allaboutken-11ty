@@ -75,7 +75,7 @@
     "gulp-images-resizer": "0.0.8",
     "html-minifier": "4.0.0",
     "list-stream": "2.1.0",
-    "node-html-parser": "5.0.0",
+    "node-html-parser": "6.1.1",
     "require-dir": "1.2.0",
     "strip-js": "1.2.0",
     "striptags": "3.2.0"
