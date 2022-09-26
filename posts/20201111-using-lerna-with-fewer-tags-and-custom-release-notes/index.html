@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en" class="vf-no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="all" href="/css/styles.css" />
+    <title>Lerna monorepos with fewer tags | All about Ken Hawkins</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/ken-favicon/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+    <script>
+// Detect if JS is on and swap vf-no-js for vf-js on the html element
+(function(H){H.className=H.className.replace(/\bvf-no-js\b/,'vf-js')})(document.documentElement);
+</script>
+
+    <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="abstract" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="Drupal, web development, Ken Hawkins, UX, information architecture" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="All About Ken Hawkins" />
+    <meta property="og:url" content="https://www.allaboutken.com/posts/20201111-using-lerna-with-fewer-tags-and-custom-release-notes/" />
+    <meta property="og:title" content="Lerna monorepos with fewer tags > All About Ken Hawkins" />
+    <meta property="og:image" content="https://www.allaboutken.com/images/crop-cinema/blog/shreaded-paper.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@khawkins98" />
+    <meta name="twitter:site:id" content="3723201" />
+    <meta name="twitter:creator" content="@khawkins98" />
+    <meta name="twitter:creator:id" content="3723201" />
+    <meta name="twitter:url" content="https://www.allaboutken.com/posts/20201111-using-lerna-with-fewer-tags-and-custom-release-notes/" />
+    <meta name="twitter:description" content="Getting the perks of monorepo publishing while curating our git tags and release notes." />
+    <meta name="twitter:image" content="https://www.allaboutken.com/images/crop-cinema/blog/shreaded-paper.jpg" />
+    <meta name="dcterms.title" content="Lerna monorepos with fewer tags > All About Ken Hawkins" />
+    <meta name="dcterms.type" content="Text" />
+    <meta name="dcterms.identifier" content="https://allaboutken.com/posts/20201111-using-lerna-with-fewer-tags-and-custom-release-notes/" />
+    <meta name="dcterms.format" content="text/html" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
+  </head>
+  <body class="vf-body vf-stack vf-stack--400">
+    <header class="vf-global-header" role="banner">
+      <a href="/" class="vf-logo"><span class="vf-logo__text">AllAboutKen.com</span></a>
+      <nav class="vf-navigation vf-navigation--global | vf-cluster | show-for-medium | do-not-print">
+        <ul class="vf-navigation__list | vf-list--inline">
+          <li class="vf-navigation__item">
+            <a href="/blog" class="vf-navigation__link">Blog</a>
+          </li>
+          <li class="vf-navigation__item | show-for-medium-only">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">E-mail</a>
+          </li>
+          <li class="vf-navigation__item | show-for-large">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">khawkins98@gmail.com</a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://twitter.com/khawkins98" class="vf-navigation__link">Twitter<span class="show-for-large"> @khawkins98</span></a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://www.linkedin.com/in/allaboutken" class="vf-navigation__link">LinkedIn</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main role="main">
+    
+<article class="vf-grid vf-grid__col-3">
+  <div class="vf-grid__col--span-1">
+    <section class="vf-u-fullbleed vf-u-background-color--yellow--dark">
+      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display | kh-post-title">Lerna monorepos with fewer tags</h1>
+    </section>
+    <p><time datetime="Wed Nov 11 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" class="vf-summary__date">11 Nov 2020</time> &nbsp;&nbsp;<span class="vf-summary__author">Filed in: static sites, blogging</span></p>
+  </div>
+  <div class="vf-grid__col--span-2 vf-content">
+    <figure
+
+class="vf-figure">
+  <img class="vf-figure__image" src="/images/crop-cinema/blog/shreaded-paper.jpg" alt="">
+  <figcaption class="vf-figure__caption">It can be hard to get a concise view of what has changed in a monorepo release. Image by <a href="https://www.flickr.com/photos/guyfromva/2440475312/in/photolist-4HE5hy-7acoqE-33eWkq-5k2vNM-GQXqCM-aufLVj-3ceJK-VWFX6i-9dDyi3-3ZWDpo-W4Ji41-8ah3ew-5VZBzj-86AAki-SYij8G-9JhPVR-4XTtJy-PEZT4m-4XPbwx-2iUjWZz-62wjgx-DDhS4-9QWCbn-ap6dmG-apshZy-9jFi89-7tUw7Y-4thUJL-4thUb5-r8YFQh-2ecwu9T-4LyZB6-7adFYV-afgCC-F7icnS-9717Pj-eaQywa-audc2t-62AzwY-akYANr-62Azn3-2hawovo-62AyQh-r98YVS-62wjzx-bthTD1-2byiNPL-QFUUX8-8f2A5K-2jtA8L4">Mike Haw</a>.</figcaption>
+</figure>
+    <section class="vf-grid vf-grid__col-3">
+      <div class="vf-grid__col--span-2">
+        <p class="vf-text-body--1">Getting the perks of monorepo publishing while curating our git tags and release notes.</p>
+
+        
+<p>For the <a href="https://stable.visual-framework.dev/">Visual Framework</a>, a front-end component library, we're developing its <a href="https://www.npmjs.com/search?q=%40visual-framework">112 npm packages</a> as a monorepo using the tool <a href="https://lerna.js.org/">Lerna</a>.</p>
+<p>Lerna works out of the box quite well, allowing us to manage all of our components in a single project and easily publishing them to npm. However, the default did two things we didn't like:</p>
+<ul>
+<li>Each release created a new tag per updated component and we were on our way to <a href="https://www.google.com/search?q=lerna+too+many+tags">1,000s of tags</a> in our project.</li>
+<li>Release notes were not easy to curate and using <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> didn't suit our workflow.</li>
+</ul>
+<h2>What we want</h2>
+<ul>
+<li>make one tag for each overall <code>lerna publish</code> <a href="https://github.com/visual-framework/vf-core/releases">release</a></li>
+<li>use git to harvest the changes in each <code>CHANGELOG.md</code> to generate release notes as an <a href="https://stable.visual-framework.dev/updates/">&quot;update&quot; on the website</a></li>
+</ul>
+<h2>How we get it</h2>
+<h3>Generate the release notes</h3>
+<p>We run the aliased command <code>yarn run releasenotes</code> that invokes a git dump:</p>
+<section class="kh-bleed-out">
+<pre class="vf-code-example__pre"><code class="Code Code--lang-bash vf-code-example">git show -U0 --raw $(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1  --max-count=1))..$(git describe --abbrev=0 --tags $(git rev-list --tags  --max-count=1)) --pretty=format:<span class="hljs-string">&#x27;commit: %H %n abbreviated_commit: %h %n subject: %s %n   sanitized_subject_line:  %f %n  date :  %aD %n  commiter : %cN %n&#x27;</span> --output=tools/vf-component-library/src/site/updates/$(<span class="hljs-built_in">date</span> +%F)-component-updates.md -- **/CHANGELOG.md 
+</code></pre>
+</section>
+<p><br/>I'll walk through that chunk of code:</p>
+<ol>
+<li>Show the raw git history: <br/>
+<code>git show -U0 --raw</code></li>
+<li>Since the most recent tag: <br/>
+<code>$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1  --max-count=1))..$(git describe --abbrev=0 --tags $(git rev-list --tags  --max-count=1))</code></li>
+<li>In this format: <br/>
+<code>--pretty=format:'commit: %H %n abbreviated_commit: %h %n subject: %s %n   sanitized_subject_line:  %f %n  date :  %aD %n  commiter : %cN %n'</code></li>
+<li>Add a new post file to the <code>updates</code> directory:<br/>
+<code>--output=tools/vf-component-library/src/site/updates/$(date +%F)-component-updates.md </code></li>
+<li>Add the diff from any <code>CHANGELOG.md</code> changes:<br/>
+<code>-- **/CHANGELOG.md</code></li>
+</ol>
+<p>That still leaves us to add on the frontmatter and massage the content, but with the help of a macro it's a pretty quick task:</p>
+
+<section class="kh-bleed-out">
+<pre class="vf-code-example__pre"><code class="Code Code--lang-markdown vf-code-example">
+{% macro notes(component=&#x27;vf-xxx&#x27;, componentVersion=&#x27;9.9.9&#x27;, commitId=&#x27;0123456789&#x27;) %}
+
+<span class="hljs-section">### [<span class="hljs-string">{{component}}</span>](<span class="hljs-link">https://visual-framework.github.io/vf-core/components/{{component}}/</span>) </span>
+
+<span class="hljs-bullet">-</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;vf-badge&quot;</span>&gt;</span></span>{{ componentVersion }}<span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></span> 
+<span class="hljs-bullet">-</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://www.npmjs.com/package/@visual-framework/{{component}}/v/{{componentVersion}}&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;vf-badge&quot;</span>&gt;</span></span>npm<span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></span> 
+<span class="hljs-bullet">-</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://github.com/visual-framework/vf-core/commit/{{commitId}}&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;vf-badge&quot;</span>&gt;</span></span>git diff<span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></span>
+
+{% endmacro %}
+
+</code></pre>
+</section>
+<p><br/>Here's <a href="https://stable.visual-framework.dev/updates/2020-11-06-component-updates/">an example release notes update</a> and <a href="https://github.com/visual-framework/vf-core/blob/develop/tools/vf-component-library/src/site/updates/2020-11-06-component-updates.md">its 11ty source code</a>.</p>
+<h3>Make a reference git tag for Lerna</h3>
+<ol>
+<li>Run Lerna publish and skip git tags: <code>lerna publish --no-git-tag-version --no-push</code></li>
+<li>Lerna publishes to npm and does cross-dependency updates to each component's <code>package.json</code>.</li>
+<li>Commit the <code>package.json</code> updates to our main git branch</li>
+<li>Create a manual tag <code>git tag -a v2.3.whatever -m 'Combined snapshot of packages'</code></li>
+<li>Push our new tag <code>git push origin --tags</code></li>
+</ol>
+<p>Now running <code>lerna changed</code> shows the expected &quot;No changed packages&quot;.</p>
+<h2>It works well for us</h2>
+<p>To be clear, we don't think there is anything &quot;wrong&quot; with Lerna's default publishing flow, however it didn't suit our needs. This is an alternative approach.</p>
+
+
+      </div>
+      <div class="vf-grid__col--span-1">
+      </div>
+    </section>
+  </div>
+</article>
+
+<div class="vf-stack vf-u-padding__top--800">
+
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Comment?</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      <p>Thanks for reading, if you have comment I'd love to hear it.</p>
+
+      <p>
+        <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
+        
+        &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+        
+        &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+      </p>
+    </div>
+  </article>
+  
+
+
+  
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Read more</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      
+      
+
+      
+      <p class="vf-text-body--3">Previously: <a href="/posts/20200713-moving-from-panini-to-eleventy/" class="vf-link">Moving from Panini to Eleventy</a></p>
+      
+
+      
+      <p class="vf-text-body--3">Next: <a href="/posts/20200713-moving-from-panini-to-eleventy/" class="vf-link">Using Nunjucks templates with React</a></p>
+      
+
+      <p>
+        <a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ Blog index</a>
+      </p>
+    </div>
+  </article>
+  
+</div>
+    </main>
+    
+      <footer class="vf-footer | do-not-print" role="contentinfo">
+  <div class="vf-footer__inner">
+    <div class="vf-footer__notice">
+
+      <div class="vf-body--text | vf-content | do-not-print"><p><strong>I'm Ken Hawkins</strong>
+I bring structure and process to complex web projects. Learn more about me <a class="vf-footer__link" href="/">on the front page</a> or <a class="vf-footer__link" href="/#hello">get in touch</a>.</p>
+</div>
+
+      <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+      &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a></div>
+  </div>
+</footer>
+
+<code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
+
+    
+    
+    <script src="/scripts/scripts.js"></script>
+  </body>
+</html>

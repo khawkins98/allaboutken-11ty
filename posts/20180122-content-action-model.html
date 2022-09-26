@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en" class="vf-no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="all" href="/css/styles.css" />
+    <title>Introducing the Content-Action Model for Web Systems | All about Ken Hawkins</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/ken-favicon/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+    <script>
+// Detect if JS is on and swap vf-no-js for vf-js on the html element
+(function(H){H.className=H.className.replace(/\bvf-no-js\b/,'vf-js')})(document.documentElement);
+</script>
+
+    <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="abstract" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="Drupal, web development, Ken Hawkins, UX, information architecture" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="All About Ken Hawkins" />
+    <meta property="og:url" content="https://www.allaboutken.com/posts/20180122-content-action-model.html" />
+    <meta property="og:title" content="Introducing the Content-Action Model for Web Systems > All About Ken Hawkins" />
+    <meta property="og:image" content="https://www.allaboutken.com/images/crop-cinema/blog/drill-bits.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@khawkins98" />
+    <meta name="twitter:site:id" content="3723201" />
+    <meta name="twitter:creator" content="@khawkins98" />
+    <meta name="twitter:creator:id" content="3723201" />
+    <meta name="twitter:url" content="https://www.allaboutken.com/posts/20180122-content-action-model.html" />
+    <meta name="twitter:description" content="Wiring ‘ugly truth’ UX diagnostics for better web strategy & IA." />
+    <meta name="twitter:image" content="https://www.allaboutken.com/images/crop-cinema/blog/drill-bits.jpg" />
+    <meta name="dcterms.title" content="Introducing the Content-Action Model for Web Systems > All About Ken Hawkins" />
+    <meta name="dcterms.type" content="Text" />
+    <meta name="dcterms.identifier" content="https://allaboutken.com/posts/20180122-content-action-model.html" />
+    <meta name="dcterms.format" content="text/html" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
+  </head>
+  <body class="vf-body vf-stack vf-stack--400">
+    <header class="vf-global-header" role="banner">
+      <a href="/" class="vf-logo"><span class="vf-logo__text">AllAboutKen.com</span></a>
+      <nav class="vf-navigation vf-navigation--global | vf-cluster | show-for-medium | do-not-print">
+        <ul class="vf-navigation__list | vf-list--inline">
+          <li class="vf-navigation__item">
+            <a href="/blog" class="vf-navigation__link">Blog</a>
+          </li>
+          <li class="vf-navigation__item | show-for-medium-only">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">E-mail</a>
+          </li>
+          <li class="vf-navigation__item | show-for-large">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">khawkins98@gmail.com</a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://twitter.com/khawkins98" class="vf-navigation__link">Twitter<span class="show-for-large"> @khawkins98</span></a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://www.linkedin.com/in/allaboutken" class="vf-navigation__link">LinkedIn</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main role="main">
+    
+<article class="vf-grid vf-grid__col-3">
+  <div class="vf-grid__col--span-1">
+    <section class="vf-u-fullbleed vf-u-background-color--yellow--dark">
+      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display | kh-post-title">Introducing the Content-Action Model for Web Systems</h1>
+    </section>
+    <p><time datetime="Mon Jan 22 2018 00:00:00 GMT+0000 (Coordinated Universal Time)" class="vf-summary__date">22 Jan 2018</time> &nbsp;&nbsp;<span class="vf-summary__author">Filed in: CAM for Web Systems, introducing</span></p>
+  </div>
+  <div class="vf-grid__col--span-2 vf-content">
+    <figure
+
+class="vf-figure">
+  <img class="vf-figure__image" src="/images/crop-cinema/blog/drill-bits.jpg" alt="">
+  <figcaption class="vf-figure__caption">Content, IA and UX professionals are spoiled for choice when it comes to tooling. But we need to be clear about which ones are right for the job — and that means distilling our intentions. <cite class="text-right">Thanks to Ian D. Keating for the Image of drill bits [<a href="https://www.flickr.com/photos/ian-arlett/16451711088">CC License</a>]</cite></figcaption>
+</figure>
+    <section class="vf-grid vf-grid__col-3">
+      <div class="vf-grid__col--span-2">
+        <p class="vf-text-body--1">Wiring ‘ugly truth’ UX diagnostics for better web strategy & IA.</p>
+
+        
+<!-- - Content goals: connecting the dots
+- Better layouts: using the right components
+- Redundancies: annoying, yet useful
+- Answers: To what questions?
+-->
+<p>Gleaning truth about what should be done — and undone — on our websites is the central quest of website strategy. There are many roads to the destination, and an arsenal of tools to make the journey smoother:</p>
+<ul>
+<li>surveys</li>
+<li>anecdotal feedback</li>
+<li>user journeys</li>
+<li>metrics (i.e. Google Analytics)</li>
+<li>you get the idea …</li>
+</ul>
+<p>Our diagnostic tools are all-important methods towards achieving implementations, and optimising them. But just as you don’t start a quest by buying shoes, you need to take a step back before jumping into your Big Website Fix. Strategy — motivation, destination, and intent — is a much better place to begin a journey of discovery.</p>
+<figure class="">
+<figcaption><h3>Building a better journey</h3></figcaption>
+<div class="vf-grid vf-grid__col-3">
+<div class="cell"><div class="card"><div class="card-section">
+  <span class="h5">Strategy <span class="emoji">➡️</span></span>
+  <ul class="vf-u-padding__top--500">
+    <li>Organisational direction</li>
+    <li>in-person interviews</li>
+    <li>big ideas&#8482;</li>
+    <li>…</li>
+  </ul>
+</div></div></div>
+<div class="cell"><div class="card"><div class="card-section">
+  <span class="h5">Diagnostic tools <span class="emoji">➡️</span></span>
+  <ul class="vf-u-padding__top--500">
+    <li>Surveys</li>
+    <li>anecdotal feedback</li>
+    <li>metrics</li>
+    <li>…</li>
+  </ul>
+</div></div></div>
+<div class="cell"><div class="card"><div class="card-section">
+  <span class="h5">Evaluation <span class="emoji">↩</span></span>
+</div></div></div>
+</div>
+</figure>
+<p>This journey to better IA to in turn better the user experience must be built on a clear strategy, otherwise we risk losing our way. To enrich the wider strategy, and make the journey go well, we need to know when to use which diagnostic tools.</p>
+<!-- We know a bit about our diagnostic tools, but what's happening in those strategy and evaluation boxes? -->
+<h2>Let’s go.</h2>
+<p>I’m the Web Design Architect for the European Bioinformatics Institute (<a href="https://www.ebi.ac.uk/">EMBL-EBI</a>). This is a not-for-profit institute that serves data to all of the world’s life-science research communities, so it has a lot of different goals.</p>
+<p>Building consensus on the direction and evolution of the core website is not a one-off thing. It is a long-term, complex relationship amongst people with different priorities and perspectives, and demands communication tools that are fit for purpose.</p>
+<p>The main tool I’ve been working on to achieve this is our “Content-Action Method for Web Systems”. It helps decision-making on all levels, from layout adjustment to microsite building. (In the Web Development team we call it just the D.A.M. for Web Systems, or CAM for short, because shortening things is our culture, for better or worse.)</p>
+
+<div class="vf-u-padding__bottom--400 vf-u-padding__top--500 vf-u-padding__bottom--500">
+<div class="callout cell medium-6 small-10">
+<h2>Origin story?</h2>
+<p>This method began after using Core Content Model methods — those were great, but not quite what we needed. For more about how the CAM method relates and doesn’t relate, check out the aside post: “<a href="20180122-content-action-model-origin-story.html">Beyond the Core Content Model</a>”.</p>
+
+</div>
+</div>
+
+<h2>How we use CAM for Web Systems</h2>
+<p>We use CAM for Web Systems to clearly model:</p>
+<ol>
+<li><strong>Needs:</strong> The organisation’s and our target users’</li>
+<li><strong>Content:</strong> What it is, and what it isn’t</li>
+<li><strong>Users:</strong> Who is visiting us now, and who we would like to join the party</li>
+<li><strong>Connections, paths, actions:</strong> Wherever they are needed</li>
+<li><strong>Meta stuff:</strong> Various contextual information about a model that helps us understand the affordances in motion</li>
+</ol>
+<p>We isolate each component as an individual item, then tie and untie them in the same conversation.
+At EMBL-EBI we use the CAM for Web Systems to compare peer concerns. This goes a long way to helping people understand one another, and the sometimes conflicting frustrations/desires/priorities of user communities. In other words, this is a discussion tool to reach agreement.</p>
+<p>We then record our shared understanding for future discussions and development work. Distilling our intentions in the CAM for Web Systems allows us to build our analytics appropriately, capturing metrics that are truly useful for understanding user journeys. Even documenting disagreements shows our reasoning clearly.</p>
+<p>Once we isolate ‘purpose’ (this is harder than it looks), we can test, evaluate, and iterate.</p>
+<figure
+
+class="vf-figure | kh-bleed-out vf-u-background-color-ui--white vf-u-padding--400">
+  <img class="vf-figure__image" src="/images/original/blog/cam-process.svg" alt="CAM process flow">
+  <figcaption class="vf-figure__caption"><strong>Figure 1.</strong> The flow of the CAM for Web Systems. Yes, it is a riff on the <a href="https://www.designcouncil.org.uk/news-opinion/design-process-what-double-diamond">Double Diamond</a>.</figcaption>
+</figure><h2><a name="collect" href="#collect">What is in the CAM Record, and why</a></h2>
+<h3><a name="in-a-record" href="#in-a-record">CAM for Web Systems contents</a></h3>
+<ol>
+<li><strong>Organisational documentation:</strong> a firm organisational record about the agreed purpose of a portion of a website (such as an /about section)</li>
+<li><strong>Itemisation of components and actions:</strong> specific components for each section; including:</li>
+<li><strong>Overall purpose:</strong> informed by organisational priorities and UX research</li>
+<li>URLs</li>
+<li>Goals (user and organisation)</li>
+<li>User types (prioritised)</li>
+<li>Content (and who will make it)</li>
+<li>Preceding and following actions (what pages and actions)</li>
+<li>Organisational placement (which parts of the organisation are surfaced)</li>
+<li>Organisation purpose (how does the content map to overall mission purposes in tone or external focus)</li>
+<li>Content owner (who is “responsible” for the content overall)</li>
+<li><strong>Relations between components:</strong> which user types are seeking this goal, and which content supports it?</li>
+<li><strong>Relations across CAM Records:</strong> how this content relates to the content, goals or users in other parts of the website (e.g. jobs page). This exposes areas that may need new CAM for Web Systems record.</li>
+<li><strong>Record of change and knowledge transfer:</strong> to avoid repeating previous missteps, and enable knowledge handover. The importance of capturing this cannot be overstated.</li>
+<li><strong>Truth through perspectives:</strong> by asking the same question from many different perspectives, expose gaps/missed opportunities (e.g. website content, external content) or prioritise areas for improvement (e.g. page components that are surplus to requirements).</li>
+</ol>
+<h3><a name="comparing" href="#comparing">Comparing CAM records</a></h3>
+<p>By collecting information consistently, we give ourselves — and our successors — clarity on how things have taken shape, what problems have been solved and what is in the pipeline (where the bodies are buried, essentially).</p>
+<div class="vf-u-padding__bottom--400 vf-u-padding__top--500 vf-u-padding__bottom--500">
+<figure class="vf-figure | kh-bleed-out">
+<img src="/images/original/blog/cam-logic-model.svg" />
+<figcaption><strong>Figure 2.</strong> Logic model: Comparing different CAM records.
+</figcaption>
+</figure>
+</div>
+<h3><a name="example" href="#example">Example: Components of a ‘Contact us’ system</a></h3>
+<p>Creating a network of CAM Records can pay dividends, as it reveals fragment goals, content and user types. A common diagnostic evaluation:</p>
+<figure class="vf-figure | kh-bleed-out">
+<img src="/images/original/blog/cam-flow.svg" />
+<figcaption><strong>Figure 3.</strong> Output of a CAM Record’s content, goals and users for a “Contact us” system.
+</figcaption>
+</figure>
+<p>In this simplified “Contact us” page for a shop, you can see clearly that the Twitter feed content needs looking at.</p>
+<p>This CAM Record shows:</p>
+<ul>
+<li>the Twitter feed is superfluous to perceived requirements</li>
+<li>we’ve missed a goal or user type</li>
+</ul>
+<p>So we can prioritise looking at the Twitter feed to see if people are using it. Then we can either strike it, or delve into which of our customers are utilising it, and why.</p>
+<figure class="vf-figure | kh-bleed-out">
+<img src="/images/original/blog/cam-flow-addition.svg" />
+<figcaption><strong>Figure 4.</strong> A content fragment often allows us to clearly identify a missed use case.
+</figcaption>
+</figure>
+<h2><a name="using" href="#using">Where and when to use</a></h2>
+<p class="vf-text-body--1">By modelling our systems consistently, we routinely surface and resolve logic issues.</p>
+<p>The CAM method allows us to develop hypotheses more clearly, and expose important knowledge gaps. This allows us to construct a shared narrative with legitimacy within the organisation, allowing us to cooperate as a group and avoid internal nitpicking.</p>
+<p>In the ‘Contact us’ example, looking closely at how people used the Twitter feed (which seemed superfluous) allowed us to add a new, validated goal: “Get info on sales and last-minute updates”. Very handy. But is that a genuine need of our two user types?</p>
+<p>Our framework allows us to see and prioritise areas we need to investigate. It helps us articulate our questions, and select the right tools to investigate and test our hypotheses.</p>
+<p>Importantly, we can share our findings easily with one another, and feed them back into iterations of the model. By doing so, we are continually improving the model and making it easier to <strong>make decisions based on evidence</strong>.</p>
+<h2>What’s next for the CAM for Web Systems?</h2>
+<p class="vf-text-body--1">This is the first of what I hope will be many posts exploring this new approach.</p>
+<p>Depending on feedback on this post, and developments in our many digital communications fora, I’ll be writing about:</p>
+<ul>
+<li><strong>CAM in Action:</strong> A how-to on getting started with this methodology.</li>
+<li><strong>Visualising insights:</strong> A dashboard to give knowledgeable stakeholders a ‘forest from the trees’ view on our strategy, interconnected content and user activity;</li>
+<li><strong>Goal-driven metrics:</strong> Looking beyond page views, and using our CAM for Web Systems to capture metrics of success and failure that relate directly to our objectives;</li>
+<li><strong>Programmatic solutions:</strong> Going beyond paper, manipulating our data in lightweight databases like <a href="https://coda.io/">Coda</a> and surfacing in-context through <a href="https://gavin.carothers.name/2009/08/13/trying-to-understand-microdata-rdfa/">RDFa in our website HTML markup</a>;</li>
+<li><strong>Specialising:</strong> How we take the general model and adapt it to bespoke use cases, such as EMBL-EBI’s free-to-use <a href="https://www.ebi.ac.uk/services">scientific data services</a>;</li>
+<li><strong>UX + the CAM:</strong> What does it mean to 'do UX' with our Content Action Model? Beyond the buzz.</li>
+<li><strong>Published</strong>: <a href="20180207-discovery-and-analysis.html">read it here</a>.</li>
+</ul>
+<figure class="vf-figure | kh-bleed-out">
+<img src="https://lh3.googleusercontent.com/KlmXDvhCSpJZMslp4aimbVVe1IPSeSSAOqTvx1D_OcTMbYQcIBxJqeYKk4uuIuGk4LdsNwfU-mf5kt63GVk_PiNjV_o6Jx9UjqrNU_XXRiL2IJ7-2-cdYX07lAe57995wJ_04JJ1" />
+<figcaption><strong>Figure 5.</strong> The goal: clearly see and show connections to power dashboards and gather new insights.</figcaption>
+</figure>
+<h2><a name="kudos" href="#kudos">Kudos in particular to this post</a></h2>
+<p>For the growth of this CAM method, I owe thanks to many for inspiration, support and indulgence. But to the writing of this article, I'd like to pass on some specific thanks:</p>
+<ul>
+<li><strong>Mary Todd-Bergman</strong> (<a href="https://twitter.com/themarytodd">@themarytodd</a>): For editing this, sure, but also for on-going support, testing and sounding-out of this approach.</li>
+<li><strong>Ivan Labra</strong> (<a href="https://twitter.com/ilabra">@ilabra</a>): For bouncing ideas about what I’m really getting at here and getting my speak out of the organisational bubble.</li>
+</ul>
+<p>If you're also interested in chatting about this evolving model or improving it: <a href="https://twitter.com/khawkins98"><span class="emoji">🐦</span> @khawkins98</a></p>
+
+
+      </div>
+      <div class="vf-grid__col--span-1">
+      </div>
+    </section>
+  </div>
+</article>
+
+<div class="vf-stack vf-u-padding__top--800">
+
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Comment?</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      <p>Thanks for reading, if you have comment I'd love to hear it.</p>
+
+      <p>
+        <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
+        
+        &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+        
+        &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+      </p>
+    </div>
+  </article>
+  
+
+
+  
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Read more</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      
+      
+
+      
+      <p class="vf-text-body--3">Previously: <a href="/posts/20180122-content-action-model-origin-story.html" class="vf-link">The Content-Action Model origin story</a></p>
+      
+
+      
+      <p class="vf-text-body--3">Next: <a href="/posts/20180122-content-action-model-origin-story.html" class="vf-link">UX, discovery, analysis + the CAM</a></p>
+      
+
+      <p>
+        <a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ Blog index</a>
+      </p>
+    </div>
+  </article>
+  
+</div>
+    </main>
+    
+      <footer class="vf-footer | do-not-print" role="contentinfo">
+  <div class="vf-footer__inner">
+    <div class="vf-footer__notice">
+
+      <div class="vf-body--text | vf-content | do-not-print"><p><strong>I'm Ken Hawkins</strong>
+I bring structure and process to complex web projects. Learn more about me <a class="vf-footer__link" href="/">on the front page</a> or <a class="vf-footer__link" href="/#hello">get in touch</a>.</p>
+</div>
+
+      <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+      &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a></div>
+  </div>
+</footer>
+
+<code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
+
+    
+    
+    <script src="/scripts/scripts.js"></script>
+  </body>
+</html>

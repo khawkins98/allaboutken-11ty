@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en" class="vf-no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="all" href="/css/styles.css" />
+    <title>Integrating Eleventy with gulp, upstream JS | All about Ken Hawkins</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/ken-favicon/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+    <script>
+// Detect if JS is on and swap vf-no-js for vf-js on the html element
+(function(H){H.className=H.className.replace(/\bvf-no-js\b/,'vf-js')})(document.documentElement);
+</script>
+
+    <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="abstract" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="Drupal, web development, Ken Hawkins, UX, information architecture" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="All About Ken Hawkins" />
+    <meta property="og:url" content="https://www.allaboutken.com/posts/20191021-integrating-eleventy-with-gulp.html" />
+    <meta property="og:title" content="Integrating Eleventy with gulp, upstream JS > All About Ken Hawkins" />
+    <meta property="og:image" content="https://www.allaboutken.com/images/crop-cinema/blog/dripping-faucet.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@khawkins98" />
+    <meta name="twitter:site:id" content="3723201" />
+    <meta name="twitter:creator" content="@khawkins98" />
+    <meta name="twitter:creator:id" content="3723201" />
+    <meta name="twitter:url" content="https://www.allaboutken.com/posts/20191021-integrating-eleventy-with-gulp.html" />
+    <meta name="twitter:description" content="Eleventy <a href='https://www.11ty.io/docs'>notes that</a> it, "works great with data — use both front matter and external data files" but the static site generator stops short of working well with upstream in-memory data objects for local development." />
+    <meta name="twitter:image" content="https://www.allaboutken.com/images/crop-cinema/blog/dripping-faucet.jpg" />
+    <meta name="dcterms.title" content="Integrating Eleventy with gulp, upstream JS > All About Ken Hawkins" />
+    <meta name="dcterms.type" content="Text" />
+    <meta name="dcterms.identifier" content="https://allaboutken.com/posts/20191021-integrating-eleventy-with-gulp.html" />
+    <meta name="dcterms.format" content="text/html" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
+  </head>
+  <body class="vf-body vf-stack vf-stack--400">
+    <header class="vf-global-header" role="banner">
+      <a href="/" class="vf-logo"><span class="vf-logo__text">AllAboutKen.com</span></a>
+      <nav class="vf-navigation vf-navigation--global | vf-cluster | show-for-medium | do-not-print">
+        <ul class="vf-navigation__list | vf-list--inline">
+          <li class="vf-navigation__item">
+            <a href="/blog" class="vf-navigation__link">Blog</a>
+          </li>
+          <li class="vf-navigation__item | show-for-medium-only">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">E-mail</a>
+          </li>
+          <li class="vf-navigation__item | show-for-large">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">khawkins98@gmail.com</a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://twitter.com/khawkins98" class="vf-navigation__link">Twitter<span class="show-for-large"> @khawkins98</span></a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://www.linkedin.com/in/allaboutken" class="vf-navigation__link">LinkedIn</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main role="main">
+    
+<article class="vf-grid vf-grid__col-3">
+  <div class="vf-grid__col--span-1">
+    <section class="vf-u-fullbleed vf-u-background-color--yellow--dark">
+      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display | kh-post-title">Integrating Eleventy with gulp, upstream JS</h1>
+    </section>
+    <p><time datetime="Mon Oct 21 2019 00:00:00 GMT+0000 (Coordinated Universal Time)" class="vf-summary__date">21 Oct 2019</time> &nbsp;&nbsp;<span class="vf-summary__author">Filed in: gulp, Eleventy, EMBL</span></p>
+  </div>
+  <div class="vf-grid__col--span-2 vf-content">
+    <figure
+
+class="vf-figure">
+  <img class="vf-figure__image" src="/images/crop-cinema/blog/dripping-faucet.jpg" alt="">
+  <figcaption class="vf-figure__caption">Drip. Drop. Drip. Opening the tap of of upstream data objects for Eleventy. Thanks to Flickr user Paul B for the image [<a href="https://www.flickr.com/photos/eastbeach/24818842988/in/photolist-DPa4m1-4eQ9W-4bPwdN-APyyy-eXwGJg-4JZhcq-6wASuN-6wwH86-6wASy7-7zwzso-wGnk7F-8HPAJt-66a7wt-4fPSa-tzkuC-tMM3hb-5njkrD-5C83sD-tzkqk-5oynfL-4pnkBU-6ZfA9m-6iZaMo-7ECykH-9sAPMe-TcFhPs-6zJcWE-4eQ9Y-5styJG-9Tshp1-nu54P-6iUT2t-xZYcY-7DbDxo-6aVvan-gsyhW8-95sAwV-gsyhHn-2cL3sdx-unNuB-gxE7Hm-3fArXA-xxCk6-6iUYaX-gsxDY2-unNiy-67GWCn-xxCsQ-gsy2m3-4Cnf2b">CC License</a>].</figcaption>
+</figure>
+    <section class="vf-grid vf-grid__col-3">
+      <div class="vf-grid__col--span-2">
+        <p class="vf-text-body--1">Eleventy <a href='https://www.11ty.io/docs'>notes that</a> it, "works great with data — use both front matter and external data files" but the static site generator stops short of working well with upstream in-memory data objects for local development.</p>
+
+        
+<p>This post is prompted by a project for a highly-modular design system as part of my work for <a href="https://www.embl.de">EMBL</a> — a leading laboratory for the life sciences. We're <a href="https://github.com/visual-framework/vf-eleventy">using</a> Eleventy with gulp (for task running and building) and <a href="https://fractal.build">Fractal</a> (for design components).</p>
+<p>We wanted to:</p>
+<ol>
+<li>Have gulp trigger builds of Eleventy</li>
+<li>Utilise Eleventy’s watch/refresh commands for local development</li>
+<li>Send variables to Eleventy’s JavaScript data files from gulp (or other Node JS tasks)</li>
+</ol>
+<p>There are methods to achieve part 1 but not with part 2 and 3. But we made a solution.</p>
+<blockquote>
+<h4>tl;dr</h4>
+<ul>
+<li>We forked 11ty’s cmd.js to better integrate with gulp and other Node JS.</li>
+<li>I made <a href="https://github.com/khawkins98/gulp-eleventy-example">a demo at khawkins98/gulp-eleventy-example</a>.</li>
+<li>I hope Eleventy’s maintainers can take some inspiration from this. <br/><br/></li>
+</ul>
+</blockquote>
+<p>Still here? Great. Read on.</p>
+<br/>
+<h4>Scenario</h4>
+<h2>Here's some really useful data, please use it</h2>
+<p>Fractal creates a really useful JavaScript object that lists component file structure, the contents of those files and compiles nested templates.</p>
+<p>An illustrative example of the file structure:</p>
+<pre><code class="language-js">fractalComponents = {
+component: “myComponent”,
+files: {
+  “myComponent.css”: {
+     “Contents of the CSS”
+   },
+  “myComponent.njk”: {
+     “Contents of the NJK template”
+   },
+  “CHANGELOG.md”: {
+     “Contents of the changelog”
+   },
+  “README.md”: {
+     “Contents of the readme”
+   }
+   … and so on
+</code></pre>
+<p><br/>Also, Fractal enables component Nunjucks templates can be invoked like:</p>
+<p><code>&lt;!-- Could not render component '@myNavComponent' - component not found. --&gt;</code></p>
+<p>Which is great as it allows us to <code>npm install</code> components and not have to move/symlink the Nunjucks templates into Eleventy <code>src/</code> directory — and it keeps syntax consistent across environments.</p>
+<p>In principle we could get Eleventy to do the same tasks, scanning the file system and rendering our templates — but we didn’t want to duplicate our build process — especially considering that both Eleventy and Fractal were already running in Node JS.</p>
+<p>So, that means we've got some in-memory data we'd really like for Eleventy to receive, and receive updates to if a component is added or edited.</p>
+<h3>This is important for local development</h3>
+<p>In our use case we're editing files locally and want a Task A (Fractal) to be able to see changes, updates its data and feed it to Task B (Eleventy).</p>
+<p>Eleventy's current design is a non-issue for our production builds. For production, Fractal generates the data and just hands it off to Eleventy. (That said: I could envision a scenario where part of the build process the Eleventy process might want to feed data to some Process C for dynamic rendering.)</p>
+<br/>
+<h4>So what are you asking for?</h4>
+<h2>Designing our solution</h2>
+<p>As previously mentioned, Eleventy has a very nice feature supporting <a href="https://www.11ty.io/docs/data-js/">JavaScript data files</a>. And as with most <code>watch</code> command's Eleventy's <a href="https://www.11ty.io/docs/usage/#re-run-eleventy-when-you-save">watch</a> observes only file-system changes — that means we need our upstream task (gulp) to be able to trigger an Eleventy rebuild for local development.</p>
+<p>So a conceptual example for our desired scenario looks like the below.</p>
+<ol>
+<li>Have some upstream data that we want to pass to Eleventy.</li>
+</ol>
+<pre><code class="language-js">// Generate a sample list of all files in a scope outside of Eleventy
+gulp.task('file-list', function () {
+global.fileList = []; // we could pass by not using a `global`, but this is the simplest for an example 
+return gulp.src(['./somePath/**/*.{njk,html,js,md}'])
+  .pipe(through.obj(function (file, enc, cb) {
+    global.fileList.push(file.path);
+    cb(null);
+  }));
+});
+</code></pre>
+<br/>
+<ol start="2">
+<li>Have an Eleventy <a href="https://www.11ty.io/docs/data-js/">data file</a> pull in a variable.</li>
+</ol>
+<pre><code class="language-js">// ./src/site/_data/fileList.js
+// Capture the sample list of all files from gulp
+// for demonstration Gulp integration with Eleventy
+module.exports = {
+files: global.fileList
+};
+</code></pre>
+<br/>
+<ol start="3">
+<li>On a targeted change event, have Gulp invoke ask Eleventy to rebuilt.</li>
+</ol>
+<pre><code class="language-js">// Watch something for changes
+gulp.task('watch', function() {
+gulp.watch(['./src/**/*.{njk,html,js,md'], gulp.series('file-list', 'eleventy:reload'));
+});
+
+// Or another scenario with an `.on` event triggering a refresh
+let fractal = require(fractalConfig).initialize();
+fractal.components.on('updated', function() {
+elev.restart();
+elev.write();
+}
+
+// Refresh eleventy
+gulp.task('eleventy:reload', function(done) {
+elev.restart()
+elev.write()
+});
+</code></pre>
+<br/>
+<p>Recap: we want to do some local development, let a parent process update a variable and and then ask  Eleventy to trigger a rebuild, pulling in the new data by the Eleventy JS data file.</p>
+
+
+<div class="vf-u-padding__bottom--400 vf-u-padding__top--500 vf-u-padding__bottom--500">
+  <div class="large-1 medium-2 cell"></div>
+  <figure class="large-10 medium-8 cell">
+  <hr/>
+<h4>Aside</h4>
+<h2>A child process won’t get us there <a name="child_process" /></h2>
+<h3>Unless you like dumping memory to disk</h3>
+<p>One method we initially considered for our need was to use Node’s <a href="https://nodejs.org/api/child_process.html"><code>child_process</code></a>. This is quite clean and is used below by zellwk.com; from <a href="https://github.com/zellwk/zellwk.com/blob/master/gulp/eleventy.js"><code>zellwk/zellwk.com/blob/master/gulp/eleventy.js</code></a></p>
+<pre><code class="language-js">const exec = require('child_process').exec
+
+const eleventy = cb =&gt; {
+const command = 'eleventy'
+
+exec(command, function (err, stdout, stderr) {
+  console.log(stdout)
+  console.log(stderr)
+  cb(err)
+})
+}
+</code></pre>
+<br/>
+<p>Using this method you’re also able to run Eleventy with a nice callback on completion — the downside to this method is there’s no clean way to pass in-memory objects to the <code>child_process</code>, you’d need to stringify your variables:</p>
+<pre><code class="language-js">require('child_process').fork('./child.js', [], { env: { FOO: 'bar' } });
+</code></pre>
+<p>For us there are two deal breakers with this method:</p>
+<ul>
+<li>The object we want to pass is quite large and we'd rather not risk issues with stringification.</li>
+<li>We'd also need to destroy and re-invoke Eleventy every time during local development, losing access to <code>elev.restart()</code> and <code>elev.write()</code></li>
+</ul>
+
+  <hr/>
+  </figure>
+</div>
+
+<br/>
+
+<br/>
+<h4>Eleventy, can you hear me?</h4>
+<h2>Making it happen</h2>
+<p>Eleventy’s entry is <a href="https://github.com/11ty/eleventy/blob/master/cmd.js"><code>cmd.js</code></a> and we need access to <code>elev</code> — but that unfortunately is inside a <code>try</code> statement.</p>
+<p>So I forked 11ty’s cmd.js in the local project. Those changes better integrate with external JS with a few minor changes but it's all about a key change: <code>module.exports = elev;</code></p>
+<p>In this way Gulp, or any other Node process, can now use Eleventy as a child task.</p>
+<h3>How? Like this</h3>
+<ol>
+<li>Set up Eleventy using our forked local command file.</li>
+</ol>
+<pre><code class="language-js">// Prepare eleventy
+process.argv.push('--config=eleventy.js'); // Eleventy config
+const elev = require('./eleventy-cmd.js');
+</code></pre>
+<br/>
+<ol start="2">
+<li>We aks eleventy to do its initial build.</li>
+</ol>
+<pre><code class="language-js">gulp.task('eleventy:build', function(done) {
+elev.write().then(function() {
+  console.log('Done building 11ty');
+  done();
+});
+});
+</code></pre>
+<br/>
+<ol start="3">
+<li>Do a deep rebuild of Eleventy when a file outside of Eleventy’s scope changes or an event trigger is received.</li>
+</ol>
+<pre><code class="language-js">gulp.task('eleventy:reload', function(done) {
+elev.restart()
+elev.write()
+});
+</code></pre>
+<br/>
+<p>This change works well for us but we'll of course need to make sure our local <code>cmd.js</code> incorporates any upstream changes (we forked it from Eleventy 0.9.0)</p>
+<br/>
+<h4>Enough talking</h4>
+<h2>Here's some code to try</h2>
+<p>I made a demo repository using this approach that you can:</p>
+<ul>
+<li><code>git clone https://github.com/khawkins98/gulp-eleventy-example.git</code> and</li>
+<li><code>npm install</code>, or just:</li>
+<li><a href="https://github.com/khawkins98/gulp-eleventy-example" class="">Browse <span class="emoji">🔎</span> the demo at github.com/khawkins98/gulp-eleventy-example</a></li>
+<li>If you have feedback <span class="emoji">💬</span>, I'd love to hear it. Either <a href="https://github.com/khawkins98/gulp-eleventy-example/issues">as an issue</a> or on <a href="https://twitter.com/khawkins98">Twitter @khawkins98</a></li>
+</ul>
+<h3>What's next</h3>
+<ul>
+<li>I'll likely make an issue on Eleventy about supporting this</li>
+<li>If that doesn't get support (or I feel inspired) I may also make an npm <code>gulp-eleventy-example</code> package</li>
+</ul>
+
+
+      </div>
+      <div class="vf-grid__col--span-1">
+      </div>
+    </section>
+  </div>
+</article>
+
+<div class="vf-stack vf-u-padding__top--800">
+
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Comment?</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      <p>Thanks for reading, if you have comment I'd love to hear it.</p>
+
+      <p>
+        <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
+        
+        &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+        
+        &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+      </p>
+    </div>
+  </article>
+  
+
+
+  
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Read more</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      
+      
+
+      
+      <p class="vf-text-body--3">Previously: <a href="/posts/20180329-cam-content-action-goal-ontology.html" class="vf-link">Inside the Content-Action Model</a></p>
+      
+
+      
+      <p class="vf-text-body--3">Next: <a href="/posts/20180329-cam-content-action-goal-ontology.html" class="vf-link">Fractal and Eleventy: Getting static sites closer to the design system</a></p>
+      
+
+      <p>
+        <a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ Blog index</a>
+      </p>
+    </div>
+  </article>
+  
+</div>
+    </main>
+    
+      <footer class="vf-footer | do-not-print" role="contentinfo">
+  <div class="vf-footer__inner">
+    <div class="vf-footer__notice">
+
+      <div class="vf-body--text | vf-content | do-not-print"><p><strong>I'm Ken Hawkins</strong>
+I bring structure and process to complex web projects. Learn more about me <a class="vf-footer__link" href="/">on the front page</a> or <a class="vf-footer__link" href="/#hello">get in touch</a>.</p>
+</div>
+
+      <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+      &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a></div>
+  </div>
+</footer>
+
+<code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
+
+    
+    
+    <script src="/scripts/scripts.js"></script>
+  </body>
+</html>

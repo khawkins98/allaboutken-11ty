@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en" class="vf-no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="all" href="/css/styles.css" />
+    <title>Using Nunjucks templates with React | All about Ken Hawkins</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/ken-favicon/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+    <script>
+// Detect if JS is on and swap vf-no-js for vf-js on the html element
+(function(H){H.className=H.className.replace(/\bvf-no-js\b/,'vf-js')})(document.documentElement);
+</script>
+
+    <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="abstract" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="Drupal, web development, Ken Hawkins, UX, information architecture" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="All About Ken Hawkins" />
+    <meta property="og:url" content="https://www.allaboutken.com/posts/20201212-using-nunjucks-with-react/" />
+    <meta property="og:title" content="Using Nunjucks templates with React > All About Ken Hawkins" />
+    <meta property="og:image" content="https://www.allaboutken.com/images/crop-cinema/blog/chocolate-component-wrappers.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@khawkins98" />
+    <meta name="twitter:site:id" content="3723201" />
+    <meta name="twitter:creator" content="@khawkins98" />
+    <meta name="twitter:creator:id" content="3723201" />
+    <meta name="twitter:url" content="https://www.allaboutken.com/posts/20201212-using-nunjucks-with-react/" />
+    <meta name="twitter:description" content="A lightweight React wrapper with precompiled Nunjucks" />
+    <meta name="twitter:image" content="https://www.allaboutken.com/images/crop-cinema/blog/chocolate-component-wrappers.jpg" />
+    <meta name="dcterms.title" content="Using Nunjucks templates with React > All About Ken Hawkins" />
+    <meta name="dcterms.type" content="Text" />
+    <meta name="dcterms.identifier" content="https://allaboutken.com/posts/20201212-using-nunjucks-with-react/" />
+    <meta name="dcterms.format" content="text/html" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
+  </head>
+  <body class="vf-body vf-stack vf-stack--400">
+    <header class="vf-global-header" role="banner">
+      <a href="/" class="vf-logo"><span class="vf-logo__text">AllAboutKen.com</span></a>
+      <nav class="vf-navigation vf-navigation--global | vf-cluster | show-for-medium | do-not-print">
+        <ul class="vf-navigation__list | vf-list--inline">
+          <li class="vf-navigation__item">
+            <a href="/blog" class="vf-navigation__link">Blog</a>
+          </li>
+          <li class="vf-navigation__item | show-for-medium-only">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">E-mail</a>
+          </li>
+          <li class="vf-navigation__item | show-for-large">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">khawkins98@gmail.com</a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://twitter.com/khawkins98" class="vf-navigation__link">Twitter<span class="show-for-large"> @khawkins98</span></a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://www.linkedin.com/in/allaboutken" class="vf-navigation__link">LinkedIn</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main role="main">
+    
+<article class="vf-grid vf-grid__col-3">
+  <div class="vf-grid__col--span-1">
+    <section class="vf-u-fullbleed vf-u-background-color--yellow--dark">
+      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display | kh-post-title">Using Nunjucks templates with React</h1>
+    </section>
+    <p><time datetime="Sat Dec 12 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" class="vf-summary__date">12 Dec 2020</time> &nbsp;&nbsp;<span class="vf-summary__author">Filed in: component systems</span></p>
+  </div>
+  <div class="vf-grid__col--span-2 vf-content">
+    <figure
+
+class="vf-figure">
+  <img class="vf-figure__image" src="/images/crop-cinema/blog/chocolate-component-wrappers.jpg" alt="">
+  <figcaption class="vf-figure__caption">Entering the React wrapper. Thanks to <a href="https://www.flickr.com/photos/honzasoukup/15910008548/in/photolist-qeUXfd-VPrPCk-2v51LF-aexEWC-4ShMi8-iBrGk8-4ZUFmT-8B2aez-7zDgvQ-aeuR3X-7RaE2Q-96aZZq-zkbi6-wuRD6-dFYQ8d-b8tx2i-aioVT6-2feM7mz-4rvVkB-4jLVdo-4fDRaz-bbKeaK-63pqX2-65GuUB-f8EFFf-4xEosE-iNqn2y-9ZVEeA-vqR4r-afTaU-4yBY-6SUYH-4f3x6e-dDQ9v-5vkwRh-eum2nV-74c2LL-74ZatA-5QXy2g-nQRTLG-eum2ZM-8mcn9-c8Sftd-dmXBA5-74Vh8x-PyVN5f-74Z597-7QuB7g-74V7mF-7uvJF7">Honza Soukup</a> for the CC licnesed photo.</figcaption>
+</figure>
+    <section class="vf-grid vf-grid__col-3">
+      <div class="vf-grid__col--span-2">
+        <p class="vf-text-body--1">A lightweight React wrapper with precompiled Nunjucks</p>
+
+        
+<p>For <a href="https://stable.visual-framework.dev/">Visual Framework component's</a> we’re using the <a href="https://mozilla.github.io/nunjucks/">Nunjucks</a> JavaScript templating engine.
+It's a JS-runtime and based off <a href="https://jinja.palletsprojects.com/en/2.11.x/">jinja2</a>.</p>
+<p>Here’s a simplified <code>vf-button.njk</code> template:</p>
+<pre class="vf-code-example__pre"><code class="Code Code--lang-html vf-code-example"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> 
+<span class="hljs-attr">href</span>=<span class="hljs-string">&quot;{{ button_href }}&quot;</span> 
+<span class="hljs-attr">class</span>=<span class="hljs-string">&quot;vf-button
+{%- if variant %} vf-button--{{ variant }}{% endif %}
+&quot;</span>&gt;</span>
+{{- text | safe -}}
+<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+</code></pre>
+<br/>
+<p>If you've used jinja2, Handlebars or Twig templating, you'll probably find Nunjucks familiar.</p>
+<p>But what to do when we want to use our nice Nunjucks template in React? It’s all just JS, <em>right</em>?</p>
+<h3>Requirements</h3>
+<ul>
+<li>Use our <code>*.precompiled.js</code> templates so we don’t have to maintain a second set of templates for React. Or with minimal changes.</li>
+<li>Compatible with a non-ejected <a href="https://create-react-app.dev/">Create React App</a>. CRA limits you by not allowing customisation to the webpack config and has some other restricitions for consistency.</li>
+<li>Minimal local project changes and code.</li>
+<li>A “JS callback&quot; to support client-side JS for basic UI elements like tabs. Much as you would for integrating jQuery.</li>
+<li>Conceivably reusable in Angular.</li>
+<li>Bonus points for using <a href="https://reactjs.org/docs/react-api.html#reactmemo">React memo components</a>.</li>
+</ul>
+<h3>Step 1: Precompiling nunjukcs</h3>
+<p>While you don’t have to precompile your Nunjucks templates to use them in other systems, doing so will make them portable, faster and require a smaller JS runtime (8KB vs 20KB)</p>
+<p>This is is fairly standard business for Nunjucks and we’ve <a href="https://github.com/visual-framework/vf-core/blob/develop/tools/vf-core/gulp-tasks/vf-templates-precompile.js#L53">already been doing it</a> as part of the Visual Framework npm distributable.</p>
+<p>For more <a href="https://mozilla.github.io/nunjucks/api.html#precompiling">you can follow the Nunjucks guide on precompiling</a>.</p>
+<h3>Step 2: Common assets</h3>
+<p>To use our Nunjucks templates in react we’ll need two dependencies:</p>
+<ul>
+<li>The <a href="https://mozilla.github.io/nunjucks/api.html#setup-2-always-precompile"><code>nunjucks-slim.js</code></a> runtime. It’s 8KB.</li>
+<li>We'll need some extra help implement React's &quot;fragments&quot; to avoid extanious <code>div</code>s, so we've added <a href="https://www.npmjs.com/package/react-dom-fragment"><code>react-dom-fragment</code></a>.</li>
+</ul>
+<p>To deliver and somre reusable central logic, we made a small npm package: <a href="https://github.com/visual-framework/vf-core/tree/develop/tools/vf-extensions-react/"><code>vf-extensions-react</code></a>.</p>
+<h3>Step 3: Template wrappers and callback</h3>
+<p>We're aiming for a simple React integration and usage process.</p>
+<ol>
+<li>Install the npm dependencies</li>
+<li>Import the template <code>import { VfButton } from &quot;@visual-framework/vf-button/vf-button.react.js&quot;; </code></li>
+<li>Use <code>&lt;VfButton href=&quot;#mylink&quot; variant=&quot;big&quot; title=&quot;React for the VF 2.0&quot; /&gt;</code></li>
+<li>Do any needed JS callback for tabs, or similar</li>
+</ol>
+<p>To facilitate this, each Visual Framework component will need a small template wrapper in the monorepo; here's <code>components/vf-button/vf-button.react.js</code>:</p>
+<div class="kh-bleed-out">
+<pre class="vf-code-example__pre"><code class="Code Code--lang-js vf-code-example"><span class="hljs-comment">// vf-button for React</span>
+<span class="hljs-comment">// See vf-extensions-react for usage guidance</span>
+<span class="hljs-comment">// We use vanilla JS templates for react for compatibility with create react app</span>
+<span class="hljs-comment">// ---</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Fragment</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react-dom-fragment&quot;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">VfButtonTemplate</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./vf-button.precompiled.js&quot;</span>;  <span class="hljs-comment">// import templates before the nunjucks env</span>
+<span class="hljs-keyword">import</span> { vfNunjucksEnv } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@visual-framework/vf-extensions-react/vf-extensions-react.js&quot;</span>;
+
+<span class="hljs-comment">// any JS actions needed on component insertion</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">VfButtonCallback</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">React.Component</span> {
+<span class="hljs-title function_">componentDidMount</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// console.log(&quot;any JS actions needed&quot;);</span>
+}
+
+<span class="hljs-title function_">render</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-title class_">React</span>.<span class="hljs-property">Fragment</span>, <span class="hljs-literal">null</span>);
+}
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">VfButton</span> = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">memo</span>(<span class="hljs-function">(<span class="hljs-params">{
+text, button_href, theme
+}</span>) =&gt;</span> {
+<span class="hljs-keyword">return</span> <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-title class_">React</span>.<span class="hljs-property">Fragment</span>, <span class="hljs-literal">null</span>,
+  <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-title class_">Fragment</span>, {
+    <span class="hljs-attr">dangerouslySetInnerHTML</span>: {
+      <span class="hljs-comment">// our HTML is handled by nunjucks, this should not receive user input</span>
+      <span class="hljs-attr">__html</span>: vfNunjucksEnv.<span class="hljs-title function_">render</span>(<span class="hljs-string">&quot;vf-button&quot;</span>, {
+        <span class="hljs-attr">text</span>: text, <span class="hljs-attr">button_href</span>: button_href, <span class="hljs-attr">theme</span>: theme
+      })
+    }
+  }),
+  <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-title class_">VfButtonCallback</span>, <span class="hljs-literal">null</span>)
+);
+}
+);
+
+<span class="hljs-keyword">export</span> { <span class="hljs-title class_">VfButton</span> };
+</code></pre>
+</div>
+<br/>
+<p>Most of this code is from a template and we only need:</p>
+<ol>
+<li>pass any context properties (href, text, variant, etc)</li>
+<li>add any JS callbacks</li>
+</ol>
+<h3>Step 4: demo</h3>
+<p>Install the requirements:</p>
+<div class="kh-bleed-out">
+<pre class="vf-code-example__pre"><code class="Code Code--lang-html vf-code-example">yarn add @visual-framework/vf-extensions-react @visual-framework/vf-button
+</code></pre>
+</div>
+<br/>
+<p>And here’s a usage example in a React template:</p>
+<div class="kh-bleed-out">
+<pre class="vf-code-example__pre"><code class="Code Code--lang-html vf-code-example">import { VfButton } from &quot;@visual-framework/vf-button/vf-button.react.js&quot;
+<span class="hljs-tag">&lt;<span class="hljs-name">VfButton</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#mylink&quot;</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;big&quot;</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;React for the VF 2.0&quot;</span> /&gt;</span>
+</code></pre>
+</div>
+<p><br/>You can see all this in action in the Visual Framework’s example React app:</p>
+<ul>
+<li><a href="https://github.com/visual-framework/vf-react">Project code</a></li>
+<li><a href="https://visual-framework.github.io/vf-react/">Demo site</a></li>
+</ul>
+<h3>Notes, caveats</h3>
+<ul>
+<li><a href="https://github.com/at0g/nunjucks-loader"><code>nunjucks-loader</code></a>: an interesting looking project that has some additional Nunjucks features. However it could require additional configuration to the <code>webpack.config.js</code>, which would make usage with Create React App very hard.
+<ul>
+<li>Similarly we'er not using <a href="https://www.npmjs.com/package/simple-nunjucks-loader">Webpack to integrate our Nunjucks templates</a></li>
+</ul>
+</li>
+<li>User input: currently not supported. We plan to use <a href="https://github.com/cure53/DOMPurify"><code>dompurify</code></a>.</li>
+<li>Client-side JavaScript: we know that for things like tabs we won’t be doing JavaScript in the true React way, however we’re mainly interested in content templates (cards, buttons, intros, heroes and other containers/patterns). We accept that for any high-performance DOM-updating element it should be written as a “native&quot; React component.</li>
+<li>Realted discussion, projects in the Visual Framework:
+<ul>
+<li><a href="https://github.com/visual-framework/vf-react">vf-react</a>, <a href="https://visual-framework.github.io/vf-react/">demo</a></li>
+<li><a href="https://github.com/visual-framework/vf-core/blob/develop/tools/vf-extensions-react/README.md">vf-extensions-react/README.md</a></li>
+<li><a href="https://github.com/visual-framework/vf-core/issues/1271">Issue: a basic how-to on integrating VF JavaScript into React #1271</a></li>
+</ul>
+</li>
+</ul>
+
+
+      </div>
+      <div class="vf-grid__col--span-1">
+      </div>
+    </section>
+  </div>
+</article>
+
+<div class="vf-stack vf-u-padding__top--800">
+
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Comment?</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      <p>Thanks for reading, if you have comment I'd love to hear it.</p>
+
+      <p>
+        <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
+        
+        &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+        
+        &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+      </p>
+    </div>
+  </article>
+  
+
+
+  
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Read more</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      
+      
+
+      
+      <p class="vf-text-body--3">Previously: <a href="/posts/20201111-using-lerna-with-fewer-tags-and-custom-release-notes/" class="vf-link">Lerna monorepos with fewer tags</a></p>
+      
+
+      
+      <p class="vf-text-body--3">Next: <a href="/posts/20201111-using-lerna-with-fewer-tags-and-custom-release-notes/" class="vf-link">Something new for 2022</a></p>
+      
+
+      <p>
+        <a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ Blog index</a>
+      </p>
+    </div>
+  </article>
+  
+</div>
+    </main>
+    
+      <footer class="vf-footer | do-not-print" role="contentinfo">
+  <div class="vf-footer__inner">
+    <div class="vf-footer__notice">
+
+      <div class="vf-body--text | vf-content | do-not-print"><p><strong>I'm Ken Hawkins</strong>
+I bring structure and process to complex web projects. Learn more about me <a class="vf-footer__link" href="/">on the front page</a> or <a class="vf-footer__link" href="/#hello">get in touch</a>.</p>
+</div>
+
+      <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+      &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a></div>
+  </div>
+</footer>
+
+<code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
+
+    
+    
+    <script src="/scripts/scripts.js"></script>
+  </body>
+</html>

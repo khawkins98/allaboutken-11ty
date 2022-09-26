@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en" class="vf-no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="all" href="/css/styles.css" />
+    <title>Moving from Panini to Eleventy | All about Ken Hawkins</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/ken-favicon/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+    <script>
+// Detect if JS is on and swap vf-no-js for vf-js on the html element
+(function(H){H.className=H.className.replace(/\bvf-no-js\b/,'vf-js')})(document.documentElement);
+</script>
+
+    <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="abstract" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="Drupal, web development, Ken Hawkins, UX, information architecture" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="All About Ken Hawkins" />
+    <meta property="og:url" content="https://www.allaboutken.com/posts/20200713-moving-from-panini-to-eleventy/" />
+    <meta property="og:title" content="Moving from Panini to Eleventy > All About Ken Hawkins" />
+    <meta property="og:image" content="https://www.allaboutken.com/images/crop-cinema/blog/allaboutken-panini.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@khawkins98" />
+    <meta name="twitter:site:id" content="3723201" />
+    <meta name="twitter:creator" content="@khawkins98" />
+    <meta name="twitter:creator:id" content="3723201" />
+    <meta name="twitter:url" content="https://www.allaboutken.com/posts/20200713-moving-from-panini-to-eleventy/" />
+    <meta name="twitter:description" content="Back in February 2018, I wrote about <a href='/posts/20180210-zurb-panini-2-migration.html'>updating this site</a> to use a static-site generator by Zurb (makers of the Foundation Framework) called <a href='https://get.foundation/sites/docs/panini.html'>Panini</a>." />
+    <meta name="twitter:image" content="https://www.allaboutken.com/images/crop-cinema/blog/allaboutken-panini.jpg" />
+    <meta name="dcterms.title" content="Moving from Panini to Eleventy > All About Ken Hawkins" />
+    <meta name="dcterms.type" content="Text" />
+    <meta name="dcterms.identifier" content="https://allaboutken.com/posts/20200713-moving-from-panini-to-eleventy/" />
+    <meta name="dcterms.format" content="text/html" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
+  </head>
+  <body class="vf-body vf-stack vf-stack--400">
+    <header class="vf-global-header" role="banner">
+      <a href="/" class="vf-logo"><span class="vf-logo__text">AllAboutKen.com</span></a>
+      <nav class="vf-navigation vf-navigation--global | vf-cluster | show-for-medium | do-not-print">
+        <ul class="vf-navigation__list | vf-list--inline">
+          <li class="vf-navigation__item">
+            <a href="/blog" class="vf-navigation__link">Blog</a>
+          </li>
+          <li class="vf-navigation__item | show-for-medium-only">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">E-mail</a>
+          </li>
+          <li class="vf-navigation__item | show-for-large">
+            <a href="mailto:khawkins98@gmail.com" class="vf-navigation__link">khawkins98@gmail.com</a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://twitter.com/khawkins98" class="vf-navigation__link">Twitter<span class="show-for-large"> @khawkins98</span></a>
+          </li>
+          <li class="vf-navigation__item">
+            <a href="https://www.linkedin.com/in/allaboutken" class="vf-navigation__link">LinkedIn</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main role="main">
+    
+<article class="vf-grid vf-grid__col-3">
+  <div class="vf-grid__col--span-1">
+    <section class="vf-u-fullbleed vf-u-background-color--yellow--dark">
+      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display | kh-post-title">Moving from Panini to Eleventy</h1>
+    </section>
+    <p><time datetime="Mon Jul 13 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" class="vf-summary__date">13 Jul 2020</time> &nbsp;&nbsp;<span class="vf-summary__author">Filed in: static sites, blogging</span></p>
+  </div>
+  <div class="vf-grid__col--span-2 vf-content">
+    <figure
+
+class="vf-figure">
+  <img class="vf-figure__image" src="/images/crop-cinema/blog/allaboutken-panini.jpg" alt="">
+  <figcaption class="vf-figure__caption">A 100 percent misleading screenshot, the change to Eleventy has zero requirement on the look of the site. But like the design change, Eleventy has an improved technical design over the older and un-updated Panini.</figcaption>
+</figure>
+    <section class="vf-grid vf-grid__col-3">
+      <div class="vf-grid__col--span-2">
+        <p class="vf-text-body--1">Back in February 2018, I wrote about <a href='/posts/20180210-zurb-panini-2-migration.html'>updating this site</a> to use a static-site generator by Zurb (makers of the Foundation Framework) called <a href='https://get.foundation/sites/docs/panini.html'>Panini</a>.</p>
+
+        
+<p>In July 2020 I've moved the site to the <a href="https://www.11ty.dev/">Eleventy static-site generator</a>.</p>
+<p>Both are based on Node.js and while Eleventy does bring an updated architecture, the truly distinguishing difference is that Panini hasn't had major development work in <a href="https://github.com/foundation/panini/releases">two years</a> — Eleventy's development started shortly before that and continues at pace.</p>
+<p>With the changes Eleventy brings more flexibility. It's better at importing external data, has more robust templating and generally it has more flexibility and more consistent behaviour (thanks in <em>part</em> to the amount of momentum Eleventy collected). If you want to know what Eleventy can do, <a href="https://www.11ty.dev/docs/">look at the docs</a>.</p>
+<p>The migration was a fairly straightforward affair, changing some template syntax and spending most of my time on the look, content and page performance. But it's left me with a better platform to do all those things that I likely won't.</p>
+<p>So why bother at all? Because I can't help myself and:</p>
+<h2>Visual Framework and ulterior motives</h2>
+<p>I've also moved to Eleventy as it is an <a href="https://visual-framework.github.io/vf-welcome/building/">officially supported</a> implementation of <a href="https://visual-framework.github.io/vf-welcome/">the Visual Framework 2.0</a>, a highly-componentised front-end framework for life science websites.</p>
+<p>This is <em>not</em> a life-science website, however it is a good chance to test the flexibility of a framework that I'm personally invested in.</p>
+<h2>Here's some code</h2>
+<p>If you want to dig deeper on the code:</p>
+<ul>
+<li><a href="https://github.com/khawkins98/allaboutken/">My site on Panini circa 2018</a></li>
+<li><a href="https://github.com/khawkins98/allaboutken-11ty/">My site on Eleventy circa 2020</a></li>
+<li><a href="https://github.com/visual-framework/vf-eleventy">Visual Framework boilerplate for Eleventy</a></li>
+</ul>
+
+
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+      </div>
+      <div class="vf-grid__col--span-1">
+      </div>
+    </section>
+  </div>
+</article>
+
+<div class="vf-stack vf-u-padding__top--800">
+
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Comment?</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      <p>Thanks for reading, if you have comment I'd love to hear it.</p>
+
+      <p>
+        <a href="https://twitter.com/khawkins98">Twitter<span class="show-for-large"> @khawkins98</span></a>
+        
+        &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+        
+        &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+      </p>
+    </div>
+  </article>
+  
+
+
+  
+  <article class="vf-grid vf-grid__col-3 | do-not-print">
+    <div class="vf-grid__col--span-1">
+      <h2 class="vf-text-heading--2 | vf-u-float__right--md">Read more</h2>
+    </div>
+    <div class="vf-grid__col--span-2 vf-content">
+      
+      
+
+      
+      <p class="vf-text-body--3">Previously: <a href="/posts/20200208-its-been-20-years.html" class="vf-link">Publishing since the 2000s</a></p>
+      
+
+      
+      <p class="vf-text-body--3">Next: <a href="/posts/20200208-its-been-20-years.html" class="vf-link">Lerna monorepos with fewer tags</a></p>
+      
+
+      <p>
+        <a href="/blog" class="vf-button vf-button--secondary vf-button--sm"> ⇤ Blog index</a>
+      </p>
+    </div>
+  </article>
+  
+</div>
+    </main>
+    
+      <footer class="vf-footer | do-not-print" role="contentinfo">
+  <div class="vf-footer__inner">
+    <div class="vf-footer__notice">
+
+      <div class="vf-body--text | vf-content | do-not-print"><p><strong>I'm Ken Hawkins</strong>
+I bring structure and process to complex web projects. Learn more about me <a class="vf-footer__link" href="/">on the front page</a> or <a class="vf-footer__link" href="/#hello">get in touch</a>.</p>
+</div>
+
+      <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+      &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a></div>
+  </div>
+</footer>
+
+<code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
+
+    
+    
+    <script src="/scripts/scripts.js"></script>
+  </body>
+</html>
