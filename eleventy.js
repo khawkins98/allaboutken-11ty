@@ -7,7 +7,11 @@ module.exports = function(config) {
   // Add in tags, filters useful for Visual Framework installs
   // (fractal's render tag, codeblock, markdown, etc)
   // and common configuration
-  const vfEleventyExtension = require("@visual-framework/vf-extensions\/11ty");
+
+  // const vfEleventyExtension = require("@visual-framework/vf-extensions\/11ty");
+  // revert once https://github.com/visual-framework/vf-core/pull/1848 is merged in and published to npm
+  const vfEleventyExtension = require("./temp-fixes/vf-extensions/11ty");
+  
   config.addPlugin(vfEleventyExtension);
 
   // BroswerSync options
