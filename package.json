@@ -25,10 +25,10 @@
     "update-components": "yarn upgrade-interactive --latest"
   },
   "dependencies": {
-    "@11ty/eleventy": "^1.0.2",
+    "@11ty/eleventy": "^2.0.0-beta.2",
     "@node-sass/node-module-importer": "1.2.3",
     "@visual-framework/embl-grid": "2.2.0",
-    "@visual-framework/vf-banner": "1.9.1",
+    "@visual-framework/vf-banner": "1.9.2",
     "@visual-framework/vf-body": "1.2.0",
     "@visual-framework/vf-box": "2.4.0",
     "@visual-framework/vf-card": "2.7.0",
@@ -67,7 +67,7 @@
     "@visual-framework/vf-summary": "1.6.1",
     "@visual-framework/vf-summary-container": "1.0.0",
     "@visual-framework/vf-table": "1.2.0-rc.3",
-    "@visual-framework/vf-tabs": "2.1.0",
+    "@visual-framework/vf-tabs": "2.1.1",
     "@visual-framework/vf-text": "1.1.0",
     "@visual-framework/vf-u-fullbleed": "1.2.2",
     "@visual-framework/vf-utility-classes": "2.0.0",
@@ -75,7 +75,7 @@
     "gulp-images-resizer": "0.0.8",
     "html-minifier": "4.0.0",
     "list-stream": "2.1.0",
-    "node-html-parser": "6.1.1",
+    "node-html-parser": "6.1.4",
     "require-dir": "1.2.0",
     "strip-js": "1.2.0",
     "striptags": "3.2.0"
