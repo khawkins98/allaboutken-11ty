@@ -1,9 +1,9 @@
 const { DateTime } = require('luxon');
 const _            = require('lodash');
 const Path         = require('path');
+// const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
 
 module.exports = function(config) {
-
   // Add in tags, filters useful for Visual Framework installs
   // (fractal's render tag, codeblock, markdown, etc)
   // and common configuration
@@ -22,7 +22,7 @@ module.exports = function(config) {
   //   return 'ddd' + value;
   // });
 
-  // Add any utiliuty filters
+  // Add any utility filters
   config.addFilter("dateDisplay", (dateObj, format = "d LLL y") => {
     return DateTime.fromJSDate(dateObj, {
       zone: "utc"
@@ -88,6 +88,9 @@ module.exports = function(config) {
 
   // mostly needed for redirecting from old drupal urls
   config.addPassthroughCopy("./src/site/**/*.html");
+
+  // // If you have other `addPlugin` calls, it’s important that UpgradeHelper is added last.
+  // config.addPlugin(UpgradeHelper);
 
   return {
     dir: {
