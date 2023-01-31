@@ -29,6 +29,7 @@ jobs:
         run: | # Install npm packages and build the Storybook files
           yarn install
           yarn run build
+          mkdir _site
           mv build _site/build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
