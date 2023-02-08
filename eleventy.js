@@ -15,8 +15,44 @@ module.exports = function(config) {
   config.addPlugin(vfEleventyExtension);
 
   // BroswerSync options
-  config.setBrowserSyncConfig({ open: true });
+  // config.setBrowserSyncConfig({ open: true, open: "local" });
+  // 11ty version 2 has its own dev server
+  // https://www.11ty.dev/docs/dev-server/
+  config.setServerOptions({
+    // Default values are shown:
+    showVersion: true,
+    // Whether the live reload snippet is used
+    liveReload: true,
 
+    // It cannot open a browser tab without hacks
+    // https://github.com/11ty/eleventy-dev-server/issues/28
+    // open: true,
+
+    // Whether DOM diffing updates are applied where possible instead of page reloads
+    domDiff: true,
+
+    // The starting port number
+    // Will increment up to (configurable) 10 times if a port is already in use.
+    // port: 8080,
+
+    // Additional files to watch that will trigger server updates
+    // Accepts an Array of file paths or globs (passed to `chokidar.watch`).
+    // Works great with a separate bundler writing files to your output folder.
+    // e.g. `watch: ["_site/**/*.css"]`
+    // watch: [],
+
+    // Show local network IP addresses for device testing
+    showAllHosts: true,
+
+    // Use a local key/certificate to opt-in to local HTTP/2 with https
+    https: {
+      // key: "./localhost.key",
+      // cert: "./localhost.cert",
+    },
+
+    // Change the default file encoding for reading/serving files
+    encoding: "utf-8",
+  });
   // Filters
   // https://www.11ty.io/docs/filters/
   // -----
