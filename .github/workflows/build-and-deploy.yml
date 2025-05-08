@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         # with:
         #   persist-credentials: false
       - name: Install and Build 🔧
@@ -31,7 +31,7 @@ jobs:
           yarn run build
           mv build _site
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
   # Deployment job
   deploy:
     if: github.ref == 'refs/heads/main' # only deploy if branch is master
