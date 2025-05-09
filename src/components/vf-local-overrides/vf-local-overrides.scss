@@ -72,7 +72,7 @@ html, body {
     @include set-type(text-body--2, $custom-margin-bottom: 0);
     font-weight: 700;
   }
-  
+
   dd:not([class*='vf-']) {
     @include set-type(text-body--2, $custom-margin-bottom: 24px);
   }
@@ -157,10 +157,10 @@ html, body {
 // Debug information from component's `package.json`:
 // ---
 /*!
- * Component: #{map-get($componentInfo, 'name')}
- * Version: #{map-get($componentInfo, 'version')}
- * Location: #{map-get($componentInfo, 'location')}
- */
+* Component: #{map-get($componentInfo, 'name')}
+* Version: #{map-get($componentInfo, 'version')}
+* Location: #{map-get($componentInfo, 'location')}
+*/
 
 
 .ken-grid {
@@ -185,15 +185,15 @@ html, body {
     display: grid;
     grid-column-gap: var(--page-grid-gap);
     /* stylelint-disable declaration-colon-space-after */
-    grid-template-columns: 
-      calc(var(--embl-grid-module--prime) + var(--embl-grid-spacing-normaliser)) 
-      [main-start] 
-      repeat(auto-fit, minmax(288px, 1fr)) 
-      [main-end]
+    grid-template-columns:
+    calc(var(--embl-grid-module--prime) + var(--embl-grid-spacing-normaliser))
+    [main-start]
+    repeat(auto-fit, minmax(288px, 1fr))
+    [main-end]
     ;
     /* stylelint-enable */
   }
-  
+
 }
 
 .ken-grid--has-centered-content {
@@ -205,9 +205,9 @@ html, body {
 
     /* stylelint-disable declaration-colon-space-after */
     grid-template-columns:
-      var(--embl-grid-module--prime)
-      auto
-      var(--embl-grid-module--prime)
+    var(--embl-grid-module--prime)
+    auto
+    var(--embl-grid-module--prime)
     ;
     /* stylelint-enable */
   }
@@ -253,9 +253,9 @@ html, body {
 
     /* stylelint-disable declaration-colon-space-after */
     grid-template-columns:
-      // var(--embl-grid-module--prime)
-      auto
-      var(--embl-grid-module--prime)
+    // var(--embl-grid-module--prime)
+    auto
+    var(--embl-grid-module--prime)
     ;
     /* stylelint-enable */
   }
@@ -296,7 +296,7 @@ html, body {
 // link beutification
 // https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-color
 .vf-link,
-.vf-content a, 
+.vf-content a,
 .vf-content a:not([class*='vf-']),
 .vf-content .vf-link {
   text-decoration-color: #3b6fb6;
@@ -306,7 +306,7 @@ html, body {
 
 
 .vf-link:visited,
-.vf-content a:visited 
+.vf-content a:visited
 .vf-content a:not([class*='vf-']):visited,
 .vf-content .vf-link:visited {
   text-decoration-color: #734595;
@@ -316,7 +316,7 @@ html, body {
 
 .vf-footer .vf-content p,
 .vf-content .vf-footer__link,
-.vf-content .vf-footer__link:visited { 
+.vf-content .vf-footer__link:visited {
   color: #fff;
 }
 
@@ -408,14 +408,14 @@ body .vf-footer {
   font-size: 14px;
 }
 .vf-content pre, .vf-content code, .vf-code-example__pre, .vf-code-example {
-//   color: #fff;
+  //   color: #fff;
   background: #fff;
 }
 
 /* set the printable link CSS */
-@media print { 
+@media print {
   .vf-content a:not([class*=vf-]),
-  .vf-content a:not([class*=vf-]):visited, 
+  .vf-content a:not([class*=vf-]):visited,
   .vf-content a:not([class*=vf-]),
   .vf-content a:not([class*=vf-]):visited {
     color: #000;
@@ -427,8 +427,8 @@ body .vf-footer {
     text-decoration-line: none;
     color: #000;
   }
-  .ken-link--print a:link:after, 
-  .ken-link--print a:visited:after { 
+  .ken-link--print a:link:after,
+  .ken-link--print a:visited:after {
     display: block;
     content: "" attr(href) "";
     font-size: 80%;
@@ -450,5 +450,23 @@ body .vf-footer {
   .kh-bleed-out {
     margin-right: -30%;
     margin-left: -30%;
+  }
+}
+
+.vf-video {
+  aspect-ratio: 16 / 9;
+  height: auto;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+
+  iframe,
+  object,
+  embed {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
   }
 }
