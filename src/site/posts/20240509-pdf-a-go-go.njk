@@ -1,10 +1,10 @@
 ---
 title: "PDF-A-go-go: Rethinking PDF Viewing for PreventionWeb"
 layout: layouts/post.njk
-teaser: "A new approach to embedding PDFs for a better web experience."
+teaser: "Because ‘Just give them the PDF’ isn’t good enough."
 image: "/blog/pdf-a-go-go.jpg"
 image_meta:
-  text: 'Screenshot of PDF-A-go-go in action.'
+  text: "Screenshot of PDF-A-go-go in action."
   altext: "A modern, accessible PDF viewer interface."
 date: 2025-05-09
 active_path: blog
@@ -18,9 +18,15 @@ topics:
 
 {% markdown %}
 
-A recurring headache for the web site owner and user is the humble PDF. Ubiquitous, essential, and the closest we've come to an immutable file format -- I can more easily open a PDF [from 30 years ago](https://web.archive.org/web/20051103044315/http://www.pdf-tools.com/public/downloads/pdf-reference/pdfreference12.pdf) than a web page from 20 years back (anyone else remember Flash?). On PreventionWeb.net, where research, reports, and guidance documents are central to the user experience, the way we present PDFs matters. Yet we often leave users with a choice: do you want the web page with added context and related materials or the PDF download. Better to be able to have both.
+The lowly PDF is the cockroach of file formats—annoying, unstoppable, often despised and but still more future-proof than half the web. I can open a PDF from [from 1996](https://web.archive.org/web/20051103044315/http://www.pdf-tools.com/public/downloads/pdf-reference/pdfreference12.pdf) more reliably than a mid-2000s Flash microsite.
 
-## Why is this still a problem?
+But PDFs are still not great, they bring a range of issues and, at a minimum, present users with an annoying choice: read the the web page with added context and related materials or the PDF download. Better to be able to have both.
+
+In my daily work, this issue has become more profound: On [PreventionWeb.net](https://PreventionWeb.net), research papers and guidance docs *are* the product, so the hand-off between “nice web page” and “raw download” matters. Right now we force people to pick one. Why not serve both?
+
+## Why is *this* still a problem?
+
+It’s 2025. We have rockets that land themselves. Yet most “drop-in” PDF viewers are:
 
 You'd think, in 2025, that there'd be a drop-in, lightweight, accessible PDF viewer that just works. But after poking around, most solutions are either heavy, locked behind paywalls, or just not quite right for our needs. I want something that:
 
@@ -32,23 +38,25 @@ You'd think, in 2025, that there'd be a drop-in, lightweight, accessible PDF vie
 - Some search support
 - Doesn't drag in a pile of dependencies
 
+
 ## Enter PDF-A-go-go
 
 While there are 3rd party tools for this, such as embedding the raw PDF viewer or commercial services: these are either clunky, inconsistent, inflexible or just not great.
 
-So I made a somewhat off-the-cuff named PDF-A-go-go: a small, embeddable PDF viewer. It's built on top of Mozilla's excellent [PDF.js](https://mozilla.github.io/pdf.js/), but strips things down to the essentials and adds a few features that make it a better fit for sites like PreventionWeb:
+Instead of bending yet another third-party widget to our will, I rolled a tiny wrapper around Mozilla’s excellent [PDF.js](https://mozilla.github.io/pdf.js/). It keeps the good bits, bins the bloat and adds a few essentials:
 
-- **Side-scroll viewing**: Feels more like flipping through a magazine than a clunky old document viewer.
-- **Customizable controls**: Show or hide search, page selectors, download buttons, and more—just by tweaking data attributes.
-- **Accessible by default**: Keyboard navigation, ARIA labels, and screen reader support are all baked in.
-- **Shareable links**: Every page in a PDF can be linked to directly, making it easier to reference specific sections in reports or guidance docs.
-- **Mobile friendly**: Works well on phones and tablets, not just desktops.
+- **Side-scroll reading** – more magazine, less micro-fiche
+- **Togglable chrome** – hide search, page picker, download, whatever, via dirt-simple data-attributes
+- **Built-in a11y** – ARIA, focus management and decent screen-reader output from the get-go
+- **Deep links** – share a URL straight to page 99, footnote 12-b
+- **Mobile first** – fingers > tiny arrows
 
 Integration is as simple as dropping in a JS and CSS file, then adding a container div with a few data attributes. No React, no build step, no fuss. Here's what it looks like in practice:
 
 ```html
 <link rel="stylesheet" href="https://khawkins98.github.io/PDF-A-go-go/pdf-a-go-go.css">
 <script src="https://khawkins98.github.io/PDF-A-go-go/pdf-a-go-go.js"></script>
+
 <div class="pdfagogo-container"
      data-pdf-url="./example.pdf"
      data-show-search="true"
@@ -73,7 +81,7 @@ Here's a live example of PDF-A-go-go in action. For more info or to contribute, 
      aria-label="PDF Viewer"
      aria-live="polite"
      aria-atomic="true"
-     data-pdf-url="https://khawkins98.github.io/PDF-A-go-go/example_spread.pdf"
+     data-pdf-url="/images/original/blog/test.pdf"
      data-default-page="3"
      data-height="2500"
      data-show-prev-next="false"></div>
@@ -97,15 +105,15 @@ I thought I could get a quick win in rewrapping [Flipbook Viewer](https://github
 
 After a few rounds of testing and feedback, it became clear that the flipbook approach was getting in the way of what users actually needed: fast, accessible, and intuitive PDF navigation.
 
-So, I pivoted. The flipbook code was retired (though you'll still find a ghost of it in the repo), and I rebuilt the viewer around a side-scroll paradigm. This new approach is lighter, faster, and much more in line with how people actually use PDFs on the web—especially in a research-heavy context like PreventionWeb.
+So, I pivoted. The flipbook code was retired and I built a new viewer layer around a simpler and more reliable side-scroll paradigm. This new approach is lighter, faster, and much more in line with how people actually use PDFs on the web—especially in a research-heavy context like PreventionWeb all the while giving us a better foundation for more customization around the UX.
 
 The result? A smoother, more accessible experience that feels like it belongs in a modern web app, not a novelty kiosk. Sometimes, the best interface is the one that gets out of the way.
 
 ## What's next?
 
-- More customization options (themes, layout tweaks)
-- Better search and navigation
-- Even lighter footprint
+- Performance optimization
+- UX tweaks and accessibility
+- Perhaps publishing to npm or a CDN
 
 If you've ever been frustrated by the state of PDF embedding on the web, give PDF-A-go-go a try. Sometimes the best tools are the ones you build because you can't believe they don't already exist.
 
