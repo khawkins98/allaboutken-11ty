@@ -1,12 +1,12 @@
 ---
 title: "DB of caution: Azure and Drupal"
 layout: layouts/post.njk
-teaser: "Managed Azure Database for MySQL cost us 50%–80% in raw query time compared with a self‑hosted MariaDB VM. After six months of pain, we flipped back to a classic VM and instantly halved our page‑load times."
+teaser: "Managed Azure Database for MySQL cost us 50%–80% slow down. After six months of pain, we moved our Drupal 10 site back to a classic VM and halved our page‑load times."
 image: "/blog/train-delays.jpg"
 image_meta:
-  text: 'A train station display board full of delays -- sometimes, the signs are right in front of you.'
+  text: 'A train station display board full of delays: sometimes, the signs are right in front of you.'
   altext: "Train delays and database metrics: both can leave you waiting."
-date: 2025-07-07
+date: 2025-07-10
 active_path: blog
 tags: posts
 topics:
@@ -15,7 +15,9 @@ topics:
 
 {% markdown %}
 
-**TL;DR:** Managed *Azure Database for MySQL* cost us 50%–80% in raw query time compared with a self‑hosted MariaDB VM. After six months of pain, we flipped back to a classic VM and instantly halved our page‑load times. If you run a transaction‑heavy Drupal (or WordPress or similar) site, steer clear of Azure's managed MySQL unless you enjoy 503s and coffee‑fuelled debugging nights.
+**TL;DR:**  If you run a transaction‑heavy Drupal (or WordPress or similar) site, steer clear of Azure's managed MySQL unless you enjoy 503s and coffee‑fuelled debugging nights.
+
+I’m sharing our saga to help you steer clear of the same pitfall — or find your way out if you’ve already stumbled in.
 
 ---
 
@@ -29,43 +31,29 @@ As seasoned Drupal folk we blamed everything except the new database: contrib mo
 
 ### Non‑cached pages: the early smoke signal
 
-Early in the migration process there were large warning signs, anything that was not already in cache felt like mud:
+Early in the migration process there were large warning signs, anything that was not already in cache felt like mud when we  profiled 20 top‑traffic URLs plus 10 admin paths into **JMeter** scripts (50 concurrent users, 5‑minute ramp‑up):
 
-* **/news view filter** – searching for *"UNDRR"* on Azure took **5.8 s server response** versus **1.68 s on prod** (same code, same data).
-* Editor paths like `/admin/content?type=conference` routinely doubled in TTFB, new‑node forms crawled past 13 s, and the media modal kept engineers on hold for eight.
+* **/news view filter** – searching for *"disaster risk"* on Azure took **5.8 s server response** versus **1.68 s on prod** (same code, same data).
+* Editor paths like `/admin/content?type=conference` routinely doubled in <abbr title="Time To First Byte">TTFB</abbr>, `/node/add` page went past 13 seconds to load, and the media modal didn't.
 
-Pressure to finalise a migration was high and we -- in hindsight, mistakingly -- agreed to move environments and either fix the issue later. I still had not given up hope that this was purely a matter of priming the site and that once the site was lively, it would be more responsive.
+Pressure to finalise a migration was high and we -- in hindsight, mistakenly -- agreed to move environments and either fix the issue later. I still had not given up hope that this was purely a matter of priming the site and that once the site was lively, it would be more responsive.
 
 I was wrong.
 
-### How we measured the pain
+### Measuring the pain
 
 As the weeks wore on, the performance issues continue, and we needed to track down where the pain was coming from.
 
 * Enabled Drupal 10's **Performance Profiler** with query logging at `watchdog.DEBUG`.
-* Compiled 20 top‑traffic URLs plus 10 admin paths into **JMeter** scripts (50 concurrent users, 5‑minute ramp‑up).
 * Alternated load tests hourly between the managed MySQL endpoint and the MariaDB VM to neutralise cache effects.
 
 The numbers were grim: aggregate query time was **51% slower** on Azure DB for MySQL, with p95 latency brushing three seconds. PHP execution time barely budged, confirming the real villain sat behind that "fully managed" façade.
 
 At this point, we could prove that the production environment's database was too slow, but we could point out why.
 
-### A diversion in the quest: And Admin Menu's four‑level query avalanche
-
-Our early profiling runs were skewed by Drupal's **admin_menu** module, whose convenience hides an ugly truth: it fires off dozens of queries on every backend request. That overhead clouded our view as we hunted for Azure's real bottleneck. (We're rolling our own slim, in‑house admin menu to fix this for good — details to come.)
-
-Drupal's trusty **admin_menu** contrib module politely renders drop‑downs by loading the entire menu tree—**four levels deep**—on every backend page. On a chunky local database that's fine; under Azure's network‑hobbled MySQL it was like adding ankle weights to a marathon runner.
-
-* **+117 extra SELECTs per request.** We counted.
-* Backend TTFB spiked from **1.1 s → 3.2 s** when admin_menu was enabled.
-
-Our quick win during diagnostics was simply **setting admin_menu to two levels of depth**, which immediately shaved ~2 s off critical admin pages and proved the DB layer was already buckling.
-
-We have a more holsitic forthcoming fix by rolling our own admin toolbar that is much simpler in functionality and shows only the links our admins and editors need through a simple taxonomy system (watch for a future post here ...)
-
-## Measuring raw performance
-
 To isolate this we took our Drupal configuration out of the equation and ran a number of queries to calculate performance between the **Azure Database for MySQL** with two alternatives: **MySQL** and **MariaDB** running on dedicated Azure virtual machines. Across every database-heavy test—including admin pages, content listings, and background operations—the **VM-based databases crushed the baseline**, slashing load times by up to 60%.
+
+> A massive hat thanks to Johan for orchestrating the load tests, crunching the stats, and getting us the raw data we needed to conclusively move away from what was billed as best practice.
 
 The standout winner was **MariaDB on a VM**, which consistently outperformed both the current setup and VM-based MySQL. Even MySQL on a VM delivered big gains over the managed database, but MariaDB edged ahead in nearly every case, especially on complex pages. Here's a snapshot of the results:
 
@@ -78,21 +66,28 @@ The standout winner was **MariaDB on a VM**, which consistently outperformed bot
 | ME01 Cold (Content) | 50.6 sec | 42.0 sec | **41.8 sec** | MariaDB |
 | ME01 Warm (Content) | 1.15 sec | 1.00 sec | **1.01 sec** | MariaDB |
 
-A massive hat tip to Johan for orchestrating the load tests, crunching the stats, and getting us the raw data we needed to conclusevely move away from what was billed as best practice.
+Digging in to the average for transactions we can see the pain clearly: Azure’s managed service lagged **3–4×** behind a self-hosted VM for write-heavy workloads. Reads fared a little better yet still showed a consistent penalty.
 
-## Making and measuring the move
+### CRUD micro-benchmark (seconds)
+
+| Operation | Azure MySQL (Before) | MariaDB VM (After) | Local MariaDB |
+|-----------|---------------------|--------------------|---------------|
+| CREATE TABLE | 0.145 | 0.038 | 0.045 |
+| INSERT (1k rows) | 3.853 | 2.806 | 1.461 |
+| SELECT (same rows) | 0.246 | 0.141 | 0.099 |
+| DROP TABLE | 0.097 | 0.091 | 0.037 |
+
+This last profiling stats were gathered using the excellent [Performance Profiler module](https://www.drupal.org/project/performance_profiler) for Drupal.
+
+## Measuring the win
 
 It took quite a bit of planning, approvals, doing and testing, but after several weeks we completed the move MariaDB. It was a win.
 
-We ran Drupal 10's **Performance Profiler** module before and after the switch:
-
-| Scenario | Azure MySQL (ms) | MariaDB VM (ms) | Δ |
+| Scenario | Before: Azure MySQL (ms) | After: MariaDB VM (ms) | Δ |
 |----------|------------------|-----------------|---|
 | DB benchmark (total) | **5 434** | **2 636** | −51% |
 | Admin » Appearance (cold cache) | 7 291 | 3 072 | −58% |
 | Admin » Appearance (warm) | 3 008 | 698 | −77% |
-
-> "Pure PHP stayed flat at ~0.67 s per request; all the wins came from faster queries." (internal test log)
 
 Even end‑user stats told the same story: daily 503s dropped 77%, and anonymous page loads shaved ~1.7 s off the top.
 
@@ -100,21 +95,39 @@ As to why Azure Database for MySQL is so slow it's hard to say, it just seems no
 
 Bonus: [MariaDB is now the RDBMS recommended by Drupal 11, so](https://www.drupal.org/docs/getting-started/system-requirements/database-server-requirements#s-drupal-11) our pivot wasn't just pragmatic—it aligned us with core guidance.
 
+### A diversion in the quest: Admin Menu
+
+Our early profiling runs were skewed by [Drupal's **admin_menu** module](https://www.drupal.org/project/admin_menu), whose overhead clouded our view as we hunted for the real Azure bottleneck.
+
+The trusty contrib module was helpfully doing what we asked, rendering drop‑downs by loading the entire menu tree  **four levels deep** on every editor page. On a chunky local database that's fine, under Azure's MySQL it wasn't.
+
+* **+117 extra SELECTs per request.** We counted.
+* Backend TTFB spiked from **1.1 s → 3.2 s** when admin_menu was enabled.
+
+Our quick win during diagnostics was simply **setting admin_menu to two levels of depth**, which immediately shaved ~2 s off critical admin pages and proved the DB layer was already buckling. That has however crippled the usefulness of the menu.
+
+We have a more holistic forthcoming fix by rolling our own admin toolbar that is much simpler in functionality and shows only the links our admins and editors need through a simple taxonomy system (watch for a future post here ...)
+
 ## But what about PHP file reads?
 
-Yes, PHP hits the file system on every request (even with OpCache). On Azure App Service those reads come from a remote SMB share. Benchmarks in the Azure OSS blog show a **100×** gap between local disk and the mounted `/home` volume under fio.
+Yes, PHP hits the file system on every request. On Azure App Service those reads come from a remote SMB share. Benchmarks in the Azure OSS blog show a **100×** gap between local disk and the mounted `/home` volume under fio.
 
-In our case Drupal's opcode cache masked most of that, so DB latency remained the dominant villain. Still, if you're shipping WordPress or Moodle you'll feel the sting sooner.
+In our case Drupal's opcode cache masked most of that, so DB latency remained the dominant villain.
 
 We still want to improve this, but for now it's not as crippling as the DB issues was.
 
-## Take‑aways for Drupal and WordPress
+## Takeaways for Drupal and WordPress
 
 1. **Benchmark first, migrate later.** Never agree to complete a migration when you have strong indicators of slow non-primed paths.
 2. If you're planning on using Azure DB for MySQL, take extra care to benchmark thoroughly
+3. For all the wins, there are trade offs: don't forget you'll need to do more on your backups and continuity planning
+
+---
+
+Chow Azure DB for MySql, now you’re just ...
 
 <aside class="vf-video">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/uB1D9wWxd2w?si=gYCaAtwA5yCnM-1d" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8UVNT4wvIGY?si=SgB26hAd89GIm-u7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </aside>
 
 {% endmarkdown %}
