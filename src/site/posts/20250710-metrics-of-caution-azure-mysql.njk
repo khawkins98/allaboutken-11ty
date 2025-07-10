@@ -116,11 +116,13 @@ In our case Drupal's opcode cache masked most of that, so DB latency remained th
 
 We still want to improve this, but for now it's not as crippling as the DB issues was.
 
-## Takeaways for Drupal and WordPress
+## Takeaways
 
 1. **Benchmark first, migrate later.** Never agree to complete a migration when you have strong indicators of slow non-primed paths.
 2. If you're planning on using Azure DB for MySQL, take extra care to benchmark thoroughly
-3. For all the wins, there are trade offs: don't forget you'll need to do more on your backups and continuity planning
+3. For all the wins, there are trade offs: don't forget you'll need to do more on your backups and continuity planning.
+4. Always compare against vanilla installs and raw performance. Before drawing conclusions, benchmark your stack against a clean, out-of-the-box install—sometimes custom modules, config, or cloud quirks hide the real culprit.
+5. Avoid monoliths, separate concerns. Where possible, resist the urge to build everything into a single, sprawling backend. Instead, consider mixing client-side rendering (for dynamic or interactive elements) with slimmer, purpose-built backend pages. This not only lightens the load on your database and server, but also makes it easier to optimize, debug, and scale each part independently.
 
 ---
 
