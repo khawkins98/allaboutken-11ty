@@ -43,38 +43,58 @@ You'd think, in 2025, that there'd be a drop-in, lightweight, accessible PDF vie
 
 While there are 3rd party tools for this, such as embedding the raw PDF viewer or commercial services: these are either clunky, inconsistent, inflexible or just not great.
 
+PDF-A-go-go is a drop‑in PDF viewer you can embed with a single script tag. Add a tiny CSS file for polish, set options with `data-*` attributes, and you’re done—no framework, no build step, no init code. It works almost anywhere you can write HTML.
+
+### Why PDF‑A‑go‑go?
+
+- **One‑line install**: Include one JS file, optionally one small CSS file
+- **Tiny footprint**: Real‑world demo transfer ~120 KB core viewer JS, ~490 KB JS dependencies, and ~4 KB CSS
+- **Works almost anywhere**: Static HTML, CMS templates, site builders, SSGs; no `<iframe>` required
+- **Super flexible embed**: Configure everything via `data-*` attributes—no custom JS required
+- **Accessible and fast**: Keyboard navigation, ARIA labels, screen‑reader support, and performance‑minded rendering
+
 Instead of bending yet another third-party widget to our will, I rolled a tiny wrapper around Mozilla’s excellent [PDF.js](https://mozilla.github.io/pdf.js/). It keeps the good bits, bins the bloat and adds a few essentials:
 
-- **Side-scroll reading** – more magazine, less micro-fiche
-- **Togglable chrome** – hide search, page picker, download, whatever, via dirt-simple data-attributes
-- **Built-in a11y** – ARIA, focus management and decent screen-reader output from the get-go
-- **Deep links** – share a URL straight to page 99, footnote 12-b
-- **Mobile first** – fingers > tiny arrows
+- **Side-scroll reading** – more magazine, less micro‑fiche
+- **Show/hide controls via data-attributes** – search, share, page selector, current page, download, fullscreen, resize grip, and visible accessibility instructions
+- **Full‑text search** – with highlighting and next/previous match navigation
+- **Shareable page links** – deep links via URL fragments
+- **Keyboard navigation** – comprehensive shortcuts across zoom, navigation, and search
+- **Resizable viewer** – drag handle to adjust height
+- **Download + Fullscreen** – built-in controls
+- **Smart HTML download handling** – works with institutional repositories that gate PDFs behind an HTML step
+- **Lightweight + embeddable** – single script tag + small CSS, no framework required
+- **Built-in accessibility** – ARIA roles, focus management, screen reader friendly
+- **Performance tuned** – progressive render and cleanup on top of PDF.js
 
 Integration is as simple as dropping in a JS and CSS file, then adding a container div with a few data attributes. No React, no build step, no fuss. Here's what it looks like in practice:
 
 ```html
 <link rel="stylesheet" href="https://khawkins98.github.io/PDF-A-go-go/pdf-a-go-go.css">
-<script src="https://khawkins98.github.io/PDF-A-go-go/pdf-a-go-go.js"></script>
+<script defer src="https://khawkins98.github.io/PDF-A-go-go/pdf-a-go-go.js"></script>
 
-<div class="pdfagogo-container"
+<div class="pdfagogo-container" id="pdfagogo-container"
      data-pdf-url="./example.pdf"
      data-show-search="true"
-     data-show-prev-next="true"
+     data-show-share="true"
      data-show-page-selector="true"
      data-show-current-page="true"
-     data-show-download="true"></div>
+     data-show-download="true"
+     data-show-fullscreen="true"
+     data-show-resize-grip="true"
+     data-show-accessibility-controls-visibly="true"
+     style="width:100%;max-width:100%;box-sizing:border-box;"></div>
 ```
 
 Want to hide the download button? Just set `data-show-download="false"`. Need to start on page 4? Add `data-default-page="4"`. It's all in the markup.
 
-Here's a live example of PDF-A-go-go in action. For more info or to contribute, check out the project on <a href="https://github.com/khawkins98/PDF-A-go-go" target="_blank" rel="noopener noreferrer">GitHub</a>.
+Here's a live example of PDF-A-go-go in action. For more info or to contribute, check out the project on <a href="https://github.com/khawkins98/PDF-A-go-go" target="_blank" rel="noopener noreferrer">GitHub</a> and see the <a href="https://khawkins98.github.io/PDF-A-go-go/" target="_blank" rel="noopener noreferrer">live demo</a>.
 
 {% endmarkdown %}
 
 <section class="kh-bleed-out">
 <link rel="stylesheet" href="https://khawkins98.github.io/PDF-A-go-go/pdf-a-go-go.css">
-<script defer="defer" src="https://khawkins98.github.io/PDF-A-go-go/pdf-a-go-go.js"></script>
+<script defer src="https://khawkins98.github.io/PDF-A-go-go/pdf-a-go-go.js"></script>
 <div class="pdfagogo-container" id="pdfagogo-container"
      tabindex="0"
      role="region"
@@ -83,15 +103,24 @@ Here's a live example of PDF-A-go-go in action. For more info or to contribute, 
      aria-atomic="true"
      data-pdf-url="/images/original/blog/test.pdf"
      data-default-page="3"
-     data-height="2500"
-     data-show-prev-next="false"></div>
+     data-show-search="true"
+     data-show-share="true"
+     data-show-page-selector="true"
+     data-show-current-page="true"
+     data-show-download="true"
+     data-show-fullscreen="true"
+     data-show-resize-grip="true"
+     data-show-accessibility-controls-visibly="true"></div>
 
 <style>
+  /* Demo sizing: tall but responsive */
+  #pdfagogo-container {
+    height: min(80vh, 1200px);
+  }
 </style>
 </section>
 
 {% markdown %}
-
 
 ## Sometimes it's about the journey
 
@@ -111,9 +140,10 @@ The result? A smoother, more accessible experience that feels like it belongs in
 
 ## What's next?
 
-- Performance optimization
-- UX tweaks and accessibility
-- Perhaps publishing to npm or a CDN
+- Further optimization for very large PDFs and low‑power devices
+- Accessibility polish and broader assistive tech testing
+- Harden the HTML download handler across more repository patterns
+- Packaging to npm/CDN and theming refinements
 
 If you've ever been frustrated by the state of PDF embedding on the web, give PDF-A-go-go a try. Sometimes the best tools are the ones you build because you can't believe they don't already exist.
 
