@@ -25,9 +25,9 @@
   letter-spacing: -1px;
   // color: #fff;
 
-  @media (min-width: 768px) {
-    font-size: 70px !important;
-  }
+  // @media (min-width: 768px) {
+  //   font-size: 70px !important;
+  // }
   // // background: #4d596d;
   // // background-image: linear-gradient(135deg, #4d596d 0%, #818ea9 100%);
   // // -webkit-background-clip: text !important;
@@ -35,8 +35,8 @@
 
   // --vf-font-now-alt--display--color: var(--vf-ui-color--grey);
   --vf-font-now-alt--display--color: var(--vf-color--orange);
-  
-  filter: 
+
+  filter:
     drop-shadow(-1px 1px var(--vf-font-now-alt--display--color))
     drop-shadow(-2px 2px var(--vf-font-now-alt--display--color))
     drop-shadow(-3px 3px var(--vf-font-now-alt--display--color))
