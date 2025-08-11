@@ -7,7 +7,6 @@ templateEngineOverride: njk, md
 active_path: front
 ---
 
-
 {# Page dividers #}
 {%- set divider %}
 <div style="page-break-before: always"></div>
@@ -38,7 +37,6 @@ active_path: front
 </div>
 
 {{ contactInfoPrint | safe }}
-
 
 <div class="vf-u-fullbleed vf-u-background-color--yellow--dark | embl-grid embl-grid--has-centered-content">
   <div></div>
@@ -150,19 +148,23 @@ My experience spans 20 years: beginning with printing presses, continuing throug
 
 {{ sectionHeader('Professional work history') }}
 
+
 <section class="embl-grid embl-grid--has-centered-content">
   <div>
-    {{ position('Website Officer', 'United Nations Office for Disaster Risk Reduction (UNDRR)', 'January 2022 – ongoing', 'Heidelberg, Germany', false ) }}
+
+
+
+<section class="embl-grid embl-grid--has-centered-content">
+  <div>
+    {{ position('Website Officer', 'United Nations Office for Disaster Risk Reduction (UNDRR)', 'January 2022 – present', 'Heidelberg, Germany', false ) }}
   </div>
   <div class="vf-content">
 
-I've done this at UNDRR
 
-I lead the creation of this tooling, the Visual Framework, and serve as its lead advocate to help developers and product designers to utilise and implement. I also ensure the Visual Framework adapts to those needs. This is an expansion of my role for the European Bioinformatics Institute (EMBL-EBI).
-
-- Grow, evolve legacy projects into pan-EMBL solutions
-- Sass, Nunjucks, Lerna, Fractal, npm, yarn, eleventy, component systems and many more
-- Information architecture and component tooling for EMBL web content, design systems
+- Led performance overhaul of flagship Drupal 10 platform, halving load times and improving editorial workflow speed.
+- Introduced RDF/SKOS metadata standards for hazard information, enabling structured discovery across UN platforms.
+- Architected component-based theming to unify brand, reduce maintenance overhead, and accelerate feature delivery.
+- Coordinated multi-office teams across Geneva, Bangkok, and Bonn for content strategy, UX, and technical delivery.
 - Architect abstracted web content platform, navigation
 - Facilitate collaboration between UX, developers and content teams
 - Foster design system growth, adoption by coordinating with development leads
@@ -175,8 +177,6 @@ I lead the creation of this tooling, the Visual Framework, and serve as its lead
 
   </div>
 </section>
-
-
 
 <section class="embl-grid embl-grid--has-centered-content">
   <div>
