@@ -1,0 +1,109 @@
+---
+title: "Talking value on Drupal 'maintenance'"
+layout: layouts/post.njk
+teaser: '"How many developers, does it take to develop website?" The existential question is often harder when the work invisibly keeps the lights on. Recently I had a happy time when I was able to harness internal metrics to craft a story that justifies development hours.'
+image: "/blog/street-lamp.jpg"
+image_meta:
+  text: 'Tools that don’t make headlines still shape the work. Illustration: Own work.'
+  alttext: "Close-up of a CMS dashboard with lots of tabs open – aka, an editor’s natural habitat."
+date: 2025-08-17
+active_path: blog
+tags: posts
+topics:
+  - drupal
+  - internal tools
+  - communication
+---
+
+{% markdown %}
+
+Updates to our Drupal CMS and similar internal platforms rarely look exciting from the outside. But we can frame their impact in terms leadership understands, transforming “maintenance” to “mission.”
+
+**TL;DR:** A few focused updates to our Drupal CMS added up to real efficiency gains. The key? Framing them not as backend tweaks, but as 58 staff hours a month handed back to the team.
+
+If you’ve ever shipped a Drupal update, you know the drill: new release, a couple of small features, a few bug fixes, maybe some backend speed tweaks. It’s the kind of thing that’s vital, but doesn’t win standing ovations in the staff meeting.
+
+And yet a recent release gave us something far more tangible: an estimated 58 hours a month reclaimed across our editorial teams. That’s not just a tech stat: it’s 1.5 extra work weeks a month we can now spend on strategy instead of image crops..
+
+That’s the story worth telling.
+
+## Why CMS work was invisible
+
+The paradox of CMS and internal tools work:
+
+- The better they are, the less anyone notices them.
+- Their value lives in avoided pain and gained efficiency, not shiny new features.
+- Leadership (understandably) sees the line item cost, but not the day-to-day friction removed.
+
+If we want these updates to land as more than “IT costs,” we have to tell the story in human, strategic terms.
+
+A faster menu load time is trivia.
+
+Fifty-eight hours gifted back to staff time? That’s strategy.
+
+## Three ways to talk about internal tooling wins
+
+Here’s what I tried in a recent internal note, and it landed well:
+
+1. **Aggregate the benefit.** Instead of “10 minutes saved per upload,” add it up across all users and tasks. For us, that meant rolling multiple small wins into the big number: “58 hours reclaimed across the org.” Big-picture numbers resonate.
+2. **Show the before-and-after.** A simple list of steps can be incredibly powerful. A big part of our time savings came from replacing a heavy, complex admin menu with a streamlined custom version. Showing the 9 clunky steps an editor took before vs. the 3 simple ones they take now makes the relief tangible, even for non-editors.
+3. **Connect to the mission.** Less time wrestling with the CMS means more time creating content that serves our audience. Always pull the thread back to organizational purpose.
+
+## A real-world example
+
+Here is an anonymized and condensed version of the update I sent to stakeholders.
+
+> **Subject:** Happy News: latest platform release reclaims 1.5 work weeks per month for editors
+>
+> Hi Team,
+>
+> Thanks to the efforts of our development team, our latest release delivered tangible improvements that ease editors’ work, reduce friction, and elevate content quality.
+>
+> The headline: These changes reclaim an estimated 58 hours monthly. In aggregate, this effectively gifts the organization 1.5 extra work weeks each month to reinvest in strategic initiatives. That’s the power of platform standardization: less friction, more time for mission-critical work.
+>
+> How we got that number:
+>
+> - **Publication Covers:** Streamlining the process of setting crops and creating covers saves an estimated 27 hours across our recent volume of publications.
+> - **Other Media Items:** Similar efficiencies on other uploads save an additional 31 hours.
+>
+> **Key Example: Document Processing**
+>
+> ## Before: 9 steps – often inconsistent and error-prone
+>
+> 1. Create entry for PDF
+> 2. Open Photoshop
+> 3. Crop PDF cover
+> 4. Save file
+> 5. Create media entry for PDF cover
+> 6. Upload image of PDF cover
+> 7. Name entry
+> 8. Specify 6 different image crops
+> 9. Select image for PDF cover
+>
+> ## After: 3 steps
+>
+> 1. Create entry for PDF
+> 2. System automatically generates an image of the PDF cover
+> 3. Select image, overriding if desired
+>
+> This is a direct result of our commitment to continuous improvement for our internal tools. Thank you all for your continued support.
+
+## A small tech appendix (for the Drupal crowd)
+
+For those curious about the “how”: much of this gain came from three custom code aspects in our latest Drupal 10.x release:
+
+- **A lighter admin menu.** We dropped the heavy contrib admin toolbar (too many options editors never needed, [plus it was query-heavy](/posts/20250710-metrics-of-caution-azure-mysql/)). In its place, we built a lean custom menu focused only on what our editors actually use.
+- **Auto-generated cover images for PDFs.** A new module now auto-creates a Media image entry when uploading a Media Document (PDF), thanks to ImageMagick. That cut the nine-step “Photoshop shuffle” down to three.
+- **Simplifying image cropping.** We’ve dropped use of the [`image_widget_crop`](https://www.drupal.org/project/image_widget_crop) module in favor of [`focal_point`](https://www.drupal.org/project/focal_point) along with some custom UX wins, which handles 99% of what we need while dropping unnecessary complexity.
+
+For these we can share the code, let me know if you are interested.
+
+## Why this matters beyond Drupal
+
+Yes, this was a specific Drupal release. But the bigger mission here is about how we can communicate the value and impact of technical work on any internal platform. The code itself won’t sell the value.
+
+We need leadership to see CMS updates not as overhead, but as capacity multipliers. That starts with emails, updates, and blog posts that frame them as such.
+
+{% endmarkdown %}
+
+
