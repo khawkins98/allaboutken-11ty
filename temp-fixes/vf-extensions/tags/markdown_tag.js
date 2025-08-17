@@ -2,7 +2,6 @@
 
 module.exports = Markdown;
 
-const nunjucks = require('nunjucks');
 const md = require('markdown-it')({ html: true });
 
 function Markdown(env) {
@@ -39,7 +38,7 @@ function Markdown(env) {
   // Markdown rendering for the file tag. Use the nunjucks.render function to render
   // the actual contents of the file. Pass the results through the markdown renderer.
   this.fileTag = function(environment, file) {
-    return new nunjucks.runtime.SafeString(md.render(file, environment.ctx));
+    return new env.runtime.SafeString(md.render(file, environment.ctx));
   }
 
   // Markdown rendering for the block. Pretty simple, just get the body text and pass
@@ -65,6 +64,6 @@ function Markdown(env) {
       body = body.join("\n"); // Rejoin into one string.
     }
 
-    return new nunjucks.runtime.SafeString(md.render(body));
+    return new env.runtime.SafeString(md.render(body));
   }
 }
