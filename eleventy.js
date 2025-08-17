@@ -1,6 +1,7 @@
 const { DateTime } = require('luxon');
 const _            = require('lodash');
 const Path         = require('path');
+const { execSync } = require('child_process');
 // const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
 
 module.exports = function(config) {
@@ -178,6 +179,34 @@ module.exports = function(config) {
 
   // mostly needed for redirecting from old drupal urls
   config.addPassthroughCopy("./src/site/**/*.html");
+
+  // Watch source images for changes
+  config.addWatchTarget("./src/site/images");
+
+  // Run image processing after each Eleventy build
+  config.on('eleventy.after', () => {
+    try {
+      execSync('node scripts/process-images.js', { stdio: 'inherit' });
+    } catch (e) {
+      console.error('Image processing failed in eleventy.after');
+    }
+    try {
+      execSync('node scripts/build-search-index.js', { stdio: 'inherit' });
+    } catch (e) {
+      console.error('Search index build failed in eleventy.after');
+    }
+  });
+
+  // When dev server detects image changes, re-run processing immediately
+  config.on('eleventy.beforeWatch', (changedFiles) => {
+    if (Array.isArray(changedFiles) && changedFiles.some((f) => f.includes('src/site/images'))) {
+      try {
+        execSync('node scripts/process-images.js', { stdio: 'inherit' });
+      } catch (e) {
+        console.error('Image processing failed in eleventy.beforeWatch');
+      }
+    }
+  });
 
   // // If you have other `addPlugin` calls, it’s important that UpgradeHelper is added last.
   // config.addPlugin(UpgradeHelper);

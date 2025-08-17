@@ -15,9 +15,9 @@
     "scripts:build": "esbuild src/components/vf-componenet-rollup/scripts.js --bundle --format=esm --outfile=build/scripts/scripts.js",
     "eleventy": "ELEVENTY_ENV=production eleventy --config=eleventy.js",
     "images": "node scripts/process-images.js",
-    "build": "yarn clean && yarn sass && yarn scripts:build && yarn eleventy && yarn images && node scripts/build-search-index.js && echo '🏋 Build completed'",
-    "images:watch": "chokidar 'src/site/images/**/*' -c 'node scripts/process-images.js'",
-    "dev": "concurrently -k \"sass --watch src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"esbuild src/components/vf-componenet-rollup/scripts.js --bundle --format=esm --outfile=build/scripts/scripts.js --watch\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\" \"yarn images && yarn images:watch\"",
+    "search:index": "node scripts/build-search-index.js",
+    "build": "yarn clean && yarn sass && yarn scripts:build && yarn eleventy && echo '🏋 Build completed'",
+    "dev": "concurrently -k \"sass --watch src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"esbuild src/components/vf-componenet-rollup/scripts.js --bundle --format=esm --outfile=build/scripts/scripts.js --watch\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\"",
     "start": "yarn dev",
     "test": "echo \"Error: no test specified\" && exit 0",
     "update-components": "yarn upgrade-interactive --latest"
