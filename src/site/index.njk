@@ -36,10 +36,7 @@ templateEngineOverride: njk
 </div>
 
 <section class="vf-card-container embl-grid">
-  {% render '@vf-section-header--default', {
-    "section_title": "Recently",
-    "id": "recently"
-  } %}
+  <h2 id="recently" class="vf-text-heading--2">Recently</h2>
   {#- <p class=" vf-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> -#}
   <section>
     <div class="vf-grid vf-grid__col-4 | summary-inline">
@@ -74,10 +71,7 @@ templateEngineOverride: njk
 {# <hr class="vf-divider" /> #}
 
 <section class="embl-grid embl-grid--has-centered-content">
-  {% render '@vf-section-header--default', {
-    "section_title": "Say hello",
-    "id": "hello"
-  } %}
+  <h2 id="hello" class="vf-text-heading--2">Say hello</h2>
   <section>
     <p class="vf-text-body--2">
       I'm currently fully engaged, helping a global leader <a href="https://www.preventionweb.net/">reduce the risk of disaster</a> — but you can still say hello.

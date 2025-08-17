@@ -22,7 +22,8 @@
 // import { vfFormFloatLabels } from 'vf-form__core/assets/vf-form__float-labels.js';
 // vfFormFloatLabels();
 
-import { vfSearchClientSide } from 'vf-search-client-side/vf-search-client-side';
+// vf-search-client-side is included via <script> tag in its template; no bundling needed
+// import { vfSearchClientSide } from 'vf-search-client-side/vf-search-client-side';
 
 // All EMBL JS
 // import { emblContentHubLoaderHtmlImports } from 'embl-content-hub-loader/embl-content-hub-loader__html-imports';
@@ -37,5 +38,4 @@ import { vfSearchClientSide } from 'vf-search-client-side/vf-search-client-side'
 // import { emblContentMetaProperties_Read } from 'embl-content-meta-properties/embl-content-meta-properties';
 // No default invokation
 
-import { vfLocalOverrides } from 'vf-local-overrides/vf-local-overrides';
-vfLocalOverrides();
+// Optional local JS is currently not required; keep file present to emit bundle

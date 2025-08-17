@@ -1,0 +1,23 @@
+// Minimal shims for removed VF Sass APIs used by local overrides
+
+$vf-breakpoint--sm: 600px !default;
+$vf-breakpoint--md: 846px !default;
+$vf-breakpoint--lg: 1024px !default;
+
+@function set-ui-color($name) {
+  @return #e0e0e0;
+}
+
+@mixin set-type($token, $custom-margin-bottom: null) {
+  @if $token == text-body--2 {
+    font-size: 1rem;
+    line-height: 1.6;
+  } @else {
+    font-size: 1rem;
+  }
+  @if $custom-margin-bottom != null {
+    margin-bottom: $custom-margin-bottom;
+  }
+}
+
+

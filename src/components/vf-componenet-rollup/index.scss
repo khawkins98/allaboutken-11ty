@@ -1,25 +1,9 @@
-@import 'package.variables.scss';
-@import 'vf-sass-config/index.scss';
-/*
- *
- * styles.css
- * The Visual Framework kitchen sink of styles.
- * Include this style sheet as a quick way to get *everything*,
- * or follow the guide at github.com/visual-framework/vf-core
- * to learn how to build custom and optimised CSS.
- */
-/*! Component: #{map-get($componentInfo, 'name')}
- * Version: #{map-get($componentInfo, 'version')}
- * Location: #{map-get($componentInfo, 'location')}
- * VF Core version in use: #{map-get($componentInfo, 'vfCoreVersion')}
- * Build time: #{map-get($componentInfo, 'buildTimeStamp')}
- */
-/* VF upstream component imports removed (vanilla build) */
+// Local shim to satisfy a few mixins/vars used in overrides
+@import '../_vf-shim.scss';
 
-// Always include local components and overrides
-@import 'ken-favicon/ken-favicon.scss';
-@import 'vf-font-now-alt/vf-font-now-alt.scss';
-@import 'vf-local-overrides/vf-local-overrides.scss';
+@import '../ken-favicon/ken-favicon.scss';
+@import '../vf-font-now-alt/vf-font-now-alt.scss';
+@import '../vf-local-overrides/vf-local-overrides.scss';
 
 /* Minimal compatibility for templates using vf-* classes */
 html { box-sizing: border-box; }
@@ -51,7 +35,6 @@ img { max-width: 100%; height: auto; display: block; }
 .vf-text-body--1 { font-size: 1.125rem; }
 .vf-text-body--2 { font-size: 1rem; }
 .vf-text-body--3 { font-size: .875rem; }
-.vf-text-body--5 { font-size: .75rem; }
 
 .vf-content { max-width: 70ch; }
 .vf-content p { margin: 0 0 1rem 0; }

@@ -1,7 +1,5 @@
-// Pass the fractal environment, components
-let localComponents = global.fractal.components.toJSON().items;
-
+// Fractal no longer used; provide empty-safe defaults
 module.exports = {
-  fractal: global.fractal,
-  localComponents: localComponents
+  fractal: {},
+  localComponents: []
 };

@@ -8,11 +8,10 @@ module.exports = function(config) {
   // (fractal's render tag, codeblock, markdown, etc)
   // and common configuration
 
-  // const vfEleventyExtension = require("@visual-framework/vf-extensions\/11ty");
-  // revert once https://github.com/visual-framework/vf-core/pull/1848 is merged in and published to npm
-  const vfEleventyExtension = require("./temp-fixes/vf-extensions/11ty");
-  
-  config.addPlugin(vfEleventyExtension);
+  // Remove VF-specific Eleventy plugin to simplify setup
+  // const vfEleventyExtension = require("@visual-framework/vf-extensions/11ty");
+  // const vfEleventyExtension = require("./temp-fixes/vf-extensions/11ty");
+  // config.addPlugin(vfEleventyExtension);
 
   // BroswerSync options
   // config.setBrowserSyncConfig({ open: true, open: "local" });
@@ -69,6 +68,19 @@ module.exports = function(config) {
     }).toFormat(format);
   });
 
+  // Minimal RSS helpers replacing vf-extensions filters
+  config.addFilter("rssDate", (dateObj) => {
+    return DateTime.fromJSDate(dateObj, { zone: "utc" }).toISO();
+  });
+  config.addFilter("rssLastUpdatedDate", (posts) => {
+    if (!Array.isArray(posts) || posts.length === 0) return DateTime.now().toISO();
+    const latest = posts.reduce((a, b) => (a.date > b.date ? a : b));
+    return DateTime.fromJSDate(latest.date, { zone: "utc" }).toISO();
+  });
+  config.addFilter("htmlToAbsoluteUrls", (content, absoluteUrl) => {
+    return (content || '').replace(/href="\//g, `href="${absoluteUrl.replace(/\/$/, '')}/`);
+  });
+
   // config.addFilter("makeLowercase", function(value) {
   //   value = value || '';
   //   return value.toLowerCase();
@@ -119,9 +131,13 @@ module.exports = function(config) {
   // });
 
   // copy js files
-  // this is necessary now that 11ty tries to compile JS files as templates
-  // @todo: backport to vf-eleventy
   config.addPassthroughCopy("./src/site/**/*.js");
+  // pass through built scripts and css
+  // these are already in output, no passthrough needed
+  // pass through favicon assets
+  config.addPassthroughCopy({ "./src/components/ken-favicon/assets": "assets/ken-favicon/assets" });
+  // pass through vf-search-client-side JS for search page
+  config.addPassthroughCopy({ "./node_modules/@visual-framework/vf-search-client-side/vf-search-client-side.js": "scripts/vf-search-client-side.js" });
 
   // pass some assets right through
   config.addPassthroughCopy("./src/site/images");
@@ -136,11 +152,12 @@ module.exports = function(config) {
     dir: {
       input: "src/site",
       output: "build",
-      data: "_data"
+      data: "_data",
+      includes: "_includes"
     },
     templateFormats : [
       "njk", "md", // note that .md files will also be parsed with njk processor
-      "css" // passthrough file copying for static assets
+      "css", "js"
     ],
     htmlTemplateEngine : ["njk", "md"],
     markdownTemplateEngine : "njk",
