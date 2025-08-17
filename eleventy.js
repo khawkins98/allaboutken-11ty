@@ -4,15 +4,6 @@ const Path         = require('path');
 // const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
 
 module.exports = function(config) {
-  // Add in tags, filters useful for Visual Framework installs
-  // (fractal's render tag, codeblock, markdown, etc)
-  // and common configuration
-
-  // Remove VF-specific Eleventy plugin to simplify setup
-  // const vfEleventyExtension = require("@visual-framework/vf-extensions/11ty");
-  // const vfEleventyExtension = require("./temp-fixes/vf-extensions/11ty");
-  // config.addPlugin(vfEleventyExtension);
-
   // BroswerSync options
   // config.setBrowserSyncConfig({ open: true, open: "local" });
   // 11ty version 2 has its own dev server
@@ -81,16 +72,59 @@ module.exports = function(config) {
     return (content || '').replace(/href="\//g, `href="${absoluteUrl.replace(/\/$/, '')}/`);
   });
 
+  // Add a no-op Nunjucks tag for `render` so legacy templates don't fail
+  config.addNunjucksTag("render", function(nunjucksEngine) {
+    return new function() {
+      this.tags = ["render"];
+      this.parse = function(parser, nodes) {
+        const tok = parser.nextToken();
+        const args = parser.parseSignature(null, true);
+        parser.advanceAfterBlockEnd(tok.value);
+        return new nodes.CallExtensionAsync(this, "run", args);
+      };
+      this.run = function(context) {
+        const cb = arguments[arguments.length - 1];
+        const ret = new nunjucksEngine.runtime.SafeString("<!-- render tag omitted -->");
+        cb(null, ret);
+      };
+    }();
+  });
+
+  // Paired shortcode to render inline markdown blocks
+  const markdownIt = require('markdown-it')({ html: true, linkify: true });
+  config.addPairedShortcode('markdown', (content) => markdownIt.render(content || ''));
+
+  // Nunjucks codeblock tag shim
+  config.addNunjucksTag('codeblock', function(nunjucksEngine) {
+    return new function() {
+      this.tags = ['codeblock'];
+      this.parse = function(parser, nodes) {
+        const tok = parser.nextToken();
+        const args = parser.parseSignature(null, true);
+        parser.advanceAfterBlockEnd(tok.value);
+        const body = parser.parseUntilBlocks('endcodeblock');
+        parser.advanceAfterBlockEnd();
+        return new nodes.CallExtensionAsync(this, 'run', args, [body]);
+      };
+      this.run = function(context, lang, body, cb) {
+        const code = String(body());
+        const escaped = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        const ret = new nunjucksEngine.runtime.SafeString(`<pre data-lang="${lang}"><code>${escaped}</code></pre>`);
+        cb(null, ret);
+      };
+    }();
+  });
+
   // config.addFilter("makeLowercase", function(value) {
   //   value = value || '';
   //   return value.toLowerCase();
   // });
-  
+
   // config.addFilter("spaceToDashes", function(value) {
   //   value = value || '';
   //   return value.replace(/\s+/g, '-').toLowerCase();
   // });
-  
+
   // Shortcodes
   // https://www.11ty.io/docs/shortcodes/
   // -----
