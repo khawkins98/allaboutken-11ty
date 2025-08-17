@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" media="all" href="{{ '/css/styles.css' | url }}" />
     <title>{{ title or (renderData and renderData.title) or siteConfig.siteInformation.title}} | All about Ken Hawkins</title>
-    {% render '@ken-favicon' %}
-    {% render '@vf-no-js' %}
+    {% include "../../components/ken-favicon/ken-favicon.njk" %}
     <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
     <meta name="MobileOptimized" content="width" />
     <meta name="HandheldFriendly" content="true" />
@@ -63,6 +62,7 @@
       {% include "footer.njk" %}
     {% endif %}
     {# <!-- This page was generated on {{ site.buildTime | dateDisplay('LLL d, yyyy - HH:mm') }} --> #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ '/scripts/scripts.js' | url }}"></script>
   </body>
 </html>

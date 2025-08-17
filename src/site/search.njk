@@ -11,15 +11,17 @@ templateEngineOverride: njk
   {# <h1 class="vf-text-body--1">{{title}}</h1> #}
 </div>
 <div>
-  {% render '@vf-search-client-side', {
-    "search_client_button_text": "Search",
-    "search_client_autofocus": false,
-    "search_client_prompt": "Search the site",
-    "search_client_script": "/search_index.js",
-    "search_client_button": true,
-    "search_client_button_text": "Search",
-    "search_client_action": "/search/",
-    "search_client_results": true
+  {% set context = {
+    search_client_button_text: "Search",
+    search_client_autofocus: false,
+    search_client_prompt: "Search the site",
+    search_client_script: "/search_index.js",
+    search_client_button: true,
+    search_client_action: "/search/",
+    search_client_results: true,
+    search_client_id: "search_query",
+    search_client_destination_prefix: ""
   } %}
+  {% include "../../node_modules/@visual-framework/vf-search-client-side/vf-search-client-side.njk" %}
 </div>
 </section>
