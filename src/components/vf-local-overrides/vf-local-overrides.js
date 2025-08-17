@@ -51,13 +51,5 @@ function vfLocalOverrides(firstPassedVar) {
 
 }
 
-// // If you need to invoke the component by default
-// vfLocalOverrides();
-
 // By default your component should be usable with js imports
 export { vfLocalOverrides };
-//
-// // You should also import it at ./components/vf-core/scripts.js
-// // import { vfcomponentName } from '../components/raw/vf-component/vf-component.js';
-// // And, if needed, invoke it
-// // vfcomponentName();
