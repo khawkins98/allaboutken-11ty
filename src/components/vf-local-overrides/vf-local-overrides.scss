@@ -151,18 +151,6 @@ html, body {
 }
 
 // ken-grid
-// embl-grid
-
-@import 'package.variables.scss';
-// Debug information from component's `package.json`:
-// ---
-/*!
-* Component: #{map-get($componentInfo, 'name')}
-* Version: #{map-get($componentInfo, 'version')}
-* Location: #{map-get($componentInfo, 'location')}
-*/
-
-
 .ken-grid {
   grid-column: main;
   margin-bottom: 48px;
