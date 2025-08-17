@@ -9,21 +9,15 @@
   "license": "Apache-2.0",
   "author": "Ken Hawkins <khawkins98@gmail.com> (https://www.allaboutken.com/)",
   "main": "eleventy.js",
-  "vfConfig": {
-    "vfName": "All about Ken",
-    "vfNamespace": "ken-",
-    "vfComponentPath": "./src/components",
-    "vfBuildDestination": "./build",
-    "vfBuildFractalMode": "dataObject",
-    "vfThemePath": "@frctl/mandelbrot"
-  },
   "scripts": {
     "clean": "rm -rf build",
     "sass": "sass --load-path src/components --no-source-map src/components/vf-componenet-rollup/index.scss:build/css/styles.css",
     "scripts:build": "esbuild src/components/vf-componenet-rollup/scripts.js --bundle --format=esm --outfile=build/scripts/scripts.js",
     "eleventy": "ELEVENTY_ENV=production eleventy --config=eleventy.js",
-    "build": "yarn clean && yarn sass && yarn scripts:build && yarn eleventy && node scripts/build-search-index.js && echo '🏋 Build completed'",
-    "dev": "concurrently -k \"sass --watch src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"esbuild src/components/vf-componenet-rollup/scripts.js --bundle --format=esm --outfile=build/scripts/scripts.js --watch\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\"",
+    "images": "node scripts/process-images.js",
+    "build": "yarn clean && yarn sass && yarn scripts:build && yarn eleventy && yarn images && node scripts/build-search-index.js && echo '🏋 Build completed'",
+    "images:watch": "chokidar 'src/site/images/**/*' -c 'node scripts/process-images.js'",
+    "dev": "concurrently -k \"sass --watch src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"esbuild src/components/vf-componenet-rollup/scripts.js --bundle --format=esm --outfile=build/scripts/scripts.js --watch\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\" \"yarn images && yarn images:watch\"",
     "start": "yarn dev",
     "test": "echo \"Error: no test specified\" && exit 0",
     "update-components": "yarn upgrade-interactive --latest"
@@ -37,9 +31,11 @@
     "striptags": "3.2.0"
   },
   "devDependencies": {
+    "chokidar-cli": "^3.0.0",
     "concurrently": "^8.2.2",
     "esbuild": "^0.23.0",
-    "sass": "^1.77.6"
+    "sass": "^1.77.6",
+    "sharp": "^0.34.3"
   },
   "bugs": {
     "url": "https://github.com/khawkins98/allaboutken-11ty/issues"
