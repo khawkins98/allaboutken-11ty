@@ -1,10 +1,10 @@
 {
   "name": "allaboutken-11ty",
-  "version": "1.0.0-alpha.1",
+  "version": "2.0.0-alpha.1",
   "description": "Ken's site.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/visual-framework/vf-eleventy.git"
+    "url": "git+https://github.com/khawkins98/allaboutken-11ty.git"
   },
   "license": "Apache-2.0",
   "author": "Ken Hawkins <khawkins98@gmail.com> (https://www.allaboutken.com/)",
