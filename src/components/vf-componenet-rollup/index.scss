@@ -1,4 +1,5 @@
 @import 'package.variables.scss';
+@import 'vf-sass-config/index.scss';
 /*
  *
  * styles.css
@@ -13,166 +14,103 @@
  * VF Core version in use: #{map-get($componentInfo, 'vfCoreVersion')}
  * Build time: #{map-get($componentInfo, 'buildTimeStamp')}
  */
+/* VF upstream component imports removed (vanilla build) */
 
-@import 'vf-sass-config/index.scss';
-// Note, you can also do relative imports
-// @import '../vf-sass-config/index.scss';
-
-/* All Visual Framework Font components */
-// @import 'vf-font-plex-mono/vf-font-plex-mono.scss';
-// @import 'vf-font-plex-sans/vf-font-plex-sans.scss';
-
-html,
-button {
-  @if $use-global-typography == true {
-    font-family: $vf-font-family--sans-serif;
-  }
-}
-
-/* Visual Framework content compatibility
- * We put this first so it will have the least specificity
- */
-@import 'vf-content/vf-content.scss';
-
-/* All Visual Framework grids */
-
-// vf-grid-page is deprecated, use vf-body instead
-// @import 'vf-grid-page/vf-grid-page.scss';
-@import 'vf-body/vf-body.scss';
-@import 'vf-grid/vf-grid.scss';
-@import 'vf-cluster/vf-cluster.scss';
-@import 'vf-stack/vf-stack.scss';
-@import 'vf-sidebar/vf-sidebar.scss';
-@import 'vf-inlay/vf-inlay.scss';
-@import 'embl-grid/embl-grid.scss';
-
-/* All Visual Framework Elements */
-
-@import 'vf-badge/vf-badge.scss';
-@import 'vf-collapse/vf-collapse.scss';
-@import 'vf-link/vf-link.scss';
-@import 'vf-link/vf-link--primary.scss';
-@import 'vf-link/vf-link--secondary.scss';
-@import 'vf-link/vf-link--disabled.scss';
-@import 'vf-logo/vf-logo.scss';
-@import 'vf-embed/vf-embed.scss';
-@import 'embl-logo/embl-logo.scss';
-@import 'vf-explainer/vf-explainer.scss';
-@import 'vf-form/vf-form.scss';
-@import 'vf-button/vf-button.scss';
-@import 'vf-figure/vf-figure.scss';
-@import 'vf-list/vf-list.scss';
-@import 'vf-blockquote/vf-blockquote.scss';
-@import 'vf-divider/vf-divider.scss';
-@import 'embl-conditional-edit/embl-conditional-edit.scss';
-
-/* All Visual Framework Blocks */
-
-@import 'vf-box/vf-box.scss';
-
-@import 'vf-breadcrumbs/vf-breadcrumbs.scss';
-@import 'vf-breadcrumbs/vf-breadcrumbs--with-related.scss';
-
-@import 'vf-card/vf-card.scss';
-@import 'vf-card-container/vf-card-container.scss';
-
-@import 'vf-discussion/vf-discussion.scss';
-
-@import 'vf-code-example/vf-code-example.scss';
-@import 'vf-page-header/vf-page-header.scss';
-@import 'vf-link-list/vf-link-list.scss';
-@import 'vf-header/vf-header.scss';
-@import 'vf-hero/vf-hero.scss';
-
-@import 'vf-lede/vf-lede.scss';
-
-@import 'vf-masthead/vf-masthead.scss';
-@import 'vf-masthead/vf-masthead--supports.scss';
-
-@import 'vf-navigation/vf-navigation.scss';
-@import 'vf-navigation/vf-navigation--global.scss';
-@import 'vf-navigation/vf-navigation--main.scss';
-@import 'vf-navigation/vf-navigation--additional.scss';
-
-@import 'vf-section-header/vf-section-header.scss';
-@import 'vf-activity-list/vf-activity-list.scss';
-@import 'vf-article-meta-information/vf-article-meta-information.scss';
-
-@import 'vf-profile/vf-profile.scss';
-
-@import 'vf-search/vf-search.scss';
-
-@import 'vf-social-links/vf-social-links.scss';
-
-@import 'vf-summary/vf-summary.scss';
-@import 'vf-summary/vf-summary--article.scss';
-@import 'vf-summary/vf-summary--job.scss';
-@import 'vf-summary/vf-summary--profile.scss';
-@import 'vf-summary/vf-summary--event.scss';
-@import 'vf-summary/vf-summary--publication.scss';
-@import 'vf-summary/vf-summary--news.scss';
-@import 'vf-summary/vf-summary--has-image.scss';
-
-@import 'vf-video/vf-video.scss';
-@import 'vf-video-teaser/vf-video-teaser.scss';
-@import 'vf-global-header/vf-global-header.scss';
-@import 'vf-tabs/vf-tabs.scss';
-@import 'vf-table/vf-table.scss';
-@import 'embl-breadcrumbs-lookup/embl-breadcrumbs-lookup.scss';
-@import 'vf-pagination/vf-pagination.scss';
-@import 'vf-pagination/vf-pagination--full.scss';
-
-/* All Visual Framework Containers */
-
-@import 'vf-activity-group/vf-activity-group.scss';
-@import 'vf-intro/vf-intro.scss';
-@import 'embl-content-hub-loader/embl-content-hub-loader.scss';
-
-@import 'vf-banner/vf-banner.scss';
-@import 'vf-banner/vf-banner--phase.scss';
-@import 'vf-banner/vf-banner--alerts.scss';
-@import 'vf-banner/vf-banner--fixed.scss';
-@import 'vf-banner/vf-banner--gdpr.scss';
-
-@import 'vf-details/vf-details.scss';
-
-@import 'vf-news-container/vf-news-container.scss';
-@import 'vf-video-container/vf-video-container.scss';
-@import 'vf-footer/vf-footer.scss';
-
-@import 'vf-show-more/vf-show-more.scss';
-
-@import 'vf-tree/vf-tree.scss';
-
-/* All Visual Framework Boilerplates */
-
-// none here
-
-/* All Visual Framework Deprecated components */
-
-@import 'vf-deprecated/vf-deprecated.scss';
-
-/* EBI Specific components */
-// ebi-header-footer is not enabled by default
-// this may change as more EBI sites move to "pure" sVF 2.0
-// @import 'ebi-header-footer/ebi-header-footer.scss';
-@import 'ebi-vf1-integration/ebi-vf1-integration.scss';
-
-/* All Visual Framework Utility and high-specificity components */
-
-@import 'vf-heading/vf-heading.scss';
-@import 'vf-text/vf-text.scss';
-@import 'vf-u-fullbleed/vf-u-fullbleed.scss';
-
-/* Visual Framework Utility Class Mixins */
-@import 'vf-sass-config/mixins/vf-utility-mixins.scss';
-@import 'vf-utility-classes/vf-utility-classes.scss';
-
-// This is a demonstration of vf-core's ability to warn and proceed on missing
-// sass imports
-// @import 'vf-somepattern/vf-i-dont-exist.scss';
-
-// If you have any locoal overrides, put them in:
+// Always include local components and overrides
 @import 'ken-favicon/ken-favicon.scss';
 @import 'vf-font-now-alt/vf-font-now-alt.scss';
 @import 'vf-local-overrides/vf-local-overrides.scss';
+
+/* Minimal compatibility for templates using vf-* classes */
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; }
+body,
+.vf-body {
+  margin: 0;
+  color: #222;
+  background: #fbf6ef;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Helvetica Neue', 'Open Sans', Arial, sans-serif;
+  line-height: 1.6;
+}
+img { max-width: 100%; height: auto; display: block; }
+
+.vf-link,
+.vf-content a,
+.vf-navigation__link {
+  color: #333;
+  text-decoration: underline;
+  text-decoration-color: #3b6fb6;
+}
+.vf-link:hover,
+.vf-content a:hover,
+.vf-navigation__link:hover { text-decoration-thickness: 2px; }
+
+.vf-text-heading--1 { font-weight: 700; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; margin: 0 0 1rem 0; }
+.vf-text-heading--2 { font-weight: 700; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.25; margin: 0 0 .75rem 0; }
+.vf-text-body--1 { font-size: 1.125rem; }
+.vf-text-body--2 { font-size: 1rem; }
+.vf-text-body--3 { font-size: .875rem; }
+.vf-text-body--5 { font-size: .75rem; }
+
+.vf-content { max-width: 70ch; }
+.vf-content p { margin: 0 0 1rem 0; }
+.vf-content h1,
+.vf-content h2,
+.vf-content h3 { margin: 2rem 0 1rem 0; }
+
+.vf-stack > * + * { margin-top: 1rem; }
+.vf-stack--400 > * + * { margin-top: 1.5rem; }
+
+.vf-grid { display: grid; gap: 16px; }
+.vf-grid__col-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.vf-grid__col-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.vf-grid__col--span-1 { grid-column: span 1; }
+.vf-grid__col--span-2 { grid-column: span 2; }
+.vf-grid__col--span-3 { grid-column: span 3; }
+@media (max-width: 845px) {
+  .vf-grid__col-3,
+  .vf-grid__col-4 { grid-template-columns: 1fr; }
+  .vf-grid__col--span-1,
+  .vf-grid__col--span-2,
+  .vf-grid__col--span-3 { grid-column: auto; }
+}
+
+.vf-navigation { display: block; }
+.vf-navigation__list { list-style: none; display: flex; gap: 16px; padding: 0; margin: 0; flex-wrap: wrap; }
+.vf-navigation__item { display: inline-flex; }
+.vf-navigation__link { text-decoration: none; }
+.vf-navigation__link:hover { text-decoration: underline; }
+
+.vf-button { display: inline-block; padding: .5rem .75rem; border: 1px solid #333; background: transparent; color: #333; text-decoration: none; border-radius: 4px; }
+.vf-button--secondary { background: #f3f3f3; }
+.vf-button--sm { padding: .25rem .5rem; font-size: .875rem; }
+
+.vf-summary { display: grid; gap: .5rem; }
+.vf-summary__image img { width: 100%; height: auto; display: block; }
+.vf-summary__date { color: #000; font-size: .875rem; }
+
+.vf-u-fullbleed { display: block; }
+.vf-u-background-color--yellow--dark { background-color: #ffeb99; }
+.vf-u-padding__top--800 { padding-top: 3rem; }
+.vf-u-padding__top--600 { padding-top: 2rem; }
+.vf-u-padding__top--500 { padding-top: 1.5rem; }
+.vf-u-padding__bottom--200 { padding-bottom: .75rem; }
+.vf-u-margin__bottom--200 { margin-bottom: .75rem; }
+.vf-u-float__right--md { float: right; }
+.vf-u-text--nowrap { white-space: nowrap; }
+
+.show-for-large { display: none; }
+@media (min-width: 1024px) { .show-for-large { display: inline; } }
+.show-for-medium-only { display: none; }
+@media (min-width: 768px) and (max-width: 1023px) { .show-for-medium-only { display: inline; } }
+.show-for-medium-up { display: none; }
+@media (min-width: 768px) { .show-for-medium-up { display: inline; } }
+.show-for-mobile-only { display: inline; }
+@media (min-width: 768px) { .show-for-mobile-only { display: none; } }
+
+@media print { .do-not-print { display: none !important; } }
+
+/* Minimal EMBL grid compatibility used on index/cv */
+.embl-grid { display: grid; gap: 16px; align-items: start; }
+.embl-grid--has-centered-content { margin-inline: auto; max-width: 1200px; padding-inline: 16px; }
