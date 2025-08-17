@@ -1,13 +1,6 @@
 // vf-local-overrides
-
-@import 'vf-local-overrides.variables.scss';
-
 .vf-body {
   background: #fbf6ef;
-}
-
-.vf-local-overrides {
-  /* your settings here */
 }
 
 // minimal reset
@@ -17,7 +10,6 @@ img {
 
 // extra spacing after header
 .vf-global-header {
-  // margin-bottom:  map-get($vf-spacing-map, vf-spacing--xl);
   background-color: unset;
   border-bottom: none;
 }
@@ -54,18 +46,6 @@ img {
   }
 }
 
-// Default color
-.vf-body {
-  // color: var(--vf-color--grey--darkest);
-  // background: var(--vf-ui-color--grey--lightest);
-  // background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23252525' fill-opacity='1' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
-  // max-width: 67.5em;
-}
-
-html, body {
-  // background: var(--vf-ui-color--grey--light);
-}
-
 // .vf-content dl
 .vf-content {
   dt:not([class*='vf-']) {
@@ -81,15 +61,6 @@ html, body {
 
 // Print utility classes
 @media print {
-  // .grid-container,
-  // hr,
-  // .print-12 {
-  //   max-width: 100%;
-  //   width: 100% !important;
-  // }
-  // body {
-  //   font-size: .8rem;
-  // }
   .do-not-print {
     display:none !important;
   }
@@ -100,13 +71,6 @@ html, body {
     content: " ";
     display: none;
   }
-  // hr {
-  //   border-top-color: #222
-  // }
-  // .has-tip {
-  //   border-bottom: none !important;
-  //   font-weight: unset;
-  // }
 }
 @media screen {
   .show-for-print-only,
@@ -308,43 +272,6 @@ html, body {
   color: #fff;
 }
 
-// .ken-grid--alt {
-//   --page-grid-gap: 0;
-//   background-color: set-ui-color(vf-ui-color--black);
-//   color: set-ui-color(vf-ui-color--white);
-//   grid-column: 1 / -1;
-//   /* stylelint-disable declaration-colon-space-after */
-//   grid-template-columns:
-//     minmax(1em, auto)
-//     calc(var(--embl-grid-module--prime) + var(--embl-grid-spacing-normaliser))
-//     minmax(288px, calc(76.5em - 206px))
-//     minmax(1em, auto)
-//   ;
-//   /* stylelint-enable */
-//   justify-content: center;
-//   position: relative;
-
-//   & > :first-child {
-//     grid-column: 2 / -2;
-//   }
-//   & > :last-child {
-//     grid-column: 2 / -2;
-//   }
-
-//   @media (min-width: $vf-breakpoint--md) {
-//     & > :first-child {
-//       grid-column: 2 / span 1;
-//     }
-//     & > :last-child {
-//       grid-column: 3;
-//       margin-left: 16px;
-//     }
-//   }
-//   @media (min-width: 1200px) {
-//     & > :last-child {
-//       margin-left: 30px;
-//     }
-//   }
 
 //   // HACK: put here for now
 //   /* stylelint-disable order/properties-alphabetical-order, order/order  */
