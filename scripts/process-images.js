@@ -12,9 +12,19 @@ const SRC_DIR = path.resolve(__dirname, '..', 'src', 'site', 'images');
 const OUT_DIR = path.resolve(__dirname, '..', 'build', 'images');
 const OUT_ORIGINAL = path.join(OUT_DIR, 'original');
 const OUT_CROP = path.join(OUT_DIR, 'crop-cinema');
+const VERBOSE = process.argv.includes('--verbose') || process.env.VERBOSE === '1';
 
 async function ensureDir(dir) {
   await fsp.mkdir(dir, { recursive: true });
+}
+
+async function cleanDir(dir) {
+  // Remove a directory and all contents if it exists
+  try {
+    await fsp.rm(dir, { recursive: true, force: true });
+  } catch (_) {
+    // ignore
+  }
 }
 
 async function walk(dir) {
@@ -29,12 +39,16 @@ async function walk(dir) {
 }
 
 async function copyOriginals(files) {
+  let copied = 0;
   for (const src of files) {
     const rel = path.relative(SRC_DIR, src);
     const dest = path.join(OUT_ORIGINAL, rel);
     await ensureDir(path.dirname(dest));
     await fsp.copyFile(src, dest);
+    copied++;
+    if (VERBOSE) console.log(`[images] copied original: ${rel}`);
   }
+  return copied;
 }
 
 function isRasterForCrop(file) {
@@ -43,6 +57,7 @@ function isRasterForCrop(file) {
 }
 
 async function createCinematicCrops(files) {
+  let cropped = 0;
   for (const src of files) {
     if (!isRasterForCrop(src)) continue;
     const rel = path.relative(SRC_DIR, src);
@@ -55,17 +70,29 @@ async function createCinematicCrops(files) {
     } else if (ext === '.png') {
       await pipeline.png({ quality: 60 }).toFile(dest);
     }
+    cropped++;
+    if (VERBOSE) console.log(`[images] cropped 900x600: ${rel}`);
   }
+  return cropped;
 }
 
 (async function main() {
   try {
+    const start = Date.now();
+    console.log(`[images] start processing`);
+    console.log(`[images] source:   ${SRC_DIR}`);
+    console.log(`[images] output:   ${OUT_DIR}`);
     const files = await walk(SRC_DIR);
+    console.log(`[images] scanned:  ${files.length} files`);
+    // Clean outputs before regenerating
+    await cleanDir(OUT_ORIGINAL);
+    await cleanDir(OUT_CROP);
     await ensureDir(OUT_ORIGINAL);
     await ensureDir(OUT_CROP);
-    await copyOriginals(files);
-    await createCinematicCrops(files);
-    console.log('Image processing complete.');
+    const originals = await copyOriginals(files);
+    const cropped = await createCinematicCrops(files);
+    const ms = Date.now() - start;
+    console.log(`[images] done: ${originals} originals, ${cropped} crops (${ms} ms)`);
   } catch (err) {
     console.error('Image processing failed:', err.message);
     process.exit(1);
