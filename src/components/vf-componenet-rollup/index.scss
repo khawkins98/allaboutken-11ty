@@ -64,6 +64,16 @@ img { max-width: 100%; height: auto; display: block; }
 .vf-navigation__link { text-decoration: none; }
 .vf-navigation__link:hover { text-decoration: underline; }
 
+/* Footer minimal styles */
+.vf-footer { border-top: 2px solid #3b6fb6; padding: 1.5rem 0; margin-top: 2rem; }
+.vf-footer__inner { max-width: 1200px; margin-inline: auto; padding-inline: 16px; }
+.vf-footer__link { color: #fff; text-decoration: underline; text-decoration-color: #3b6fb6; }
+.vf-footer .vf-content { color: #fff; }
+.vf-footer__notice { background: #333; color: #fff; padding: 1rem; border-radius: 4px; }
+.vf-banner { padding: .75rem 1rem; border-radius: 4px; margin-top: 1rem; }
+.vf-banner--warning { background: #fff7e6; border: 1px solid #ffd591; }
+.vf-banner__text { margin: 0; }
+
 .vf-button { display: inline-block; padding: .5rem .75rem; border: 1px solid #333; background: transparent; color: #333; text-decoration: none; border-radius: 4px; }
 .vf-button--secondary { background: #f3f3f3; }
 .vf-button--sm { padding: .25rem .5rem; font-size: .875rem; }
