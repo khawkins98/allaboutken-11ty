@@ -381,3 +381,65 @@ body .vf-footer {
     width: 100%;
   }
 }
+
+// minimal shims to match legacy VF look without full VF
+
+// cluster layout utility (used by global nav)
+.vf-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+// simple global header layout
+.vf-global-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+}
+
+.vf-logo {
+  text-decoration: none;
+  color: #333;
+  font-weight: 700;
+}
+
+// card container spacing on home
+.vf-card-container {
+  margin: 2rem 0;
+}
+
+// divider
+.vf-divider {
+  display: block;
+  border: 0;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 2rem 0;
+}
+
+// 404 intro text styles
+.vf-intro__heading {
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 0 0 .5rem 0;
+}
+
+.vf-lede,
+.vf-intro__text {
+  font-size: 1.125rem;
+}
+
+// tiny body size used on RSS note
+.vf-text-body--5 {
+  font-size: 0.75rem;
+}
+
+// summary link inherits standard link visuals
+.vf-summary__link {
+  text-decoration: underline;
+  text-decoration-color: #3b6fb6;
+  color: #333;
+}
