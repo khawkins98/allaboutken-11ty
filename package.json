@@ -17,7 +17,7 @@
     "images": "node scripts/process-images.js",
     "search:index": "node scripts/build-search-index.js",
     "build": "yarn clean && yarn sass && yarn scripts:build && yarn eleventy && echo '🏋 Build completed'",
-    "dev": "concurrently -k \"sass --load-path src/components --watch src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"esbuild src/components/vf-componenet-rollup/scripts.js --bundle --format=esm --outfile=build/scripts/scripts.js --watch\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\"",
+    "dev": "yarn scripts:build &&concurrently -k \"sass --load-path src/components --watch src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"esbuild src/components/vf-componenet-rollup/scripts.js --bundle --format=esm --outfile=build/scripts/scripts.js --watch\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\"",
     "start": "yarn dev",
     "test": "echo \"Error: no test specified\" && exit 0",
     "update-components": "yarn upgrade-interactive --latest"
