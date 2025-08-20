@@ -36,7 +36,7 @@ module.exports = function(nunjucksEngine,fractal){
       if(typeof txt == "undefined") return;
       txt = hljs.highlight(txt, {language: format, ignoreIllegals: true }).value;
 
-      return new nunjucksEngine.runtime.SafeString(`<pre class="vf-code-example__pre"><code class="Code Code--lang-${format} vf-code-example">${txt}</code></pre>`);
+      return new nunjucksEngine.runtime.SafeString(`<pre class="kh-code-example__pre"><code class="Code Code--lang-${format} vf-code-example">${txt}</code></pre>`);
     };
 
   }

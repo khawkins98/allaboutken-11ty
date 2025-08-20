@@ -21,30 +21,30 @@ active_path: front
 
 {# Position templates #}
 {%- macro position(name, employer='', years='', location='') %}
-<h2 class="vf-text-heading--2">{{ name }}</h2>
-<h4 class="vf-text-heading--4 | vf-u-text-color--grey">{{ employer }}</h4>
-<p><small class="vf-summary__date">{{ years }}</small><br/>
-   <small class="vf-summary__date">{{ location }}</small></p>
+<h2 class="kh-text-heading--2">{{ name }}</h2>
+<h4 class="kh-text-heading--4 | kh-u-text-color--grey">{{ employer }}</h4>
+<p><small class="kh-summary__date">{{ years }}</small><br/>
+   <small class="kh-summary__date">{{ location }}</small></p>
 {% endmacro -%}
 
 {# Section header #}
 {%- macro sectionHeader(title) %}
-<h2 class="vf-badge vf-badge--outline | vf-u-margin__top--1200 vf-u-margin__bottom--600">{{ title }}</h2>
+<h2 class="kh-badge kh-badge--outline | kh-u-margin__top--1200 kh-u-margin__bottom--600">{{ title }}</h2>
 {% endmacro -%}
 
 <div class="show-for-print-only">
-  <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display">{{title}}</h1>
+  <h1 class="kh-text-heading--1 kh-font-now-alt kh-font-now-alt--display">{{title}}</h1>
 </div>
 
 {{ contactInfoPrint | safe }}
 
-<div class="vf-u-fullbleed vf-u-background-color--yellow--dark | embl-grid embl-grid--has-centered-content">
+<div class="kh-u-fullbleed kh-u-background-color--yellow--dark | embl-grid embl-grid--has-centered-content">
   <div></div>
-  <section class="vf-u-padding__top--500 vf-u-padding__bottom--200 vf-content">
+  <section class="kh-u-padding__top--500 kh-u-padding__bottom--200 kh-content">
     <div class="do-not-print">
-      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display vf-u-margin__bottom--200 | show-for-mobile-only">Ken <br/> Hawkins.</span></h1>
-      <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display vf-u-margin__bottom--200 | show-for-medium-up">Ken Hawkins.</span></h1>
-      <h2 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display">{{subtitle}}.</h2>
+      <h1 class="kh-text-heading--1 kh-font-now-alt kh-font-now-alt--display kh-u-margin__bottom--200 | show-for-mobile-only">Ken <br/> Hawkins.</span></h1>
+      <h1 class="kh-text-heading--1 kh-font-now-alt kh-font-now-alt--display kh-u-margin__bottom--200 | show-for-medium-up">Ken Hawkins.</span></h1>
+      <h2 class="kh-text-heading--1 kh-font-now-alt kh-font-now-alt--display">{{subtitle}}.</h2>
       <p>
         Web Platform Lead with 20+ years’ experience delivering high-impact, scalable web platforms for global science, media, and UN organisations.
       </p>
@@ -77,15 +77,15 @@ I seek out challenges of efficiency and communication.
 <div id="experience" data-magellan-target="experience"></div>
 {{ sectionHeader('Professional experience') }}
 
-{# <div class="vf-content">
+{# <div class="kh-content">
 {% markdown %}
 My experience spans 20 years: beginning with printing presses, continuing through graphic design, information graphics and an online media startup.
 {% endmarkdown %}
 </div> #}
 
 <section class="embl-grid embl-grid--has-centered-content">
-  <h2 class="vf-text-heading--2">Web expertise</h2>
-  <div class="vf-content">
+  <h2 class="kh-text-heading--2">Web expertise</h2>
+  <div class="kh-content">
 {% markdown %}
 
 - HTML and CSS fundamentals
@@ -100,8 +100,8 @@ My experience spans 20 years: beginning with printing presses, continuing throug
 </section>
 
 <section class="embl-grid embl-grid--has-centered-content">
-  <h2 class="vf-text-heading--2">Structure</h2>
-  <div class="vf-content">
+  <h2 class="kh-text-heading--2">Structure</h2>
+  <div class="kh-content">
 {% markdown %}
 
 - Maximising content for discoverability and context-aware content
@@ -115,8 +115,8 @@ My experience spans 20 years: beginning with printing presses, continuing throug
 </section>
 
 <section class="embl-grid embl-grid--has-centered-content">
-  <h2 class="vf-text-heading--2">Leadership</h2>
-  <div class="vf-content">
+  <h2 class="kh-text-heading--2">Leadership</h2>
+  <div class="kh-content">
 {% markdown %}
 
 - Governance through triangulating content, actions and goals
@@ -132,7 +132,7 @@ My experience spans 20 years: beginning with printing presses, continuing throug
 
 {# --- #}
 
-<div class="vf-content">
+<div class="kh-content">
 
 <div id="history" data-magellan-target="history"></div>
 
@@ -146,7 +146,7 @@ My experience spans 20 years: beginning with printing presses, continuing throug
   <div>
     {{ position('Web Platform Lead', 'United Nations Office for Disaster Risk Reduction (UNDRR)', 'January 2022 – present', 'Bonn, Germany', false ) }}
   </div>
-  <div class="vf-content">
+  <div class="kh-content">
 
 - Led performance overhaul of flagship Drupal 10 platform, halving load times and improving editorial workflow speed.
 - Architected component-based theming to unify brand, reduce maintenance overhead, and accelerate feature delivery.
@@ -169,7 +169,7 @@ My experience spans 20 years: beginning with printing presses, continuing throug
   <div>
     {{ position('Web Front End Lead', 'European Molecular Biology Laboratory (EMBL)', 'June 2018 – December 2021', 'Heidelberg, Germany', false ) }}
   </div>
-  <div class="vf-content">
+  <div class="kh-content">
 
 EMBL is Europe’s flagship laboratory for the life sciences and employs hundreds of developers to deliver online scientific services. We've created reusable front-end tooling to speed development, reduce cost and improve UX. It's been especially interesting for the breadth of technology and wide range of user needs and developer backgrounds.
 
@@ -207,7 +207,7 @@ I lead the creation of this tooling, the Visual Framework, and serve as its lead
   <div>
     {{ position('Web design architect', 'European Bioinformatics Institute (EMBL-EBI)', 'July 2015 – June 2018', 'Cambridge, UK' ) }}
   </div>
-  <div class="vf-content">
+  <div class="kh-content">
 
 - Lead information architecture and design tooling for EMBL-EBI web content, design systems
 - Facilitate collaboration between UX, developers and content teams
@@ -237,7 +237,7 @@ I lead the creation of this tooling, the Visual Framework, and serve as its lead
   <div>
     {{ position('Web developer and information designer', 'DRS Technical Solutions', 'February 2011 – June 2015', 'Stuttgart, Germany' ) }}
   </div>
-  <div class="vf-content">
+  <div class="kh-content">
 
 - Manage user-focused efforts (UX, research, metrics) for company web projects
 - Website project lead for a Drupal platform to support more than 150,000 user accounts, provide e-commerce tools
@@ -254,7 +254,7 @@ I lead the creation of this tooling, the Visual Framework, and serve as its lead
   <div>
     {{ position('Technical and editorial lead', 'TheDigitel', 'May 2008 – February 2011', 'South Carolina, USA' ) }}
   </div>
-  <div class="vf-content">
+  <div class="kh-content">
 
 
 I co-founded TheDigitel.com way back in 2009 to help advance newspaper methodology in the age of websites. This broke down barriers in collaborating with the public and created a more efficient and highly-networked data model of hyperlocal news.
@@ -277,7 +277,7 @@ I co-founded TheDigitel.com way back in 2009 to help advance newspaper methodolo
   <div>
     {{ position('Graphics reporter', 'The Post and Courier', 'March 2006 - May 2008', 'South Carolina, USA' ) }}
   </div>
-  <div class="vf-content">
+  <div class="kh-content">
 
 
 - Newspaper infographic design and reporting
@@ -296,7 +296,7 @@ I co-founded TheDigitel.com way back in 2009 to help advance newspaper methodolo
   <div>
     {{ position('Graphics reporter', 'The Beaufort Gazette', 'May 2003 - March 2006', 'South Carolina, USA' ) }}
   </div>
-  <div class="vf-content">
+  <div class="kh-content">
 
 
 - Newspaper infographic and page design
@@ -313,7 +313,7 @@ I co-founded TheDigitel.com way back in 2009 to help advance newspaper methodolo
   <div>
     {{ position('Production manager', 'The Daily Journal', 'May 2000 - April 2003', 'South Carolina, USA' ) }}
   </div>
-  <div class="vf-content">
+  <div class="kh-content">
 
 
 - Newspaper pre-press production, advertising
@@ -340,12 +340,12 @@ I co-founded TheDigitel.com way back in 2009 to help advance newspaper methodolo
 - Co-founder of Fuse843 networking and business development group {# A regional group of "creative class" individuals, we hosted local networking events, speakers and an online social networking tool #}
 - Charleston PechaKucha, Charleston Drupal user group, Create South conference, Startup Stuttgart, various others
 
-{# <div class="do-not-print vf-u-padding__top--600"></div>
-<div class="do-not-print vf-u-padding__top--600"></div>
+{# <div class="do-not-print kh-u-padding__top--600"></div>
+<div class="do-not-print kh-u-padding__top--600"></div>
 
 <div id="more" data-magellan-target="more"></div>
 
-<h2 class="vf-badge vf-badge--outline">Other things</h2>
+<h2 class="kh-badge kh-badge--outline">Other things</h2>
 
 <span class="emoji">📐</span>  Clean design  <span class="emoji">🎭</span> creative approaches  <span class="emoji">💫</span> culture  <span class="emoji">🔰</span> Japanese eccentricities
 <span class="emoji">💬</span>  puns <span class="emoji">🍻</span>  crisp lagers<span class="emoji">🎾</span> tennis  <span class="emoji">🚣</span> kayaking  <span class="emoji">😇</span>  exploring where tech meets culture) #}
@@ -357,4 +357,4 @@ I co-founded TheDigitel.com way back in 2009 to help advance newspaper methodolo
 
 </div>
 
-<div class="do-not-print vf-u-padding__top--600"></div>
+<div class="do-not-print kh-u-padding__top--600"></div>

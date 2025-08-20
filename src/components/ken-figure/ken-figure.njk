@@ -1,10 +1,9 @@
 <figure
-{# You're using an ID? Really?? That'll go here #}
 {% if id %} id="{{-id-}}"{% endif %}
-class="vf-figure
+class="kh-figure
 {%- if override_class %} | {{override_class}}{% endif -%}">
   {% if href %}<a href="{{ href }}">{% endif %}
-  <img class="vf-figure__image" src="{{imageUrl}}" alt="{{alttext}}">
+  <img class="kh-figure__image" src="{{imageUrl}}" alt="{{alttext}}">
   {% if href %}</a>{% endif %}
-  <figcaption class="vf-figure__caption">{{- html | safe if html else text -}}</figcaption>
+  <figcaption class="kh-figure__caption">{{- html | safe if html else text -}}</figcaption>
 </figure>

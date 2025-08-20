@@ -5,7 +5,7 @@
 // Sample:
 // {% spaceless -%}
 //   <a href="#"
-//     class="vf-link"
+//     class="kh-link"
 //       >
 //     I have a bunch of
 //     silly whitespace that can mass up pre-processors
