@@ -1,11 +1,17 @@
 <!doctype html>
-<html lang="en" class="kh-no-js">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" media="all" href="{{ '/css/styles.css' | url }}" />
     <title>{{ title or (renderData and renderData.title) or siteConfig.siteInformation.title}} | All about Ken Hawkins</title>
-    {% include "../../../components/ken-favicon/ken-favicon.njk" %}
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
+    <link rel="manifest" href="/assets/ken-favicon/assets/site.webmanifest">
+    <link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
     <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
     <meta name="MobileOptimized" content="width" />
     <meta name="HandheldFriendly" content="true" />
@@ -32,11 +38,11 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
     <meta name="generator" content="{{ eleventy.generator }}">
   </head>
-  <body class="kh-body vf-stack vf-stack--400{% if bodyClass %} {{ bodyClass }}{% endif %}">
+  <body class="kh-body kh-stack kh-stack--400{% if bodyClass %} {{ bodyClass }}{% endif %}">
     <header class="kh-global-header" role="banner">
       <a href="/" class="kh-logo"><span class="kh-logo__text">AllAboutKen.com</span></a>
-      <nav class="kh-navigation vf-navigation--global | vf-cluster | show-for-medium | do-not-print">
-        <ul class="kh-navigation__list | vf-list--inline">
+      <nav class="kh-navigation kh-navigation--global | kh-cluster | show-for-medium | do-not-print">
+        <ul class="kh-navigation__list | kh-list--inline">
           <li class="kh-navigation__item">
             <a href="/blog" class="kh-navigation__link">Blog</a>
           </li>
