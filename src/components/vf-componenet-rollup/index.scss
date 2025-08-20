@@ -7,19 +7,6 @@ $vf-breakpoint--sm-down: ($vf-breakpoint--sm - 1px) !default;
 $vf-breakpoint--md-down: ($vf-breakpoint--md - 1px) !default;
 $vf-breakpoint--lg-down: ($vf-breakpoint--lg - 1px) !default;
 
-@mixin set-type($token, $custom-margin-bottom: null) {
-  @if $token == text-body--2 {
-    font-size: 1rem;
-    line-height: 1.6;
-  } @else {
-    font-size: 1rem;
-  }
-
-  @if $custom-margin-bottom != null {
-    margin-bottom: $custom-margin-bottom;
-  }
-}
-
 @font-face {
   font-family: NowAlt-Bold;
   src: url('../vf-font-now-alt/assets/NowAlt-Bold.woff2') format('woff');
