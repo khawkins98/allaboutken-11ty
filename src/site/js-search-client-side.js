@@ -1,22 +1,15 @@
 // Forked from vf-search-client-side.js
-
-// vf-search-client-side
+// some tips
+// https://lunrjs.com/guides/customising.html
+// https://davidwalsh.name/adding-search-to-your-site-with-javascript
 
 /* global lunr */
 /* global searchIndex */
 
-/**
- * The global function for this component
- * @example vfSearchClientSide()
- */
 function vfSearchClientSide() {
   var searchTerm;
   const searchQueryInput = document.querySelectorAll('[data-vf-search-client-side-input]'); // where we put the query
   const searchResultsContainer = document.querySelectorAll('[data-vf-search-client-side-results]'); // where we put the search results
-
-  // some tips
-  // https://lunrjs.com/guides/customising.html
-  // https://davidwalsh.name/adding-search-to-your-site-with-javascript
 
   // this lunr pipeline disregards hyphens by breaking up words
   // It's particularly good if users might type `vf-tabs` or `tabs` to find `vf-tabs`
