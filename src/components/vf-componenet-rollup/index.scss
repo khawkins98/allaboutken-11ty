@@ -25,7 +25,7 @@ $kh-breakpoint--lg-down: ($kh-breakpoint--lg - 1px) !default;
   --kh-color--orange: #f49e17;
   --kh-body-width: 81.25em;
   --page-grid-gap: 1rem;
-  --embl-grid-module--prime: 16rem;
+  --kh-grid-stylized-module--prime: 16rem;
 }
 
 @media (min-width: $kh-breakpoint--lg) {
@@ -601,13 +601,13 @@ body .kh-footer {
   }
 }
 
-.embl-grid {
+.kh-grid-stylized {
   display: grid;
   gap: var(--page-grid-gap);
   align-items: start;
 }
 
-.embl-grid--has-centered-content {
+.kh-grid-stylized--has-centered-content {
   margin-inline: auto;
   max-width: 1200px;
   padding-inline: 16px;
@@ -736,7 +736,7 @@ body .kh-footer {
   }
 
   @media (width <= 1299px) {
-    .embl-grid .kh-grid {
+    .kh-grid-stylized .kh-grid {
       grid-column: 1/-1;
     }
   }
@@ -798,7 +798,7 @@ body .kh-footer {
   margin-top: 0;
 }
 
-.embl-grid > :first-child {
+.kh-grid-stylized > :first-child {
   grid-column: 1/-1;
 }
 
@@ -820,37 +820,37 @@ body .kh-footer {
 }
 
 @media (max-width: $kh-breakpoint--md-down) {
-  .embl-grid > *:not(:first-child) {
+  .kh-grid-stylized > *:not(:first-child) {
     grid-column: 1/-1;
   }
 }
 
 @media (min-width: $kh-breakpoint--md) {
-  .embl-grid > :first-child {
+  .kh-grid-stylized > :first-child {
     grid-column: span 1;
   }
 }
 
 @media (min-width: $kh-breakpoint--sm) {
-  .embl-grid {
-    --embl-grid: var(--embl-grid-module--prime) [main-start] repeat(auto-fit, minmax(200px, 1fr)) [main-end];
+  .kh-grid-stylized {
+    --kh-grid-stylized: var(--kh-grid-stylized-module--prime) [main-start] repeat(auto-fit, minmax(200px, 1fr)) [main-end];
 
     display: grid;
     gap: var(--page-grid-gap);
-    grid-template-columns: var(--kh-custom-grid-layout, var(--embl-grid));
+    grid-template-columns: var(--kh-custom-grid-layout, var(--kh-grid-stylized));
   }
 }
 
-.embl-grid--has-centered-content > *:last-child {
+.kh-grid-stylized--has-centered-content > *:last-child {
   grid-column-start: 2;
 }
 
 @media (min-width: $kh-breakpoint--lg) {
-  .embl-grid--has-centered-content {
-    --embl-grid: var(--embl-grid-module--prime) auto var(--embl-grid-module--prime);
+  .kh-grid-stylized--has-centered-content {
+    --kh-grid-stylized: var(--kh-grid-stylized-module--prime) auto var(--kh-grid-stylized-module--prime);
   }
 
-  .embl-grid--has-centered-content > *:last-child {
+  .kh-grid-stylized--has-centered-content > *:last-child {
     grid-column-start: unset;
   }
 }
