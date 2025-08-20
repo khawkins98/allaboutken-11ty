@@ -1,9 +1,0 @@
-<figure
-{% if id %} id="{{-id-}}"{% endif %}
-class="kh-figure
-{%- if override_class %} | {{override_class}}{% endif -%}">
-  {% if href %}<a href="{{ href }}">{% endif %}
-  <img class="kh-figure__image" src="{{imageUrl}}" alt="{{alttext}}">
-  {% if href %}</a>{% endif %}
-  <figcaption class="kh-figure__caption">{{- html | safe if html else text -}}</figcaption>
-</figure>
