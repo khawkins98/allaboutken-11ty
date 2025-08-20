@@ -16,14 +16,14 @@ topics:
 
 {% markdown %}
 
-For [Visual Framework components](https://stable.visual-framework.dev/) we’re using the [Nunjucks](https://mozilla.github.io/nunjucks/) JavaScript templating engine. 
-It's a JS-runtime and based off [jinja2](https://jinja.palletsprojects.com/en/2.11.x/). 
+For [Visual Framework components](https://stable.visual-framework.dev/) we’re using the [Nunjucks](https://mozilla.github.io/nunjucks/) JavaScript templating engine.
+It's a JS-runtime and based off [jinja2](https://jinja.palletsprojects.com/en/2.11.x/).
 
 Here’s a simplified `vf-button.njk` template:
 
 {% codeblock 'html' -%}
-{%- raw -%}<a 
-  href="{{ button_href }}" 
+{%- raw -%}<a
+  href="{{ button_href }}"
   class="vf-button
   {%- if variant %} vf-button--{{ variant }}{% endif %}
 ">
@@ -34,7 +34,7 @@ Here’s a simplified `vf-button.njk` template:
 
 <br/>
 
-If you've used jinja2, Handlebars or Twig templating, you'll probably find Nunjucks familiar. 
+If you've used jinja2, Handlebars or Twig templating, you'll probably find Nunjucks familiar.
 
 But what to do when we want to use our nice Nunjucks template in React? It’s all just JS, _right_?
 
@@ -51,11 +51,11 @@ But what to do when we want to use our nice Nunjucks template in React? It’s a
 
 While you don’t have to precompile your Nunjucks templates to use them in other systems, doing so will make them portable, faster and require a smaller JS runtime (8KB vs 20KB)
 
-This is is fairly standard business for Nunjucks and we’ve [already been doing it](https://github.com/visual-framework/vf-core/blob/develop/tools/vf-core/gulp-tasks/vf-templates-precompile.js#L53) as part of the Visual Framework npm distributable. 
+This is is fairly standard business for Nunjucks and we’ve [already been doing it](https://github.com/visual-framework/vf-core/blob/develop/tools/vf-core/gulp-tasks/vf-templates-precompile.js#L53) as part of the Visual Framework npm distributable.
 
 For more [you can follow the Nunjucks guide on precompiling](https://mozilla.github.io/nunjucks/api.html#precompiling).
 
-### Step 2: Common assets 
+### Step 2: Common assets
 
 To use our Nunjucks templates in react we’ll need two dependencies:
 
@@ -126,7 +126,7 @@ Most of this code is from a template and we only need:
 1. pass any context properties (href, text, variant, etc)
 2. add any JS callbacks
 
-### Step 4: demo 
+### Step 4: demo
 
 Install the requirements:
 
@@ -158,10 +158,10 @@ import { VfButton } from "@visual-framework/vf-button/vf-button.react.js"
 
 ### Notes, caveats
 
-- [`nunjucks-loader`](https://github.com/at0g/nunjucks-loader): an interesting looking project that has some additional Nunjucks features. However it could require additional configuration to the `webpack.config.js`, which would make usage with Create React App very hard. 
+- [`nunjucks-loader`](https://github.com/at0g/nunjucks-loader): an interesting looking project that has some additional Nunjucks features. However it could require additional configuration to the `webpack.config.js`, which would make usage with Create React App very hard.
     - Similarly we'er not using [Webpack to integrate our Nunjucks templates](https://www.npmjs.com/package/simple-nunjucks-loader)
 - User input: currently not supported. We plan to use [`dompurify`](https://github.com/cure53/DOMPurify).
-- Client-side JavaScript: we know that for things like tabs we won’t be doing JavaScript in the true React way, however we’re mainly interested in content templates (cards, buttons, intros, heroes and other containers/patterns). We accept that for any high-performance DOM-updating element it should be written as a “native" React component. 
+- Client-side JavaScript: we know that for things like tabs we won’t be doing JavaScript in the true React way, however we’re mainly interested in content templates (cards, buttons, intros, heroes and other containers/patterns). We accept that for any high-performance DOM-updating element it should be written as a “native" React component.
 - Realted discussion, projects in the Visual Framework:
     - [vf-react](https://github.com/visual-framework/vf-react), [demo](https://visual-framework.github.io/vf-react/)
     - [vf-extensions-react/README.md](https://github.com/visual-framework/vf-core/blob/develop/tools/vf-extensions-react/README.md)
