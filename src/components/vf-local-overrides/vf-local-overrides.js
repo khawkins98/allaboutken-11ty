@@ -8,9 +8,6 @@ function vfLocalOverrides(firstPassedVar) {
   console.log('vfLocalOverrides invoked with a value of', firstPassedVar);
 
   // This is the "Offline copy of pages" service worker
-  // Add this below content to your HTML page, or add the js file to your page at the very top to register service worker
-
-  // Check compatibility for the browser we're running this in
   if ("serviceWorker" in navigator) {
     if (navigator.serviceWorker.controller) {
       console.log("[PWA Builder] active service worker found, no need to register");
@@ -25,8 +22,6 @@ function vfLocalOverrides(firstPassedVar) {
         });
     }
   }
-
 }
 
-// By default your component should be usable with js imports
 export { vfLocalOverrides };
