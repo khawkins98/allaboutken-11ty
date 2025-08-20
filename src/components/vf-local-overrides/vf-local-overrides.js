@@ -1,12 +1,7 @@
  /**
   * The global function for this component
-  * @example vfcomponentName(firstPassedVar)
-  * @param {string} [firstPassedVar]  - An option to be passed
   */
-function vfLocalOverrides(firstPassedVar) {
-  firstPassedVar = firstPassedVar || 'defaultVal';
-  console.log('vfLocalOverrides invoked with a value of', firstPassedVar);
-
+function vfLocalOverrides() {
   // This is the "Offline copy of pages" service worker
   if ("serviceWorker" in navigator) {
     if (navigator.serviceWorker.controller) {
