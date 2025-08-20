@@ -11,9 +11,7 @@ $vf-breakpoint--lg-down: ($vf-breakpoint--lg - 1px) !default;
   @if $token == text-body--2 {
     font-size: 1rem;
     line-height: 1.6;
-  }
-
- @else {
+  } @else {
     font-size: 1rem;
   }
 
