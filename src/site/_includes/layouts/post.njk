@@ -12,13 +12,13 @@ templateEngineOverride: njk
     <p><time datetime="{{ date }}" class="kh-summary__date">{{ date | dateDisplay }}</time> {% if topics %}&nbsp;&nbsp;<span class="kh-summary__author">Filed in: {{topics}}</span>{% endif %}</p>
   </div>
   <div class="kh-grid__col--span-2 kh-content">
-    <figure{% if id %} id="{{-id-}}"{% endif %} class="kh-figure
-      {%- if override_class %} | {{override_class}}{% endif -%}">
-        {% if href %}<a href="{{ href }}">{% endif %}
-        <img class="kh-figure__image" src="{{imageUrl}}" alt="{{alttext}}">
-        {% if href %}</a>
+    <figure class="kh-figure">
+      {% if href %}<a href="{{ href }}">{% endif %}
+      <img class="kh-figure__image" src="/images{{ image | url }}" alt="{{ image_meta.altext }}">
+      {% if href %}</a>{% endif %}
+      {% if image_meta and image_meta.text %}
+      <figcaption class="kh-figure__caption">{{ image_meta.text | safe }}</figcaption>
       {% endif %}
-      <figcaption class="kh-figure__caption">{{- html | safe if html else text -}}</figcaption>
     </figure>
 
     <section class="kh-grid kh-grid__col-3">
