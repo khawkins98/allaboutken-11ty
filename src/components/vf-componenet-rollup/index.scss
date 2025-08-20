@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@use 'sass:meta';
+
 $vf-breakpoint--sm: 600px !default;
 $vf-breakpoint--md: 846px !default;
 $vf-breakpoint--lg: 1024px !default;
@@ -57,17 +59,12 @@ body,
   margin: 0 auto;
   max-width: var(--vf-body-width, 81.25em);
   padding: 0 1em;
-}
-
-.vf-body + .vf-body {
-  padding: 0;
-}
-
-body,
-.vf-body {
   color: #222;
   background: #fbf6ef;
   line-height: 1.6;
+  + .vf-body {
+    padding: 0;
+  }
 }
 
 img {
@@ -335,12 +332,6 @@ body .vf-footer {
   font-size: 1.125rem;
 }
 
-.vf-logo {
-  text-decoration: none;
-  color: #333;
-  font-weight: 700;
-}
-
 .vf-summary__link {
   text-decoration: underline;
   text-decoration-color: #3b6fb6;
@@ -368,8 +359,6 @@ body .vf-footer {
   top: 0;
   width: 100%;
 }
-
-
 
 .vf-grid {
   display: grid;
@@ -695,11 +684,7 @@ body .vf-footer {
   }
 }
 
-@import './vf-content';
-
 .vf-grid {
-  display: -webkit-box;
-  display: flexbox;
   display: flex;
 
   > * {
@@ -718,7 +703,6 @@ body .vf-footer {
 }
 
 .vf-grid__col-3 > * {
-  -webkit-box-flex: 0;
   flex: 0 0 32.513844467%;
   max-width: 32.513844467%;
 }
@@ -728,7 +712,6 @@ body .vf-footer {
 }
 
 .vf-grid__col-4 > * {
-  -webkit-box-flex: 0;
   flex: 0 0 24.0780754%;
   max-width: 24.0780754%;
 }
@@ -743,7 +726,6 @@ body .vf-footer {
   }
 
   .vf-grid > * {
-    -webkit-box-flex: 0;
     flex: 0 0 49.18305%;
   }
 }
@@ -804,11 +786,7 @@ body .vf-footer {
 }
 
 .vf-cluster > * {
-  -webkit-box-align: var(--vf-cluster-alignment, center);
-  -ms-flex-align: var(--vf-cluster-alignment, center);
   align-items: var(--vf-cluster-alignment, center);
-  display: -webkit-box;
-  display: flexbox;
   display: flex;
   flex-wrap: wrap;
   -webkit-box-pack: start;
@@ -818,7 +796,6 @@ body .vf-footer {
 }
 
 .vf-cluster > * > * {
-  -webkit-box-flex: var(--vf-cluster__item--flex);
   flex: var(--vf-cluster__item--flex);
   margin: 1rem;
   margin: calc(var(--vf-cluster-margin) / 2) !important;
@@ -833,38 +810,8 @@ body .vf-footer {
   grid-column: 1/-1;
 }
 
-.vf-sidebar {
-  overflow: hidden;
-}
-
-.vf-sidebar > * {
-  display: -webkit-box;
-  display: flexbox;
-  display: flex;
-  flex-wrap: wrap;
-  margin: calc(var(--vf-sidebar-spacing, 1rem) / 2 * -1);
-}
-
-.vf-sidebar > * > * {
-  margin: calc(var(--vf-sidebar-spacing, 1rem) / 2);
-  -webkit-box-flex: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-}
-
-.vf-sidebar--end > * > :first-child {
-  -ms-flex-preferred-size: 0;
-  flex-basis: 0;
-  -webkit-box-flex: 999;
-  -ms-flex-positive: 999;
-  flex-grow: 999;
-  min-width: calc(var(--vf-sidebar-main-width, 50%) - var(--vf-sidebar-spacing, 1rem));
-}
-
 .vf-stack > * + * {
   --vf-stack-margin: 1rem;
-
-  margin-top: 1rem;
   margin-top: var(--vf-stack-margin--custom, var(--vf-stack-margin, 1rem));
 }
 
@@ -1035,15 +982,12 @@ body .vf-footer {
 }
 
 .vf-logo {
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  color: #1e1e1e;
-  display: -webkit-box;
-  display: flexbox;
   display: flex;
   min-height: 32px;
   text-decoration: none;
+  color: #333;
+  font-weight: 700;
 }
 
 .vf-logo__text {
@@ -1052,7 +996,6 @@ body .vf-footer {
   font-weight: 500;
   line-height: 1.71;
   margin: var(--vf-stack-margin, 0) 0 0 0;
-  -ms-flex-item-align: center;
   align-self: center;
 }
 
@@ -1084,7 +1027,6 @@ input[type='search']::-webkit-search-cancel-button {
   box-shadow:
     8px 8px 0 var(--vf-button-shadow-background-color, var(--vf-button__color__background--default-dark)),
     -5px -5px rgb(0 0 0 / 0%);
-  color: #fafafa;
   color: var(--vf-button-text-color, #fafafa);
   cursor: pointer;
   display: inline-block;
@@ -1233,7 +1175,6 @@ a.vf-button:focus {
   border: none;
   height: 1px;
   margin-block: 0 var(--vf-divider-margin--block-end, 1.5rem);
-  margin-top: 1rem;
   margin-top: var(--vf-stack-margin, 1rem);
   width: 100%;
 }
@@ -1343,80 +1284,16 @@ a.vf-button:focus {
   }
 }
 
-.vf-form--search .vf-button {
-  -ms-flex-item-align: start;
-  align-self: start;
-  margin: 0.5rem;
-  margin: calc(var(--vf-sidebar--spacing, 1rem) / 2);
-}
-
-.vf-form--search .vf-button__icon {
-  fill: #fff;
-  height: 1em;
-  width: 1em;
-}
-
-.vf-form--search.vf-sidebar {
-  --vf-sidebar-spacing: 0.5rem;
-  --vf-sidebar-main-width: 60%;
-
-  overflow: visible;
-}
-
-.vf-form--search.vf-sidebar .vf-form__item {
-  position: relative;
-}
-
-.vf-form--search.vf-sidebar .vf-form__item:last-of-type {
-  padding-right: 0.25rem;
-}
-
-.vf-form--search.vf-sidebar > * {
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-@media (max-width: $vf-breakpoint--sm-down) {
-  .vf-form--search--responsive .vf-button {
-    margin-left: 0;
-    padding: 0.5rem;
-  }
-
-  .vf-form--search--responsive .vf-button__text {
-    border: 0;
-    clip: rect(1px, 1px, 1px, 1px);
-    clip-path: inset(50%);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-    word-wrap: normal !important;
-  }
-}
-
-@media (min-width: $vf-breakpoint--sm) {
-  .vf-form--search--responsive .vf-button__icon {
-    display: none;
-  }
-}
-
 .vf-summary {
   --vf-text-margin--bottom: 16px;
-}
-
-.vf-summary {
   align-self: start;
   column-gap: var(--page-grid-gap);
   display: grid;
   margin-bottom: 2rem;
   position: relative;
-}
-
-.vf-summary > *:last-child {
-  margin-bottom: 0;
+  > *:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .vf-summary__author {
@@ -1538,8 +1415,6 @@ html:not(.vf-disable-deprecated) .vf-summary__link:hover {
 .vf-global-header {
   align-items: center;
   box-sizing: border-box;
-  display: -webkit-box;
-  display: flexbox;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -1769,14 +1644,6 @@ html:not(.vf-disable-deprecated) .vf-summary__link:hover {
   }
 }
 
-.vf-show-more.is-active .vf-show-more__button {
-  display: none;
-}
-
-.vf-show-more.is-active .vf-show-more__button--less {
-  display: unset;
-}
-
 .vf-text {
   margin: 0 0 16px;
 }
@@ -1963,3 +1830,5 @@ html:not(.vf-disable-deprecated) .vf-summary__link:hover {
     display: none !important;
   }
 }
+
+@include meta.load-css('./vf-content');
