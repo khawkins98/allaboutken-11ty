@@ -87,7 +87,6 @@ function vfSearchClientSide() {
 
   // Grab any query from the URL on bootstrap
   searchTerm = getQueryVariable('search_query');
-  console.log('searchTerm', searchTerm);
 
   // set the input box to the search query
   if (typeof searchTerm !== 'undefined') {
@@ -120,7 +119,6 @@ function vfSearchClientSide() {
 
     if (results.length === 0) {
       searchResultsContainer[0].innerHTML = 'No results found';
-
       return false;
     }
 
