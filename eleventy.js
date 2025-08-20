@@ -30,7 +30,9 @@ module.exports = function(config) {
     // Accepts an Array of file paths or globs (passed to `chokidar.watch`).
     // Works great with a separate bundler writing files to your output folder.
     // e.g. `watch: ["_site/**/*.css"]`
-    // watch: [],
+    watch: [
+      "build/**/*.css" // watch compiled CSS from Sass for instant reloads
+    ],
 
     // Show local network IP addresses for device testing
     showAllHosts: true,
