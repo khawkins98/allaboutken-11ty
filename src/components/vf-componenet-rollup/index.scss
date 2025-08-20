@@ -206,7 +206,7 @@ body .vf-footer:after {
   position: relative;
 }
 
-@media (min-width: 768px) {
+@media (min-width: $vf-breakpoint--md) {
   .kh-post-title {
     padding-left: 2rem;
     left: -1.5rem;
@@ -610,7 +610,7 @@ img {
   display: none;
 }
 
-@media (min-width: 768px) {
+@media (min-width: $vf-breakpoint--md) {
   .show-for-medium-up {
     display: inline;
   }
@@ -619,7 +619,7 @@ img {
   display: inline;
 }
 
-@media (min-width: 768px) {
+@media (min-width: $vf-breakpoint--md) {
   .show-for-mobile-only {
     display: none;
   }
@@ -982,7 +982,7 @@ button {
   display: table-caption;
 }
 
-/*! * Component: @visual-framework/vf-body * Version: 1.2.0 * Location: components/vf-body */
+/* */
 html {
   margin: 0;
 }
@@ -1060,7 +1060,7 @@ html {
     grid-column-gap: var(--page-grid-gap);
     grid-row-gap: var(--page-row-gap, var(--page-grid-gap));
   }
-  @media (min-width: 840px) {
+  @media (min-width: $vf-breakpoint--md) {
     .vf-grid {
       grid-auto-flow: column;
     }
@@ -1077,7 +1077,7 @@ html {
   [class*="grid__"] {
     grid-auto-flow: unset;
   }
-  @media (min-width: 768px) {
+  @media (min-width: $vf-breakpoint--md) {
     .vf-grid__col-3 {
       grid-template-columns: repeat(3, 1fr);
     }
@@ -1094,7 +1094,7 @@ html {
     grid-column-end: span 2;
   }
 }
-/*! * Component: @visual-framework/vf-cluster * Version: 1.0.2 * Location: components/vf-cluster */
+/* */
 .vf-cluster {
   --vf-cluster-margin: var(--vf-cluster-margin--override, 1rem);
   overflow: hidden;
@@ -1123,7 +1123,7 @@ html {
   margin: calc(var(--vf-cluster-margin) / 2) !important;
 }
 
-/*! * Component: @visual-framework/vf-stack * Version: 3.0.0 * Location: components/vf-stack */
+/* */
 [class^="vf-stack"] > * {
   margin-bottom: 0;
   margin-top: 0;
@@ -1147,7 +1147,7 @@ html {
   --vf-stack-margin: 2rem;
 }
 
-/*! * Component: @visual-framework/vf-sidebar * Version: 1.0.0-alpha.2 * Location: components/vf-sidebar * Build time: Sun, 17 Aug 2025 16:10:00 GMT */
+/* */
 .vf-sidebar {
   overflow: hidden;
 }
@@ -1215,7 +1215,7 @@ html {
     grid-column-start: unset;
   }
 }
-/*! * Component: @visual-framework/vf-badge * Version: 2.0.1 * Location: components/vf-badge */
+/* */
 .vf-badge {
   font-size: 16px;
   font-weight: 700;
@@ -1231,7 +1231,7 @@ html {
   text-transform: uppercase;
 }
 
-/*! * Component: @visual-framework/vf-link * Version: 2.0.0 * Location: components/vf-link */
+/* */
 .vf-link {
   border-bottom: none;
   text-decoration: none;
@@ -1254,7 +1254,7 @@ html {
   text-decoration: underline;
 }
 
-/*! * Component: @visual-framework/vf-logo * Version: 1.5.1 * Location: components/vf-logo */
+/* */
 .vf-logo {
   -webkit-box-align: center;
   -ms-flex-align: center;
@@ -1509,7 +1509,7 @@ a.vf-button:focus {
   padding: 8px;
 }
 
-/*! * Component: @visual-framework/vf-figure * Version: 2.0.1 * Location: components/vf-figure */
+/* */
 .vf-figure {
   margin: 0;
 }
@@ -1671,7 +1671,7 @@ a.vf-button:focus {
   padding: 0.5em;
 }
 
-/*! * Component: @visual-framework/vf-lede * Version: 1.0.1 * Location: components/vf-lede */
+/* */
 .vf-lede {
   font-size: 32px;
   color: #000;
@@ -1702,7 +1702,7 @@ a.vf-button:focus {
   text-decoration: underline;
 }
 
-/*! * Component: @visual-framework/vf-navigation * Version: 5.0.0 * Location: components/vf-navigation */
+/* */
 .vf-navigation__link {
   border-bottom: none;
   text-decoration: none;
@@ -1735,9 +1735,9 @@ a.vf-button:focus {
     margin-left: auto;
   }
 }
-/*! * Component: @visual-framework/vf-section-header * Version: 1.5.3 * Location: components/vf-section-header */
-/*! * Component: @visual-framework/vf-search * Version: 3.0.0-alpha.1 * Location: components/vf-search */
-/*! * Component: @visual-framework/vf-search * Version: 3.0.0-alpha.1 * Location: components/vf-search */
+/* */
+/* */
+/* */
 .vf-form--search .vf-button {
   -ms-flex-item-align: start;
   align-self: start;
@@ -1938,7 +1938,7 @@ html:not(.vf-disable-deprecated) .vf-summary__link:hover {
     row-gap: unset;
   }
 }
-/*! * Component: @visual-framework/vf-global-header * Version: 3.1.2 * Location: components/vf-global-header */
+/* */
 .vf-global-header {
   -webkit-box-align: center;
   -ms-flex-align: center;
@@ -1961,7 +1961,7 @@ html:not(.vf-disable-deprecated) .vf-summary__link:hover {
   flex: 1;
 }
 
-/*! * Component: @visual-framework/vf-tabs * Version: 2.1.1 * Location: components/vf-tabs */
+/* */
 .vf-tabs__list {
   font-size: 22px;
   color: #000;
@@ -2042,8 +2042,8 @@ html:not(.vf-disable-deprecated) .vf-summary__link:hover {
   flex-basis: max-content;
 }
 
-/*! * Component: @visual-framework/vf-table * Version: 1.2.0-rc.3 * Location: components/vf-table */
-/*! * Component: @visual-framework/vf-intro * Version: 1.5.1 * Location: components/vf-intro */
+/* */
+/* */
 @media (min-width: $vf-breakpoint--lg) {
   .vf-intro__heading {
     grid-area: header;
@@ -2098,9 +2098,9 @@ html:not(.vf-disable-deprecated) .vf-summary__link:hover {
   text-decoration: underline;
 }
 
-/*! * Component: @visual-framework/vf-banner * Version: 1.9.2 * Location: components/vf-banner */
-/*! * Component: @visual-framework/vf-details * Version: 1.2.0 * Location: components/vf-details */
-/*! * Component: @visual-framework/vf-footer * Version: 1.2.0 * Location: components/vf-footer */
+/* */
+/* */
+/* */
 .vf-footer {
   background-color: #54585a;
   border-top: 8px solid #18974c;
@@ -2197,7 +2197,7 @@ html:not(.vf-disable-deprecated) .vf-summary__link:hover {
   display: unset;
 }
 
-/*! * Component: @visual-framework/vf-heading * Version: 1.1.0 * Location: components/vf-heading */
+/* */
 .vf-text {
   margin: 0 0 16px 0;
 }
@@ -2238,7 +2238,7 @@ html:not(.vf-disable-deprecated) .vf-summary__link:hover {
   margin: var(--vf-stack-margin, 0) 0 var(--vf-text-margin--bottom, 16px) 0;
 }
 
-/*! * Component: @visual-framework/vf-text * Version: 1.1.0 * Location: components/vf-text */
+/* */
 .vf-text-body--5 {
   font-size: 14px;
   color: #373a36;
@@ -2275,7 +2275,7 @@ html:not(.vf-disable-deprecated) .vf-summary__link:hover {
   margin: var(--vf-stack-margin, 0) 0 var(--vf-text-margin--bottom, 16px) 0;
 }
 
-/*! * Component: @visual-framework/vf-u-fullbleed * Version: 1.2.2 * Location: components/vf-u-fullbleed */
+/* */
 .vf-u-fullbleed {
   background-position: center center;
   background-repeat: no-repeat;
@@ -2305,7 +2305,7 @@ body {
   position: relative;
 }
 
-@media (min-width: 768px) {
+@media (min-width: $vf-breakpoint--md) {
   .vf-u-float__right--md {
     float: right !important;
   }
@@ -2397,8 +2397,8 @@ body {
     drop-shadow(-6px 6px var(--vf-font-now-alt--display--color));
 }
 
-/*! * Component: @visual-framework/ken-favicon * Version: 0.0.1 * Location: components/undefined */
-@media (max-width: 768px) {
+/* */
+@media (max-width: $vf-breakpoint--md) {
   .show-for-medium-only {
     display: none !important;
   }
