@@ -614,3 +614,30 @@
     padding-left: 20px;
   }
 }
+
+.kh-footer .kh-content p,
+.kh-content .kh-footer__link,
+.kh-content .kh-footer__link:visited {
+  color: #fff;
+}
+
+.kh-link,
+.kh-content a,
+.kh-content a:not([class*='vf-']),
+.kh-content .kh-link {
+  text-decoration-color: #3b6fb6;
+  text-decoration-line: underline;
+  color: #333;
+}
+
+.kh-link:visited,
+.kh-content a:visited .kh-content a:not([class*='vf-']):visited,
+.kh-content .kh-link:visited {
+  text-decoration-color: #734595;
+  text-decoration-line: underline;
+  color: #333;
+}
+
+.kh-content small:not([class*='vf-']) {
+  display: inline;
+}
