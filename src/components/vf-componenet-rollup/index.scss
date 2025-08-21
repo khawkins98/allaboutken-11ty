@@ -48,8 +48,7 @@ html,
 button,
 body,
 .kh-body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
@@ -79,13 +78,7 @@ body {
 @include meta.load-css('./vf-content');
 
 .kh-font-now-alt {
-  font-family:
-    NowAlt-Bold,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    'Open Sans',
-    serif !important;
+  font-family: NowAlt-Bold, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Open Sans', serif !important;
 }
 
 .kh-font-now-alt--display {
@@ -766,7 +759,8 @@ body .kh-footer {
 
 @media (min-width: $kh-breakpoint--sm) {
   .kh-grid-stylized {
-    --kh-grid-stylized: var(--kh-grid-stylized-module--prime) [main-start] repeat(auto-fit, minmax(200px, 1fr)) [main-end];
+    --kh-grid-stylized: var(--kh-grid-stylized-module--prime) [main-start] repeat(auto-fit, minmax(200px, 1fr))
+      [main-end];
 
     display: grid;
     gap: var(--page-grid-gap);
@@ -949,8 +943,7 @@ input[type='search']::-webkit-search-cancel-button {
   backface-visibility: hidden;
   background-color: var(--kh-button-background-color, var(--kh-button__color__background--default));
   border: 4px solid var(--kh-button-border-color, var(--kh-button__color__background--default));
-  box-shadow:
-    8px 8px 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)),
+  box-shadow: 8px 8px 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)),
     -5px -5px rgb(0 0 0 / 0%);
   color: var(--kh-button-text-color, #fafafa);
   cursor: pointer;
@@ -964,20 +957,16 @@ input[type='search']::-webkit-search-cancel-button {
   transform: translate(0, 0);
   transition: all linear 125ms;
   &:active {
-    box-shadow:
-      0 0 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)),
-      2px 2px 2px rgb(30 30 30 / 12.5%),
-      -5px -5px rgb(0 0 0 / 0%);
+    box-shadow: 0 0 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)),
+      2px 2px 2px rgb(30 30 30 / 12.5%), -5px -5px rgb(0 0 0 / 0%);
     transform: translate(8px, 8px) translateZ(1px);
   }
 }
 
 .kh-button:focus,
 .kh-button:hover {
-  box-shadow:
-    4px 4px 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)),
-    2px 2px 4px rgb(30 30 30 / 25%),
-    -5px -5px rgb(0 0 0 / 0%);
+  box-shadow: 4px 4px 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)),
+    2px 2px 4px rgb(30 30 30 / 25%), -5px -5px rgb(0 0 0 / 0%);
   transform: translate(4px, 4px);
   transition: all linear 125ms;
   text-decoration: none;
