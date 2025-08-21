@@ -882,7 +882,7 @@ body .kh-footer {
   border-color: #54585a;
   box-shadow: 0 0 0 0.0625rem #54585a;
   color: #1e1e1e;
-  outline: 0;
+  // outline: 0;
 }
 
 .kh-link {
@@ -981,6 +981,7 @@ input[type='search']::-webkit-search-cancel-button {
     -5px -5px rgb(0 0 0 / 0%);
   transform: translate(4px, 4px);
   transition: all linear 125ms;
+  text-decoration: none;
 }
 
 .kh-form__item > * {
@@ -994,11 +995,6 @@ input[type='search']::-webkit-search-cancel-button {
   line-height: 1.45;
   margin: var(--kh-stack-margin, 0) 0 0 0;
   display: flex;
-}
-
-a.kh-button:hover,
-a.kh-button:focus {
-  text-decoration: none;
 }
 
 .hljs {
@@ -1351,76 +1347,6 @@ html:not(.kh-disable-deprecated) .kh-summary__link:hover {
 
 .kh-global-header > [class*='logo'] {
   flex: 1;
-}
-
-.kh-tabs__item {
-  display: inline-block;
-  position: relative;
-  flex-basis: max-content;
-}
-
-.kh-tabs__link {
-  font-size: 22px;
-  font-weight: 300;
-  line-height: 1.45;
-  margin: var(--kh-stack-margin, 0) 0 0 0;
-  border-bottom: 4px solid transparent;
-  color: #54585a;
-  display: block;
-  outline: 0;
-  padding: 8px 16px;
-  position: relative;
-  text-decoration: none;
-}
-
-.kh-tabs__link:focus:focus-visible {
-  outline: -webkit-focus-ring-color auto 1px;
-}
-
-.kh-tabs__link:hover,
-.kh-tabs__link:focus {
-  border-bottom-color: #54585a;
-  color: #000;
-  z-index: 5150;
-}
-
-.kh-tabs__link.is-active {
-  border-bottom-color: #3b6fb6;
-  color: #3b6fb6;
-  text-shadow: 1px 0 0 currentcolor;
-  z-index: 1800;
-}
-
-.kh-tabs__link.is-active:hover,
-.kh-tabs__link.is-active:focus {
-  color: #3b6fb6;
-}
-
-.kh-tabs__list {
-  font-size: 22px;
-  color: #000;
-  font-weight: 300;
-  line-height: 1.45;
-  margin: var(--kh-stack-margin, 0) 0 0 0;
-  display: inline-flex;
-  flex-wrap: wrap;
-  padding: 0;
-  position: relative;
-}
-
-.kh-tabs__list::before {
-  border-bottom: 2px solid #000;
-  bottom: 0;
-  content: '';
-  height: 1px;
-  left: 0;
-  position: absolute;
-  width: 100%;
-  z-index: 1984;
-}
-
-.kh-tabs__section {
-  padding: 8px 16px;
 }
 
 @media (min-width: $kh-breakpoint--lg) {
