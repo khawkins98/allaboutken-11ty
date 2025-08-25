@@ -38,10 +38,10 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
     <meta name="generator" content="{{ eleventy.generator }}">
   </head>
-  <body class="kh-body kh-stack kh-stack--400{% if bodyClass %} {{ bodyClass }}{% endif %}">
+  <body class="kh-body kh-stack{% if bodyClass %} {{ bodyClass }}{% endif %}">
     <header class="kh-global-header" role="banner">
       <a href="/" class="kh-logo"><span class="kh-logo__text">AllAboutKen.com</span></a>
-      <nav class="kh-navigation kh-navigation--global | kh-cluster | show-for-medium | do-not-print">
+      <nav class="kh-navigation | kh-cluster | show-for-medium | do-not-print">
         <ul class="kh-navigation__list | kh-list--inline">
           <li class="kh-navigation__item">
             <a href="/blog" class="kh-navigation__link">Blog</a>
