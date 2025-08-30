@@ -30,43 +30,43 @@
     margin-bottom: 1rem;
     min-width: 0;
     overflow: auto;
-    white-space: pre-wrap;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+    white-space: pre-wrap;
   }
 
   pre,
   code {
+    background: #f3f3f3;
+    border-radius: 4px;
+    color: #373a36;
     font-family: Monaco, Consolas, 'Lucida Console', monospace;
     font-size: 14px;
-    color: #373a36;
     font-weight: 400;
     line-height: 1.57;
     margin: var(--kh-stack-margin, 0) 0 0 0;
     padding-bottom: 0.25rem;
     padding-top: 0.25rem;
-    background: #f3f3f3;
-    border-radius: 4px;
   }
 
   .kh-link,
   a:not([class*='kh-']) {
     border-bottom: none;
-    text-decoration: none;
     color: #3b6fb6;
+    text-decoration: none;
   }
 
   .kh-link:hover,
   a:not([class*='kh-']):hover {
-    color: #193f90;
     border-bottom: none;
+    color: #193f90;
     text-decoration: underline;
   }
 
   .kh-link:visited,
   a:not([class*='kh-']):visited {
-    color: #734595;
     border-bottom: none;
+    color: #734595;
   }
 
   .kh-link:visited:hover,
@@ -84,12 +84,12 @@
   }
 
   blockquote:not([class*='kh-']) {
-    font-size: 22px;
+    border: 0;
     color: #000;
+    font-size: 22px;
     font-weight: 300;
     line-height: 1.45;
     margin: 0 0 16px;
-    border: 0;
     padding: 10px 8px 10px 32px;
     position: relative;
 
@@ -114,11 +114,11 @@
 
   figcaption:not([class*='kh-']),
   cite:not([class*='kh-']) {
+    color: #54585a;
     font-size: 16px;
     font-weight: 500;
     line-height: 1.71;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
-    color: #54585a;
   }
 
   figure:not([class*='kh-']) {
@@ -138,8 +138,8 @@
   }
 
   h1:not([class*='kh-']) {
-    font-size: 42px;
     color: #000;
+    font-size: 42px;
     font-weight: 700;
     line-height: 1.147;
     margin: var(--kh-stack-margin, 0) 0 0 0;
@@ -156,8 +156,8 @@
   }
 
   h2:not([class*='kh-']) {
-    font-size: 30px;
     color: #000;
+    font-size: 30px;
     font-weight: 500;
     line-height: 1.333;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -169,8 +169,8 @@
   }
 
   h3:not([class*='kh-']) {
-    font-size: 27px;
     color: #000;
+    font-size: 27px;
     font-weight: 500;
     line-height: 1.333;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -182,8 +182,8 @@
   }
 
   h4:not([class*='kh-']) {
-    font-size: 21px;
     color: #000;
+    font-size: 21px;
     font-weight: 500;
     line-height: 1.29;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -195,8 +195,8 @@
   }
 
   h5:not([class*='kh-']) {
-    font-size: 19px;
     color: #000;
+    font-size: 19px;
     font-weight: 500;
     line-height: 1.5;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -224,8 +224,8 @@
   }
 
   li:not([class*='kh-']) {
-    font-size: 22px;
     color: #000;
+    font-size: 22px;
     font-weight: 300;
     line-height: 1.45;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -242,26 +242,26 @@
   }
 
   ol:not([class*='kh-']) {
-    margin: 0;
     list-style-type: decimal;
+    margin: 0;
     padding-left: 20px;
   }
 
   p:not([class*='kh-']) {
-    font-size: 22px;
     color: #000;
+    font-size: 22px;
     font-weight: 300;
     line-height: 1.45;
     margin: var(--kh-stack-margin, 0) 0 1rem 0;
   }
 
   small:not([class*='kh-']) {
-    font-size: 14px;
     color: #373a36;
+    display: block;
+    font-size: 14px;
     font-weight: 400;
     line-height: 1.57;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
-    display: block;
   }
 
   table:not([class*='kh-']) {
@@ -270,8 +270,8 @@
   }
 
   table:not([class*='kh-']) td {
-    font-size: 22px;
     color: #000;
+    font-size: 22px;
     font-weight: 300;
     line-height: 1.45;
     margin: var(--kh-stack-margin, 0) 0 0 0;
@@ -285,8 +285,8 @@
   }
 
   table:not([class*='kh-']) thead th {
-    font-size: 19px;
     color: #000;
+    font-size: 19px;
     font-weight: 500;
     line-height: 1.5;
     margin: var(--kh-stack-margin, 0) 0 0 0;
@@ -299,8 +299,8 @@
   }
 
   ul:not([class*='kh-']) {
-    margin: 0;
     list-style-type: disc;
+    margin: 0;
     padding-left: 20px;
   }
 }
@@ -340,43 +340,43 @@
     margin-bottom: 1rem;
     min-width: 0;
     overflow: auto;
-    white-space: pre-wrap;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+    white-space: pre-wrap;
   }
 
   pre,
   code {
+    background: #f3f3f3;
+    border-radius: 4px;
+    color: #373a36;
     font-family: Monaco, Consolas, 'Lucida Console', monospace;
     font-size: 14px;
-    color: #373a36;
     font-weight: 400;
     line-height: 1.57;
     margin: var(--kh-stack-margin, 0) 0 0 0;
     padding-bottom: 0.25rem;
     padding-top: 0.25rem;
-    background: #f3f3f3;
-    border-radius: 4px;
   }
 
   .kh-link,
   a:not([class*='kh-']) {
     border-bottom: none;
-    text-decoration: none;
     color: #3b6fb6;
+    text-decoration: none;
   }
 
   .kh-link:hover,
   a:not([class*='kh-']):hover {
-    color: #193f90;
     border-bottom: none;
+    color: #193f90;
     text-decoration: underline;
   }
 
   .kh-link:visited,
   a:not([class*='kh-']):visited {
-    color: #734595;
     border-bottom: none;
+    color: #734595;
   }
 
   .kh-link:visited:hover,
@@ -394,12 +394,12 @@
   }
 
   blockquote:not([class*='kh-']) {
-    font-size: 22px;
+    border: 0;
     color: #000;
+    font-size: 22px;
     font-weight: 300;
     line-height: 1.45;
     margin: 0 0 16px;
-    border: 0;
     padding: 10px 8px 10px 32px;
     position: relative;
 
@@ -424,11 +424,11 @@
 
   figcaption:not([class*='kh-']),
   cite:not([class*='kh-']) {
+    color: #54585a;
     font-size: 16px;
     font-weight: 500;
     line-height: 1.71;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
-    color: #54585a;
   }
 
   figure:not([class*='kh-']) {
@@ -448,8 +448,8 @@
   }
 
   h1:not([class*='kh-']) {
-    font-size: 42px;
     color: #000;
+    font-size: 42px;
     font-weight: 700;
     line-height: 1.147;
     margin: var(--kh-stack-margin, 0) 0 0 0;
@@ -466,8 +466,8 @@
   }
 
   h2:not([class*='kh-']) {
-    font-size: 30px;
     color: #000;
+    font-size: 30px;
     font-weight: 500;
     line-height: 1.333;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -479,8 +479,8 @@
   }
 
   h3:not([class*='kh-']) {
-    font-size: 27px;
     color: #000;
+    font-size: 27px;
     font-weight: 500;
     line-height: 1.333;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -492,8 +492,8 @@
   }
 
   h4:not([class*='kh-']) {
-    font-size: 21px;
     color: #000;
+    font-size: 21px;
     font-weight: 500;
     line-height: 1.29;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -505,8 +505,8 @@
   }
 
   h5:not([class*='kh-']) {
-    font-size: 19px;
     color: #000;
+    font-size: 19px;
     font-weight: 500;
     line-height: 1.5;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -534,8 +534,8 @@
   }
 
   li:not([class*='kh-']) {
-    font-size: 22px;
     color: #000;
+    font-size: 22px;
     font-weight: 300;
     line-height: 1.45;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -552,26 +552,26 @@
   }
 
   ol:not([class*='kh-']) {
-    margin: 0;
     list-style-type: decimal;
+    margin: 0;
     padding-left: 20px;
   }
 
   p:not([class*='kh-']) {
-    font-size: 22px;
     color: #000;
+    font-size: 22px;
     font-weight: 300;
     line-height: 1.45;
     margin: var(--kh-stack-margin, 0) 0 1rem 0;
   }
 
   small:not([class*='kh-']) {
-    font-size: 14px;
     color: #373a36;
+    display: block;
+    font-size: 14px;
     font-weight: 400;
     line-height: 1.57;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
-    display: block;
   }
 
   table:not([class*='kh-']) {
@@ -580,8 +580,8 @@
   }
 
   table:not([class*='kh-']) td {
-    font-size: 22px;
     color: #000;
+    font-size: 22px;
     font-weight: 300;
     line-height: 1.45;
     margin: var(--kh-stack-margin, 0) 0 0 0;
@@ -595,8 +595,8 @@
   }
 
   table:not([class*='kh-']) thead th {
-    font-size: 19px;
     color: #000;
+    font-size: 19px;
     font-weight: 500;
     line-height: 1.5;
     margin: var(--kh-stack-margin, 0) 0 0 0;
@@ -609,8 +609,8 @@
   }
 
   ul:not([class*='kh-']) {
-    margin: 0;
     list-style-type: disc;
+    margin: 0;
     padding-left: 20px;
   }
 }
@@ -625,17 +625,17 @@
 .kh-content a,
 .kh-content a:not([class*='vf-']),
 .kh-content .kh-link {
+  color: #333;
   text-decoration-color: #3b6fb6;
   text-decoration-line: underline;
-  color: #333;
 }
 
 .kh-link:visited,
 .kh-content a:visited .kh-content a:not([class*='vf-']):visited,
 .kh-content .kh-link:visited {
+  color: #333;
   text-decoration-color: #734595;
   text-decoration-line: underline;
-  color: #333;
 }
 
 .kh-content small:not([class*='vf-']) {
