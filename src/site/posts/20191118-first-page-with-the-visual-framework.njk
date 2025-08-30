@@ -63,7 +63,7 @@ To optimise compatibility and flexibility, the Visual Framework does not target 
 Below is an example for a "large heading".
 
 {% endmarkdown %}
-<figure class="kh-figure | kh-bleed-out">
+<figure class="kh-bleed-out kh-figure">
 <div
   class="codepen"
   data-prefill
@@ -126,7 +126,7 @@ There are a few principles to understand when working with Visual Framework:
 
 {% endmarkdown %}
 
-<figure class="kh-figure | kh-bleed-out">
+<figure class="kh-bleed-out kh-figure">
 <div
   class="codepen"
   data-prefill
@@ -157,7 +157,7 @@ There are a few principles to understand when working with Visual Framework:
 
 
 {% endmarkdown %}
-<figure class="vf-figure | kh-bleed-out">
+<figure class="kh-bleed-out vf-figure">
 <div
   class="codepen"
   data-prefill
@@ -195,7 +195,7 @@ There are a few principles to understand when working with Visual Framework:
     {%- endcodeblock -%}
 
 {% endmarkdown %}
-<figure class="kh-figure | kh-bleed-out">
+<figure class="kh-bleed-out kh-figure">
 <div
   class="codepen"
   data-prefill
@@ -238,7 +238,7 @@ There are a few principles to understand when working with Visual Framework:
 
    ```html
    <header class="vf-page-header">
-     <h1 class="vf-page-header__heading | vf-text vf-text--heading-l">Page title</h1>
+     <h1 class="vf-page-header__heading vf-text vf-text--heading-l">Page title</h1>
    </header>
    ```
 
@@ -259,7 +259,7 @@ There are a few principles to understand when working with Visual Framework:
    [See all the utility classes](https://visual-framework.github.io/vf-core/components/detail/vf-utility-classes.html).
 
 {% endmarkdown %}
-<figure class="vf-figure | kh-bleed-out">
+<figure class="kh-bleed-out vf-figure">
 <div
   class="codepen"
   data-prefill
@@ -271,7 +271,7 @@ There are a few principles to understand when working with Visual Framework:
   data-default-tab="html,result"
 >
 <pre data-lang="html">
-&lt;div class="vf-button | vf-u-background-color--red">I'm red&lt;/div>
+&lt;div class="vf-button vf-u-background-color--red">I'm red&lt;/div>
 
 &lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></pre>
 </div>
@@ -292,7 +292,7 @@ There are a few principles to understand when working with Visual Framework:
     {%- endcodeblock -%}
 
 {% endmarkdown %}
-<figure class="vf-figure | kh-bleed-out">
+<figure class="kh-bleed-out vf-figure">
 <div
   class="codepen"
   data-prefill
@@ -323,7 +323,7 @@ A grab-bag of important things that you might not expect.
    If you have a `<section class="my-local-style vf-tabs">` the VF CSS is designed to defer to any CSS you have for `section {}` and `.my-local-style`.
 
 {% endmarkdown %}
-<figure class="vf-figure | kh-bleed-out">
+<figure class="kh-bleed-out vf-figure">
 <div
   class="codepen"
   data-prefill
@@ -337,7 +337,7 @@ A grab-bag of important things that you might not expect.
 
 &lt;ul class="nav nav-tabs">
   &lt;li class="nav-item">
-    &lt;a class="nav-link active" href="#">Active&lt;/a>
+    &lt;a class="active nav-link" href="#">Active&lt;/a>
   &lt;/li>
   &lt;li class="nav-item">
     &lt;a class="nav-link" href="#">Bootstrap tabs&lt;/a>
@@ -349,7 +349,7 @@ A grab-bag of important things that you might not expect.
 &lt;div classs="vf-tabs">
   &lt;ul class="vf-tabs__list">
     &lt;li class="vf-tabs__item">
-      &lt;a class="vf-tabs__link is-active" href="#">Active&lt;/a>
+      &lt;a class="is-active vf-tabs__link" href="#">Active&lt;/a>
     &lt;/li>
     &lt;li class="vf-tabs__item">
       &lt;a class="vf-tabs__link" href="#">VF Tabs&lt;/a>

@@ -6,11 +6,11 @@ image: "/blog/drill-bits.jpg"
 layout: layouts/base.njk
 templateEngineOverride: njk
 ---
-<div class="kh-u-fullbleed kh-u-background-color--yellow--dark">
-<section class="kh-grid-stylized kh-grid-stylized--has-centered-content | kh-u-padding__top--500">
+<div class="kh-u-background-color--yellow--dark kh-u-fullbleed">
+<section class="kh-grid-stylized kh-grid-stylized--has-centered-content kh-u-padding__top--500">
   <div></div>
   <div class="kh-content">
-    <h1 class="kh-text-heading--1 kh-font-now-alt kh-font-now-alt--display">{{title}}. <br/><span class="kh-u-text--nowrap">I am</span> Ken Hawkins.</h1>
+    <h1 class="kh-font-now-alt kh-font-now-alt--display kh-text-heading--1">{{title}}. <br/><span class="kh-u-text--nowrap">I am</span> Ken Hawkins.</h1>
     <h2 class="kh-text-heading--2">I bring structure and process to complex web projects.</h2>
     {% markdown -%}
 
@@ -37,9 +37,9 @@ templateEngineOverride: njk
 
 <section class="kh-card-container kh-grid-stylized">
   <h2 id="recently" class="kh-text-heading--2">Recently</h2>
-  {#- <p class=" kh-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> -#}
+  {#- <p class="kh-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> -#}
   <section>
-    <div class="kh-grid kh-grid__col-4 | summary-inline">
+    <div class="kh-grid kh-grid__col-4 summary-inline">
     {%- for post in collections.posts.slice(-3) | reverse -%}
     <article class="kh-summary kh-summary--news">
       <span class="kh-summary__date">{{ post.date | dateDisplay }}</span>

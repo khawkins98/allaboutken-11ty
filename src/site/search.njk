@@ -6,7 +6,7 @@ layout: layouts/base.njk
 templateEngineOverride: njk
 ---
 
-<section class="kh-grid-stylized kh-grid-stylized--has-centered-content | kh-stack">
+<section class="kh-grid-stylized kh-grid-stylized--has-centered-content kh-stack">
   <div></div>
   <div>
     {% set context = {
@@ -20,14 +20,14 @@ templateEngineOverride: njk
       search_client_destination_prefix: ""
     } %}
 
-    <form action="{{ context.search_client_action }}" method="GET" class="kh-form kh-form--search kh-form--search--responsive | kh-sidebar kh-sidebar--end">
+    <form action="{{ context.search_client_action }}" method="GET" class="kh-form kh-form--search kh-form--search--responsive kh-sidebar kh-sidebar--end">
       <div class="kh-sidebar__inner">
-        <div class="kh-form__item | kh-search__item">
-          <label class="kh-form__label kh-u-sr-only | kh-search__label" for="{{ search_client_id }}">{{ context.search_label }}</label>
-          <input type="search" id="search" placeholder="{{ context.search_client_prompt }}" name="{{ context.search_client_id }}" class="vf-search__input | vf-form__input" {%- if search_client_autofocus %} autofocus{%- endif %} data-vf-search-client-side-input data-vf-search-client-side-destination-prefix="{{context.search_client_destination_prefix}}">
+        <div class="kh-form__item kh-search__item">
+          <label class="kh-form__label kh-search__label kh-u-sr-only" for="{{ search_client_id }}">{{ context.search_label }}</label>
+          <input type="search" id="search" placeholder="{{ context.search_client_prompt }}" name="{{ context.search_client_id }}" class="vf-form__input vf-search__input" {%- if search_client_autofocus %} autofocus{%- endif %} data-vf-search-client-side-input data-vf-search-client-side-destination-prefix="{{context.search_client_destination_prefix}}">
         </div>
         {%- if context.search_client_button -%}
-        <button type="submit" class="kh-search__button | kh-button kh-button--primary">
+        <button type="submit" class="kh-button kh-button--primary kh-search__button">
           <span class="kh-button__text">{{ context.search_client_button_text }}</span>
         </button>
         {%- endif -%}
@@ -38,7 +38,7 @@ templateEngineOverride: njk
     <script src="/js-search-lunr.js"></script>
     <script src="/js-search-client-side.js"></script>
     <script src="{{ context.search_client_script }}"></script>
-    <div class="kh-search-client-side kh-grid | kh-content">
+    <div class="kh-content kh-grid kh-search-client-side">
       <div class="results-container" data-vf-search-client-side-results>
         Loading...
       </div>
