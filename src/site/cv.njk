@@ -22,29 +22,29 @@ active_path: front
 {# Position templates #}
 {%- macro position(name, employer='', years='', location='') %}
 <h2 class="kh-text-heading--2">{{ name }}</h2>
-<h4 class="kh-text-heading--4 | kh-u-text-color--grey">{{ employer }}</h4>
+<h4 class="kh-text-heading--4 kh-u-text-color--grey">{{ employer }}</h4>
 <p><small class="kh-summary__date">{{ years }}</small><br/>
    <small class="kh-summary__date">{{ location }}</small></p>
 {% endmacro -%}
 
 {# Section header #}
 {%- macro sectionHeader(title) %}
-<h2 class="kh-badge kh-badge--outline | kh-u-margin__top--1200 kh-u-margin__bottom--600">{{ title }}</h2>
+<h2 class="kh-badge kh-badge--outline kh-u-margin__bottom--600 kh-u-margin__top--1200">{{ title }}</h2>
 {% endmacro -%}
 
 <div class="show-for-print-only">
-  <h1 class="kh-text-heading--1 kh-font-now-alt kh-font-now-alt--display">{{title}}</h1>
+  <h1 class="kh-font-now-alt kh-font-now-alt--display kh-text-heading--1">{{title}}</h1>
 </div>
 
 {{ contactInfoPrint | safe }}
 
-<div class="kh-u-fullbleed kh-u-background-color--yellow--dark | kh-grid-stylized kh-grid-stylized--has-centered-content">
+<div class="kh-grid-stylized kh-grid-stylized--has-centered-content kh-u-background-color--yellow--dark kh-u-fullbleed">
   <div></div>
-  <section class="kh-u-padding__top--500 kh-u-padding__bottom--200 kh-content">
+  <section class="kh-content kh-u-padding__bottom--200 kh-u-padding__top--500">
     <div class="do-not-print">
-      <h1 class="kh-text-heading--1 kh-font-now-alt kh-font-now-alt--display kh-u-margin__bottom--200 | show-for-mobile-only">Ken <br/> Hawkins.</span></h1>
-      <h1 class="kh-text-heading--1 kh-font-now-alt kh-font-now-alt--display kh-u-margin__bottom--200 | show-for-medium-up">Ken Hawkins.</span></h1>
-      <h2 class="kh-text-heading--1 kh-font-now-alt kh-font-now-alt--display">{{subtitle}}.</h2>
+      <h1 class="kh-font-now-alt kh-font-now-alt--display kh-text-heading--1 kh-u-margin__bottom--200 show-for-mobile-only">Ken <br/> Hawkins.</span></h1>
+      <h1 class="kh-font-now-alt kh-font-now-alt--display kh-text-heading--1 kh-u-margin__bottom--200 show-for-medium-up">Ken Hawkins.</span></h1>
+      <h2 class="kh-font-now-alt kh-font-now-alt--display kh-text-heading--1">{{subtitle}}.</h2>
       <p>
         Web Platform Lead with 20+ years’ experience delivering high-impact, scalable web platforms for global science, media, and UN organisations.
       </p>

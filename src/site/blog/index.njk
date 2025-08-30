@@ -8,7 +8,7 @@ layout: layouts/base.njk
 {%- set siteConfig = siteConfig.siteInformation -%}
 <div class="kh-grid-stylized">
   <div>
-    <h1 class="kh-text-heading--1 kh-font-now-alt kh-font-now-alt--display">{{title}}</h1>
+    <h1 class="kh-font-now-alt kh-font-now-alt--display kh-text-heading--1">{{title}}</h1>
   </div>
   <section>
   {%- for post in collections.posts | sort(true, true, attribute='date' ) -%}
@@ -17,10 +17,10 @@ layout: layouts/base.njk
     <a class="kh-summary__image" href="{{ post.url | url}}">
       <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image | url }}" alt="{{ post.data.teaser }}" />
     </a>
-    <h3 class="kh-summary__title | kh-font-now-alt">
+    <h3 class="kh-font-now-alt kh-summary__title">
       <a href="{{ post.url | url}}" class="kh-summary__link">{{ post.data.title }}</a>
     </h3>
-    <p class="kh-summary__text | kh-content">{{ post.data.teaser | safe }}</p>
+    <p class="kh-content kh-summary__text">{{ post.data.teaser | safe }}</p>
   </article>
   {%- endfor -%}
   </section>

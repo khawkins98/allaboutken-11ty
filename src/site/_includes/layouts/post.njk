@@ -6,12 +6,12 @@ templateEngineOverride: njk
 
 <article class="kh-grid kh-grid__col-3">
   <div class="kh-grid__col--span-1">
-    <section class="kh-u-fullbleed kh-u-background-color--yellow--dark">
-      <h1 class="kh-text-heading--1 kh-font-now-alt kh-font-now-alt--display | kh-post-title">{{title}}</h1>
+    <section class="kh-u-background-color--yellow--dark kh-u-fullbleed">
+      <h1 class="kh-font-now-alt kh-font-now-alt--display kh-post-title kh-text-heading--1">{{title}}</h1>
     </section>
     <p><time datetime="{{ date }}" class="kh-summary__date">{{ date | dateDisplay }}</time> {% if topics %}&nbsp;&nbsp;<span class="kh-summary__author">Filed in: {{topics}}</span>{% endif %}</p>
   </div>
-  <div class="kh-grid__col--span-2 kh-content">
+  <div class="kh-content kh-grid__col--span-2">
     <figure class="kh-figure">
       {% if href %}<a href="{{ href }}">{% endif %}
       <img class="kh-figure__image" src="/images{{ image | url }}" alt="{{ image_meta.altext }}">
@@ -36,11 +36,11 @@ templateEngineOverride: njk
 
 <div class="kh-stack kh-u-padding__top--800">
 {% if comment != false %}
-  <article class="kh-grid kh-grid__col-3 | do-not-print">
+  <article class="do-not-print kh-grid kh-grid__col-3">
     <div class="kh-grid__col--span-1">
-      <h2 class="kh-text-heading--2 | kh-u-float__right--md">Comment?</h2>
+      <h2 class="kh-text-heading--2 kh-u-float__right--md">Comment?</h2>
     </div>
-    <div class="kh-grid__col--span-2 kh-content">
+    <div class="kh-content kh-grid__col--span-2">
       <p>Thanks for reading, if you have comment I'd love to hear it.</p>
       <p>
         <a href="https://toot.io/@khawkins98">Mastodon<span class="show-for-large"> @khawkins98@toot.io</span></a>
@@ -54,11 +54,11 @@ templateEngineOverride: njk
   {% endif %}
 
   {% if page.url != '/privacy/' %}
-  <article class="kh-grid kh-grid__col-3 | do-not-print">
+  <article class="do-not-print kh-grid kh-grid__col-3">
     <div class="kh-grid__col--span-1">
-      <h2 class="kh-text-heading--2 | kh-u-float__right--md">Read more</h2>
+      <h2 class="kh-text-heading--2 kh-u-float__right--md">Read more</h2>
     </div>
-    <div class="kh-grid__col--span-2 kh-content">
+    <div class="kh-content kh-grid__col--span-2">
       {% set previousPost = collections.posts | getPreviousCollectionItem(page) %}
       {% set nextPost = collections.posts | getNextCollectionItem(page) %}
 
