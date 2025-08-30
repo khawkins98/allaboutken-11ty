@@ -36,14 +36,14 @@ templateEngineOverride: njk
 
 <div class="kh-stack kh-u-padding__top--800">
 {% if comment != false %}
-  <article class="do-not-print kh-grid kh-grid__col-3">
+  <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
     <div class="kh-grid__col--span-1">
       <h2 class="kh-text-heading--2 kh-u-float__right--md">Comment?</h2>
     </div>
     <div class="kh-content kh-grid__col--span-2">
       <p>Thanks for reading, if you have comment I'd love to hear it.</p>
       <p>
-        <a href="https://toot.io/@khawkins98">Mastodon<span class="show-for-large"> @khawkins98@toot.io</span></a>
+        <a href="https://toot.io/@khawkins98">Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
         {# &nbsp; <a href="/rss.xml">RSS feed</a> #}
         &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
         {# &nbsp; <a href="mailto:khawkins98@gmail.com">E-mail</a> #}
@@ -54,7 +54,7 @@ templateEngineOverride: njk
   {% endif %}
 
   {% if page.url != '/privacy/' %}
-  <article class="do-not-print kh-grid kh-grid__col-3">
+  <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
     <div class="kh-grid__col--span-1">
       <h2 class="kh-text-heading--2 kh-u-float__right--md">Read more</h2>
     </div>
