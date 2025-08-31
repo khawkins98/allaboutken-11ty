@@ -30,14 +30,14 @@ Lerna works out of the box quite well, allowing us to manage all of our componen
 
 ## How we get it
 
-### Generate the release notes 
+### Generate the release notes
 
 We run the aliased command `yarn run releasenotes` that invokes a git dump:
 
 <section class="kh-bleed-out">
-{% codeblock 'bash' -%}
-git show -U0 --raw $(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1  --max-count=1))..$(git describe --abbrev=0 --tags $(git rev-list --tags  --max-count=1)) --pretty=format:'commit: %H %n abbreviated_commit: %h %n subject: %s %n   sanitized_subject_line:  %f %n  date :  %aD %n  commiter : %cN %n' --output=tools/vf-component-library/src/site/updates/$(date +%F)-component-updates.md -- **/CHANGELOG.md 
-{% endcodeblock %}
+```bash
+git show -U0 --raw $(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1  --max-count=1))..$(git describe --abbrev=0 --tags $(git rev-list --tags  --max-count=1)) --pretty=format:'commit: %H %n abbreviated_commit: %h %n subject: %s %n   sanitized_subject_line:  %f %n  date :  %aD %n  commiter : %cN %n' --output=tools/vf-component-library/src/site/updates/$(date +%F)-component-updates.md -- **/CHANGELOG.md
+```
 </section>
 
 <br/>I'll walk through that chunk of code:
@@ -57,28 +57,26 @@ That still leaves us to add on the frontmatter and massage the content, but with
 
 {% endmarkdown %}
 <section class="kh-bleed-out">
-{% codeblock 'markdown' -%}
-{% verbatim %}
+```njk
 {% macro notes(component='vf-xxx', componentVersion='9.9.9', commitId='0123456789') %}
 
-### [{{component}}](https://visual-framework.github.io/vf-core/components/{{component}}/) 
+### [{{component}}](https://visual-framework.github.io/vf-core/components/{{component}}/)
 
-- <span class="vf-badge">{{ componentVersion }}</span> 
-- <a href="https://www.npmjs.com/package/@visual-framework/{{component}}/v/{{componentVersion}}" class="vf-badge">npm</a> 
-- <a href="https://github.com/visual-framework/vf-core/commit/{{commitId}}" class="vf-badge">git diff</a>
+- <span class="kh-badge">{{ componentVersion }}</span>
+- <a href="https://www.npmjs.com/package/@visual-framework/{{component}}/v/{{componentVersion}}" class="kh-badge">npm</a>
+- <a href="https://github.com/visual-framework/vf-core/commit/{{commitId}}" class="kh-badge">git diff</a>
 
 {% endmacro %}
-{% endverbatim %}
-{% endcodeblock %}
+```
 </section>
 {% markdown %}
 
-<br/>Here's [an example release notes update](https://stable.visual-framework.dev/updates/2020-11-06-component-updates/) and [its 11ty source code](https://github.com/visual-framework/vf-core/blob/develop/tools/vf-component-library/src/site/updates/2020-11-06-component-updates.md). 
+<br/>Here's [an example release notes update](https://stable.visual-framework.dev/updates/2020-11-06-component-updates/) and [its 11ty source code](https://github.com/visual-framework/vf-core/blob/develop/tools/vf-component-library/src/site/updates/2020-11-06-component-updates.md).
 
 ### Make a reference git tag for Lerna
 
-1. Run Lerna publish and skip git tags: `lerna publish --no-git-tag-version --no-push` 
-2. Lerna publishes to npm and does cross-dependency updates to each component's `package.json`. 
+1. Run Lerna publish and skip git tags: `lerna publish --no-git-tag-version --no-push`
+2. Lerna publishes to npm and does cross-dependency updates to each component's `package.json`.
 3. Commit the `package.json` updates to our main git branch
 4. Create a manual tag `git tag -a v2.3.whatever -m 'Combined snapshot of packages'`
 5. Push our new tag `git push origin --tags`
@@ -87,6 +85,6 @@ Now running `lerna changed` shows the expected "No changed packages".
 
 ## It works well for us
 
-To be clear, we don't think there is anything "wrong" with Lerna's default publishing flow, however it didn't suit our needs. This is an alternative approach. 
+To be clear, we don't think there is anything "wrong" with Lerna's default publishing flow, however it didn't suit our needs. This is an alternative approach.
 
 {% endmarkdown %}

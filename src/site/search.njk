@@ -6,20 +6,48 @@ layout: layouts/base.njk
 templateEngineOverride: njk
 ---
 
-<section class="embl-grid embl-grid--has-centered-content | vf-stack">
-<div>
-  {# <h1 class="vf-text-body--1">{{title}}</h1> #}
-</div>
-<div>
-  {% render '@vf-search-client-side', {
-    "search_client_button_text": "Search",
-    "search_client_autofocus": false,
-    "search_client_prompt": "Search the site",
-    "search_client_script": "/search_index.js",
-    "search_client_button": true,
-    "search_client_button_text": "Search",
-    "search_client_action": "/search/",
-    "search_client_results": true
-  } %}
-</div>
+<section class="kh-grid-stylized kh-grid-stylized--has-centered-content kh-stack">
+  <div></div>
+  <div>
+    {% set context = {
+      search_client_button_text: "Search",
+      search_client_autofocus: false,
+      search_client_prompt: "Search the site",
+      search_client_script: "/search_index.js",
+      search_client_button: true,
+      search_client_action: "/search/",
+      search_client_id: "search_query",
+      search_client_destination_prefix: ""
+    } %}
+
+    <form action="{{ context.search_client_action }}" method="GET" class="kh-form kh-form--search kh-form--search--responsive kh-sidebar kh-sidebar--end">
+      <div class="kh-sidebar__inner">
+        <div class="kh-form__item kh-search__item">
+          <label class="kh-form__label kh-search__label kh-u-sr-only" for="{{ search_client_id }}">{{ context.search_label }}</label>
+          <input type="search" id="search" placeholder="{{ context.search_client_prompt }}" name="{{ context.search_client_id }}" class="vf-form__input vf-search__input" {%- if search_client_autofocus %} autofocus{%- endif %} data-vf-search-client-side-input data-vf-search-client-side-destination-prefix="{{context.search_client_destination_prefix}}">
+        </div>
+        {%- if context.search_client_button -%}
+        <button type="submit" class="kh-button kh-button--primary kh-search__button">
+          <span class="kh-button__text">{{ context.search_client_button_text }}</span>
+        </button>
+        {%- endif -%}
+
+      </div>
+    </form>
+
+    <script src="/js-search-lunr.js"></script>
+    <script src="/js-search-client-side.js"></script>
+    <script src="{{ context.search_client_script }}"></script>
+    <div class="kh-content kh-grid kh-search-client-side">
+      <div class="results-container" data-vf-search-client-side-results>
+        Loading...
+      </div>
+    </div>
+  </div>
 </section>
+
+<script type="text/javascript">
+  window.onload = function () {
+    vfSearchClientSide();
+  };
+</script>

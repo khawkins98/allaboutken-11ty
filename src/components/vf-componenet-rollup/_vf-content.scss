@@ -1,0 +1,319 @@
+.kh-content {
+  max-width: 70ch;
+
+  h1,
+  h2,
+  h3 {
+    margin: 2rem 0 1rem;
+  }
+
+  p {
+    margin: 0 0 1rem;
+  }
+
+  pre {
+    border: 1px;
+    display: block;
+    margin-bottom: 1rem;
+    min-width: 0;
+    overflow: auto;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    white-space: pre-wrap;
+  }
+
+  pre,
+  code {
+    background: #f3f3f3;
+    border-radius: 4px;
+    color: #373a36;
+    font-family: Monaco, Consolas, 'Lucida Console', monospace;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.57;
+    margin: var(--kh-stack-margin, 0) 0 0 0;
+    padding-bottom: 0.25rem;
+    padding-top: 0.25rem;
+  }
+
+  .kh-link,
+  a:not([class*='kh-']) {
+    border-bottom: none;
+    color: #3b6fb6;
+    text-decoration: none;
+  }
+
+  .kh-link:hover,
+  a:not([class*='kh-']):hover {
+    border-bottom: none;
+    color: #193f90;
+    text-decoration: underline;
+  }
+
+  .kh-link:visited,
+  a:not([class*='kh-']):visited {
+    border-bottom: none;
+    color: #734595;
+  }
+
+  .kh-link:visited:hover,
+  a:not([class*='kh-']):visited:hover {
+    color: #734595;
+    text-decoration: underline;
+  }
+
+  .kh-video {
+    margin-bottom: 32px;
+  }
+
+  > :first-child {
+    margin-top: 0 !important;
+  }
+
+  blockquote:not([class*='kh-']) {
+    border: 0;
+    color: #000;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.45;
+    margin: 0 0 16px;
+    padding: 10px 8px 10px 32px;
+    position: relative;
+  }
+
+  blockquote:not([class*='kh-']) p:last-of-type:not([class*='kh-']) {
+    margin-bottom: 0;
+  }
+
+  blockquote:not([class*='kh-'])::before {
+    border-left: 4px solid #d0d0ce;
+    content: '';
+    height: 100%;
+    left: 12px;
+    position: absolute;
+    top: 0;
+  }
+
+  code:not([class*='kh-']) {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+
+  figcaption:not([class*='kh-']),
+  cite:not([class*='kh-']) {
+    color: #54585a;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.71;
+    margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
+  }
+
+  figure:not([class*='kh-']) {
+    display: table;
+    margin: auto;
+  }
+
+  figure:not([class*='kh-']) figcaption:not([class*='kh-']) {
+    caption-side: bottom;
+    display: table-caption;
+  }
+
+  figure:not([class*='kh-']) img:not([class*='kh-']) {
+    display: block;
+    height: auto;
+    max-width: 100%;
+  }
+
+  h1:not([class*='kh-']) {
+    color: #000;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.147;
+    margin: var(--kh-stack-margin, 0) 0 0 0;
+  }
+
+  h1:not([class*='kh-']) + small {
+    margin-bottom: 35px;
+    margin-top: 22px;
+  }
+
+  h1:not([class*='kh-']) b,
+  h1:not([class*='kh-']) strong {
+    font-weight: inherit;
+  }
+
+  h2:not([class*='kh-']) {
+    color: #000;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1.333;
+    margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
+  }
+
+  h2:not([class*='kh-']) b,
+  h2:not([class*='kh-']) strong {
+    font-weight: inherit;
+  }
+
+  h3:not([class*='kh-']) {
+    color: #000;
+    font-size: 27px;
+    font-weight: 500;
+    line-height: 1.333;
+    margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
+  }
+
+  h3:not([class*='kh-']) b,
+  h3:not([class*='kh-']) strong {
+    font-weight: inherit;
+  }
+
+  h4:not([class*='kh-']) {
+    color: #000;
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1.29;
+    margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
+  }
+
+  h4:not([class*='kh-']) b,
+  h4:not([class*='kh-']) strong {
+    font-weight: inherit;
+  }
+
+  h5:not([class*='kh-']) {
+    color: #000;
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 1.5;
+    margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
+  }
+
+  h5:not([class*='kh-']) b,
+  h5:not([class*='kh-']) strong {
+    font-weight: inherit;
+  }
+
+  hr:not([class*='kh-']) {
+    --context-margin--inline: 1rem;
+
+    background-color: #f3f3f3;
+    border: none;
+    height: 1px;
+    margin-block: 0 var(--kh-divider-margin--block-end, 1.5rem);
+    margin-top: var(--kh-stack-margin, 1rem);
+    width: 100%;
+  }
+
+  img:not([class*='kh-']) {
+    height: auto;
+    max-width: 100%;
+  }
+
+  li:not([class*='kh-']) {
+    color: #000;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.45;
+    margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
+    margin-bottom: 0.5rem;
+  }
+
+  li:not([class*='kh-']) > ul:not([class*='kh-']),
+  li:not([class*='kh-']) > ol:not([class*='kh-']) {
+    margin-top: 0.5rem;
+  }
+
+  li:not([class*='kh-']):last-of-type {
+    margin-bottom: 1rem;
+  }
+
+  ol:not([class*='kh-']) {
+    list-style-type: decimal;
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  p:not([class*='kh-']) {
+    color: #000;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.45;
+    margin: var(--kh-stack-margin, 0) 0 1rem 0;
+  }
+
+  small:not([class*='kh-']) {
+    color: #373a36;
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.57;
+    margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
+  }
+
+  table:not([class*='kh-']) {
+    background-color: #fafafa;
+    border-collapse: collapse;
+  }
+
+  table:not([class*='kh-']) td {
+    color: #000;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.45;
+    margin: var(--kh-stack-margin, 0) 0 0 0;
+    padding: 8px 16px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  table:not([class*='kh-']) thead {
+    background-color: #d0d0ce;
+  }
+
+  thead th {
+    color: #000;
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 1.5;
+    margin: var(--kh-stack-margin, 0) 0 0 0;
+    padding: 8px 16px;
+    text-align: left;
+  }
+
+  table:not([class*='kh-']) tr:nth-of-type(even) {
+    background-color: #d8d8d8;
+  }
+
+  ul:not([class*='kh-']) {
+    list-style-type: disc;
+    margin: 0;
+    padding-left: 20px;
+  }
+}
+
+.kh-footer .kh-content p {
+  color: #fff;
+}
+
+.kh-link,
+.kh-content a,
+.kh-content a:not([class*='vf-']),
+.kh-content .kh-link {
+  color: #333;
+  text-decoration-color: #3b6fb6;
+  text-decoration-line: underline;
+}
+
+.kh-link:visited,
+.kh-content a:visited,
+.kh-content a:not([class*='vf-']):visited,
+.kh-content .kh-link:visited {
+  color: #333;
+  text-decoration-color: #734595;
+  text-decoration-line: underline;
+}
+
+.kh-content small:not([class*='vf-']) {
+  display: inline;
+}
