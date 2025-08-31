@@ -1,0 +1,65 @@
+---
+title: "A simpler, faster site: moving to pure Eleventy v3"
+layout: layouts/post.njk
+teaser: "I upgraded the site to Eleventy v3, removed Gulp and the Visual Framework, and simplified everything."
+image: "/blog/circular-loop.jpg"
+image_meta:
+  text: "Metaphorically breaking free from the Fractal ↔ Eleventy ↔ Gulp loop. This overhaul retires that loop."
+  altext: "Diagram metaphorically breaking the old build cycle between Eleventy and Gulp."
+date: 2025-08-31
+url: /posts/20250831-site-overhaul-eleventy-v3.html
+active_path: blog
+tags: posts
+topics:
+  - eleventy
+  - build pipeline
+  - visual framework
+---
+
+{% markdown %}
+
+Craving a lighter, nimbler site, I finally parted a long goodbye with Gulp and the Visual Framework for a streamlined Eleventy stack making the codebase is easier to tinker with and build fun things.
+
+> #### tl;dr
+>
+> - Slimmer, more experimental setup on Eleventy v3.
+> - Dropped Gulp and upstream Visual Framework.
+> - Images and the search index now build via Eleventy-integrated scripts.
+> - CI/build is streamlined; local `yarn dev` stays snappy.
+
+### Why change
+
+Let’s be honest: I’m not in the thick of [the Visual Framework](https://stable.visual-framework.dev/) anymore. Back when I was at EMBL/EMBL‑EBI, I brought it in here as a bit of “dogfooding” -- but for a personal site, that kind of heavyweight integration is overkill unless you're building for EMBL.
+
+Now, I’m aiming for something leaner and more playful: I’ve kept the templates and local styles I actually use, trimmed away the rest, and rebuilt the workflow around Eleventy v3 for a much simpler, more modern stack. If you’re curious about what the Visual Framework offers these days, it’s still a fantastic toolkit for federated life science sites.
+
+With [Eleventy v4](https://github.com/11ty/eleventy/releases/tag/v4.0.0-alpha.4) around the corner -- and having followed Eleventy since its 2018 debut ([Introducing Eleventy](https://www.zachleat.com/web/introducing-eleventy/); [early supporters](https://v0-10-0.11ty.dev/docs/supporters/)) -- this felt like the right moment to simplify and get current on v3.
+
+### What changed
+
+By the numbers: +3,069 additions, −10,252 deletions (net −7,183 lines, excluding `yarn.lock`) across 190 files—and 127 fewer files (140 deleted, 14 added) [PR #12](https://github.com/khawkins98/allaboutken-11ty/pull/12).
+
+- Build and tooling
+  - Switched to Eleventy v3.
+  - Dropped Gulp and Fractal.
+  - Dropped much custom NJK templates.
+  - Removed legacy `{% raw %}{% render %}{% endraw %}`/`codeblock` usage and their shims; converted posts to plain HTML or fenced code.
+  - Condensed and audited local SCSS and components.
+
+- Eleventy-integrated tasks
+  - Images: `scripts/process-images.js` (sharp) runs on build and during dev.
+  - Search: `scripts/build-search-index.js` regenerates the client-side index on build.
+  - Cleaned passthroughs; removed unused VF assets.
+
+### Related posts
+
+- In 2020 I first moved this site to Eleventy: [Moving from Panini to Eleventy](/posts/20200713-moving-from-panini-to-eleventy).
+- In 2018 I wrote about migrating to Zurb Panini 2.0: [Migrating to Zurb Panini 2.0](/posts/20180210-zurb-panini-2-migration).
+
+### What’s next
+
+I’m looking forward to playing with some new CSS techniques and blog visualisations, and, honestly, just posting more.
+
+Thanks for reading.
+
+{% endmarkdown %}

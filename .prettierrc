@@ -1,0 +1,7 @@
+{
+  "singleQuote": true,
+  "printWidth": 520,
+  "insertPragma": false,
+  "proseWrap": "preserve",
+  "bracketSpacing": true
+}

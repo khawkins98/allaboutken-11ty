@@ -6,21 +6,21 @@ layout: layouts/base.njk
 #templateEngineOverride: njk
 ---
 {%- set siteConfig = siteConfig.siteInformation -%}
-<div class="embl-grid">
+<div class="kh-grid-stylized">
   <div>
-    <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display">{{title}}</h1>
+    <h1 class="kh-font-now-alt kh-font-now-alt--display kh-text-heading--1">{{title}}</h1>
   </div>
   <section>
   {%- for post in collections.posts | sort(true, true, attribute='date' ) -%}
-  <article class="vf-summary vf-summary--news">
-    <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
-    <a class="vf-summary__image" href="{{ post.url | url}}">
-      <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image | url }}" alt="{{ post.data.teaser }}" />
+  <article class="kh-summary kh-summary--news">
+    <span class="kh-summary__date">{{ post.date | dateDisplay }}</span>
+    <a class="kh-summary__image" href="{{ post.url | url}}">
+      <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image | url }}" alt="{{ post.data.teaser }}" />
     </a>
-    <h3 class="vf-summary__title | vf-font-now-alt">
-      <a href="{{ post.url | url}}" class="vf-summary__link">{{ post.data.title }}</a>
+    <h3 class="kh-font-now-alt kh-summary__title">
+      <a href="{{ post.url | url}}" class="kh-summary__link">{{ post.data.title }}</a>
     </h3>
-    <p class="vf-summary__text | vf-content">{{ post.data.teaser | safe }}</p>
+    <p class="kh-content kh-summary__text">{{ post.data.teaser | safe }}</p>
   </article>
   {%- endfor -%}
   </section>

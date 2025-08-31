@@ -4,7 +4,14 @@ on:
     branches:
       - main
   push:
-    paths: ["src/**", ".github/workflows/**", "package.json"] # Trigger the action only when files change in the folders defined here
+    paths: [
+      "src/**",
+      "scripts/**",
+      "eleventy.js",
+      "package.json",
+      "yarn.lock",
+      ".github/workflows/**"
+    ] # Trigger only when relevant files change
     branches: ["main"]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -23,15 +30,21 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
-        # with:
-        #   persist-credentials: false
-      - name: Install and Build 🔧
-        run: | # Install npm packages and build the Storybook files
-          yarn install
-          yarn run build
-          mv build _site
+      - name: Set up Node.js ☕
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+      - name: Install dependencies 📦
+        run: yarn install --frozen-lockfile
+      - name: Build site 🔧
+        run: yarn build
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
   # Deployment job
   deploy:
     if: github.ref == 'refs/heads/main' # only deploy if branch is master

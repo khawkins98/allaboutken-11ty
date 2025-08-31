@@ -29,14 +29,13 @@ But what I want to chat about is what IBM has been up to: unveiling their new Pl
 
 {% endmarkdown %}
 
-<section class="vf-grid vf-grid__col-3">
-  <div class="vf-grid__col--span-2 | vf-stack vf-stack--800">
-    <figure class="vf-figure">
-      {% render '@vf-embed', {
-        "vf_embedded_content": '<iframe src="https://www.youtube.com/embed/xcs9snQnkJs" frameborder="0" gesture="media" allowfullscreen></iframe>',
-        "vf_embed_variant_16x9": true
-      } %}
-      <figcaption class="vf-figure__caption">IBM discusses their change in typeface.</figcaption>
+<section class="kh-grid kh-grid__col-3">
+  <div class="kh-grid__col--span-2 kh-stack kh-stack--800">
+    <figure class="kh-figure">
+      <div class="kh-video">
+        <iframe src="https://www.youtube.com/embed/xcs9snQnkJs" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <figcaption class="kh-figure__caption">IBM discusses their change in typeface.</figcaption>
     </figure>
   </div>
 </section>
@@ -57,38 +56,32 @@ Here's a quick comparison between, Plex, Helvetica, Fira and a couple of other s
 
 {% endmarkdown %}
 
-<section class="vf-stack vf-stack--800">
+<section class="kh-stack vf-stack--800">
 
-  {% render '@vf-figure--default', {
-    "text": 'Like Fira, Plex seems to play well where Helvetica was once used and both Fira and Plex fix a number of long-standing issues around the lowercase "L" and overly tight "c" and "e".',
-    "alttext": "Plex example",
-    "imageUrl": "../images/original/blog/plex.svg"
-  } %}
+  <figure class="kh-figure">
+    <img src="../images/original/blog/plex.svg" alt="Plex example" class="kh-figure__image" />
+    <figcaption class="kh-figure__caption">Like Fira, Plex seems to play well where Helvetica was once used and both Fira and Plex fix a number of long-standing issues around the lowercase "L" and overly tight "c" and "e".</figcaption>
+  </figure>
 
+  <figure class="kh-figure">
+    <img src="../images/original/blog/plex-letters.svg" alt="Plex letters" class="kh-figure__image" />
+    <figcaption class="kh-figure__caption">Fira and Plex have personality in the letterforms. Plex might be a bit more conservative than Fira, and the uppercase "i" is a clear win for environments where you don\'t want to confuse a vertical pipe "|" and lowercase "l". The uppercase "E" has also been shortened less than Fira.</figcaption>
+  </figure>
 
-  {% render '@vf-figure--default', {
-    "text": 'Fira and Plex have personality in the letterforms. Plex might be a bit more conservative than Fira, and the uppercase "i" is a clear win for environments where you don\'t want to confuse a vertical pipe "|" and lowercase "l". The uppercase "E" has also been shortened less than Fira.',
-    "alttext": "Plex letters",
-    "imageUrl": "../images/original/blog/plex-letters.svg"
-  } %}
+  <figure class="kh-figure">
+    <img src="../images/original/blog/plex-numbers.svg" alt="Plex numbers" class="kh-figure__image" />
+    <figcaption class="kh-figure__caption">The wide width of Plex\'s numbers is notable. Again, this may be a concession for data environments, particularly the styling of the number "1".</figcaption>
+  </figure>
 
-  {% render '@vf-figure--default', {
-    "text": 'The wide width of Plex\'s numbers is notable. Again, this may be a concession for data environments, particularly the styling of the number "1".',
-    "alttext": "Plex numbers",
-    "imageUrl": "../images/original/blog/plex-numbers.svg"
-  } %}
+  <figure class="kh-figure">
+    <img src="../images/original/blog/fira-italic.svg" alt="Fira italics" class="kh-figure__image" />
+    <figcaption class="kh-figure__caption">The Plex italics add <a href="https://twitter.com/ThunderNixon/status/929043150383075329">a big flair</a> Especially in the mono style (where both Fira Code and Mono lack a true italic). However my main interest at the moment is data compatibility — but personality in italics could be quite nice.</figcaption>
+  </figure>
 
-  {% render '@vf-figure--default', {
-    "text": 'The Plex italics add <a href="https://twitter.com/ThunderNixon/status/929043150383075329">a big flair</a> Especially in the mono style (where both Fira Code and Mono lack a true italic). However my main interest at the moment is data compatibility — but personality in italics could be quite nice.',
-    "alttext": "Fira italics",
-    "imageUrl": "../images/original/blog/fira-italic.svg"
-  } %}
-
-  {% render '@vf-figure--default', {
-    "text": 'Plex\'s very square "t", it feels like a mono style.',
-    "alttext": "Plex notches",
-    "imageUrl": "../images/original/blog/plex-notching.svg"
-  } %}
+  <figure class="kh-figure">
+    <img src="../images/original/blog/plex-notching.svg" alt="Plex notches" class="kh-figure__image" />
+    <figcaption class="kh-figure__caption">Plex\'s very square "t", it feels like a mono style.</figcaption>
+  </figure>
 
 </section>
 {% markdown %}

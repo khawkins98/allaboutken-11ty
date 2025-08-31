@@ -14,6 +14,13 @@ self.addEventListener("install", function (event) {
       return cache.add(offlineFallbackPage);
     })
   );
+  // Activate the new service worker as soon as it's finished installing
+  self.skipWaiting();
+});
+
+// Ensure the newly activated service worker takes control of the page ASAP
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
 });
 
 // If any fetch fails, it will look for the request in the cache and serve it from there first
@@ -30,7 +37,7 @@ self.addEventListener("fetch", function (event) {
 
         return response;
       })
-      .catch(function (error) {        
+      .catch(function (error) {
         console.log("[PWA Builder] Network request Failed. Serving content from cache: " + error);
         return fromCache(event.request);
       })
