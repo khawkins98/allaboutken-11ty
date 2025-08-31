@@ -173,8 +173,6 @@ module.exports = function(config) {
   // these are already in output, no passthrough needed
   // pass through favicon assets
   config.addPassthroughCopy({ "./src/components/ken-favicon/assets": "assets/ken-favicon/assets" });
-  // pass through vf-search-client-side JS for search page
-  config.addPassthroughCopy({ "./node_modules/@visual-framework/vf-search-client-side/vf-search-client-side.js": "scripts/vf-search-client-side.js" });
 
   // pass some assets right through
   config.addPassthroughCopy("./src/site/images");
