@@ -5,31 +5,13 @@ const { execSync } = require('child_process');
 // const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
 
 module.exports = function(config) {
-  // BroswerSync options
-  // config.setBrowserSyncConfig({ open: true, open: "local" });
-  // 11ty version 2 has its own dev server
-  // https://www.11ty.dev/docs/dev-server/
   config.setServerOptions({
-    // Default values are shown:
     showVersion: true,
-    // Whether the live reload snippet is used
     liveReload: true,
-
-    // It cannot open a browser tab without hacks
-    // https://github.com/11ty/eleventy-dev-server/issues/28
-    // open: true,
 
     // Whether DOM diffing updates are applied where possible instead of page reloads
     domDiff: true,
 
-    // The starting port number
-    // Will increment up to (configurable) 10 times if a port is already in use.
-    // port: 8080,
-
-    // Additional files to watch that will trigger server updates
-    // Accepts an Array of file paths or globs (passed to `chokidar.watch`).
-    // Works great with a separate bundler writing files to your output folder.
-    // e.g. `watch: ["_site/**/*.css"]`
     watch: [
       "build/**/*.css" // watch compiled CSS from Sass for instant reloads
     ],
@@ -75,8 +57,6 @@ module.exports = function(config) {
     return (content || '').replace(/href="\//g, `href="${absoluteUrl.replace(/\/$/, '')}/`);
   });
 
-  // Removed legacy render tag; replaced usages with plain HTML.
-
   // Paired shortcode to render inline markdown blocks
   const markdownIt = require('markdown-it')({ html: true, linkify: true });
   config.addPairedShortcode('markdown', (content) => markdownIt.render(content || ''));
@@ -95,8 +75,6 @@ module.exports = function(config) {
 
   // Shortcodes
   // https://www.11ty.io/docs/shortcodes/
-  // -----
-
   // nunjucks
   // {% sampleShortcode "firstName", "lastName" %}
   // handlebars
@@ -134,8 +112,6 @@ module.exports = function(config) {
 
   // copy js files
   config.addPassthroughCopy("./src/site/**/*.js");
-  // pass through built scripts and css
-  // these are already in output, no passthrough needed
   // pass through favicon assets
   config.addPassthroughCopy({ "./src/components/ken-favicon/assets": "assets/ken-favicon/assets" });
 
@@ -177,7 +153,6 @@ module.exports = function(config) {
 
   // // If you have other `addPlugin` calls, it’s important that UpgradeHelper is added last.
   // config.addPlugin(UpgradeHelper);
-
   return {
     dir: {
       input: "src/site",
@@ -194,6 +169,4 @@ module.exports = function(config) {
     passthroughFileCopy: true,
     // pathPrefix: "/vf-eleventy/" // if your site is deployed to a sub-url, otherwise comment out
   };
-
 };
-

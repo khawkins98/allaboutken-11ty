@@ -5,7 +5,6 @@
 
 /* global lunr */
 /* global searchIndex */
-
 function vfSearchClientSide() {
   var searchTerm;
   const searchQueryInput = document.querySelectorAll('[data-vf-search-client-side-input]'); // where we put the query
