@@ -7,7 +7,7 @@ layout: layouts/base.njk
 templateEngineOverride: njk
 ---
 <div class="kh-u-background-color--yellow--dark kh-u-fullbleed">
-<section class="kh-grid-stylized kh-grid-stylized--has-centered-content kh-u-padding__top--500">
+<section class="kh-grid-stylized kh-u-padding__top--500">
   <div></div>
   <div class="kh-content">
     <h1 class="kh-font-now-alt kh-font-now-alt--display kh-text-heading--1">{{title}}. <br/><span class="kh-u-text--nowrap">I am</span> Ken Hawkins.</h1>
@@ -39,7 +39,6 @@ templateEngineOverride: njk
   <h2 id="recently" class="kh-text-heading--2">Recently</h2>
   {#- <p class="kh-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> -#}
   <section>
-    <div class="kh-grid kh-grid__col-4 summary-inline">
     {%- for post in collections.posts.slice(-3) | reverse -%}
     <article class="kh-summary kh-summary--news">
       <span class="kh-summary__date">{{ post.date | dateDisplay }}</span>
@@ -62,13 +61,12 @@ templateEngineOverride: njk
       </h3>
       {#- {{loop.index}} -#}
     </article>
-    </div>
   </section>
 
 </section>
 
 {#- Contact -#}
-<section class="kh-grid-stylized kh-grid-stylized--has-centered-content">
+<section class="kh-grid-stylized">
   <h2 id="hello" class="kh-text-heading--2">Say hello</h2>
   <section>
     <p class="kh-text-body--2">
