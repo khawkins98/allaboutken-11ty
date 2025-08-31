@@ -41,12 +41,14 @@ I’m no longer closely involved with VF, and the Gulp-based pipeline added comp
 
 - CSS and templates
   - Kept local SCSS and components.
-  - Added a small `_vf-shim.scss` and a few utilities so existing `vf-*` classes render sensibly.
-  - Replaced most `{% raw %}{% render %}{% endraw %}` usages with direct includes; a no-op `render` shim exists for legacy content.
+  - Refactored SCSS in-place: replaced `meta.load-css` with `@use`, centralized breakpoints, flattened deep nesting.
+  - Tightened Stylelint rules (max nesting; selector complexity) to keep CSS maintainable.
+  - Removed legacy `{% raw %}{% render %}{% endraw %}`/`codeblock` usage and their shims; converted posts to plain HTML or fenced code.
 
 - Eleventy-integrated tasks
   - Images: `scripts/process-images.js` (sharp) runs on build and during dev.
   - Search: `scripts/build-search-index.js` regenerates the client-side index on build.
+  - Cleaned passthroughs; removed unused VF assets.
 
 If you want the gory details, the changelog in the pull request has the blow-by-blow: [Feat/update to 11ty v3 + move away from VF (PR #12)](https://github.com/khawkins98/allaboutken-11ty/pull/12).
 
@@ -62,172 +64,20 @@ If you want the gory details, the changelog in the pull request has the blow-by-
 - Legacy `vf-*` classes get enough styling from `_vf-shim.scss` to keep layouts intact.
 - During `yarn dev`, Eleventy watches templates; Sass and esbuild handle CSS/JS; images auto-process.
 
-### Trimming Sass with PurgeCSS
+### Refactor highlights
 
-I used a small Node script to run [PurgeCSS](https://purgecss.com/) against the compiled site in `build/`, then splice the result back into my Sass so I could keep only what the site actually uses.
-
-Commands I ran:
-
-```bash
-# Page-scoped audit (writes a per-page purged CSS + JSON report)
-node scripts/purge-css.js --page posts/20250820-site-overhaul-eleventy-v3/index.html
-
-# Create a non-destructive trimmed SCSS next to index.scss
-yarn scss:trim
-
-# After review, overwrite the source SCSS (optional)
-yarn scss:trim:write
-```
-
-For this post’s page, the per‑page audit dropped CSS by ~95%, and the trimmed `index.scss` variant removes a lot of dead weight left over from older VF styles. I reviewed diffs and kept a small safelist for state classes to avoid over‑purging.
-
-The result: smaller CSS, fewer bytes over the wire, and easier future edits.
-
-### Removing duplicate SCSS rules
-
-After purging, I also ran a tiny PostCSS-based script to deduplicate identical selector blocks and strip stray `@charset` at‑rules. This helped clean up legacy VF imports that had repeated declarations.
-
-```bash
-# Review-only: writes index.dedup.scss next to index.scss
-yarn scss:dedupe
-
-# Overwrite the source after review
-yarn scss:dedupe:write
-```
-
-On this codebase it removed 97 duplicate rules and fixed the `@charset` linter error in `src/components/vf-componenet-rollup/index.scss`.
-
-### Copy‑paste, one‑off scripts (no permanent files)
-
-If you don’t want to keep maintenance scripts in your repo, here are short, disposable snippets you can paste into a temp file, run once, then delete. These only touch the source `.scss` and never hook into your production CSS build.
-
-- Temporarily install deps (remove after use):
-
-```bash
-npm i -D purgecss postcss postcss-scss
-# ... run the scripts below ...
-npm remove purgecss postcss postcss-scss
-```
-
-#### One‑off: Trim SCSS from a purged CSS snapshot
-
-1) Build your site, then generate a purged snapshot against built HTML/JS (ad‑hoc):
-
-```bash
-npx -y purgecss@latest \
-  --css build/css/styles.css \
-  --content "build/**/*.html" "build/**/*.js" \
-  --safelist "is-active is-open js-.* visually-hidden kh-u-do-not-print" \
-  --output build/css
-# Result: build/css/styles.css (overwritten) or use --out to a new file
-```
-
-2) Splice that purged CSS back into your SCSS (write a temp file, run, delete):
-
-```js
-// save as _once-trim-scss.js, run with: node _once-trim-scss.js
-const fs = require('fs');
-const path = require('path');
-
-const source = process.env.SRC || 'src/components/vf-componenet-rollup/index.scss';
-const purged = process.env.PURGED || 'build/css/styles.css';
-const write = process.env.WRITE === '1';
-
-const scss = fs.readFileSync(source, 'utf8');
-const purgedCss = fs.readFileSync(purged, 'utf8');
-
-const marker = '// old csss';
-const idx = scss.indexOf(marker);
-const next = idx >= 0
-  ? scss.slice(0, idx + marker.length) + '\n\n' + purgedCss + '\n'
-  : scss + '\n\n/* purged */\n' + purgedCss + '\n';
-
-const outPath = write ? source : path.join(path.dirname(source), path.basename(source, '.scss') + '.trimmed.scss');
-fs.writeFileSync(outPath, next);
-console.log('Wrote', outPath);
-```
-
-Run it:
-
-```bash
-node _once-trim-scss.js                        # writes index.trimmed.scss
-WRITE=1 node _once-trim-scss.js               # overwrites source
-SRC=src/components/vf-local-overrides/vf-local-overrides.scss \
-  PURGED=build/css/styles.css node _once-trim-scss.js
-```
-
-#### One‑off: Deduplicate identical SCSS rules
-
-Paste, run, delete:
-
-```js
-// save as _once-dedupe-scss.js, run with: node _once-dedupe-scss.js
-const fs = require('fs');
-const path = require('path');
-const postcss = require('postcss');
-const scss = require('postcss-scss');
-
-const source = process.env.SRC || 'src/components/vf-componenet-rollup/index.scss';
-const write = process.env.WRITE === '1';
-
-(async () => {
-  const input = fs.readFileSync(source, 'utf8');
-  const root = (await postcss().process(input, { syntax: scss, from: source })).root;
-
-  // drop stray @charset
-  let droppedCharset = 0;
-  root.walkAtRules('charset', (a) => { a.remove(); droppedCharset++; });
-
-  const seen = new Set();
-  let removed = 0;
-
-  const norm = (s) => String(s || '').replace(/\s+/g, ' ').trim();
-  const sigDecls = (rule) => {
-    const decls = (rule.nodes || []).filter(n => n.type === 'decl').map(n => {
-      const imp = n.important ? ' !important' : '';
-      return `${String(n.prop||'').trim().toLowerCase()}:${norm(n.value)}${imp}`;
-    }).sort();
-    return decls.join(';');
-  };
-
-  function walk(node, ctx) {
-    if (!node.nodes) return;
-    for (const child of [...node.nodes]) {
-      if (child.type === 'atrule') {
-        walk(child, [...ctx, `@${child.name} ${norm(child.params)}`]);
-        if (!child.nodes || child.nodes.length === 0) child.remove();
-      } else if (child.type === 'rule') {
-        const sel = norm(child.selector);
-        const d = sigDecls(child);
-        if (!sel || !d) continue;
-        const key = `${ctx.join(' | ')}||${sel}||${d}`;
-        if (seen.has(key)) { child.remove(); removed++; } else { seen.add(key); }
-      }
-    }
-  }
-
-  walk(root, []);
-  const out = root.toResult({ syntax: scss, from: source }).css;
-  const outPath = write ? source : path.join(path.dirname(source), path.basename(source, '.scss') + '.dedup.scss');
-  fs.writeFileSync(outPath, out);
-  console.log(`Removed ${removed} duplicate rule(s), stripped ${droppedCharset} @charset. Wrote ${outPath}`);
-})();
-```
-
-Run it:
-
-```bash
-node _once-dedupe-scss.js                      # writes index.dedup.scss
-WRITE=1 node _once-dedupe-scss.js             # overwrites source
-SRC=src/components/vf-local-overrides/vf-local-overrides.scss node _once-dedupe-scss.js
-```
+- Replaced `@include meta.load-css` with `@use … as *` for `normalize` and content styling.
+- Centralized all breakpoints in `_settings.scss` and kept media queries in Sass.
+- Flattened deep selector nesting; enforced max nesting via Stylelint.
+- Converted `{% raw %}{% codeblock %}{% endraw %}` to fenced code; removed the shim.
+- Removed legacy `{% raw %}{% render %}{% endraw %}` usages and tag; switched to plain HTML patterns.
+- Deleted `temp-fixes/vf-extensions/` and unused passthroughs.
 
 ### What’s next
 
-- Remove remaining Gulp artifacts and temp VF extensions.
-- Migrate Sass `@import` to `@use`/`@forward`.
+- Prune unused CSS selectors and consolidate utilities.
 - Consider `@11ty/eleventy-img` for responsive images.
-- Audit any leftover `{% raw %}{% render %}{% endraw %}` in older posts.
+- Document the SCSS conventions and refactor summary in `README.md`.
 
 Thanks for reading—and if you spot anything odd post‑migration, please let me know.
 
