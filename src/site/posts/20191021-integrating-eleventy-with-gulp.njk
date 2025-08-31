@@ -64,7 +64,9 @@ fractalComponents = {
 ```
 <br/>Also, Fractal enables component Nunjucks templates can be invoked like:
 
-`{% render '@myNavComponent', {passedParam: 'An Example'} %}`
+```njk
+{% raw %}{% render '@myNavComponent', {passedParam: 'An Example'} %}{% endraw %}
+```
 
 Which is great as it allows us to `npm install` components and not have to move/symlink the Nunjucks templates into Eleventy `src/` directory — and it keeps syntax consistent across environments.
 

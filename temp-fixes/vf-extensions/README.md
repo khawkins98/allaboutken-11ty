@@ -1,1 +1,0 @@
-Temporary until https://github.com/visual-framework/vf-core/pull/1848 is merged in and published to npm

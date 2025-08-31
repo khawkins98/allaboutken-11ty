@@ -35,9 +35,9 @@ Lerna works out of the box quite well, allowing us to manage all of our componen
 We run the aliased command `yarn run releasenotes` that invokes a git dump:
 
 <section class="kh-bleed-out">
-{% codeblock 'bash' -%}
+```bash
 git show -U0 --raw $(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1  --max-count=1))..$(git describe --abbrev=0 --tags $(git rev-list --tags  --max-count=1)) --pretty=format:'commit: %H %n abbreviated_commit: %h %n subject: %s %n   sanitized_subject_line:  %f %n  date :  %aD %n  commiter : %cN %n' --output=tools/vf-component-library/src/site/updates/$(date +%F)-component-updates.md -- **/CHANGELOG.md
-{% endcodeblock %}
+```
 </section>
 
 <br/>I'll walk through that chunk of code:
@@ -57,8 +57,7 @@ That still leaves us to add on the frontmatter and massage the content, but with
 
 {% endmarkdown %}
 <section class="kh-bleed-out">
-{% codeblock 'markdown' -%}
-{% verbatim %}
+```njk
 {% macro notes(component='vf-xxx', componentVersion='9.9.9', commitId='0123456789') %}
 
 ### [{{component}}](https://visual-framework.github.io/vf-core/components/{{component}}/)
@@ -68,8 +67,7 @@ That still leaves us to add on the frontmatter and massage the content, but with
 - <a href="https://github.com/visual-framework/vf-core/commit/{{commitId}}" class="kh-badge">git diff</a>
 
 {% endmacro %}
-{% endverbatim %}
-{% endcodeblock %}
+```
 </section>
 {% markdown %}
 

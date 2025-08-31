@@ -75,48 +75,13 @@ module.exports = function(config) {
     return (content || '').replace(/href="\//g, `href="${absoluteUrl.replace(/\/$/, '')}/`);
   });
 
-  // Add a no-op Nunjucks tag for `render` so legacy templates don't fail
-  config.addNunjucksTag("render", function(nunjucksEngine) {
-    return new function() {
-      this.tags = ["render"];
-      this.parse = function(parser, nodes) {
-        const tok = parser.nextToken();
-        const args = parser.parseSignature(null, true);
-        parser.advanceAfterBlockEnd(tok.value);
-        return new nodes.CallExtensionAsync(this, "run", args);
-      };
-      this.run = function(context) {
-        const cb = arguments[arguments.length - 1];
-        const ret = new nunjucksEngine.runtime.SafeString("<!-- render tag omitted -->");
-        cb(null, ret);
-      };
-    }();
-  });
+  // Removed legacy render tag; replaced usages with plain HTML.
 
   // Paired shortcode to render inline markdown blocks
   const markdownIt = require('markdown-it')({ html: true, linkify: true });
   config.addPairedShortcode('markdown', (content) => markdownIt.render(content || ''));
 
-  // Nunjucks codeblock tag shim
-  config.addNunjucksTag('codeblock', function(nunjucksEngine) {
-    return new function() {
-      this.tags = ['codeblock'];
-      this.parse = function(parser, nodes) {
-        const tok = parser.nextToken();
-        const args = parser.parseSignature(null, true);
-        parser.advanceAfterBlockEnd(tok.value);
-        const body = parser.parseUntilBlocks('endcodeblock');
-        parser.advanceAfterBlockEnd();
-        return new nodes.CallExtensionAsync(this, 'run', args, [body]);
-      };
-      this.run = function(context, lang, body, cb) {
-        const code = String(body());
-        const escaped = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        const ret = new nunjucksEngine.runtime.SafeString(`<pre data-lang="${lang}"><code>${escaped}</code></pre>`);
-        cb(null, ret);
-      };
-    }();
-  });
+  // Removed custom codeblock tag; posts now use fenced code blocks in markdown.
 
   // config.addFilter("makeLowercase", function(value) {
   //   value = value || '';

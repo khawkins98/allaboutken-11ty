@@ -45,12 +45,11 @@ Important: your organisation or project may have added custom components or remo
 
 You can always see which components (and which version) are enabled by viewing the CSS source; from [the VF demo component library](https://dev.assets.emblstatic.net/vf/develop/css/styles.css):
 
-{% codeblock 'css' -%}
-/*!
+<pre data-lang="css"><code>/*!
  * Component: @visual-framework/vf-badge
  * Version: 1.0.0-beta.8
  * Location: components/vf-badge
-{% endcodeblock %}
+ */</code></pre>
 
 The default VF build will maintain these comments even in the minified CSS build. For higher level information, [see the Visual Framework Welcome site](https://visual-framework.github.io/vf-welcome/).
 
@@ -113,16 +112,15 @@ There are a few principles to understand when working with Visual Framework:
 
    - By default  [`vf-grid`](https://visual-framework.github.io/vf-core/components/detail/vf-grid.html) will try to put your content into columns, if you only want one column:
 
-    {% codeblock 'html' -%}
-    <div class="vf-grid">
-      <div>All child content here</div>
-    </div>
+    <pre data-lang="html"><code>&lt;div class="vf-grid">
+  &lt;div>All child content here&lt;/div>
+&lt;/div>
 
-    <div class="vf-grid">
-      <div>This layout</div>
-      <div>Makes two columns</div>
-    </div>
-    {% endcodeblock %}
+&lt;div class="vf-grid">
+  &lt;div>This layout&lt;/div>
+  &lt;div>Makes two columns&lt;/div>
+&lt;/div>
+</code></pre>
 
 {% endmarkdown %}
 
@@ -187,12 +185,11 @@ There are a few principles to understand when working with Visual Framework:
 {% markdown %}
 
    - If you want to make a custom layout
-    {% codeblock 'html' -%}
-<div class="vf-grid vf-grid__col-3">
-    <div>I cover 1 of 3</div>
-    <div class="vf-grid__col--span-2">I cover 2 of 3 columns</div>
-</div>
-    {%- endcodeblock -%}
+    <pre data-lang="html"><code>&lt;div class="vf-grid vf-grid__col-3">
+    &lt;div>I cover 1 of 3&lt;/div>
+    &lt;div class="vf-grid__col--span-2">I cover 2 of 3 columns&lt;/div>
+&lt;/div>
+</code></pre>
 
 {% endmarkdown %}
 <figure class="kh-bleed-out kh-figure">
@@ -284,12 +281,11 @@ There are a few principles to understand when working with Visual Framework:
 
    For those situations, wrap the content in a [parent element with `.vf-content`](https://visual-framework.github.io/vf-core/components/detail/vf-content.html)
 
-    {% codeblock 'html' -%}
-<section class="vf-content">
-    <h1>My WYSIWYG-made text</h1>
-    <p>I'm some user-made content with <a href="#">a link</a>.</p>
-</section>
-    {%- endcodeblock -%}
+    <pre data-lang="html"><code>&lt;section class="vf-content">
+    &lt;h1>My WYSIWYG-made text&lt;/h1>
+    &lt;p>I'm some user-made content with &lt;a href="#">a link&lt;/a> and I'm not using any element-level VF classes.&lt;/p>
+  &lt;/section>
+&lt;link rel="stylesheet" href="https://dev.assets.emblstatic.net/vf/v2.0.0-beta.6/css/styles.css"></code></pre>
 
 {% endmarkdown %}
 <figure class="kh-bleed-out vf-figure">
