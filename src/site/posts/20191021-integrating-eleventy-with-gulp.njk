@@ -17,7 +17,7 @@ topics:
 
 {% markdown %}
 
-This post is prompted by a project for a highly-modular design system as part of my work for [EMBL](https://www.embl.de) — a leading laboratory for the life sciences. We're [using](https://github.com/visual-framework/vf-eleventy) Eleventy with gulp (for task running and building) and [Fractal](https://fractal.build) (for design components). 
+This post is prompted by a project for a highly-modular design system as part of my work for [EMBL](https://www.embl.de) — a leading laboratory for the life sciences. We're [using](https://github.com/visual-framework/vf-eleventy) Eleventy with gulp (for task running and building) and [Fractal](https://fractal.build) (for design components).
 
 We wanted to:
 
@@ -25,10 +25,10 @@ We wanted to:
 1. Utilise Eleventy’s watch/refresh commands for local development
 1. Send variables to Eleventy’s JavaScript data files from gulp (or other Node JS tasks)
 
-There are methods to achieve part 1 but not with part 2 and 3. But we made a solution. 
+There are methods to achieve part 1 but not with part 2 and 3. But we made a solution.
 
-> #### tl;dr 
-> - We forked 11ty’s cmd.js to better integrate with gulp and other Node JS. 
+> #### tl;dr
+> - We forked 11ty’s cmd.js to better integrate with gulp and other Node JS.
 > - I made [a demo at khawkins98/gulp-eleventy-example](https://github.com/khawkins98/gulp-eleventy-example).
 > - I hope Eleventy’s maintainers can take some inspiration from this. <br/><br/>
 
@@ -40,7 +40,7 @@ Still here? Great. Read on.
 
 ## Here's some really useful data, please use it
 
-Fractal creates a really useful JavaScript object that lists component file structure, the contents of those files and compiles nested templates. 
+Fractal creates a really useful JavaScript object that lists component file structure, the contents of those files and compiles nested templates.
 
 An illustrative example of the file structure:
 
@@ -64,17 +64,19 @@ fractalComponents = {
 ```
 <br/>Also, Fractal enables component Nunjucks templates can be invoked like:
 
-`{% render '@myNavComponent', {passedParam: 'An Example'} %}`
+```njk
+{% raw %}{% render '@myNavComponent', {passedParam: 'An Example'} %}{% endraw %}
+```
 
 Which is great as it allows us to `npm install` components and not have to move/symlink the Nunjucks templates into Eleventy `src/` directory — and it keeps syntax consistent across environments.
 
-In principle we could get Eleventy to do the same tasks, scanning the file system and rendering our templates — but we didn’t want to duplicate our build process — especially considering that both Eleventy and Fractal were already running in Node JS. 
+In principle we could get Eleventy to do the same tasks, scanning the file system and rendering our templates — but we didn’t want to duplicate our build process — especially considering that both Eleventy and Fractal were already running in Node JS.
 
-So, that means we've got some in-memory data we'd really like for Eleventy to receive, and receive updates to if a component is added or edited. 
+So, that means we've got some in-memory data we'd really like for Eleventy to receive, and receive updates to if a component is added or edited.
 
 ### This is important for local development
 
-In our use case we're editing files locally and want a Task A (Fractal) to be able to see changes, updates its data and feed it to Task B (Eleventy). 
+In our use case we're editing files locally and want a Task A (Fractal) to be able to see changes, updates its data and feed it to Task B (Eleventy).
 
 Eleventy's current design is a non-issue for our production builds. For production, Fractal generates the data and just hands it off to Eleventy. (That said: I could envision a scenario where part of the build process the Eleventy process might want to feed data to some Process C for dynamic rendering.)
 
@@ -82,9 +84,9 @@ Eleventy's current design is a non-issue for our production builds. For producti
 
 #### So what are you asking for?
 
-## Designing our solution 
+## Designing our solution
 
-As previously mentioned, Eleventy has a very nice feature supporting [JavaScript data files](https://www.11ty.io/docs/data-js/). And as with most `watch` command's Eleventy's [watch](https://www.11ty.io/docs/usage/#re-run-eleventy-when-you-save) observes only file-system changes — that means we need our upstream task (gulp) to be able to trigger an Eleventy rebuild for local development. 
+As previously mentioned, Eleventy has a very nice feature supporting [JavaScript data files](https://www.11ty.io/docs/data-js/). And as with most `watch` command's Eleventy's [watch](https://www.11ty.io/docs/usage/#re-run-eleventy-when-you-save) observes only file-system changes — that means we need our upstream task (gulp) to be able to trigger an Eleventy rebuild for local development.
 
 So a conceptual example for our desired scenario looks like the below.
 
@@ -93,14 +95,14 @@ So a conceptual example for our desired scenario looks like the below.
 ```js
 // Generate a sample list of all files in a scope outside of Eleventy
 gulp.task('file-list', function () {
-  global.fileList = []; // we could pass by not using a `global`, but this is the simplest for an example 
+  global.fileList = []; // we could pass by not using a `global`, but this is the simplest for an example
   return gulp.src(['./somePath/**/*.{njk,html,js,md}'])
     .pipe(through.obj(function (file, enc, cb) {
       global.fileList.push(file.path);
       cb(null);
     }));
 });
-``` 
+```
 <br/>
 
 2. Have an Eleventy [data file](https://www.11ty.io/docs/data-js/) pull in a variable.
@@ -112,7 +114,7 @@ gulp.task('file-list', function () {
 module.exports = {
   files: global.fileList
 };
-``` 
+```
 <br/>
 
 3. On a targeted change event, have Gulp invoke ask Eleventy to rebuilt.
@@ -142,9 +144,9 @@ Recap: we want to do some local development, let a parent process update a varia
 
 {% endmarkdown %}
 
-<div class="vf-u-padding__bottom--400 vf-u-padding__top--500 vf-u-padding__bottom--500">
-  <div class="large-1 medium-2 cell"></div>
-  <figure class="large-10 medium-8 cell">
+<div class="kh-u-padding__bottom--400 kh-u-padding__bottom--500 kh-u-padding__top--500">
+  <div class="cell large-1 medium-2"></div>
+  <figure class="cell large-10 medium-8">
   <hr/>
 {% markdown %}
 
@@ -178,7 +180,7 @@ require('child_process').fork('./child.js', [], { env: { FOO: 'bar' } });
 
 For us there are two deal breakers with this method:
 
-- The object we want to pass is quite large and we'd rather not risk issues with stringification. 
+- The object we want to pass is quite large and we'd rather not risk issues with stringification.
 - We'd also need to destroy and re-invoke Eleventy every time during local development, losing access to `elev.restart()` and `elev.write()`
 {% endmarkdown %}
   <hr/>
@@ -191,12 +193,12 @@ For us there are two deal breakers with this method:
 
 <br/>
 
-#### Eleventy, can you hear me? 
+#### Eleventy, can you hear me?
 
 ## Making it happen
 
 
-Eleventy’s entry is [`cmd.js`](https://github.com/11ty/eleventy/blob/master/cmd.js) and we need access to `elev` — but that unfortunately is inside a `try` statement. 
+Eleventy’s entry is [`cmd.js`](https://github.com/11ty/eleventy/blob/master/cmd.js) and we need access to `elev` — but that unfortunately is inside a `try` statement.
 
 So I forked 11ty’s cmd.js in the local project. Those changes better integrate with external JS with a few minor changes but it's all about a key change: `module.exports = elev;`
 

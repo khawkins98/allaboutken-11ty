@@ -1,20 +1,19 @@
-<footer class="vf-footer | do-not-print" role="contentinfo">
-  <div class="vf-footer__inner">
-    <div class="vf-footer__notice">
-
-      <div class="vf-body--text | vf-content | do-not-print">
-        {%- markdown %}
-        <strong>I'm Ken Hawkins</strong> 
-        I bring structure and process to complex web projects. Learn more about me <a class="vf-footer__link" href="/">on the front page</a> or <a class="vf-footer__link" href="/#hello">get in touch</a>.
-        {% endmarkdown -%}
+<footer class="kh-footer kh-u-do-not-print" role="contentinfo">
+  <div class="kh-footer__inner">
+    <div class="kh-footer__notice">
+      <div class="kh-u-do-not-print">
+{%- markdown %}
+<strong>I'm Ken Hawkins</strong>
+I bring structure and process to complex web projects. Learn more about me <a href="/">on the front page</a> or <a href="/#hello">get in touch</a>.
+{% endmarkdown -%}
       </div>
 
-      <a class="vf-footer__link" href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
-      &nbsp; <a class="vf-footer__link" href="/privacy">Curious about privacy?</a>
+      <a href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+      &nbsp; <a href="/privacy">Curious about privacy?</a>
 
       {%- if serverInfo.environment == "development" %}
-          <div class="vf-banner vf-banner--alert vf-banner--warning">
-            <p class="vf-banner__text">
+          <div class="kh-banner kh-banner--alert kh-banner--warning">
+            <p class="kh-banner__text">
               ⚠️ You're running the {{serverInfo.environment}} command.
             </p>
         </div>
@@ -23,4 +22,4 @@
   </div>
 </footer>
 
-<code class="show-for-print-only small">Printed direct from AllAboutKen.com</code>
+<code class="kh-u-show-for-print-only small">Printed direct from AllAboutKen.com</code>

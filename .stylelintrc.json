@@ -1,0 +1,25 @@
+{
+  "customSyntax": "postcss-scss",
+  "extends": [
+    "stylelint-config-recommended-scss"
+  ],
+  "plugins": [
+    "stylelint-scss",
+    "@stylistic/stylelint-plugin"
+  ],
+  "rules": {
+    "no-duplicate-selectors": true,
+    "no-descending-specificity": null,
+    "number-max-precision": 4,
+    "@stylistic/block-closing-brace-newline-after": "always",
+    "max-nesting-depth": [1, { "ignore": ["blockless-at-rules"] }],
+    "selector-max-compound-selectors": 3
+  },
+  "ignoreFiles": [
+    "build/**",
+    "**/*.min.css",
+    "node_modules/**"
+  ]
+}
+
+

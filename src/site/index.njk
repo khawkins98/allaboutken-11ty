@@ -6,12 +6,12 @@ image: "/blog/drill-bits.jpg"
 layout: layouts/base.njk
 templateEngineOverride: njk
 ---
-<div class="vf-u-fullbleed vf-u-background-color--yellow--dark">
-<section class="embl-grid embl-grid--has-centered-content | vf-u-padding__top--500">
+<div class="kh-u-background-color--yellow--dark kh-u-fullbleed">
+<section class="kh-grid-stylized kh-grid-stylized--has-centered-content kh-u-padding__top--500">
   <div></div>
-  <div class="vf-content">
-    <h1 class="vf-text-heading--1 vf-font-now-alt vf-font-now-alt--display">{{title}}. <br/><span class="vf-u-text--nowrap">I am</span> Ken Hawkins.</h1>
-    <h2 class="vf-text-heading--2">I bring structure and process to complex web projects.</h2>
+  <div class="kh-content">
+    <h1 class="kh-font-now-alt kh-font-now-alt--display kh-text-heading--1">{{title}}. <br/><span class="kh-u-text--nowrap">I am</span> Ken Hawkins.</h1>
+    <h2 class="kh-text-heading--2">I bring structure and process to complex web projects.</h2>
     {% markdown -%}
 
     With [20 years](/cv/) experience in publishing and technology, I help projects move beyond content and problems into performant web platforms that [deliver](/posts/20180122-content-action-model.html) organisational goals.
@@ -21,7 +21,7 @@ templateEngineOverride: njk
 
     {#- <dl>
       <dt>Descriptors</dt>
-      <dd>Creator of websites, information architect, data geek, designer, newspaper nerd, lover of UX, consultant, <a href="https://twitter.com/euroia/status/912695523118927873" class="vf-link">information acrobat</a>. </dd>
+      <dd>Creator of websites, information architect, data geek, designer, newspaper nerd, lover of UX, consultant, <a href="https://twitter.com/euroia/status/912695523118927873" class="kh-link">information acrobat</a>. </dd>
 
       <dt>Methodologies</dt>
       <dd>Content modelling, design thinking, content structure and organisation, responsive design, analytics and metrics, principles of graphing, user centred design, user stories, user behaviour, Kanban.</dd>
@@ -35,33 +35,30 @@ templateEngineOverride: njk
 </section>
 </div>
 
-<section class="vf-card-container embl-grid">
-  {% render '@vf-section-header--default', {
-    "section_title": "Recently",
-    "id": "recently"
-  } %}
-  {#- <p class=" vf-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> -#}
+<section class="kh-card-container kh-grid-stylized">
+  <h2 id="recently" class="kh-text-heading--2">Recently</h2>
+  {#- <p class="kh-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> -#}
   <section>
-    <div class="vf-grid vf-grid__col-4 | summary-inline">
+    <div class="kh-grid kh-grid__col-4 summary-inline">
     {%- for post in collections.posts.slice(-3) | reverse -%}
-    <article class="vf-summary vf-summary--news">
-      <span class="vf-summary__date">{{ post.date | dateDisplay }}</span>
-      <a href="{{ post.url }}" class="vf-summary__image">
-        <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
+    <article class="kh-summary kh-summary--news">
+      <span class="kh-summary__date">{{ post.date | dateDisplay }}</span>
+      <a href="{{ post.url }}" class="kh-summary__image">
+        <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
       </a>
-      <h3 class="vf-summary__title">
-        <a href="{{ post.url }}" class="vf-summary__link">{{ post.data.title }}</a>
+      <h3 class="kh-summary__title">
+        <a href="{{ post.url }}" class="kh-summary__link">{{ post.data.title }}</a>
       </h3>
       {#- {{loop.index}} -#}
     </article>
     {%- endfor -%}
-    <article class="vf-summary vf-summary--news">
-      {# <span class="vf-summary__date">{{ post.date | dateDisplay }}</span> #}
-      {# <a href="{{ post.url }}" class="vf-summary__image">
-        <img class="vf-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
+    <article class="kh-summary kh-summary--news">
+      {# <span class="kh-summary__date">{{ post.date | dateDisplay }}</span> #}
+      {# <a href="{{ post.url }}" class="kh-summary__image">
+        <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
       </a>   #}
-      <h3 class="vf-summary__title">
-        <a href="/blog" class="vf-summary__link">Read {{ collections.posts | length - 3}} more posts on the blog ↦</a>
+      <h3 class="kh-summary__title">
+        <a href="/blog" class="kh-summary__link">Read {{ collections.posts | length - 3}} more posts on the blog ↦</a>
       </h3>
       {#- {{loop.index}} -#}
     </article>
@@ -71,30 +68,23 @@ templateEngineOverride: njk
 </section>
 
 {#- Contact -#}
-{# <hr class="vf-divider" /> #}
-
-<section class="embl-grid embl-grid--has-centered-content">
-  {% render '@vf-section-header--default', {
-    "section_title": "Say hello",
-    "id": "hello"
-  } %}
+<section class="kh-grid-stylized kh-grid-stylized--has-centered-content">
+  <h2 id="hello" class="kh-text-heading--2">Say hello</h2>
   <section>
-    <p class="vf-text-body--2">
-      I'm currently fully engaged, helping a global leader <a href="https://www.preventionweb.net/">reduce the risk of disaster</a> — but you can still say hello.
+    <p class="kh-text-body--2">
+      I'm currently fully engaged helping a global leader <a href="https://www.preventionweb.net/">reduce the risk of disaster</a> — but you can still say hello.
     </p>
-    <p class="vf-text-body--2">
-      <a href="https://toot.io/@khawkins98" class="vf-link">Mastodon<span class="show-for-large"> @khawkins98@toot.io</span></a> &nbsp; &nbsp;
-      <a href="https://www.linkedin.com/in/allaboutken" class="vf-link">LinkedIn</a> &nbsp; &nbsp;
-      <a href="mailto:khawkins98@gmail.com" class="vf-link">Email</a> &nbsp; &nbsp;
-      <a href="https://untappd.com/user/khawkins98" class="vf-link">Beer</a>
+    <p class="kh-text-body--2">
+      <a href="https://toot.io/@khawkins98" class="kh-link">Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a> &nbsp; &nbsp;
+      <a href="https://www.linkedin.com/in/allaboutken" class="kh-link">LinkedIn</a> &nbsp; &nbsp;
+      <a href="mailto:khawkins98@gmail.com" class="kh-link">Email</a> &nbsp; &nbsp;
+      <a href="https://untappd.com/user/khawkins98" class="kh-link">Beer</a>
     </p>
   </section>
 </section>
 
-<hr class="vf-divider" />
-
 <section>
-  <p class="vf-text-body--3">
-    <a href="/rss.xml" class="vf-link">RSS</a> <span class="vf-text-body--5">(Instant updates with the hottest tech from 20 years ago)</span>
+  <p class="kh-text-body--3">
+    <a href="/rss.xml" class="kh-link">RSS</a> <span class="kh-text-body--5">(Instant updates with the hottest tech from 20 years ago)</span>
   </p>
 </section>
