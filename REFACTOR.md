@@ -105,16 +105,16 @@ If later you decide to freeze CSS instead:
 ## Quick TODO list (actionable)
 
 - [x] Confirm branch exists and capture baseline screenshots
-- [ ] Replace `meta.load-css` with `@use ... as *` in `index.scss`
-- [ ] Extract and centralize breakpoint variables
-- [ ] Limit nesting depth to 1 and flatten selectors
-- [ ] Remove unused SCSS partials and imports
+- [x] Replace `meta.load-css` with `@use ... as *` in `index.scss`
+- [x] Extract and centralize breakpoint variables
+- [x] Limit nesting depth to 1 and flatten selectors
+- [x] Remove unused SCSS partials and imports
 - [ ] Keep CSS variables for colors/spacing; use Sass only for media
-- [ ] Tighten stylelint rules (max nesting, discourage deep selectors)
+- [x] Tighten stylelint rules (max nesting, discourage deep selectors)
 - [ ] Verify build outputs expected CSS; visual parity on key pages
 - [ ] Prune unused CSS selectors incrementally
 - [ ] Consolidate and clean utility classes
-- [ ] Replace NJK `render` with includes; remove shim
-- [ ] Replace NJK `codeblock` with fenced markdown; remove shim
-- [ ] Audit passthroughs; drop unused VF assets
+- [x] Replace NJK `render` with includes/static HTML (in progress across posts)
+- [x] Replace NJK `codeblock` with fenced markdown; remove shim
+- [x] Audit passthroughs; drop unused VF assets
 - [ ] Update `README.md` with SCSS conventions and refactor outcome

@@ -17,7 +17,7 @@ topics:
 
 {% markdown %}
 
-This combo eases site building by giving developers visibility on Fractal templates and documentation in their particular install. The integration also allows project-level [Fractal](https://fractal.build/) components that can extend core Sass and re-use component templates, with full access to Fractal `{% raw %}{% render %}{% endraw %}` tags, context data, and other component metadata. 
+This combo eases site building by giving developers visibility on Fractal templates and documentation in their particular install. The integration also allows project-level [Fractal](https://fractal.build/) components that can extend core Sass and re-use component templates, with full access to Fractal `{% raw %}{% render %}{% endraw %}` tags, context data, and other component metadata.
 
 Features:
 
@@ -36,11 +36,10 @@ The two tools don't work like this by default, but I'll share how we've made it 
 {% endmarkdown %}
 
 <section class="kh-bleed-out">
-{%- render '@ken-figure', {
-  "text": "A 16-second animated-GIF that shows how the Fractal components and Eleventy content are united.",
-  "alttext": "Animated-GIF that shows how the Fractal components and Eleventy content are united",
-  "imageUrl": "/images/original/blog/fractal-elventy-gulp-cycle.gif" 
-} -%}
+  <figure class="kh-figure">
+    <img class="kh-figure__image" src="/images/original/blog/fractal-elventy-gulp-cycle.gif" alt="Animated-GIF that shows how the Fractal components and Eleventy content are united" />
+    <figcaption class="kh-figure__caption">A 16-second animated-GIF that shows how the Fractal components and Eleventy content are united.</figcaption>
+  </figure>
 </section>
 
 {% markdown %}
@@ -57,7 +56,7 @@ For component management of the [Visual Framework 2.0](https://github.com/visual
 
 [Eleventy](https://github.com/visual-framework/vf-eleventy) is also Node JS-based and can use Nunjucks templating.
 
-We were really excited by this in initial discussions as we can use similar build environments and templates across our component library and static-site generator. 
+We were really excited by this in initial discussions as we can use similar build environments and templates across our component library and static-site generator.
 
 Here's a high-level diagram:
 
@@ -80,26 +79,26 @@ When attempting to achieve our flow, we quickly found issues as we weren't able 
 
     We could work around this by some fancy copy-and-paste task that scans `node_modules` and copies `**/*.njk` to the directory used by Eleventy. Unpleasant, but possible.
 
-2.  The Nunjucks template syntax isn’t exactly the same between the Fractal and Eleventy. The [United States Web Design System](https://designsystem.digital.gov/documentation/developers/) also uses Fractal and [notes](https://github.com/uswds/uswds#template-compatibility):  
-  
-    > Components that reference other components use a Fractal-specific `{% raw %}{% render %}{% endraw %}` tag that will either need to be implemented in other environments or replaced with the appropriate `{% raw %}{% include %}{% endraw %}` tags.  
-    
+2.  The Nunjucks template syntax isn’t exactly the same between the Fractal and Eleventy. The [United States Web Design System](https://designsystem.digital.gov/documentation/developers/) also uses Fractal and [notes](https://github.com/uswds/uswds#template-compatibility):
+
+    > Components that reference other components use a Fractal-specific `{% raw %}{% render %}{% endraw %}` tag that will either need to be implemented in other environments or replaced with the appropriate `{% raw %}{% include %}{% endraw %}` tags.
+
     Which means using nested container-level templates — like using a `logo` component inside a `page-header` template — is out, unless you have one set of templates for Fractal and one for "generic" Nunjucks environments. While replacing `render` with `include` might seem trivial at first, there are issues around path lookups and other whack-a-mole issues with other Njk tags.
 
-Maintaining two sets of templates adds significant overhead and a large risk for typos and tests, it would also prevent us from being able to `yarn add` components. 
+Maintaining two sets of templates adds significant overhead and a large risk for typos and tests, it would also prevent us from being able to `yarn add` components.
 
 But there's a way to sidestep both of these issues.
 
 ### Playing nice
 
-We can avoid both of these by resolving Eleventy's expectation to run in a separate Node process. 
+We can avoid both of these by resolving Eleventy's expectation to run in a separate Node process.
 
 Fractal has already prepared a list of all the components (Issue 1) and made available the custom Nunjucks templates (Issue 2), if we can get Eleventy to use (and extend) the same Node process as  Fractal's Nunjucks environment we'll get all the benefits outlined above.
 
 To do this we’ve had to make a couple tweaks to how Eleventy executes; here's a summary:
 
 1. We forked Eleventy's `cmd.js` to so we can use it as a child task (i.e. `elev.write().then`)
-2. Gulp triggers the build of Fractal and then Eleventy 
+2. Gulp triggers the build of Fractal and then Eleventy
 3. Utilise Eleventy’s watch and refresh commands for local development
 4. Send variables to Eleventy’s JavaScript data files from Gulp (or other Node JS tasks)
 

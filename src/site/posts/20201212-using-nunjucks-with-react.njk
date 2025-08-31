@@ -21,16 +21,15 @@ It's a JS-runtime and based off [jinja2](https://jinja.palletsprojects.com/en/2.
 
 Here’s a simplified `vf-button.njk` template:
 
-{% codeblock 'html' -%}
-{%- raw -%}<a
+```html
+<a
   href="{{ button_href }}"
   class="vf-button
   {%- if variant %} vf-button--{{ variant }}{% endif %}
 ">
 {{- text | safe -}}
 </a>
-{% endraw %}
-{% endcodeblock %}
+```
 
 <br/>
 
@@ -77,7 +76,7 @@ To facilitate this, each Visual Framework component will need a small template w
 
 <div class="kh-bleed-out">
 
-{% codeblock 'js' -%}
+```js
 // vf-button for React
 // See vf-extensions-react for usage guidance
 // We use vanilla JS templates for react for compatibility with create react app
@@ -116,7 +115,7 @@ const VfButton = React.memo(({
 );
 
 export { VfButton };
-{% endcodeblock %}
+```
 
 </div>
 <br/>
@@ -132,9 +131,9 @@ Install the requirements:
 
 <div class="kh-bleed-out">
 
-{% codeblock 'html' -%}
+```bash
 yarn add @visual-framework/vf-extensions-react @visual-framework/vf-button
-{% endcodeblock %}
+```
 
 </div>
 
@@ -144,10 +143,10 @@ And here’s a usage example in a React template:
 
 <div class="kh-bleed-out">
 
-{% codeblock 'html' -%}
+```jsx
 import { VfButton } from "@visual-framework/vf-button/vf-button.react.js"
 <VfButton href="#mylink" variant="big" title="React for the VF 2.0" />
-{% endcodeblock %}
+```
 
 </div>
 

@@ -104,12 +104,10 @@ Once we isolate ‘purpose’ (this is harder than it looks), we can test, evalu
 
 {% endmarkdown %}
 
-{%- render '@ken-figure', {
-  "text": '<strong>Figure 1.</strong> The flow of the CAM for Web Systems. Yes, it is a riff on the <a href="https://www.designcouncil.org.uk/news-opinion/design-process-what-double-diamond">Double Diamond</a>.',
-  "alttext": "CAM process flow",
-  "imageUrl": "/images/original/blog/cam-process.svg",
-  "override_class": "kh-bleed-out kh-u-background-color-ui--white kh-u-padding--400"
-} -%}
+<figure class="kh-figure kh-bleed-out kh-u-background-color-ui--white kh-u-padding--400">
+  <img class="kh-figure__image" src="/images/original/blog/cam-process.svg" alt="CAM process flow" />
+  <figcaption class="kh-figure__caption"><strong>Figure 1.</strong> The flow of the CAM for Web Systems. Yes, it is a riff on the <a href="https://www.designcouncil.org.uk/news-opinion/design-process-what-double-diamond">Double Diamond</a>.</figcaption>
+</figure>
 
 {% markdown %}
 
