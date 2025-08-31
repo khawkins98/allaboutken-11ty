@@ -102,13 +102,19 @@ If later you decide to freeze CSS instead:
 - No missing assets (CSS/fonts) after passthrough changes.
 - Lint passes with CSS-only rules.
 
-## Implementation checklist (actionable)
+## Quick TODO list (actionable)
 
-- [ ] Phase 0: confirm branch exists + screenshots/baseline
-- [ ] Phase 1: replace `meta.load-css` with `@use ... as *` and build
-- [ ] Phase 1: centralize breakpoints; cap nesting depth; flatten selectors
-- [ ] Phase 1: remove unused partials/imports; verify visual parity
-- [ ] Phase 2: simplify stylelint rules; minimize SCSS-specific features
-- [ ] Phase 3: start pruning unused CSS incrementally
-- [ ] Phase 4: replace/remove `{% render %}` and `{% codeblock %}` usage and shims
-- [ ] Phase 5: update `README.md` and finalize cleanup
+- [x] Confirm branch exists and capture baseline screenshots
+- [ ] Replace `meta.load-css` with `@use ... as *` in `index.scss`
+- [ ] Extract and centralize breakpoint variables
+- [ ] Limit nesting depth to 1 and flatten selectors
+- [ ] Remove unused SCSS partials and imports
+- [ ] Keep CSS variables for colors/spacing; use Sass only for media
+- [ ] Tighten stylelint rules (max nesting, discourage deep selectors)
+- [ ] Verify build outputs expected CSS; visual parity on key pages
+- [ ] Prune unused CSS selectors incrementally
+- [ ] Consolidate and clean utility classes
+- [ ] Replace NJK `render` with includes; remove shim
+- [ ] Replace NJK `codeblock` with fenced markdown; remove shim
+- [ ] Audit passthroughs; drop unused VF assets
+- [ ] Update `README.md` with SCSS conventions and refactor outcome
