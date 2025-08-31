@@ -57,9 +57,57 @@ module.exports = function(config) {
     return (content || '').replace(/href="\//g, `href="${absoluteUrl.replace(/\/$/, '')}/`);
   });
 
-  // Paired shortcode to render inline markdown blocks
-  const markdownIt = require('markdown-it')({ html: true, linkify: true });
-  config.addPairedShortcode('markdown', (content) => markdownIt.render(content || ''));
+  // Configure Markdown-It with anchor IDs for headings and use it globally
+  const markdownIt = require('markdown-it');
+  const markdownItAnchor = require('markdown-it-anchor');
+  const md = markdownIt({ html: true, linkify: true }).use(markdownItAnchor, {
+    // Add ids to all heading levels so we can deep-link
+    level: [1, 2, 3, 4, 5, 6],
+    // Create clean ASCII slugs: remove punctuation/specials, collapse spaces to '-'
+    slugify: (s) => (
+      (s || '')
+        .toString()
+        .toLowerCase()
+        .normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g, '') // strip combining marks
+        .replace(/&amp;/g, 'and')
+        .replace(/[^a-z0-9\s-]/g, '') // drop punctuation and specials (e.g. ?!@():’–)
+        .replace(/[\s_-]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+    ),
+    // Wrap heading text with an <a href="#slug" name="slug">…</a>,
+    // but skip if the heading already contains a link to avoid nesting
+    permalink: (slug, opts, state, index) => {
+      try {
+        const inlineToken = state.tokens[index + 1];
+        if (!inlineToken || !Array.isArray(inlineToken.children)) return;
+        const hasExistingLink = inlineToken.children.some((t) => {
+          if (t.type === 'link_open') return true;
+          if (t.type === 'html_inline' && typeof t.content === 'string') {
+            return /<a\s/i.test(t.content);
+          }
+          return false;
+        });
+        if (hasExistingLink) return;
+
+        const linkOpen = new state.Token('link_open', 'a', 1);
+        linkOpen.attrs = [
+          ['href', `#${slug}`],
+          ['name', slug]
+        ];
+        const linkClose = new state.Token('link_close', 'a', -1);
+
+        inlineToken.children.unshift(linkOpen);
+        inlineToken.children.push(linkClose);
+      } catch (e) {
+        // no-op
+      }
+    }
+  });
+  // Use for Eleventy's markdown engine (for .md files and markdown in templates)
+  config.setLibrary('md', md);
+  // Paired shortcode to render inline markdown blocks consistently
+  config.addPairedShortcode('markdown', (content) => md.render(content || ''));
 
   // Removed custom codeblock tag; posts now use fenced code blocks in markdown.
 

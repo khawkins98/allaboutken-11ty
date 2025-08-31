@@ -38,7 +38,7 @@ templateEngineOverride: njk
 {% if comment != false %}
   <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
     <div class="kh-grid__col--span-1">
-      <h2 class="kh-text-heading--2 kh-u-float__right--md">Comment?</h2>
+      <h2 class="kh-text-heading--2">Comment?</h2>
     </div>
     <div class="kh-content kh-grid__col--span-2">
       <p>Thanks for reading, if you have comment I'd love to hear it.</p>
@@ -56,7 +56,7 @@ templateEngineOverride: njk
   {% if page.url != '/privacy/' %}
   <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
     <div class="kh-grid__col--span-1">
-      <h2 class="kh-text-heading--2 kh-u-float__right--md">Read more</h2>
+      <h2 class="kh-text-heading--2">Read more</h2>
     </div>
     <div class="kh-content kh-grid__col--span-2">
       {% set previousPost = collections.posts | getPreviousCollectionItem(page) %}
