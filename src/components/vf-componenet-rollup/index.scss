@@ -19,7 +19,7 @@ $kh-breakpoint--lg-down: ($kh-breakpoint--lg - 1px) !default;
   src: url('../vf-font-now-alt/assets/NowAlt-Bold.woff2') format('woff');
 }
 
-::root {
+:root {
   --kh-color--grey: #707372;
   --kh-color--grey--darkest: #373a36;
   --kh-color--blue: #3b6fb6;
@@ -44,6 +44,7 @@ body,
 }
 
 body {
+  margin: 0;
   position: relative;
 }
 
@@ -187,10 +188,12 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .kh-cluster {
+  --kh-cluster-margin: var(--kh-cluster-margin--override, 1rem);
   align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: var(--page-grid-gap);
+  overflow: hidden;
 }
 
 .kh-divider {
@@ -209,43 +212,6 @@ input[type='search']::-webkit-search-cancel-button {
 
 .kh-intro__text {
   font-size: 1.125rem;
-}
-
-.kh-video {
-  aspect-ratio: 16/9;
-  height: auto;
-  max-width: 100%;
-  overflow: hidden;
-  position: relative;
-}
-
-.kh-video iframe,
-.kh-video object,
-.kh-video embed {
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
-}
-
-.kh-link,
-.kh-content a,
-.kh-navigation__link {
-  color: #333;
-  text-decoration: underline;
-  text-decoration-color: #3b6fb6;
-  &:hover {
-    text-decoration-thickness: 2px;
-  }
-}
-
-.kh-stack > * + * {
-  margin-top: 1rem;
-}
-
-.kh-stack--400 > * + * {
-  margin-top: 1.5rem;
 }
 
 .kh-text-body--1 {
