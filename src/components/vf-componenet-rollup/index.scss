@@ -103,7 +103,7 @@ input[type='search']::-webkit-search-cancel-button {
 
 @media (max-width: $kh-breakpoint--sm) {
   .summary-inline .kh-summary {
-    grid-row-gap: 0;
+    row-gap: 0;
   }
 }
 
@@ -693,7 +693,6 @@ input[type='search']::-webkit-search-cancel-button {
 
 .kh-summary__link {
   border-bottom: none;
-  color: #3b6fb6;
   color: #333;
   text-decoration: none;
   text-decoration: underline;
@@ -1158,7 +1157,7 @@ input[type='search']::-webkit-search-cancel-button {
 .kh-grid {
   display: grid;
   grid-column: main;
-  grid-gap: var(--page-row-gap, var(--page-grid-gap)) var(--page-grid-gap);
+  gap: var(--page-row-gap, var(--page-grid-gap)) var(--page-grid-gap);
   gap: var(--page-grid-gap);
   > * {
     margin: 0;
