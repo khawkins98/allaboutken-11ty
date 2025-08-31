@@ -102,6 +102,10 @@ input[type='search']::-webkit-search-cancel-button {
   grid-template-columns: none;
 }
 
+.kh-summary__title {
+  margin-bottom: 0;
+}
+
 @media (max-width: $kh-breakpoint--sm) {
   .summary-inline .kh-summary {
     row-gap: 0;
@@ -163,10 +167,6 @@ input[type='search']::-webkit-search-cancel-button {
   .kh-u-show-for-mobile-only {
     display: none !important;
   }
-}
-
-.kh-summary__title {
-  margin-bottom: 0;
 }
 
 @media (min-width: $kh-breakpoint--lg) {
