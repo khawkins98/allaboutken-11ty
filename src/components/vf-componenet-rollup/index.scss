@@ -6,6 +6,7 @@
 $kh-breakpoint--sm: 600px !default;
 $kh-breakpoint--md: 846px !default;
 $kh-breakpoint--lg: 1024px !default;
+$kh-breakpoint--xl: 1300px !default;
 $kh-breakpoint--sm-down: ($kh-breakpoint--sm - 1px) !default;
 $kh-breakpoint--md-down: ($kh-breakpoint--md - 1px) !default;
 $kh-breakpoint--lg-down: ($kh-breakpoint--lg - 1px) !default;
@@ -355,16 +356,6 @@ input[type='search']::-webkit-search-cancel-button {
   }
 }
 
-@media (min-width: $kh-breakpoint--sm) {
-  .kh-u-show-for-mobile-only {
-    display: none !important;
-  }
-}
-
-.kh-summary__date {
-  color: #000;
-}
-
 .kh-video {
   aspect-ratio: 16/9;
   height: auto;
@@ -405,7 +396,7 @@ input[type='search']::-webkit-search-cancel-button {
   }
 }
 
-@media (width <= 1299px) {
+@media (width <= $kh-breakpoint--xl) {
   .kh-grid-stylized .kh-grid {
     grid-column: 1/-1;
   }
@@ -939,7 +930,6 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .kh-text-body--1 {
-  color: #000;
   font-size: 32px;
   font-weight: 500;
   line-height: 1.3125;
@@ -947,7 +937,6 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .kh-text-body--2 {
-  color: #000;
   font-size: 22px;
   font-weight: 300;
   line-height: 1.45;
@@ -971,7 +960,6 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .kh-text-heading--1 {
-  color: #000;
   font-size: 42px;
   font-weight: 700;
   line-height: 1.147;
@@ -979,7 +967,6 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .kh-text-heading--2 {
-  color: #000;
   font-size: 30px;
   font-weight: 500;
   line-height: 1.333;
@@ -987,7 +974,6 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .kh-text-heading--3 {
-  color: #000;
   font-size: 27px;
   font-weight: 500;
   line-height: 1.333;
@@ -1021,10 +1007,6 @@ input[type='search']::-webkit-search-cancel-button {
   .kh-u-float__right--md {
     float: right !important;
   }
-}
-
-.kh-u-background-color--red {
-  background-color: #d41645;
 }
 
 .kh-u-background-color--yellow--dark {
@@ -1166,7 +1148,6 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .kh-form__label {
-  color: #000;
   display: flex;
   font-size: 22px;
   font-weight: 300;
@@ -1291,7 +1272,6 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .kh-summary__date {
-  color: #000;
   font-size: 0.875rem;
 }
 
