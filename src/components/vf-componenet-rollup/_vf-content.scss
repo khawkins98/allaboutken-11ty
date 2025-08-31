@@ -79,19 +79,19 @@
     margin: 0 0 16px;
     padding: 10px 8px 10px 32px;
     position: relative;
+  }
 
-    p:last-of-type:not([class*='kh-']) {
-      margin-bottom: 0;
-    }
+  blockquote:not([class*='kh-']) p:last-of-type:not([class*='kh-']) {
+    margin-bottom: 0;
+  }
 
-    &::before {
-      border-left: 4px solid #d0d0ce;
-      content: '';
-      height: 100%;
-      left: 12px;
-      position: absolute;
-      top: 0;
-    }
+  blockquote:not([class*='kh-'])::before {
+    border-left: 4px solid #d0d0ce;
+    content: '';
+    height: 100%;
+    left: 12px;
+    position: absolute;
+    top: 0;
   }
 
   code:not([class*='kh-']) {
@@ -271,7 +271,7 @@
     background-color: #d0d0ce;
   }
 
-  table:not([class*='kh-']) thead th {
+  thead th {
     color: #000;
     font-size: 19px;
     font-weight: 500;
@@ -308,7 +308,8 @@
 }
 
 .kh-link:visited,
-.kh-content a:visited .kh-content a:not([class*='vf-']):visited,
+.kh-content a:visited,
+.kh-content a:not([class*='vf-']):visited,
 .kh-content .kh-link:visited {
   color: #333;
   text-decoration-color: #734595;
