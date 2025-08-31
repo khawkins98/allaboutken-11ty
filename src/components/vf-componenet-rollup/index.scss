@@ -457,7 +457,7 @@ input[type='search']::-webkit-search-cancel-button {
   text-transform: uppercase;
 }
 
-.kh-form__input::input-placeholder {
+.kh-form__input::placeholder {
   opacity: 1;
   color: #a8a99e;
 }
@@ -468,8 +468,7 @@ input[type='search']::-webkit-search-cancel-button {
   cursor: not-allowed;
 }
 
-.kh-form__input:disabled::placeholder,
-.kh-form__input:disabled::input-placeholder {
+.kh-form__input:disabled::placeholder {
   color: #18974c;
 }
 
