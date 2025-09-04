@@ -27,10 +27,21 @@ templateEngineOverride: njk
   <section>
     {%- for post in collections.posts.slice(-3) | reverse -%}
     <article class="kh-summary kh-summary--news">
-      <div class="kh-summary__date">{{ post.date | dateDisplay }}</div>
-      <a href="{{ post.url }}" class="kh-summary__image">
-        <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
-      </a>
+      {% set isNote = (post.data.tags and ('note' in post.data.tags))  %}
+      <div class="kh-summary__date">{{ post.date | dateDisplay }}
+      {% if isNote %}
+       | Note post
+      {% endif %}
+      </div>
+      {% if (not isNote) and post.data.image %}
+        <a href="{{ post.url }}" class="kh-summary__image">
+          <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
+        </a>
+      {% else %}
+      <div class="kh-summary__image">
+      <!-- spacer -->
+      </div>
+      {% endif %}
       <h3 class="kh-summary__title">
         <a href="{{ post.url }}" class="kh-summary__link">{{ post.data.title }}</a>
       </h3>
