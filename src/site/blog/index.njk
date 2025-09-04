@@ -8,16 +8,21 @@ layout: layouts/base.njk
 {%- set siteConfig = siteConfig.siteInformation -%}
 <div class="kh-grid-stylized">
   <div>
-    <h1 class="kh-font-now-alt kh-font-now-alt--display kh-text-heading--1">{{title}}</h1>
+    <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
   </div>
   <section>
   {%- for post in collections.posts | sort(true, true, attribute='date' ) -%}
   <article class="kh-summary kh-summary--news">
-    <span class="kh-summary__date">{{ post.date | dateDisplay }}</span>
+    {% set isNote = (post.data.tags and ('note' in post.data.tags))  %}
+    <div class="kh-summary__date">{{ post.date | dateDisplay }}
+    {% if isNote %}
+      | Note post
+    {% endif %}
+    </div>
     <a class="kh-summary__image" href="{{ post.url | url}}">
       <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image | url }}" alt="{{ post.data.teaser }}" />
     </a>
-    <h3 class="kh-font-now-alt kh-summary__title">
+    <h3 class="kh-font-headline kh-summary__title">
       <a href="{{ post.url | url}}" class="kh-summary__link">{{ post.data.title }}</a>
     </h3>
     <p class="kh-content kh-summary__text">{{ post.data.teaser | safe }}</p>

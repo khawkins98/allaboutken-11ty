@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preload" as="font" href="/assets/kh-font/Recursive_VF_1.085--subset-GF_latin_basic.woff2" type="font/woff2" crossorigin>
     <link rel="stylesheet" media="all" href="{{ '/css/styles.css' | url }}" />
     <title>{{ title or (renderData and renderData.title) or siteConfig.siteInformation.title}} | All about Ken Hawkins</title>
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
@@ -40,7 +41,7 @@
   </head>
   <body class="kh-body kh-stack{% if bodyClass %} {{ bodyClass }}{% endif %}">
     <header class="kh-global-header" role="banner">
-      <a href="/" class="kh-logo">AllAboutKen.com</a>
+      <a href="/" class="kh-logo kh-navigation__link">AllAboutKen.com</a>
       <nav class="kh-cluster kh-navigation kh-u-do-not-print kh-u-show-for-medium">
         <ul class="kh-navigation__list">
           <li class="kh-navigation__item">

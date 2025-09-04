@@ -1,25 +1,19 @@
-<footer class="kh-footer kh-u-do-not-print" role="contentinfo">
-  <div class="kh-footer__inner">
-    <div class="kh-footer__notice">
-      <div class="kh-u-do-not-print">
-{%- markdown %}
-<strong>I'm Ken Hawkins</strong>
-I bring structure and process to complex web projects. Learn more about me <a href="/">on the front page</a> or <a href="/#hello">get in touch</a>.
-{% endmarkdown -%}
-      </div>
+<footer class="kh-footer kh-u-fullbleed kh-u-do-not-print kh-content" role="contentinfo">
+  {%- markdown %}
+  <strong>I'm Ken Hawkins</strong>
+  I bring structure and process to complex web projects. Learn more about me <a href="/">on the front page</a> or <a href="/#hello">get in touch</a>.
+  {% endmarkdown -%}
 
-      <a href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
-      &nbsp; <a href="/privacy">Curious about privacy?</a>
+  <a href="/posts/20200713-moving-from-panini-to-eleventy/">About this site's technology</a>
+  &nbsp; <a href="/privacy">Curious about privacy?</a>
 
-      {%- if serverInfo.environment == "development" %}
-          <div class="kh-banner kh-banner--alert kh-banner--warning">
-            <p class="kh-banner__text">
-              ⚠️ You're running the {{serverInfo.environment}} command.
-            </p>
-        </div>
-      {% endif -%}
+  {%- if serverInfo.environment == "development" %}
+      <div class="kh-banner kh-banner--alert kh-banner--warning">
+        <p class="kh-banner__text">
+          ⚠️ You're running the {{serverInfo.environment}} command.
+        </p>
     </div>
-  </div>
+  {% endif -%}
 </footer>
 
 <code class="kh-u-show-for-print-only small">Printed direct from AllAboutKen.com</code>

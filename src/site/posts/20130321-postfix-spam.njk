@@ -14,6 +14,17 @@ active_path: blog
 tags: posts
 ---
 
+<div id="pdf-viewer" style="height: 500px"></div>
+<script async type="module">
+  import EmbedPDF from 'https://snippet.embedpdf.com/embedpdf.js';
+
+  const EPDFinstance = EmbedPDF.init({
+    type: 'container',
+    target: document.getElementById('pdf-viewer'),
+    src: 'https://snippet.embedpdf.com/ebook.pdf'
+  })
+</script>
+
 {% markdown %}
 
 The below code can be easily appended to Postfix's main.cf to drastically reduce the authorization hole.
