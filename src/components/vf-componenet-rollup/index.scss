@@ -38,6 +38,15 @@ img {
   max-width: 100%;
 }
 
+/* Visual affordance for elements with a title tooltip */
+.kh-content [title]:not(a),
+abbr[title] {
+  cursor: help;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 0.125em;
+}
+
 a,
 a:not([class*='vf-']) {
   color: #333;
@@ -901,6 +910,21 @@ input[type='search']::-webkit-search-cancel-button {
   font-variation-settings: "wght" 800, "MONO" 1, "CASL" 0;
 }
 
+.kh-note-box {
+  text-wrap: balance;
+  background: #fff;
+  border: 4px solid var(--kh-color--orange);
+  display: block;
+  font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 500, 'slnt' -6, 'CRSV' 0;
+  margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
+  padding: 0.75rem 1rem;
+}
+
+.kh-note-box__label {
+  display: inline-block;
+  font-variation-settings: 'MONO' 1, 'CASL' 1, 'wght' 800, 'slnt' -80, 'CRSV' 1;
+}
+
 .kh-navigation {
   display: block;
   margin-left: auto;
@@ -938,6 +962,7 @@ input[type='search']::-webkit-search-cancel-button {
   grid-column: 1 / span 1;
   grid-row: 1 / span 4;
   margin-right: 30px;
+  min-width: 220px;
   max-width: 220px;
   width: 100%;
 
@@ -1014,7 +1039,8 @@ input[type='search']::-webkit-search-cancel-button {
 /* Self-hosted Recursive variable font */
 @font-face {
   font-family: 'Recursive';
-  src: url('/assets/kh-font/Recursive.woff2') format('woff2');
+  src: url('/assets/kh-font/Recursive_VF_1.085--subset-GF_latin_basic.woff2') format('woff2');
+  // src: url('/assets/kh-font/Recursive.woff2') format('woff2');
   // src: url(https://fonts.gstatic.com/s/recursive/v43/8vIk7wMr0mhh-RQChyHEH06JlTRq_gukbQr6Mk1QmnhkyU8G_X-dm23WO1ysrvuO.woff2) format('woff2');
   font-weight: 300 800;
   font-style: oblique -15deg 0deg; /* maps to slnt axis */
