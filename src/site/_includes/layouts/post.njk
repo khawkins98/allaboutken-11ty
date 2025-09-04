@@ -63,11 +63,11 @@ templateEngineOverride: njk
       {% set nextPost = collections.posts | getNextCollectionItem(page) %}
 
       {% if previousPost %}
-      <p class="kh-text-body--3">Previously: <a href="{{ previousPost.url | url}}" class="kh-link">{{ previousPost.data.title }}</a></p>
+      <p class="kh-text-body--3">Previously: <a href="{{ previousPost.url | url}}">{{ previousPost.data.title }}</a></p>
       {% endif %}
 
       {% if nextPost %}
-      <p class="kh-text-body--3">Next: <a href="{{ previousPost.url | url}}" class="kh-link">{{ nextPost.data.title }}</a></p>
+      <p class="kh-text-body--3">Next: <a href="{{ previousPost.url | url}}">{{ nextPost.data.title }}</a></p>
       {% endif %}
 
       <p>

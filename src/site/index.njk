@@ -7,7 +7,7 @@ layout: layouts/base.njk
 templateEngineOverride: njk
 ---
 <div class="kh-u-background-color--yellow--dark kh-u-fullbleed">
-<section class="kh-grid-stylized kh-u-padding__top--500">
+<section class="kh-grid-stylized kh-u-padding__top--500 kh-u-padding__bottom--500">
   <div></div>
   <div class="kh-content">
     <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}. <br/><span class="kh-u-text--nowrap">I am</span> Ken Hawkins.</h1>
@@ -17,20 +17,6 @@ templateEngineOverride: njk
     With [20 years](/cv/) experience in publishing and technology, I help projects move beyond content and problems into performant web platforms that [deliver](/posts/20180122-content-action-model.html) organisational goals.
 
     {%- endmarkdown %}
-    {# **I am a deep thinker** who applies a strong conceptual background from years of crafting deadline-driven data-heavy infographics for newspapers, online publications driven by data and invocating marketing and tracking tools.  #}
-
-    {#- <dl>
-      <dt>Descriptors</dt>
-      <dd>Creator of websites, information architect, data geek, designer, newspaper nerd, lover of UX, consultant, <a href="https://twitter.com/euroia/status/912695523118927873" class="kh-link">information acrobat</a>. </dd>
-
-      <dt>Methodologies</dt>
-      <dd>Content modelling, design thinking, content structure and organisation, responsive design, analytics and metrics, principles of graphing, user centred design, user stories, user behaviour, Kanban.</dd>
-
-      <dt>Concisely</dt>
-      <dd>Ken Hawkins, Web Design Architect.</dd>
-    </dl> -#}
-
-    {#- <p>Say hello or dig deeper <span class="emoji">⤵</span></p> -#}
   </div>
 </section>
 </div>
@@ -41,7 +27,7 @@ templateEngineOverride: njk
   <section>
     {%- for post in collections.posts.slice(-3) | reverse -%}
     <article class="kh-summary kh-summary--news">
-      <span class="kh-summary__date">{{ post.date | dateDisplay }}</span>
+      <div class="kh-summary__date">{{ post.date | dateDisplay }}</div>
       <a href="{{ post.url }}" class="kh-summary__image">
         <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
       </a>
@@ -52,10 +38,6 @@ templateEngineOverride: njk
     </article>
     {%- endfor -%}
     <article class="kh-summary kh-summary--news">
-      {# <span class="kh-summary__date">{{ post.date | dateDisplay }}</span> #}
-      {# <a href="{{ post.url }}" class="kh-summary__image">
-        <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
-      </a>   #}
       <h3 class="kh-summary__title">
         <a href="/blog" class="kh-summary__link">Read {{ collections.posts | length - 3}} more posts on the blog ↦</a>
       </h3>
@@ -73,16 +55,16 @@ templateEngineOverride: njk
       I'm currently fully engaged helping a global leader <a href="https://www.preventionweb.net/">reduce the risk of disaster</a> — but you can still say hello.
     </p>
     <p class="kh-text-body--2">
-      <a href="https://toot.io/@khawkins98" class="kh-link">Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a> &nbsp; &nbsp;
-      <a href="https://www.linkedin.com/in/allaboutken" class="kh-link">LinkedIn</a> &nbsp; &nbsp;
-      <a href="mailto:khawkins98@gmail.com" class="kh-link">Email</a> &nbsp; &nbsp;
-      <a href="https://untappd.com/user/khawkins98" class="kh-link">Beer</a>
+      <a href="https://toot.io/@khawkins98" >Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a> &nbsp; &nbsp;
+      <a href="https://www.linkedin.com/in/allaboutken" >LinkedIn</a> &nbsp; &nbsp;
+      <a href="mailto:khawkins98@gmail.com" >Email</a> &nbsp; &nbsp;
+      <a href="https://untappd.com/user/khawkins98" >Beer</a>
     </p>
   </section>
 </section>
 
 <section>
   <p class="kh-text-body--3">
-    <a href="/rss.xml" class="kh-link">RSS</a> <span class="kh-text-body--5">(Instant updates with the hottest tech from 20 years ago)</span>
+    <a href="/rss.xml" >RSS</a> (Instant updates with the hottest tech from 20 years ago)
   </p>
 </section>
