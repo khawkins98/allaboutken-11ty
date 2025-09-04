@@ -166,8 +166,8 @@ module.exports = function(config) {
   // pass some assets right through
   config.addPassthroughCopy("./src/site/images");
 
-  // Copy font assets to locations used by compiled CSS
-  config.addPassthroughCopy({ "./src/components/vf-font-now-alt/assets": "vf-font-now-alt/assets" });
+  // Copy local Recursive font assets to build
+  config.addPassthroughCopy({ "./src/components/kh-font": "assets/kh-font" });
   // mostly needed for redirecting from old drupal urls
   config.addPassthroughCopy("./src/site/**/*.html");
 
