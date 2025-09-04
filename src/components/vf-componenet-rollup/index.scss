@@ -3,14 +3,6 @@
 @use './vf-content' as *;
 @use './settings' as *;
 
-@font-face {
-  font-display: swap;
-  font-family: NowAlt-Bold;
-  font-style: normal;
-  font-weight: normal;
-  src: url('../vf-font-now-alt/assets/NowAlt-Bold.woff2') format('woff');
-}
-
 :root {
   --kh-color--grey: #707372;
   --kh-color--grey--darkest: #373a36;
@@ -32,7 +24,7 @@ html,
 button,
 body,
 .kh-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: 'Recursive', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 body {
@@ -73,14 +65,15 @@ input[type='search']::-webkit-search-cancel-button {
   }
 }
 
-.kh-font-now-alt {
-  font-family:
-    NowAlt-Bold,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    'Open Sans',
-    serif !important;
+/* Headline and code font helpers using Recursive variable axes */
+.kh-font-headline {
+  font-family: 'Recursive', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-variation-settings: "wght" 800, "MONO" 0, "CASL" 1;
+}
+
+.kh-font-code {
+  font-family: 'Recursive', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace !important;
+  font-variation-settings: 'MONO' 1, 'CASL' 0, 'slnt' 0, 'CRSV' 0;
 }
 
 .kh-content a:focus,
@@ -446,7 +439,6 @@ input[type='search']::-webkit-search-cancel-button {
 
 .kh-navigation__link:focus,
 .kh-navigation__link:hover {
-  text-decoration: underline;
   border-bottom: none;
   color: #000;
   text-decoration: underline;
@@ -900,10 +892,10 @@ input[type='search']::-webkit-search-cancel-button {
   margin: calc(var(--kh-cluster-margin) / 2) !important;
 }
 
-.kh-font-now-alt--display {
-  --kh-font-now-alt--display--color: var(--kh-color--orange);
-
-  filter: drop-shadow(-1px 1px var(--kh-font-now-alt--display--color)) drop-shadow(-2px 2px var(--kh-font-now-alt--display--color)) drop-shadow(-3px 3px var(--kh-font-now-alt--display--color)) drop-shadow(-4px 4px var(--kh-font-now-alt--display--color)) drop-shadow(-5px 5px var(--kh-font-now-alt--display--color)) drop-shadow(-6px 6px var(--kh-font-now-alt--display--color));
+/* Display styling for expressive headlines */
+.kh-font-headline--display {
+  --kh-headline-display-color: var(--kh-color--orange);
+  filter: drop-shadow(-1px 1px var(--kh-headline-display-color)) drop-shadow(-2px 2px var(--kh-headline-display-color)) drop-shadow(-3px 3px var(--kh-headline-display-color)) drop-shadow(-4px 4px var(--kh-headline-display-color)) drop-shadow(-5px 5px var(--kh-headline-display-color)) drop-shadow(-6px 6px var(--kh-headline-display-color));
   font-size: 60px !important;
   letter-spacing: -1px;
 }
@@ -1085,3 +1077,22 @@ input[type='search']::-webkit-search-cancel-button {
     display: none;
   }
 }
+
+/* Self-hosted Recursive variable font */
+@font-face {
+  font-family: 'Recursive';
+  src: url('../kh-font/Recursive.woff2') format('woff2');
+  font-weight: 300 800;
+  font-style: oblique -15deg 0deg; /* maps to slnt axis */
+  font-display: swap;
+}
+
+/* latin */
+// @font-face {
+//   font-family: 'Recursive';
+//   font-style: normal;
+//   font-weight: 300 800;
+//   font-display: swap;
+//   src: url(https://fonts.gstatic.com/s/recursive/v43/8vIk7wMr0mhh-RQChyHEH06JlTRq_gukbQr6Mk1QmnhkyU8G_X-dm23WO1ysrvuO.woff2) format('woff2');
+//   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+// }
