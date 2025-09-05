@@ -1,0 +1,78 @@
+---
+title: "Go-go-go … I missed EmbedPDF"
+layout: layouts/post.njk
+teaser: "It seems a robust, embeddable PDF viewer for on‑page reading already exists."
+date: 2025-09-05
+active_path: blog
+tags:
+  - posts
+  - note
+topics:
+  - web development
+  - pdf
+  - accessibility
+---
+
+{% markdown %}
+
+After rolling a lean, drop‑in PDF viewer (see my post on [PDF‑A‑go‑go](/posts/20250811-pdf-a-go-go/)), I stumbled on **[EmbedPDF](https://github.com/embedpdf/embed-pdf-viewer?tab=readme-ov-file#embedpdf)** — a polished, framework‑agnostic, open‑source viewer with a rich feature set and real documentation.
+
+Oh.
+
+You always find the cool thing after you do all the work.
+
+It's perhaps understandable as EmbedPDF started about [9 months ago in January 2025](https://github.com/embedpdf/embed-pdf-viewer/commit/f18c6332313be46daec2ce7892caf2b6bb9e7314) and likely was not widely known when I was dreaming about PDF-A-go-go in April 2025.
+
+It's only thanks to [WebToolsWeekly](https://mailchi.mp/webtoolsweekly/web-tools-633?e=917619dd9d) that I did finally find EmbedPDF. Thanks [Louis Lazaris](https://bsky.app/profile/louislazaris.com)!
+
+## Demo
+
+{% endmarkdown %}
+
+<div id="pdf-viewer" style="height: 500px"></div>
+<script async type="module">
+  import EmbedPDF from 'https://snippet.embedpdf.com/embedpdf.js';
+
+  const EPDFinstance = EmbedPDF.init({
+    type: 'container',
+    target: document.getElementById('pdf-viewer'),
+    src: 'https://snippet.embedpdf.com/ebook.pdf'
+  })
+
+</script>
+
+{% markdown %}
+
+
+### What EmbedPDF brings
+
+- **On‑page embedding**: render inside your layout (no iframe) for a native reading flow.
+- **Serious features**: annotations (highlight, notes, ink, free text), search, redaction.
+- **Framework support**: works cleanly with React, Vue, Svelte, and vanilla JS.
+- **Good docs and API**: clear primitives and a plugin model.
+
+It’s excellent work — exactly the kind of project I wish I had found before I went down the rabbit hole.
+
+EmbedPDF offers the powerful, premium features of a commercial SDK but with the freedom and accessibility of an open-source, MIT-licensed project. A bit part of how it achieves this lies in its choice of engine.
+
+EmbedPDF isn't just another JavaScript library; it's a frontend for [PDFium](https://pdfium.googlesource.com/pdfium/), Google's open-source PDF rendering engine, compiled to WebAssembly. This is the exact same battle-tested engine that powers PDF viewing in Google Chrome and Microsoft Edge.
+
+And they've bundled that engine up in a really nice wrapper.
+
+### So how does compare to PDF‑A‑go‑go?
+
+- **Size/weight**: PDF‑A‑go‑go is intentionally small and no‑build; EmbedPDF is heavier to enable its features.
+- **Setup**: PDF‑A‑go‑go is a single JS + optional CSS with `data-*` attributes; EmbedPDF offers a fuller API and framework adapters.
+- **Use cases**: If you want a quick, accessible embed with minimal ceremony, PDF‑A‑go‑go shines. If you need annotations, redaction, plugins, or framework integration, EmbedPDF is the better fit.
+
+All this said, I think there's still a role for PDF-A-go-go, it's more focused on the Vanilla JS space and I can more easily integrate some specific needs, [like loading HTML-redirected PDFs](https://khawkins98.github.io/PDF-A-go-go/html-download-example.html).
+
+### What I’ll do next
+
+- Keep PDF‑A‑go‑go focused on friction‑free embeds for static sites and CMSes.
+- Borrow ideas from EmbedPDF’s UX and API where it helps without adding bulk.
+- Point folks to EmbedPDF when they need advanced capabilities.
+
+I made PDF-A-go-go to scratch an itch, and it's still itchy.
+
+{% endmarkdown %}
