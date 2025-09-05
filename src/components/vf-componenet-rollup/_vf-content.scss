@@ -266,24 +266,40 @@
   }
 }
 
-// .kh-link,
-// .kh-content a,
-// .kh-content a:not([class*='vf-']),
-// .kh-content .kh-link {
-//   color: #333;
-//   text-decoration-color: #3b6fb6;
-//   text-decoration-line: underline;
-// }
-
-// .kh-link:visited,
-// .kh-content a:visited,
-// .kh-content a:not([class*='vf-']):visited,
-// .kh-content .kh-link:visited {
-//   color: #333;
-//   text-decoration-color: #734595;
-//   text-decoration-line: underline;
-// }
-
 .kh-content small:not([class*='vf-']) {
   display: inline;
+}
+
+/* Dedicated '#' permalink using SCSS nesting */
+.kh-content {
+  h2:not([class*='kh-']),
+  h3:not([class*='kh-']),
+  h4:not([class*='kh-']),
+  h5:not([class*='kh-']),
+  h6:not([class*='kh-']) {
+    position: relative;
+
+    .kh-anchor {
+      color: var(--kh-anchor-color, var(--kh-color--grey));
+      text-decoration: none;
+      display: inline-block;
+      margin-left: 0.375rem;
+      line-height: inherit;
+      padding: 0 0.125rem; /* slightly increase hit area without shifting baseline */
+
+      &:hover {
+        color: var(--kh-color--blue--dark); /* darker brand blue on hover */
+        text-decoration: underline;
+      }
+
+      &:focus-visible {
+        outline: 1px dashed rgb(0 0 0 / 60%);
+        outline-offset: 4px;
+      }
+    }
+
+    &:target .kh-anchor {
+      color: var(--kh-color--blue);
+    }
+  }
 }

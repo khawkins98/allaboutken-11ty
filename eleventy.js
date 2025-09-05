@@ -28,14 +28,10 @@ module.exports = function(config) {
     // Change the default file encoding for reading/serving files
     encoding: "utf-8",
   });
+
   // Filters
   // https://www.11ty.io/docs/filters/
   // -----
-
-  // {{ "myContent" | sampleFilter }}
-  // config.addFilter("sampleFilter", function(value) {
-  //   return 'ddd' + value;
-  // });
 
   // Add any utility filters
   config.addFilter("dateDisplay", (dateObj, format = "d LLL y") => {
@@ -75,30 +71,23 @@ module.exports = function(config) {
         .replace(/[\s_-]+/g, '-')
         .replace(/^-+|-+$/g, '')
     ),
-    // Wrap heading text with an <a href="#slug" name="slug">…</a>,
-    // but skip if the heading already contains a link to avoid nesting
+    // Append a discrete '#' permalink link to the end of the heading content
     permalink: (slug, opts, state, index) => {
       try {
         const inlineToken = state.tokens[index + 1];
         if (!inlineToken || !Array.isArray(inlineToken.children)) return;
-        const hasExistingLink = inlineToken.children.some((t) => {
-          if (t.type === 'link_open') return true;
-          if (t.type === 'html_inline' && typeof t.content === 'string') {
-            return /<a\s/i.test(t.content);
-          }
-          return false;
-        });
-        if (hasExistingLink) return;
-
+        // Create a small '#' anchor link that is the only clickable element
         const linkOpen = new state.Token('link_open', 'a', 1);
         linkOpen.attrs = [
           ['href', `#${slug}`],
-          ['name', slug]
+          ['class', 'kh-anchor'],
+          ['aria-label', 'Permalink to this heading']
         ];
+        const textToken = new state.Token('text', '', 0);
+        textToken.content = '#';
         const linkClose = new state.Token('link_close', 'a', -1);
 
-        inlineToken.children.unshift(linkOpen);
-        inlineToken.children.push(linkClose);
+        inlineToken.children.push(linkOpen, textToken, linkClose);
       } catch (e) {
         // no-op
       }
@@ -199,8 +188,7 @@ module.exports = function(config) {
     }
   });
 
-  // // If you have other `addPlugin` calls, it’s important that UpgradeHelper is added last.
-  // config.addPlugin(UpgradeHelper);
+  // If you have other `addPlugin` calls, it’s important that UpgradeHelper is added last.
   return {
     dir: {
       input: "src/site",
@@ -209,7 +197,7 @@ module.exports = function(config) {
       includes: "_includes"
     },
     templateFormats : [
-      "njk", "md", // note that .md files will also be parsed with njk processor
+      "njk", "md",
       "css", "js"
     ],
     htmlTemplateEngine : ["njk", "md"],
