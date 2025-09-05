@@ -14,7 +14,7 @@ templateEngineOverride: njk
   <div class="kh-content kh-grid__col--span-2">
     <figure class="kh-figure">
       {% if href %}<a href="{{ href }}">{% endif %}
-      <img class="kh-figure__image" src="/images{{ image | url }}" alt="{{ image_meta.altext }}">
+      <img class="kh-figure__image kh-figure__image--lead" src="/images{{ image | url }}" alt="{{ image_meta.altext }}">
       {% if href %}</a>{% endif %}
       {% if image_meta and image_meta.text %}
       <figcaption class="kh-figure__caption">{{ image_meta.text | safe }}</figcaption>
