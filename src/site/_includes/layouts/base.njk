@@ -65,10 +65,8 @@
     <main role="main">
     {{ content | safe }}
     </main>
-    {% if  page.url != '/' %}
-      {% include "footer.njk" %}
-    {% endif %}
+    {% include "footer.njk" %}
     {# <!-- This page was generated on {{ site.buildTime | dateDisplay('LLL d, yyyy - HH:mm') }} --> #}
-    <script src="{{ '/scripts.js' | url }}"></script>
+    <script src="{{ '/scripts.js' | url }}" defer></script>
   </body>
 </html>
