@@ -1,0 +1,59 @@
+---
+title: "Exposing HTML: The No-JS nudist CSS toggle"
+layout: layouts/post.njk
+teaser: "A tiny footer checkbox to turns your site styles off with no JavaScript required."
+image: "/blog/light-switch.jpg"
+image_meta:
+  text: "Image by <a href='https://www.flickr.com/photos/colink/3960696677/in/photolist-72ZB8K-5UccW-5NgFoY-ub4YQ-ub4hN-ikLiq-88Nn2-cKCKEy-5GZon4-6Z2XLC-ub5Zd-3eQ7N-6CHFBn-68FBpu-xP2PM-6nJZ8K-2giZZr9-5bnoaR-93eFu8-6uqno9-7td71o-5UdcX-8H9zhB-2gj1spy-Jaia-o7N4ka-6Xhh8Q-zmnxCH-e1CWce-4DYi9K-2nG2LhC-5TwAt2-7Vjje-7Cq3yw-7QAzro-4nwhSA-6vy2FH-Yf9Z-6bYGvs-u6pvF-8YMzoj-9cD2bB-gVha9-6U8g6-2kKUwBL-ZVQvq-8aGhPL-kGUeL-7CPqjN-oBRSE'>Collin Knowels</a>"
+  altext: "An image of light switches."
+date: 2025-09-06
+active_path: blog
+tags:
+  - posts
+  - note
+topics:
+  - web development
+  - css
+  - accessibility
+---
+
+{% markdown %}
+
+It's refreshing to see your site with no CSS in play -- it peels back the facade and exposes structural issues, giving a better view to how robots and persons with disabilities might experience the site.
+
+And it's bonus points to add an easy tickbox to show it in action, doubly so if there's no need for JS.
+
+Fortunately it was easy to add a CSS only trick:
+
+```css
+body:has(#kh-css-toggle:checked) {
+  .all-your-other-css {
+    color: red;
+  }
+}
+```
+
+Now when `<input type="checkbox" id="kh-css-toggle"` isn't checked, the CSS is disabled.
+
+[Try it in the footer](#kh-css-toggle).
+
+Neat.
+
+No JavaScript. No build trickery. Just a checkbox in the footer and modern CSS.
+
+I haven’t seen this exact pattern written up quite this simply; if you have, please let me know, I'd love to see how you did it.
+
+In the name of not confusing users, I also added a banner that will only be visible when the CSS is off:
+
+```html
+<!-- Visible when CSS is off (hidden by CSS when on) -->
+<p class="kh-css-off-note">If you're reading this the site styles are currently disabled. Toggle the “CSS” checkbox in the footer to restore styling.<hr></p>
+```
+
+Sadly I'm far too late and many months early for [CSS Naked Day](https://css-naked-day.org/) on April 9.
+
+## Browser support footnote
+
+The `:has()` selector is [broadly supported in modern browsers](https://caniuse.com/css-has). Should it break CSS for older sites, at least I know the site will be functional.
+
+{% endmarkdown %}

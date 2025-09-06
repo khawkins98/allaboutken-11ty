@@ -40,12 +40,8 @@ templateEngineOverride: njk
       </div>
       {% if (not isNote) and post.data.image %}
         <a href="{{ post.url }}" class="kh-summary__image">
-          <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
+          <img width="300" class="kh-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
         </a>
-      {% else %}
-      <div class="kh-summary__image">
-      <!-- spacer -->
-      </div>
       {% endif %}
       <h3 class="kh-summary__title">
         <a href="{{ post.url }}" class="kh-summary__link">{{ post.data.title }}</a>
