@@ -1,0 +1,59 @@
+---
+title: Colophon
+layout: layouts/post.njk
+date: 2025-09-10
+lastUpdated: 2025-09-06
+templateEngineOverride: njk, md
+---
+
+{% if lastUpdated %}
+<small>Last updated: {{ lastUpdated | dateDisplay('d LLL yyyy') }}</small>
+{% endif %}
+
+
+<aside class="kh-note-box">
+<span class="kh-note-box__label">What's a colophon?</span>
+Historically a colophon summarized how a book was made — who printed it, where, and when. On the web, a colophon is a short page describing how a site is built and the principles behind it (see <a href="https://en.wikipedia.org/wiki/Colophon_(publishing)">colophon in publishing</a> and <a href="https://indieweb.org/colophon">IndieWeb colophon</a>).
+</span>
+</aside>
+
+{% markdown %}
+
+This site is built and published with a small, readable stack and a bias for flexibility and performance.
+
+## Stack
+
+- **Static site generator**: Eleventy (11ty) v3
+- **Language & tooling**: Node.js (Yarn scripts), Nunjucks templates, Markdown via Markdown‑It with `markdown-it-anchor`
+- **Styles**: Sass compiled to a single CSS file; custom utility classes; normalize; type set with the Recursive font
+  - Previously used the EMBL Visual Framework (VF) and Gulp; the [migration to a simpler Eleventy v3 stack is documented here](/posts/20250831-site-overhaul-eleventy-v3.html).
+- **Images**: Preprocessed with Sharp; responsive sizes generated during build
+- **Search**: Static index generated at build time; client‑side search with Lunr.js. Source: [search page template](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/search.njk), [client‑side script](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/js-search-client-side.js), [index builder](https://github.com/khawkins98/allaboutken-11ty/blob/main/scripts/build-search-index.js)
+- **Hosting**: Vercel (auto‑deploys from GitHub, automatic HTTPS, global CDN)
+- **Domain**: Cloudflare (DNS, security, and performance)
+
+## Build & source
+
+- **Source code**: [`github.com/khawkins98/allaboutken-11ty`](https://github.com/khawkins98/allaboutken-11ty/)
+- **Build command**: `yarn build` → compiles Sass, runs Eleventy, processes images, builds search index
+
+## Privacy
+
+- **Analytics**: GoatCounter (cookie‑free, aggregate counts only). See their rationale on GDPR consent and legitimate interest: [GDPR consent notices](https://khawkins98.goatcounter.com/help/gdpr).
+- **No trackers**: No ad tech, no cross‑site profiling.
+
+## Principles
+
+- Prefer simple, inspectable pages over heavy frameworks.
+- Ship as little JS as practical; keep content readable without it.
+- Optimize images and typography for legibility.
+- Document decisions in public when it helps future me (and you).
+
+## Credits
+
+- Fonts: [Recursive](/posts/20250904-switching-to-recursive.html)
+- Tools: Eleventy, Sass, Sharp, Markdown‑It
+- Analytics: GoatCounter
+
+Questions or feedback? [Get in touch](/#hello)
+{% endmarkdown %}
