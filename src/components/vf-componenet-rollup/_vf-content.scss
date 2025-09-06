@@ -1,15 +1,6 @@
+@mixin kh-vf-content() {
 .kh-content {
   max-width: 70ch;
-
-  // h1,
-  // h2,
-  // h3 {
-  //   margin: 2rem 0 1rem;
-  // }
-
-  p {
-    margin: 0 0 1rem;
-  }
 
   pre {
     border: 1px;
@@ -27,11 +18,11 @@
     background: #f3f3f3;
     border-radius: 4px;
     color: #373a36;
-    font-family: Monaco, Consolas, 'Lucida Console', monospace;
+    font-family: 'Recursive', Monaco, Consolas, 'Lucida Console', monospace;
+    font-variation-settings: 'MONO' 1, 'CASL' 0, 'slnt' 0, 'CRSV' 0;
     font-size: 14px;
     font-weight: 400;
     line-height: 1.57;
-    margin: var(--kh-stack-margin, 0) 0 0 0;
     padding-bottom: 0.25rem;
     padding-top: 0.25rem;
   }
@@ -302,4 +293,5 @@
       color: var(--kh-color--blue);
     }
   }
+}
 }

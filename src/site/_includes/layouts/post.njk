@@ -26,7 +26,7 @@ templateEngineOverride: njk
         {% if tags and ('note' in tags) %}
         <div class="kh-note-box">
           <span class="kh-note-box__label">Note:</span>
-          I'm trying to be a bit more active on the blog, partly by posting shorter form, more informal updates.
+          I'm getting more active by writing shorter form, more informal updates like this one.
         </div>
         {% endif %}
         {% if teaser -%}
@@ -41,45 +41,42 @@ templateEngineOverride: njk
 </article>
 
 <div class="kh-stack kh-u-padding__top--800">
-{% if comment != false %}
+{%- if comment != false %}
   <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
     <div class="kh-grid__col--span-1">
       <h2 class="kh-text-heading--2">Comment?</h2>
     </div>
     <div class="kh-content kh-grid__col--span-2">
       <p>Thanks for reading, if you have comment I'd love to hear it.</p>
-      <p>
+      <p class="kh-cluster">
         <a href="https://toot.io/@khawkins98">Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
-        {# &nbsp; <a href="/rss.xml">RSS feed</a> #}
-        &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
-        {# &nbsp; <a href="mailto:khawkins98@gmail.com">E-mail</a> #}
-        &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+        <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+        <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
       </p>
     </div>
   </article>
-  {% endif %}
+  {%- endif %}
 
-  {% if page.url != '/privacy/' %}
+  {%- if page.url != '/privacy/' %}
   <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
     <div class="kh-grid__col--span-1">
       <h2 class="kh-text-heading--2">Read more</h2>
     </div>
     <div class="kh-content kh-grid__col--span-2">
-      {% set previousPost = collections.posts | getPreviousCollectionItem(page) %}
-      {% set nextPost = collections.posts | getNextCollectionItem(page) %}
+      {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
+      {%- set nextPost = collections.posts | getNextCollectionItem(page) %}
 
-      {% if previousPost %}
+      {%- if previousPost %}
       <p class="kh-text-body--3">Previously: <a href="{{ previousPost.url | url}}">{{ previousPost.data.title }}</a></p>
       {% endif %}
 
-      {% if nextPost %}
+      {%- if nextPost %}
       <p class="kh-text-body--3">Next: <a href="{{ previousPost.url | url}}">{{ nextPost.data.title }}</a></p>
-      {% endif %}
-
+      {%- endif %}
       <p>
         <a href="/blog" class="kh-button kh-button--secondary kh-button--sm"> ⇤ Blog index</a>
       </p>
     </div>
   </article>
-  {% endif %}
+  {%- endif %}
 </div>

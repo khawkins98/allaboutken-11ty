@@ -19,9 +19,11 @@ layout: layouts/base.njk
       | Note post
     {% endif %}
     </div>
-    <a class="kh-summary__image" href="{{ post.url | url}}">
-      <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image | url }}" alt="{{ post.data.teaser }}" />
-    </a>
+    {% if (not isNote) and post.data.image %}
+      <a href="{{ post.url }}" class="kh-summary__image">
+        <img width="300" class="kh-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
+      </a>
+    {% endif %}
     <h3 class="kh-font-headline kh-summary__title">
       <a href="{{ post.url | url}}" class="kh-summary__link">{{ post.data.title }}</a>
     </h3>
