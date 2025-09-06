@@ -61,6 +61,11 @@ module.exports = function(config) {
     const latest = posts.reduce((a, b) => (a.date > b.date ? a : b));
     return DateTime.fromJSDate(latest.date, { zone: "utc" }).toISO();
   });
+  // Convert double hyphens to em dashes for nicer typography
+  config.addFilter("emdash", (value) => {
+    const v = String(value || '');
+    return v.replace(/--/g, '—');
+  });
   config.addFilter("htmlToAbsoluteUrls", (content, siteBaseUrl) => {
     const base = (siteBaseUrl || '').replace(/\/$/, '');
     const html = content || '';
@@ -94,6 +99,21 @@ module.exports = function(config) {
   // Configure Markdown-It with anchor IDs for headings and use it globally
   const markdownIt = require('markdown-it');
   const markdownItAnchor = require('markdown-it-anchor');
+
+  // Plugin to convert double hyphens to em dashes in Markdown text tokens
+  const emdashPlugin = (md) => {
+    md.core.ruler.after('inline', 'emdash', (state) => {
+      state.tokens.forEach((blockToken) => {
+        if (blockToken.type !== 'inline' || !Array.isArray(blockToken.children)) return;
+        blockToken.children.forEach((token) => {
+          if (token.type === 'text') {
+            token.content = token.content.replace(/--/g, '—');
+          }
+        });
+      });
+    });
+  };
+
   const md = markdownIt({ html: true, linkify: true }).use(markdownItAnchor, {
     // Add ids to all heading levels so we can deep-link
     level: [1, 2, 3, 4, 5, 6],
@@ -131,7 +151,7 @@ module.exports = function(config) {
         // no-op
       }
     }
-  });
+  }).use(emdashPlugin);
 
   // Use for Eleventy's markdown engine (for .md files and markdown in templates)
   config.setLibrary('md', md);

@@ -1,5 +1,3 @@
-console.log('scripts.js loaded');
-
 // This is the "Offline copy of pages" service worker
 if ('serviceWorker' in navigator) {
   // Always attempt to register; the browser will update existing registrations as needed
