@@ -1,11 +1,11 @@
 .kh-content {
   max-width: 70ch;
 
-  h1,
-  h2,
-  h3 {
-    margin: 2rem 0 1rem;
-  }
+  // h1,
+  // h2,
+  // h3 {
+  //   margin: 2rem 0 1rem;
+  // }
 
   p {
     margin: 0 0 1rem;
@@ -48,7 +48,7 @@
     border: 0;
     color: #000;
     font-size: 22px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.45;
     margin: 0 0 16px;
     padding: 10px 8px 10px 32px;
@@ -187,7 +187,7 @@
   li:not([class*='kh-']) {
     color: #000;
     font-size: 22px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.45;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
     margin-bottom: 0.5rem;
@@ -211,7 +211,7 @@
   p:not([class*='kh-']) {
     color: #000;
     font-size: 22px;
-    font-weight: 300;
+    font-weight: 350;
     line-height: 1.45;
     margin: var(--kh-stack-margin, 0) 0 1rem 0;
   }
@@ -233,7 +233,7 @@
   table:not([class*='kh-']) td {
     color: #000;
     font-size: 22px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.45;
     margin: var(--kh-stack-margin, 0) 0 0 0;
     padding: 8px 16px;

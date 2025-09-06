@@ -52,6 +52,7 @@ a:not([class*='vf-']) {
   color: #333;
   text-decoration-color: #3b6fb6;
   text-decoration-line: underline;
+  text-underline-offset: 2px;
 }
 
 a:visited,
@@ -271,13 +272,13 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .kh-cluster {
-  --kh-cluster-margin: var(--kh-cluster-margin--override, 1rem);
+  // --kh-cluster-margin: var(--kh-cluster-margin--override, 1rem);
 
   align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: var(--page-grid-gap);
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 @media (max-width: $kh-breakpoint--md-down) {
@@ -589,6 +590,11 @@ input[type='search']::-webkit-search-cancel-button {
   }
 }
 
+.kh-footer__links {
+  display: inline-flex;
+  gap: 1rem;
+}
+
 .kh-intro__heading {
   color: #000;
   font-size: 42px;
@@ -831,9 +837,17 @@ input[type='search']::-webkit-search-cancel-button {
 /* Display styling for expressive headlines */
 .kh-font-headline--display {
   --kh-headline-display-color: var(--kh-color--orange);
-  filter: drop-shadow(-1px 1px var(--kh-headline-display-color)) drop-shadow(-2px 2px var(--kh-headline-display-color)) drop-shadow(-3px 3px var(--kh-headline-display-color)) drop-shadow(-4px 4px var(--kh-headline-display-color)) drop-shadow(-5px 5px var(--kh-headline-display-color)) drop-shadow(-6px 6px var(--kh-headline-display-color));
+  // filter: drop-shadow(-1px 1px var(--kh-headline-display-color)) drop-shadow(-2px 2px var(--kh-headline-display-color)) drop-shadow(-3px 3px var(--kh-headline-display-color)) drop-shadow(-4px 4px var(--kh-headline-display-color)) drop-shadow(-5px 5px var(--kh-headline-display-color)) drop-shadow(-6px 6px var(--kh-headline-display-color));
   font-size: 60px !important;
   letter-spacing: -1px;
+}
+
+// When we have two display headlines, make the first one bigger
+.kh-font-headline--display:has(+ .kh-font-headline--display) {
+  font-size: 80px !important;
+  font-variation-settings: "wght" 100, "MONO" 0, "CASL" 1, "slnt" -8, "CRSV" 1;
+  padding-bottom: 1rem;
+  padding-top: 2rem;
 }
 
 .kh-form__item > * {
