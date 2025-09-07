@@ -17,16 +17,20 @@ url: /posts/20250911-deterministic-image-filenames/
 
 {% markdown %}
 
-Eleventy Image is a fantastic tool: with fairly little effort I now have optimized AVIF and WebP image sets for the modern web, faster local dev, over the wire image size shrank 60% and I even dropped [100 lines of custom code](https://github.com/khawkins98/allaboutken-11ty/pull/16/files#diff-83f457d1c8a095e2107235fc7c68113ec81b5da9c8d209051c5f5f5fa9681bb6) to make Sharp generate basic image crops.
+[Eleventy Image](https://www.11ty.dev/docs/plugins/image/) is a fantastic tool: with fairly little effort I now have optimized AVIF and WebP image sets for the modern web, faster local dev, over the wire image size shrank 60% and I even dropped [100 lines of custom code](https://github.com/khawkins98/allaboutken-11ty/pull/16/files#diff-83f457d1c8a095e2107235fc7c68113ec81b5da9c8d209051c5f5f5fa9681bb6) to make Sharp generate basic image crops.
 
-The default behavior of generating hashed filenames is brilliant for automatic cache-busting -- but my personal preference is strongly for more for predictable, deterministic, token-based approach for debugging and managing CDN logs.
+My `/blog` page dropped from 1.8 MB of images to 241 KB.
+
+N-ice. 🍦
+
+BUT ... while the default behavior of generating hashed filenames is brilliant for automatic cache-busting, my personal preference is strongly for more for predictable, deterministic, token-based approach for debugging and managing CDN logs.
 
 That is:
 
 - `/img/PZQUJcboty-900.avif` ... I'd really rather not.
 - `/img/light-switch-900.avif` ... yes please.
 
-Thankfully, Eleventy Image accommodates this through `filenameFormat`.
+Thankfully, Eleventy Image accommodates this through [`filenameFormat`](https://www.11ty.dev/docs/plugins/image/#custom-filenames).
 
 ## How to implement deterministic token-based filenames
 
@@ -90,12 +94,9 @@ module.exports = function(config) {
 
 After updating your configuration, make sure to use **root-relative paths** in your templates for the plugin to properly process the images.
 
-<section class="kh-bleed-out">
-
 ```njk
 <img src="/images/blog/my-image.jpg" alt="A descriptive alt text" width="900">
 ```
-</section>
 
 Now, when you build your site, the images in the `build/img/` directory will have predictable names like `my-image-900.webp` instead of random hashes like `PZQUJcboty-900.webp`.
 
@@ -110,6 +111,6 @@ By switching to deterministic names, you gain readability but lose the automatic
 
 ### Would be nice: first‑class support
 
-Eleventy Image prefers hashed outputs by default for good reasons (cache busting, dedupe). Still, it would be handy to have a built‑in toggle for deterministic patterns—perhaps with a safe, short content hash baked in. For now, `filenameFormat` gives us the flexibility we need and I'm not yet familiar enough with the plugin to propose a change.
+Eleventy Image prefers hashed outputs by default for good reasons (cache busting, dedupe). Still, it would be handy to have a built‑in toggle for deterministic patterns—perhaps with a safe, short content hash baked in. For now, `filenameFormat` gives us the flexibility I need and I'm not yet familiar enough with the plugin to propose a change.
 
 {% endmarkdown %}
