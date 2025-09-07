@@ -2,9 +2,60 @@ const { DateTime } = require('luxon');
 const _            = require('lodash');
 const Path         = require('path');
 const { execSync } = require('child_process');
+const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 // const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
 
 module.exports = function(config) {
+  const isDev = process.env.ELEVENTY_ENV === 'development';
+  // Transform <img>/<picture> in HTML to responsive images at build time
+  config.addPlugin(eleventyImageTransformPlugin, {
+    outputDir: "./build/img/",
+    urlPath: "/img/",
+    widths: [320, 600, 900, 1280],
+    formats: ["avif", "webp", "jpeg"],
+    transformOnRequest: isDev,
+    // Do not fail the entire build on a single image error (e.g., 404 remote)
+    failOnError: false,
+    // Deterministic file names: <dir-token>-<base-name>-<width>.<format>
+    filenameFormat: function filenameFormat(id, src, width, format) {
+      try {
+        let baseName = '';
+        let dirToken = '';
+        if (typeof src === 'string') {
+          if (src.startsWith('http://') || src.startsWith('https://')) {
+            const u = new URL(src);
+            baseName = Path.basename(u.pathname) || u.hostname;
+            const parts = (u.pathname || '').split('/').filter(Boolean);
+            dirToken = parts.length > 1 ? parts[parts.length - 2] : '';
+          } else {
+            baseName = Path.basename(src);
+            const parentDir = Path.basename(Path.dirname(src));
+            dirToken = parentDir;
+          }
+        }
+        baseName = String(baseName || 'image').replace(/\.[a-z0-9]+$/i, '');
+        const safe = baseName
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        const dirSafe = String(dirToken || '')
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        const name = dirSafe ? `${dirSafe}-${safe}` : safe;
+        return `${name}-${width}.${format}`;
+      } catch (e) {
+        return `${id}-${width}.${format}`;
+      }
+    },
+    htmlOptions: {
+      img: {
+        decoding: "async",
+        loading: "lazy",
+        sizes: "100vw"
+      }
+    }
+  });
   config.setServerOptions({
     showVersion: true,
     liveReload: true,
@@ -218,13 +269,8 @@ module.exports = function(config) {
   // Watch source images for changes
   config.addWatchTarget("./src/site/images");
 
-  // Run image processing after each Eleventy build
+  // Post-build tasks
   config.on('eleventy.after', () => {
-    try {
-      execSync('node scripts/process-images.js', { stdio: 'inherit' });
-    } catch (e) {
-      console.error('Image processing failed in eleventy.after');
-    }
     try {
       execSync('node scripts/build-search-index.js', { stdio: 'inherit' });
     } catch (e) {
@@ -232,16 +278,7 @@ module.exports = function(config) {
     }
   });
 
-  // When dev server detects image changes, re-run processing immediately
-  config.on('eleventy.beforeWatch', (changedFiles) => {
-    if (Array.isArray(changedFiles) && changedFiles.some((f) => f.includes('src/site/images'))) {
-      try {
-        execSync('node scripts/process-images.js', { stdio: 'inherit' });
-      } catch (e) {
-        console.error('Image processing failed in eleventy.beforeWatch');
-      }
-    }
-  });
+  // Image transforms run on-request in dev; no separate watcher is required
 
   // If you have other `addPlugin` calls, it’s important that UpgradeHelper is added last.
   return {

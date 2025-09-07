@@ -1,0 +1,116 @@
+---
+title: "Predictable, token-based filenames with Eleventy Image"
+layout: layouts/post.njk
+teaser: "How I swapped Eleventy Image’s hashed outputs for readable, stable names—and the trade‑offs."
+image: "/blog/tree-branches.jpg"
+image_meta:
+  text: "A lack of deterministic routes can feel messy. <a href='https://www.flickr.com/photos/khawkins04/2087784331/in/photolist-4busr8-4byuqY-4byuNo-5HdEN9-8282Zr-8FVjFm-91ZNGc-93GCwL-93GCyw-93GCAY-94xzyu-96Hwun-98iapL-98mV4j-9ntvCg-9ntxW4-9nwAnE-a6UYVE-auDXg2-bsHHGQ-bwEAp9-bM5aTt-cKQ1d5-cKQ1MS-cKQhhu-3JFnCG-4aXjFi-4burk8-4burvR-4burxz-4burBz-4burJX-4bus8H-4busda-4bytum-4bytzh-4bytQd-4byu3b-AupBy-EVqsJ'>Image: Own work</a>"
+  altext: "Dead tree branches."
+date: 2025-09-07
+tags: posts
+topics:
+  - eleventy
+  - performance
+  - images
+url: /posts/20250911-deterministic-image-filenames/
+---
+
+{% markdown %}
+
+[Eleventy Image](https://www.11ty.dev/docs/plugins/image/) is a fantastic tool: with fairly little effort I now have optimized AVIF and WebP image sets for the modern web, faster local dev, over the wire image size shrank 60% and I even dropped [100 lines of custom code](https://github.com/khawkins98/allaboutken-11ty/pull/16/files#diff-83f457d1c8a095e2107235fc7c68113ec81b5da9c8d209051c5f5f5fa9681bb6) to make Sharp generate basic image crops.
+
+My `/blog` page dropped from 1.8 MB of images to 241 KB.
+
+N-ice. 🍦
+
+BUT ... while the default behavior of generating hashed filenames is brilliant for automatic cache-busting, my personal preference is strongly for more for predictable, deterministic, token-based approach for debugging and managing CDN logs.
+
+That is:
+
+- `/img/PZQUJcboty-900.avif` ... I'd really rather not.
+- `/img/light-switch-900.avif` ... yes please.
+
+Thankfully, Eleventy Image accommodates this through [`filenameFormat`](https://www.11ty.dev/docs/plugins/image/#custom-filenames).
+
+## How to implement deterministic token-based filenames
+
+You need to configure the `eleventyImageTransformPlugin` in your `.eleventy.js` file. The key is to provide a custom function for the **`filenameFormat`** option.
+
+This function receives the image ID, source path (`src`), width, and format, and returns the desired filename string. The example below derives a stable name from the source file path, includes a parent directory token to prevent collisions, and appends the image width and format.
+
+<section class="kh-bleed-out">
+
+```js
+// .eleventy.js
+const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
+const Path = require("path");
+
+module.exports = function(config) {
+  config.addPlugin(eleventyImageTransformPlugin, {
+    outputDir: "./build/img/",
+    urlPath: "/img/",
+    widths: [320, 600, 900, 1280],
+    formats: ["avif", "webp", "jpeg"],
+    // Use the filenameFormat option to generate a custom filename with a dir token
+    filenameFormat(id, src, width, format) {
+      // 1) Derive a stable base and a directory token
+      let base = "image";
+      let dirToken = "";
+      try {
+        if (typeof src === "string") {
+          if (/^https?:\/\//i.test(src)) {
+            const u = new URL(src);
+            base = Path.basename(u.pathname) || u.hostname;
+            const parts = (u.pathname || '').split('/').filter(Boolean);
+            dirToken = parts.length > 1 ? parts[parts.length - 2] : '';
+          } else {
+            base = Path.basename(src);
+            dirToken = Path.basename(Path.dirname(src));
+          }
+        }
+      } catch (_) {}
+
+      // 2) Strip extension and normalize
+      const norm = (s) => String(s).toLowerCase().replace(/\.[a-z0-9]+$/i, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+      const baseSafe = norm(base);
+      const dirSafe = norm(dirToken);
+      const name = dirSafe ? `${dirSafe}-${baseSafe}` : baseSafe;
+
+      // 3) Final name: <dir>-<base>-<width>.<format>
+      return `${name}-${width}.${format}`;
+    },
+    htmlOptions: {
+      img: { decoding: "async", loading: "lazy", sizes: "100vw" }
+    }
+  });
+
+  // ...rest of your config...
+  return {
+    dir: { input: "src/site", output: "build", data: "_data", includes: "_includes" }
+  };
+};
+```
+</section>
+
+After updating your configuration, make sure to use **root-relative paths** in your templates for the plugin to properly process the images.
+
+```njk
+<img src="/images/blog/my-image.jpg" alt="A descriptive alt text" width="900">
+```
+
+Now, when you build your site, the images in the `build/img/` directory will have predictable names like `my-image-900.webp` instead of random hashes like `PZQUJcboty-900.webp`.
+
+As a further bonus, this makes device caching smarter and improve the human and machine readability of source code.
+
+## Trade-offs and mitigations
+
+By switching to deterministic names, you gain readability but lose the automatic cache-busting and collision prevention that the default hashed filenames provide. Consider the following:
+
+* **Cache invalidation:** The primary drawback is that a browser or CDN cache won't know the image has changed if its filename remains the same. To solve this, you can rely on HTTP headers like `ETag` and `Cache-Control` for cache-busting.
+* **Filename cCollisions:** If you have two different images with the same filename in separate folders (e.g., `src/post1/hero.jpg` and `src/post2/hero.jpg`), they will both be processed as `hero-900.webp` and overwrite each other. To mitigate this, I incorporated part of the source directory path into your filename logic (e.g., `post1-hero-900.webp`).
+
+### Would be nice: first‑class support
+
+Eleventy Image prefers hashed outputs by default for good reasons (cache busting, dedupe). Still, it would be handy to have a built‑in toggle for deterministic patterns—perhaps with a safe, short content hash baked in. For now, `filenameFormat` gives us the flexibility I need and I'm not yet familiar enough with the plugin to propose a change.
+
+{% endmarkdown %}
