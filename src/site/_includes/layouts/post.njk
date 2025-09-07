@@ -12,14 +12,16 @@ templateEngineOverride: njk
     <p><time datetime="{{ date }}" class="kh-summary__date">{{ date | dateDisplay }}</time>{% if topics %}&nbsp;&nbsp;<span class="kh-summary__author">Filed in: {{ topics | join(', ') }}</span>{% endif %}</p>
   </div>
   <div class="kh-content kh-grid__col--span-2">
+    {% if image %}
     <figure class="kh-figure">
       {% if href %}<a href="{{ href }}">{% endif %}
-      <img class="kh-figure__image kh-figure__image--lead" src="/images{{ image | url }}" alt="{{ image_meta.altext }}">
+      <img class="kh-figure__image kh-figure__image--lead" width="900" src="/images{{ image | url }}" alt="{{ image_meta.altext or '' }}">
       {% if href %}</a>{% endif %}
       {% if image_meta and image_meta.text %}
       <figcaption class="kh-figure__caption">{{ image_meta.text | safe }}</figcaption>
       {% endif %}
     </figure>
+    {% endif %}
 
     <section class="kh-grid kh-grid__col-3">
       <div class="kh-grid__col--span-2">
