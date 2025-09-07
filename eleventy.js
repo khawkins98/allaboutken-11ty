@@ -6,12 +6,14 @@ const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 // const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
 
 module.exports = function(config) {
+  const isDev = process.env.ELEVENTY_ENV === 'development';
   // Transform <img>/<picture> in HTML to responsive images at build time
   config.addPlugin(eleventyImageTransformPlugin, {
     outputDir: "./build/img/",
     urlPath: "/img/",
     widths: [320, 600, 900, 1280],
     formats: ["avif", "webp", "jpeg"],
+    transformOnRequest: isDev,
     // Do not fail the entire build on a single image error (e.g., 404 remote)
     failOnError: false,
     htmlOptions: {
