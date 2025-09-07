@@ -80,6 +80,18 @@ module.exports = function(config) {
     encoding: "utf-8",
   });
 
+  // Fix any image src paths that were rewritten to input filesystem paths.
+  // Ensures URLs point to passthrough-copied /images/ in output.
+  config.addTransform("fixImageSrcToAbsolute", (content, outputPath) => {
+    try {
+      if (typeof content !== 'string') return content;
+      if (!outputPath || !outputPath.endsWith('.html')) return content;
+      return content.replace(/src="(?:\.\.\/)*src\/site\/images\//g, 'src="/images/');
+    } catch (e) {
+      return content;
+    }
+  });
+
   // Filters
   // https://www.11ty.io/docs/filters/
   // -----

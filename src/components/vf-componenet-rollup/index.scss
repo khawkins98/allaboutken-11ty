@@ -34,7 +34,8 @@ body:has(#kh-css-toggle:checked) {
   background: #fbf6ef;
   color: #222;
   display: block;
-  line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.7;
   margin: 0 auto;
   max-width: var(--kh-body-width);
   padding: 0 1em;
@@ -318,7 +319,6 @@ body:has(#kh-css-toggle:checked) {
     display: -webkit-inline-box;
     display: -ms-inline-flexbox;
     display: inline-flex;
-    font-size: 16px;
     font-weight: 700;
     letter-spacing: 0.05em;
     line-height: 1;
@@ -340,7 +340,6 @@ body:has(#kh-css-toggle:checked) {
     color: var(--kh-button-text-color, #fafafa);
     cursor: pointer;
     display: inline-block;
-    font-size: 24px;
     font-weight: 700;
     line-height: 1;
     margin: 0 16px 16px 0;
@@ -372,7 +371,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-button--sm {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     line-height: 1;
     padding: 0.25rem 0.5rem;
@@ -407,7 +406,6 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-figure__caption {
     color: #373a36;
-    font-size: 16px;
     font-weight: 500;
     line-height: 1.71;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -466,7 +464,7 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-summary__author {
     color: #707372;
-    font-size: 14px;
+    font-size: 13px;
     font-style: italic;
     font-weight: 400;
     line-height: 1.57;
@@ -475,7 +473,7 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-summary__date {
     color: #707372;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 400;
     line-height: 1.57;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -506,16 +504,14 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-summary__text {
-    color: #000;
-    font-size: 22px;
+    color: #222;
     font-weight: 300;
     line-height: 1.45;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
   }
 
   .kh-summary__title {
-    color: #000;
-    font-size: 21px;
+    color: #222;
     font-weight: 400;
     line-height: 1.29;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -567,7 +563,7 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-footer {
     max-width: calc(100% - 2em); // vf-body padding offset
-    padding-bottom: 60px;
+    padding-bottom: 1.5rem;
     padding-top: 24px;
     text-wrap: balance;
 
@@ -583,7 +579,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-intro__heading {
-    color: #000;
+    color: #222;
     font-size: 42px;
     font-weight: 700;
     line-height: 1.25;
@@ -591,7 +587,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-intro__text {
-    color: #000;
+    color: #222;
     font-size: 22px;
     font-weight: 300;
     line-height: 1.45;
@@ -646,13 +642,6 @@ body:has(#kh-css-toggle:checked) {
     font-size: 32px;
     font-weight: 500;
     line-height: 1.3125;
-    margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
-  }
-
-  .kh-text-body--2 {
-    font-size: 22px;
-    font-weight: 300;
-    line-height: 1.45;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
   }
 
@@ -722,9 +711,11 @@ body:has(#kh-css-toggle:checked) {
       grid-column: 1/-1;
       height: 100%;
       margin-left: calc(50% - (50vw - var(--context-margin--inline, 0px)));
+      // margin-left: calc(50% - (50vw));
       position: absolute;
       top: 0;
-      width: calc(100vw - var(--context-margin--inline, 0px) * 2);
+      // width: calc(100vw - var(--context-margin--inline, 0px) * 2);
+      width: calc(100vw * 2);
       z-index: -1;
     }
   }
@@ -787,7 +778,6 @@ body:has(#kh-css-toggle:checked) {
     padding: var(--kh-box-padding);
     width: 100%;
     color: #1e1e1e;
-    font-size: 16px;
     font-weight: 500;
     line-height: 1.71;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -848,7 +838,6 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-form__label {
     display: flex;
-    font-size: 22px;
     font-weight: 300;
     line-height: 1.45;
     margin: var(--kh-stack-margin, 0) 0 0 0;
@@ -1000,7 +989,7 @@ body:has(#kh-css-toggle:checked) {
     .kh-content a:not([class*='kh-']),
     .kh-content a:not([class*='kh-']):visited {
       border-bottom: none;
-      color: #000;
+      color: #222;
       text-decoration-color: #666;
     }
 
