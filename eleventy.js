@@ -16,16 +16,21 @@ module.exports = function(config) {
     transformOnRequest: isDev,
     // Do not fail the entire build on a single image error (e.g., 404 remote)
     failOnError: false,
-    // Deterministic file names: <base-name>-<width>.<format>
+    // Deterministic file names: <dir-token>-<base-name>-<width>.<format>
     filenameFormat: function filenameFormat(id, src, width, format) {
       try {
         let baseName = '';
+        let dirToken = '';
         if (typeof src === 'string') {
           if (src.startsWith('http://') || src.startsWith('https://')) {
             const u = new URL(src);
             baseName = Path.basename(u.pathname) || u.hostname;
+            const parts = (u.pathname || '').split('/').filter(Boolean);
+            dirToken = parts.length > 1 ? parts[parts.length - 2] : '';
           } else {
             baseName = Path.basename(src);
+            const parentDir = Path.basename(Path.dirname(src));
+            dirToken = parentDir;
           }
         }
         baseName = String(baseName || 'image').replace(/\.[a-z0-9]+$/i, '');
@@ -33,7 +38,12 @@ module.exports = function(config) {
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, '-')
           .replace(/^-+|-+$/g, '');
-        return `${safe}-${width}.${format}`;
+        const dirSafe = String(dirToken || '')
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        const name = dirSafe ? `${dirSafe}-${safe}` : safe;
+        return `${name}-${width}.${format}`;
       } catch (e) {
         return `${id}-${width}.${format}`;
       }
