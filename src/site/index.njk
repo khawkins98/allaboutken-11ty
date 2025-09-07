@@ -28,9 +28,8 @@ templateEngineOverride: njk
 
 <section class="kh-card-container kh-grid-stylized">
   <h2 id="recently" class="kh-text-heading--2">Recently</h2>
-  {#- <p class="kh-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> -#}
   <section>
-    {%- for post in collections.posts.slice(-3) | reverse -%}
+    {%- for post in collections.posts.slice(-5) | reverse -%}
     <article class="kh-summary kh-summary--news">
       {% set isNote = (post.data.tags and ('note' in post.data.tags))  %}
       <div class="kh-summary__date">{{ post.date | dateDisplay }}

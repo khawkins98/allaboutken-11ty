@@ -17,7 +17,7 @@ url: /posts/20250911-deterministic-image-filenames/
 
 {% markdown %}
 
-Eleventy Image is a fantastic tool: with fairly little effort I now have optimized AVIF and WebP image sets for the modern web, faster local dev and I even dropped [100 lines of custom code](https://github.com/khawkins98/allaboutken-11ty/pull/16/files#diff-83f457d1c8a095e2107235fc7c68113ec81b5da9c8d209051c5f5f5fa9681bb6) to make Sharp generate basic image crops.
+Eleventy Image is a fantastic tool: with fairly little effort I now have optimized AVIF and WebP image sets for the modern web, faster local dev, over the wire image size shrank 60% and I even dropped [100 lines of custom code](https://github.com/khawkins98/allaboutken-11ty/pull/16/files#diff-83f457d1c8a095e2107235fc7c68113ec81b5da9c8d209051c5f5f5fa9681bb6) to make Sharp generate basic image crops.
 
 The default behavior of generating hashed filenames is brilliant for automatic cache-busting -- but my personal preference is strongly for more for predictable, deterministic, token-based approach for debugging and managing CDN logs.
 
@@ -66,7 +66,7 @@ module.exports = function(config) {
         }
       } catch (_) {}
 
-      // 2) Strip extension and normalise
+      // 2) Strip extension and normalize
       const norm = (s) => String(s).toLowerCase().replace(/\.[a-z0-9]+$/i, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
       const baseSafe = norm(base);
       const dirSafe = norm(dirToken);
