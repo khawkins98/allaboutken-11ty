@@ -16,6 +16,28 @@ module.exports = function(config) {
     transformOnRequest: isDev,
     // Do not fail the entire build on a single image error (e.g., 404 remote)
     failOnError: false,
+    // Deterministic file names: <base-name>-<width>.<format>
+    filenameFormat: function filenameFormat(id, src, width, format) {
+      try {
+        let baseName = '';
+        if (typeof src === 'string') {
+          if (src.startsWith('http://') || src.startsWith('https://')) {
+            const u = new URL(src);
+            baseName = Path.basename(u.pathname) || u.hostname;
+          } else {
+            baseName = Path.basename(src);
+          }
+        }
+        baseName = String(baseName || 'image').replace(/\.[a-z0-9]+$/i, '');
+        const safe = baseName
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        return `${safe}-${width}.${format}`;
+      } catch (e) {
+        return `${id}-${width}.${format}`;
+      }
+    },
     htmlOptions: {
       img: {
         decoding: "async",
