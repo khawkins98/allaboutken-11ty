@@ -27,8 +27,9 @@ templateEngineOverride: njk
 </div>
 
 <section class="kh-card-container kh-grid-stylized">
-  <h2 id="recently" class="kh-text-heading--2">Recently</h2>
+  <span></span>
   <section>
+    <h2 id="recently" class="kh-text-heading--2">Recently</h2>
     {%- for post in collections.posts.slice(-5) | reverse -%}
     <article class="kh-summary kh-summary--news">
       {% set isNote = (post.data.tags and ('note' in post.data.tags))  %}
@@ -60,12 +61,13 @@ templateEngineOverride: njk
 
 {#- Contact -#}
 <section class="kh-grid-stylized">
-  <h2 id="hello" class="kh-text-heading--2">Say hello</h2>
+  <span></span>
   <section>
-    <p class="kh-text-body--2">
+    <h2 id="hello" class="kh-text-heading--2">Say hello</h2>
+    <p>
       I'm currently fully engaged helping a global leader <a href="https://www.preventionweb.net/">reduce the risk of disaster</a> — but you can still say hello.
     </p>
-    <p class="kh-text-body--2 kh-cluster">
+    <p class="kh-cluster">
       <a href="https://toot.io/@khawkins98" >Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
       <a href="https://www.linkedin.com/in/allaboutken" >LinkedIn</a>
       <a href="mailto:khawkins98@gmail.com" >Email</a>

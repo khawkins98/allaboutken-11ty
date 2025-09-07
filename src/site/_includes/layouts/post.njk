@@ -7,7 +7,7 @@ templateEngineOverride: njk
 <article class="kh-grid kh-grid__col-3">
   <div class="kh-grid__col--span-1">
     <section class="kh-u-background-color--yellow--dark kh-u-fullbleed">
-      <h1 class="kh-font-headline kh-font-headline--display kh-post-title kh-text-heading--1">{{title}}</h1>
+      <h1 class="kh-font-headline kh-post-title kh-text-heading--1">{{title}}</h1>
     </section>
     <p><time datetime="{{ date }}" class="kh-summary__date">{{ date | dateDisplay }}</time>{% if topics %}&nbsp;&nbsp;<span class="kh-summary__author">Filed in: {{ topics | join(', ') }}</span>{% endif %}</p>
   </div>
@@ -46,9 +46,9 @@ templateEngineOverride: njk
 {%- if comment != false %}
   <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
     <div class="kh-grid__col--span-1">
-      <h2 class="kh-text-heading--2">Comment?</h2>
     </div>
     <div class="kh-content kh-grid__col--span-2">
+      <h2 class="kh-text-heading--2">Comment?</h2>
       <p>Thanks for reading, if you have comment I'd love to hear it.</p>
       <p class="kh-cluster">
         <a href="https://toot.io/@khawkins98">Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
@@ -62,9 +62,9 @@ templateEngineOverride: njk
   {%- if page.url != '/privacy/' %}
   <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
     <div class="kh-grid__col--span-1">
-      <h2 class="kh-text-heading--2">Read more</h2>
     </div>
     <div class="kh-content kh-grid__col--span-2">
+      <h2 class="kh-text-heading--2">Read more</h2>
       {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
       {%- set nextPost = collections.posts | getNextCollectionItem(page) %}
 
