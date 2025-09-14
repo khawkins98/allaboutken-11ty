@@ -53,7 +53,7 @@ Suggested intro blocks
 - **Nunjucks in code fences**: when showing Njk templates, wrap content in `{% raw %}…{% endraw %}` inside the fence to avoid evaluation.
 - **Links**: embed on descriptive nouns/phrases; avoid “here”. Use absolute links for external sites; relative for internal routes.
 - **Lists**: convert dense prose into bullets or numbered steps where possible.
-- **Length**: aim for 600–1,200 words unless the post is an announcement.
+- **Length**: aim for 600–1,200 words unless the user has otherwise suggested a length.
 - **Whitespace**: no trailing spaces; leave a blank line between major sections.
 
 Front matter template
