@@ -469,6 +469,12 @@ body:has(#kh-css-toggle:checked) {
     font-weight: 400;
     line-height: 1.57;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
+
+    &::before {
+      content: "|";
+      margin-right: 0.5rem;
+      margin-left: 0.5rem;
+    }
   }
 
   .kh-summary__date {
