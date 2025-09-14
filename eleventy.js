@@ -159,6 +159,49 @@ module.exports = function(config) {
       .replace(/\son[a-z]+="[^"]*"/gi, '');
   });
 
+  // Compute plain-text word count from HTML content
+  config.addFilter("wordCount", (content) => {
+    try {
+      const html = String(content || '');
+      const cleaned = html
+        .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+        .replace(/<iframe[\s\S]*?<\/iframe>/gi, ' ')
+        .replace(/<noscript[\s\S]*?<\/noscript>/gi, ' ')
+        .replace(/<[^>]+>/g, ' ') // strip remaining tags
+        .replace(/&[a-z#0-9]+;/gi, ' ') // drop entities
+        .replace(/[\s\n\r\t]+/g, ' ') // collapse whitespace
+        .trim();
+      if (!cleaned) return 0;
+      return cleaned.split(/\s+/).filter(Boolean).length;
+    } catch (e) {
+      return 0;
+    }
+  });
+
+  // Format a number with locale separators (e.g., 1,234)
+  config.addFilter("formatNumber", (value, locale = 'en-US') => {
+    try {
+      const n = Number(value);
+      if (!isFinite(n)) return String(value ?? '');
+      return n.toLocaleString(locale);
+    } catch (e) {
+      return String(value ?? '');
+    }
+  });
+
+  // // Estimate reading time in minutes at ~225 words per minute (min 1)
+  // config.addFilter("readingTime", (content, wpm = 225) => {
+  //   try {
+  //     const words = config.getFilter("wordCount")(content);
+  //     const perMinute = Number(wpm) > 0 ? Number(wpm) : 225;
+  //     const minutes = Math.max(1, Math.ceil(words / perMinute));
+  //     return minutes;
+  //   } catch (e) {
+  //     return 1;
+  //   }
+  // });
+
   // Configure Markdown-It with anchor IDs for headings and use it globally
   const markdownIt = require('markdown-it');
   const markdownItAnchor = require('markdown-it-anchor');
