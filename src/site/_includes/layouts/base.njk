@@ -6,6 +6,9 @@
     <link rel="preload" as="font" href="/assets/kh-font/Recursive_VF_1.085--subset-GF_latin_basic.woff2" type="font/woff2" crossorigin>
     <link rel="stylesheet" media="all" href="{{ '/css/styles.css' | url }}" />
     <title>{{ title or (renderData and renderData.title) or siteConfig.siteInformation.title}} | All about Ken Hawkins</title>
+    <link rel="canonical" href="https://www.allaboutken.com{{ page.url | url }}" />
+    <link rel="webmention" href="https://webmention.io/allaboutken.com/webmention" />
+    <link rel="pingback" href="https://webmention.io/allaboutken.com/xmlrpc" />
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
@@ -50,16 +53,16 @@
             <a href="/blog" class="kh-navigation__link">Blog</a>
           </li>
           <li class="kh-navigation__item kh-u-show-for-medium-only">
-            <a href="mailto:khawkins98@gmail.com" class="kh-navigation__link">E-mail</a>
+            <a rel="me" href="mailto:khawkins98@gmail.com" class="kh-navigation__link">khawkins98@gmail.com</a>
           </li>
           <li class="kh-navigation__item kh-u-show-for-large">
-            <a href="mailto:khawkins98@gmail.com" class="kh-navigation__link">khawkins98@gmail.com</a>
+            <a rel="me" href="mailto:khawkins98@gmail.com" class="kh-navigation__link">khawkins98@gmail.com</a>
           </li>
           <li class="kh-navigation__item">
-            <a href="https://toot.io/@khawkins98" class="kh-navigation__link">Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
+            <a rel="me" href="https://toot.io/@khawkins98" class="kh-navigation__link">Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
           </li>
           <li class="kh-navigation__item">
-            <a href="https://www.linkedin.com/in/allaboutken" class="kh-navigation__link">LinkedIn</a>
+            <a rel="me" href="https://www.linkedin.com/in/allaboutken" class="kh-navigation__link">LinkedIn</a>
           </li>
         </ul>
       </nav>
