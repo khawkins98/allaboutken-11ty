@@ -1,6 +1,7 @@
 const { DateTime } = require('luxon');
 const _            = require('lodash');
 const Path         = require('path');
+const Fs           = require('fs');
 const { execSync } = require('child_process');
 const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 // const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
@@ -78,6 +79,208 @@ module.exports = function(config) {
 
     // Change the default file encoding for reading/serving files
     encoding: "utf-8",
+  });
+
+  // Async shortcode: list all cached webmentions (for an admin/utility page)
+  config.addNunjucksAsyncShortcode('webmentions_all', async () => {
+    try {
+      const cacheDir = Path.join(process.cwd(), '.cache');
+      if (!Fs.existsSync(cacheDir)) return '<p>No cache yet.</p>';
+      const files = Fs.readdirSync(cacheDir).filter(f => f.startsWith('webmentions-') && f.endsWith('.json'));
+      const sanitize = config.getFilter('sanitizeFeedHtml');
+      const items = [];
+      for (const f of files) {
+        try {
+          const data = JSON.parse(Fs.readFileSync(Path.join(cacheDir, f), 'utf-8'));
+          const children = Array.isArray(data.children) ? data.children : [];
+          for (const c of children) {
+            items.push(c);
+          }
+        } catch (e) {
+          // skip bad cache file
+        }
+      }
+      // basic normalization
+      const entries = items.map(it => ({
+        id: it['wm-id'],
+        prop: it['wm-property'],
+        target: it['wm-target'],
+        source: it['wm-source'],
+        url: it.url,
+        published: it.published || it['wm-received'],
+        author: it.author?.name || it.author?.url || 'Someone',
+        authorUrl: it.author?.url || '',
+        authorPhoto: it.author?.photo || '',
+        contentHtml: it.content?.html ? sanitize(it.content.html) : '',
+        contentText: it.content?.text || ''
+      }));
+      // sort newest first
+      entries.sort((a, b) => String(b.published || '').localeCompare(String(a.published || '')));
+
+      let html = `<table class="kh-table"><thead><tr><th>Type</th><th>Author</th><th>Source</th><th>Target</th><th>When</th></tr></thead><tbody>`;
+      for (const e of entries) {
+        const author = e.authorUrl ? `<a href="${e.authorUrl}">${_.escape(e.author)}</a>` : _.escape(e.author);
+        const body = e.contentHtml || _.escape(e.contentText || '');
+        html += `<tr><td>${_.escape(e.prop || '')}</td><td>${author}</td><td><a href="${e.source}">source</a></td><td><code>${_.escape(e.target || '')}</code></td><td>${_.escape(e.published || '')}</td></tr>`;
+        if (body) {
+          html += `<tr><td></td><td colspan="4" class="kh-text-body--2">${body}</td></tr>`;
+        }
+      }
+      html += `</tbody></table>`;
+      return html;
+    } catch (e) {
+      return '<p>Error reading webmentions cache.</p>';
+    }
+  });
+
+  // Async Nunjucks filter: fetch and render Webmentions for an absolute URL
+  // Cached locally to avoid rate limits and speed up builds
+  //
+  // Inspiration & references:
+  // - Max Böck’s eleventy-webmentions (MIT): https://github.com/maxboeck/eleventy-webmentions
+  // - Sia K’s “Webmentions & Eleventy in depth”: https://sia.codes/posts/webmentions-eleventy-in-depth/
+  //
+  // Note: This implementation is bespoke for this site (target-scoped cache files,
+  // minimal dependencies, and rendering tailored to existing CSS utilities).
+  config.addNunjucksAsyncFilter('webmentions', async (absoluteUrl, callback) => {
+    try {
+      const target = String(absoluteUrl || '').trim();
+      if (!target || !/^https?:\/\//i.test(target)) {
+        return callback(null, '');
+      }
+
+      const cacheDir = Path.join(process.cwd(), '.cache');
+      const cacheTtlMs = 60 * 60 * 1000; // 1 hour
+
+      if (!Fs.existsSync(cacheDir)) {
+        try { Fs.mkdirSync(cacheDir, { recursive: true }); } catch (e) { /* no-op */ }
+      }
+
+      // Support legacy host (work.allaboutken.com) by merging mentions
+      const newUrl = new URL(target);
+      const legacyBase = 'https://work.allaboutken.com';
+      const legacyTarget = `${legacyBase}${newUrl.pathname}`;
+      const targets = Array.from(new Set([target, legacyTarget]));
+
+      const fetchMentions = async (tgt) => {
+        const cacheKey = tgt.replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+        const cacheFile = Path.join(cacheDir, `webmentions-${cacheKey}.json`);
+        let cached = null;
+        try {
+          const stat = Fs.existsSync(cacheFile) ? Fs.statSync(cacheFile) : null;
+          if (stat && (Date.now() - stat.mtimeMs) < cacheTtlMs) {
+            cached = JSON.parse(Fs.readFileSync(cacheFile, 'utf-8'));
+          }
+        } catch (e) {
+          cached = null;
+        }
+        if (cached) return cached;
+        const params = new URLSearchParams({ target: tgt, 'per-page': '100' });
+        // Example:
+        // https://webmention.io/api/mentions.jf2?target=https%3A%2F%2Fwww.allaboutken.com%2Fposts%2F20250912-knowledge-over-data%2F&per-page=100
+        const url = `https://webmention.io/api/mentions.jf2?${params.toString()}`;
+        let resJson = { children: [] };
+        try {
+          const res = await (global.fetch ? fetch(url) : await import('node-fetch').then(m => m.default(url)));
+          if (res && res.ok) {
+            resJson = await res.json();
+          }
+        } catch (e) {
+          // network error -> fall back to empty
+        }
+        try { Fs.writeFileSync(cacheFile, JSON.stringify(resJson || { children: [] }), 'utf-8'); } catch (e) { /* no-op */ }
+        return resJson || { children: [] };
+      };
+
+      // Merge children from all targets and de-duplicate by wm-id
+      let merged = [];
+      for (const t of targets) {
+        const jf2 = await fetchMentions(t);
+        const children = Array.isArray(jf2.children) ? jf2.children : [];
+        merged = merged.concat(children);
+      }
+      const seen = new Set();
+      const entries = merged.filter((it) => {
+        const id = it && it['wm-id'];
+        if (id && !seen.has(id)) { seen.add(id); return true; }
+        return !id; // keep if no id, rare
+      });
+      const sanitize = config.getFilter('sanitizeFeedHtml');
+
+      const byType = {
+        replies: [],
+        mentions: [],
+        likes: [],
+        reposts: []
+      };
+
+      for (const item of entries) {
+        const prop = item && item["wm-property"]; // e.g., in-reply-to, mention-of, like-of, repost-of
+        const published = item && (item.published || item["wm-received"]) || '';
+        const author = item && item.author || {};
+        const content = item && item.content || {};
+        const contentHtml = typeof content.html === 'string' ? sanitize(content.html) : '';
+        const contentText = typeof content.text === 'string' ? content.text : '';
+        const authorName = author.name || author.url || 'Someone';
+        const authorPhoto = author.photo || '';
+        const authorUrl = author.url || '';
+
+        const base = { authorName, authorPhoto, authorUrl, published, contentHtml, contentText, url: item.url };
+        if (prop === 'in-reply-to') {
+          byType.replies.push(base);
+        } else if (prop === 'mention-of') {
+          byType.mentions.push(base);
+        } else if (prop === 'like-of') {
+          byType.likes.push(base);
+        } else if (prop === 'repost-of') {
+          byType.reposts.push(base);
+        }
+      }
+
+      const formatDate = (d) => {
+        try { return d ? DateTime.fromISO(d, { zone: 'utc' }).toFormat('d LLL y') : ''; } catch { return ''; }
+      };
+
+      const avatarImg = (src, alt) => (src ? `<img src="${src}" alt="" title="${_.escape(alt || '')}" width="24" height="24" loading="lazy">` : '');
+
+      let html = '';
+      const total = byType.replies.length + byType.mentions.length + byType.likes.length + byType.reposts.length;
+      html += `<section class="kh-stack kh-u-padding__top--800 kh-u-do-not-print"><h2 class="kh-text-heading--2">Webmentions${total ? ` (${total})` : ''}</h2>`;
+
+      const renderList = (items, heading) => {
+        if (!items.length) return '';
+        let out = `<h3 class="kh-text-heading--3">${heading}</h3><ul class="kh-stack">`;
+        for (const it of items) {
+          const text = it.contentText || it.contentHtml || '';
+          const body = it.contentHtml || _.escape(it.contentText || '');
+          const byline = [it.authorUrl ? `<a href="${it.authorUrl}">${_.escape(it.authorName)}</a>` : _.escape(it.authorName), formatDate(it.published)].filter(Boolean).join(' · ');
+          out += `<li class="kh-media">${avatarImg(it.authorPhoto, it.authorName)}<div class="kh-media__body"><div class="kh-text-body--2">${body}</div><div class="kh-text-body--3 kh-u-color--muted">${byline}</div></div></li>`;
+        }
+        out += `</ul>`;
+        return out;
+      };
+
+      html += renderList(byType.replies, 'Replies');
+      html += renderList(byType.mentions, 'Mentions');
+
+      const renderFaces = (items, heading) => {
+        if (!items.length) return '';
+        let out = `<h3 class="kh-text-heading--3">${heading} (${items.length})</h3><p class="kh-cluster">`;
+        for (const it of items) {
+          out += `<span class="kh-avatar">${avatarImg(it.authorPhoto, it.authorName)}</span>`;
+        }
+        out += `</p>`;
+        return out;
+      };
+
+      html += renderFaces(byType.likes, 'Likes');
+      html += renderFaces(byType.reposts, 'Reposts');
+
+      html += `</section>`;
+      return callback(null, html);
+    } catch (e) {
+      return callback(null, '');
+    }
   });
 
   // Fix any image src paths that were rewritten to input filesystem paths.

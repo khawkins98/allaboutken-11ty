@@ -1,0 +1,6 @@
+{#
+  Renders webmentions for the current page using the async filter defined in eleventy.js.
+  Computes the absolute URL via siteConfig.siteInformation.url + page.url
+#}
+{% set absolute = siteConfig.siteInformation.url + (page.url | url) %}
+{{ absolute | webmentions | safe }}

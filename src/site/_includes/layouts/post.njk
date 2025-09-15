@@ -64,6 +64,7 @@ templateEngineOverride: njk
     <div class="kh-grid__col--span-1">
     </div>
     <div class="kh-content kh-grid__col--span-2">
+      {% include "webmentions.njk" %}
       <h2 class="kh-text-heading--2">Read more</h2>
       {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
       {%- set nextPost = collections.posts | getNextCollectionItem(page) %}

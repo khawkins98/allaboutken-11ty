@@ -20,7 +20,9 @@
     "dev": "concurrently -k \"sass --load-path src/components --watch src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\"",
     "start": "yarn dev",
     "test": "echo \"Error: no test specified\" && exit 0",
-    "update-components": "yarn upgrade-interactive --latest"
+    "update-components": "yarn upgrade-interactive --latest",
+    "wm:hydrate": "node scripts/hydrate-webmentions.js",
+    "wm:hydrate:post": "node scripts/hydrate-webmentions.js https://www.allaboutken.com/posts/"
   },
   "dependencies": {
     "@11ty/eleventy": "^3.1.2",
