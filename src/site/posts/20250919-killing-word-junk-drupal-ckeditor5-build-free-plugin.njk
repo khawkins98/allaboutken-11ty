@@ -22,15 +22,21 @@ If your content editors are still fighting with messy HTML pasted from Word, you
 
 Yes, you can block inline HTML or clean text on paste, but CKEditor 5 still lacks an easy way to select text and remove _all_ inline styles and Word‑like junk.
 
-And it's not just me — look at this 5-year-running [Drupal.org thread](https://www.drupal.org/project/drupal/issues/3321254):
+Perhaps you, too, have seen fun like this?
+
+```html
+<p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:8pt;margin-left:0in;line-height:107%;font-size:11pt;font-family:'Calibri',sans-serif;"><span style="mso-fareast-language:EN-US;color:#1F4E79;background:white;"><b><i>Heading from Word</i></b></span>
+```
+
+And it's not just our editors that feel the pain — look at this 5-year-running [Drupal.org thread](https://www.drupal.org/project/drupal/issues/3321254):
 
 > “We've got clients trying to paste in a lot of documents from Word, and the ‘remove formatting’ button only stripping styles from inline elements tends to leave the document with a broken mix of styling, mostly relating to sizing and spacing.
 >
 > Stripping styles after the fact in the filter prevents intentional styling and makes the editing experience very inconsistent when they're still visible within the editor.”
 >
-> **hephaestus (2 years ago)** ·
+> **hephaestus (2 years ago)**
 
-The discussion reflects how this is still an ongoing pain point. Hopefully it does get sorted out soon, but in the interim it was becoming too painful to wait; So I had a look and it wasn't too hard to make a cleanup button for CKEditor 5 + Drupal.
+Following comments in the thread show how this is still an ongoing pain point. Hopefully it does get sorted out soon, but in the interim it was becoming too painful to wait; So I had a look and it wasn't too hard to make a cleanup button for CKEditor 5 + Drupal.
 
 ## The stopgap solution
 
