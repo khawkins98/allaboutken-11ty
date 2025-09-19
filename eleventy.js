@@ -12,10 +12,20 @@ module.exports = function(config) {
     outputDir: "./build/img/",
     urlPath: "/img/",
     widths: [320, 600, 900, 1280],
-    formats: ["avif", "webp", "jpeg"],
+    formats: ["avif", "webp", "jpeg", "gif"],
     transformOnRequest: isDev,
     // Do not fail the entire build on a single image error (e.g., 404 remote)
     failOnError: false,
+    // Preserve animation for GIF/WEBP when resizing/encoding
+    sharpOptions: {
+      animated: true
+    },
+    sharpWebpOptions: {
+      animated: true
+    },
+    sharpGifOptions: {
+      reoptimise: true
+    },
     // Deterministic file names: <dir-token>-<base-name>-<width>.<format>
     filenameFormat: function filenameFormat(id, src, width, format) {
       try {

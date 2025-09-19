@@ -330,6 +330,9 @@ body:has(#kh-css-toggle:checked) {
   .kh-button {
     --kh-button__color__background--default: var(--kh-color--grey);
     --kh-button__color__background--default-dark: var(--kh-color--grey--darkest);
+    --kh-button-background-color: #fafafa;
+    --kh-button-border-color: var(--kh-color--blue);
+    --kh-button-shadow-background-color: var(--kh-color--blue--dark);
     align-self: center;
     appearance: none;
     backface-visibility: hidden;
@@ -359,23 +362,17 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-button:focus,
   .kh-button:hover {
+    --kh-button-border-color: var(--kh-color--blue);
     box-shadow: 4px 4px 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)), 2px 2px 4px rgb(30 30 30 / 25%), -5px -5px rgb(0 0 0 / 0%);
     text-decoration: none;
     transform: translate(4px, 4px);
     transition: all linear 125ms;
   }
 
-  .kh-button--secondary:focus,
-  .kh-button--secondary:hover {
-    --kh-button-border-color: var(--kh-color--blue);
-  }
-
   .kh-button--sm {
     font-size: 14px;
     font-weight: 700;
     line-height: 1;
-    padding: 0.25rem 0.5rem;
-
     padding: 8px;
   }
 
@@ -416,12 +413,6 @@ body:has(#kh-css-toggle:checked) {
     height: auto;
     margin: 0 0 0.5rem;
     max-width: 100%;
-  }
-
-  @media (min-width: $kh-breakpoint--md) {
-    .kh-figure__image--lead {
-      min-height: 500px;
-    }
   }
 
   .kh-navigation__link {
@@ -806,15 +797,6 @@ body:has(#kh-css-toggle:checked) {
   .kh-button--primary {
     --kh-button-border-color: var(--kh-color--blue);
     --kh-button-background-color: var(--kh-color--blue);
-    --kh-button-shadow-background-color: var(--kh-color--blue--dark);
-  }
-
-  .kh-button--secondary {
-    background: #f3f3f3;
-
-    --kh-button-background-color: #fafafa;
-    --kh-button-border-color: var(--kh-color--blue);
-    --kh-button-text-color: var(--kh-color--blue);
     --kh-button-shadow-background-color: var(--kh-color--blue--dark);
   }
 
