@@ -37,3 +37,7 @@ This site runs on Eleventy v3 with Dart Sass for CSS. The legacy Visual Framewor
 - Images and search index are generated in the Eleventy build via `scripts/process-images.js` and `scripts/build-search-index.js`
 - Eleventy config: `eleventy.js`
 
+## Montioring
+
+- [Analytics](https://khawkins98.goatcounter.com/)
+- [Link backs](https://webmention.io/settings/sites)
