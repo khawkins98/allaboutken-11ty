@@ -23,10 +23,10 @@ This site is built and published with a small, readable stack and a bias for fle
 
 ## Stack
 
-- **Static site generator**: Eleventy (11ty) v3
+- **Static site generator**: [Eleventy (11ty) v3](https://www.11ty.dev/)
 - **Language & tooling**: Node.js (Yarn scripts), Nunjucks templates, Markdown via Markdown‑It with `markdown-it-anchor`
 - **Styles**: Sass compiled to a single CSS file; custom utility classes; normalize; type set with the Recursive font
-  - Previously used the EMBL Visual Framework (VF) and Gulp; the [migration to a simpler Eleventy v3 stack is documented here](/posts/20250831-site-overhaul-eleventy-v3.html).
+  - Previously used the EMBL Visual Framework (VF) and Gulp; the [migration to a simpler Eleventy v3 stack is documented here](/posts/20250831-site-overhaul-eleventy-v3).
 - **Search**: Static index generated at build time; client‑side search with Lunr.js. Source: [search page template](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/search.njk), [client‑side script](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/js-search-client-side.js), [index builder](https://github.com/khawkins98/allaboutken-11ty/blob/main/scripts/build-search-index.js)
 - **Hosting**: Vercel (auto‑deploys from GitHub, automatic HTTPS, global CDN)
 - **Domain**: Cloudflare (DNS, security, and performance)
@@ -51,9 +51,8 @@ This site is built and published with a small, readable stack and a bias for fle
 
 ## Credits
 
-- Fonts: [Recursive](/posts/20250904-switching-to-recursive.html)
+- Fonts: [Recursive](/posts/20250904-switching-to-recursive)
 - Tools: Eleventy, Sass, Sharp, Markdown‑It
-- Analytics: GoatCounter
+- Analytics: [GoatCounter](https://www.goatcounter.com/)
 
-Questions or feedback? [Get in touch](/#hello)
 {% endmarkdown %}
