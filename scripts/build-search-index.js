@@ -35,7 +35,7 @@ for (const file of files) {
   const bodyMatch = html.match(/<body[\s\S]*?>([\s\S]*?)<\/body>/i);
   let body = bodyMatch ? bodyMatch[1] : html;
   const root = parse(body);
-  root.querySelectorAll('.vf-search-client-side--no-index').forEach((el) => el.set_content(''));
+  root.querySelectorAll('.kh-search-client-side--no-index').forEach((el) => el.set_content(''));
   body = String(root);
   body = stripJs(striptags(body));
   body = body.replace(/&quot;/g, ' ').replace(/class=/g, ' ');
@@ -48,5 +48,3 @@ for (const file of files) {
 const out = `let searchIndex = ${JSON.stringify({ pages })};`;
 fs.writeFileSync(outFile, out);
 console.log(`Wrote ${pages.length} pages to ${outFile}`);
-
-

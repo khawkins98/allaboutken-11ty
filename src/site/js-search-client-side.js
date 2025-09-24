@@ -5,10 +5,10 @@
 
 /* global lunr */
 /* global searchIndex */
-function vfSearchClientSide() {
+function khSearchClientSide() {
   var searchTerm;
-  const searchQueryInput = document.querySelectorAll('[data-vf-search-client-side-input]'); // where we put the query
-  const searchResultsContainer = document.querySelectorAll('[data-vf-search-client-side-results]'); // where we put the search results
+  const searchQueryInput = document.querySelectorAll('[data-kh-search-client-side-input]'); // where we put the query
+  const searchResultsContainer = document.querySelectorAll('[data-kh-search-client-side-results]'); // where we put the search results
 
   // this lunr pipeline disregards hyphens by breaking up words
   // It's particularly good if users might type `vf-tabs` or `tabs` to find `vf-tabs`
@@ -114,7 +114,7 @@ function vfSearchClientSide() {
       return false;
     }
 
-    let searchDestinationPrefix = searchQueryInput[0].dataset.vfSearchClientSideDestinationPrefix;
+    let searchDestinationPrefix = searchQueryInput[0].dataset.khSearchClientSideDestinationPrefix;
 
     // console.log("searchTermTrimmed", searchTermTrimmed);
 
@@ -131,15 +131,7 @@ function vfSearchClientSide() {
       resultPages.forEach((element) => {
         if (typeof element !== 'undefined') {
           element.text = element.text || '';
-          renderedResults +=
-            "<a class='result' href='" +
-            searchDestinationPrefix +
-            element.url +
-            '?q=' +
-            searchTerm +
-            "'><h3>" +
-            element.title +
-            '</h3></a>';
+          renderedResults += "<a class='result' href='" + searchDestinationPrefix + element.url + '?q=' + searchTerm + "'><h3>" + element.title + '</h3></a>';
           renderedResults += "<p class='snippet'>" + element.text.substring(0, 200) + '</p>';
           renderedResults += '<p><code>' + element.url + '</code></p>';
         }

@@ -344,7 +344,7 @@ body:has(#kh-css-toggle:checked) {
     border: 4px solid var(--kh-button-border-color, var(--kh-button__color__background--default));
     border-radius: 4px;
     box-shadow: 8px 8px 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)), -5px -5px rgb(0 0 0 / 0%);
-    color: var(--kh-button-text-color, #fafafa);
+    color: var(--kh-color--blue);
     cursor: pointer;
     display: inline-block;
     font-weight: 700;
@@ -799,11 +799,11 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
-  .kh-button--primary {
-    --kh-button-border-color: var(--kh-color--blue);
-    --kh-button-background-color: var(--kh-color--blue);
-    --kh-button-shadow-background-color: var(--kh-color--blue--dark);
-  }
+  // .kh-button--primary {
+  //   --kh-button-border-color: var(--kh-color--blue);
+  //   --kh-button-background-color: var(--kh-color--blue);
+  //   --kh-button-shadow-background-color: var(--kh-color--blue--dark);
+  // }
 
   .kh-cluster > * {
     align-items: var(--kh-cluster-alignment, center);
@@ -837,6 +837,16 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-form__item > * {
     --kh-stack-margin--custom: 0.25rem;
+  }
+
+  .kh-form__item{
+    display: inline-flex;
+    gap: 0.5rem;
+  }
+
+  .kh-form__input {
+    padding: 1rem;
+    margin-right: 0.5rem;
   }
 
   .kh-form__label {
