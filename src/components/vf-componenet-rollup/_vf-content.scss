@@ -155,7 +155,7 @@
   hr:not([class*='kh-']) {
     --context-margin--inline: 1rem;
 
-    background-color: #f3f3f3;
+    background-color: var(--kh-color--orange);
     border: none;
     height: 1px;
     margin-block: 0 var(--kh-divider-margin--block-end, 1.5rem);
