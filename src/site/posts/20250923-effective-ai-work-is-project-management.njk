@@ -1,0 +1,206 @@
+---
+title: "Focusing on planning and pausing prompt tuning"
+layout: layouts/post.njk
+teaser: "Traditional project planning approaches to ensure maximize benefits from AI tools."
+image: "/blog/planning-the-print.jpg"
+image_meta:
+  text: "Tweaking how dedicated the worker is won't help correct a bad design. Image made with <a href='https://www.loras.dev/'>Loras.dev</a>."
+  altext: "Split blockprint scene: left, a dim attic cluttered with loose metal type, ink spills, and smudged sheets; right, a bright letterpress shop where compositors set finely spaced type, proofs are inspected, and large textured broadsides roll from a vintage press; worn wooden shelves and warm lantern light tie the scenes."
+date: 2025-09-23
+tags:
+  - posts
+topics:
+  - AI
+  - workflow
+  - project management
+workflow:
+  - brief:
+      summary: >-
+        This post argues that effective AI work is primarily a project management
+        challenge rather than a prompt‑wording problem. It lays out a small,
+        repeatable loop—plan → do → review → adapt—showing how clear briefs,
+        scoped child contexts, explicit acceptance criteria, and lightweight
+        traceability turn fickle outputs into reliable outcomes.
+---
+
+{% markdown %}
+
+If you find frequent failure in the quality of your AI's work, it may not be linguistic -- it’s likely managerial.
+
+With an LLM's vast knowledge resource we often assume it knows what our specific need is. So when a response misses the mark, resist another round of prompt tweaks. Pause and return to planning: outcome, audience, constraints, and acceptance criteria.
+
+The path to dependable, compounding results runs through the same disciplines that make any project a success: project management and ensuring the responsible actor has enough information about the work at hand.
+
+---
+
+_This post comes out of my own ongoing efforts to figure out how my team can effectively make use of LLMs and the potential it offers without getting bogged down in technical trends -- in both code and traditional office work like document preparation and research. With this piece I am forming my own thoughts, and perhaps help you understand how best to get result over noise. There's a spirtual connection here with my post from 10 days earlier: [Sacrificing knowledge in the name of data](/posts/20250912-knowledge-over-data/)_
+
+---
+
+Research about response quality and accuracy found that you can measurably improve the quality and accuracy by:
+
+- stating an explicit role and audience,
+- using precise task directives,
+- giving acceptance criteria,
+- providing 1–2 compact exemplars, and
+- decomposing problems into ordered steps.
+
+Specifically, in the [ATLAS benchmark](https://arxiv.org/abs/2207.09830), principled prompts improved quality by ~57.7% and accuracy by ~36.4% on GPT‑4 (Bsharat, Myrzakhan, Shen et al., [“Principled Instructions Are All You Need](https://arxiv.org/abs/2312.16171”) ([arXiv:2312.16171v2](https://arxiv.org/pdf/2312.16171v2)).
+
+Those suggestions are tremendous -- they are also not technical "[prompt engineering](https://en.wikipedia.org/wiki/Prompt_engineering)" and are, well, [good project planning](https://techfarhub.usds.gov/resources/learning-center/field-guides/quick-and-dirty-agile-project-management/). Taking the time to ask the LLM to do specific tasks, with acceptance criteria and order to the work is exactly the sort of thing that makes project work done by humans successful too.
+
+So how am I better marrying traditional project planning with LLM interaction?
+
+## How to: using planning best practice with AI behaviours
+
+Planning what you need pays off and beats prompt fiddling that says "work harder" or "think longer".
+
+### Conceptual
+
+Consider: You ask the LLM to “polish this strategy doc.” The model obliges, with confident prose that drifts from the audience, ignores constraints, and invents commitments. The issue isn’t the assistant’s vocabulary. It’s that no one stated the outcome, the boundaries, the success criteria, or who plays which role. We wouldn’t run a human product launch with that level of ambiguity. Why do we run AI work that way?
+
+---
+
+### Tip: edit your text with a code editor
+
+Code‑based editors are a superior way to work with LLMs — even for non‑code work.
+
+LLMs think in [Markdown text](https://www.markdownguide.org/getting-started/), and <a href="https://github.blog/developer-skills/programming-languages-and-frameworks/what-is-git-our-beginners-guide-to-version-control/">Git</a> provides <a href="https://arxiv.org/html/2508.00031v1">an excellent way</a> to track and branch text changes.</p>
+
+A moderately complex task will benefit in allowing you to feed inputs (plans, CSVs, JSON) reliably and track outputs as Markdown under version control. Once the structure is set, move materials into Office‑style apps for polish. Microsoft Copilot partly closes this gap by letting you use Microsoft 365 documents and email as context. Something like <a href="https://www.cursor.com/">Cursor</a> and <a href="https://desktop.github.com/">GitHub Desktop</a> would be an excellent entry point.
+
+> “Our key insight is that the challenges faced by long‑horizon agents closely mirror those encountered by software engineers managing complex, evolving codebases.” — Junde Wu et al., Git‑Context‑Controller ([arXiv:2508.00031v1](https://arxiv.org/html/2508.00031v1))
+
+---
+
+
+### Step 1: Start with goal, scope, and plan
+
+Suggested file: `docs/PROJECT_BRIEF.md`
+
+Start where every competent project starts: with goal, scope, and plan. Name the outcome and user. Declare what’s in and out of bounds, including the required format and fidelity. Choose roles—writer, editor, analyst, fact‑checker—and place checkpoints where the work can be inspected against the criteria. Even a single paragraph of intent and a handful of constraints will outperform a clever but contextless prompt.
+
+```markdown
+Write PROJECT_BRIEF.md that includes:
+- Goal and measurable outcome
+- User/audience and decision/use context
+- Scope (in/out), constraints, and required format/fidelity
+- Roles, owners, and checkpoints with acceptance criteria
+- Milestones and tasks ordered for execution
+```
+
+### Step 2: Use your brief to seed the LLM plan
+
+Suggested file: `docs/PROJECT_PLAN.md`
+
+The plan will enforce intent and stakes out boundaries: Who is this for? What decision will this drive? What must be preserved? What will be considered a success? When you convert a fuzzy request into a one‑paragraph brief with success criteria, you provide a target. Now the assistant can aim.
+
+Here's a reusable scaffold I often use:
+
+```markdown
+Draft a project plan to achieve based on PROJECT_BRIEF.md. Save the new plan as PROJECT_PLAN.md
+```
+
+### Step 3: Digest context to files as working memory
+
+Complex work overwhelms a single thread. Decompose it. Hold the big picture—goal, scope, plan, and acceptance criteria—in a parent context. Spin up [child contexts](/posts/20250919-smart-ai-integration-context-first/) for narrow jobs with clear constraints: one to summarize research, one to draft, one to critique for clarity, one to check facts. Pass only what each subtask needs. Then reconcile the pieces back in the parent. This mirrors how teams succeed: contributors own parts; a lead integrates the whole.
+
+```markdown
+Distill our current conversation into key points and save a PROJECT_CONVERSATION_TOPIC.md
+```
+
+### Step 4: Branch conversation and use digested context
+
+Start a new conversation per subtask and pass only what it needs from Step 3 files. Keep the parent thread clean for integration.
+
+Mini handoff prompt (per child context):
+
+```markdown
+Task: [high-precision directive, e.g., “reduce this section to three claims”]
+
+Role: [writer/editor/analyst/fact-checker]
+
+Inputs: [link or paste only the minimal files/snippets, e.g., docs/child/research_summary.md]
+```
+
+Narrowing the job lowers the model's "cognitive load" and raises precision. It also creates natural review points against acceptance criteria.
+
+Evidence from structured prompting and deliberate reasoning supports this: Chain‑of‑Thought, self‑consistency, and Tree of Thoughts improve performance on complex tasks ([Wei et al., 2022](https://arxiv.org/abs/2201.11903); [Wang et al., 2022](https://arxiv.org/abs/2203.11171); [Yao et al., 2023](https://arxiv.org/abs/2305.10601)).
+
+### Step 5: Make work traceable
+
+After each task, start a brief check‑in to reconcile the plan: make acceptance criteria explicit, name owners for checkpoints, and update status.
+
+```markdown
+Now update PROJECT_PLAN.md:
+- Add/confirm acceptance criteria per task
+- Add/confirm checkpoints
+- Record what changed and why (one‑sentence decision)
+```
+
+This enables logging of the work done. It helps both us humans and the LLM agent track what needs to be done next.
+
+This is also an excellent time to save your work by committing changes in Git.
+
+### Step 6: Build a working library
+
+Suggested file: `PATTERNS.md`
+
+Then invest in a working library. Save the prompt fragments that prove useful—definitions of success, critique lenses, personas for tone, scaffolds for planning. Save the patterns too: summarize → critique → rewrite; plan → execute → review → adapt. Over time, this library compounds like internal tooling. It moves the center of gravity from ad hoc heroics to repeatable practice.
+
+```markdown
+Distill the spirit of the conversation we've had, focusing on what was most essential to completing the task and save it in `PATTERNS.md`
+
+Template:
+
+## Pattern name
+
+- 1-3 bullet points on what was essential to the task
+```
+
+### Step 7: Step outside the box
+
+The better we do the above, the more we lock in the project perspectives. Take opportunities to remove that context or copy-paste an output into a chatbot for a critical take on:
+
+```markdown
+Is the approach in this piece of work sound?"
+```
+
+### Bringing it all together: Make the project legible to your assistant
+
+Create or update a few lightweight docs and keep them next to the code so both humans and the model reason from the same ground truth.
+
+- `PROJECT_BRIEF.md` one‑paragraph brief (goal, audience, constraints)
+- `PROJECT_PLAN.md` milestones, tasks, acceptance criteria
+- `DECISIONS.md` short, dated notes capturing trade‑offs and why
+- `PATTERNS.md` a running collection of patterns to be used in conversations
+- `PROJECT_BACKGROUND.md` Background notes worth keeping handy such as a glossary of domain terms and abbreviations, audience constraints and tone guides and non‑goals/out‑of‑scope to prevent drift
+
+## How to run it
+
+If a response misses the mark, pause prompt tuning and consider if the problem was a minor quality issue or misstep in approach.
+
+If the model doesn't seem to understand, state the plan—tighten scope or criteria before changing wording. What does this look like in practice?
+
+You can't wait for a model smart enough to figure this out. If the assistant were “smarter,” the thinking goes, we wouldn’t need so much structure. But stronger models amplify both signal and noise. Without goals, guardrails, and traceability, higher capability can produce faster drift. Management doesn’t slow great models down; it gives them something to converge on.
+
+The craft isn’t conjuring magic words; it’s building a system that makes good outcomes likely. Define the goal. Bound the scope. Treat prompts as briefs and contexts as memory. Version your work and record your rationale. Do this consistently, and you’ll stop gambling with generative models. You’ll be managing them—exactly as you manage any capable collaborator.
+
+---
+
+> On Human Leverage
+>
+> “A bad line of code is… a bad line of code. But a bad line of a plan could lead to hundreds of bad lines of code. And a bad line of research, a misunderstanding of how the codebase works or where certain functionality is located, could land you with thousands of bad lines of code.”
+>
+> — [Dex Horthy](https://github.com/dexhorthy), [Advanced Context Engineering: Functional Context Assembly (FCA)](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/ace-fca.md?ck_subscriber_id=2068005284)
+
+---
+
+> “When we prompt, we often do the opposite of good software practice: we keep the generated code and delete the prompt. It’s like shredding the source and very carefully version‑controlling the binary. That’s why it’s crucial to capture intent and values in a written specification — it aligns humans on what needs to be done and what success looks like.”
+>
+> — Sean Grove, OpenAI, “Specs are the new code” ([YouTube](https://www.youtube.com/watch?v=8rABwKRsec4))
+
+
+Ultimately what's important is to iterate on the approach and ensure we're cross-applying tried and true approaches: documentation and record keeping. What matters most is the thinking you do before you ask, and how you’ll adapt the plan after.
+
+{% endmarkdown %}

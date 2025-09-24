@@ -12,6 +12,7 @@ html {
   -webkit-text-size-adjust: 100%; /* 2 */
 }
 
+
 // This acts as our root selector so we can use it to toggle the custom CSS
 body:has(#kh-css-toggle:checked) {
   @include normalize.kh-normalize();

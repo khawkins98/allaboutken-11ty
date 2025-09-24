@@ -5,18 +5,19 @@ This site runs on Eleventy v3 with Dart Sass for CSS. The legacy Visual Framewor
 ## Quick start
 
 1. Install Node and Yarn
-   - https://nodejs.org/
-   - https://yarnpkg.com/
+   - [Node.js](https://nodejs.org/)
+   - [Yarn](https://yarnpkg.com/)
 2. Install dependencies
    - `yarn install`
 3. Start development server
-   - `yarn dev` (watches Sass and serves Eleventy with live reload)
+   - `yarn dev` (or `yarn start`) — watches Sass and serves Eleventy with live reload
 4. Build static site to `/build`
    - `yarn build`
 
 ## Scripts
 
 - `yarn dev`: runs Sass in watch mode and Eleventy `--serve`
+- `yarn start`: alias for `yarn dev`
 - `yarn build`: clean → compile Sass → Eleventy production build
 
 ## CSS
@@ -34,10 +35,11 @@ This site runs on Eleventy v3 with Dart Sass for CSS. The legacy Visual Framewor
 
 ## Notes
 
-- Images and search index are generated in the Eleventy build via `scripts/process-images.js` and `scripts/build-search-index.js`
-- Eleventy config: `eleventy.js`
+- Images are processed by the Eleventy Image Transform plugin configured in [`eleventy.js`](eleventy.js) and output to `build/img/`
+- The search index is generated post-build via [`scripts/build-search-index.js`](scripts/build-search-index.js)
+- Eleventy config: [`eleventy.js`](eleventy.js)
 
-## Montioring
+## Monitoring
 
 - [Analytics](https://khawkins98.goatcounter.com/)
 - [Link backs](https://webmention.io/settings/sites)
