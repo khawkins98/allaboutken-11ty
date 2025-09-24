@@ -46,6 +46,7 @@ templateEngineOverride: njk
       <h3 class="kh-summary__title">
         <a href="{{ post.url }}" class="kh-summary__link">{{ post.data.title }}</a>
       </h3>
+      <p class="kh-content kh-summary__text">{{ post.data.teaser | safe }}</p>
       {#- {{loop.index}} -#}
     </article>
     {%- endfor -%}
@@ -53,7 +54,6 @@ templateEngineOverride: njk
       <h3 class="kh-summary__title">
         <a href="/blog" class="kh-summary__link">Read {{ collections.posts | length - 3}} more posts on the blog ↦</a>
       </h3>
-      {#- {{loop.index}} -#}
     </article>
   </section>
 

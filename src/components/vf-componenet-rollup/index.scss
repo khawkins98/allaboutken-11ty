@@ -12,6 +12,9 @@ html {
   -webkit-text-size-adjust: 100%; /* 2 */
 }
 
+em {
+  font-variation-settings: 'slnt' -10, 'MONO' 0, 'CASL' 1;
+}
 
 // This acts as our root selector so we can use it to toggle the custom CSS
 body:has(#kh-css-toggle:checked) {
@@ -448,6 +451,7 @@ body:has(#kh-css-toggle:checked) {
     grid-template-columns: none;
     margin-bottom: 2rem;
     position: relative;
+    max-width: $kh-breakpoint--md;
 
     > *:last-child {
       margin-bottom: 0;
@@ -517,25 +521,25 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-summary--news {
     gap: var(--page-grid-gap) 0;
-    column-gap: 0;
+    column-gap: var(--page-grid-gap);
     grid-template-rows: auto;
     margin-bottom: 2rem;
 
     .kh-summary__date {
       --kh-text-margin--bottom: 0px;
 
-      grid-column: 2/-1;
+      grid-column: 1/-1;
       grid-row: 1;
     }
 
     .kh-summary__text {
       align-items: center;
       display: block;
-      grid-column: 2/-1;
+      grid-column: 1/-1;
     }
 
     .kh-summary__title {
-      grid-column: 2/-1;
+      grid-column: 1/-1;
     }
   }
 
@@ -938,8 +942,10 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-summary__image {
-    grid-column: 1 / span 1;
-    grid-row: 1 / span 4;
+    @media (min-width: $kh-breakpoint--md) {
+      grid-column: 3 / span 1;
+      grid-row: 1 / span 4;
+    }
     margin-right: 30px;
     min-width: 220px;
     max-width: 220px;
