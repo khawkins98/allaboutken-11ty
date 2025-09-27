@@ -1,0 +1,18 @@
+---
+title: 'Embracing px and rem for CSS'
+layout: layouts/digesting.njk
+teaser: 'Miriam Suzanne from OddBird explains how combining CSS units can lead to more robust and user-friendly typography.'
+date: 2025-09-27
+digest_link: https://www.oddbird.net/2025/09/23/type-units/
+tags: digesting
+topics:
+  - css
+  - typography
+  - ux
+---
+
+{% markdown %}
+Miriam Suzanne, in her article ["The Best CSS Unit Might Be a Combination"](https://www.oddbird.net/2025/09/23/type-units/),  argues against the "either/or" mentality when choosing CSS units for typography. Instead of strictly adhering to `px` or `rem`, she advocates for a more nuanced approach, utilizing CSS comparison functions like `max()`, `clamp()`, and `calc()` to combine different units.
+
+It's interesting and resonates with some challenges I've had in refactoring a legacy code base where the `html` element is hard fixed to `12px` and has caused a giant pain in introducing modernized components.
+{% endmarkdown %}

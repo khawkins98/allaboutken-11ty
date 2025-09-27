@@ -1,7 +1,7 @@
 ---
-title: The blog
-teaser: "Thoughts, lessons learned, and the occasional web oddity."
-date: 2018-08-22 12:24:50
+title: Digesting
+teaser: A curated collection of interesting articles, tools, and ideas.
+date: 2025-09-27 12:00:00
 layout: layouts/base.njk
 ---
 {%- set siteConfig = siteConfig.siteInformation -%}
@@ -10,19 +10,11 @@ layout: layouts/base.njk
   </div>
   <section>
     <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
-  {%- for post in collections.posts | sort(true, true, attribute='date' ) -%}
+    <p class="kh-text-body--3">A collection of interesting articles, tools, and ideas I've stumbled upon shared here as bookmarks and notes.</p>
+  {%- for post in collections.digesting | sort(true, true, attribute='date' ) -%}
   <article class="kh-summary kh-summary--news">
-    {% set isNote = (post.data.tags and ('note' in post.data.tags))  %}
     <div class="kh-summary__date">{{ post.date | dateDisplay }}
-    {% if isNote %}
-      | Note post
-    {% endif %}
     </div>
-    {% if (not isNote) and post.data.image %}
-      <a href="{{ post.url }}" class="kh-summary__image">
-        <img width="300" class="kh-summary__image" src="/images{{ post.data.image }}" alt="{{ post.data.title }}">
-      </a>
-    {% endif %}
     <h3 class="kh-font-headline kh-summary__title">
       <a href="{{ post.url | url}}" class="kh-summary__link">{{ post.data.title }}</a>
     </h3>

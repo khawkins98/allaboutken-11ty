@@ -16,10 +16,9 @@
     <link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
     <link rel="webmention" href="https://webmention.io/www.allaboutken.com/webmention" />    <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
-    <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="description" content="{{ teaser | striptags }}" />
     <meta name="MobileOptimized" content="width" />
     <meta name="HandheldFriendly" content="true" />
-    <meta name="abstract" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="keywords" content="Drupal, web development, Ken Hawkins, UX, information architecture" />
     <meta property="og:type" content="website" />
@@ -51,6 +50,9 @@
         <ul class="kh-navigation__list">
           <li class="kh-navigation__item">
             <a href="/blog" class="kh-navigation__link">Blog</a>
+          </li>
+          <li class="kh-navigation__item">
+            <a href="/digesting" class="kh-navigation__link">Digesting</a>
           </li>
           <li class="kh-navigation__item kh-u-show-for-medium-only">
             <a rel="me" href="mailto:khawkins98@gmail.com" class="kh-navigation__link">khawkins98@gmail.com</a>
