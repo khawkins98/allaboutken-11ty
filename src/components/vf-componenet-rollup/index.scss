@@ -1,6 +1,6 @@
 @charset "UTF-8";
 @use './normalize' as normalize;
-@use './vf-content' as khcontent;
+@use './kh-content' as kh-content;
 @use './settings' as *;
 
 html {
@@ -11,7 +11,7 @@ html {
 // This acts as our root selector so we can use it to toggle the custom CSS
 body:has(#kh-css-toggle:checked) {
   @include normalize.kh-normalize();
-  @include khcontent.kh-vf-content();
+  @include kh-content.kh-vf-content();
   --kh-color--grey: #707372;
   --kh-color--grey--darkest: #373a36;
   --kh-color--blue: #3b6fb6;
