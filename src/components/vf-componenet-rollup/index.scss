@@ -8,10 +8,6 @@ html {
   -webkit-text-size-adjust: 100%; // Prevent adjustments of font size after orientation changes in iOS.
 }
 
-em {
-  font-variation-settings: 'slnt' -10, 'MONO' 0, 'CASL' 1;
-}
-
 // This acts as our root selector so we can use it to toggle the custom CSS
 body:has(#kh-css-toggle:checked) {
   @include normalize.kh-normalize();
@@ -42,6 +38,10 @@ body:has(#kh-css-toggle:checked) {
 
   button {
     font-family: 'Recursive', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  }
+
+  em {
+    font-variation-settings: 'slnt' -10, 'MONO' 0, 'CASL' 1;
   }
 
   img {
@@ -799,7 +799,7 @@ body:has(#kh-css-toggle:checked) {
     margin: calc(var(--kh-cluster-margin) / 2) !important;
   }
 
-  /* Display styling for expressive headlines */
+  // Display styling for expressive headlines
   .kh-font-headline--display {
     --kh-headline-display-color: var(--kh-color--orange);
     font-size: 60px !important;

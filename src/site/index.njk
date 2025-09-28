@@ -7,7 +7,7 @@ layout: layouts/base.njk
 templateEngineOverride: njk
 ---
 <div class="kh-u-background-color--yellow--dark kh-u-fullbleed">
-<section class="kh-grid-stylized kh-u-padding__top--500 kh-u-padding__bottom--400">
+<section class="kh-grid-stylized kh-u-padding__top--500 kh-u-padding__bottom--500">
   <div></div>
   <div class="kh-content">
     <h1 class="kh-font-headline kh-text-heading--1">
@@ -19,9 +19,11 @@ templateEngineOverride: njk
     <h2 class="kh-text-heading--2">I transform digital platforms for global impact and strategic communication.</h2>
     {% markdown -%}
 
-    With [20 years](/cv/) leading digital strategy for science, media, and UN organizations, I help teams navigate from complex challenges to AI-ready platforms that [deliver](/posts/20180122-content-action-model.html) measurable organizational transformation.
+    With [20 years experience](/cv/) leading digital strategy for science, media, and UN organizations, I help teams navigate from complex challenges to AI-ready platforms that [deliver](/posts/20180122-content-action-model.html) measurable organizational transformation.
 
-    Currently directing multi-domain ecosystems at the United Nations Office for Disaster Risk Reduction, where strategic platform innovation meets global crisis communication.
+    Currently directing multi-domain ecosystems at the United Nations Office for Disaster Risk Reduction, ensuring strategic platform innovation meets global disaster communication.
+
+    <hr>
 
     {% set latestDigesting = collections.digesting | reverse | first %}
     <p id="digesting">Currently digesting: <a href="{{ latestDigesting.url }}">{{ latestDigesting.data.title }}</a><p>
