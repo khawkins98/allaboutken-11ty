@@ -1,15 +1,11 @@
 @charset "UTF-8";
 @use './normalize' as normalize;
-@use './vf-content' as vfcontent;
+@use './vf-content' as khcontent;
 @use './settings' as *;
 
-/**
- * 1. Correct the line height in all browsers.
- * 2. Prevent adjustments of font size after orientation changes in iOS.
- */
 html {
-  line-height: 1.15; /* 1 */
-  -webkit-text-size-adjust: 100%; /* 2 */
+  line-height: 1.15; // Correct the line height in all browsers.
+  -webkit-text-size-adjust: 100%; // Prevent adjustments of font size after orientation changes in iOS.
 }
 
 em {
@@ -19,7 +15,7 @@ em {
 // This acts as our root selector so we can use it to toggle the custom CSS
 body:has(#kh-css-toggle:checked) {
   @include normalize.kh-normalize();
-  @include vfcontent.kh-vf-content();
+  @include khcontent.kh-vf-content();
   --kh-color--grey: #707372;
   --kh-color--grey--darkest: #373a36;
   --kh-color--blue: #3b6fb6;
@@ -710,7 +706,6 @@ body:has(#kh-css-toggle:checked) {
     position: relative;
 
     &::before {
-      // --context-margin--inline: 1rem;
       background-color: inherit;
       background-image: inherit;
       background-position: inherit;
@@ -719,14 +714,10 @@ body:has(#kh-css-toggle:checked) {
       content: '';
       grid-column: 1/-1;
       height: 100%;
-      // margin-left: calc(50% - (50vw));
       margin-left: calc(50% - (50vw - (var(--context-margin--inline, 0px) / 2)));
       position: absolute;
       top: 0;
-      // width: calc(100vw - (var(--context-margin--inline, 0px) * 2));
       width: calc(100vw - (var(--context-margin--inline, 0px) * 1));
-      // width: calc(100vw * 2);
-      // width: calc(100vw);
       z-index: -1;
     }
   }
@@ -749,10 +740,6 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-u-padding__bottom--400 {
     padding-bottom: 1rem;
-  }
-
-  .kh-u-padding__bottom--500 {
-    padding-bottom: 1.25rem;
   }
 
   .kh-u-sr-only {
@@ -798,12 +785,6 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
-  // .kh-button--primary {
-  //   --kh-button-border-color: var(--kh-color--blue);
-  //   --kh-button-background-color: var(--kh-color--blue);
-  //   --kh-button-shadow-background-color: var(--kh-color--blue--dark);
-  // }
-
   .kh-cluster > * {
     align-items: var(--kh-cluster-alignment, center);
     display: flex;
@@ -821,7 +802,6 @@ body:has(#kh-css-toggle:checked) {
   /* Display styling for expressive headlines */
   .kh-font-headline--display {
     --kh-headline-display-color: var(--kh-color--orange);
-    // filter: drop-shadow(-1px 1px var(--kh-headline-display-color)) drop-shadow(-2px 2px var(--kh-headline-display-color)) drop-shadow(-3px 3px var(--kh-headline-display-color)) drop-shadow(-4px 4px var(--kh-headline-display-color)) drop-shadow(-5px 5px var(--kh-headline-display-color)) drop-shadow(-6px 6px var(--kh-headline-display-color));
     font-size: 60px !important;
     letter-spacing: -1px;
   }
