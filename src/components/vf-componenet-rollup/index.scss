@@ -753,6 +753,30 @@ body:has(#kh-css-toggle:checked) {
     width: 1px;
   }
 
+  .kh-skip-link {
+    position: absolute;
+    left: 1rem;
+    top: 0;
+    background: #000;
+    color: #fff;
+    padding: .5rem 1rem;
+    border-radius: .25rem;
+    transform: translateY(-120%);
+    transition: transform .2s ease;
+    z-index: 1000;
+  }
+  .kh-skip-link:focus, .kh-skip-link:focus-visible {
+    transform: translateY(0);
+  }
+  .kh-u-sr-only.kh-skip-link:focus, .kh-u-sr-only.kh-skip-link:focus-visible {
+    clip-path: none;
+    width: auto;
+    height: auto;
+    position: absolute;
+    white-space: normal;
+    overflow: visible;
+  }
+
   .kh-u-text-color--grey {
     color: #707372;
   }
