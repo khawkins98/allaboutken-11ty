@@ -1,15 +1,14 @@
 ---
 title: Colophon
-layout: layouts/post.njk
+layout: layouts/digesting.njk
 date: 2025-09-10
-lastUpdated: 2025-09-06
-templateEngineOverride: njk, md
+lastUpdated: 2025-09-29
+templateEngineOverride: njk
 ---
 
 {% if lastUpdated %}
 <small>Last updated: {{ lastUpdated | dateDisplay('d LLL yyyy') }}</small>
 {% endif %}
-
 
 <aside class="kh-note-box">
 <span class="kh-note-box__label">What's a colophon?</span>
@@ -56,3 +55,33 @@ This site is built and published with a small, readable stack and a bias for fle
 - Analytics: [GoatCounter](https://www.goatcounter.com/)
 
 {% endmarkdown %}
+
+<section class="kh-u-padding__top--600">
+  <h2 class="kh-u-sr-only">Classic web badges</h2>
+  <div class="kh-badges" role="list">
+    <a role="listitem" class="kh-badge__link" href="https://indieweb.org/Webmention" title="Webmentions supported">
+      <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/webmentions.1627619603.png" alt="Webmentions supported." loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+    <a role="listitem" class="kh-badge__link" href="https://indieweb.org/" title="IndieWeb">
+      <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/indieweb.1117854059.png" alt="I W C Now! indieweb.org." loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+    <a role="listitem" class="kh-badge__link" href="https://www.w3.org/developers/tools/" title="I heart validator">
+      <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/heartvalidator.492094636.png" alt="I heart validator." loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+    <a role="listitem" class="kh-badge__link" href="https://www.w3.org/QA/Tips/iso-date" title="ISO-8601 dates">
+      <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/iso.1707930409.png" alt="ISO-8601 now! YYYY-MM-DD." loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+    <a role="listitem" class="kh-badge__link" href="https://tintara.tripod.com/FramesSuck.html" title="Campaign against frames!">
+      <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/frames-suck.2280495098.png" alt="The text “Campaign against frames!” next to a crossed-out webpage full of frames." loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+    <a role="listitem" class="kh-badge__link" href="https://eightyeightthirty.one/" title="eighty eight thirty one">
+      <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/eightyeightthirtyone.4286714267.png" alt="eighty eight thirty dot one." loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+    <a role="listitem" class="kh-badge__link" href="https://www.11ty.dev/" title="Built with Eleventy">
+      <img class="kh-badge__img" width="176" height="62" src="https://chrisburnell.com/images/animated/built-with-eleventy.gif" alt="Built with Eleventy 88×31 animated badge" loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+  </div>
+  <p class="kh-u-text-color--grey">Badges sourced from <a href="https://seirdy.one/meta/badges/">Seirdy’s “Classic web badges”</a> — licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY‑SA 4.0</a>. Eleventy badge by <a href="https://chrisburnell.com/note/eleventy-animated-88x31/">Chris Burnell</a>.</p>
+</section>
+
+<hr>

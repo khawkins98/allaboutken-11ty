@@ -859,6 +859,36 @@ body:has(#kh-css-toggle:checked) {
     margin: var(--kh-stack-margin, 0) 0 0 0;
   }
 
+  // Classic 88×31 badges: pixelated rendering + dark-mode aware SVG theme
+  .kh-badges {
+    --kh-cluster-margin: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .kh-badge__link {
+    display: inline-block;
+  }
+
+  .kh-badges img,
+  .kh-badges svg {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    height: auto;
+    max-width: 100%;
+  }
+
+  .kh-badges svg .badge-text {
+    dominant-baseline: middle;
+    text-anchor: middle;
+    font-family: 'Recursive', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    font-variation-settings: 'MONO' 1, 'CASL' 0, 'slnt' 0, 'CRSV' 0, 'wght' 800;
+    font-size: 12px;
+    fill: #fff;
+  }
+
   .kh-grid {
     display: grid;
     grid-column: main;
