@@ -42,6 +42,32 @@ templateEngineOverride: njk
   </div>
 </article>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.allaboutken.com{{ page.url | url }}"
+  },
+  "headline": {{ title | dump | safe }},
+  "description": {{ (teaser or siteConfig.siteInformation.short_description) | striptags | dump | safe }},
+  "datePublished": {{ date | dump | safe }},
+  "dateModified": {{ (updated or date) | dump | safe }},
+  "author": {
+    "@type": "Person",
+    "name": {{ siteConfig.siteInformation.author | dump | safe }}
+  },
+  {% if image -%}
+  "image": ["https://www.allaboutken.com/images{{ image | url }}"],
+  {%- endif %}
+  "publisher": {
+    "@type": "Person",
+    "name": {{ siteConfig.siteInformation.author | dump | safe }}
+  }
+}
+</script>
+
 <div class="kh-stack kh-u-padding__top--800">
 {%- if comment != false %}
   <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
@@ -73,7 +99,7 @@ templateEngineOverride: njk
       {% endif %}
 
       {%- if nextPost %}
-      <p class="kh-text-body--3">Next: <a href="{{ previousPost.url | url}}">{{ nextPost.data.title }}</a></p>
+      <p class="kh-text-body--3">Next: <a href="{{ nextPost.url | url}}">{{ nextPost.data.title }}</a></p>
       {%- endif %}
       <p>
         <a href="/blog" class="kh-button kh-button--sm"> ⇤ Blog index</a>
