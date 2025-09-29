@@ -16,30 +16,52 @@
     <link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
     <link rel="webmention" href="https://webmention.io/www.allaboutken.com/webmention" />    <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
-    <meta name="description" content="{{ teaser | striptags }}" />
+    <meta name="description" content="{{ (teaser or siteConfig.siteInformation.short_description) | striptags }}" />
     <meta name="MobileOptimized" content="width" />
     <meta name="HandheldFriendly" content="true" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="keywords" content="Drupal, web development, Ken Hawkins, UX, information architecture" />
+    {% if noindex %}<meta name="robots" content="noindex,follow" />{% endif %}
+    {% if tags and ('posts' in tags) %}
+    <meta property="og:type" content="article" />
+    <meta property="article:published_time" content="{{ date }}" />
+    {% if tags %}{% for tag in tags %}<meta property="article:tag" content="{{ tag }}" />{% endfor %}{% endif %}
+    {% else %}
     <meta property="og:type" content="website" />
+    {% endif %}
     <meta property="og:site_name" content="All About Ken Hawkins" />
     <meta property="og:url" content="https://www.allaboutken.com{{page.url | url }}" />
-    <meta property="og:title" content="{{title}} > All About Ken Hawkins" />
-    <meta property="og:image" content="https://www.allaboutken.com/images{{image}}" />
+    <meta property="og:title" content="{{ title }}" />
+    {% if image %}{% set ogImage = "https://www.allaboutken.com/images" ~ image %}{% else %}{% set ogImage = "https://www.allaboutken.com/images/blog/drill-bits.jpg" %}{% endif %}
+    <meta property="og:image" content="{{ ogImage }}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@khawkins98" />
     <meta name="twitter:site:id" content="3723201" />
     <meta name="twitter:creator" content="@khawkins98" />
     <meta name="twitter:creator:id" content="3723201" />
     <meta name="twitter:url" content="https://www.allaboutken.com{{page.url | url }}" />
-    <meta name="twitter:description" content="{{ teaser | striptags }}" />
-    <meta name="twitter:image" content="https://www.allaboutken.com/images{{image}}" />
+    <meta name="twitter:description" content="{{ (teaser or siteConfig.siteInformation.short_description) | striptags }}" />
+    <meta name="twitter:image" content="{{ ogImage }}" />
     <meta name="dcterms.title" content="{{title}} > All About Ken Hawkins" />
     <meta name="dcterms.type" content="Text" />
-    <meta name="dcterms.identifier" content="https://allaboutken.com{{page.url | url }}" />
+    <meta name="dcterms.identifier" content="https://www.allaboutken.com{{page.url | url }}" />
     <meta name="dcterms.format" content="text/html" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
     <meta name="generator" content="{{ eleventy.generator }}">
+    {% if page.url == '/' %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://www.allaboutken.com/",
+      "name": "All about Ken Hawkins",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.allaboutken.com/search/?search_query={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    {% endif %}
   </head>
   <body class="kh-stack{% if bodyClass %} {{ bodyClass }}{% endif %}">
     <a href="#main-content" class="kh-u-sr-only kh-skip-link">Skip to main content</a>
