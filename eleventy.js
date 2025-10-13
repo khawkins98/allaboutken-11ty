@@ -274,6 +274,31 @@ module.exports = function(config) {
   // Paired shortcode to render inline markdown blocks consistently
   config.addPairedShortcode('markdown', (content) => md.render(content || ''));
 
+  // Paired shortcode: render escaped code and a live demo from the same HTML snippet
+  // Usage (place outside of a {% markdown %} block):
+  // {% codeAndDemo 'html' %}
+  // <form>...</form>
+  // <script>...</script>
+  // {% endcodeAndDemo %}
+  config.addPairedShortcode('codeAndDemo', (content, lang = 'html') => {
+    const snippet = String(content || '');
+    const escapeHtml = (s) => (
+      String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+    );
+    const escaped = escapeHtml(snippet);
+    return [
+      '<div class="kh-demo">',
+      `<pre><code class="language-${lang}">${escaped}</code></pre>`,
+      '<div class="kh-demo__live">',
+      snippet,
+      '</div>',
+      '</div>'
+    ].join('');
+  });
+
   // Removed custom codeblock tag; posts now use fenced code blocks in markdown.
 
   // config.addFilter("makeLowercase", function(value) {

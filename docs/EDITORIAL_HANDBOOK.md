@@ -128,6 +128,30 @@ workflow:
 ---
 ```
 
+### Code demos (codeAndDemo shortcode)
+
+- Use the `codeAndDemo` paired shortcode to show a snippet as both an escaped code block and a live demo from the same source.
+- Place it outside `{% markdown %}` blocks (Markdown will double‑escape otherwise).
+- Prefer plain HTML/JS snippets for live demos; keep them minimal and self‑contained.
+- Don’t duplicate the same example in both a fenced code block and inline—let the shortcode handle both.
+
+Usage
+
+```njk
+{% codeAndDemo 'html' -%}
+<output id="result">Waiting…</output>
+<script>
+  const out = document.getElementById('result');
+  out.textContent = 'Updated';
+</script>
+{% endcodeAndDemo %}
+```
+
+Notes
+
+- The first argument (e.g., `'html'`) is used as a language class on the code block for syntax highlighting.
+- When demonstrating Nunjucks templates, prefer fenced code within `{% markdown %}` and wrap the template with `{% raw %}…{% endraw %}` so it isn’t evaluated. The `codeAndDemo` shortcode is best for runnable HTML/JS examples.
+
 ## Dos and Don’ts
 
 ### ✅ Dos
