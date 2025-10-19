@@ -18,7 +18,7 @@ templateEngineOverride: njk
       {% if topics %}<span class="kh-summary__author">Filed in: {{ topics | join(', ') }}</span>{% endif %}
     </p>
   </div>
-  <div class="kh-content kh-grid__col--span-2">
+  <div class="kh-post--text kh-content kh-grid__col--span-2">
     {% if image %}
     <figure class="kh-figure">
       {% if href %}<a href="{{ href }}">{% endif %}

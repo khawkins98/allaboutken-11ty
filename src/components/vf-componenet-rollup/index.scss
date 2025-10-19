@@ -415,6 +415,16 @@ body:has(#kh-css-toggle:checked) {
     max-width: 100%;
   }
 
+  /* Post layout: if there is no lead image, nudge main content down a bit */
+  @media (min-width: $kh-breakpoint--md) {
+    .kh-post--text:not(:has(.kh-figure)) {
+      // padding-top: 25rem;
+      background-color: #fbf6ef;
+      padding-left: 2rem;
+      padding-top: 2rem;
+    }
+  }
+
   .kh-navigation__link {
     border-bottom: none;
     color: #333;
@@ -690,7 +700,7 @@ body:has(#kh-css-toggle:checked) {
   @media (min-width: $kh-breakpoint--md) {
     .kh-post-title {
       left: -1.5rem;
-      margin-top: 10rem;
+      margin-top: 2rem;
       padding-left: 2rem;
     }
   }
