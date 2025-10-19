@@ -172,18 +172,10 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
-  .kh-u-show-for-medium-only {
-    display: none;
-  }
-
   @media (min-width: $kh-breakpoint--md) and (max-width: $kh-breakpoint--lg-down) {
     .kh-u-show-for-medium-only {
       display: inline;
     }
-  }
-
-  .kh-u-show-for-medium-up {
-    display: none;
   }
 
   @media (min-width: $kh-breakpoint--md) {
@@ -193,24 +185,6 @@ body:has(#kh-css-toggle:checked) {
 
     .kh-u-show-for-mobile-only {
       display: none;
-    }
-  }
-
-  @media (max-width: $kh-breakpoint--lg) {
-    .kh-u-show-for-large {
-      display: none !important;
-    }
-  }
-
-  @media (max-width: $kh-breakpoint--md) {
-    .kh-u-show-for-medium-only {
-      display: none !important;
-    }
-  }
-
-  @media (min-width: $kh-breakpoint--lg) {
-    .kh-u-show-for-medium-only {
-      display: none !important;
     }
   }
 
@@ -791,12 +765,6 @@ body:has(#kh-css-toggle:checked) {
     color: #707372;
   }
 
-  @media (max-width: $kh-breakpoint--md) {
-    .kh-u-show-for-medium-only {
-      display: none !important;
-    }
-  }
-
   .kh-box {
     --box-text-color: var(--kh-box-theme-color--foreground, var(--kh-theme-color--foreground, #1e1e1e));
     --box-background-color: var(--kh-box-theme-color--background, var(--kh-theme-color--background, #fafafa));
@@ -1029,14 +997,6 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-u-padding__top--800 {
     padding-top: 3rem;
-  }
-
-  .kh-u-show-for-large {
-    display: none;
-  }
-
-  .kh-u-show-for-mobile-only {
-    display: inline;
   }
 
   .kh-u-text--nowrap {
