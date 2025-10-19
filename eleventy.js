@@ -368,6 +368,17 @@ module.exports = function(config) {
     }
   });
 
+  // Collections
+  config.addCollection('caseStudies', (collectionApi) => {
+    try {
+      return collectionApi.getAll()
+        .filter((item) => Array.isArray(item.data && item.data.tags) && item.data.tags.includes('case-studies'))
+        .sort((a, b) => (a.date > b.date ? -1 : 1));
+    } catch (e) {
+      return [];
+    }
+  });
+
   // Image transforms run on-request in dev; no separate watcher is required
 
   // If you have other `addPlugin` calls, it’s important that UpgradeHelper is added last.

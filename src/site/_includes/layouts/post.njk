@@ -9,7 +9,14 @@ templateEngineOverride: njk
     <section class="kh-u-background-color--yellow--dark kh-u-fullbleed">
       <h1 class="kh-font-headline kh-post-title kh-text-heading--1">{{title}}</h1>
     </section>
-    <p><time datetime="{{ date }}" class="kh-summary__date">{{ date | dateDisplay }}</time><span class="kh-summary__author">{{ content | wordCount | formatNumber }} words</span>{% if topics %}<span class="kh-summary__author">Filed in: {{ topics | join(', ') }}</span>{% endif %}</p>
+    {% set isCaseStudy = tags and ('case-studies' in tags) %}
+    <p>
+      <time datetime="{{ date }}" class="kh-summary__date">
+        {% if isCaseStudy %}{{ date | dateDisplay('y') }}{% else %}{{ date | dateDisplay }}{% endif %}
+      </time>
+      <span class="kh-summary__author">{{ content | wordCount | formatNumber }} words</span>
+      {% if topics %}<span class="kh-summary__author">Filed in: {{ topics | join(', ') }}</span>{% endif %}
+    </p>
   </div>
   <div class="kh-content kh-grid__col--span-2">
     {% if image %}

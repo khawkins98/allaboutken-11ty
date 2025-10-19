@@ -75,6 +75,9 @@
             <a href="/blog" class="kh-navigation__link">Blog</a>
           </li>
           <li class="kh-navigation__item">
+            <a href="/work" class="kh-navigation__link">Work</a>
+          </li>
+          <li class="kh-navigation__item">
             <a href="/digesting" class="kh-navigation__link">Digesting</a>
           </li>
           <li class="kh-navigation__item kh-u-show-for-medium-only">
@@ -91,6 +94,9 @@
           </li>
         </ul>
       </nav>
+    {% set ctaLocation = 'header' %}
+    {% include "partials/cta.njk" %}
+    {% set ctaLocation = null %}
     </header>
     <main role="main" id="main-content">
     {{ content | safe }}

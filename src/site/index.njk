@@ -37,7 +37,8 @@ templateEngineOverride: njk
   <span></span>
   <section>
     <h2 id="recently" class="kh-text-heading--2">Recently</h2>
-    {%- for post in collections.posts.slice(-5) | reverse -%}
+    {%- for post in collections.posts.slice(-10) | reverse -%}
+    {%- if not (post.data.tags and ('case-studies' in post.data.tags)) -%}
     <article class="kh-summary kh-summary--news">
       {% set isNote = (post.data.tags and ('note' in post.data.tags))  %}
       <div class="kh-summary__date">{{ post.date | dateDisplay }}
@@ -56,6 +57,7 @@ templateEngineOverride: njk
       <p class="kh-content kh-summary__text">{{ post.data.teaser | safe }}</p>
       {#- {{loop.index}} -#}
     </article>
+    {%- endif -%}
     {%- endfor -%}
     <article class="kh-summary kh-summary--news">
       <h3 class="kh-summary__title">
@@ -77,6 +79,7 @@ templateEngineOverride: njk
     <p class="kh-cluster">
       <a href="https://toot.io/@khawkins98" >Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
       <a href="https://www.linkedin.com/in/allaboutken" >LinkedIn</a>
+      <a href="/cv/" >CV</a>
       <a href="mailto:khawkins98@gmail.com" >Email</a>
       <a href="https://untappd.com/user/khawkins98">Beer</a>
     </p>
