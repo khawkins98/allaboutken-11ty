@@ -1,0 +1,47 @@
+---
+title: Work case studies
+layout: layouts/base.njk
+templateEngineOverride: njk, md
+---
+
+<div class="kh-grid-stylized">
+  <div></div>
+  <section class="kh-content kh-u-padding__top--800 kh-u-padding__bottom--200">
+    <h1 class="kh-text-heading--1">{{title}}</h1>
+    <p class="kh-intro__text">
+      Here I maintain a collection of evidence‑led write‑ups of my work on platforms, performance, and design‑system work.
+    </p>
+  </section>
+</div>
+
+<section class="kh-grid-stylized kh-content kh-content--wide">
+  <span></span>
+  <section>
+    {% set studies = collections.caseStudies or [] %}
+    {% if studies.length %}
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Year</th>
+            <th scope="col">Organization</th>
+            <th scope="col">Topics</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for post in studies -%}
+          <tr>
+            <td><a href="{{ post.url }}">{{ post.data.title }}</a></td>
+            <td>{{ post.date | dateDisplay('y') }}</td>
+            <td>{% if post.data.org %}{{ post.data.org }}{% else %}&mdash;{% endif %}</td>
+            <td>{% if post.data.topics %}{{ post.data.topics | join(', ') }}{% endif %}</td>
+          </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No case studies yet.</p>
+    {% endif %}
+  </section>
+</section>
+

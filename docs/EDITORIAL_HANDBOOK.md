@@ -276,6 +276,89 @@ First, a long explanation spanning multiple paragraphs… (code appears much lat
 - When demonstrating Nunjucks templates, use `{% raw %}` inside code fences to avoid evaluation.
 - Use standard `figure/figcaption` for images that carry meaning; project classes (e.g., `kh-figure`) are fine. Provide alt text and a succinct caption.
 
+## Case Studies
+
+Write concise, evidence‑led case studies that make outcomes obvious in seconds.
+
+### Required components
+
+- **Title**: outcome‑led, concrete; include org/context when allowed.
+- **Teaser**: one sentence with 1–2 metrics or a clear benefit.
+- **tl;dr block (near top)**: 2–4 bullets covering problem, approach, key decision(s), and quantified outcome(s).
+- **Narrative intro (after tl;dr)**: 1–2 short paragraphs that set audience and stakes, explain why the work mattered now, and how the approach fit constraints. Keep it tight and practical.
+- **Body sections** (use these exact headings):
+  - Problem
+  - Approach
+  - Key decisions
+  - Outcomes (with numbers)
+  - Metrics (checklist targets and/or measured results)
+  - Links and related (artifacts, repos, internal posts, dashboards)
+
+### Conventions (this site)
+
+- Tag case studies with `case-studies` (required). This tag ensures they are excluded from the homepage/blog lists and appear on the Work table.
+- Show only the year in UI for case studies. Use a full `date` in front matter (for sorting), but display year‑only via templates.
+- Year‑based permalinks: set `url` to `/posts/YYYY/your-case-study-slug/`.
+- Provide `org` (organization) and `topics` — both render on the Work table (`/work/`).
+- Screenshots/images: store under `src/site/images/blog/` and reference via `image: "/blog/…"`; include `image_meta.altext` and `image_meta.text`.
+- Cross‑link: include at least one internal link to a related long‑form post or case study; add external source links when citing hosted articles.
+
+### Metrics and evidence
+
+- Prefer numbers with baselines and timeframes (e.g., “50–70% faster over 90 days” vs “faster”).
+- Attribute metrics to sources where appropriate (GA4, Looker Studio, CWV/Lighthouse, platform logs). Avoid unverifiable absolutes.
+- Include a compact metrics checklist when relevant to CWV or delivery:
+  - LCP < 2.5s (mobile), CLS < 0.1, TBT < 200ms
+  - Lighthouse SEO ≥ 90 (representative pages)
+  - Release cadence maintained (e.g., 3‑week)
+- Link to inspectable artifacts wherever possible (repo, gist, diagram, dashboard snapshot). Redact or anonymize sensitive data.
+
+### Style and length
+
+- 400–900 words; front‑load value with scannable bullets and short paragraphs.
+- Include a brief narrative intro immediately after the tl;dr that frames context and flow; use 2–4 sentence paragraphs.
+- Use descriptive links; avoid “here”. Show a figure or snippet before deep explanation when helpful.
+- When showing Nunjucks, wrap in `{% raw %}…{% endraw %}` inside fences to avoid evaluation.
+
+### Accessibility and compliance
+
+- Provide meaningful alt text and short captions for figures that carry information.
+- Expand acronyms on first use; write numbers with units and order‑of‑magnitude clarity.
+- Review for confidentiality: no internal credentials, private endpoints, or undisclosed data.
+
+### Front matter (example)
+
+```yaml
+---
+title: 'Case study: Outcome (metric, timeframe)'
+layout: layouts/post.njk
+teaser: 'One‑sentence summary with a number.'
+date: YYYY‑MM‑DD
+tags:
+  - posts
+  - case-studies
+topics:
+  - keyword one
+  - keyword two
+org: Organization Name
+url: /posts/YYYY/case-study-slug/
+image: '/blog/example.jpg' # optional
+image_meta:
+  altext: 'Accurate alt text.'
+  text: 'Attribution or context.'
+---
+```
+
+### Checklist (author)
+
+- [ ] Title and teaser are outcome‑led and specific
+- [ ] tl;dr present with 2–4 high‑signal bullets
+- [ ] Sections include Problem, Approach, Key decisions, Outcomes, Metrics, Links
+- [ ] At least one artifact (repo/gist/diagram/demo) linked
+- [ ] Metrics include numbers, baselines, and timeframe
+- [ ] Accessibility (alt text, captions) and confidentiality reviewed
+- [ ] CTA to CV or Contact is present when appropriate
+
 ## Representative Patterns Observed
 
 - Posts often include a short “Scenario”, “How it works/making it happen”, and “Here’s some code/links” cadence.

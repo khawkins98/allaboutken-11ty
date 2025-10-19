@@ -3,6 +3,10 @@
   max-width: 70ch;
   font-weight: 350;
 
+  &.kh-content--wide {
+    max-width: unset;
+  }
+
   pre,
   code {
     background: #fff;
