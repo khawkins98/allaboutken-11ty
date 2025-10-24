@@ -296,6 +296,22 @@ body:has(#kh-css-toggle:checked) {
     text-transform: uppercase;
   }
 
+  /* Compact label for categorization chips */
+  .kh-label {
+    align-items: center;
+    background-color: #f5f5f4;
+    border: 1px solid var(--kh-color--grey, #707372);
+    border-radius: 9999px;
+    color: inherit;
+    display: inline-flex;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    margin: 0 0.25rem 0.25rem 0;
+    padding: 4px 8px;
+    white-space: nowrap;
+  }
+
   .kh-button {
     --kh-button__color__background--default: var(--kh-color--grey);
     --kh-button__color__background--default-dark: var(--kh-color--grey--darkest);
