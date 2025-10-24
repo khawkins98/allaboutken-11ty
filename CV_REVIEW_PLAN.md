@@ -81,30 +81,19 @@ Your most impressive achievements are hidden:
 - "Professional experience" universally means job history, not skills
 - Could lose readers who skip ahead looking for work history
 
-### 4. Missing Executive Summary with Key Metrics
+### 4. Missing Executive Summary with Key Metrics ✅ **RESOLVED (2025-10-24)**
 
-**Current intro** (lines 60-64):
-> "Digital strategy leader with 20+ years experience delivering high-impact, scalable web platforms for global science, media, and UN organizations. Expert in AI-ready architectures and multilingual, multicultural digital ecosystems."
+**Updated executive summary** (lines 61-69):
+> "Platform Architect & Digital Strategy Lead delivering measurable transformation for UN, science, and media organizations. Current achievements at UNDRR: 50–70% faster delivery, 20% cost savings, 40% engagement increases across 15-site Drupal ecosystem."
 
-**Problems**:
-- Generic opening
-- Metrics appear later in paragraph 2
-- Doesn't lead with outcomes
+**Improvements made**:
+- ✅ Leads with title and measurable outcomes (metrics-first approach)
+- ✅ Specific metrics in first paragraph (50-70%, 20%, 40%)
+- ✅ Shows on both screen AND print versions (removed screen-only wrapper)
+- ✅ Three-paragraph structure: outcomes → experience/expertise → personal statement
+- ✅ AI-ready positioning strengthened in paragraph 2
+- ✅ Call-to-action buttons moved to screen-only section
 
-**Better approach**:
-> "Digital strategy leader delivering measurable platform transformation: 50-70% faster delivery, 20% cost reduction, 40% engagement increases across UN, science, and media organizations. 20+ years architecting AI-ready platforms and leading distributed teams."
-
-### 5. Title Positioning Inconsistency
-
-- **Page title**: "Digital Strategy & Communications Director"
-- **Current role title**: "Web Platform Lead"
-- **Footer**: "I bring structure and process to complex web projects"
-
-**Question**: Are you targeting Director-level or Lead/Senior IC roles?
-
-**Fix**: Align all titles to target level:
-- **Director track**: Keep "Digital Strategy & Communications Director"
-- **Senior IC track**: Use "Senior Platform Architect" or "Principal Web Platform Lead"
 
 ### 6. No Visual Impact
 
@@ -114,48 +103,17 @@ Missing:
 - Visual hierarchy for key achievements
 - Scannable "at a glance" metrics
 
-### 7. Over-Reliance on Blog Post Links
-
-Many capabilities link to your blog posts:
-- Line 96: machine-actionable content models
-- Line 96: context-first approach to AI integration
-- Line 97: load time reduction
-- Line 100: analytics frameworks
-- Lines 112-113: Multiple IA/content strategy links
-
-**Problems**:
-- Breaks reading flow
-- May not work in PDF exports
-- Can appear overly self-promotional
-- Key points should stand alone without needing to click
 
 **Fix**: Limit to 2-3 most impressive pieces per role in a "Selected Writing" callout
 
-### 8. No Career Snapshot Section
+### 8. No Career Snapshot Section ✅ **RESOLVED (2025-10-24)**
 
-Missing a scannable summary like:
+**Added Career Snapshot section** at lines 115-131:
+- Scannable bullet list format
+- Key information: current role, experience, team scope, impact metrics, technical expertise, strategic focus
+- Clean CSS styling with borders and proper spacing
+- Located after Impact Metrics, before Professional Experience section
 
-```
-Career Snapshot:
-✓ 20+ years experience | UN, EMBL, media organizations
-✓ Current: 15-site Drupal ecosystem | UNDRR
-✓ 50-70% performance improvements | 20% cost savings | 40% engagement increase
-✓ Distributed team leadership across 5 countries
-✓ AI-ready architecture | RDF/SKOS | structured content
-```
-
-### 9. Technology Lists Too Long
-
-"Major technical tooling" lists run very long, especially for older roles (lines 183, 220, 252, 270, 290, 309, 325, 341).
-
-**Problem**:
-- Dilutes focus on current/relevant skills
-- QuarkXPress and Flash (lines 309, 325) date you unnecessarily
-
-**Fix**:
-- Group by category: "Platforms | Languages | Analytics"
-- Trim obsolete tools from roles older than 10 years
-- Or remove entirely from pre-2010 roles
 
 ---
 
@@ -371,9 +329,9 @@ Add 1-2 short quotes from colleagues/supervisors (if available):
 
 ### Phase 1: Structure (Est. 2-3 hours)
 
-- [ ] Move skills sections (lines 84-155) to after work history
-- [ ] Rename "Professional experience" → "Core Capabilities"
-- [ ] Rename "Professional work history" → "Professional Experience"
+- [x] Move skills sections (lines 84-155) to after work history ✅ **ALREADY DONE** - Core Capabilities at line 317, after Professional Experience at line 128
+- [x] Rename "Professional experience" → "Core Capabilities" ✅ **ALREADY CORRECT** - Line 317 uses "Core Capabilities"
+- [x] Rename "Professional work history" → "Professional Experience" ✅ **ALREADY CORRECT** - Line 128 uses "Professional Experience"
 - [x] Create Impact Metrics section (HTML) ✅ **DONE (2025-10-24)** - Lines 81-113
 - [x] Rewrite executive summary (metrics-first) ✅ **DONE (2025-10-24)** - Lines 59-67
 - [x] Create CSS for impact metrics ✅ **DONE (already exists in styles)**
@@ -413,6 +371,35 @@ Add 1-2 short quotes from colleagues/supervisors (if available):
 - **AI emphasis**: Strengthened throughout - "making the web faster, more accessible, and AI-ready"
 - **Personality**: "online problem solver" preserved in footer for approachability
 - **Years**: Changed from "20 years" to "20+" for forward-looking positioning
+
+### Structure Verification (2025-10-24)
+✅ **CV structure is ALREADY optimal:**
+1. Lines 1-79: Intro + CTAs
+2. Lines 81-113: **Impact at a Glance** (metrics grid)
+3. Lines 115-131: **Career Snapshot** (scannable summary) ✅ NEW
+4. Lines 145+: **Professional Experience** (work history - 9 roles chronological)
+5. Lines 335+: **Core Capabilities** (4 skill categories)
+6. Lines 405+: Education, speaking & community
+
+The CV does NOT have the "skills-first" problem identified in the original plan. Work history comes before capabilities, which is the standard and preferred structure.
+
+### Career Snapshot Added (2025-10-24)
+✅ **Created scannable Career Snapshot section** including:
+- Current role at UNDRR (UN) managing 15-site ecosystem
+- 20+ years across UN, EMBL, media organizations
+- Distributed team leadership across 5 countries
+- Platform impact metrics (50-70% improvements, 20% savings, 40% engagement)
+- Technical expertise (Drupal, Azure, design systems, AI-ready architecture)
+- Strategic focus areas
+- CSS styling: clean list format with borders, proper spacing (lines 330-355 of _kh-content.scss)
+
+### Case Study Integration (2025-10-24)
+✅ **Integrated 11 case studies contextually throughout CV:**
+- **UNDRR role** (7 links): Platform transformation, GAR2025 campaign, Azure optimization, editorial efficiency, governance/delivery, operations reliability, vendor tech debt
+- **EMBL roles** (3 links): Visual Framework design system, footer/directory, dynamic content architecture
+- **DRS role** (1 link): Scaled Drupal with 150k+ users
+- **Approach**: Linked actual achievement text rather than adding "[case study]" labels
+- **Benefit**: Provides evidence and deeper context for key accomplishments without cluttering the CV
 
 ---
 
