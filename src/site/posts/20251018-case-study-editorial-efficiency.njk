@@ -1,0 +1,59 @@
+---
+title: 'Case study: Improving editorial efficiency through standardization saving 58 hours a month'
+layout: layouts/post.njk
+teaser: 'Reclaimed ~58 hours/month across 48 editors by standardizing image workflows, speeding editor UI by ~20%, and reducing repetitive steps.'
+date: 2025-08-17
+tags:
+  - posts
+  - case-studies
+topics:
+  - editorial
+  - workflow
+  - standardization
+org: UNDRR
+permalink: /posts/2025/case-study-editorial-efficiency/
+---
+
+{% markdown %}
+{% from "partials/orgs.njk" import orgIntro %}
+
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+> tl;dr
+>
+> - ~58 hours/month reclaimed across 48 active editors (~1.2 h each) via Release 5.11.
+> - Editor menu performance improved ~20% (7.8s → 6.18s).
+> - Standardized publication cover workflow cut steps from 9 to 3.
+> - Results delivered by a cross‑functional team (engineering, design, content ops) under clear leadership and governance.
+
+Editorial work is where mission meets reality. If the tools are slow or inconsistent, content quality and cadence suffer. Our bet was simple: standardize the common tasks and give editors faster defaults so they can spend more time on substance.
+
+Release 5.11 is a good example of that philosophy. We didn’t add bells and whistles—we removed steps, sped up the UI, and made the “right way” the easiest path.
+
+## Problem
+
+Fragmented editorial steps and inconsistent tooling increased time‑to‑publish and human error, reducing capacity for strategic content work.
+
+## Approach
+
+- Standardized Drupal CMS workflows across presences via the Public Web Platform.
+- Automated PDF cover image generation and image crops for publications.
+- Optimized editor navigation and UI performance.
+
+### Before → After (publication covers)
+
+- Before: 9 steps (create entry, open Photoshop, crop, save, create media, upload, name, specify 6 crops, select image).
+- After: 3 steps (create entry, system auto‑generates cover, optionally override).
+
+## Outcomes (last month)
+
+- Publications: 166 items × ~10 minutes saved ≈ ~27 hours saved.
+- Other items: 377 entries × ~5 minutes saved ≈ ~31 hours saved.
+- Total estimated time reclaimed: ~58 hours/month (≈ 1.5 work weeks).
+- Per‑editor average: ~50 minutes saved/week.
+- Editor UI speed: ~20% faster (7.8s → 6.18s).
+
+## Related release scope
+
+- HIPs improvements, security hardening, and stability enhancements shipped alongside.
+
+{% endmarkdown %}

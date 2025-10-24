@@ -1,0 +1,41 @@
+---
+title: 'Case study: Scaled Drupal with commerce (150k+ users)'
+layout: layouts/post.njk
+teaser: 'Managed a large‑scale Drupal platform with 150k+ users and integrated commerce; optimized caching and DB performance.'
+date: 2014-06-30
+tags:
+  - posts
+  - case-studies
+topics:
+  - Drupal
+  - Caching
+  - MySQL optimization
+org: DRS Technical Solutions
+permalink: /posts/2014/case-study-drs-scaled-drupal/
+---
+
+{% markdown %}
+> tl;dr
+>
+> - Led a high‑traffic Drupal platform with integrated commerce for 150k+ user accounts.
+> - Improved performance and reliability through caching strategy and database optimization.
+
+When platforms carry both logged‑in workflows and commerce, the tolerance for latency drops to near‑zero. People are trying to get real work done—timeouts and jitter cost money and trust. The work here wasn’t flashy; it was the kind of tuning and guard‑railing that keeps a system calm on busy days.
+
+We focused on the boring, durable parts: cache keys, TTLs, database indexes, and deployment safety nets. The wins accumulate when you remove a dozen small sources of friction.
+
+## Problem
+
+High traffic and commerce workflows required reliable performance and operational predictability.
+
+## Approach
+
+- Implemented reverse proxy caching and tuned Drupal caching layers.
+- Optimized MySQL queries and indexes; monitored with APM and logs.
+- Hardened deployment and rollback procedures.
+
+## Outcomes
+
+- Faster page responses, fewer timeouts under load, and smoother editorial operations.
+
+{% endmarkdown %}

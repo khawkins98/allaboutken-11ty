@@ -1,0 +1,62 @@
+---
+title: 'Case study: Transforming the UNDRR platform for faster performance and lower costs'
+layout: layouts/post.njk
+teaser: 'Led a 15‑site Drupal 10 ecosystem: 50–70% faster, 20% Azure savings, doubled Lighthouse SEO scores, +40% campaign engagement.'
+date: 2025-07-01
+tags:
+  - posts
+  - case-studies
+topics:
+  - Drupal 10/11
+  - Azure optimization
+  - Core Web Vitals
+  - RDF/SKOS
+org: UNDRR
+permalink: /posts/2025/case-study-undrr-platform/
+---
+
+{% markdown %}
+{% from "partials/orgs.njk" import orgIntro %}
+
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+> tl;dr
+>
+> - Standardized a 15‑site UNDRR Drupal 10 ecosystem, cutting load times by 50–70% and reducing Azure spend by 20%.
+> - Doubled Lighthouse SEO scores and increased campaign engagement by ~40% (e.g., GAR2025).
+> - Achieved by leading a cross‑functional team and aligning engineering, editorial, and design toward shared outcomes.
+
+We operate a multi‑domain ecosystem serving policymakers, practitioners, and the public. That means a tidy “site redesign” isn’t enough; the platform has to be fast, reliable, and readable by both humans and machines. When we kicked off this work, we framed success in terms stakeholders care about: measurable speed, lower infrastructure spend, and clearer routes for AI‑ready publishing.
+
+What follows isn’t a heroics story; it’s the result of standardization and patience. We focused on a few high‑leverage improvements (image pipelines, caching, structured metadata, shared components) and applied them consistently across 15 sites. The compounding effect is what moved the needle.
+
+## Problem
+
+Critical content for decision‑makers was slowed by inconsistent theming, fragmented governance, and limited AI‑readiness. Pages were heavy, image pipelines inconsistent, and analytics lacked dimensions for segment‑level reporting.
+
+## Approach
+
+- Platform standardization on Drupal 10 with hybrid headless patterns.
+- Performance engineering: caching strategy, image pipelines, render path audits, CWV fixes.
+- AI‑readiness: RDF/SKOS metadata, JSON‑LD exports, machine‑actionable content models.
+- Design‑system patterns and component theming to unify UX across 15 sites.
+- Analytics: GA4 with custom dimensions; Looker Studio dashboards; chatbot referral tracking.
+
+## Key decisions
+
+- Consolidated asset handling; deterministic responsive images in build.
+- Tightened Azure resources; tuned database and CDN caching.
+- Introduced governance playbooks to harden editorial workflows.
+
+## Outcomes
+
+- 50–70% faster loads; 20% quarterly Azure cost reduction.
+- Doubled Lighthouse SEO scores on representative pages.
+- +40% campaign engagement lift (GAR2025); clearer segment insights.
+
+## Links and related writing
+
+- [Metrics of caution: Azure MySQL](/posts/20250710-metrics-of-caution-azure-mysql/)
+- [Context‑first AI integration](/posts/20250919-smart-ai-integration-context-first/)
+- [Knowledge over data: analytics](/posts/20250912-knowledge-over-data/)
+
+{% endmarkdown %}

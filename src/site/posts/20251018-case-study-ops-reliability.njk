@@ -1,0 +1,49 @@
+---
+title: 'Case study: Improving operational reliability and user trust in 2025'
+layout: layouts/post.njk
+teaser: 'Improved perceived usefulness to 79.9% (+7pp YoY), reduced daily page failures vs post‑migration peak, and cut response time to 0.45s.'
+date: 2025-10-01
+tags:
+  - posts
+  - case-studies
+topics:
+  - reliability
+  - ux
+  - performance
+org: UNDRR
+permalink: /posts/2025/case-study-ops-reliability/
+---
+
+{% markdown %}
+{% from "partials/orgs.njk" import orgIntro %}
+
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+> tl;dr
+>
+> - 79.9% of visitors report sites are helpful (+7 percentage points YoY; n=35,113 responses, +4.3% YoY volume).
+> - Post‑migration stability recovered from 6 to ~4.5 daily page errors; trending toward pre‑migration baseline of ~4.
+> - Median response time improved to 0.45s from 0.88s on legacy.
+> - Achieved through coordinated work across platform, product and editorial teams with clear ownership and cadence.
+
+Stability is invisible until it isn’t. After a major infrastructure change, we hit a period where the platform felt more fragile than we liked. We didn’t hide from it—we instrumented better, created a risk register, and focused on the fixes with the most user impact.
+
+This is what recovery looks like in practice: fewer page failures, faster responses, and a visible path back to “boringly reliable.” Along the way, we kept listening to users so the numbers matched reality.
+
+## Problem
+
+A major infrastructure migration created instability and perception risk: error frequency increased and perceived usefulness could decline despite strategic investments.
+
+## Approach
+
+- Focused reliability backlog prioritized by impact; added a live risk register to guide mitigation.
+- Hardened monitoring; categorized failures by root cause and owner.
+- Iterated on caching, CDN, and DB tuning to reduce tail latency.
+- Closed the loop with users via on‑site feedback to validate progress.
+
+## Outcomes
+
+- Usefulness: 79.9% report sites are helpful (+7pp YoY; 35,113 responses, +4.3% YoY volume).
+- Stability: average daily page failures declined from 6 (first six months) to ~4.5 (last three months), approaching ~4 pre‑migration.
+- Speed: response time improved to 0.45s from 0.88s legacy.
+
+{% endmarkdown %}

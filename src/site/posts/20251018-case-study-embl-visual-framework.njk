@@ -1,0 +1,54 @@
+---
+title: 'Case study: EMBL Visual Framework (design‑system at scale)'
+layout: layouts/post.njk
+teaser: 'Architected and led a component library adopted across 50+ scientific properties, accelerating delivery and standardizing UX.'
+date: 2019-11-12
+tags:
+  - posts
+  - case-studies
+topics:
+  - Design systems
+  - Fractal
+  - Eleventy
+  - Component architecture
+org: EMBL
+permalink: /posts/2019/case-study-embl-visual-framework/
+---
+
+{% markdown %}
+> tl;dr
+>
+> - Built the EMBL Visual Framework, enabling consistent UX and faster time‑to‑delivery across 50+ scientific properties.
+> - Standardized tooling with Fractal, Nunjucks, Sass, and Eleventy; integrated CI and documentation.
+
+Design systems aren’t about components for their own sake—they’re about making good decisions easier and repeatable. At EMBL, dozens of teams shipped sites with different stacks, timelines, and constraints. Our goal was to create a shared language that worked in all of those environments without slowing people down.
+
+We started small: patterns that respected accessibility, performance, and editorial realities. Then we proved adoption was worth it by reducing rework and shortening delivery time. The Visual Framework didn’t “win” because we mandated it; it spread because it helped.
+
+## Problem
+
+Dozens of properties were duplicating UI effort, fragmenting brand and UX, and slowing delivery across a pan‑European scientific organization.
+
+## Approach
+
+- Created a reusable component library with documented patterns and tokens.
+- Integrated Fractal for component development and Eleventy for static demos.
+- Established CI, versioning, and governance for adoption across teams.
+
+## Key decisions
+
+- Prioritized accessibility and performance in base components.
+- Provided migration paths and lightweight integration examples for varied stacks.
+
+## Outcomes
+
+- Adopted across 50+ properties; reduced implementation time and increased consistency.
+- Improved performance through shared best‑practice patterns.
+
+## Links and related writing
+
+- [Fractal and Eleventy: closer to the design system](/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html)
+- [Faster scientific websites through reusability](https://blogs.embl.org/communications/2018/09/12/faster-scientific-websites-through-reusability/)
+- [Unshackling content, and their authors](https://blogs.embl.org/communications/2018/08/21/unshackling-content-and-their-authors/)
+
+{% endmarkdown %}
