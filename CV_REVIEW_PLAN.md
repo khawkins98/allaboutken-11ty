@@ -374,19 +374,16 @@ Add 1-2 short quotes from colleagues/supervisors (if available):
 - [ ] Move skills sections (lines 84-155) to after work history
 - [ ] Rename "Professional experience" → "Core Capabilities"
 - [ ] Rename "Professional work history" → "Professional Experience"
-- [ ] Create Impact Metrics section (HTML)
-- [ ] Rewrite executive summary (metrics-first)
-- [ ] Create CSS for impact metrics
+- [x] Create Impact Metrics section (HTML) ✅ **DONE (2025-10-24)** - Lines 81-113
+- [x] Rewrite executive summary (metrics-first) ✅ **DONE (2025-10-24)** - Lines 59-67
+- [x] Create CSS for impact metrics ✅ **DONE (already exists in styles)**
 - [ ] Test print/PDF output
 
 ### Phase 2: Content (Est. 1-2 hours)
 
-- [ ] Decide on title positioning (Director vs Lead)
-- [ ] Update page title and hero title consistently
-- [ ] Reduce blog post links in skills sections
-- [ ] Consolidate technology lists (group by category)
-- [ ] Trim obsolete tools from pre-2010 roles
-- [ ] Add Download PDF button
+- [x] Decide on title positioning (Director vs Lead) ✅ **DONE (2025-10-24)** - Chose "Platform Architect & Digital Strategy Lead"
+- [x] Update page title and hero title consistently ✅ **DONE (2025-10-24)** - Updated across index.njk, cv.njk, footer.njk, siteConfig.json
+- [x] Add Download PDF button ✅ **DONE (already exists)** - Line 71
 - [ ] Create "Featured Writing" section
 
 ### Phase 3: Visual (Est. 1-2 hours, optional)
@@ -397,6 +394,25 @@ Add 1-2 short quotes from colleagues/supervisors (if available):
 - [ ] Add headshot to hero
 - [ ] Consider testimonials section
 - [ ] Generate PDF version
+
+---
+
+## Recent Updates (2025-10-24)
+
+### Completed: Role Positioning Consistency
+- ✅ Unified positioning as **"Platform Architect & Digital Strategy Lead"** across all pages
+- ✅ Homepage teaser and H2 updated with consistent language
+- ✅ CV title, print header, and intro paragraphs aligned
+- ✅ Footer updated with personality ("online problem solver") while maintaining professional positioning
+- ✅ Site config meta description strengthened with AI-readiness emphasis
+- ✅ Executive summary now leads with metrics and outcomes
+- ✅ Impact metrics section already implemented and visible
+
+### Key Language Decisions
+- **Primary title**: "Platform Architect & Digital Strategy Lead" (consistent everywhere)
+- **AI emphasis**: Strengthened throughout - "making the web faster, more accessible, and AI-ready"
+- **Personality**: "online problem solver" preserved in footer for approachability
+- **Years**: Changed from "20 years" to "20+" for forward-looking positioning
 
 ---
 
