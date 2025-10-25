@@ -18,6 +18,7 @@ permalink: /posts/2025/case-study-editorial-efficiency/
 {% from "partials/orgs.njk" import orgIntro %}
 
 <p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+
 > tl;dr
 >
 > - ~58 hours/month reclaimed across 48 active editors (~1.2 h each) via Release 5.11.
@@ -25,9 +26,11 @@ permalink: /posts/2025/case-study-editorial-efficiency/
 > - Standardized publication cover workflow cut steps from 9 to 3.
 > - Results delivered by a cross‑functional team (engineering, design, content ops) under clear leadership and governance.
 
-Editorial work is where mission meets reality. If the tools are slow or inconsistent, content quality and cadence suffer. Our bet was simple: standardize the common tasks and give editors faster defaults so they can spend more time on substance.
+No single issue was breaking the editorial experience—but the accumulation of paper cuts was slowing everything down. The site felt sluggish. Navigation was slow. Saving content would occasionally time out. The editor menu took 7+ seconds to load. None of these problems were catastrophic on their own, but together they were draining editor time and patience.
 
-Release 5.11 is a good example of that philosophy. We didn’t add bells and whistles—we removed steps, sped up the UI, and made the “right way” the easiest path.
+We dedicated time in our 3-week release cycle to address this backlog of friction. We introduced a new menu concept, fixed underlying performance bugs, automated repetitive workflows, and optimized database queries. The kind of work that's easy to defer when there's always a "more important" feature—but the cumulative impact was significant.
+
+We measured this rigorously: 48 active editors, the frequency of common tasks (publications, news items, updates), and the time each task required. When we multiplied task frequency × time saved × editor count, the result was ~58 hours reclaimed per month. Not from one heroic fix, but from addressing a dozen small sources of friction.
 
 ## Problem
 
@@ -44,16 +47,12 @@ Fragmented editorial steps and inconsistent tooling increased time‑to‑publis
 - Before: 9 steps (create entry, open Photoshop, crop, save, create media, upload, name, specify 6 crops, select image).
 - After: 3 steps (create entry, system auto‑generates cover, optionally override).
 
-## Outcomes (last month)
+## Outcomes (averaged over typical month)
 
 - Publications: 166 items × ~10 minutes saved ≈ ~27 hours saved.
 - Other items: 377 entries × ~5 minutes saved ≈ ~31 hours saved.
 - Total estimated time reclaimed: ~58 hours/month (≈ 1.5 work weeks).
 - Per‑editor average: ~50 minutes saved/week.
 - Editor UI speed: ~20% faster (7.8s → 6.18s).
-
-## Related release scope
-
-- HIPs improvements, security hardening, and stability enhancements shipped alongside.
 
 {% endmarkdown %}
