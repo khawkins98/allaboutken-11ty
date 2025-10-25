@@ -1,7 +1,7 @@
 ---
 title: 'Case study: Improving operational reliability and user trust in 2025'
 layout: layouts/post.njk
-teaser: 'Improved perceived usefulness to 79.9% (+7pp YoY), reduced daily page failures vs post‑migration peak, and cut response time to 0.45s.'
+teaser: 'Improved perceived usefulness to 79.9%, reduced daily page failures vs post‑migration peak, and cut response time to 0.45s.'
 date: 2025-10-01
 tags:
   - posts
@@ -21,12 +21,16 @@ permalink: /posts/2025/case-study-ops-reliability/
 
 > tl;dr
 >
-> - 79.9% of visitors report sites are helpful (+7 percentage points YoY; n=35,113 responses, +4.3% YoY volume).
+> - 79.9% of visitors report sites are helpful (+7 percentage points year over year; n=35,113 responses, +4.3% year over year volume).
 > - Post‑migration stability recovered from 6 to ~4.5 daily page errors; trending toward pre‑migration baseline of ~4.
 > - Median response time improved to 0.45s from 0.88s on legacy.
 > - Achieved through coordinated work across platform, product and editorial teams with clear ownership and cadence.
 
-After migrating to Azure, daily page failures increased from ~4 to ~6—users reported timeouts during peak traffic, and perceived stability declined. We instrumented better, created a risk register, and focused on fixes with the most user impact.
+We migrated from a traditional VM setup with custom load balancing to Azure—a significant infrastructure change that promised better scalability and operational efficiency. But some planning decisions proved suboptimal. We chose services that looked good on paper but weren't designed with Drupal's architecture in mind, like Azure Database for MySQL.
+
+The problems manifested in unexpected ways. High-traffic pages worked fine—they stayed warm in cache. But the long tail of less-frequently accessed content would fail. If no one had visited a particular page recently, the first request would time out. This pattern was nearly invisible on popular routes but created a poor experience for users exploring deeper content or accessing regional pages.
+
+Daily page failures increased from ~4 to ~6. Users reported timeouts during peak traffic. Perceived stability declined despite strategic platform investments. We instrumented better, created a risk register, and focused on fixes with the most user impact: database migration to MariaDB on a VM, CDN tuning, and cache warming for cold paths.
 
 The recovery: fewer page failures, faster responses, and a visible path back to baseline reliability. We kept listening to users throughout to ensure the numbers matched their experience.
 
