@@ -20,16 +20,9 @@ templateEngineOverride: njk
     <h2 class="kh-text-heading--2">I translate between executives, developers, and users—building platforms that work, ship on time, and solve real problems.</h2>
     {% markdown -%}
 
-    Over 20 years leading digital strategy for UN, science, and media organizations, I've architected and shipped AI-ready platforms that [deliver](/posts/20180122-content-action-model.html) measurable results. My journalism background provides deadline discipline and audience-first clarity that pure technologists often lack.
+    Over 20 years leading digital strategy for UN, international science, and media organizations, I've architected and shipped AI-ready platforms that [deliver](/posts/20180122-content-action-model.html) measurable results. My journalism background provides deadline discipline and audience-first clarity that pure technologists often lack.
 
-    Current achievements at UNDRR: product owner for a 15-site Drupal 10 ecosystem delivering 50–70% faster performance, 20% cost savings, and +40% campaign engagement. I create shared vocabularies that enable collaboration across technical teams, content creators, and executive stakeholders.
-
-    See recent <a href="/work/">case studies</a>: UNDRR platform transformation, EMBL Visual Framework, scaled Drupal with commerce.
-
-    <hr>
-
-    {% set latestDigesting = collections.digesting | reverse | first %}
-    <p id="digesting">Currently digesting: <a href="{{ latestDigesting.url }}">{{ latestDigesting.data.title }}</a></p>
+    At UNDRR, I lead a 15-site Drupal ecosystem serving millions with disaster risk intelligence. Through Azure migration challenges and platform optimization, we've achieved 50–70% faster performance, 20% cost savings, and 40% campaign engagement increases. I bridge technical teams, content creators, and executives—translating between stakeholders to ship solutions that work.
 
     {%- endmarkdown %}
   </div>
@@ -37,6 +30,7 @@ templateEngineOverride: njk
 </div>
 
 {#- What Sets Me Apart -#}
+{#- commented out for now
 <section class="kh-grid-stylized kh-u-padding__top--600 kh-u-padding__bottom--600">
   <span></span>
   <section class="kh-content">
@@ -48,11 +42,22 @@ templateEngineOverride: njk
     </blockquote>
   </section>
 </section>
+-#}
 
 <section class="kh-card-container kh-grid-stylized">
   <span></span>
   <section>
     <h2 id="recently" class="kh-text-heading--2">Recently</h2>
+
+    <article class="kh-summary kh-summary--news | kh-content">
+    {% set latestDigesting = collections.digesting | reverse | first %}
+    {% set latestCaseStudy = collections.caseStudies | first %}
+    <ul>
+    <li>Recent project notes as <a href="/work/">case studies</a>: <a href="{{ latestCaseStudy.url }}">{{ latestCaseStudy.data.title }}</a></li>
+    <li id="digesting">Currently digesting: <a href="{{ latestDigesting.url }}">{{ latestDigesting.data.title }}</a></li>
+    </ul>
+    </article>
+
     {%- for post in collections.posts.slice(-10) | reverse -%}
     {%- if not (post.data.tags and ('case-studies' in post.data.tags)) -%}
     <article class="kh-summary kh-summary--news">

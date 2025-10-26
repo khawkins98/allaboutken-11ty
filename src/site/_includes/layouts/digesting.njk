@@ -7,6 +7,7 @@ templateEngineOverride: njk
 <article class="kh-grid-stylized kh-u-margin__top--1200">
   <div></div>
   <div class="kh-content">
+    <p class="kh-breadcrumb"><a href="/digesting">← Digesting</a></p>
     <h1 class="kh-font-headline kh-text-heading--1">{{title}}</h1>
     <p><time datetime="{{ date }}" class="kh-summary__date">{{ date | dateDisplay }}</time>{% if topics %}<span class="kh-summary__author">Filed in: {{ topics | join(', ') }}</span>{% endif %}</p>
     {% if tags and ('note' in tags) %}
