@@ -21,8 +21,8 @@ permalink: /work/2025/impact-story-undrr-platform-transformation/
 >
 > - Transformed 15-site UNDRR Drupal 10 ecosystem: median response time cut in half (0.88s → 0.45s), 20% Azure cost reduction, doubled Lighthouse SEO scores.
 > - Navigated Azure migration challenges including database bottlenecks that caused cold-path failures on long-tail content.
-> - Diagnosed and resolved performance issues through rigorous benchmarking: moved from Azure Database for MySQL to MariaDB on VM, cutting DB latency by ~51%.
-> - Recovered operational reliability: daily page failures from 6 post-migration peak to ~4.5, trending toward ~4 baseline; 503 errors down ~77%.
+> - Diagnosed and resolved performance issues through rigorous benchmarking: moved from Azure Database for MySQL to MariaDB on VM, cutting DB latency by 51%.
+> - Recovered operational reliability: daily page failures from 6 post-migration peak to 4.5, trending toward 4 baseline; 503 errors down 77%.
 > - User satisfaction: 79.9% report sites helpful (+7 percentage points year over year; 35,113 responses).
 > - Managed through risk-led governance with 3-week release cadence and cross-functional coordination across Geneva, Bangkok, Bonn, New York, Manila.
 
@@ -44,7 +44,7 @@ The problems manifested in unexpected ways. High-traffic pages worked fine—the
 
 For disaster risk coordinators searching for hazard data on a specific region, or policymakers accessing historical reports to inform urgent decisions, these failures weren't just technical inconveniences—they were barriers to time-sensitive work. This pattern was nearly invisible on popular routes but created a poor experience for users exploring deeper content or accessing regional pages.
 
-Daily page failures increased from ~4 to ~6. Users reported timeouts during peak traffic. Non-cached paths and admin UX regressed substantially. Query times and p95 latency suggested the managed database service was the bottleneck. Perceived stability declined despite strategic platform investments.
+Daily page failures increased from 4 to 6. Users reported timeouts during peak traffic. Non-cached paths and admin UX regressed substantially. Query times and p95 latency suggested the managed database service was the bottleneck. Perceived stability declined despite strategic platform investments.
 
 ## Diagnosis: database bottleneck
 
@@ -56,7 +56,7 @@ The results were consistent: MariaDB on a VM outperformed the managed service by
 
 With diagnosis complete, we executed a coordinated recovery across multiple fronts:
 
-- **Database migration**: Moved to MariaDB on a VM with tight backup and continuity plans. This immediately cut DB-bound latency by ~51% and reduced daily 503 errors by ~77%. Editor time-to-first-byte improved materially, especially on admin paths and heavy queries.
+- **Database migration**: Moved to MariaDB on a VM with tight backup and continuity plans. This immediately cut DB-bound latency by 51% and reduced daily 503 errors by 77%. Editor time-to-first-byte improved materially, especially on admin paths and heavy queries.
 - **Platform standardization**: Consolidated asset handling with deterministic responsive images in build. Standardized Drupal 10 theming with design-system patterns and component libraries across all 15 sites. Unified UX while maintaining site-specific requirements.
 - **Performance engineering**: Implemented comprehensive caching strategy covering page cache, render cache, and CDN layers. Tuned image pipelines for Core Web Vitals compliance. Conducted render path audits and fixed performance regressions. Added cache warming for cold paths to prevent the timeout pattern we saw post-migration.
 - **AI-readiness**: Implemented RDF/SKOS metadata pipelines and JSON-LD exports. Built machine-actionable content models positioning UNDRR as a leader in structured data publishing. Full context-first approach documented in [Smart AI integration](/posts/20250919-smart-ai-integration-context-first/).
@@ -80,13 +80,13 @@ The cadence held throughout 2024-2025. 90%+ of major tickets included defined ou
 
 - Median response time cut in half (0.88s → 0.45s) across 15 sites—disaster risk data accessible in under a second instead of multiple seconds of waiting
 - Median response time: 0.45s (improved from 0.88s on legacy platform)—practitioners can move between reports and datasets fluidly without interrupting their workflow
-- Database latency: ~51% reduction after MariaDB migration—editors spend less time waiting for the CMS and more time on content that saves lives
+- Database latency: 51% reduction after MariaDB migration—editors spend less time waiting for the CMS and more time on content that saves lives
 - Doubled Lighthouse SEO scores on representative pages—critical risk reduction information reaches broader audiences through search
 
 **Reliability** (rebuilding user trust):
 
-- Daily page failures: recovered from post-migration peak of ~6 to ~4.5, trending toward pre-migration baseline of ~4—fewer dead ends when users need data urgently
-- 503 errors: ~77% reduction after database migration—regional pages and historical reports accessible consistently
+- Daily page failures: recovered from post-migration peak of 6 to 4.5, trending toward pre-migration baseline of 4—fewer dead ends when users need data urgently
+- 503 errors: 77% reduction after database migration—regional pages and historical reports accessible consistently
 - Stability visible to users: smoother experience on long-tail and regional content, particularly for users in bandwidth-constrained environments
 
 **Cost optimization** (doing more with less):
@@ -102,7 +102,7 @@ The cadence held throughout 2024-2025. 90%+ of major tickets included defined ou
 
 **Campaign impact**:
 
-- GAR2025 landing: ~40% engagement lift during campaign period (see [GAR2025 impact story](/work/2025/impact-story-gar2025-landing/))
+- GAR2025 landing: 40% engagement lift during campaign period (see [GAR2025 impact story](/work/2025/impact-story-gar2025-landing/))
 - Platform stability enabled successful high-stakes launches
 
 **AI readiness** (positioning UNDRR for the future):
@@ -130,7 +130,7 @@ We also kept listening to users throughout. The 79.9% satisfaction score wasn't 
 **Related impact stories**:
 
 - [GAR2025 landing: outcomes-first storytelling](/work/2025/impact-story-gar2025-landing/) - Campaign success enabled by platform improvements
-- [Editorial efficiency: saving ~120 hours per 100 editors monthly](/work/2025/impact-story-editorial-efficiency/) - Workflow optimization on the improved platform
+- [Editorial efficiency: saving 120 hours per 100 editors monthly](/work/2025/impact-story-editorial-efficiency/) - Workflow optimization on the improved platform
 - [Governance and delivery at 3-week cadence](/work/2025/impact-story-governance-delivery/) - Process framework that managed this complexity
 
 {% endmarkdown %}
