@@ -1056,7 +1056,7 @@ body:has(#kh-css-toggle:checked) {
   // Impact metrics component for CV
   .kh-metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1rem;
     margin-top: 1rem;
   }
@@ -1086,7 +1086,6 @@ body:has(#kh-css-toggle:checked) {
     display: block;
     margin-top: 0.5rem;
     font-size: 0.875rem;
-    text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--kh-color--grey);
     font-weight: 500;
