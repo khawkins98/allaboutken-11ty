@@ -2,7 +2,34 @@
 
 ## Purpose
 
-This handbook codifies how Ken’s posts are written and presented: the voice, structure, formatting, and quality bar. It is intended for humans and LLMs to produce consistent, on-brand posts.
+This handbook codifies how Ken's posts are written and presented: the voice, structure, formatting, and quality bar. It is intended for humans and LLMs to produce consistent, on-brand posts.
+
+## Table of Contents
+
+- [Bio (for reference)](#bio-for-reference)
+- [Voice and Tone](#voice-and-tone)
+- [Choosing Content Type: Impact Stories vs Blog Posts](#choosing-content-type-impact-stories-vs-blog-posts)
+- [Structure of a Blog Post](#structure-of-a-blog-post)
+- [Formatting Rules](#formatting-rules)
+  - [Note boxes (kh-note)](#note-boxes-kh-note)
+  - [Code demos (codeAndDemo shortcode)](#code-demos-codeanddemo-shortcode)
+- [Dos and Don'ts](#dos-and-donts)
+- [Examples (Good vs Bad)](#examples-good-vs-bad)
+- [Checklist for Writers](#checklist-for-writers)
+- [Narrative & Flow (GW quick pass)](#narrative--flow-gw-quick-pass)
+- [Reasoning & Fallacy Checks (FF quick pass)](#reasoning--fallacy-checks-ff-quick-pass)
+- [Notes for This Site's Stack](#notes-for-this-sites-stack)
+- [Impact Stories](#impact-stories)
+  - [Required components](#required-components)
+  - [Conventions (this site)](#conventions-this-site)
+  - [Structure and narrative depth](#structure-and-narrative-depth)
+  - [Metrics and evidence](#metrics-and-evidence)
+  - [Tone and style](#tone-and-style)
+  - [Accessibility and compliance](#accessibility-and-compliance)
+  - [Front matter template](#front-matter-template)
+  - [Checklist (author)](#checklist-author)
+  - [Examples (Impact Stories)](#examples-impact-stories)
+- [Cross-linking Guidance](#cross-linking-guidance)
 
 ## Bio (for reference)
 
@@ -16,17 +43,54 @@ This handbook codifies how Ken’s posts are written and presented: the voice, s
 - **Core voice**: friendly, conversational, practical; confident but not performative; lightly self‑deprecating when helpful.
 - **Audience**: practitioners and curious readers; assume web/dev literacy but explain project context.
 - **Energy**: start with value, keep momentum with scannable structure, end warmly.
-- **Humor/emojis**: occasional, tasteful, in service of clarity; 0–1 per post is plenty.
-- **Perspective**: prefer first‑person singular for personal experience; use “we” only when work was truly collaborative.
+- **Humor/emojis**: Use sparingly and only when they enhance clarity or tone. Aim for 0–1 per post. Never use emojis as replacements for clear writing.
+- **Perspective**: prefer first‑person singular for personal experience; use "we" only when work was truly collaborative.
 - **Style**: use contractions and plain English; keep sentences and paragraphs short.
 - **Tense**: default to present tense; use past tense for specific events or chronology.
 - **Specificity**: avoid hype; be concrete and show first, then tell.
 
+**Note**: For impact stories, apply a more formal narrative tone. See the [Impact Stories: Tone and style](#tone-and-style) section for specific guidance.
+
 Examples
 
 - Conversational setup: “Still here? Great. Read on.”
-- Light aside: “This is important for local development.”
-- Warm close: “If you have feedback, I’d love to hear it.”
+- Light aside: "This is important for local development."
+- Warm close: "If you have feedback, I'd love to hear it."
+
+## Choosing Content Type: Impact Stories vs Blog Posts
+
+Use this decision guide to determine which format best suits your content:
+
+**Write an Impact Story when**:
+
+- Documenting substantial professional work with measurable outcomes (e.g., platform migrations, system optimizations, design system rollouts)
+- You have quantifiable metrics showing business/organizational impact (performance gains, efficiency improvements, user outcomes)
+- The work involved multiple phases, stakeholders, or technical components worth explaining in depth
+- You want to demonstrate problem-solving approach, technical decisions, and lessons learned
+- The story merits 800–1,500 words to tell comprehensively
+- Goal: showcase portfolio-worthy work for professional context (hiring managers, collaborators, clients)
+
+**Write a Blog Post when**:
+
+- Explaining a specific technique, tool, or solution (e.g., "How to integrate Eleventy with gulp")
+- Sharing a focused tutorial or implementation guide
+- Discussing a narrow technical topic or discovery
+- Writing timely commentary on tools, trends, or experiences
+- Content fits naturally in 600–1,200 words
+- Goal: teach, explain, or share knowledge with practitioners
+
+**Key differences**:
+
+- **Scope**: Impact stories cover end-to-end projects; blog posts address focused topics
+- **Evidence**: Impact stories require metrics and outcomes; blog posts prioritize clarity and examples
+- **Tone**: Impact stories use narrative storytelling; blog posts are conversational and tutorial-focused
+- **Length**: Impact stories are comprehensive (800–1,500 words); blog posts are concise (600–1,200 words)
+- **Audience**: Impact stories target evaluators (hiring managers, collaborators); blog posts target practitioners learning a technique
+
+**Examples**:
+
+- Impact story: "Scaled Drupal platform to 150k+ users with caching strategy" → comprehensive project narrative with performance metrics
+- Blog post: "Integrating Eleventy with gulp for better Node.js tooling" → focused how-to with code examples
 
 ## Structure of a Blog Post
 
@@ -81,8 +145,8 @@ Use a compact aside for short callouts, updates, or related links.
 
 ```html
 <aside class="kh-note-box">
-<span class="kh-note-box__label">Label</span>
-Your short note content goes here.
+  <span class="kh-note-box__label">Label</span>
+  Your short note content goes here.
 </aside>
 ```
 
@@ -108,23 +172,6 @@ via: 'https://example.com/source' # optional source/attribution URL for link pos
 tags: posts
 topics:
   - keyword one, keyword two
-workflow:
-  - context:
-      - 'See the Publishing Workflow for roles, stages, and handoffs: [Publishing Workflow](/docs/PUBLISHING_WORKFLOW.md)'
-      - 'Follow the Editorial Handbook & Style Guide for voice, structure, and formatting: [Editorial Handbook](/docs/EDITORIAL_HANDBOOK.md)'
-  - stage:
-      note: Set to the highest completed stage number (0–9)
-      current: 0
-  - checklist:
-      - 'Stage 0 Pitch & Planning — ME'
-      - 'Stage 1 Drafting — Author/JEA (+GW)'
-      - 'Stage 2 Technical Review — TR'
-      - 'Stage 3 Fact Check — FC (+FF)'
-      - 'Stage 4 Plagiarism Check — PC'
-      - 'Stage 5 Editorial Style Edit — ESE (+GW/FF)'
-      - 'Stage 6 Accessibility Review — AR'
-      - 'Stage 7 SEO & Discoverability — SEO'
-      - 'Stage 8 Final Managing Editor Gate — ME'
 ---
 ```
 
@@ -276,72 +323,112 @@ First, a long explanation spanning multiple paragraphs… (code appears much lat
 - When demonstrating Nunjucks templates, use `{% raw %}` inside code fences to avoid evaluation.
 - Use standard `figure/figcaption` for images that carry meaning; project classes (e.g., `kh-figure`) are fine. Provide alt text and a succinct caption.
 
-## Case Studies
+## Impact Stories
 
-Write concise, evidence‑led case studies that make outcomes obvious in seconds.
+Write comprehensive, evidence‑led impact stories that demonstrate measurable outcomes and tell the full story of complex work.
 
 ### Required components
 
-- **Title**: outcome‑led, concrete; include org/context when allowed.
-- **Teaser**: one sentence with 1–2 metrics or a clear benefit.
-- **tl;dr block (near top)**: 2–4 bullets covering problem, approach, key decision(s), and quantified outcome(s).
-- **Narrative intro (after tl;dr)**: 1–2 short paragraphs that set audience and stakes, explain why the work mattered now, and how the approach fit constraints. Keep it tight and practical.
-- **Body sections** (use these exact headings):
-  - Problem
-  - Approach
-  - Key decisions
-  - Outcomes (with numbers)
-  - Metrics (checklist targets and/or measured results)
-  - Links and related (artifacts, repos, internal posts, dashboards)
+- **Title**: Begin with "Impact story:" followed by an outcome-focused, specific headline. Include org/context when allowed.
+- **Teaser**: Narrative hook (not metrics). One sentence that tells the story arc or challenge. Avoid repeating tl;dr content.
+- **tl;dr block**: 3–6 bullets covering key quantified outcomes, approach highlights, and sustained impact. This is where metrics go.
+- **Organization context (after tl;dr)**: Use `{% from "partials/orgs.njk" import orgIntro %}` and `<p class="kh-text-body--3">{{ orgIntro(org) }}</p>` to provide organization background after the tl;dr.
+- **Narrative opening**: 2–4 paragraphs that set context, explain the challenge, and frame why this work mattered. Make it compelling and human-focused.
+- **Body sections** (flexible structure based on story needs):
+  - **Problem**: Detailed problem framing with specific pain points and stakeholder impact
+  - **Approach**: Comprehensive description of the solution with subsections for major components
+  - **Outcomes**: Categorized results (e.g., Performance, Reliability, Cost, User Satisfaction) with human-impact framing
+  - **What made this work**: Reflection on key factors, lessons learned, and why the approach succeeded
+  - **Links**: Related impact stories, deep-dive blog posts, external artifacts
 
 ### Conventions (this site)
 
-- Tag case studies with `case-studies` (required). This tag ensures they are excluded from the homepage/blog lists and appear on the Work table.
-- Show only the year in UI for case studies. Use a full `date` in front matter (for sorting), but display year‑only via templates.
-- Year‑based permalinks: set `url` to `/posts/YYYY/your-case-study-slug/`.
-- Provide `org` (organization) and `topics` — both render on the Work table (`/work/`).
-- Screenshots/images: store under `src/site/images/blog/` and reference via `image: "/blog/…"`; include `image_meta.altext` and `image_meta.text`.
-- Cross‑link: include at least one internal link to a related long‑form post or case study; add external source links when citing hosted articles.
+- **Tag**: Use `impact-stories` tag (required). This ensures they appear in the Work section and are excluded from blog listings.
+- **Date display**: Show only the year in UI. Use full `date` in front matter for sorting.
+- **Permalinks**: Use `/work/YYYY/impact-story-slug/` format (not `/posts/`).
+- **Filename**: Use `YYYYMMDD-impact-story-slug.njk` format for consistency.
+- **Organization & topics**: Provide `org` and `topics` — both render on the Work table (`/work/`).
+- **Images**: Store under `src/site/images/blog/` and reference via `image: "/blog/…"`; include `image_meta.altext` and `image_meta.text`.
+- **Cross‑linking**: Include links to related impact stories and deep-dive blog posts. Link text should be descriptive, not naked URLs.
+
+### Structure and narrative depth
+
+Impact stories should be comprehensive (800–1,500 words) and tell the complete story:
+
+**Opening narrative** (after tl;dr and orgIntro):
+
+- Set context about the organization, scale, and constraints
+- Frame the challenge in human terms (what was at stake for users/stakeholders)
+- Introduce the approach and why it mattered
+
+**Problem section**:
+
+- Break down specific pain points with concrete examples
+- Show impact on different stakeholder groups
+- Include context about organizational constraints or complexity
+
+**Approach section**:
+
+- Use descriptive subsection headers (e.g., "Risk register as prioritization tool" not just "Risk register")
+- Explain technical decisions with rationale
+- Include specific examples, numbers, and implementation details
+- Show the "how" not just the "what"
+
+**Outcomes section**:
+
+- Categorize results (Performance, Reliability, Cost, etc.)
+- Add human-impact framing: what the metrics mean for real users
+- Include specific numbers with baselines and timeframes
+- Connect technical improvements to organizational value
+
+**What made this work**:
+
+- Reflect on key factors that enabled success
+- Share lessons learned or principles discovered
+- Acknowledge collaboration and cross-functional work
+- End with the ultimate impact or transformation
 
 ### Metrics and evidence
 
-- Prefer numbers with baselines and timeframes (e.g., “50–70% faster over 90 days” vs “faster”).
-- Attribute metrics to sources where appropriate (GA4, Looker Studio, CWV/Lighthouse, platform logs). Avoid unverifiable absolutes.
-- Include a compact metrics checklist when relevant to CWV or delivery:
-  - LCP < 2.5s (mobile), CLS < 0.1, TBT < 200ms
-  - Lighthouse SEO ≥ 90 (representative pages)
-  - Release cadence maintained (e.g., 3‑week)
-- Link to inspectable artifacts wherever possible (repo, gist, diagram, dashboard snapshot). Redact or anonymize sensitive data.
+- **Specific over ranges**: Use single numbers when possible (e.g., "2x faster" or "0.88s → 0.45s" not "50-70% faster")
+- **Baselines and timeframes**: Always show before/after and specify duration
+- **Attribution**: Note sources (GA4, Looker Studio, CWV, platform logs) when relevant
+- **Relative metrics**: For team-size sensitive data, normalize (e.g., "per 100 editors" instead of absolute team size)
+- **Human framing**: Explain what metrics mean (e.g., "~120 hours monthly per 100 editors—equivalent to 3 full work weeks")
+- **Multiple dimensions**: Show outcomes across performance, cost, reliability, user satisfaction, etc.
 
-### Style and length
+### Tone and style
 
-- 400–900 words; front‑load value with scannable bullets and short paragraphs.
-- Include a brief narrative intro immediately after the tl;dr that frames context and flow; use 2–4 sentence paragraphs.
-- Use descriptive links; avoid “here”. Show a figure or snippet before deep explanation when helpful.
-- When showing Nunjucks, wrap in `{% raw %}…{% endraw %}` inside fences to avoid evaluation.
+- **Narrative first**: Tell a story, not just a project report
+- **Concrete and specific**: Use real examples, specific tools, named locations/teams
+- **Human impact**: Connect technical work to user/stakeholder outcomes
+- **Honest about challenges**: Include problems encountered and how they were solved
+- **Avoid superlatives**: Let outcomes speak for themselves
+- **Professional objectivity**: Focus on facts and problem-solving over validation
 
 ### Accessibility and compliance
 
-- Provide meaningful alt text and short captions for figures that carry information.
-- Expand acronyms on first use; write numbers with units and order‑of‑magnitude clarity.
-- Review for confidentiality: no internal credentials, private endpoints, or undisclosed data.
+- Provide meaningful alt text and captions for screenshots/diagrams
+- Expand acronyms on first use (e.g., "GAR (Global Assessment Report)")
+- Review for confidentiality: no internal credentials, private endpoints, or sensitive team data
+- Use relative metrics when absolute numbers could expose confidential information
 
-### Front matter (example)
+### Front matter template
 
 ```yaml
 ---
-title: 'Case study: Outcome (metric, timeframe)'
+title: 'Impact story: Descriptive outcome-focused headline'
 layout: layouts/post.njk
-teaser: 'One‑sentence summary with a number.'
-date: YYYY‑MM‑DD
+teaser: 'Narrative hook that tells the story arc (not metrics).'
+date: YYYY-MM-DD
 tags:
   - posts
-  - case-studies
+  - impact-stories
 topics:
   - keyword one
   - keyword two
 org: Organization Name
-url: /posts/YYYY/case-study-slug/
+permalink: /work/YYYY/impact-story-slug/
 image: '/blog/example.jpg' # optional
 image_meta:
   altext: 'Accurate alt text.'
@@ -351,16 +438,190 @@ image_meta:
 
 ### Checklist (author)
 
-- [ ] Title and teaser are outcome‑led and specific
-- [ ] tl;dr present with 2–4 high‑signal bullets
-- [ ] Sections include Problem, Approach, Key decisions, Outcomes, Metrics, Links
-- [ ] At least one artifact (repo/gist/diagram/demo) linked
-- [ ] Metrics include numbers, baselines, and timeframe
-- [ ] Accessibility (alt text, captions) and confidentiality reviewed
-- [ ] CTA to CV or Contact is present when appropriate
+- [ ] Title starts with "Impact story:" and is outcome-focused
+- [ ] Teaser is narrative (not metrics), doesn't repeat tl;dr
+- [ ] tl;dr has 3–6 bullets with quantified outcomes
+- [ ] orgIntro appears after tl;dr (not before)
+- [ ] Opening narrative (2–4 paragraphs) sets context compellingly
+- [ ] Problem section includes specific pain points and human impact
+- [ ] Approach section has descriptive subsections with implementation details
+- [ ] Outcomes categorized and include human-impact framing
+- [ ] "What made this work" section provides reflection
+- [ ] Metrics use specific numbers with baselines and timeframes
+- [ ] Links use descriptive text (no naked URLs)
+- [ ] Accessibility (alt text, acronyms) and confidentiality reviewed
+- [ ] Cross-links to related impact stories or deep-dive posts included
+
+### Examples (Impact Stories)
+
+These examples show good and bad patterns specific to impact stories.
+
+#### Teaser (narrative vs metrics)
+
+**Good** (narrative hook that sets up the story):
+
+```yaml
+teaser: 'Managed a large‑scale Drupal platform with 150k+ users and integrated commerce; optimized caching and DB performance.'
+```
+
+This tells the _story_ (what was at stake, what was involved) without repeating the tl;dr.
+
+**Bad** (metrics dump that duplicates tl;dr):
+
+```yaml
+teaser: 'Achieved 80% cache hit rate, reduced query times by 40%, and scaled to 150k users.'
+```
+
+#### Opening narrative (compelling vs technical)
+
+**Good** (human-focused context):
+
+```markdown
+Running a high-traffic Drupal platform with 150,000+ registered users and integrated e-commerce meant operating with near-zero tolerance for latency. Every timeout during checkout cost revenue. Every slow page load accessing account data eroded trust.
+```
+
+Sets stakes in human terms before diving into technical details.
+
+**Bad** (immediate technical detail):
+
+```markdown
+We implemented Varnish caching with a 30-minute TTL and optimized MySQL queries using indexes on user_id and product_id columns.
+```
+
+#### Approach section (descriptive vs generic headers)
+
+**Good** (descriptive subsection headers):
+
+```markdown
+## Approach: multi-layered performance strategy
+
+**Reverse proxy caching (Varnish)**
+
+Implemented Varnish in front of the application layer…
+
+**Database optimization (MySQL)**
+
+Profiled slow queries and optimized the hot paths…
+```
+
+Headers describe _what was done_ and _why_, making the approach scannable.
+
+**Bad** (generic headers):
+
+```markdown
+## Approach
+
+**Caching**
+
+We added caching.
+
+**Database**
+
+We optimized queries.
+```
+
+#### Outcomes (human-impact framing vs raw metrics)
+
+**Good** (metrics + what they mean):
+
+```markdown
+**Operational reliability**:
+
+- **Confident deployments**: Multiple deployments per week with instant rollback capability
+- **Proactive monitoring**: APM and slow query logs caught issues before they affected users
+- **Graceful scaling**: Platform handled traffic spikes during promotional campaigns without degradation
+```
+
+Each metric is framed in terms of what it enabled or prevented.
+
+**Bad** (raw metrics only):
+
+```markdown
+**Outcomes**:
+
+- 80% cache hit rate
+- 40% faster queries
+- 99.9% uptime
+```
+
+#### Cross-linking (descriptive vs naked URLs)
+
+**Good** (descriptive link text):
+
+```markdown
+- Related impact story: [UNDRR platform transformation](/work/2025/impact-story-undrr-platform-transformation/) (includes similar database optimization work)
+- Related writing: [UX success: Doubling conversion rates](/posts/20140407-ux-success-double-conversion.html) (Drupal e-commerce from same period)
+```
+
+**Bad** (naked or generic links):
+
+```markdown
+- See also: /work/2025/impact-story-undrr-platform-transformation/
+- Related post [here](/posts/20140407-ux-success-double-conversion.html)
+```
+
+## Cross-linking Guidance
+
+Effective cross-linking helps readers discover related content and builds a connected portfolio narrative.
+
+**Patterns for cross-linking**:
+
+1. **Impact story → related impact stories**: Link to stories covering related domains, technologies, or time periods
+
+   ```markdown
+   - Related impact story: [EMBL Visual Framework](/work/2019/impact-story-embl-visual-framework/) (design system work from same organization)
+   ```
+
+2. **Impact story → deep-dive blog posts**: Link to tutorial/technical posts that explain specific techniques used
+
+   ```markdown
+   - Deep dive: [Integrating Eleventy with gulp](/posts/20191021-integrating-eleventy-with-gulp/) (tooling approach used in this project)
+   ```
+
+3. **Blog post → impact stories**: Reference portfolio context where techniques were applied at scale
+
+   ```markdown
+   I used this pattern while building the [EMBL Visual Framework](/work/2019/impact-story-embl-visual-framework/), where we needed to support multiple technology stacks.
+   ```
+
+4. **Chronological linking**: Connect stories that show progression or evolution of approach
+
+   ```markdown
+   This work built on lessons learned from [DRS scaled Drupal platform](/work/2014/impact-story-drs-scaled-drupal/) and informed later optimizations at [UNDRR platform transformation](/work/2025/impact-story-undrr-platform-transformation/).
+   ```
+
+**Guidelines**:
+
+- Use descriptive link text that explains _why_ the link is relevant (not "see also" or "here")
+- Add brief parenthetical context when helpful: `(similar caching approach)` or `(design system from same organization)`
+- Place cross-links at natural transition points (end of sections, in "Links and related" section)
+- Prefer relative URLs for internal content: `/work/YYYY/slug/` or `/posts/slug/`
+- Verify links are current—update when content moves or is renamed
 
 ## Representative Patterns Observed
 
-- Posts often include a short “Scenario”, “How it works/making it happen”, and “Here’s some code/links” cadence.
-- Occasional emoji is acceptable; ensure it does not replace clarity.
-- Calls to action typically point to a GitHub repo, demo, or invite feedback on X/Twitter.
+**Blog post cadence**:
+
+- Posts often follow a "Scenario → How it works/making it happen → Here's some code/links" structure
+- Opening value statements establish benefit quickly: "This will help you…" or "Here's a faster way to…"
+- Code examples appear early, followed by explanation (show first, then tell)
+- Closing typically includes a repo/demo link and invitation for feedback
+
+**Technical writing style**:
+
+- Contractions and conversational tone throughout ("Let's", "Here's", "You'll")
+- Short paragraphs (2-4 sentences typical)
+- Bulleted lists preferred over dense prose
+- Inline code and keyboard shortcuts formatted with backticks: `npm install`, `Cmd+Shift+P`
+
+**Visual conventions**:
+
+- Screenshots and diagrams include descriptive captions via `<figure>`/`<figcaption>` or image_meta
+- Code blocks use language tags for syntax highlighting: `js,`bash, ```yaml
+- Note boxes (`<aside class="kh-note-box">`) for updates, related links, or short asides
+
+**Calls to action**:
+
+- GitHub repo links for code examples
+- Invitations for feedback: "If you have feedback, I'd love to hear it" or "Let me know if this helped"
+- Cross-references to related posts or impact stories

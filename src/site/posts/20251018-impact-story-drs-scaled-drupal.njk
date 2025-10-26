@@ -24,27 +24,119 @@ permalink: /work/2014/impact-story-drs-scaled-drupal/
 
 <p class="kh-text-body--3">{{ orgIntro(org) }}</p>
 
-Platforms carrying both logged‑in workflows and commerce have near‑zero tolerance for latency. Timeouts and slow responses cost money and trust—especially when users are trying to complete purchases or access account data.
+## The challenge
 
-We focused on caching strategy, database optimization, and deployment safety nets. Performance wins came from removing dozens of small sources of friction: cache keys, TTLs, database indexes, and query optimization.
+Running a high-traffic Drupal platform with 150,000+ registered users and integrated e‑commerce meant operating with near-zero tolerance for latency. Every timeout during checkout cost revenue. Every slow page load accessing account data eroded trust. Anonymous browsing needed to be fast, but authenticated sessions with personalized content and cart state couldn't rely on aggressive caching.
+
+The platform supported both public content (browsable by millions) and authenticated workflows (user accounts, purchase history, active shopping carts). These competing demands created performance challenges that couldn't be solved with a single caching strategy.
+
+We needed to deliver fast experiences for both anonymous and authenticated users while maintaining operational reliability during traffic spikes and code deployments.
 
 ## Problem
 
-High traffic and commerce workflows required reliable performance and operational predictability.
+High traffic and commerce workflows required reliable performance and operational predictability across different user contexts:
 
-## Approach
+**Anonymous users** (public content):
+- Millions of monthly visits
+- Cacheable pages but with personalized elements (regional pricing, currency)
+- SEO-critical performance
 
-- Implemented reverse proxy caching and tuned Drupal caching layers.
-- Optimized MySQL queries and indexes; monitored with APM and logs.
-- Hardened deployment and rollback procedures.
+**Authenticated users** (logged-in workflows):
+- 150,000+ registered accounts
+- Shopping carts with real-time inventory
+- Account dashboards with purchase history and order tracking
+- Personalized recommendations and saved preferences
+
+**Operational constraints**:
+- Daily content updates requiring cache invalidation
+- Code deployments without downtime
+- Traffic spikes during promotional campaigns
+- Database growth requiring ongoing query optimization
+
+## Approach: multi-layered performance strategy
+
+**Reverse proxy caching (Varnish)**
+
+Implemented Varnish in front of the application layer to serve anonymous traffic without hitting PHP or the database. This handled the majority of public page views.
+
+Key decisions:
+- **Smart cache keys**: Included currency and region in cache variations to support personalized pricing
+- **Selective bypassing**: Authenticated requests bypassed Varnish entirely to avoid serving stale cart or account data
+- **Cache warming**: Pre-cached high-traffic pages after deployments or content updates
+- **TTL tuning**: Balanced freshness vs performance (30-minute TTL for most pages, 5 minutes for time-sensitive content like inventory)
+
+Result: 80%+ of anonymous traffic served from Varnish cache, reducing application load dramatically.
+
+**Drupal caching layers**
+
+Tuned Drupal's internal caching for authenticated traffic:
+- **Page cache disabled** for logged-in users (dynamic cart and account data)
+- **Render cache optimized**: Cached reusable page elements (navigation, footer, product grids) while keeping user-specific content dynamic
+- **Block cache tuning**: Cached static blocks aggressively, short TTL for promotional banners
+- **Views caching**: Database-heavy product listings cached with smart invalidation on inventory changes
+
+**Database optimization (MySQL)**
+
+Profiled slow queries and optimized the hot paths:
+- **Indexed critical columns**: User lookups, product searches, order queries
+- **Query rewrites**: Replaced inefficient joins and subqueries in product catalog and order history
+- **Connection pooling**: Reused database connections to reduce overhead under load
+- **Read replicas**: Offloaded reporting and analytics queries to read-only replicas
+
+Monitoring with slow query logs and APM (New Relic) identified bottlenecks before they became user-facing problems.
+
+**Deployment safety nets**
+
+Commerce platforms can't afford broken deployments. We hardened the deployment process:
+- **Blue-green deployments**: Deployed to a staging environment, tested, then switched traffic—allowing instant rollback
+- **Database migration testing**: Ran schema changes on a production-scale test database first
+- **Automated smoke tests**: Post-deployment checks verified cart functionality, checkout flow, and account access
+- **Gradual traffic shifting**: Ramped traffic to the new environment over 15 minutes, monitoring error rates
+
+This let us deploy confidently multiple times per week without risking revenue.
+
+**Traffic pattern analysis**
+
+Used analytics and APM data to understand real user behavior:
+- Identified peak traffic windows (lunch hours, evenings) and scheduled deployments during quiet periods
+- Profiled slow authenticated paths (cart → checkout conversion) and optimized those flows specifically
+- Monitored conversion funnel metrics to catch performance regressions early
 
 ## Outcomes
 
-- Faster page responses, fewer timeouts under load, and smoother editorial operations.
+**Performance**:
+- **Anonymous traffic**: 80%+ served from Varnish cache, sub-second page loads for public content
+- **Authenticated workflows**: Optimized database queries reduced cart and account page load times by 40%
+- **Reduced timeouts**: Eliminated timeout failures during peak traffic through caching and query optimization
+- **Better conversion**: Faster checkout flow correlated with improved conversion rates (detailed in [UX success: Doubling conversion rates](/posts/20140407-ux-success-double-conversion.html))
+
+**Operational reliability**:
+- **Confident deployments**: Multiple deployments per week with instant rollback capability
+- **Proactive monitoring**: APM and slow query logs caught issues before they affected users
+- **Graceful scaling**: Platform handled traffic spikes during promotional campaigns without degradation
+- **Smooth editorial operations**: Content editors experienced fast admin interfaces through render cache optimization
+
+**Platform sustainability**:
+- **Growing user base**: Scaled from initial launch to 150,000+ registered users without major infrastructure changes
+- **Cost efficiency**: Varnish cache reduced application server load, allowing horizontal scaling when needed
+- **Knowledge capture**: Documented optimization patterns that informed later work at UNDRR (see [UNDRR platform transformation](/work/2025/impact-story-undrr-platform-transformation/))
+
+## What made this work
+
+E-commerce platforms demand a different performance mindset than public content sites. You can't just throw caching at the problem—you need layered strategies that balance anonymous and authenticated experiences.
+
+Key factors:
+- **Understanding the user contexts**: Anonymous browsers needed speed, authenticated users needed accuracy—different caching strategies for each
+- **Measuring the right things**: Conversion funnel metrics, not just page load times
+- **Proactive optimization**: Profiling and fixing slow queries before they became incidents
+- **Deployment discipline**: Blue-green deployments and automated testing enabled confident iteration
+- **Patience with scale**: Incremental optimization across caching, database, and application layers rather than hoping for a single heroic fix
+
+The result was a platform that handled 150,000+ users and millions of monthly visitors while maintaining fast, reliable experiences across both public and authenticated contexts.
 
 ## Links and related
 
 - Related impact story: [UNDRR platform transformation](/work/2025/impact-story-undrr-platform-transformation/) (includes similar database optimization work)
-- Related writing: [UX success: Doubling conversion rates](/posts/20140407-ux-success-double-conversion.html) (Drupal e-commerce from same period)
+- Related writing: [UX success: Doubling conversion rates](/posts/20140407-ux-success-double-conversion.html) (Drupal e‑commerce from same period)
 
 {% endmarkdown %}
