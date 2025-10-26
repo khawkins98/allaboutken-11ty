@@ -369,10 +369,10 @@ module.exports = function(config) {
   });
 
   // Collections
-  config.addCollection('caseStudies', (collectionApi) => {
+  config.addCollection('impactStories', (collectionApi) => {
     try {
       return collectionApi.getAll()
-        .filter((item) => Array.isArray(item.data && item.data.tags) && item.data.tags.includes('case-studies'))
+        .filter((item) => Array.isArray(item.data && item.data.tags) && item.data.tags.includes('impact-stories'))
         .sort((a, b) => (a.date > b.date ? -1 : 1));
     } catch (e) {
       return [];

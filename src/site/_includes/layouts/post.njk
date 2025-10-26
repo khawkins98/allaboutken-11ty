@@ -6,10 +6,10 @@ templateEngineOverride: njk
 
 <article class="kh-grid kh-grid__col-3">
   <div class="kh-grid__col--span-1">
-    {% set isCaseStudy = tags and ('case-studies' in tags) %}
+    {% set isImpactStory = tags and ('impact-stories' in tags) %}
     <p class="kh-breadcrumb">
-      {% if isCaseStudy %}
-        <a href="/work">← Case Studies</a>
+      {% if isImpactStory %}
+        <a href="/work">← Work</a>
       {% else %}
         <a href="/blog">← Blog</a>
       {% endif %}
@@ -19,7 +19,7 @@ templateEngineOverride: njk
     </section>
     <p>
       <time datetime="{{ date }}" class="kh-summary__date">
-        {% if isCaseStudy %}{{ date | dateDisplay('y') }}{% else %}{{ date | dateDisplay }}{% endif %}
+        {% if isImpactStory %}{{ date | dateDisplay('y') }}{% else %}{{ date | dateDisplay }}{% endif %}
       </time>
       <span class="kh-summary__author">{{ content | wordCount | formatNumber }} words</span>
       {% if topics %}<span class="kh-summary__author">Filed in: {{ topics | join(', ') }}</span>{% endif %}

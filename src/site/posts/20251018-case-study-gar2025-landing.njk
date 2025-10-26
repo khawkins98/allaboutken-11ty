@@ -1,11 +1,11 @@
 ---
-title: 'Case study: GAR 2025 landing with outcomes‑first storytelling and interactive design'
+title: 'Impact story: GAR 2025 landing with outcomes‑first storytelling and interactive design'
 layout: layouts/post.njk
-teaser: 'Outcomes‑first narrative with interactive data and accessible media that contributed to ~40% engagement lift during the campaign.'
+teaser: 'Coupled with interactive data and accessible graphics drives a 40% engagement lift.'
 date: 2025-10-18
 tags:
   - posts
-  - case-studies
+  - impact-stories
 topics:
   - storytelling
   - interaction
@@ -25,38 +25,96 @@ image_meta:
 
 > tl;dr
 >
-> - Led cross‑team delivery (editorial, design, engineering): outcomes‑first narrative with accessible media and interactive data.
-> - Shaped content structure and performance guardrails; contributed to ~40% engagement lift during campaign.
+> - Led cross‑team delivery (editorial, design, engineering) for UNDRR's flagship report landing page serving policymakers, donors, and journalists globally.
+> - Framed content around "Three Spirals of Unsustainable Development" with interactive maps, animated GDP projections, and choice-based narratives.
+> - Balanced rich media (animated timelines, embedded Datawrapper charts, interactive global maps) with performance: maintained Core Web Vitals despite heavy content load.
+> - Contributed to ~40% engagement lift during campaign period vs. prior GAR launch.
 
-The Global Assessment Report on Disaster Risk Reduction (GAR) is UNDRR’s flagship global report on disaster risk, widely referenced by policymakers, donors, and practitioners.
+The Global Assessment Report on Disaster Risk Reduction (GAR) is UNDRR's flagship report on disaster risk—widely referenced by policymakers, donors, and practitioners making billion-dollar decisions. GAR 2025's thesis: disaster costs now exceed $2.3 trillion annually when cascading impacts are included, but this destructive cycle isn't inevitable.
 
-The GAR landing needed to work for multiple audiences: policymakers, journalists, donors, and the general public. We framed the page around outcomes and choices rather than internal structure—short value‑dense sections, scannable claims tied to the report, and interactive elements that rewarded curiosity.
+The challenge: how do you make macroeconomic arguments about fiscal crises, insurance markets, and climate scenarios compelling to both UN delegates and general public? The page needed to communicate urgent stakes while giving multiple audience segments clear pathways into complex evidence.
 
-My role in the work bridged content, UX, and platform leadership: aligning editorial priorities with component patterns, setting performance budgets, and ensuring the page remained fast and accessible even as rich media was added.
+I led content structure, UX decisions, and platform implementation—translating editorial priorities into component patterns, setting performance budgets, and ensuring the page stayed fast worldwide despite interactive maps, animated data visualizations, and rich media throughout.
 
 ## Problem
 
-Flagship report launches often default to long pages with heavy media and abstract framing. We needed a landing that made the stakes clear in seconds, encouraged exploration, and stayed fast worldwide.
+Flagship report launches often default to long pages with heavy media and abstract framing—burying the key message and slowing global access. We needed a landing that made the stakes clear in seconds, gave multiple audience segments onward paths, and stayed fast despite rich interactive content.
 
-## Approach
+## Content strategy: outcomes first, evidence accessible
 
-- Outcomes‑first copy and headings; short sections that ladder to the report narrative.
-- Interactive data visuals and embedded media balanced with accessibility.
-- Performance guardrails (image pipelines, lazy loading, budget checks) to maintain CWV.
+**Opening hook: "$2.3 trillion annually"**
+We led with the staggering total cost figure, then immediately connected macro to personal: "But the real cost is far higher." This framing made economic abstractions tangible.
 
-## Key decisions
+**The Three Spirals framework**
+Structured the core narrative around three interconnected downward spirals:
+1. **Spiral One: Increasing Debt, Decreasing Income** - How disasters shrink GDP and trigger fiscal crises
+2. **Spiral Two: Unsustainable Risk Transfer** - Insurance market breakdown and "un-insurability"
+3. **Spiral Three: Respond-Repeat** - The humanitarian aid trap
 
-- Prioritized a lead statement that connects macroeconomic stakes to personal and policy choices.
-- Structured the page for quick scanning with clear onward paths to solutions and evidence.
-- Tuned media loading and fallback content to keep the experience smooth.
+Each spiral included its own expandable section with:
+- Problem framing
+- Real-world examples (Micronesia's 46% GDP impact, US insurance withdrawal)
+- Links to interactive map evidence
+- Concrete "Breaking the Spiral" solutions
+
+**Choice-based narrative: Generation Jolt vs Generation Regeneration**
+Presented two stark 2050 scenarios—high-regret vs. resilience-invested futures—making abstract policy choices visceral and personal.
+
+## Interactive elements: making data explorable
+
+**Animated GDP projection timeline**
+The page opens with an animated visualization showing expected hazard impacts on GDP from 2030-2100 across seven climate scenarios (Net Zero 2050, Current Policies, Delayed Transition, etc.). Users can pause, explore, and see their choices play out over decades.
+
+**Embedded interactive maps** (linked to full exploration tool):
+- Fiscal gap return periods (when countries can't meet debt obligations)
+- Earthquake loss projections by region
+- Nature-related fiscal risk
+- Droughts and land degradation
+- Water scarcity and child malnutrition
+- Internally displaced persons
+
+**Datawrapper scatterplot**
+Compared direct disaster losses vs. % of GDP across regions—showing North America's $69.6B (0.23% GDP) vs Micronesia's $4.3B (46.1% GDP). Made relative impact vs absolute losses immediately visual.
+
+**Data counters and dynamic figures**
+Animated the "$2.3 trillion annually" figure on scroll to emphasize scale.
+
+## Technical execution: performance with richness
+
+**The challenge**: Page includes animated timelines, embedded maps, multiple third-party visualizations (Datawrapper), high-res imagery, and interactive tabs. This could easily tank Core Web Vitals.
+
+**Solutions implemented**:
+- Lazy loading for all interactive embeds and below-fold images
+- Intersection Observer API to trigger animations only when visible
+- Deterministic image pipelines with responsive sizing (already in place from platform work)
+- Budget checks during development: every new element justified against performance impact
+- Fallback content for users with JS disabled or slow connections
+- CDN tuning to serve heavy assets efficiently worldwide
+
+**Accessibility maintained throughout**:
+- All interactive maps keyboard-navigable
+- Alt text and ARIA labels on data visualizations
+- Color-blind safe palettes on charts
+- Text alternatives for animated content
 
 ## Outcomes
 
-- Contributed to ~40% engagement lift during campaign period (vs prior comparable launch).
-- Maintained fast, accessible experience with rich content.
+- **Engagement lift**: ~40% increase during campaign period vs. prior comparable GAR launch
+- **Performance maintained**: Core Web Vitals stayed green despite heavy interactive content load
+- **Global accessibility**: Fast experience worldwide, including bandwidth-constrained regions
+- **Multi-audience success**: Clear pathways served policymakers (exploring detailed maps), journalists (scannable claims), and general public (choice-based scenarios)
+- **Campaign amplification**: Interactive maps and data visualizations widely shared on social media, extending report reach beyond traditional policy audiences
+
+## What made this work
+
+Cross-functional coordination was essential. Editorial team brought the Three Spirals narrative framework and evidence hierarchy. Design team created the data visualizations and interactive components. I translated between these priorities and platform constraints—ensuring editorial ambitions remained technically feasible while performance budgets stayed realistic.
+
+The result: a landing page that honored the report's complexity while making it accessible, maintained technical performance while enabling rich interactivity, and served multiple audiences without fragmenting the core message.
 
 ## Links
 
-- Live page: https://www.undrr.org/gar/gar2025
+- [GAR 2025 live page](https://www.undrr.org/gar/gar2025)
+- [Interactive map exploration tool](https://www.undrr.org/gar/gar2025/map-exploration)
+- [UNDRR platform transformation](/work/2025/case-study-undrr-platform-transformation/) (platform foundation enabling this campaign)
 
 {% endmarkdown %}
