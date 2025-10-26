@@ -6,10 +6,17 @@ templateEngineOverride: njk
 
 <article class="kh-grid kh-grid__col-3">
   <div class="kh-grid__col--span-1">
+    {% set isCaseStudy = tags and ('case-studies' in tags) %}
+    <p class="kh-breadcrumb">
+      {% if isCaseStudy %}
+        <a href="/work">← Case Studies</a>
+      {% else %}
+        <a href="/blog">← Blog</a>
+      {% endif %}
+    </p>
     <section class="kh-u-background-color--yellow--dark kh-u-fullbleed">
       <h1 class="kh-font-headline kh-post-title kh-text-heading--1">{{title}}</h1>
     </section>
-    {% set isCaseStudy = tags and ('case-studies' in tags) %}
     <p>
       <time datetime="{{ date }}" class="kh-summary__date">
         {% if isCaseStudy %}{{ date | dateDisplay('y') }}{% else %}{{ date | dateDisplay }}{% endif %}
