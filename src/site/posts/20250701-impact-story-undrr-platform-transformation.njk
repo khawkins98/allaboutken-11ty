@@ -21,7 +21,7 @@ permalink: /work/2025/impact-story-undrr-platform-transformation/
 >
 > - Transformed 15-site UNDRR Drupal 10 ecosystem: median response time cut in half (0.88s → 0.45s), 20% Azure cost reduction, doubled Lighthouse SEO scores.
 > - Navigated Azure migration challenges including database bottlenecks that caused cold-path failures on long-tail content.
-> - Diagnosed and resolved performance issues through rigorous benchmarking: moved from Azure Database for MySQL to MariaDB on VM, cutting DB latency by 51%.
+> - Diagnosed and resolved performance issues through rigorous benchmarking: moved from Azure Database for MySQL to MariaDB on Virtual Machine (VM), cutting database (DB) latency by 51%.
 > - Recovered operational reliability: daily page failures from 6 post-migration peak to 4.5, trending toward 4 baseline; 503 errors down 77%.
 > - User satisfaction: 79.9% report sites helpful (+7 percentage points year over year; 35,113 responses).
 > - Managed through risk-led governance with 3-week release cadence and cross-functional coordination across Geneva, Bangkok, Bonn, New York, Manila.
@@ -32,23 +32,23 @@ permalink: /work/2025/impact-story-undrr-platform-transformation/
 
 ## The vision
 
-We operate a multi-domain ecosystem serving policymakers, practitioners, and the public with critical disaster risk reduction information. A tidy "site redesign" isn't enough—the platform has to be fast, reliable, and readable by both humans and machines. When we kicked off this transformation, we framed success in terms stakeholders care about: measurable speed, lower infrastructure spend, clearer routes for AI-ready publishing, and demonstrable user trust.
+We operate a multi-domain ecosystem serving policymakers, practitioners, and the public with critical disaster risk reduction information. A tidy "site redesign" isn't enough — the platform has to be fast, reliable, and readable by both humans and machines. When we kicked off this transformation, we framed success in terms stakeholders care about: measurable speed, lower infrastructure spend, clearer routes for AI-ready publishing, and demonstrable user trust.
 
 The starting point: critical content for decision-makers was slowed by inconsistent theming, fragmented governance, and limited AI-readiness. Pages were heavy, image pipelines inconsistent, and analytics lacked dimensions for segment-level reporting. We needed comprehensive platform standardization across 15 sites while simultaneously managing a major infrastructure migration.
 
 ## The migration challenge
 
-We migrated from a traditional VM setup with custom load balancing to Azure—a significant infrastructure change that promised better scalability and operational efficiency. But some planning decisions proved suboptimal. We chose services that looked good on paper but weren't designed with Drupal's architecture in mind, particularly Azure Database for MySQL.
+We migrated from a traditional VM setup with custom load balancing to Azure — a significant infrastructure change that promised better scalability and operational efficiency. But some planning decisions proved suboptimal. We chose services that looked good on paper but weren't designed with Drupal's architecture in mind, particularly Azure Database for MySQL.
 
-The problems manifested in unexpected ways. High-traffic pages worked fine—they stayed warm in cache. But the long tail of less-frequently accessed content would fail. If no one had visited a particular page recently, the first request would time out.
+The problems manifested in unexpected ways. High-traffic pages worked fine — they stayed warm in cache. But the long tail of less-frequently accessed content would fail. If no one had visited a particular page recently, the first request would time out.
 
-For disaster risk coordinators searching for hazard data on a specific region, or policymakers accessing historical reports to inform urgent decisions, these failures weren't just technical inconveniences—they were barriers to time-sensitive work. This pattern was nearly invisible on popular routes but created a poor experience for users exploring deeper content or accessing regional pages.
+For disaster risk coordinators searching for hazard data on a specific region, or policymakers accessing historical reports to inform urgent decisions, these failures weren't just technical inconveniences — they were barriers to time-sensitive work. This pattern was nearly invisible on popular routes but created a poor experience for users exploring deeper content or accessing regional pages.
 
-Daily page failures increased from 4 to 6. Users reported timeouts during peak traffic. Non-cached paths and admin UX regressed substantially. Query times and p95 latency suggested the managed database service was the bottleneck. Perceived stability declined despite strategic platform investments.
+Daily page failures increased from 4 to 6. Users reported timeouts during peak traffic. Non-cached paths and admin User Experience (UX) regressed substantially. Query times and 95th percentile latency suggested the managed database service was the bottleneck. Perceived stability declined despite strategic platform investments.
 
 ## Diagnosis: database bottleneck
 
-We needed rigorous evidence to justify a major infrastructure change. Load testing alternated between Azure Database for MySQL and MariaDB on a VM while keeping code and configuration static to isolate the database layer. We measured both user-facing paths and CRUD micro-benchmarks, neutralizing cache effects to see the real performance delta.
+We needed rigorous evidence to justify a major infrastructure change. Load testing alternated between Azure Database for MySQL and MariaDB on a VM while keeping code and configuration static to isolate the database layer. We measured both user-facing paths and CRUD (Create, Read, Update, Delete) micro-benchmarks, neutralizing cache effects to see the real performance delta.
 
 The results were consistent: MariaDB on a VM outperformed the managed service by 2-3x on database-bound operations. The bottleneck was clear. The full technical analysis and benchmarking tables are documented in [Drupal delayed by Azure MySQL](/posts/20250710-metrics-of-caution-azure-mysql/).
 
@@ -58,19 +58,19 @@ With diagnosis complete, we executed a coordinated recovery across multiple fron
 
 - **Database migration**: Moved to MariaDB on a VM with tight backup and continuity plans. This immediately cut DB-bound latency by 51% and reduced daily 503 errors by 77%. Editor time-to-first-byte improved materially, especially on admin paths and heavy queries.
 - **Platform standardization**: Consolidated asset handling with deterministic responsive images in build. Standardized Drupal 10 theming with design-system patterns and component libraries across all 15 sites. Unified UX while maintaining site-specific requirements.
-- **Performance engineering**: Implemented comprehensive caching strategy covering page cache, render cache, and CDN layers. Tuned image pipelines for Core Web Vitals compliance. Conducted render path audits and fixed performance regressions. Added cache warming for cold paths to prevent the timeout pattern we saw post-migration.
-- **AI-readiness**: Implemented RDF/SKOS metadata pipelines and JSON-LD exports. Built machine-actionable content models positioning UNDRR as a leader in structured data publishing. Full context-first approach documented in [Smart AI integration](/posts/20250919-smart-ai-integration-context-first/).
-- **Analytics and monitoring**: Deployed GA4 with custom dimensions for segment-level reporting. Built Looker Studio dashboards tracking chatbot referral patterns and AI-driven traffic. Hardened monitoring with failure categorization by root cause and owner. Implemented on-site user feedback to validate that numbers matched experience.
+- **Performance engineering**: Implemented comprehensive caching strategy covering page cache, render cache, and CDN layers. Tuned image pipelines for Core Web Vitals (CWV) compliance. Conducted render path audits and fixed performance regressions. Added cache warming for cold paths to prevent the timeout pattern we saw post-migration.
+- **AI-readiness**: Implemented RDF (Resource Description Framework) / SKOS (Simple Knowledge Organization System) metadata pipelines and JSON-LD (JavaScript Object Notation for Linked Data) exports. Built machine-actionable content models positioning UNDRR as a leader in structured data publishing. Full context-first approach documented in [Smart AI integration](/posts/20250919-smart-ai-integration-context-first/).
+- **Analytics and monitoring**: Deployed GA4 (Google Analytics 4) with custom dimensions for segment-level reporting. Built Looker Studio dashboards tracking chatbot referral patterns and AI-driven traffic. Hardened monitoring with failure categorization by root cause and owner. Implemented on-site user feedback to validate that numbers matched experience.
 
 ## Governance: managing complexity
 
-This level of transformation—platform standardization, infrastructure migration, performance recovery, and feature delivery—required disciplined governance to stay on track.
+This level of transformation — platform standardization, infrastructure migration, performance recovery, and feature delivery — required disciplined governance to stay on track.
 
 We introduced a living risk register with owners, triggers, and mitigations to steer prioritization. The database migration was flagged early as high-impact/high-risk, which allowed us to plan the transition carefully and maintain service continuity.
 
 We committed to a predictable 3-week release cadence with scope control and demo checkpoints. This gave stakeholders clear expectations about what would ship when, and gave the team focus during a period of significant platform change.
 
-We required measurable outcomes on every major ticket—not just "improve performance" but "reduce p95 TTFB to under 1s on admin paths." This aligned work artifacts to organizational goals and made reporting clearer.
+We required measurable outcomes on every major ticket — not just "improve performance" but "reduce 95th percentile Time to First Byte (TTFB) to under 1s on admin paths." This aligned work artifacts to organizational goals and made reporting clearer.
 
 The cadence held throughout 2024-2025. 90%+ of major tickets included defined outcomes and success metrics. The risk register was reviewed each cycle with owner sign-off. Stakeholder confidence increased as we demonstrated predictable delivery even while managing platform complexity.
 
@@ -78,26 +78,26 @@ The cadence held throughout 2024-2025. 90%+ of major tickets included defined ou
 
 **Performance** (what it means for users):
 
-- Median response time cut in half (0.88s → 0.45s) across 15 sites—disaster risk data accessible in under a second instead of multiple seconds of waiting
-- Median response time: 0.45s (improved from 0.88s on legacy platform)—practitioners can move between reports and datasets fluidly without interrupting their workflow
-- Database latency: 51% reduction after MariaDB migration—editors spend less time waiting for the CMS and more time on content that saves lives
-- Doubled Lighthouse SEO scores on representative pages—critical risk reduction information reaches broader audiences through search
+- Median response time cut in half (0.88s → 0.45s) across 15 sites — disaster risk data accessible in under a second instead of multiple seconds of waiting
+- Median response time: 0.45s (improved from 0.88s on legacy platform) — practitioners can move between reports and datasets fluidly without interrupting their workflow
+- Database latency: 51% reduction after MariaDB migration — editors spend less time waiting for the CMS and more time on content that saves lives
+- Doubled Lighthouse SEO scores on representative pages — critical risk reduction information reaches broader audiences through search
 
 **Reliability** (rebuilding user trust):
 
-- Daily page failures: recovered from post-migration peak of 6 to 4.5, trending toward pre-migration baseline of 4—fewer dead ends when users need data urgently
-- 503 errors: 77% reduction after database migration—regional pages and historical reports accessible consistently
+- Daily page failures: recovered from post-migration peak of 6 to 4.5, trending toward pre-migration baseline of 4 — fewer dead ends when users need data urgently
+- 503 errors: 77% reduction after database migration — regional pages and historical reports accessible consistently
 - Stability visible to users: smoother experience on long-tail and regional content, particularly for users in bandwidth-constrained environments
 
 **Cost optimization** (doing more with less):
 
-- 20% quarterly Azure spend reduction—budget freed up for content and feature development rather than infrastructure overhead
-- Better resource utilization through right-sized infrastructure—technical efficiency enabling mission focus
+- 20% quarterly Azure spend reduction — budget freed up for content and feature development rather than infrastructure overhead
+- Better resource utilization through right-sized infrastructure — technical efficiency enabling mission focus
 
 **User satisfaction** (evidence that technical improvements matter):
 
-- 79.9% of visitors report sites are helpful (+7 percentage points year over year)—real people finding real value
-- 35,113 user responses (+4.3% year over year volume)—growing engagement from the communities we serve
+- 79.9% of visitors report sites are helpful (+7 percentage points year over year) — real people finding real value
+- 35,113 user responses (+4.3% year over year volume) — growing engagement from the communities we serve
 - Perception matched reality: instrumentation validated that performance fixes improved actual user experience, not just backend metrics
 
 **Campaign impact**:
@@ -107,17 +107,17 @@ The cadence held throughout 2024-2025. 90%+ of major tickets included defined ou
 
 **AI readiness** (positioning UNDRR for the future):
 
-- Machine-actionable metadata positioned UNDRR as industry leader—disaster risk knowledge discoverable by AI systems serving global audiences
-- Structured publishing workflows supporting both human and AI audiences—content reaches policymakers whether they're reading directly or querying through AI tools
-- Analytics tracking AI-driven referral patterns and behavior shifts—understanding how audiences discover and use critical information in an evolving landscape
+- Machine-actionable metadata positioned UNDRR as industry leader — disaster risk knowledge discoverable by AI systems serving global audiences
+- Structured publishing workflows supporting both human and AI audiences — content reaches policymakers whether they're reading directly or querying through AI tools
+- Analytics tracking AI-driven referral patterns and behavior shifts — understanding how audiences discover and use critical information in an evolving landscape
 
 ## What made this work
 
-This wasn't a heroics story—it was the result of standardization, rigorous diagnosis, and patient execution. We focused on high-leverage improvements and applied them consistently across 15 sites. The compounding effect is what moved the needle.
+This wasn't a heroics story — it was the result of standardization, rigorous diagnosis, and patient execution. We focused on high-leverage improvements and applied them consistently across 15 sites. The compounding effect is what moved the needle.
 
-Cross-functional coordination across platform, product, editorial, design, and operations teams in Geneva, Bangkok, Bonn, New York, and Manila. Clear ownership, disciplined cadence, and evidence-based decision making. When we hit the database bottleneck, we didn't guess—we benchmarked rigorously and made the infrastructure change with data in hand.
+Cross-functional coordination across platform, product, editorial, design, and operations teams in Geneva, Bangkok, Bonn, New York, and Manila. Clear ownership, disciplined cadence, and evidence-based decision making. When we hit the database bottleneck, we didn't guess — we benchmarked rigorously and made the infrastructure change with data in hand.
 
-We also kept listening to users throughout. The 79.9% satisfaction score wasn't an accident—it reflected our commitment to ensuring that technical metrics translated to real improvements in user experience.
+We also kept listening to users throughout. The 79.9% satisfaction score wasn't an accident — it reflected our commitment to ensuring that technical metrics translated to real improvements in user experience.
 
 ## Links and related writing
 

@@ -64,7 +64,7 @@ PDF-A-go-go is a drop‑in PDF viewer you can embed with a single script tag. Ad
 - **One‑line install**: Include one JS file, optionally one small CSS file
 - **Tiny footprint**: Real‑world demo transfer ~120 KB core viewer JS, ~490 KB JS dependencies, and ~4 KB CSS
 - **Works almost anywhere**: Static HTML, CMS templates, site builders, SSGs; no `<iframe>` required
-- **Super flexible embed**: Configure everything via `data-*` attributes—no custom JS required
+- **Super flexible embed**: Configure everything via `data-*` attributes — no custom JS required
 - **Accessible and fast**: Keyboard navigation, ARIA labels, screen‑reader support, and performance‑minded rendering
 
 Instead of bending yet another third-party widget to our will, I rolled a tiny wrapper around Mozilla’s excellent [PDF.js](https://mozilla.github.io/pdf.js/). It keeps the good bits, bins user-facing bloat.
@@ -121,17 +121,17 @@ Here's a live example of PDF-A-go-go in action. For more info or to contribute, 
 
 ## Sometimes it's about the journey
 
-PDF-A-go-go didn't start out as a scrollable PDF viewer. The first iteration was built around a "flipbook" metaphor—think of those animated page-turning widgets you sometimes see in digital magazines. The idea was to keep the custom code as small possible adn rely on tried and true page-flip format.
+PDF-A-go-go didn't start out as a scrollable PDF viewer. The first iteration was built around a "flipbook" metaphor — think of those animated page-turning widgets you sometimes see in digital magazines. The idea was to keep the custom code as small possible adn rely on tried and true page-flip format.
 
 I thought I could get a quick win in rewrapping [Flipbook Viewer](https://github.com/theproductiveprogrammer/flipbook-viewer) ... but as I started integrating this approach, a few issues quickly surfaced:
 
 - **Performance**: The flipbook model, while visually appealing, was heavy on the browser. Animating page turns and keeping multiple canvases in memory led to sluggishness as I worked to handle edge cases, especially on lower-powered devices or when viewing large PDFs.
-- **User Experience**: The page-flip interaction, though fun at first, turned out to be less practical for the kinds of documents we host on PreventionWeb. Users often want to jump quickly between sections, search for keywords, or scan through pages rapidly—actions that are awkward in a flipbook UI.
+- **User Experience**: The page-flip interaction, though fun at first, turned out to be less practical for the kinds of documents we host on PreventionWeb. Users often want to jump quickly between sections, search for keywords, or scan through pages rapidly — actions that are awkward in a flipbook UI.
 - **Accessibility**: Making the flipbook accessible (keyboard navigation, screen reader support, etc.) proved challenging. The more we tried to patch it, the more it felt like I was fighting the metaphor.
 
 After a few rounds of testing and feedback, it became clear that the flipbook approach was getting in the way of what users actually needed: fast, accessible, and intuitive PDF navigation.
 
-So, I pivoted. The flipbook code was retired and I built a new viewer layer around a simpler and more reliable scroll paradigm. The approach is lighter, faster, and much more in line with how people actually use PDFs on the web—especially in a research-heavy context like PreventionWeb all the while giving us a better foundation for more customization around the UX.
+So, I pivoted. The flipbook code was retired and I built a new viewer layer around a simpler and more reliable scroll paradigm. The approach is lighter, faster, and much more in line with how people actually use PDFs on the web — especially in a research-heavy context like PreventionWeb all the while giving us a better foundation for more customization around the UX.
 
 The result? A smoother, more accessible experience that feels like it belongs in a modern web app, not a novelty kiosk. Sometimes, the best interface is the one that gets out of the way.
 
@@ -144,6 +144,6 @@ The result? A smoother, more accessible experience that feels like it belongs in
 
 If you've ever been frustrated by the state of PDF embedding on the web, give PDF-A-go-go a try. Sometimes the best tools are the ones you build because you can't believe they don't already exist.
 
-PDF-A-go-go is open source and [available on GitHub](https://github.com/khawkins98/PDF-A-go-go/). Contributions, feedback, and ideas are very welcome—whether it's a bug report, a feature suggestion, or just a note to say how you're using it.
+PDF-A-go-go is open source and [available on GitHub](https://github.com/khawkins98/PDF-A-go-go/). Contributions, feedback, and ideas are very welcome — whether it's a bug report, a feature suggestion, or just a note to say how you're using it.
 
 {% endmarkdown %}
