@@ -12,7 +12,7 @@ topics:
   - Eleventy
   - Component architecture
 org: EMBL
-permalink: /work/2019/case-study-embl-visual-framework/
+permalink: /work/2019/impact-story-embl-visual-framework/
 image: '/blog/vf-home.png'
 image_meta:
   text: 'Screenshot of the Visual Framework documentation site'
@@ -24,6 +24,10 @@ image_meta:
 >
 > - Built the EMBL Visual Framework, enabling consistent UX and faster time‑to‑delivery across 50+ scientific properties.
 > - Standardized tooling with Fractal, Nunjucks, Sass, and Eleventy; integrated CI and documentation.
+
+{% from "partials/orgs.njk" import orgIntro %}
+
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
 
 At EMBL, dozens of teams shipped sites with different stacks, timelines, and constraints. They were duplicating UI effort, fragmenting brand and UX, and slowing delivery. Our goal was to create a shared component library that worked across all those environments without slowing teams down.
 
