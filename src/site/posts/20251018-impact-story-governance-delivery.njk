@@ -51,7 +51,7 @@ We built a concise risk register tracking platform, operational, and delivery ri
 
 Example entries:
 
-- **Azure Database for MySQL performance bottleneck** (High impact/High likelihood): Owner: Platform lead. Trigger: p95 latency >2s on admin paths. Mitigation: Benchmark alternative DB solutions, plan migration to MariaDB on VM.
+- **Azure Database for MySQL performance bottleneck** (High impact/High likelihood): Owner: Platform lead. Trigger: 95th percentile latency >2s on admin paths. Mitigation: Benchmark alternative database (DB) solutions, plan migration to MariaDB on Virtual Machine (VM).
 - **GAR2025 launch on unstable platform** (High impact/Medium likelihood): Owner: Product lead. Trigger: Daily 503 errors >5. Mitigation: Prioritize stability fixes over new features in cycles leading up to launch.
 - **Fragmented editorial workflows slowing time-to-publish** (Medium impact/High likelihood): Owner: Content ops lead. Mitigation: Dedicate one 3-week cycle to workflow efficiency (became Editorial Efficiency initiative saving 120 hours per 100 editors monthly).
 
@@ -77,13 +77,13 @@ The cadence gave stakeholders clear answers: "That feature will be in the cycle 
 
 **Measurable outcomes on every major ticket**
 
-We required explicit, measurable outcomes for significant work—not just "improve performance" but "reduce p95 TTFB to under 1s on admin paths" or "cut publication workflow from 9 steps to 3."
+We required explicit, measurable outcomes for significant work—not just "improve performance" but "reduce 95th percentile Time to First Byte (TTFB) to under 1s on admin paths" or "cut publication workflow from 9 steps to 3."
 
 Outcome template:
 
 - **What**: Brief description of the work
 - **Why**: Strategic value or risk mitigation
-- **Success metric**: Measurable outcome (performance delta, time saved, error reduction %)
+- **Success metric**: Measurable outcome (performance delta, time saved, error reduction percentage)
 - **Audience**: Who benefits (editors, public users, policymakers, etc.)
 
 Examples from actual releases:
@@ -110,29 +110,29 @@ This outcomes-first approach aligned work artifacts to organizational goals and 
 
 ## Outcomes
 
-**Predictability and trust**:
+**Predictability and trust** (what it meant for stakeholders):
 
-- Release cadence maintained at 3 weeks throughout 2024-2025 (26 cycles across 18 months)
-- Stakeholder confidence increased—they knew when work would ship and could plan campaigns accordingly
-- Zero missed major launches due to platform instability (GAR2025, regional campaigns, etc.)
+- Release cadence maintained at 3 weeks throughout 2024-2025 (26 cycles across 18 months)—teams in Geneva, Bangkok, Bonn, New York, and Manila could plan campaign launches with confidence
+- Stakeholder confidence increased—"when will X be ready?" changed from "we'll try" to "cycle starting [date]"
+- Zero missed major launches due to platform instability (GAR2025, regional campaigns, etc.)—predictable delivery enabled critical communication deadlines
 
-**Outcomes-aligned delivery**:
+**Outcomes-aligned delivery** (connecting work to value):
 
-- 90%+ of major tickets included defined success metrics
-- Backlog prioritized by risk/impact rather than loudest voice or convenience
-- Reporting shifted from activity ("tickets closed") to impact ("hours saved," "errors reduced," "users satisfied")
+- 90%+ of major tickets included defined success metrics—engineering understood why their work mattered
+- Backlog prioritized by risk/impact rather than loudest voice or convenience—high-value work (editorial efficiency, database migration) addressed systematically
+- Reporting shifted from activity ("tickets closed") to impact ("hours saved," "errors reduced," "users satisfied")—clearer communication to leadership and funders
 
-**Active risk management**:
+**Active risk management** (preventing crises before they happen):
 
-- Risk register reviewed each cycle with owner sign-off
-- High-impact risks (database bottleneck, editorial efficiency) systematically addressed rather than deferred
-- Team empowered to escalate blockers early with clear mitigation plans
+- Risk register reviewed each cycle with owner sign-off—risks visible and managed proactively
+- High-impact risks (database bottleneck, editorial efficiency) systematically addressed rather than deferred—prevented platform failures during critical campaigns
+- Team empowered to escalate blockers early with clear mitigation plans—problems surfaced before they became user-facing incidents
 
-**Cross-functional coordination**:
+**Cross-functional coordination** (making distributed teams effective):
 
-- Governance enabled collaboration across platform, product, editorial, design, and operations teams
-- Distributed teams (Geneva, Bangkok, Bonn, New York, Manila) synchronized through predictable cadence
-- Clear ownership prevented diffusion of responsibility
+- Governance enabled collaboration across platform, product, editorial, design, and operations teams—shared understanding of priorities and timelines
+- Distributed teams (Geneva, Bangkok, Bonn, New York, Manila) synchronized through predictable cadence—no timezone became a blocker
+- Clear ownership prevented diffusion of responsibility—everyone knew who was accountable for what
 
 ## What made this work
 

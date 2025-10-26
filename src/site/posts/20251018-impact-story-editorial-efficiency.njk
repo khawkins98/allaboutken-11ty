@@ -36,6 +36,28 @@ We measured this rigorously: the frequency of common tasks (publications, news i
 
 Fragmented editorial steps and inconsistent tooling increased time‑to‑publish and human error, reducing capacity for strategic content work.
 
+Specific pain points across the editorial team:
+
+**Performance friction**:
+
+- Editor menu took 7.8 seconds to load — used hundreds of times daily, this meant minutes lost waiting for basic navigation
+- Content save operations timed out frequently, forcing editors to retry or lose work
+- Taxonomy autocomplete sluggish, slowing content tagging and categorization
+
+**Manual publication workflow**:
+
+- Publications (166 monthly) required 9-step process: create entry, switch to Photoshop, crop cover, save file, create media entity, upload, name/tag, specify 6 crops, select in publication
+- 10 minutes per publication × 166 items = 1,660 minutes monthly (27.6 hours) spent on mechanical image prep
+- Error-prone: editors frequently forgot crops or uploaded wrong image sizes
+
+**Inconsistent workflows across 15 sites**:
+
+- Editors moving between UNDRR regional sites faced different field structures, publishing states, and taxonomies
+- Content types for publications, news, and events differed site-to-site, forcing editors to relearn patterns
+- Fragmentation multiplied training burden and increased errors
+
+The cumulative effect: editors spent significant time fighting the Content Management System (CMS) instead of creating content that serves UNDRR's mission.
+
 ## Approach: addressing friction systematically
 
 **Menu performance optimization**
@@ -75,7 +97,7 @@ The automation used ImageMagick to extract the first page of uploaded PDFs, appl
 
 **Workflow standardization across 15 sites**
 
-Different UNDRR web presences had fragmented editorial workflows—editors moving between sites faced different field structures, publishing states, and taxonomy hierarchies. We standardized:
+Different UNDRR web presences had fragmented editorial workflows — editors moving between sites faced different field structures, publishing states, and taxonomy hierarchies. We standardized:
 
 - Content type schemas (publications, news, events, statements)
 - Editorial workflow states (draft → review → published)
@@ -87,32 +109,33 @@ Different UNDRR web presences had fragmented editorial workflows—editors movin
 - Reduced timeout failures on save (optimized revision storage)
 - Fixed slow taxonomy autocomplete (indexed commonly-used terms)
 - Streamlined moderation workflow queries (reduced database round-trips)
-- Improved WYSIWYG editor responsiveness (updated CKEditor configuration)
+- Improved WYSIWYG (What You See Is What You Get) editor responsiveness (updated CKEditor configuration)
 
 ## Outcomes (normalized per 100 editors per month)
 
 - **Publications**: 56 hours saved (166 items × 10 minutes per 100 editors)
 - **Other content**: 64 hours saved (377 entries × 5 minutes per 100 editors)
-- **Total time reclaimed**: 120 hours/month per 100 editors—**equivalent to 3 full work weeks** of human effort returned monthly
-- **Per-editor average**: 50 minutes saved/week per editor—nearly an hour per person reclaimed for strategic content work instead of fighting the CMS
+- **Total time reclaimed**: 120 hours/month per 100 editors — **equivalent to 3 full work weeks** of human effort returned monthly
+- **Per-editor average**: 50 minutes saved/week per editor — nearly an hour per person reclaimed for strategic content work instead of fighting the CMS
 - **Menu performance**: 20% faster (7.8s → 6.18s)
 - **Timeout failures**: Reduced by 85% on content save operations
 - **Editor satisfaction**: Qualitative feedback showed reduced frustration with "the system is slow" complaints
 
-To put this in perspective: 120 hours monthly per 100 editors equals 1,440 hours annually—**the equivalent of nearly 8 full-time months of work** reclaimed across a 100-editor team. This isn't theoretical productivity—it's actual time editors now spend creating content that serves UNDRR's mission instead of waiting for menus to load or manually cropping images.
+To put this in perspective: 120 hours monthly per 100 editors equals 1,440 hours annually — **the equivalent of nearly 8 full-time months of work** reclaimed across a 100-editor team. This isn't theoretical productivity — it's actual time editors now spend creating content that serves UNDRR's mission instead of waiting for menus to load or manually cropping images.
 
 ## What made this work
 
 This wasn't glamorous feature work, the kind of work that's easy to defer when there's always a "more important" campaign or feature request. But the cumulative impact mattered.
 
 We made it happen by:
+
 - **Carving out dedicated time** in our 3-week release cadence specifically for editorial efficiency
-- **Measuring rigorously** before and after (task frequency × time × editor count = defensible ROI)
+- **Measuring rigorously** before and after (task frequency × time × editor count = defensible ROI (Return on Investment))
 - **Prioritizing by impact** (publication covers affected 166 items/month, so automation paid off quickly)
 - **Keeping defaults fast** (auto-generate covers, but allow overrides when needed)
 - **Standardizing ruthlessly** (15 sites, one workflow pattern)
 
-The result: editors spend less time fighting the CMS and more time on strategic content work—exactly what a platform should enable.
+The result: editors spend less time fighting the CMS and more time on strategic content work — exactly what a platform should enable.
 
 ## Links
 

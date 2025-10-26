@@ -33,7 +33,7 @@ This handbook codifies how Ken's posts are written and presented: the voice, str
 
 ## Bio (for reference)
 
-- **Role**: Ken Hawkins — web design architect and product‑minded editorial lead.
+- **Role**: Ken Hawkins – web design architect and product‑minded editorial lead.
 - **Focus**: information architecture, design systems, Eleventy/Drupal, and pragmatic content tooling.
 - **Unique value**: translating between communications and engineering; show‑first, evidence‑led writing; reusable, production‑ready patterns.
 - **Style anchors**: approachable, specific, generous with links and examples.
@@ -43,7 +43,7 @@ This handbook codifies how Ken's posts are written and presented: the voice, str
 - **Core voice**: friendly, conversational, practical; confident but not performative; lightly self‑deprecating when helpful.
 - **Audience**: practitioners and curious readers; assume web/dev literacy but explain project context.
 - **Energy**: start with value, keep momentum with scannable structure, end warmly.
-- **Humor/emojis**: Use sparingly and only when they enhance clarity or tone. Aim for 0–1 per post. Never use emojis as replacements for clear writing.
+- **Humor/emojis**: Use sparingly and only when they enhance clarity or tone. Aim for 0 – 1 per post. Never use emojis as replacements for clear writing.
 - **Perspective**: prefer first‑person singular for personal experience; use "we" only when work was truly collaborative.
 - **Style**: use contractions and plain English; keep sentences and paragraphs short.
 - **Tense**: default to present tense; use past tense for specific events or chronology.
@@ -67,7 +67,7 @@ Use this decision guide to determine which format best suits your content:
 - You have quantifiable metrics showing business/organizational impact (performance gains, efficiency improvements, user outcomes)
 - The work involved multiple phases, stakeholders, or technical components worth explaining in depth
 - You want to demonstrate problem-solving approach, technical decisions, and lessons learned
-- The story merits 800–1,500 words to tell comprehensively
+- The story merits 800 – 1,500 words to tell comprehensively
 - Goal: showcase portfolio-worthy work for professional context (hiring managers, collaborators, clients)
 
 **Write a Blog Post when**:
@@ -76,7 +76,7 @@ Use this decision guide to determine which format best suits your content:
 - Sharing a focused tutorial or implementation guide
 - Discussing a narrow technical topic or discovery
 - Writing timely commentary on tools, trends, or experiences
-- Content fits naturally in 600–1,200 words
+- Content fits naturally in 600 – 1,200 words
 - Goal: teach, explain, or share knowledge with practitioners
 
 **Key differences**:
@@ -84,7 +84,7 @@ Use this decision guide to determine which format best suits your content:
 - **Scope**: Impact stories cover end-to-end projects; blog posts address focused topics
 - **Evidence**: Impact stories require metrics and outcomes; blog posts prioritize clarity and examples
 - **Tone**: Impact stories use narrative storytelling; blog posts are conversational and tutorial-focused
-- **Length**: Impact stories are comprehensive (800–1,500 words); blog posts are concise (600–1,200 words)
+- **Length**: Impact stories are comprehensive (800 – 1,500 words); blog posts are concise (600 – 1,200 words)
 - **Audience**: Impact stories target evaluators (hiring managers, collaborators); blog posts target practitioners learning a technique
 
 **Examples**:
@@ -136,7 +136,7 @@ Suggested intro blocks (use only 1)
 Paragraph
 ```
 
-- **Length**: aim for 600–1,200 words unless the user has otherwise suggested a length.
+- **Length**: aim for 600 – 1,200 words unless the user has otherwise suggested a length.
 - **Whitespace**: no trailing spaces; leave a blank line between major sections.
 
 ### Note boxes (kh-note)
@@ -180,7 +180,7 @@ topics:
 - Use the `codeAndDemo` paired shortcode to show a snippet as both an escaped code block and a live demo from the same source.
 - Place it outside `{% markdown %}` blocks (Markdown will double‑escape otherwise).
 - Prefer plain HTML/JS snippets for live demos; keep them minimal and self‑contained.
-- Don’t duplicate the same example in both a fenced code block and inline—let the shortcode handle both.
+- Don’t duplicate the same example in both a fenced code block and inline – let the shortcode handle both.
 
 Usage
 
@@ -301,7 +301,7 @@ First, a long explanation spanning multiple paragraphs… (code appears much lat
 
 ## Narrative & Flow (GW quick pass)
 
-- **Lede**: opens with value; sets stakes and audience in first 1–2 sentences.
+- **Lede**: opens with value; sets stakes and audience in first 1 – 2 sentences.
 - **Outline**: sections flow logically (problem → approach → steps → wrap‑up).
 - **Transitions**: each section opens with a bridge sentence that orients the reader.
 - **Scannability**: convert dense prose into bullets/steps; keep paragraphs short.
@@ -331,9 +331,9 @@ Write comprehensive, evidence‑led impact stories that demonstrate measurable o
 
 - **Title**: Begin with "Impact story:" followed by an outcome-focused, specific headline. Include org/context when allowed.
 - **Teaser**: Narrative hook (not metrics). One sentence that tells the story arc or challenge. Avoid repeating tl;dr content.
-- **tl;dr block**: 3–6 bullets covering key quantified outcomes, approach highlights, and sustained impact. This is where metrics go.
+- **tl;dr block**: 3 – 6 bullets covering key quantified outcomes, approach highlights, and sustained impact. This is where metrics go.
 - **Organization context (after tl;dr)**: Use `{% from "partials/orgs.njk" import orgIntro %}` and `<p class="kh-text-body--3">{{ orgIntro(org) }}</p>` to provide organization background after the tl;dr.
-- **Narrative opening**: 2–4 paragraphs that set context, explain the challenge, and frame why this work mattered. Make it compelling and human-focused.
+- **Narrative opening**: 2 – 4 paragraphs that set context, explain the challenge, and frame why this work mattered. Make it compelling and human-focused.
 - **Body sections** (flexible structure based on story needs):
   - **Problem**: Detailed problem framing with specific pain points and stakeholder impact
   - **Approach**: Comprehensive description of the solution with subsections for major components
@@ -347,13 +347,13 @@ Write comprehensive, evidence‑led impact stories that demonstrate measurable o
 - **Date display**: Show only the year in UI. Use full `date` in front matter for sorting.
 - **Permalinks**: Use `/work/YYYY/impact-story-slug/` format (not `/posts/`).
 - **Filename**: Use `YYYYMMDD-impact-story-slug.njk` format for consistency.
-- **Organization & topics**: Provide `org` and `topics` — both render on the Work table (`/work/`).
+- **Organization & topics**: Provide `org` and `topics` – both render on the Work table (`/work/`).
 - **Images**: Store under `src/site/images/blog/` and reference via `image: "/blog/…"`; include `image_meta.altext` and `image_meta.text`.
 - **Cross‑linking**: Include links to related impact stories and deep-dive blog posts. Link text should be descriptive, not naked URLs.
 
 ### Structure and narrative depth
 
-Impact stories should be comprehensive (800–1,500 words) and tell the complete story:
+Impact stories should be comprehensive (800 – 1,500 words) and tell the complete story:
 
 **Opening narrative** (after tl;dr and orgIntro):
 
@@ -393,8 +393,9 @@ Impact stories should be comprehensive (800–1,500 words) and tell the complete
 - **Specific over ranges**: Use single numbers when possible (e.g., "2x faster" or "0.88s → 0.45s" not "50-70% faster")
 - **Baselines and timeframes**: Always show before/after and specify duration
 - **Attribution**: Note sources (GA4, Looker Studio, CWV, platform logs) when relevant
+- **Percentiles**: Write "95th percentile" (not "p95"), "90th percentile" (not "p90"), etc.
 - **Relative metrics**: For team-size sensitive data, normalize (e.g., "per 100 editors" instead of absolute team size)
-- **Human framing**: Explain what metrics mean (e.g., "~120 hours monthly per 100 editors—equivalent to 3 full work weeks")
+- **Human framing**: Explain what metrics mean (e.g., "~120 hours monthly per 100 editors – equivalent to 3 full work weeks")
 - **Multiple dimensions**: Show outcomes across performance, cost, reliability, user satisfaction, etc.
 
 ### Tone and style
@@ -409,7 +410,7 @@ Impact stories should be comprehensive (800–1,500 words) and tell the complete
 ### Accessibility and compliance
 
 - Provide meaningful alt text and captions for screenshots/diagrams
-- Expand acronyms on first use (e.g., "GAR (Global Assessment Report)")
+- Acronyms: Do not expand common technical acronyms (e.g., CSS, JS, API, HTML, URL, HTTP, DNS, CDN). Expand only uncommon or organization‑specific acronyms on first use (e.g., "GAR (Global Assessment Report)").
 - Review for confidentiality: no internal credentials, private endpoints, or sensitive team data
 - Use relative metrics when absolute numbers could expose confidential information
 
@@ -440,9 +441,9 @@ image_meta:
 
 - [ ] Title starts with "Impact story:" and is outcome-focused
 - [ ] Teaser is narrative (not metrics), doesn't repeat tl;dr
-- [ ] tl;dr has 3–6 bullets with quantified outcomes
+- [ ] tl;dr has 3 – 6 bullets with quantified outcomes
 - [ ] orgIntro appears after tl;dr (not before)
-- [ ] Opening narrative (2–4 paragraphs) sets context compellingly
+- [ ] Opening narrative (2 – 4 paragraphs) sets context compellingly
 - [ ] Problem section includes specific pain points and human impact
 - [ ] Approach section has descriptive subsections with implementation details
 - [ ] Outcomes categorized and include human-impact framing
@@ -596,7 +597,7 @@ Effective cross-linking helps readers discover related content and builds a conn
 - Add brief parenthetical context when helpful: `(similar caching approach)` or `(design system from same organization)`
 - Place cross-links at natural transition points (end of sections, in "Links and related" section)
 - Prefer relative URLs for internal content: `/work/YYYY/slug/` or `/posts/slug/`
-- Verify links are current—update when content moves or is renamed
+- Verify links are current – update when content moves or is renamed
 
 ## Representative Patterns Observed
 
