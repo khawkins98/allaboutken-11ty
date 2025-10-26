@@ -254,6 +254,7 @@
   h5:not([class*='kh-']),
   h6:not([class*='kh-']) {
     position: relative;
+    text-wrap: balance;
 
     .kh-anchor {
       color: var(--kh-anchor-color, var(--kh-color--grey));

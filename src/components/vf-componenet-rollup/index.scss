@@ -433,6 +433,10 @@ body:has(#kh-css-toggle:checked) {
     text-decoration: underline;
   }
 
+  .kh-navigation__link--active {
+    font-weight: bold;
+  }
+
   .kh-summary {
     --kh-text-margin--bottom: 16px;
     align-self: start;
@@ -508,6 +512,7 @@ body:has(#kh-css-toggle:checked) {
     font-weight: 400;
     line-height: 1.29;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
+    text-wrap: balance;
   }
 
   .kh-summary--news {
@@ -680,6 +685,7 @@ body:has(#kh-css-toggle:checked) {
   .kh-post-title {
     padding: 2rem 0;
     position: relative;
+    text-wrap: balance;
   }
 
   @media (min-width: $kh-breakpoint--md) {
@@ -1012,6 +1018,105 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-u-text--nowrap {
     white-space: nowrap;
+  }
+
+
+  // Featured quotes for homepage
+  .kh-quote--featured {
+    border-left: 3px solid var(--kh-color--yellow--dark);
+    padding: 1rem 0 1rem 1.5rem;
+    margin: 0 0 2rem 0;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    font-style: normal;
+    font-weight: 400;
+    color: var(--kh-color--text);
+    background: transparent;
+
+    p {
+      margin: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    // Subtle opening quote mark
+    &::before {
+      content: '"';
+      font-size: 2.5rem;
+      line-height: 0;
+      vertical-align: -0.4rem;
+      margin-right: 0.25rem;
+      color: var(--kh-color--yellow--dark);
+      font-weight: 700;
+    }
+  }
+
+  // Impact metrics component for CV
+  .kh-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .kh-metric {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: var(--kh-color--yellow--lightest);
+    border-radius: 4px;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  .kh-metric__number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--kh-color--text);
+    font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 700, 'slnt' 0, 'CRSV' 0.5;
+  }
+
+  .kh-metric__label {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--kh-color--grey);
+    font-weight: 500;
+  }
+
+  // Career snapshot component for CV
+  .kh-career-snapshot {
+    max-width: 70ch;
+  }
+
+  .kh-snapshot-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--kh-color--grey--lightest);
+      line-height: 1.6;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      strong {
+        color: var(--kh-color--text);
+        font-weight: 600;
+        margin-right: 0.5rem;
+      }
+    }
   }
 
   @media print {

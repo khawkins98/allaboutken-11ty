@@ -1,6 +1,6 @@
 ---
 title: My work and impact
-teaser: 'Evidence-led case studies: UNDRR platform transformation (50–70% faster), EMBL Visual Framework (50+ sites), editorial efficiency, and governance improvements.'
+teaser: 'Evidence-led impact stories: UNDRR platform transformation (50–70% faster), EMBL Visual Framework (50+ sites), editorial efficiency, and governance improvements.'
 layout: layouts/base.njk
 templateEngineOverride: njk
 ---
@@ -10,7 +10,7 @@ templateEngineOverride: njk
   <section class="kh-content kh-u-padding__top--800 kh-u-padding__bottom--200">
     <h1 class="kh-text-heading--1">{{title}}</h1>
     <p class="kh-intro__text">
-      Here I maintain a collection of evidence‑led write‑ups of my work on platforms, performance, and design‑system work.
+      Here I maintain a collection of evidence‑led impact stories from my work on platforms, performance, and design systems.
     </p>
     <p class="">
       Want the broader picture? Skim my <a href="/cv/">CV</a>, get in touch via
@@ -23,8 +23,8 @@ templateEngineOverride: njk
 <section class="kh-grid-stylized kh-content kh-content--wide">
   <span></span>
   <section>
-    {% set studies = collections.caseStudies or [] %}
-    {% if studies.length %}
+    {% set stories = collections.impactStories or [] %}
+    {% if stories.length %}
       <table>
         <thead>
           <tr>
@@ -35,10 +35,10 @@ templateEngineOverride: njk
           </tr>
         </thead>
         <tbody>
-          {%- for post in studies -%}
+          {%- for post in stories -%}
           <tr>
             <td>
-              <a href="{{ post.url }}">{{ post.data.title | replace('Case study: ', '') }}</a>
+              <a href="{{ post.url }}">{{ post.data.title | replace('Impact story: ', '') }}</a>
               {% if post.data.teaser %}<br><small>{{ post.data.teaser | striptags }}</small>{% endif %}
             </td>
             <td>{{ post.date | dateDisplay('y') }}</td>
@@ -53,7 +53,7 @@ templateEngineOverride: njk
         </tbody>
       </table>
     {% else %}
-      <p>No case studies yet.</p>
+      <p>No impact stories yet.</p>
     {% endif %}
   </section>
 </section>
