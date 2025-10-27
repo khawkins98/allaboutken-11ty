@@ -1026,12 +1026,12 @@ body:has(#kh-css-toggle:checked) {
     border-left: 3px solid var(--kh-color--yellow--dark);
     padding: 1rem 0 1rem 1.5rem;
     margin: 0 0 2rem 0;
-    font-size: 1.0625rem;
-    line-height: 1.65;
     font-style: normal;
     font-weight: 400;
     color: var(--kh-color--text);
     background: transparent;
+    position: relative;
+    isolation: isolate;
 
     p {
       margin: 0;
@@ -1043,13 +1043,36 @@ body:has(#kh-css-toggle:checked) {
 
     // Subtle opening quote mark
     &::before {
-      content: '"';
+      content: '“';
+      // ”
       font-size: 2.5rem;
       line-height: 0;
       vertical-align: -0.4rem;
       margin-right: 0.25rem;
       color: var(--kh-color--yellow--dark);
       font-weight: 700;
+      position: relative;
+      top: 2rem;
+      left: -2rem;
+      font-variation-settings: 'slnt' -10, 'MONO' 0, 'CASL' 1;
+      opacity: 0.8;
+    }
+
+    // Hand-drawn highlighter effect behind the quote
+    &::after {
+      content: '';
+      position: absolute;
+      // keep some space for the left border so it stays crisp
+      inset: 2rem -1rem 1rem 0.65rem;
+      z-index: -1;
+      border-radius: 6px;
+      transform: rotate(-0.5deg);
+
+      // Fallback: use rgba of the brand yellow
+      background-color: rgba(255, 184, 28, 0.12);
+
+      // Slight emphasis on print-like saturation
+      filter: saturate(110%);
     }
   }
 
