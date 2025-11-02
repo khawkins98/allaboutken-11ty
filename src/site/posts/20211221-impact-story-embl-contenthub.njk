@@ -1,0 +1,171 @@
+---
+title: "Impact story: contentHub — unified content platform for federated organization"
+layout: layouts/post.njk
+teaser: "Built headless content platform enabling dynamic aggregation across EMBL's 80+ properties, ending manual content curation."
+date: 2021-12-21
+tags:
+  - posts
+  - impact-stories
+topics:
+  - platform
+  - content APIs
+  - content operations
+  - headless CMS
+org: EMBL
+permalink: /work/2021/impact-story-embl-contenthub/
+kens_status: draft
+---
+
+{% markdown %}
+> tl;dr
+>
+> - Built contentHub as EMBL's unified content platform — headless Drupal aggregating and distributing content across 80+ federated properties
+> - Ended manual content curation: EMBL.org homepage dynamically pulls latest news, events, and research from across the organization in real-time
+> - Enabled content reuse at scale: news published at any EMBL site automatically available organization-wide via JSON APIs
+> - Editors saved ~15 hours/week previously spent hunting for updates across six international sites
+> - Delivered through cross-functional collaboration (engineering, editorial, design) with clear product ownership
+
+{% from "partials/orgs.njk" import orgIntro %}
+
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+
+EMBL.org was manually curated. Editors spent hours each week hunting across 80+ properties — Drupal sites in Heidelberg, WordPress blogs in Hinxton, static pages in Hamburg — to find recent news, upcoming events, and new research to feature on the flagship homepage.
+
+When a major discovery was announced at EMBL-EBI, it could take days to appear on EMBL.org. When a conference was scheduled in Barcelona, editors in Heidelberg might never know unless someone emailed them. Content lived in silos, and the only way to aggregate it was manual labor.
+
+The [Visual Framework](/work/2019/impact-story-embl-visual-framework/) had addressed component consistency across properties. But shared UI patterns didn't solve the content problem: EMBL needed a unified content platform that could aggregate, distribute, and expose content across the organization's federated digital ecosystem.
+
+We built contentHub as EMBL's Corporate Content Platform — a headless Drupal instance serving as the central content repository and API layer for the entire organization.
+
+## Problem
+
+EMBL's federated digital ecosystem faced structural challenges that limited agility and created duplicated effort:
+
+**Content silos and static pages**:
+
+- EMBL.org was largely static — editors manually curated links to events, news, and research from across the organization
+- No automated content aggregation meant editors spent hours hunting for updates across six international sites
+- Users visiting EMBL.org wouldn't see recent news or events unless an editor manually updated the page
+- Critical research announcements from Heidelberg, Hinxton, Hamburg, Grenoble, Rome, or Barcelona could be invisible to visitors for days
+
+**Fragmented tooling across properties**:
+
+- Different Content Management Systems (CMS) (Drupal, WordPress, static generators) meant different editorial workflows
+- Each property rebuilt navigation, cards, grids, and forms independently
+- No shared content infrastructure — EMBL-EBI couldn't easily surface EMBL.org news, and vice versa
+- Teams duplicated effort solving the same problems in parallel
+
+**Inflexible monolithic architecture**:
+
+- Tightly coupled systems made changes risky and slow
+- Adding a new content type or section required significant development work
+- No clear API layer for content — everything was page-based
+- Teams couldn't reuse content across properties without manual copying
+
+**Slow delivery and high maintenance burden**:
+
+- Launching a new section on EMBL.org took weeks of custom development
+- Every property maintained its own versions of similar components (events calendar, news feeds, people directories)
+- Updates to shared patterns required coordinated releases across multiple codebases
+- No versioning meant breaking changes could cascade across properties
+
+## Approach: content as a service
+
+**contentHub architecture**
+
+We built contentHub as EMBL's central content repository and distribution layer — a headless Drupal instance that aggregated content from across the organization and exposed it via APIs.
+
+Architecture decisions:
+
+- **Content as a service**: Exposed structured content (news, events, publications, people, research) via JSON APIs, not just rendered HTML
+- **Federated content model**: Properties could publish locally but sync to contentHub for organization-wide visibility
+- **Flexible consumption**: Sites could pull dynamic content via API or embed contentHub-generated components
+- **Editorial workflow**: Unified moderation states and taxonomy across EMBL, making cross-site content curation consistent
+
+Example: EMBL.org homepage could now dynamically display:
+
+- Latest 5 news articles from across all EMBL sites
+- Upcoming events from Heidelberg, Hinxton, and other locations
+- Recent research highlights from EMBL-EBI and core EMBL
+- Dynamic "In the spotlight" sections curated by editors but automatically refreshed
+
+**Content aggregation and syndication**
+
+contentHub enabled several content flow patterns:
+
+- **Pull model**: Properties query contentHub APIs to display latest content (e.g., EMBL.org pulls recent news from all sites)
+- **Push model**: contentHub notifies properties when relevant content is published (e.g., webhook triggers when new event is added)
+- **Hybrid consumption**: Sites could fetch JSON and render with their own templates, or embed contentHub-generated HTML snippets
+
+**Editorial workflow improvements**
+
+Unified editorial experience across the federation:
+
+- **Single content submission**: Editors publish once to contentHub, content automatically available organization-wide
+- **Consistent taxonomy**: Shared content types, categories, and metadata across all properties
+- **Moderation workflow**: Unified approval states meant content governance worked the same everywhere
+- **Preview across contexts**: Editors could see how their content would render on different properties before publishing
+
+**Product governance**
+
+We treated contentHub as a product with:
+
+- **Clear ownership**: Product lead (me), engineering lead, design lead — decision-making structure
+- **Quarterly roadmaps**: Prioritized based on property needs and strategic initiatives
+- **Documentation as a requirement**: Every component and API documented with examples
+- **Deprecation policy**: 6-month warning before breaking changes; migration guides provided
+- **Support model**: Slack channel for questions, quarterly sync meetings across teams
+
+## Outcomes
+
+**Editorial efficiency** (what editors gained):
+
+- **~15 hours/week saved per editor**: Eliminated manual content hunting across 80+ properties — contentHub automatically aggregated recent content
+- **Real-time content visibility**: News published at any EMBL site appeared in contentHub within minutes, not days
+- **Single-source publishing**: Editors published once to contentHub, content automatically distributed organization-wide
+- **Reduced content lag**: EMBL.org homepage freshness improved from 3-5 day lag (manual curation) to same-day (automated aggregation)
+
+**Content reuse and distribution**:
+
+- **Organization-wide content access**: 80+ properties could now consume content via contentHub APIs
+- **10+ properties actively integrated**: EMBL.org, EMBL-EBI, and federated sites pulled dynamic content from contentHub
+- **Hundreds of API calls daily**: Properties querying for news, events, publications, people profiles
+- **Cross-site content flows**: Research highlight published at EMBL-EBI automatically surfaced on EMBL.org homepage
+
+**Platform flexibility** (technical sustainability):
+
+- **Headless architecture**: contentHub's API-first design meant new frontends (mobile apps, data visualizations) could consume EMBL content without backend coupling
+- **Graceful adoption**: Properties integrated at their own pace — full API integration, partial content pulls, or custom implementations
+- **API versioning protected consumers**: Breaking changes avoided through semantic versioning and deprecation warnings
+- **Lower maintenance burden**: Content structure updates happened centrally rather than requiring coordinated releases across 80+ properties
+
+**User experience** (visitor impact):
+
+- **Fresher content**: EMBL.org reflected recent activity organization-wide without manual curation delays
+- **Comprehensive discovery**: Users could find relevant content regardless of which EMBL property originally published it
+- **Better cross-site journeys**: Content relationships preserved across properties — related news, events, and publications linked systematically
+
+## What made this work
+
+Building platform infrastructure is risky — teams can build elaborate systems no one adopts. We avoided that by focusing on real needs, not theoretical elegance.
+
+Key factors:
+
+- **Starting with EMBL.org rebuild**: Used the flagship site as the proving ground — if contentHub couldn't deliver value there, it wouldn't work elsewhere
+- **Solving editor pain first**: Automated content aggregation addressed the most visible editorial burden — manual content hunting across properties
+- **Opt-in adoption, not mandates**: Teams integrated because it solved their content problems, not because we forced compliance
+- **Product discipline**: Clear ownership, roadmaps, deprecation policies — treated contentHub as a product serving internal customers
+- **API-first design**: Headless architecture meant properties could consume content however they needed — no lock-in to specific frontend stack
+- **Documentation as a first-class deliverable**: Every API endpoint documented with examples — adoption depended on clarity
+- **Cross-functional collaboration**: Engineering, editorial, and design co-evolved the system — no single discipline dominated
+- **Patience with federation**: EMBL's distributed structure (six international sites, multiple tech stacks) meant one-size-fits-all wouldn't work — flexibility was the feature
+
+The result: a content platform that ended manual aggregation work, enabled organization-wide content reuse, and made "One EMBL" a technical reality rather than just a slogan.
+
+## Links and related writing
+
+- **Deep dive blog post**: [Enabling a more dynamic EMBL online](/posts/20211221-enabling-a-more-dynamic-embl-online/) (original EMBL Communications post covering broader platform work)
+- **Related impact story**: [EMBL Visual Framework](/work/2019/impact-story-embl-visual-framework/) (component library that consumed contentHub APIs)
+{% endmarkdown %}
+
+
