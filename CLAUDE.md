@@ -24,9 +24,14 @@ yarn eleventy     # Run Eleventy build (sets ELEVENTY_ENV=production)
 
 ### Linting
 ```bash
-yarn lint:css       # Lint SCSS/CSS files with stylelint
+yarn lint:css       # Lint SCSS/CSS files with stylelint (uses .stylelintrc.json)
 yarn lint:css:fix   # Auto-fix stylelint issues
 ```
+
+**Stylelint configuration** (`.stylelintrc.json`):
+- Uses `stylelint-config-recommended-scss` with `postcss-scss` syntax
+- Key rules: max nesting depth of 1, max 3 compound selectors, no duplicate selectors
+- Ignores `build/`, `node_modules/`, and minified CSS
 
 ### Other
 ```bash
@@ -75,11 +80,12 @@ Images are processed by `@11ty/eleventy-img` transform plugin (configured in `el
 - Layout: `layouts/post.njk` → `layouts/base.njk`
 - Use `{% markdown %}…{% endmarkdown %}` paired shortcode for Markdown blocks
 - Legacy custom tags (`render`, `codeblock`) removed—use fenced code blocks instead
-- Case studies tagged with `case-studies` in frontmatter
+- Impact stories tagged with `impact-stories` in frontmatter
 
 **Data**:
 - Global config: `src/site/_data/siteConfig.json`
-- Collections defined in `eleventy.js`: e.g., `caseStudies` collection (filtered by `case-studies` tag)
+- Collections defined in `eleventy.js`: e.g., `impactStories` collection (filtered by `impact-stories` tag)
+- Organization descriptions: `src/site/_includes/partials/orgs.njk` provides `orgIntro()` macro for impact story context boxes
 
 **Templates**:
 - Base layout: `src/site/_includes/layouts/base.njk`
@@ -125,7 +131,7 @@ The site uses a unique CSS activation pattern:
 - `{% codeAndDemo 'html' %}…{% endcodeAndDemo %}`: Render escaped code + live demo
 
 **Collections**:
-- `caseStudies`: Posts tagged with `case-studies`, sorted by date descending
+- `impactStories`: Posts tagged with `impact-stories`, sorted by date descending
 
 **Passthrough Copy**:
 - `src/site/**/*.js` → JavaScript files
@@ -167,16 +173,17 @@ teaser: 'Short description'
 date: 2025-10-24
 tags:
   - posts
-  - case-studies  # Optional: for case study collection
+  - impact-stories  # Optional: for impact story collection
 topics:
   - Topic 1
   - Topic 2
-org: Organization  # Optional: for case studies
+org: Organization  # Optional: for impact stories (used with orgIntro macro)
 permalink: /posts/custom-url/  # Optional
 image: /path/to/image.jpg  # Optional
 image_meta:
   text: 'Caption text'
   altext: 'Alt text'
+via: 'https://example.com/source'  # Optional: source/attribution URL for link posts
 ---
 ```
 
@@ -187,6 +194,19 @@ image_meta:
 Regular markdown content here.
 {% endmarkdown %}
 ```
+
+### Organization Context Box (Impact Stories)
+Use the `orgIntro` macro to add organization context after the tl;dr in impact stories:
+
+```njk
+{% from "partials/orgs.njk" import orgIntro %}
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+```
+
+Supported organizations (defined in `src/site/_includes/partials/orgs.njk`):
+- `UNDRR`: United Nations Office for Disaster Risk Reduction
+- `EMBL`: European Molecular Biology Laboratory
+- `EMBL-EBI`: European Bioinformatics Institute
 
 ### Code and Demo Shortcode
 ```njk
@@ -210,6 +230,17 @@ The search functionality is powered by a post-build script (`scripts/build-searc
 - Webmention: `webmention.io/allaboutken.com`
 - Self-hosted font: Recursive variable font subset at `/assets/kh-font/Recursive_VF_1.085--subset-GF_latin_basic.woff2`
 
+## Editorial System
+
+When working on blog posts or impact stories, follow the editorial system:
+
+- **`docs/EDITORIAL_HANDBOOK.md`** - Complete style guide, voice/tone, structure templates, quality standards
+- **`docs/ROLE_TECHNICAL_REVIEWER.md`** - QA role (code correctness, builds, links, accessibility)
+- **`docs/ROLE_EDITORIAL_STYLE_EDITOR.md`** - Style role (voice, structure, scannability, flow)
+- **`docs/ROLE_SEO_DISCOVERABILITY_EDITOR.md`** - SEO role (titles, metadata, internal linking)
+
+To invoke a specific editorial lens, read the role file and apply its standards. All roles reference the Editorial Handbook as source of truth.
+
 ## Key Files to Know
 
 - `eleventy.js` - Eleventy configuration, plugins, filters, collections
@@ -219,3 +250,4 @@ The search functionality is powered by a post-build script (`scripts/build-searc
 - `src/site/_includes/layouts/post.njk` - Blog post template
 - `src/site/_data/siteConfig.json` - Site-wide configuration
 - `scripts/build-search-index.js` - Search index generator
+- `docs/EDITORIAL_HANDBOOK.md` - Editorial standards and guidelines
