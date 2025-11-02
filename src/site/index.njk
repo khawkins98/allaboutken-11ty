@@ -22,7 +22,9 @@ templateEngineOverride: njk
 
     Over 20 years leading digital strategy for UN, international science, and media organizations, I've architected and shipped AI-ready platforms that [deliver](/posts/20180122-content-action-model.html) measurable results. My journalism background provides deadline discipline and audience-first clarity that pure technologists often lack.
 
-    At UNDRR, I lead a 15-site Drupal ecosystem serving millions with disaster risk intelligence. Through Azure migration challenges and platform optimization, we've achieved 50–70% faster performance, 20% cost savings, and 40% campaign engagement increases. I bridge technical teams, content creators, and executives — translating between stakeholders to ship solutions that work.
+    I bridge technical teams, content creators, and executives — translating between stakeholders to ship solutions that work.
+
+    At UNDRR, [I lead](/cv) a 15-site Drupal ecosystem serving millions with disaster risk intelligence. Recently we've resolved Azure migration challenges to [achieve 50–70% faster performance, 20% cost savings, and 40% campaign engagement](/work/2025/impact-story-undrr-platform-transformation/) increases.
 
     {%- endmarkdown %}
   </div>
@@ -53,7 +55,7 @@ templateEngineOverride: njk
     {% set latestDigesting = collections.digesting | reverse | first %}
     {% set latestImpactStory = collections.impactStories | first %}
     <ul>
-    <li>Recent project notes as <a href="/work/">impact stories</a>: <a href="{{ latestImpactStory.url }}">{{ latestImpactStory.data.title }}</a></li>
+    <li>Recent project notes as <a href="/work/">impact stories</a>: <a href="{{ latestImpactStory.url }}">{{ latestImpactStory.data.title | replace('Impact story: ', '') }}</a></li>
     <li id="digesting">Currently digesting: <a href="{{ latestDigesting.url }}">{{ latestDigesting.data.title }}</a></li>
     </ul>
     </article>

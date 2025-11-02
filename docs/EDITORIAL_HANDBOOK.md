@@ -124,9 +124,10 @@ Suggested intro blocks (use only 1)
 - **Headlines**: Avoid ending punctuation. Use sentence‑case for section headings unless a proper noun.
 - **Teasers**: one sentence; avoid links unless essential.
 - **Images**: always include meaningful alt text and attribution in front matter. Prefer figures with captions when the image carries information.
+- **Em-dashes**: Use spaced em-dashes " — " (space-emdash-space) for better readability and line-breaking. Example: "Footer reduced from 80+ links — users could quickly scan."
 - **Code**: use fenced code blocks inside `{% markdown %}` sections; rely on standard language‑tagged fences for syntax highlighting. Do not use legacy macros. Show code/visuals first; then explain. Prefer minimal comments in code.
 - **Nunjucks in code fences**: when showing Njk templates, wrap content in `{% raw %}…{% endraw %}` inside the fence to avoid evaluation.
-- **Links**: embed on descriptive nouns/phrases; avoid “here”. Use absolute links for external sites; relative for internal routes.
+- **Links**: embed on descriptive nouns/phrases; avoid "here". Use absolute links for external sites; relative for internal routes.
 - **Lists**: convert dense prose into bullets or numbered steps where possible.
 - **Headings spacing**: always include a blank line after any heading before the following paragraph or list.
 
@@ -172,8 +173,14 @@ via: 'https://example.com/source' # optional source/attribution URL for link pos
 tags: posts
 topics:
   - keyword one, keyword two
+kens_status: draft # draft | final_draft | ready_for_publication
 ---
 ```
+
+**Status tracking** (`kens_status`):
+- `draft`: Initial draft, work in progress
+- `final_draft`: Content complete, ready for final review
+- `ready_for_publication`: Reviewed and approved, ready to publish
 
 ### Code demos (codeAndDemo shortcode)
 
@@ -430,6 +437,7 @@ topics:
   - keyword two
 org: Organization Name
 permalink: /work/YYYY/impact-story-slug/
+kens_status: draft # draft | final_draft | ready_for_publication
 image: '/blog/example.jpg' # optional
 image_meta:
   altext: 'Accurate alt text.'
