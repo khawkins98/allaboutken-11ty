@@ -1,7 +1,7 @@
 ---
-title: 'Impact story: Scaling Drupal for 150,000 paying users'
+title: 'Impact story: Scaling Drupal for 150,000 satellite connected customers'
 layout: layouts/post.njk
-teaser: 'Built a multi‑layered caching and optimization strategy for a global e‑commerce platform — including customers on satellite connections with time‑boxed sessions.'
+teaser: 'I sustained and optimized a multi‑layered strategy for a global e‑commerce platform for customers on satellite connections.'
 date: 2014-06-30
 tags:
   - posts
@@ -12,6 +12,7 @@ topics:
   - MySQL optimization
 org: DRS Technical Solutions
 permalink: /work/2014/impact-story-drs-scaled-drupal/
+kens_status: ready_for_publication
 ---
 
 {% markdown %}
@@ -19,8 +20,8 @@ permalink: /work/2014/impact-story-drs-scaled-drupal/
 >
 > - Scaled Drupal e‑commerce platform to 150k+ registered users with zero peak‑time timeouts
 > - Edge-first architecture: reduced static asset delivery from 500-800ms (satellite to origin) to 20-50ms (edge)
-> - 80%+ anonymous traffic served from Varnish; 40% faster cart/account pages through database optimization
-> - Typical page loads: 10-15 origin requests → 1-2 (HTML + dynamic data only)
+> - 40% Faster cart/account pages through database optimization
+> - Typical page loads: 10-15 origin requests → 1-3 (HTML + dynamic data only)
 
 {% from "partials/orgs.njk" import orgIntro %}
 
@@ -32,7 +33,7 @@ Running a high-traffic Drupal platform with 150,000+ registered users and integr
 
 The platform supported both public content (browsable by millions) and authenticated workflows (user accounts, purchase history, active shopping carts). Anonymous browsing needed aggressive caching, but authenticated sessions with personalized content and cart state couldn't rely on the same approach. These competing demands created performance challenges that couldn't be solved with a single strategy.
 
-Many users accessed the site from satellite internet cafés with limited bandwidth, high latency, and time‑boxed sessions. Pages needed to be small, load predictably, and degrade gracefully when connectivity faltered.
+Users primarily accessed the site from satellite internet cafés with limited bandwidth, high latency, and time‑boxed sessions. Pages needed to be small, load predictably, and degrade gracefully when connectivity faltered.
 
 We needed to deliver fast experiences for both anonymous and authenticated users while maintaining operational reliability during traffic spikes and code deployments.
 
@@ -76,7 +77,7 @@ Strategy:
 - **Optimized images**: Compressed and right-sized images; used progressive JPEGs so partial loads showed content quickly
 - **Lightweight HTML**: Kept HTML payloads small and fast to parse, since only HTML required origin round trips for dynamic/authenticated content
 
-Result: Static asset delivery moved from 500-800ms per asset (satellite to origin) to 20-50ms (satellite to regional edge). Reduced typical page loads from 10-15 origin requests to 1-2 (HTML + dynamic data only).
+Result: Static asset delivery moved from 500-800ms per asset (satellite to origin) to 20-50ms (cafe to regional edge). Reduced typical page loads from 10-15 origin requests to 1-3 (HTML + dynamic data only).
 
 **Reverse proxy caching (Varnish)**
 
@@ -92,55 +93,6 @@ Key decisions:
 - **Compression**: Gzip for HTML to minimize bytes over satellite links
 
 Result: 80%+ of anonymous traffic served from Varnish cache. Combined with edge-static architecture, anonymous page loads required minimal origin contact.
-
-**Drupal caching layers**
-
-Tuned Drupal's internal caching for authenticated traffic:
-
-- **Page cache disabled** for logged-in users (dynamic cart and account data)
-- **Render cache optimized**: Cached reusable page elements (navigation, footer, product grids) while keeping user-specific content dynamic
-- **Block cache tuning**: Cached static blocks aggressively, short TTL for promotional banners
-- **Views caching**: Database-heavy product listings cached with smart invalidation on inventory changes
-
-**Authenticated session optimization**
-
-For logged-in users, we couldn't rely on edge caching — every request needed fresh cart and account data. Optimization focused on minimizing round trips and keeping payloads lean:
-
-- **Reduced request waterfalls**: Preloaded critical resources; avoided chained requests where possible
-- **Deferred non-critical features**: Loaded recommendations and related products after core cart/checkout rendered
-- **Optimized AJAX patterns**: Batched API calls; used long polling instead of rapid-fire requests for inventory checks
-- **Session persistence**: Used long-lived sessions and local storage to avoid re-authentication round trips
-
-**Database optimization (MySQL)**
-
-Profiled slow queries and optimized the hot paths:
-
-- **Indexed critical columns**: User lookups, product searches, order queries
-- **Query rewrites**: Replaced inefficient joins and subqueries in product catalog and order history
-- **Connection pooling**: Reused database connections to reduce overhead under load
-- **Read replicas**: Offloaded reporting and analytics queries to read-only replicas
-
-Monitoring with slow query logs and Application Performance Monitoring (APM) tools (New Relic) identified bottlenecks before they became user-facing problems.
-
-**Deployment safety nets**
-
-Commerce platforms can't afford broken deployments. We hardened the deployment process:
-
-- **Blue-green deployments**: Deployed to a staging environment, tested, then switched traffic — allowing instant rollback
-- **Database migration testing**: Ran schema changes on a production-scale test database first
-- **Automated smoke tests**: Post-deployment checks verified cart functionality, checkout flow, and account access
-- **Gradual traffic shifting**: Ramped traffic to the new environment over 15 minutes, monitoring error rates
-
-This let us deploy confidently multiple times per week without risking revenue.
-
-**Traffic pattern analysis**
-
-Used analytics and APM data to understand real user behavior:
-
-- Identified peak traffic windows (lunch hours, evenings) and scheduled deployments during quiet periods
-- Profiled slow authenticated paths (cart → checkout conversion) and optimized those flows specifically
-- Monitored conversion funnel metrics to catch performance regressions early
- - Simulated high‑latency conditions and validated key user journeys under satellite connectivity
 
 ## Outcomes
 

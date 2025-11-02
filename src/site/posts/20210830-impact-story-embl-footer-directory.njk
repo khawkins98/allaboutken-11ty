@@ -1,7 +1,7 @@
 ---
-title: 'Impact story: Improving EMBL.org navigation with footer and directory redesign'
+title: "Impact story: Improving user journeys spanning 80 web properties"
 layout: layouts/post.njk
-teaser: 'Replaced an overgrown “footmap” with a focused global footer and a scannable directory, improving orientation and task completion.'
+teaser: "Blending contemporary navigation structures with tried and tested sitemaps."
 date: 2021-08-30
 tags:
   - posts
@@ -12,6 +12,7 @@ topics:
   - visual framework
 org: EMBL
 permalink: /work/2021/impact-story-embl-footer-directory/
+kens_status: ready_for_publication
 ---
 
 {% markdown %}
@@ -30,6 +31,8 @@ permalink: /work/2021/impact-story-embl-footer-directory/
 EMBL.org's footer had become a "footmap" — a screen-and-a-half of densely packed links attempting to be both a site map and a footer. Users scrolling to the bottom of a page encountered 80+ links organized into 12 columns, overwhelming the page with competing calls to action.
 
 The problem wasn't unique to EMBL. Many large organizational sites accumulate footer links over time as stakeholders request "just add it to the footer." But footers serve specific jobs — orientation (What is this organization?), contact (How do I reach you?), and wayfinding (Where can I go from here?). When footers try to be comprehensive site maps, they fail at all three jobs.
+
+There was just too much (and yet too little) content crammed into the bottom of each page and it was a grey blob to our users' needs and our goals.
 
 We split these roles: the footer would handle orientation and contact, while a new Directory page would provide the comprehensive map of EMBL's digital ecosystem. This wasn't just visual cleanup — it fundamentally rethought how users navigate a large scientific organization.
 
@@ -116,6 +119,7 @@ The Directory page became EMBL's maintained map — a single-page overview of ma
 - **Categorized sections**: Clear headers with 5-10 links per category — scannable without overwhelming
 - **Descriptions**: Short descriptions under each link explaining what users would find — reduced guesswork
 - **Visual Framework patterns**: Used VF card components for consistent styling and responsive behavior
+- **Custom analytics**: Implemented Google Analytics custom events to track which directory regions users engaged with and capture in-browser search behavior (Ctrl+F/Cmd+F usage)
 
 **Apply Visual Framework patterns for propagation**
 
@@ -144,7 +148,7 @@ Both the footer and directory used Visual Framework (VF) components, meaning:
 
 - **Governance clarity**: Footer now curated — stakeholder requests evaluated against orientation criteria
 - **Directory ownership**: Content team maintained directory as living document — clear process for adding/removing sections
-- **Better analytics**: Directory page provided clear signals about which content areas users sought — informed content strategy
+- **Better analytics**: Custom Google Analytics events tracked directory region engagement and in-browser search behavior (Ctrl+F usage), providing actionable insights about which content areas users sought most — directly informed content strategy and proved the directory's value
 - **Reduced maintenance**: Fewer footer links meant less link rot cleanup
 
 **Adoption across properties**:
@@ -156,6 +160,8 @@ Both the footer and directory used Visual Framework (VF) components, meaning:
 ## What made this work
 
 Footer redesigns often fail because they're treated as visual problems rather than structural problems. We succeeded by reframing the question: not "how do we fit more links in the footer?" but "what jobs should the footer and directory each perform?"
+
+The directory approach hit a sweet spot between modern mega menus and old-school sitemaps. Like mega menus, it provides scannable categories with descriptions so users can quickly orient. Like traditional sitemaps, it's comprehensive and lives on a dedicated page where users can search (Ctrl+F) or scroll through everything. This hybrid works particularly well for accessibility: screen reader users can navigate by headings, keyboard users can tab through categorized sections, and sighted users can scan visually. The single-page format also means users don't need to remember where they saw something — they can search the page instantly.
 
 Key factors:
 
