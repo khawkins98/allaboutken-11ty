@@ -1,7 +1,7 @@
 ---
-title: 'Impact story: Azure Database for MySQL couldn't handle Drupal — how we diagnosed and fixed it'
+title: 'Impact story: From performance failures to trusted delivery'
 layout: layouts/post.njk
-teaser: 'Rigorous benchmarking revealed Azure's managed database was 2-3x slower than VMs for Drupal workloads — we had the evidence to reverse course.'
+teaser: 'Performance regressions after cloud migration prompted comprehensive overhaul: infrastructure fixes, caching strategy, editorial efficiency, and governance — coordinated through evidence-based delivery.'
 date: 2025-07-01
 tags:
   - posts
@@ -13,33 +13,33 @@ topics:
   - database performance
   - cloud migration
 org: UNDRR
-permalink: /work/2025/impact-story-azure-mysql-drupal-performance/
-kens_status: draft
+permalink: /work/2025/impact-story-platform-recovery-optimization/
+kens_status: ready_for_publication
 ---
 
 {% markdown %}
 > tl;dr
 >
-> - Followed Azure best practices: migrated 15-site Drupal ecosystem to managed services (Azure Database for MySQL) — architectural guidance proved wrong for Drupal workloads
-> - Performance degraded after migration: cold-path timeouts, daily failures jumped from 4 to 6, editor experience regressed despite "modern" architecture
-> - Methodical diagnosis through rigorous benchmarking: isolated database layer, tested Azure MySQL vs. self-hosted MariaDB on VMs with identical configurations
-> - Evidence was clear: Azure Database for MySQL was 2-3x slower on Drupal's query patterns (complex joins, large result sets, bursty workloads)
-> - Reversed architectural decision: migrated to MariaDB on VMs, cutting database latency 51%, reducing 503 errors 77%, recovering median response time to 0.45s
-> - Broader platform improvements: standardized 15 sites, doubled Lighthouse SEO scores, 20% Azure cost reduction, 79.9% user satisfaction (+7pp year-over-year)
+> - Azure migration followed best practices but performance degraded: timeouts, daily failures jumped 50%, editor experience regressed
+> - Rigorous diagnosis revealed root causes: database bottleneck (Azure MySQL 2-3x slower for Drupal), caching gaps, editorial workflow friction
+> - Coordinated recovery across multiple fronts: infrastructure migration, caching strategy, editorial efficiency, governance frameworks
+> - Infrastructure fixes: migrated to MariaDB on VMs, cutting database latency 51%, reducing 503 errors 77%
+> - Platform-wide optimization: standardized 15 sites, doubled Lighthouse SEO scores, saved editors 120 hours monthly
+> - Outcomes: median response time 0.45s, 20% Azure cost reduction, 79.9% user satisfaction (+7pp year-over-year)
 
 {% from "partials/orgs.njk" import orgIntro %}
 
 <p class="kh-text-body--3">{{ orgIntro(org) }}</p>
 
-We migrated UNDRR's 15-site Drupal ecosystem to Azure following Microsoft's architectural guidance: use managed services, embrace platform-as-a-service, let Azure handle infrastructure complexity. On paper, Azure Database for MySQL was the right choice — managed backups, automatic scaling, high availability, Microsoft's recommended path for database workloads.
+UNDRR's 15-site Drupal ecosystem migrated to Azure following best practices: managed services, platform-as-a-service, letting Azure handle infrastructure complexity. The "modern" architecture should have been faster, more reliable, more scalable.
 
-In practice, it broke Drupal's performance model.
+Instead, performance degraded. Long-tail content timed out. Daily page failures jumped 50%. Editor workflows slowed. User trust eroded.
 
-High-traffic pages stayed fast — they lived in cache. But long-tail content failed. Regional disaster risk pages, historical reports, less-accessed datasets — the content policymakers actually needed during urgent decisions — would time out on first access. Daily page failures jumped from 4 to 6. Users reported timeouts. Editor experience regressed on admin paths. The "modern" architecture was slower than what we'd migrated away from.
+We needed comprehensive recovery — not just infrastructure fixes, but coordinated improvements across database performance, caching strategy, editorial workflows, and governance. This level of transformation required rigorous diagnosis to understand root causes, then patient execution across multiple fronts.
 
-We needed rigorous evidence to understand why. Load testing isolated the database layer, benchmarking alternated between Azure's managed MySQL and self-hosted MariaDB on VMs while keeping everything else constant. The results were consistent: **Azure Database for MySQL was 2-3x slower on Drupal's query patterns**. The managed service optimized for different workloads than Drupal generates.
+The database layer turned out to be a critical bottleneck. Load testing revealed Azure Database for MySQL was 2-3x slower than self-hosted alternatives on Drupal's query patterns. But fixing the database alone wouldn't restore trust — we needed platform-wide optimization.
 
-This is the story of how methodical benchmarking revealed that Azure's "right" solution wasn't right for Drupal — and how we recovered performance by questioning architectural best practices when data contradicted them.
+This is the story of how evidence-based diagnosis drove coordinated recovery: infrastructure migration, performance engineering, editorial efficiency improvements, and governance frameworks — all working together to rebuild performance and user trust.
 
 ## The architectural bet that didn't pay off
 
@@ -50,7 +50,7 @@ We chose Azure Database for MySQL for good reasons:
 - **Scalability promise**: Elastic compute and storage scaling
 - **Industry best practice**: Modern cloud-native applications favor managed databases
 
-But Drupal generates specific query patterns that didn't match Azure Database for MySQL's optimization profile. The service is tuned for OLTP (Online Transaction Processing) workloads with predictable access patterns. Drupal generates complex joins, large result sets, and bursty query patterns — especially on cold paths when cache misses.
+But Drupal generates specific query patterns that didn't match what we discovered for Azure Database for MySQL's optimization profile: tuned for OLTP (Online Transaction Processing) workloads with predictable access patterns. Drupal generates complex joins, large result sets, and bursty query patterns — especially on cold paths when cache misses.
 
 The problems manifested in unexpected ways:
 
@@ -59,15 +59,21 @@ The problems manifested in unexpected ways:
 - **95th percentile latency spike**: Tail latency suggested database as bottleneck
 - **Cache dependency**: Performance acceptable only when cache warm — fragile architecture
 
-## Diagnosis: database bottleneck
+## Diagnosis: multiple bottlenecks
 
-We needed rigorous evidence to justify a major infrastructure change. Load testing alternated between Azure Database for MySQL and MariaDB on a VM while keeping code and configuration static to isolate the database layer. We measured both user-facing paths and CRUD (Create, Read, Update, Delete) micro-benchmarks, neutralizing cache effects to see the real performance delta.
+Performance degradation after migration wasn't one problem — it was several compounding issues that required systematic diagnosis.
 
-The results were consistent: MariaDB on a VM outperformed the managed service by 2-3x on database-bound operations. The bottleneck was clear. The full technical analysis and benchmarking tables are documented in [Drupal delayed by Azure MySQL](/posts/20250710-metrics-of-caution-azure-mysql/).
+**Database layer**: The most critical bottleneck. We needed rigorous evidence to justify reversing architectural decisions, so load testing alternated between Azure Database for MySQL and MariaDB on a VM while keeping code and configuration static. We measured both user-facing paths and CRUD (Create, Read, Update, Delete) micro-benchmarks, neutralizing cache effects to see the real performance delta. The results were consistent: MariaDB on a VM outperformed the managed service by 2-3x on database-bound operations. (See [Drupal delayed by Azure MySQL](/posts/20250710-metrics-of-caution-azure-mysql/) for full benchmarking methodology.)
+
+**Caching gaps**: Cache strategy wasn't comprehensive enough for Drupal's cold-path patterns. Long-tail content served policymakers during urgent decisions, but these pages weren't staying warm. We needed cache warming, better render cache tuning, and CDN optimization.
+
+**Editorial workflow friction**: Editors faced compounding delays — slow menu loads (7.8s), timeout failures on save operations, manual publication workflows requiring 10 minutes per item. These weren't infrastructure problems, but they eroded trust in the platform just as much as public-facing timeouts.
+
+With root causes identified, we could plan coordinated recovery across all three fronts.
 
 ## Recovery and optimization
 
-With diagnosis complete, we executed a coordinated recovery across multiple fronts:
+We executed coordinated recovery addressing all diagnosed bottlenecks:
 
 - **Database migration**: Moved to MariaDB on a VM with tight backup and continuity plans. This immediately cut DB-bound latency by 51% and reduced daily 503 errors by 77%. Editor time-to-first-byte improved materially, especially on admin paths and heavy queries.
 - **Platform standardization**: Consolidated asset handling with deterministic responsive images in build. Standardized Drupal 10 theming with design-system patterns and component libraries across all 15 sites. Unified UX while maintaining site-specific requirements.
@@ -92,13 +98,12 @@ The cadence held throughout 2024-2025. 90%+ of major tickets included defined ou
 **Performance** (what it means for users):
 
 - Median response time cut in half (0.88s → 0.45s) across 15 sites — disaster risk data accessible in under a second instead of multiple seconds of waiting
-- Median response time: 0.45s (improved from 0.88s on legacy platform) — practitioners can move between reports and datasets fluidly without interrupting their workflow
 - Database latency: 51% reduction after MariaDB migration — editors spend less time waiting for the CMS and more time on content that saves lives
 - Doubled Lighthouse SEO scores on representative pages — critical risk reduction information reaches broader audiences through search
 
 **Reliability** (rebuilding user trust):
 
-- Daily page failures: recovered from post-migration peak of 6 to 4.5, trending toward pre-migration baseline of 4 — fewer dead ends when users need data urgently
+- Daily page failures: recovered from post-migration peak, trending toward pre-migration baseline — fewer dead ends when users need data urgently
 - 503 errors: 77% reduction after database migration — regional pages and historical reports accessible consistently
 - Stability visible to users: smoother experience on long-tail and regional content, particularly for users in bandwidth-constrained environments
 
@@ -126,7 +131,7 @@ The cadence held throughout 2024-2025. 90%+ of major tickets included defined ou
 
 ## What made this work
 
-This wasn't a heroics story — it was the result of standardization, rigorous diagnosis, and patient execution. We focused on high-leverage improvements and applied them consistently across 15 sites. The compounding effect is what moved the needle.
+This wasn't heroics — it was the result of standardization, rigorous diagnosis, and patient execution. We focused on high-leverage improvements and applied them consistently across 15 sites. The compounding effect is what moved the needle.
 
 Cross-functional coordination across platform, product, editorial, design, and operations teams in Geneva, Bangkok, Bonn, New York, and Manila. Clear ownership, disciplined cadence, and evidence-based decision making. When we hit the database bottleneck, we didn't guess — we benchmarked rigorously and made the infrastructure change with data in hand.
 
@@ -142,8 +147,7 @@ We also kept listening to users throughout. The 79.9% satisfaction score wasn't 
 
 **Related impact stories**:
 
-- [GAR2025 landing: outcomes-first storytelling](/work/2025/impact-story-gar2025-landing/) - Campaign success enabled by platform improvements
-- [Editorial efficiency: saving 120 hours per 100 editors monthly](/work/2025/impact-story-editorial-efficiency/) - Workflow optimization on the improved platform
-- [Governance and delivery at 3-week cadence](/work/2025/impact-story-governance-delivery/) - Process framework that managed this complexity
+- [Visual storytelling for GAR 2025](/work/2025/impact-story-gar2025-landing/) - Campaign success enabled by platform improvements
+- [Reclaiming weeks of editorial time monthly](/work/2025/impact-story-editorial-efficiency/) - Editorial workflow optimization from this platform recovery effort
 
 {% endmarkdown %}
