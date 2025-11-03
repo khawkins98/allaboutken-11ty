@@ -1,0 +1,208 @@
+---
+title: "Impact story: Ending platform lock-in to share corporate content freely"
+layout: layouts/post.njk
+teaser: "Separated where content is written from where it's displayed, enabling 80+ properties to share content and structure regardless of tech stack."
+date: 2020-12-21
+tags:
+  - posts
+  - impact-stories
+topics:
+  - content federation
+  - headless CMS
+  - platform independence
+  - content APIs
+org: EMBL
+permalink: /work/2021/impact-story-ending-platform-lock-in/
+kens_status: ready_for_publication
+---
+
+{% markdown %}
+> tl;dr
+>
+> - Decoupled where content is authored from where it's displayed
+> - Editors could write in virtually any system and syndicate content organization-wide
+> - Properties could display content in WordPress, static HTML, React, or any frontend
+> - Ended manual content curation: sites dropped in syndicated components (global footer, news feeds, event calendars) with a single `<link>` tag
+> - Editors saved ~15 hours/week; 80+ properties could share content without platform lock-in
+> - Delivered through cross-functional collaboration (engineering, editorial, design) with clear product ownership
+
+{% from "partials/orgs.njk" import orgIntro %}
+
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+
+EMBL's digital ecosystem spanned 80+ properties built on different platforms: Drupal sites, WordPress blogs, static HTML, React, Angular and on and on. Each property managed content independently. When editors wanted to share content across sites, they had two bad options: manually copy-paste (breaking links, duplicating work), or force everyone onto the same CMS (killing local flexibility).
+
+The fundamental tension: **EMBL needed content to flow freely across the organization, but couldn't force 80+ properties onto a single platform**. Research teams needed WordPress for blogging. Communications preferred Drupal for structured content. Developers wanted static generators for documentation. Forcing convergence would have failed.
+
+The [Visual Framework](/work/2019/impact-story-embl-visual-framework/) had solved visual consistency across mixed platforms. But it didn't solve content sharing: a news article written in EMBL-EBI's Drupal couldn't easily appear on EMBL.org's WordPress, and vice versa. Content remained siloed by platform.
+
+We needed to decouple two layers:
+
+1. **Where content is authored** (Drupal, WordPress, static markdown — doesn't matter)
+2. **Where content is displayed** (WordPress, React, static HTML — doesn't matter)
+
+We built contentHub + Visual Framework 2.0 as the decoupling layer: contentHub exposed all content via APIs, VF 2.0 consumed those APIs with drop-in components, and `link rel=import` made it work with a single HTML tag.
+
+## Problem
+
+EMBL's federated digital ecosystem faced a fundamental architectural problem: **content was tightly coupled to the platform it was authored in**.
+
+**Platform lock-in killed content reuse**:
+
+- News written in EMBL-EBI's Drupal couldn't appear on EMBL.org's WordPress without manual copy-paste
+- Events created in Hinxton's calendar system remained invisible to Hamburg's static site
+- Research highlights published at one site required duplicate entry to appear organization-wide
+- Each CMS platform created a content silo — data couldn't flow across platform boundaries
+
+**Two bad options for sharing content**:
+
+1. **Manual copy-paste**:
+   - Editors spent ~15 hours/week hunting for content across 80+ properties
+   - Copy-paste broke links, lost formatting, duplicated maintenance burden
+   - Content went stale quickly — updates at source didn't propagate to copies
+   - 3-5 day lag between content publication and organization-wide visibility
+
+2. **Force platform convergence**:
+   - Mandate everyone use the same CMS (Drupal? WordPress? Static?)
+   - Would have killed local flexibility and failed politically
+   - Research teams, communications, and developers needed different tools for different workflows
+   - EMBL's federated structure (six international sites, autonomous teams) made top-down mandates impractical
+
+**Display layer coupled to authoring layer**:
+
+- WordPress sites could only easily display WordPress content
+- Drupal sites could only easily display Drupal content
+- Static sites required build-time content — no dynamic updates
+- React applications needed JSON APIs that most CMSs didn't expose consistently
+
+**The core challenge**: EMBL needed content to flow freely across the organization while respecting local platform choices. Solving this required decoupling where content is authored from where it's displayed.
+
+## Approach: three-layer decoupling architecture
+
+**Layer 1: contentHub — write anywhere**
+
+We built contentHub as EMBL's unified content hub — a central repository that accepted content from any source and made it available organization-wide:
+
+**Authoring flexibility**:
+
+- Editors could write in their preferred tools: **Drupal, WordPress, static markdown, or any CMS**
+- Properties published locally, synced to contentHub for organization-wide sharing
+- Unified taxonomy and moderation meant content governance worked consistently regardless of where it was authored
+
+**Normalized content**:
+
+- News, events, publications, people profiles, research highlights — all available in consistent formats
+- contentHub translated between different platforms' content structures
+- A news article written in WordPress looked the same in the API as one written in Drupal
+
+**Layer 2: Visual Framework 2.0 — display anywhere**
+
+VF 2.0 provided ready-made components that pulled content from contentHub and displayed it consistently across **any platform**:
+
+**Display flexibility**:
+
+- Components worked in **WordPress, static HTML, React, or any frontend**
+- Properties didn't need matching technology stacks to share visual patterns
+- contentHub provided data, VF components provided consistent presentation
+
+**Syndicated elements**:
+
+Syndication wasn't limited to content — structural and navigational elements could be shared too:
+
+- **Global footer**: organization-wide navigation structure and links
+- **Primary menus**: navigation menus shared across properties
+- **Taxonomy browsers**: shared research categories and terms
+- **News feeds**: dynamic news from across all EMBL sites
+- **Event calendars**: upcoming events aggregated organization-wide
+- **Publication lists**: recent publications from any EMBL property
+- **Data feeds**: custom feeds for research datasets, facility usage, organizational metrics
+
+This meant properties could maintain local autonomy while participating in organization-wide navigation and content ecosystems.
+
+**Layer 3: `link rel=import` — one-line integration**
+
+The breakthrough: making integration trivial. Properties could add syndicated content with a single HTML `<link>` tag — no backend integration, no custom code, no platform-specific work. A WordPress site, Drupal site, or static HTML page all used the same approach: drop in a link tag, get organization-wide content.
+
+This meant:
+
+- **Footer updates propagated instantly**: Change navigation structure in contentHub, all 80+ properties updated automatically
+- **Menu changes required no coordination**: Update primary menu once, appears everywhere
+- **Content appeared in real-time**: News published at EMBL-EBI surfaced on EMBL.org's homepage immediately
+- **Static sites became dynamic**: HTML pages could display live news feeds, event calendars, taxonomy browsers without backend infrastructure
+
+The platform war ended. Teams could choose WordPress for blogging, Drupal for structured content, static generators for documentation — content flowed freely regardless. contentHub normalized content from disparate sources, VF components rendered it consistently, and `<link>` tags made adoption frictionless.
+
+**Product discipline**
+
+We treated contentHub + VF 2.0 as products serving internal customers, not just technical infrastructure:
+
+- Clear ownership and quarterly roadmaps prioritized based on property needs
+- Every component and API documented with examples — adoption depended on clarity
+- 6-month deprecation warnings and migration guides when changes were needed
+- Slack channel and quarterly syncs provided ongoing support across teams
+
+This product approach meant teams trusted the platform to evolve without breaking their sites.
+
+## Outcomes
+
+**Platform independence achieved** (write anywhere, display anywhere):
+
+- **Authoring platform became irrelevant**: Editors could write in Drupal, WordPress, markdown, or any CMS — content flowed to contentHub regardless
+- **Display platform became irrelevant**: Properties on WordPress, static HTML, React, or any frontend could consume content via `<link rel="import">` tags
+- **No more platform lock-in**: Research teams kept WordPress for blogging, communications kept Drupal for structured content, developers kept static generators — content shared freely across all
+- **80+ properties gained content access** without platform migration or forced convergence
+
+**Drop-in syndication** (the `<link>` tag promise):
+
+- **One-line integration**: Properties added global footer, menus, taxonomies with `<link rel="import" href="...vf/footer" />` — worked in any platform
+- **Instant organization-wide updates**: contentHub menu structure update propagated to all 80+ properties automatically (no rebuild, no coordinated release)
+- **Dynamic content with zero backend work**: Static HTML sites could display dynamic news feeds, event calendars, research highlights, taxonomy browsers, data feeds via `<link>` tags
+- **Structural syndication**: Not just content, but navigation menus, taxonomy hierarchies, organizational metadata — all syndicated
+- **10+ properties actively integrated**: EMBL.org, EMBL-EBI, and federated sites dropped in dozens of syndicated components (content + structure)
+
+**Editorial efficiency** (what editors gained):
+
+- **~15 hours/week saved per editor**: Eliminated manual content hunting — editors published once to contentHub, content appeared everywhere automatically
+- **Reduced content lag**: EMBL.org homepage freshness improved from 3-5 day lag (manual curation) to real-time (automated aggregation)
+- **Single-source publishing**: Write once in your preferred CMS, distribute organization-wide
+- **Consistent workflow**: Unified moderation states and taxonomy across platforms
+
+**Technical sustainability**:
+
+- **Headless architecture**: contentHub's API-first design decoupled content from presentation — new frontends (mobile apps, voice interfaces) could consume EMBL content without backend coupling
+- **API versioning protected consumers**: Breaking changes avoided through semantic versioning — contentHub evolved without breaking consuming sites
+- **Graceful adoption**: Properties integrated at their own pace — drop in one syndicated component or rebuild entire site with contentHub backend
+- **Lower maintenance burden**: Footer updates, taxonomy changes, content structure improvements happened centrally rather than requiring coordinated releases across 80+ properties
+
+**User experience** (visitor impact):
+
+- **Fresher content**: EMBL.org reflected recent activity organization-wide without manual curation delays
+- **Consistent navigation and structure**: Global footer, primary menus, and taxonomy organization unified across all 80+ EMBL properties — regardless of underlying platform
+- **Better cross-site discovery**: Users could find relevant content regardless of which EMBL property or platform originally published it
+- **Seamless journeys**: Moving between Drupal sites, WordPress blogs, and static pages felt coherent — syndicated navigation meant users didn't get lost
+
+## What made this work
+
+The key architectural insight: **decouple authoring from display, then make integration trivial**.
+
+Most content platforms fail because they solve the wrong problem — they unify the authoring layer (force everyone onto Drupal, or WordPress, or whatever) but leave the display layer coupled. We did the opposite: we left authoring distributed (write in whatever CMS you want) and unified the content API layer + presentation layer.
+
+Key factors:
+
+- **Respecting platform diversity**: EMBL's federated structure (six international sites, autonomous teams) meant we couldn't mandate platform convergence — the architecture had to work *with* platform diversity, not against it
+- **The `<link>` tag magic**: Making integration literally one line of HTML was critical — if adopting contentHub required backend work or custom code, adoption would have stalled
+- **Solving editor pain first**: Automated content aggregation addressed the most visible burden — manual content hunting across 80+ properties eating ~15 hours/week
+- **Web standards over frameworks**: `link rel=import` felt native, not like adopting a proprietary system — properties didn't need to "buy in" to contentHub philosophy, just drop in a tag
+- **Starting with EMBL.org rebuild**: Used the flagship site as the proving ground — if contentHub + VF 2.0 couldn't deliver value there, they wouldn't work elsewhere
+- **Opt-in adoption, not mandates**: Teams integrated because `<link>` tags solved their problems with near-zero effort, not because we forced compliance
+- **API versioning from day one**: contentHub APIs used semantic versioning with deprecation warnings — evolution didn't break consumers
+- **Product discipline**: Clear ownership, roadmaps, documentation — treated contentHub + VF 2.0 as products serving internal customers
+- **Cross-functional collaboration**: Engineering, editorial, and design co-evolved the system — no single discipline dominated
+
+The result: an architecture that made platform choice orthogonal to content sharing. Write anywhere, display anywhere, with a single HTML tag.
+
+## Links and related writing
+
+- **Deep dive blog post**: [Enabling a more dynamic EMBL online](/posts/20211221-enabling-a-more-dynamic-embl-online/) (original EMBL Communications post covering broader platform work)
+- **Related impact story**: [EMBL Visual Framework](/work/2019/impact-story-embl-visual-framework/) (component library that consumed contentHub APIs)
+{% endmarkdown %}

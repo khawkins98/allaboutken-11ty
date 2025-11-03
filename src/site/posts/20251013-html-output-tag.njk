@@ -1,7 +1,7 @@
 ---
 title: "HTML’s Best‑Kept Secret: the output tag"
 layout: layouts/digesting.njk
-teaser: "Use the native HTML output element to announce dynamic results—semantic, accessible, and simple."
+teaser: "Use the native HTML output element to announce dynamic results — semantic, accessible, and simple."
 date: 2025-10-13
 digest_link: https://denodell.com/blog/html-best-kept-secret-output-tag
 tags: digesting
@@ -13,11 +13,11 @@ topics:
 
 {% markdown %}
 
-Den Odell uncovers [`<output>`](https://html.spec.whatwg.org/multipage/form-elements.html#the-output-element), the semantic HTML element that feels like it's been hiding in the spec since 2008.
+Den Odell writes on [`<output>`](https://html.spec.whatwg.org/multipage/form-elements.html#the-output-element), the semantic HTML element that feels like it's been hiding in the spec since 2008.
 
 The lovely little `<output>` tag is mapped to `role="status"` and makes dynamic updates possible without ARIA workarounds. A semantic-first principle everyone advocates and it's just there waiting for us. The irony is that component-driven frameworks trained an entire generation to abstract away from HTML semantics, turning everything into divs wrapped in utility classes.
 
-**I love stumbling on posts like this—calling attention to long-standing fundamentals that have been there all along, allowing us to do what we need in an elegant, legacy-friendly, and long-established way.**
+**I love stumbling on posts like this — calling attention to long-standing fundamentals that have been there all along, allowing us to do what we need in an elegant, legacy-friendly, and long-established way.**
 
 The opportunities should be plentiful: it doesn’t require a `<form>` and you can use `<output>` anywhere you update text as a result of user input or app events.
 

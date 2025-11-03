@@ -72,19 +72,19 @@
       <nav class="kh-cluster kh-navigation kh-u-do-not-print kh-u-show-for-medium">
         <ul class="kh-navigation__list">
           <li class="kh-navigation__item">
-            <a href="/blog" class="kh-navigation__link">Blog</a>
+            <a href="/blog" class="kh-navigation__link{% if page.url.startsWith('/blog') or (page.url.startsWith('/posts') and tags and not ('impact-stories' in tags)) %} kh-navigation__link--active{% endif %}">Blog</a>
           </li>
           <li class="kh-navigation__item">
-            <a href="/digesting" class="kh-navigation__link">Digesting</a>
+            <a href="/work" class="kh-navigation__link{% if page.url.startsWith('/work') %} kh-navigation__link--active{% endif %}">Work</a>
+          </li>
+          <li class="kh-navigation__item">
+            <a href="/digesting" class="kh-navigation__link{% if page.url.startsWith('/digesting') %} kh-navigation__link--active{% endif %}">Digesting</a>
           </li>
           <li class="kh-navigation__item kh-u-show-for-medium-only">
             <a rel="me" href="mailto:khawkins98@gmail.com" class="kh-navigation__link">khawkins98@gmail.com</a>
           </li>
           <li class="kh-navigation__item kh-u-show-for-large">
             <a rel="me" href="mailto:khawkins98@gmail.com" class="kh-navigation__link">khawkins98@gmail.com</a>
-          </li>
-          <li class="kh-navigation__item">
-            <a rel="me" href="https://toot.io/@khawkins98" class="kh-navigation__link">Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
           </li>
           <li class="kh-navigation__item">
             <a rel="me" href="https://www.linkedin.com/in/allaboutken" class="kh-navigation__link">LinkedIn</a>
