@@ -1,7 +1,7 @@
 ---
-title: 'Impact story: From migration challenges to doubling performance'
+title: 'Impact story: Azure Database for MySQL couldn't handle Drupal — how we diagnosed and fixed it'
 layout: layouts/post.njk
-teaser: 'What looked like a clean Azure migration turned into a performance crisis.'
+teaser: 'Rigorous benchmarking revealed Azure's managed database was 2-3x slower than VMs for Drupal workloads — we had the evidence to reverse course.'
 date: 2025-07-01
 tags:
   - posts
@@ -13,39 +13,51 @@ topics:
   - database performance
   - cloud migration
 org: UNDRR
-permalink: /work/2025/impact-story-undrr-platform-transformation/
+permalink: /work/2025/impact-story-azure-mysql-drupal-performance/
 kens_status: draft
 ---
 
 {% markdown %}
 > tl;dr
 >
-> - Transformed 15-site UNDRR Drupal 10 ecosystem: median response time cut in half (0.88s → 0.45s), 20% Azure cost reduction, doubled Lighthouse SEO scores.
-> - Navigated Azure migration challenges including database bottlenecks that caused cold-path failures on long-tail content.
-> - Diagnosed and resolved performance issues through rigorous benchmarking: moved from Azure Database for MySQL to MariaDB on Virtual Machine (VM), cutting database (DB) latency by 51%.
-> - Recovered operational reliability: daily page failures from 6 post-migration peak to 4.5, trending toward 4 baseline; 503 errors down 77%.
-> - User satisfaction: 79.9% report sites helpful (+7 percentage points year over year; 35,113 responses).
-> - Managed through risk-led governance with 3-week release cadence and cross-functional coordination across Geneva, Bangkok, Bonn, New York, Manila.
+> - Followed Azure best practices: migrated 15-site Drupal ecosystem to managed services (Azure Database for MySQL) — architectural guidance proved wrong for Drupal workloads
+> - Performance degraded after migration: cold-path timeouts, daily failures jumped from 4 to 6, editor experience regressed despite "modern" architecture
+> - Methodical diagnosis through rigorous benchmarking: isolated database layer, tested Azure MySQL vs. self-hosted MariaDB on VMs with identical configurations
+> - Evidence was clear: Azure Database for MySQL was 2-3x slower on Drupal's query patterns (complex joins, large result sets, bursty workloads)
+> - Reversed architectural decision: migrated to MariaDB on VMs, cutting database latency 51%, reducing 503 errors 77%, recovering median response time to 0.45s
+> - Broader platform improvements: standardized 15 sites, doubled Lighthouse SEO scores, 20% Azure cost reduction, 79.9% user satisfaction (+7pp year-over-year)
 
 {% from "partials/orgs.njk" import orgIntro %}
 
 <p class="kh-text-body--3">{{ orgIntro(org) }}</p>
 
-## The vision
+We migrated UNDRR's 15-site Drupal ecosystem to Azure following Microsoft's architectural guidance: use managed services, embrace platform-as-a-service, let Azure handle infrastructure complexity. On paper, Azure Database for MySQL was the right choice — managed backups, automatic scaling, high availability, Microsoft's recommended path for database workloads.
 
-We operate a multi-domain ecosystem serving policymakers, practitioners, and the public with critical disaster risk reduction information. A tidy "site redesign" isn't enough — the platform has to be fast, reliable, and readable by both humans and machines. When we kicked off this transformation, we framed success in terms stakeholders care about: measurable speed, lower infrastructure spend, clearer routes for AI-ready publishing, and demonstrable user trust.
+In practice, it broke Drupal's performance model.
 
-The starting point: critical content for decision-makers was slowed by inconsistent theming, fragmented governance, and limited AI-readiness. Pages were heavy, image pipelines inconsistent, and analytics lacked dimensions for segment-level reporting. We needed comprehensive platform standardization across 15 sites while simultaneously managing a major infrastructure migration.
+High-traffic pages stayed fast — they lived in cache. But long-tail content failed. Regional disaster risk pages, historical reports, less-accessed datasets — the content policymakers actually needed during urgent decisions — would time out on first access. Daily page failures jumped from 4 to 6. Users reported timeouts. Editor experience regressed on admin paths. The "modern" architecture was slower than what we'd migrated away from.
 
-## The migration challenge
+We needed rigorous evidence to understand why. Load testing isolated the database layer, benchmarking alternated between Azure's managed MySQL and self-hosted MariaDB on VMs while keeping everything else constant. The results were consistent: **Azure Database for MySQL was 2-3x slower on Drupal's query patterns**. The managed service optimized for different workloads than Drupal generates.
 
-We migrated from a traditional VM setup with custom load balancing to Azure — a significant infrastructure change that promised better scalability and operational efficiency. But some planning decisions proved suboptimal. We chose services that looked good on paper but weren't designed with Drupal's architecture in mind, particularly Azure Database for MySQL.
+This is the story of how methodical benchmarking revealed that Azure's "right" solution wasn't right for Drupal — and how we recovered performance by questioning architectural best practices when data contradicted them.
 
-The problems manifested in unexpected ways. High-traffic pages worked fine — they stayed warm in cache. But the long tail of less-frequently accessed content would fail. If no one had visited a particular page recently, the first request would time out.
+## The architectural bet that didn't pay off
 
-For disaster risk coordinators searching for hazard data on a specific region, or policymakers accessing historical reports to inform urgent decisions, these failures weren't just technical inconveniences — they were barriers to time-sensitive work. This pattern was nearly invisible on popular routes but created a poor experience for users exploring deeper content or accessing regional pages.
+We chose Azure Database for MySQL for good reasons:
 
-Daily page failures increased from 4 to 6. Users reported timeouts during peak traffic. Non-cached paths and admin User Experience (UX) regressed substantially. Query times and 95th percentile latency suggested the managed database service was the bottleneck. Perceived stability declined despite strategic platform investments.
+- **Microsoft's recommended architecture**: Managed PaaS services over self-managed VMs
+- **Operational simplicity**: Automatic backups, patching, high availability built in
+- **Scalability promise**: Elastic compute and storage scaling
+- **Industry best practice**: Modern cloud-native applications favor managed databases
+
+But Drupal generates specific query patterns that didn't match Azure Database for MySQL's optimization profile. The service is tuned for OLTP (Online Transaction Processing) workloads with predictable access patterns. Drupal generates complex joins, large result sets, and bursty query patterns — especially on cold paths when cache misses.
+
+The problems manifested in unexpected ways:
+
+- **Cold path failures**: If no one visited a page recently, first request would time out
+- **Admin path regression**: Editor workflows involving heavy queries slowed substantially
+- **95th percentile latency spike**: Tail latency suggested database as bottleneck
+- **Cache dependency**: Performance acceptable only when cache warm — fragile architecture
 
 ## Diagnosis: database bottleneck
 
