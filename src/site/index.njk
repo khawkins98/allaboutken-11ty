@@ -17,16 +17,24 @@ templateEngineOverride: njk
         <span class="kh-u-text--nowrap">I am</span> Ken Hawkins.
       </div>
     </h1>
-    <h2 class="kh-text-heading--2">I translate between executives, developers, and users — building platforms that work, ship on time, and solve real problems.</h2>
+    <h2 class="kh-text-heading--2">I transform digital platforms for global impact — bridging executive, technical, and content teams to
+  solve complex challenges and deliver measurable results.</h2>
     {% markdown -%}
 
-    Over 20 years leading digital strategy for UN, international science, and media organizations, I've architected and shipped AI-ready platforms that [deliver](/posts/20180122-content-action-model.html) measurable results. My journalism background provides deadline discipline and audience-first clarity that pure technologists often lack.
+    I have 2 decades of experience leading digital strategy for United Nations, international science, and media organizations. My journalism background provides deadline discipline and audience-first clarity that pure technologists often lack.
 
-    I bridge technical teams, content creators, and executives — translating between stakeholders to ship solutions that work.
-
-    At UNDRR, [I lead](/cv) a 15-site Drupal ecosystem serving millions with disaster risk intelligence. Recently we've resolved Azure migration challenges to [achieve 50–70% faster performance, 20% cost savings, and 40% campaign engagement](/work/2025/impact-story-undrr-platform-transformation/) increases.
+    At UNDRR, [I direct](/cv) a multi-domain ecosystem serving millions with disaster risk intelligence.
 
     {%- endmarkdown %}
+
+     <article class="kh-summary kh-summary--news | kh-content">
+    {% set latestDigesting = collections.digesting | reverse | first %}
+    {% set latestImpactStory = collections.impactStories | first %}
+    <ul>
+    <li>Latest project note: <a href="{{ latestImpactStory.url }}">{{ latestImpactStory.data.title | replace('Impact story: ', '') }}</a></li>
+    <li id="digesting">Currently digesting: <a href="{{ latestDigesting.url }}">{{ latestDigesting.data.title }}</a></li>
+    </ul>
+    </article>
   </div>
 </section>
 </div>
@@ -49,16 +57,7 @@ templateEngineOverride: njk
 <section class="kh-card-container kh-grid-stylized">
   <span></span>
   <section>
-    <h2 id="recently" class="kh-text-heading--2">Recently</h2>
-
-    <article class="kh-summary kh-summary--news | kh-content">
-    {% set latestDigesting = collections.digesting | reverse | first %}
-    {% set latestImpactStory = collections.impactStories | first %}
-    <ul>
-    <li>Recent project notes as <a href="/work/">impact stories</a>: <a href="{{ latestImpactStory.url }}">{{ latestImpactStory.data.title | replace('Impact story: ', '') }}</a></li>
-    <li id="digesting">Currently digesting: <a href="{{ latestDigesting.url }}">{{ latestDigesting.data.title }}</a></li>
-    </ul>
-    </article>
+    <h2 id="recently" class="kh-text-heading--2">Recent blogging</h2>
 
     {%- for post in collections.posts.slice(-10) | reverse -%}
     {%- if not (post.data.tags and ('impact-stories' in post.data.tags)) -%}
