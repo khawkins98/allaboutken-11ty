@@ -18,7 +18,7 @@ workflow:
       summary: >-
         This post argues that effective AI work is primarily a project management
         challenge rather than a prompt‑wording problem. It lays out a small,
-        repeatable loop—plan → do → review → adapt—showing how clear briefs,
+        repeatable loop — plan → do → review → adapt — showing how clear briefs,
         scoped child contexts, explicit acceptance criteria, and lightweight
         traceability turn fickle outputs into reliable outcomes.
 ---
@@ -78,7 +78,7 @@ A moderately complex task will benefit in allowing you to feed inputs (plans, CS
 
 Suggested file: `docs/PROJECT_BRIEF.md`
 
-Start where every competent project starts: with goal, scope, and plan. Name the outcome and user. Declare what’s in and out of bounds, including the required format and fidelity. Choose roles—writer, editor, analyst, fact‑checker—and place checkpoints where the work can be inspected against the criteria. Even a single paragraph of intent and a handful of constraints will outperform a clever but contextless prompt.
+Start where every competent project starts: with goal, scope, and plan. Name the outcome and user. Declare what’s in and out of bounds, including the required format and fidelity. Choose roles — writer, editor, analyst, fact‑checker — and place checkpoints where the work can be inspected against the criteria. Even a single paragraph of intent and a handful of constraints will outperform a clever but contextless prompt.
 
 ```markdown
 Write PROJECT_BRIEF.md that includes:
@@ -103,7 +103,7 @@ Draft a project plan to achieve based on PROJECT_BRIEF.md. Save the new plan as 
 
 ### Step 3: Digest context to files as working memory
 
-Complex work overwhelms a single thread. Decompose it. Hold the big picture—goal, scope, plan, and acceptance criteria—in a parent context. Spin up [child contexts](/posts/20250919-smart-ai-integration-context-first/) for narrow jobs with clear constraints: one to summarize research, one to draft, one to critique for clarity, one to check facts. Pass only what each subtask needs. Then reconcile the pieces back in the parent. This mirrors how teams succeed: contributors own parts; a lead integrates the whole.
+Complex work overwhelms a single thread. Decompose it. Hold the big picture — goal, scope, plan, and acceptance criteria — in a parent context. Spin up [child contexts](/posts/20250919-smart-ai-integration-context-first/) for narrow jobs with clear constraints: one to summarize research, one to draft, one to critique for clarity, one to check facts. Pass only what each subtask needs. Then reconcile the pieces back in the parent. This mirrors how teams succeed: contributors own parts; a lead integrates the whole.
 
 ```markdown
 Distill our current conversation into key points and save a PROJECT_CONVERSATION_TOPIC.md
@@ -146,7 +146,7 @@ This is also an excellent time to save your work by committing changes in Git.
 
 Suggested file: `PATTERNS.md`
 
-Then invest in a working library. Save the prompt fragments that prove useful—definitions of success, critique lenses, personas for tone, scaffolds for planning. Save the patterns too: summarize → critique → rewrite; plan → execute → review → adapt. Over time, this library compounds like internal tooling. It moves the center of gravity from ad hoc heroics to repeatable practice.
+Then invest in a working library. Save the prompt fragments that prove useful — definitions of success, critique lenses, personas for tone, scaffolds for planning. Save the patterns too: summarize → critique → rewrite; plan → execute → review → adapt. Over time, this library compounds like internal tooling. It moves the center of gravity from ad hoc heroics to repeatable practice.
 
 ```markdown
 Distill the spirit of the conversation we've had, focusing on what was most essential to completing the task and save it in `PATTERNS.md`
@@ -180,11 +180,11 @@ Create or update a few lightweight docs and keep them next to the code so both h
 
 If a response misses the mark, pause prompt tuning and consider if the problem was a minor quality issue or misstep in approach.
 
-If the model doesn't seem to understand, state the plan—tighten scope or criteria before changing wording. What does this look like in practice?
+If the model doesn't seem to understand, state the plan — tighten scope or criteria before changing wording. What does this look like in practice?
 
 You can't wait for a model smart enough to figure this out. If the assistant were “smarter,” the thinking goes, we wouldn’t need so much structure. But stronger models amplify both signal and noise. Without goals, guardrails, and traceability, higher capability can produce faster drift. Management doesn’t slow great models down; it gives them something to converge on.
 
-The craft isn’t conjuring magic words; it’s building a system that makes good outcomes likely. Define the goal. Bound the scope. Treat prompts as briefs and contexts as memory. Version your work and record your rationale. Do this consistently, and you’ll stop gambling with generative models. You’ll be managing them—exactly as you manage any capable collaborator.
+The craft isn’t conjuring magic words; it’s building a system that makes good outcomes likely. Define the goal. Bound the scope. Treat prompts as briefs and contexts as memory. Version your work and record your rationale. Do this consistently, and you’ll stop gambling with generative models. You’ll be managing them — exactly as you manage any capable collaborator.
 
 ---
 

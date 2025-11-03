@@ -1,6 +1,7 @@
 ---
 title: Hello
 subtitle: I am Ken Hawkins.
+teaser: 'Platform Architect & Digital Strategy Lead with 20+ years delivering measurable transformation for UN, science, and media organizations.'
 date: 2018-08-22 12:24:50
 image: "/blog/drill-bits.jpg"
 layout: layouts/base.njk
@@ -16,28 +17,50 @@ templateEngineOverride: njk
         <span class="kh-u-text--nowrap">I am</span> Ken Hawkins.
       </div>
     </h1>
-    <h2 class="kh-text-heading--2">I transform digital platforms for global impact and strategic communication.</h2>
+    <h2 class="kh-text-heading--2">I transform digital platforms for global impact — bridging executive, technical, and content teams to
+  solve complex challenges and deliver measurable results.</h2>
     {% markdown -%}
 
-    With [20 years experience](/cv/) leading digital strategy for science, media, and UN organizations, I help teams navigate from complex challenges to AI-ready platforms that [deliver](/posts/20180122-content-action-model.html) measurable organizational transformation.
+    I have 2 decades of experience leading digital strategy for United Nations, international science, and media organizations. My journalism background provides deadline discipline and audience-first clarity that pure technologists often lack.
 
-    Currently directing multi-domain ecosystems at the United Nations Office for Disaster Risk Reduction, ensuring strategic platform innovation meets global disaster communication.
-
-    <hr>
-
-    {% set latestDigesting = collections.digesting | reverse | first %}
-    <p id="digesting">Currently digesting: <a href="{{ latestDigesting.url }}">{{ latestDigesting.data.title }}</a><p>
+    At UNDRR, [I direct](/cv) a multi-domain ecosystem serving millions with disaster risk intelligence.
 
     {%- endmarkdown %}
+
+     <article class="kh-summary kh-summary--news | kh-content">
+    {% set latestDigesting = collections.digesting | reverse | first %}
+    {% set latestImpactStory = collections.impactStories | first %}
+    <ul>
+    <li>Latest project note: <a href="{{ latestImpactStory.url }}">{{ latestImpactStory.data.title | replace('Impact story: ', '') }}</a></li>
+    <li id="digesting">Currently digesting: <a href="{{ latestDigesting.url }}">{{ latestDigesting.data.title }}</a></li>
+    </ul>
+    </article>
   </div>
 </section>
 </div>
 
+{#- What Sets Me Apart -#}
+{#- commented out for now
+<section class="kh-grid-stylized kh-u-padding__top--600 kh-u-padding__bottom--600">
+  <span></span>
+  <section class="kh-content">
+    <blockquote class="kh-quote kh-quote--featured">
+      <p>Ken is the rare professional who can sit with executives to discuss strategy, then build the technical architecture to deliver it, while ensuring the content teams and end users actually benefit. He's not just a consultant who talks about transformation — he's someone who ships working systems that last.</p>
+    </blockquote>
+    <blockquote class="kh-quote kh-quote--featured">
+      <p>Ken's not a pure developer or designer — he's a strategic technologist who builds sustainable systems for complex organizations with distributed teams.</p>
+    </blockquote>
+  </section>
+</section>
+-#}
+
 <section class="kh-card-container kh-grid-stylized">
   <span></span>
   <section>
-    <h2 id="recently" class="kh-text-heading--2">Recently</h2>
-    {%- for post in collections.posts.slice(-5) | reverse -%}
+    <h2 id="recently" class="kh-text-heading--2">Recent blogging</h2>
+
+    {%- for post in collections.posts.slice(-10) | reverse -%}
+    {%- if not (post.data.tags and ('impact-stories' in post.data.tags)) -%}
     <article class="kh-summary kh-summary--news">
       {% set isNote = (post.data.tags and ('note' in post.data.tags))  %}
       <div class="kh-summary__date">{{ post.date | dateDisplay }}
@@ -56,6 +79,7 @@ templateEngineOverride: njk
       <p class="kh-content kh-summary__text">{{ post.data.teaser | safe }}</p>
       {#- {{loop.index}} -#}
     </article>
+    {%- endif -%}
     {%- endfor -%}
     <article class="kh-summary kh-summary--news">
       <h3 class="kh-summary__title">
@@ -72,11 +96,12 @@ templateEngineOverride: njk
   <section>
     <h2 id="hello" class="kh-text-heading--2">Say hello</h2>
     <p>
-      I'm currently fully engaged helping a global leader <a href="https://www.preventionweb.net/">reduce the risk of disaster</a> — but you can still say hello.
+      Open to strategic opportunities — let’s connect.
     </p>
     <p class="kh-cluster">
       <a href="https://toot.io/@khawkins98" >Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
       <a href="https://www.linkedin.com/in/allaboutken" >LinkedIn</a>
+      <a href="/cv/" >CV</a>
       <a href="mailto:khawkins98@gmail.com" >Email</a>
       <a href="https://untappd.com/user/khawkins98">Beer</a>
     </p>
