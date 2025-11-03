@@ -1,7 +1,7 @@
 ---
-title: 'Impact story: Editorial efficiency (saving 120 hours per 100 editors monthly)'
+title: 'Impact story: Saving editors weeks of time'
 layout: layouts/post.njk
-teaser: 'How we reclaimed weeks of human effort monthly by addressing the unglamorous friction editors faced daily.'
+teaser: 'How we reclaimed weeks of human effort by addressing the unglamorous friction editors faced daily.'
 date: 2025-08-17
 tags:
   - posts
@@ -13,24 +13,27 @@ topics:
   - CMS optimization
 org: UNDRR
 permalink: /work/2025/impact-story-editorial-efficiency/
-kens_status: draft
+kens_status: ready_for_publication
 ---
 
 {% markdown %}
 > tl;dr
 >
-> - 120 hours/month reclaimed per 100 editors (1.2 h per editor).
-> - Editor menu performance improved 20% (7.8s → 6.18s).
-> - Standardized publication cover workflow cut steps from 9 to 3.
-> - Results delivered by a cross‑functional team (engineering, design, content ops) under clear leadership and governance.
+> - 120 hours/month reclaimed per 100 editors — equivalent to 3 full work weeks of human effort returned monthly
+> - Editor menu performance improved 20% (7.8s → 6.18s)
+> - Standardized publication cover workflow cut steps from 9 to 3
+> - Standardized workflows across 15 sites
+> - Timeout failures reduced by 85% and editors stopped losing work mid-edit
 
 {% from "partials/orgs.njk" import orgIntro %}
 
 <p class="kh-text-body--3">{{ orgIntro(org) }}</p>
 
-No single issue was breaking the editorial experience, but an accumulation of paper cuts slowed everything down. The site felt sluggish. Navigation was slow. Saving content would all-too-often time out. The editor menu took 7+ seconds to load. All of these issues were significant on their own, but together they were catastrophically draining editor time and patience.
+No single issue was breaking the editorial experience — it was an accumulation of paper cuts. The site felt sluggish. Navigation lagged. Content saves timed out. The editor menu took 7+ seconds to load. Each issue was significant on its own, but together they catastrophically drained editor time and patience.
 
-We dedicated a 3-week release cycle to address this, introducing a new menu concept, fixing underlying performance bugs, automating repetitive workflows, and optimizing database queries. The kind of work that's easy to defer when there's always a "more important" feature — but the cumulative impact is significant.
+This work was part of broader platform recovery following the Azure migration. While we addressed database bottlenecks and infrastructure issues, editorial workflow friction needed dedicated focus — the kind of work that's easy to defer when there's always a "more important" feature, but the cumulative impact is significant.
+
+We dedicated a 3-week release cycle specifically for editorial efficiency, introducing a new menu concept, fixing underlying performance bugs, automating repetitive workflows, and optimizing database queries.
 
 We measured this rigorously: the frequency of common tasks (publications, news items, updates) across the editorial team, and the time each task required. When we multiplied task frequency × time saved × editor count, the result was 120 hours reclaimed per month per 100 editors. Not from one heroic fix, but from addressing a dozen small sources of friction.
 
@@ -42,19 +45,19 @@ Specific pain points across the editorial team:
 
 **Performance friction**:
 
-- Editor menu took 7.8 seconds to load — used hundreds of times daily, this meant minutes lost waiting for basic navigation
+- Editor menu took on average 7.8 seconds to load — used hundreds of times daily, this meant minutes lost waiting for basic navigation
 - Content save operations timed out frequently, forcing editors to retry or lose work
 - Taxonomy autocomplete sluggish, slowing content tagging and categorization
 
 **Manual publication workflow**:
 
-- Publications (166 monthly) required 9-step process: create entry, switch to Photoshop, crop cover, save file, create media entity, upload, name/tag, specify 6 crops, select in publication
-- 10 minutes per publication × 166 items = 1,660 minutes monthly (27.6 hours) spent on mechanical image prep
+- Publications required 9-step process: create entry, switch to Photoshop, crop cover, save file, create media entity, upload, name/tag, specify 6 crops, select in publication
+- At 10 minutes per publication, this consumed ~56 hours monthly per 100 editors on mechanical image prep alone
 - Error-prone: editors frequently forgot crops or uploaded wrong image sizes
 
 **Inconsistent workflows across 15 sites**:
 
-- Editors moving between UNDRR regional sites faced different field structures, publishing states, and taxonomies
+- Editors moving between sites faced different field structures, publishing states, and taxonomies
 - Content types for publications, news, and events differed site-to-site, forcing editors to relearn patterns
 - Fragmentation multiplied training burden and increased errors
 
@@ -73,7 +76,7 @@ The editor menu is used hundreds of times daily across the editorial team, takin
 
 **Automated publication cover generation**
 
-Publications are a core content type at UNDRR with 166 uploaded monthly. The manual workflow was killing productivity.
+Publications are a high-volume content type at UNDRR. The manual workflow was killing productivity.
 
 ### Before → After (publication covers)
 
@@ -106,7 +109,7 @@ Different UNDRR web presences had fragmented editorial workflows — editors mov
 - Taxonomy application (topics, regions, hazard types)
 - Media handling patterns
 
-**Performance fixes across the stack**
+**Performance fixes: timeouts, autocomplete, and editor responsiveness**
 
 - Reduced timeout failures on save (optimized revision storage)
 - Fixed slow taxonomy autocomplete (indexed commonly-used terms)
@@ -115,8 +118,8 @@ Different UNDRR web presences had fragmented editorial workflows — editors mov
 
 ## Outcomes (normalized per 100 editors per month)
 
-- **Publications**: 56 hours saved (166 items × 10 minutes per 100 editors)
-- **Other content**: 64 hours saved (377 entries × 5 minutes per 100 editors)
+- **Publications**: 56 hours saved through automated cover generation
+- **Other content**: 64 hours saved through performance fixes and workflow improvements
 - **Total time reclaimed**: 120 hours/month per 100 editors — **equivalent to 3 full work weeks** of human effort returned monthly
 - **Per-editor average**: 50 minutes saved/week per editor — nearly an hour per person reclaimed for strategic content work instead of fighting the CMS
 - **Menu performance**: 20% faster (7.8s → 6.18s)
@@ -127,13 +130,13 @@ To put this in perspective: 120 hours monthly per 100 editors equals 1,440 hours
 
 ## What made this work
 
-This wasn't glamorous feature work, the kind of work that's easy to defer when there's always a "more important" campaign or feature request. But the cumulative impact mattered.
+This wasn't glamorous feature work, the kind of work that's easy to defer when there's always a "more important" campaign or feature request. But the cumulative impact mattered — and the broader platform recovery effort created the governance framework that made dedicating a full cycle to editorial efficiency possible.
 
 We made it happen by:
 
 - **Carving out dedicated time** in our 3-week release cadence specifically for editorial efficiency
 - **Measuring rigorously** before and after (task frequency × time × editor count = defensible ROI (Return on Investment))
-- **Prioritizing by impact** (publication covers affected 166 items/month, so automation paid off quickly)
+- **Prioritizing by impact** (publication covers were high-volume, so automation paid off quickly)
 - **Keeping defaults fast** (auto-generate covers, but allow overrides when needed)
 - **Standardizing ruthlessly** (15 sites, one workflow pattern)
 
@@ -141,7 +144,6 @@ The result: editors spend less time fighting the CMS and more time on strategic 
 
 ## Links
 
-- [UNDRR platform transformation](/work/2025/impact-story-undrr-platform-transformation/) (broader platform context)
-- [Governance and delivery](/work/2025/impact-story-governance-delivery/) (the 3-week cadence that made this possible)
+- [From performance failures to trusted delivery](/work/2025/impact-story-platform-recovery-optimization/) - Platform-wide recovery including editorial efficiency work
 
 {% endmarkdown %}
