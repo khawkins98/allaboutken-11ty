@@ -1,8 +1,8 @@
 ---
-title: "Impact story: Ending platform lock-in — Drupal, WordPress, and static sites sharing content freely"
+title: "Impact story: Ending platform lock-in to share corporate content freely"
 layout: layouts/post.njk
 teaser: "Separated where content is written from where it's displayed, enabling 80+ properties to share content and structure regardless of tech stack."
-date: 2021-12-21
+date: 2020-12-21
 tags:
   - posts
   - impact-stories
@@ -13,15 +13,15 @@ topics:
   - content APIs
 org: EMBL
 permalink: /work/2021/impact-story-ending-platform-lock-in/
-kens_status: draft
+kens_status: ready_for_publication
 ---
 
 {% markdown %}
 > tl;dr
 >
-> - Decoupled where content is authored from where it's displayed: contentHub (headless Drupal) + Visual Framework 2.0 + `link rel=import` enabled write-anywhere, display-anywhere architecture
-> - Editors could write in Drupal, WordPress, or any CMS — content appeared organization-wide via APIs
-> - Properties could display content in WordPress, static HTML, React, or any frontend — tech stack didn't matter
+> - Decoupled where content is authored from where it's displayed
+> - Editors could write in virtually any system and syndicate content organization-wide
+> - Properties could display content in WordPress, static HTML, React, or any frontend
 > - Ended manual content curation: sites dropped in syndicated components (global footer, news feeds, event calendars) with a single `<link>` tag
 > - Editors saved ~15 hours/week; 80+ properties could share content without platform lock-in
 > - Delivered through cross-functional collaboration (engineering, editorial, design) with clear product ownership
@@ -30,13 +30,14 @@ kens_status: draft
 
 <p class="kh-text-body--3">{{ orgIntro(org) }}</p>
 
-EMBL's digital ecosystem spanned 80+ properties built on different platforms: Drupal sites in Heidelberg, WordPress blogs in Hinxton, static HTML in Hamburg, React applications at EMBL-EBI. Each property managed content independently. When editors wanted to share content across sites, they had two bad options: manually copy-paste (breaking links, duplicating work), or force everyone onto the same CMS (killing local flexibility).
+EMBL's digital ecosystem spanned 80+ properties built on different platforms: Drupal sites, WordPress blogs, static HTML, React, Angular and on and on. Each property managed content independently. When editors wanted to share content across sites, they had two bad options: manually copy-paste (breaking links, duplicating work), or force everyone onto the same CMS (killing local flexibility).
 
 The fundamental tension: **EMBL needed content to flow freely across the organization, but couldn't force 80+ properties onto a single platform**. Research teams needed WordPress for blogging. Communications preferred Drupal for structured content. Developers wanted static generators for documentation. Forcing convergence would have failed.
 
 The [Visual Framework](/work/2019/impact-story-embl-visual-framework/) had solved visual consistency across mixed platforms. But it didn't solve content sharing: a news article written in EMBL-EBI's Drupal couldn't easily appear on EMBL.org's WordPress, and vice versa. Content remained siloed by platform.
 
 We needed to decouple two layers:
+
 1. **Where content is authored** (Drupal, WordPress, static markdown — doesn't matter)
 2. **Where content is displayed** (WordPress, React, static HTML — doesn't matter)
 
@@ -83,11 +84,13 @@ EMBL's federated digital ecosystem faced a fundamental architectural problem: **
 We built contentHub as EMBL's unified content hub — a central repository that accepted content from any source and made it available organization-wide:
 
 **Authoring flexibility**:
+
 - Editors could write in their preferred tools: **Drupal, WordPress, static markdown, or any CMS**
 - Properties published locally, synced to contentHub for organization-wide sharing
 - Unified taxonomy and moderation meant content governance worked consistently regardless of where it was authored
 
 **Normalized content**:
+
 - News, events, publications, people profiles, research highlights — all available in consistent formats
 - contentHub translated between different platforms' content structures
 - A news article written in WordPress looked the same in the API as one written in Drupal
@@ -97,6 +100,7 @@ We built contentHub as EMBL's unified content hub — a central repository that 
 VF 2.0 provided ready-made components that pulled content from contentHub and displayed it consistently across **any platform**:
 
 **Display flexibility**:
+
 - Components worked in **WordPress, static HTML, React, or any frontend**
 - Properties didn't need matching technology stacks to share visual patterns
 - contentHub provided data, VF components provided consistent presentation
@@ -120,6 +124,7 @@ This meant properties could maintain local autonomy while participating in organ
 The breakthrough: making integration trivial. Properties could add syndicated content with a single HTML `<link>` tag — no backend integration, no custom code, no platform-specific work. A WordPress site, Drupal site, or static HTML page all used the same approach: drop in a link tag, get organization-wide content.
 
 This meant:
+
 - **Footer updates propagated instantly**: Change navigation structure in contentHub, all 80+ properties updated automatically
 - **Menu changes required no coordination**: Update primary menu once, appears everywhere
 - **Content appeared in real-time**: News published at EMBL-EBI surfaced on EMBL.org's homepage immediately
@@ -201,5 +206,3 @@ The result: an architecture that made platform choice orthogonal to content shar
 - **Deep dive blog post**: [Enabling a more dynamic EMBL online](/posts/20211221-enabling-a-more-dynamic-embl-online/) (original EMBL Communications post covering broader platform work)
 - **Related impact story**: [EMBL Visual Framework](/work/2019/impact-story-embl-visual-framework/) (component library that consumed contentHub APIs)
 {% endmarkdown %}
-
-
