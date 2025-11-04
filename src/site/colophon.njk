@@ -27,18 +27,19 @@ This site is built and published with a small, readable stack and a bias for fle
 - **Styles**: Sass compiled to a single CSS file; custom utility classes; normalize; type set with the Recursive font
   - Previously used the EMBL Visual Framework (VF) and Gulp; the [migration to a simpler Eleventy v3 stack is documented here](/posts/20250831-site-overhaul-eleventy-v3).
 - **Search**: Static index generated at build time; client‑side search with Lunr.js. Source: [search page template](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/search.njk), [client‑side script](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/js-search-client-side.js), [index builder](https://github.com/khawkins98/allaboutken-11ty/blob/main/scripts/build-search-index.js)
-- **Hosting**: Vercel (auto‑deploys from GitHub, automatic HTTPS, global CDN)
-- **Domain**: Cloudflare (DNS, security, and performance)
+- **Hosting**: Vercel (auto‑deploys from GitHub, automatic HTTPS, CDN)
+- **Domain**: Cloudflare (DNS, security, performance)
+- Fonts: [Recursive](/posts/20250904-switching-to-recursive)
 
 ## Build & source
 
 - **Source code**: [`github.com/khawkins98/allaboutken-11ty`](https://github.com/khawkins98/allaboutken-11ty/)
-- **Images**: [Eleventy Image plugin](https://www.11ty.dev/docs/plugins/image) (still Sharp under the hood) configured to [generate deterministic, token‑based filenames](/posts/20250907-deterministic-image-filenames)
+- **Images**: [Eleventy Image plugin](https://www.11ty.dev/docs/plugins/image) ([Sharp](https://sharp.pixelplumbing.com/) under the hood) configured to [generate deterministic, token‑based filenames](/posts/20250907-deterministic-image-filenames)
 - **Build command**: `yarn build` → compiles Sass, runs Eleventy, processes images, builds search index
 
 ## Privacy
 
-- **Analytics**: GoatCounter (cookie‑free, aggregate counts only). See their rationale on GDPR consent and legitimate interest: [GDPR consent notices](https://khawkins98.goatcounter.com/help/gdpr).
+- **Analytics**: [GoatCounter](https://www.goatcounter.com/) (cookie‑free, aggregate counts only). See their rationale on GDPR consent and legitimate interest: [GDPR consent notices](https://khawkins98.goatcounter.com/help/gdpr).
 - **No trackers**: No ad tech, no cross‑site profiling.
 
 ## Principles
@@ -47,12 +48,6 @@ This site is built and published with a small, readable stack and a bias for fle
 - Ship as little JS as practical; keep content readable without it.
 - Optimize images and typography for legibility.
 - Document decisions in public when it helps future me (and you).
-
-## Credits
-
-- Fonts: [Recursive](/posts/20250904-switching-to-recursive)
-- Tools: Eleventy, Sass, Sharp, Markdown‑It
-- Analytics: [GoatCounter](https://www.goatcounter.com/)
 
 {% endmarkdown %}
 
