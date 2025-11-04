@@ -233,7 +233,7 @@ Notes
 Good
 
 ```12:35:src/site/posts/20191021-integrating-eleventy-with-gulp.njk
-> #### tl;dr
+> ## tl;dr
 > - We forked 11ty’s cmd.js to better integrate with gulp and other Node JS.
 > - I made a demo at khawkins98/gulp-eleventy-example.
 ```
