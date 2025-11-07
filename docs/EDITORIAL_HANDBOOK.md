@@ -9,6 +9,7 @@ This handbook codifies how Ken's posts are written and presented: the voice, str
 - [Bio (for reference)](#bio-for-reference)
 - [Voice and Tone](#voice-and-tone)
 - [Choosing Content Type: Impact Stories vs Blog Posts](#choosing-content-type-impact-stories-vs-blog-posts)
+- [Digesting Posts](#digesting-posts)
 - [Structure of a Blog Post](#structure-of-a-blog-post)
 - [Formatting Rules](#formatting-rules)
   - [Note boxes (kh-note)](#note-boxes-kh-note)
@@ -91,6 +92,57 @@ Use this decision guide to determine which format best suits your content:
 
 - Impact story: "Scaled Drupal platform to 150k+ users with caching strategy" → comprehensive project narrative with performance metrics
 - Blog post: "Integrating Eleventy with gulp for better Node.js tooling" → focused how-to with code examples
+
+## Digesting Posts
+
+Digesting posts are short-form commentary on external articles, tools, or resources. They help you track what you're reading and provide brief reactions.
+
+**Key principle**: Never use the source article's title as your headline. Rewrite titles in your own voice to reflect what you found valuable or learned.
+
+**Title patterns**:
+
+- Focus on what you learned or discovered (e.g., "Why I should have been using the output tag all along")
+- Make it specific and actionable (e.g., "Engineers need 45 minutes to hit peak focus")
+- State a clear takeaway (e.g., "Context engineering beats prompt tricks for AI agents")
+- Use conversational language (e.g., "Thoughtful AI integration beats bolted-on Clippy")
+
+**Guidelines**:
+
+- Titles should be concise, conversational, and specific
+- Avoid simply restating the source headline
+- Frame titles around the insight or value you gained
+- No trailing punctuation
+- Use first-person perspective when appropriate ("Why I should have...")
+
+**Examples**:
+
+Good (in your voice):
+- "Why I should have been using the output tag all along"
+- "Engineers need 45 minutes to hit peak focus"
+- "Developers are becoming context curators for AI"
+- "Thoughtful AI integration beats bolted-on Clippy"
+
+Bad (source titles):
+- "HTML's Best‑Kept Secret: the output tag"
+- "Distracting software engineers is way more harmful than most managers think"
+- "Effective context engineering for AI agents"
+- "Smart AI integration comes only with knowledge"
+
+**Front matter**:
+
+```yaml
+---
+title: "Your rewritten title in your voice"
+layout: layouts/digesting.njk
+teaser: "Brief description of what the source covers."
+date: YYYY-MM-DD
+digest_link: https://example.com/source-article
+tags: digesting
+topics:
+  - keyword one
+  - keyword two
+---
+```
 
 ## Structure of a Blog Post
 
