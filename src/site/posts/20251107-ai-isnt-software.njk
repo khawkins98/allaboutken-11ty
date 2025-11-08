@@ -1,0 +1,36 @@
+---
+title: "Too many think of AI as perfectly predictable code"
+layout: layouts/digesting.njk
+teaser: "Boyd Kane explains why treating AI like debuggable code misses the fundamental difference in how these systems work."
+date: 2025-11-07
+digest_link: https://boydkane.com/essays/boss
+tags: digesting
+topics:
+  - AI
+  - software engineering
+kens_status: draft
+---
+
+{% markdown %}
+
+I enjoyed Boyd Kane's ["Why Your Boss Isn't Worried About AI"](https://boydkane.com/essays/boss) for honing in on how many non-tech people assume AI can be debugged and fixed like traditional software.
+
+It can't.
+
+The core insight: **AI problems come from training data, not code bugs.**
+
+> The software that runs AI acts very differently to the software that runs most of your computer or your phone.
+
+Five key differences that matter:
+
+1. **Training data vs. code bugs**: Issues stem from trillions of words in training data, not reviewable lines of code
+2. **Undebuggable**: You can't trace misbehavior back to specific training data
+3. **Unfixable**: Retraining doesn't guarantee the problem won't resurface
+4. **Non-deterministic**: Tiny prompt changes produce dramatically different outputs
+5. **Unpredictable capabilities**: Unknown abilities emerge after release
+
+This explains why "just fix it" doesn't work with AI the way it does with software. The architecture is fundamentally different.
+
+It's a useful framing for explaining AI limitations to stakeholders who expect software-like reliability.
+
+{% endmarkdown %}
