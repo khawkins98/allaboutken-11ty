@@ -107,39 +107,6 @@ The site uses a unique CSS activation pattern:
   - `$kh-breakpoint--md-down`: 767px
   - `$kh-breakpoint--lg-down`: 1023px
 
-#### Pseudomorphic Ambience (Site-wide Background Effect)
-
-Site-wide atmospheric background using pure CSS/SVG (no JavaScript). Creates warm, dappled light inspired by Daylight Computer → Sunlit.place → Jacky Zhao's Sunlit.
-
-**Location**: `/src/components/kh-ambience/`
-**Documentation**: See `src/components/kh-ambience/README.md` for full details
-
-**Quick Reference**:
-- **File size**: ~9KB CSS, ~750 bytes HTML per page
-- **Palette**: Change `$kh-ambience-active-palette` in `_kh-ambience.scss:37` ('sunrise', 'midday', 'dusk')
-- **Intensity**: Adjust `$kh-ambience-light-intensity` (default: 0.28) and `$kh-ambience-dapple-opacity` (default: 0.5)
-- **Accessibility**: Respects `prefers-reduced-motion` and `prefers-contrast: high`; fully decorative (`aria-hidden`)
-- **Architecture**: 5 layers (base light → bounce → dapple mask → 3D blinds → blur) at `z-index: -1`
-- **3D Effect**: Blinds use `matrix3d()` transform for angled wall perspective (inspired by Sunlit)
-- **Integration**: Included via `src/site/_includes/partials/ambience.njk` in `base.njk` layout
-- **Activation**: Works within existing `#kh-css-toggle` system
-
-**Common adjustments**:
-```scss
-// src/components/kh-ambience/_kh-ambience.scss
-
-// Change scene
-$kh-ambience-active-palette: 'midday'; // 'sunrise', 'midday', 'dusk'
-
-// Tune intensity
-$kh-ambience-light-intensity: 0.25; // 0.0-1.0 (default: 0.28)
-$kh-ambience-dapple-opacity: 0.4;   // 0.0-1.0 (default: 0.5)
-
-// Adjust blinds
-$kh-ambience-sun-angle: 60deg;      // Gradient/blinds angle (default: 45deg)
-$kh-ambience-slat-gap: 32px;        // Spacing (default: 24px)
-```
-
 ### Eleventy Configuration Details
 
 **Markdown**:
