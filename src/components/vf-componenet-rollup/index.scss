@@ -2,6 +2,7 @@
 @use './normalize' as normalize;
 @use './kh-content' as kh-content;
 @use './settings' as *;
+@use '../kh-ambience/kh-ambience' as kh-ambience;
 
 html {
   line-height: 1.15; // Correct the line height in all browsers.

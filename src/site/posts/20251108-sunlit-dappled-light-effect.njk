@@ -1,0 +1,245 @@
+---
+title: 'Creating warm, dappled light with CSS and SVG'
+layout: layouts/post.njk
+teaser: 'I added a sunlit ambience effect to this site using pure CSS and SVG — no JavaScript, just gradients and blend modes.'
+date: 2025-11-08
+tags:
+  - posts
+topics:
+  - CSS
+  - SVG
+  - Web Performance
+  - Accessibility
+permalink: /posts/sunlit-dappled-light-effect/
+kens_status: draft
+---
+
+{% markdown %}
+
+I recently saw [Jacky Zhao's Sunlit](https://jzhao.xyz/thoughts/craft) and appreciate the warmth and sense of relaxation it brings to the page. Much like reading by a sunny window. I wanted to understand how it worked, so I followed the trail: Jacky's implementation traced back to [Sunlit.place](https://www.sunlit.place/) and the [Daylight Computer](https://daylightcomputer.com/), with roots in older [CSS-Tricks dappled light techniques](https://css-tricks.com/css-dappled-light-effect/).
+
+I dug into [the code](https://github.com/jackyzha0/sunlit) and derived a riffed version here: ≈9KB of CSS, one SVG image, zero JavaScript. The effect respects reduced motion preferences, works in all modern browsers, and doesn't block interactions.
+
+Is it a bit silly to add atmospheric lighting effects to a blog? Probably. But it's my blog, and the effect will be fun while it lasts. Hopefully it's so subtle that you've not really noticed it.
+
+Here's how it works  —  and where I took a different approach.
+
+> ## tl;dr
+>
+> - Built a 2-layer atmospheric effect (dappled leaves + 3D perspective blinds) using CSS gradients and SVG filters
+> - Sun angle and opacity animate as you scroll — no JavaScript required, Firefox not supported
+> - Total footprint: ≈9KB CSS overhead, minimal SVG, zero JavaScript runtime cost
+> - Reduced complexity [CodePen demo](https://codepen.io/khawkins98/pen/ZYQgKOw?editors=1000) to try it yourself
+
+{% endmarkdown %}
+
+<aside class="kh-note-box" style="margin: 2rem 0; z-index: 3; position: relative;">
+  <span class="kh-note-box__label">Demo</span>
+  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+    <input type="checkbox" id="demo-underlay-toggle" style="cursor: pointer;">
+    <span>Add a grey underlay to make the effect more visible</span>
+  </label>
+</aside>
+
+<style>
+  body.demo-underlay-active::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--kh-color--grey);
+    z-index: 0;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  (function() {
+    const toggle = document.getElementById('demo-underlay-toggle');
+    if (toggle) {
+      toggle.addEventListener('change', function() {
+        document.body.classList.toggle('demo-underlay-active', this.checked);
+      });
+    }
+  })();
+</script>
+
+{% markdown %}
+
+The key to making this feel like real sunlight was choosing the right blend mode.
+
+## Why additive light instead of shadows
+
+Most dappled light effects use `mix-blend-mode: multiply` to cast shadows — darkening the page like objects blocking sunlight. I went with [`mix-blend-mode: plus-lighter`](https://drafts.fxtf.org/compositing/#porterduffcompositingoperators_plus_lighter) to simulate sunlight streaming in.
+
+Overall this aims to create a warmer, luminous effect. The gray tones in the gradient brighten the underlying page instead of darkening it. For example: when multiply darkens white backgrounds to gray, plus-lighter brightens mid-tones toward sunlit warmth  —  similar to how real sunlight adds energy rather than blocking it.
+
+Combined with CSS `repeating-linear-gradient` for the blinds (instead of generating DOM elements), the whole thing stays lean and performant.
+
+## How it works
+
+Two layers stacked with `pointer-events: none` so they don't block clicks. This is somewhat simpler than other effects and omits additional lighting layers.
+
+**Layer 1: Dappled Leaves**
+
+- SVG image (inspired by [Sunlit's leaves.png](https://github.com/jackyzha0/sunlit))
+- SVG `feDisplacementMap` filter creates organic wind movement
+- 9px blur for atmospheric softness
+- Opacity: 0.07 (desktop), 0.1 (mobile)
+
+**Layer 2: Blinds with 3D Perspective**
+
+- `repeating-linear-gradient` with gray tones (no DOM elements)
+- `matrix3d()` transform creates angled wall illusion
+- 9px blur, gentle sway animation (11s)
+- Scroll-driven opacity fade: 0.9 → 0.3
+
+Here's the markup structure:
+
+```html
+<div id="kh-dappled-light" aria-hidden="true">
+  <!-- Leaves layer with SVG wind filter -->
+  <div class="kh-ambience-leaves">
+    <svg style="width: 0; height: 0; position: absolute;">
+      <defs>
+        <filter id="kh-ambience-leaves-animation">
+          <feTurbulence type="fractalNoise" numOctaves="1">
+            <animate attributeName="baseFrequency" dur="40s"
+              values="0.005 0.003;0.01 0.009;0.008 0.004;0.005 0.003"
+              repeatCount="indefinite" />
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic">
+            <animate attributeName="scale" dur="10s"
+              values="15;55;105;55;45"
+              repeatCount="indefinite" />
+          </feDisplacementMap>
+        </filter>
+      </defs>
+    </svg>
+  </div>
+
+  <!-- Blinds/shutters layer -->
+  <div class="kh-ambience-blinds">
+    <div class="kh-ambience-shutters"></div>
+  </div>
+</div>
+```
+
+The blinds gradient uses a CSS custom property for the sun angle:
+
+```scss
+.kh-ambience-shutters {
+  background: repeating-linear-gradient(
+    calc(var(--ambience-sun-angle, 80deg) + 120deg),
+    transparent,
+    transparent 89px,
+    rgb(80 80 80 / 66%) 89px,
+    rgb(117 117 117 / 60%) 167px
+  );
+}
+```
+
+## Scroll-driven animation (no JavaScript)
+
+The sun angle shifts from 60deg to 80deg and opacity fades from 0.9 to 0.3 as you scroll — entirely in CSS using [`animation-timeline: scroll()`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/scroll-timeline).
+
+```scss
+@property --ambience-sun-angle {
+  syntax: '<angle>';
+  initial-value: 60deg;
+  inherits: true;
+}
+
+@property --ambience-blinds-opacity {
+  syntax: '<number>';
+  initial-value: 0.9;
+  inherits: true;
+}
+
+#kh-dappled-light {
+  animation: kh-ambience-scroll-shift linear both;
+  animation-timeline: scroll(root);
+  animation-range: 0% 100%;
+}
+
+@keyframes kh-ambience-scroll-shift {
+  0% {
+    --ambience-sun-angle: 60deg;
+    --ambience-blinds-opacity: 0.9;
+  }
+  100% {
+    --ambience-sun-angle: 80deg;
+    --ambience-blinds-opacity: 0.3;
+  }
+}
+```
+
+Browser support: Chrome 115+, Edge 115+, Opera 101+, Safari 26+. Firefox will gracefully degrade to static values.
+
+## Firefox optimization
+
+The SVG `feDisplacementMap` filter creates beautiful organic movement but chews through CPU in Firefox. I disabled it specifically for Firefox using `@-moz-document url-prefix()`, keeping only the cheap blur:
+
+```scss
+.kh-ambience-leaves {
+  filter: url(#kh-ambience-leaves-animation) blur(9px);
+}
+
+// Firefox: disable expensive filter, keep blur
+@-moz-document url-prefix() {
+  .kh-ambience-leaves {
+    filter: blur(9px);
+  }
+}
+```
+
+## Accessibility
+
+The effect is purely decorative, so:
+
+- `aria-hidden="true"` on all ambience elements
+- `pointer-events: none` ensures complete clickthrough
+- Animation disabled when `prefers-reduced-motion: reduce`
+- Entire effect hidden when `prefers-contrast: high` — users who enable this setting prioritize readability over decorative effects, so removing ambience reduces visual noise
+
+```scss
+@media (prefers-reduced-motion: no-preference) {
+  .kh-ambience-blinds {
+    animation: kh-ambience-sway 11s ease-in-out infinite;
+  }
+}
+
+@media (prefers-contrast: high) {
+  #kh-dappled-light {
+    display: none !important;
+  }
+}
+```
+
+## What I learned
+
+**Simplify ruthlessly.** I started with 5 proposed layers (base light, dapple mask, blinds, depth blur, color gradient). Ended up shipping 2 — leaves and blinds. The simpler version looked better and performed faster.
+
+**Build warmth through subtlety.** Early iterations with orange/amber gradients reduced text contrast ratios below WCAG AA thresholds (<4.5:1 for body text). Switching to pure gray tones with `plus-lighter` blend mode maintained ≥7:1 contrast while creating warmth naturally.
+
+**Image beats procedural noise.** I tried generating the dappled pattern with SVG `feTurbulence` filters. Complex, inconsistent, hard to tune. Sunlit's static leaves.svg provided better organic texture and eliminated the filter chain.
+
+**3D transforms make it real.** Adding the `matrix3d()` perspective transform to the blinds (inspired by [Sunlit's implementation](https://github.com/jackyzha0/sunlit/blob/main/index.css#L165)) created the illusion of light cast on an angled wall. Suddenly it felt atmospheric instead of flat.
+
+## Try it yourself
+
+- View the [CodePen demo](https://codepen.io/khawkins98/pen/ZYQgKOw?editors=1000) (simplified version without scroll animation)
+- Check out the [source](https://github.com/khawkins98/allaboutken-11ty) on GitHub
+
+## Credits
+
+Inspired by:
+
+- [Daylight Computer](https://daylightcomputer.com/) — original physical device inspiration
+- [Sunlit.place](https://www.sunlit.place/) — web concept
+- [Sunlit by Jacky Zhao](https://jzhao.xyz/thoughts/craft) — technical approach I adapted ([GitHub repo](https://github.com/jackyzha0/sunlit))
+- [CSS Dappled Light Effect](https://css-tricks.com/css-dappled-light-effect/) — CSS-Tricks historical technique reference
+
+{% endmarkdown %}
