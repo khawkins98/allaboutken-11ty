@@ -64,6 +64,7 @@
     {% endif %}
   </head>
   <body class="kh-stack{% if bodyClass %} {{ bodyClass }}{% endif %}">
+    {% include "partials/ambience.njk" %}
     <a href="#main-content" class="kh-u-sr-only kh-skip-link">Skip to main content</a>
     <!-- Visible when CSS is off (hidden by CSS when on) -->
     <aside class="kh-css-off-note">If you're reading this the site styles are currently disabled. Toggle the “CSS” checkbox in the footer to restore styling.<hr></aside>
