@@ -21,33 +21,50 @@
     <meta name="HandheldFriendly" content="true" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     {% if noindex %}<meta name="robots" content="noindex,follow" />{% endif %}
-    {% if tags and ('posts' in tags) %}
+    {#- OpenGraph and Twitter meta tags with defaults and per-post overrides #}
+    {#- Compute values once for reuse #}
+    {%- set ogTitleComputed = og_title or (title ~ " | All about Ken Hawkins") %}
+    {%- set ogDescriptionComputed = og_description or teaser or siteConfig.siteInformation.short_description %}
+    {%- if og_image %}
+      {#- Explicit og_image override (full URL) - only way to bypass dynamic screenshots #}
+      {%- set ogImageComputed = og_image %}
+    {%- else %}
+      {#- Default: dynamic screenshot from social card page #}
+      {%- set ogImageComputed %}{% ogImageUrl %}{% endset %}
+    {%- endif %}
+    {#- OpenGraph meta tags #}
+    {%- if tags and ('posts' in tags) %}
     <meta property="og:type" content="article" />
     <meta property="article:published_time" content="{{ date }}" />
+    <meta property="article:author" content="{{ siteConfig.siteInformation.author }}" />
     {% if tags %}{% for tag in tags %}<meta property="article:tag" content="{{ tag }}" />{% endfor %}{% endif %}
     {% else %}
     <meta property="og:type" content="website" />
     {% endif %}
     <meta property="og:site_name" content="All About Ken Hawkins" />
-    <meta property="og:url" content="https://www.allaboutken.com{{page.url | url }}" />
-    <meta property="og:title" content="{{ title }}" />
-    {% if image %}{% set ogImage = "https://www.allaboutken.com/images" ~ image %}{% else %}{% set ogImage = "https://www.allaboutken.com/images/blog/drill-bits.jpg" %}{% endif %}
-    <meta property="og:image" content="{{ ogImage }}" />
+    <meta property="og:url" content="{{ siteConfig.siteInformation.url }}{{ page.url | url }}" />
+    <meta property="og:title" content="{{ ogTitleComputed }}" />
+    <meta property="og:description" content="{{ ogDescriptionComputed | striptags }}" />
+    <meta property="og:image" content="{{ ogImageComputed }}" />
+    {%- if image_meta and image_meta.alt %}<meta property="og:image:alt" content="{{ image_meta.alt }}" />{% endif %}
+    {# Twitter Card meta tags #}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@khawkins98" />
     <meta name="twitter:site:id" content="3723201" />
     <meta name="twitter:creator" content="@khawkins98" />
     <meta name="twitter:creator:id" content="3723201" />
-    <meta name="twitter:url" content="https://www.allaboutken.com{{page.url | url }}" />
-    <meta name="twitter:description" content="{{ (teaser or siteConfig.siteInformation.short_description) | striptags }}" />
-    <meta name="twitter:image" content="{{ ogImage }}" />
+    <meta name="twitter:url" content="{{ siteConfig.siteInformation.url }}{{ page.url | url }}" />
+    <meta name="twitter:title" content="{{ ogTitleComputed }}" />
+    <meta name="twitter:description" content="{{ ogDescriptionComputed | striptags }}" />
+    <meta name="twitter:image" content="{{ ogImageComputed }}" />
+    {% if image_meta and image_meta.alt %}<meta name="twitter:image:alt" content="{{ image_meta.alt }}" />{% endif %}
     <meta name="dcterms.title" content="{{title}} > All About Ken Hawkins" />
     <meta name="dcterms.type" content="Text" />
     <meta name="dcterms.identifier" content="https://www.allaboutken.com{{page.url | url }}" />
     <meta name="dcterms.format" content="text/html" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
     <meta name="generator" content="{{ eleventy.generator }}">
-    {% if page.url == '/' %}
+    {%- if page.url == '/' %}
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -64,7 +81,7 @@
     {% endif %}
   </head>
   <body class="kh-stack{% if bodyClass %} {{ bodyClass }}{% endif %}">
-    {% include "partials/ambience.njk" %}
+    {% include "partials/ambience.njk" -%}
     <a href="#main-content" class="kh-u-sr-only kh-skip-link">Skip to main content</a>
     <!-- Visible when CSS is off (hidden by CSS when on) -->
     <aside class="kh-css-off-note">If you're reading this the site styles are currently disabled. Toggle the “CSS” checkbox in the footer to restore styling.<hr></aside>

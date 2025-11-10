@@ -39,6 +39,18 @@ This site runs on Eleventy v3 with Dart Sass for CSS. The legacy Visual Framewor
 - The search index is generated post-build via [`scripts/build-search-index.js`](scripts/build-search-index.js)
 - Eleventy config: [`eleventy.js`](eleventy.js)
 
+## Dynamic Social Sharing Images
+
+All pages automatically generate social sharing images (OpenGraph/Twitter cards) using [Eleventy's Screenshot Service](https://www.11ty.dev/docs/services/opengraph/):
+
+- **Social card pages**: Auto-generated at `/social/<page-url>/` for every page (see [`src/site/social-cards.njk`](src/site/social-cards.njk))
+- **Card template**: [`src/site/_includes/layouts/social-card.njk`](src/site/_includes/layouts/social-card.njk) (1200×630px, styled HTML)
+- **Screenshot service**: Captures card pages as images on-demand via `https://v1.screenshot.11ty.dev/`
+- **Testing locally**: Visit card pages directly (e.g., `http://localhost:8080/social/posts/sunlit-dappled-light-effect/`)
+- **Override**: Add `og_image: 'https://full-url.jpg'` in frontmatter to use a custom image instead
+
+The `ogImageUrl` shortcode (defined in `eleventy.js`) generates screenshot URLs automatically.
+
 ## Monitoring
 
 - [Analytics](https://khawkins98.goatcounter.com/)
