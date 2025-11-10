@@ -299,6 +299,17 @@ module.exports = function(config) {
     ].join('');
   });
 
+  // Shortcode to generate Eleventy screenshot service URL for dynamic OG images
+  // Usage: {% ogImageUrl %}
+  config.addShortcode('ogImageUrl', function() {
+    // Build the social card URL for this page
+    const socialCardUrl = `https://www.allaboutken.com/social${this.page.url}`;
+    // URI encode the URL for the screenshot service
+    const encodedUrl = encodeURIComponent(socialCardUrl);
+    // Return the screenshot service URL with opengraph size (1200x630)
+    return `https://v1.screenshot.11ty.dev/${encodedUrl}/opengraph/`;
+  });
+
   // Removed custom codeblock tag; posts now use fenced code blocks in markdown.
 
   // config.addFilter("makeLowercase", function(value) {

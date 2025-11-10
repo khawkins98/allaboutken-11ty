@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      /* Load Recursive font from site */
+      @font-face {
+        font-family: 'Recursive';
+        src: url('https://www.allaboutken.com/assets/kh-font/Recursive_VF_1.085--subset-GF_latin_basic.woff2') format('woff2');
+        font-weight: 300 800;
+        font-style: oblique -15deg 0deg;
+        font-display: swap;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        width: 1200px;
+        height: 630px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fbf6ef;
+        font-family: 'Recursive', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        padding: 60px;
+        overflow: hidden;
+        {% if image %}
+        background-image: url('https://www.allaboutken.com/images{{ image }}');
+        background-size: cover;
+        background-position: center;
+        {% endif %}
+      }
+
+      .card {
+        background: {% if image %}rgba(251, 246, 239, 0.95){% else %}#fbf6ef{% endif %};
+        padding: 60px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border-bottom: 8px solid #f49e17;
+        position: relative;
+        {% if image %}
+        backdrop-filter: blur(2px);
+        {% endif %}
+      }
+
+      /* Orange accent bar at top */
+      .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 8px;
+        background: #f49e17;
+      }
+
+      .title {
+        font-size: 64px;
+        font-weight: 700;
+        font-variation-settings: 'wght' 800, 'MONO' 0, 'CASL' 1;
+        line-height: 1.2;
+        color: #222;
+        margin-bottom: 24px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .description {
+        font-size: 32px;
+        line-height: 1.45;
+        font-weight: 300;
+        color: #222;
+        margin-bottom: auto;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 48px;
+        padding-top: 32px;
+        border-top: 2px solid #e0d8ca;
+      }
+
+      .site {
+        font-size: 28px;
+        font-weight: 800;
+        font-variation-settings: 'wght' 800, 'MONO' 1, 'CASL' 0;
+        color: #222;
+        letter-spacing: -0.5px;
+      }
+
+      .author {
+        font-size: 24px;
+        font-weight: 500;
+        color: #707372;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div>
+        <h1 class="title">{{ title }}</h1>
+        {% if teaser or siteConfig.siteInformation.short_description %}
+        <p class="description">{{ teaser or siteConfig.siteInformation.short_description }}</p>
+        {% endif %}
+      </div>
+      <div class="footer">
+        <div class="site">AllAboutKen.com</div>
+        <div class="author">{{ siteConfig.siteInformation.author }}</div>
+      </div>
+    </div>
+  </body>
+</html>
