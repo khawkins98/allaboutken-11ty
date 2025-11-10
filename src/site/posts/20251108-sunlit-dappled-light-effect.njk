@@ -104,16 +104,18 @@ Here's the markup structure:
   <div class="kh-ambience-leaves">
     <svg style="width: 0; height: 0; position: absolute;">
       <defs>
-        <filter id="kh-ambience-leaves-animation">
-          <feTurbulence type="fractalNoise" numOctaves="1">
-            <animate attributeName="baseFrequency" dur="40s"
-              values="0.005 0.003;0.01 0.009;0.008 0.004;0.005 0.003"
-              repeatCount="indefinite" />
+        <filter id="kh-ambience-leaves-animation"  x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" numOctaves="2" seed="1">
+            <animate attributeName="baseFrequency" dur="16s" calcMode="spline"
+              values="0.007 0.005;0.01 0.009;0.008 0.005;0.005 0.003"
+              keyTimes="0;0.33;0.66;1"
+              keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1" repeatCount="indefinite" />
           </feTurbulence>
-          <feDisplacementMap in="SourceGraphic">
-            <animate attributeName="scale" dur="10s"
-              values="15;55;105;55;45"
-              repeatCount="indefinite" />
+          <feDisplacementMap in="SourceGraphic" scale="50">
+            <animate attributeName="scale" dur="20s" calcMode="spline"
+              values="45;55;75;55;45"
+              keyTimes="0;0.25;0.5;0.75;1"
+              keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1" repeatCount="indefinite" />
           </feDisplacementMap>
         </filter>
       </defs>
@@ -231,7 +233,7 @@ The effect is purely decorative, so:
 ## Try it yourself
 
 - View the [CodePen demo](https://codepen.io/khawkins98/pen/ZYQgKOw?editors=1000) (simplified version without scroll animation)
-- Check out the [source](https://github.com/khawkins98/allaboutken-11ty/commit/e02a6dde94624cd4e5c66124ca95ff31ac8b448c) on GitHub
+- Check out the source ([CSS](https://github.com/khawkins98/allaboutken-11ty/commit/e02a6dde94624cd4e5c66124ca95ff31ac8b448c), [HTML](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/_includes/partials/ambience.njk)) on GitHub
 
 ## Credits
 
@@ -239,7 +241,7 @@ Inspired by:
 
 - [Daylight Computer](https://daylightcomputer.com/) — original physical device inspiration
 - [Sunlit.place](https://www.sunlit.place/) — web concept
-- [Sunlit by Jacky Zhao](https://jzhao.xyz/thoughts/craft) — technical approach I adapted ([GitHub repo](https://github.com/jackyzha0/sunlit))
+- [Sunlit by Jacky Zhao](https://jzhao.xyz/thoughts/craft) — technical approach I riffed ([GitHub repo](https://github.com/jackyzha0/sunlit))
 - [CSS Dappled Light Effect](https://css-tricks.com/css-dappled-light-effect/) — CSS-Tricks historical technique reference
 
 {% endmarkdown %}
