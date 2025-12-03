@@ -115,7 +115,7 @@ The site uses a unique CSS activation pattern:
 - Permalink anchors: `#` links appended to headings with class `kh-anchor`
 - Slugify: lowercase, remove punctuation, collapse spaces to hyphens
 
-**Filters** (see `eleventy.js:105-213`):
+**Filters** (see `eleventy.js:105-201`):
 - `dateDisplay(dateObj, format)`: Format dates with Luxon
 - `limitItems(array, n)`: Return first/last N items
 - `ensureTrailingSlash(value)`: Ensure trailing slash on URLs
@@ -179,13 +179,35 @@ topics:
   - Topic 2
 org: Organization  # Optional: for impact stories (used with orgIntro macro)
 permalink: /posts/custom-url/  # Optional
-image: /path/to/image.jpg  # Optional
+image: /path/to/image.jpg  # Optional: for in-page hero images (NOT used for social sharing)
 image_meta:
   text: 'Caption text'
-  altext: 'Alt text'
+  alt: 'Alt text'  # Also used for og:image:alt and twitter:image:alt
 via: 'https://example.com/source'  # Optional: source/attribution URL for link posts
+
+# OpenGraph/Twitter Card Overrides (optional):
+og_title: 'Custom OG Title'  # Overrides default: "Post title | All about Ken Hawkins"
+og_description: 'Custom OG description'  # Overrides default: teaser or site description
+og_image: 'https://example.com/custom-image.jpg'  # Full URL - ONLY way to override dynamic social card
 ---
 ```
+
+**OpenGraph/Twitter defaults** (if not overridden in frontmatter):
+- `og:title` / `twitter:title`: `{{ title }} | All about Ken Hawkins`
+- `og:description` / `twitter:description`: Uses `teaser` → `siteConfig.short_description`
+- `og:image` / `twitter:image`: **Dynamic screenshot from social card page** by default (via Eleventy Screenshot Service)
+  - Override with `og_image` frontmatter (full URL) to use a custom image
+  - The `image` field is **NOT** used for OG meta tags (only for in-page hero images)
+- `og:type`: `article` for posts, `website` for other pages
+- `article:author`: Pulled from `siteConfig.siteInformation.author`
+
+**Dynamic Social Sharing Images**:
+- **All pages use auto-generated social cards by default**
+- Social card pages are auto-generated at `/social/<page-url>/` for every page via pagination (see `src/site/social-cards.njk`)
+- Card template: `src/site/_includes/layouts/social-card.njk` (1200×630px, styled with inline CSS)
+- Eleventy Screenshot Service (`https://v1.screenshot.11ty.dev/`) captures these cards as images
+- `ogImageUrl` shortcode generates screenshot URLs (defined in `eleventy.js:304-311`)
+- To use a custom image for social sharing, set `og_image` in frontmatter with a full URL
 
 ### Using Markdown in Nunjucks
 ```njk
@@ -235,6 +257,7 @@ The search functionality is powered by a post-build script (`scripts/build-searc
 When working on blog posts or impact stories, follow the editorial system:
 
 - **`docs/EDITORIAL_HANDBOOK.md`** - Complete style guide, voice/tone, structure templates, quality standards
+- **`docs/PUBLISHING_WORKFLOW.md`** - End-to-end workflow for creating and publishing content
 - **`docs/ROLE_TECHNICAL_REVIEWER.md`** - QA role (code correctness, builds, links, accessibility)
 - **`docs/ROLE_EDITORIAL_STYLE_EDITOR.md`** - Style role (voice, structure, scannability, flow)
 - **`docs/ROLE_SEO_DISCOVERABILITY_EDITOR.md`** - SEO role (titles, metadata, internal linking)
