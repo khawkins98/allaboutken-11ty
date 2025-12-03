@@ -1,7 +1,7 @@
 ---
 title: 'Measuring success beyond the page view'
 layout: layouts/post.njk
-teaser: "Page views and bounce rates won't tell you if your content has impact — here's how I measure what actually matters."
+teaser: "Analytics on page views and bounce rates won't tell you if your content has impact — here's how I measure what actually matters."
 date: 2025-12-03
 tags:
   - posts
@@ -26,13 +26,16 @@ Measuring success is comparatively easy when you're selling t-shirts. You can lo
 
 Anti-patterns of making users register to read weren't an option.
 
-But simply putting Google Analytics on a website doesn't help much here. I'll know page views, bounce rates, time on page, and generic engagement metrics -- interesting signals but rarely definitive about the impact of content. A high bounce rate might mean failure, or it might mean someone found exactly what they needed and left satisfied.
+And simply putting Google Analytics on a website doesn't help much here. I'll know page views, bounce rates, time on page, and generic engagement metrics — interesting signals but rarely definitive about the impact of content. A high bounce rate might mean failure, or it might mean someone found exactly what they needed and left satisfied.
+
+Here's the thing: **the measurement problem is really a strategy problem**. You can't measure success if you haven't defined it, and most organizations skip that step. They install Google Analytics, look at traffic, and call it done.
 
 > ## tl;dr
 >
 > - Traditional metrics (page views, bounce rate) don't measure content success for non-e-commerce sites
-> - Three content techniques require different success signals: public information, reference material, and conversion-focused content
+> - Four content types require different success signals: public information, reference material, conversion-focused, and low-traffic/high-impact content
 > - Measuring effectively requires page metadata, event tracking, and referrer categorization
+> - Some impact will never appear in analytics — plan for qualitative validation too
 
 ## Four fundamental types requiring different success signals
 
@@ -49,9 +52,7 @@ I've found most non-commercial content falls into these main categories, each re
 - Social sharing and external referrals
 - Time-bound engagement (peaks around launch, then trails off)
 
-This is often the most straightforward category to measure because success looks like traditional marketing metrics: reach and awareness.
-
-We can often complement this with qualitative measures, but this is often the area that requires the least amount of creative thinking to demonstrate results.
+This is the most straightforward category to measure because success looks like traditional marketing metrics: reach and awareness. When we ran campaigns for international observance days, we could track traffic spikes, geographic distribution matching target regions, and downstream media pickups — all conventional signals that validated reach.
 
 Phew, an easy one, let's continue.
 
@@ -94,60 +95,67 @@ A bit of creative thinking to measure this and get stakeholders to understand, b
 - Email subscriptions
 - Event attendance relative to page traffic
 
-This is the closest to traditional funnel metrics. You're measuring whether visitors take a specific action, and you can optimize accordingly.
+This is the closest to traditional funnel metrics. You're measuring whether visitors take a specific action, and you can optimize accordingly. For event registration pages, we tracked not just sign-ups but the conversion rate from page view to registration — and importantly, how that varied by referral source. Traffic from partner organization newsletters converted at 3x the rate of social media traffic, which shaped where we invested promotional effort.
 
 Another one that isn't too bad, happy days.
 
 ### Type 4: Low-traffic, high-impact content
 
-**What it is**: content designed for small, influential audiences. Policy briefs for decision-makers, technical specifications for implementers, guidance documents for working groups.
+**What it is**: Content designed for small, influential audiences. Policy briefs for decision-makers, technical specifications for implementers, guidance documents for working groups.
 
-You did guess we'd save the hardest for last, _right?_
+This is the hardest category — and often the most important.
 
-These pages might see only 10–50 visitors per month — or even fewer — but sometimes those visits connect to decision-makers, an aide preparing a presentation, or someone informing a strategic plan. Traditional metrics would flag a few visits as "underperforming," but their success might be validated through policy implementations, citations in official documents, or adoption in organizational planning.
+These pages might see only 10–50 visitors per month, but those visits may connect to decision-makers, an aide preparing a ministerial presentation, or someone informing a national strategic plan. Traditional metrics would flag this as "underperforming," but success might be validated through policy implementations, citations in official documents, or adoption in organizational planning.
 
-That does not show up as a traditional Google Analytics event. Measuring these in a traditional way requires heavy qualitative validation: tracking where the content is cited, monitoring policy changes that reference the material, or surveying stakeholders who use it.
+**Success signals**:
+- Referrals from government (.gov), international (.int), and institutional domains
+- "Was this helpful?" feedback from the small audience that does visit
+- Qualitative evidence: citations in policy documents, mentions in stakeholder communications
+- Downloads or shares by verified institutional users
 
-Fortunately, this doesn't have to be purely analog. By placing lightweight feedback mechanisms — "Was this page helpful?" — and allowing users to pass comments easily, tracking what links user click on and what content they engage with, you capture signal at the moment of use. Combine that with tracking which network types drive traffic (government domains, academic institutions, NGO referrers) and you can distill scents of success even from tiny visitor counts.
+That does not show up as a traditional Google Analytics event. Measuring this requires heavy qualitative validation: tracking where the content is cited, monitoring policy changes that reference the material, or surveying stakeholders who use it.
 
-## Making it work: implementation steps
+Fortunately, it doesn't have to be purely analog. Lightweight feedback mechanisms — "Was this page helpful?" with optional comments — capture signal at the moment of use. Combine that with tracking which network types drive traffic (government domains, academic institutions, NGO referrers) and you can surface patterns even from tiny visitor counts.
 
-Understanding these techniques is one thing. Implementing them requires technical work:
+{% endmarkdown %}
 
-1. **Page metadata and categorization**: Tag content by type (public info, reference, conversion, strategic) in your CMS or static site generator.
+<aside class="kh-note-box">
+  <span class="kh-note-box__label">The validation gap:</span>
+  For high-impact content, build organizational processes to capture what analytics miss. When a colleague mentions "the ministry referenced our guidance," record it. These anecdotes become evidence.
+</aside>
 
-2. **Google Analytics configuration**: Set up custom dimensions or content grouping to categorize pages. Create separate views or segments for each content type.
+{% markdown %}
 
-3. **Event tracking**: Implement events for conversions (downloads, form submissions, outbound links) and referrer analysis.
+## Making it work
 
-4. **Referrer processing**: Build logic to categorize incoming traffic sources (educational, government, commercial, social, search) to understand reference material reach.
+Understanding these types is one thing. Implementing measurement requires deliberate choices about where to invest effort.
 
-5. **Dashboard and reporting**: Create content-type-specific dashboards that surface the right metrics for each category. You might start with Looker Studio reports connected to GA4, then over time use the Google Analytics API to drive adapted and automatically generated reports tailored to different stakeholder needs.
+**Focus on decisions, not dashboards.** The question isn't "what can we measure?" but "what measurements would change how we act?" If knowing that a page gets 500 vs 5,000 views wouldn't alter your content strategy, don't build elaborate tracking for it. A quarterly stakeholder report needs different measurement rigor than a transient news item.
 
-This isn't trivial work, but once the infrastructure is in place, you can answer the fundamental question: is this content doing what it's supposed to do?
+**The technical scaffolding matters.** To measure effectively, you need:
+- Page metadata that categorizes content by type in your CMS
+- Event tracking for meaningful actions (downloads, form completions, outbound links to partner sites)
+- Referrer categorization that distinguishes government and academic sources from general traffic
+- Dashboards tailored to each content type's success signals
 
-## What this actually means
+This isn't trivial work, but once the infrastructure exists, you can answer the fundamental question: is this content doing what it's supposed to do?
 
-The measurement problem is really a strategy problem. You can't measure success if you haven't defined it, and most organizations skip that step. They install Google Analytics, look at traffic, and call it done.
+## What analytics can't tell you
 
-Default metrics are a commoditized tool for content that is often bespoke in need. If you only measure what GA gives you out of the box — page views, bounce rates, engagement — you'll optimize for traffic over impact, volume over utility. Your content strategy follows your measurement, so bad metrics create bad content.
+Default metrics are commoditized tools for content that is often bespoke in need. If you only measure what GA gives you out of the box — page views, bounce rates, engagement — you'll optimize for traffic over impact, volume over utility. Your content strategy follows your measurement, so bad metrics create bad content.
 
 The good news: GA is more flexible than most teams realize. You can engineer custom signals — download clicks, citation copies, outbound links to partner sites, scroll depth on long-form content — that actually reflect how your content is being used. The tooling exists; the gap is usually knowing what to track.
 
-But some measurement will never live in your analytics. Policy influence, research citations, strategic decisions informed by your content — these happen outside your system. You need organizational processes to capture them: stakeholder surveys, citation monitoring, qualitative feedback loops.
+But some measurement will never live in your analytics. Policy influence, research citations, strategic decisions informed by your content — these happen outside your system. You need organizational processes to capture them: stakeholder surveys, citation monitoring, qualitative feedback loops. When someone tells you "we used your guidance to inform our national strategy," that's not a GA event — but it's the impact that matters most.
 
 Better metrics enable better conversations. When you can show that a 50-visit policy brief was downloaded by three government ministries and cited in a national strategy, you can make the case for content that would otherwise be flagged as underperforming. You shift the conversation from "this didn't get enough traffic" to "this reached exactly who it needed to reach."
-
-That's the real mindset shift: from "how many people saw this" to "did the right people find it and use it." Most organizations haven't made that reorientation.
-
-Not everything needs sophisticated measurement. Sometimes the instrumentation overhead isn't worth it. Focus your effort where the insight will actually change decisions.
 
 ## What's next
 
 This post is the mental model — the framework for thinking about content measurement beyond default analytics. It's the conversation I wish more organizations would have before installing tracking pixels.
 
-In a follow-up, I'll share the technical approaches I'm using to get this information into the hands of stakeholders: the specific GA4 configurations, dashboard designs, and reporting workflows that make these measurements actionable. The mental model is necessary but not sufficient — you also need the infrastructure to surface insights where decisions get made.
+In a follow-up, I'll share the technical implementation: specific GA4 configurations, referrer categorization logic, and reporting workflows that surface these insights where decisions get made. The mental model is necessary but not sufficient — you also need infrastructure.
 
-If you're wrestling with similar measurement challenges, I'd love to hear how you're approaching them.
+The organizations that get this right stop asking "how many people saw this?" and start asking "did the right people find it and use it?" That reorientation changes everything.
 
 {% endmarkdown %}
