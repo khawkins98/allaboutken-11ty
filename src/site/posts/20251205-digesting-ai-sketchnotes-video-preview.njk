@@ -1,0 +1,26 @@
+---
+title: "Digest videos into sketchnotes through AI"
+layout: layouts/digesting.njk
+teaser: "Daniel Vaughan built an agent that generates sketchnotes from YouTube videos — a visual triage step before committing to long-form content."
+date: 2025-12-05
+digest_link: https://www.linkedin.com/posts/danielpvaughan_i-am-really-impressed-with-the-possibilities-activity-7399778795827695616-g1sM/
+tags: digesting
+topics:
+  - AI
+  - visual communication
+  - productivity
+---
+
+{% markdown %}
+
+Daniel Vaughan — a colleague from my EBI days — shares an agent flow he made that "watches" a YouTube video and generates a sketchnote summary. It's a clever idea: in a two-step process the AI digests the content for you, producing a visual artifact you could share and a way to grasp complex topics without the 45-minute commitment.
+
+Of course, AI often produces output that looks intelligible at first glance but doesn't hold up on closer inspection. And I know quite a few people who make good income doing sketchnotes — so there's that concern too. But inevitably you're going to want to tweak this sort of thing anyway, which brings up the missing link: how do you actually *edit* the output?
+
+Right now you get a raster image. What would make this more powerful is adding a third step to decompose it into text regions plus multiple raster elements (not a full vector trace) as a PDF or SVG. That gives you an editable first draft to refine.
+
+The analogy is how we use LLMs to generate draft documents. You don't take the raw output and ship it — you edit, you refine, you add the context the model couldn't know. The sketchnote should work the same way: AI handles the rough layout and visual structure, humans adjust emphasis and fix what got missed. This doesn't squeeze out the human illustrator — we're still key in asking for the right structure and refining the final output.
+
+That refinement step feels like the next missing piece here. But watching AI digest video into visual summaries? Pretty exciting.
+
+{% endmarkdown %}
