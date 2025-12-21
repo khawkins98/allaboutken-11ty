@@ -384,102 +384,77 @@ First, a long explanation spanning multiple paragraphs… (code appears much lat
 
 ## Impact Stories
 
-Write comprehensive, evidence‑led impact stories that demonstrate measurable outcomes and tell the full story of complex work.
+Impact stories are portfolio case studies demonstrating measurable outcomes through narrative. Unlike agency case studies (which sell services), these showcase *how you think and work* for potential employers and collaborators.
 
-### Required components
+**Inspiration**: [Clearleft's case study format](https://clearleft.com/work) — active titles, question-based section headers, narrative momentum.
 
-- **Title**: Begin with "Impact story:" followed by an outcome-focused, specific headline. Include org/context when allowed.
-- **Teaser**: Narrative hook (not metrics). One sentence that tells the story arc or challenge. Avoid repeating tl;dr content.
-- **tl;dr block**: 3 – 6 bullets covering key quantified outcomes, approach highlights, and sustained impact. This is where metrics go.
-- **Organization context (after tl;dr)**: Use `{% from "partials/orgs.njk" import orgIntro %}` and `<p class="kh-text-body--3">{{ orgIntro(org) }}</p>` to provide organization background after the tl;dr.
-- **Narrative opening**: 2 – 4 paragraphs that set context, explain the challenge, and frame why this work mattered. Make it compelling and human-focused.
-- **Body sections** (flexible structure based on story needs):
-  - **Problem**: Detailed problem framing with specific pain points and stakeholder impact
-  - **Approach**: Comprehensive description of the solution with subsections for major components
-  - **Outcomes**: Categorized results (e.g., Performance, Reliability, Cost, User Satisfaction) with human-impact framing
-  - **What made this work**: Reflection on key factors, lessons learned, and why the approach succeeded
-  - **Links**: Related impact stories, deep-dive blog posts, external artifacts
+### Titles
+
+Use **gerund/action format** by default. Questions and outcome statements work but are less common.
+
+| Pattern | Example | Use when |
+|---------|---------|----------|
+| **Gerund** (default) | "Reclaiming three weeks of editorial time every month" | Process or transformation is interesting |
+| **Outcome** | "Platform recovery after a cloud migration failure" | Result is more compelling than process |
+| **Question** (sparingly) | "What happens when cloud best practices fail?" | Inherent tension or counterintuitive challenge |
+
+**Avoid**: "Impact story: X", "Case study: Y", passive constructions.
+
+### Section headers
+
+Use **questions** for section headers — they create narrative momentum even when the title is a statement.
+
+```
+What was actually breaking?
+How do you fix death by a thousand paper cuts?
+What did we actually achieve?
+Why did this actually work?
+```
+
+### Structure
+
+Typical pattern (flexible, 3-5 sections):
+
+1. **Result themes** — 3 short phrases at top (e.g., **Efficiency** | **Reliability** | **Consistency**). Not metrics — let the narrative reveal those.
+2. **Organization context** — `{{ orgIntro(org) }}` macro after result themes.
+3. **Opening** — 2-3 short paragraphs. Set stakes, frame challenge, state your role.
+4. **Challenge section** — What was broken? Frame as question header.
+5. **Approach section** — How did you solve it? Show constraints, tradeoffs, vulnerability.
+6. **Outcomes section** — Metrics with human-impact framing. Bold labels, not bullet dumps.
+7. **Reflection section** — Why this worked. Specific factors, not generic lessons.
+8. **Links** — Related stories, deep dives, external artifacts.
 
 ### Conventions (this site)
 
-- **Tag**: Use `impact-stories` tag (required). This ensures they appear in the Work section and are excluded from blog listings.
-- **Date display**: Show only the year in UI. Use full `date` in front matter for sorting.
-- **Permalinks**: Use `/work/YYYY/impact-story-slug/` format (not `/posts/`).
-- **Filename**: Use `YYYYMMDD-impact-story-slug.njk` format for consistency.
-- **Organization & topics**: Provide `org` and `topics` – both render on the Work table (`/work/`).
-- **Images**: Store under `src/site/images/blog/` and reference via `image: "/blog/…"`; include `image_meta.altext` and `image_meta.text`.
-- **Cross‑linking**: Include links to related impact stories and deep-dive blog posts. Link text should be descriptive, not naked URLs.
+- **Tag**: `impact-stories` (required) — appears in Work section, excluded from blog
+- **Permalink**: `/work/YYYY/impact-story-slug/`
+- **Filename**: `YYYYMMDD-impact-story-slug.njk`
+- **Front matter**: Include `org` and `topics` (both render on Work table)
+- **Images**: Store in `src/site/images/blog/`, include `image_meta.altext`
 
-### Structure and narrative depth
+### Writing guidelines
 
-Impact stories should be comprehensive (800 – 1,500 words) and tell the complete story:
+**Length**: 600-1,200 words. Shorter and scannable beats exhaustive.
 
-**Opening narrative** (after tl;dr and orgIntro):
+**Paragraphs**: 2-3 sentences max. Single sentences for emphasis.
 
-- Set context about the organization, scale, and constraints
-- Frame the challenge in human terms (what was at stake for users/stakeholders)
-- Introduce the approach and why it mattered
+**Formatting**: Bold lead-ins over bullet lists (`**Key point**: explanation`).
 
-**Problem section**:
+**Perspective**: Use **first-person singular** ("I") to emphasize personal contribution and decision-making. These are portfolio pieces — showcase *your* thinking. Use "I led the team to..." when describing collaborative work, not "we." Reserve "we" only when the team's collective action is genuinely the point.
 
-- Break down specific pain points with concrete examples
-- Show impact on different stakeholder groups
-- Include context about organizational constraints or complexity
+**Metrics**: Specific numbers with baselines (e.g., "0.88s → 0.45s" not "50-70% faster"). Include human framing ("equivalent to 3 full work weeks").
 
-**Approach section**:
+**Tone**: Conversational, honest. Show process and tradeoffs, not just deliverables. Acknowledge what almost didn't work — strategic vulnerability builds credibility.
 
-- Use descriptive subsection headers (e.g., "Risk register as prioritization tool" not just "Risk register")
-- Explain technical decisions with rationale
-- Include specific examples, numbers, and implementation details
-- Show the "how" not just the "what"
+**Accessibility**: Alt text on images. Expand uncommon acronyms on first use (common ones like CSS, API, HTML need not be expanded).
 
-**Outcomes section**:
-
-- Categorize results (Performance, Reliability, Cost, etc.)
-- Add human-impact framing: what the metrics mean for real users
-- Include specific numbers with baselines and timeframes
-- Connect technical improvements to organizational value
-
-**What made this work**:
-
-- Reflect on key factors that enabled success
-- Share lessons learned or principles discovered
-- Acknowledge collaboration and cross-functional work
-- End with the ultimate impact or transformation
-
-### Metrics and evidence
-
-- **Specific over ranges**: Use single numbers when possible (e.g., "2x faster" or "0.88s → 0.45s" not "50-70% faster")
-- **Baselines and timeframes**: Always show before/after and specify duration
-- **Attribution**: Note sources (GA4, Looker Studio, CWV, platform logs) when relevant
-- **Percentiles**: Write "95th percentile" (not "p95"), "90th percentile" (not "p90"), etc.
-- **Relative metrics**: For team-size sensitive data, normalize (e.g., "per 100 editors" instead of absolute team size)
-- **Human framing**: Explain what metrics mean (e.g., "~120 hours monthly per 100 editors – equivalent to 3 full work weeks")
-- **Multiple dimensions**: Show outcomes across performance, cost, reliability, user satisfaction, etc.
-
-### Tone and style
-
-- **Narrative first**: Tell a story, not just a project report
-- **Concrete and specific**: Use real examples, specific tools, named locations/teams
-- **Human impact**: Connect technical work to user/stakeholder outcomes
-- **Honest about challenges**: Include problems encountered and how they were solved
-- **Avoid superlatives**: Let outcomes speak for themselves
-- **Professional objectivity**: Focus on facts and problem-solving over validation
-
-### Accessibility and compliance
-
-- Provide meaningful alt text and captions for screenshots/diagrams
-- Acronyms: Do not expand common technical acronyms (e.g., CSS, JS, API, HTML, URL, HTTP, DNS, CDN). Expand only uncommon or organization‑specific acronyms on first use (e.g., "GAR (Global Assessment Report)").
-- Review for confidentiality: no internal credentials, private endpoints, or sensitive team data
-- Use relative metrics when absolute numbers could expose confidential information
-
-### Front matter template
+### Front matter
 
 ```yaml
 ---
-title: 'Impact story: Descriptive outcome-focused headline'
+title: '[Gerund phrase describing the work]'
 layout: layouts/post.njk
-teaser: 'Narrative hook that tells the story arc (not metrics).'
+teaser: 'Narrative hook — tension/challenge, not metrics.'
 date: YYYY-MM-DD
 tags:
   - posts
@@ -489,137 +464,62 @@ topics:
   - keyword two
 org: Organization Name
 permalink: /work/YYYY/impact-story-slug/
-kens_status: draft # draft | final_draft | ready_for_publication
-image: '/blog/example.jpg' # optional
+kens_status: draft
+image: '/blog/example.jpg'
 image_meta:
-  altext: 'Accurate alt text.'
+  altext: 'Descriptive alt text.'
   text: 'Attribution or context.'
 ---
 ```
 
-### Checklist (author)
+### Checklist
 
-- [ ] Title starts with "Impact story:" and is outcome-focused
-- [ ] Teaser is narrative (not metrics), doesn't repeat tl;dr
-- [ ] tl;dr has 3 – 6 bullets with quantified outcomes
-- [ ] orgIntro appears after tl;dr (not before)
-- [ ] Opening narrative (2 – 4 paragraphs) sets context compellingly
-- [ ] Problem section includes specific pain points and human impact
-- [ ] Approach section has descriptive subsections with implementation details
-- [ ] Outcomes categorized and include human-impact framing
-- [ ] "What made this work" section provides reflection
-- [ ] Metrics use specific numbers with baselines and timeframes
-- [ ] Links use descriptive text (no naked URLs)
-- [ ] Accessibility (alt text, acronyms) and confidentiality reviewed
-- [ ] Cross-links to related impact stories or deep-dive posts included
+- [ ] Title uses gerund format (preferred), outcome format, or question — not "Impact story: X"
+- [ ] Teaser sets up challenge (not metrics)
+- [ ] Result themes (3 short phrases) appear after opening
+- [ ] Section headers are questions
+- [ ] Uses "I" perspective (not "we") — portfolio pieces showcase personal contribution
+- [ ] Shows constraints, tradeoffs, vulnerability — not just success
+- [ ] Metrics include human-impact framing
+- [ ] Paragraphs are 2-3 sentences; bold lead-ins over bullets
+- [ ] 600-1,200 words
 
-### Examples (Impact Stories)
+### Examples
 
-These examples show good and bad patterns specific to impact stories.
+#### Titles
 
-#### Teaser (narrative vs metrics)
+| Good | Bad |
+|------|-----|
+| "Reclaiming three weeks of editorial time every month" | "Impact story: Editorial efficiency" |
+| "Platform recovery after a cloud migration failure" | "Case study: UNDRR platform optimization" |
 
-**Good** (narrative hook that sets up the story):
+#### Section headers
 
-```yaml
-teaser: 'Managed a large‑scale Drupal platform with 150k+ users and integrated commerce; optimized caching and DB performance.'
+| Good (questions) | Bad (generic) |
+|------------------|---------------|
+| "What was actually breaking?" | "Problem" |
+| "How do you fix death by a thousand paper cuts?" | "Approach" |
+| "Why did this actually work?" | "Outcomes" |
+
+#### Outcomes
+
+**Good** (bold labels + human framing):
+```
+**Efficiency**: 120 hours/month reclaimed — equivalent to 3 full work weeks.
+**Reliability**: Timeout failures reduced 85%. Editors stopped losing work.
 ```
 
-This tells the _story_ (what was at stake, what was involved) without repeating the tl;dr.
-
-**Bad** (metrics dump that duplicates tl;dr):
-
-```yaml
-teaser: 'Achieved 80% cache hit rate, reduced query times by 40%, and scaled to 150k users.'
+**Bad** (raw bullets):
+```
+- 120 hours saved
+- 85% fewer timeouts
 ```
 
-#### Opening narrative (compelling vs technical)
+#### Vulnerability
 
-**Good** (human-focused context):
+**Good**: "Any single element could tank Core Web Vitals. Together, they seemed impossible. Some ideas didn't make the cut."
 
-```markdown
-Running a high-traffic Drupal platform with 150,000+ registered users and integrated e-commerce meant operating with near-zero tolerance for latency. Every timeout during checkout cost revenue. Every slow page load accessing account data eroded trust.
-```
-
-Sets stakes in human terms before diving into technical details.
-
-**Bad** (immediate technical detail):
-
-```markdown
-We implemented Varnish caching with a 30-minute TTL and optimized MySQL queries using indexes on user_id and product_id columns.
-```
-
-#### Approach section (descriptive vs generic headers)
-
-**Good** (descriptive subsection headers):
-
-```markdown
-## Approach: multi-layered performance strategy
-
-**Reverse proxy caching (Varnish)**
-
-Implemented Varnish in front of the application layer…
-
-**Database optimization (MySQL)**
-
-Profiled slow queries and optimized the hot paths…
-```
-
-Headers describe _what was done_ and _why_, making the approach scannable.
-
-**Bad** (generic headers):
-
-```markdown
-## Approach
-
-**Caching**
-
-We added caching.
-
-**Database**
-
-We optimized queries.
-```
-
-#### Outcomes (human-impact framing vs raw metrics)
-
-**Good** (metrics + what they mean):
-
-```markdown
-**Operational reliability**:
-
-- **Confident deployments**: Multiple deployments per week with instant rollback capability
-- **Proactive monitoring**: APM and slow query logs caught issues before they affected users
-- **Graceful scaling**: Platform handled traffic spikes during promotional campaigns without degradation
-```
-
-Each metric is framed in terms of what it enabled or prevented.
-
-**Bad** (raw metrics only):
-
-```markdown
-**Outcomes**:
-
-- 80% cache hit rate
-- 40% faster queries
-- 99.9% uptime
-```
-
-#### Cross-linking (descriptive vs naked URLs)
-
-**Good** (descriptive link text):
-
-```markdown
-- Related impact story: [UNDRR platform transformation](/work/2025/impact-story-undrr-platform-transformation/) (includes similar database optimization work)
-- Related writing: [UX success: Doubling conversion rates](/posts/20140407-ux-success-double-conversion.html) (Drupal e-commerce from same period)
-```
-
-**Bad** (naked or generic links):
-
-```markdown
-- See also: /work/2025/impact-story-undrr-platform-transformation/
-- Related post [here](/posts/20140407-ux-success-double-conversion.html)
-```
+**Bad**: "We successfully implemented all features while maintaining excellent performance."
 
 ## Cross-linking Guidance
 
