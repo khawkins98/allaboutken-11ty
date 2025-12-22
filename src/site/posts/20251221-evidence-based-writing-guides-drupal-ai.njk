@@ -302,9 +302,9 @@ Example patterns identified:
 - "Early warning + Science and technology" in 14%
 
 
-## Step 3: Feed in your existing editorial guides
+## Step 3: Gather your existing editorial guides
 
-The AI-generated guidance from Step 2 gives you structure and patterns, but your organization likely has domain knowledge that won't appear in the examples: house style rules, terminology preferences, audience definitions, legal disclaimers.
+Your organization likely has domain knowledge that won't appear in the content examples: house style rules, terminology preferences, audience definitions, legal disclaimers.
 
 Gather what you have:
 - Style guides (even if scattered across wikis and emails)
@@ -312,16 +312,18 @@ Gather what you have:
 - Content type definitions from your CMS
 - Any PDF or HTML standards documents
 
-Convert these to a format your AI assistant can consume. For Microsoft 365 Copilot, that means Word documents. For Claude or ChatGPT, Markdown or PDF works fine.
-
 The key is making them AI-readable: consolidate scattered guidance into coherent documents, remove contradictions, and be specific. "Use British English" is clear. "Follow standard editorial conventions" is not.
 
 
-## Step 4: Deploy via Microsoft 365 Copilot
+## Step 4: Combine and deploy
 
-In my case we're using a Copilot agent (just the normal one, not a Copilot Studio one).
+You now have two knowledge sources:
+1. **Pattern-based guidance** from Step 2 (extracted from your best examples)
+2. **Institutional knowledge** from Step 3 (your existing style rules and standards)
 
-The backbone is the agent guide from Step 2, but we also created a SharePoint folder with AI-adapted editorial guides on specific domains — publications, news, taxonomies, and general style standards.
+Convert both to your AI assistant's preferred format. For Microsoft 365 Copilot, that means Word documents — I used Pandoc to batch-convert Markdown. For Claude or ChatGPT, Markdown or PDF works fine.
+
+Upload everything to your agent. In my case, I created a custom Copilot agent (the standard one, not Copilot Studio) with a SharePoint folder containing all the documents.
 
 This is optional, but it adds meaningful nuance — especially when drafting content that falls outside the main patterns.
 
@@ -337,7 +339,7 @@ This is optional, but it adds meaningful nuance — especially when drafting con
 
 The same docs work for AI and human training.
 
-2. For Copilot we fed this in as Word files, converting PDF and HTML to Markdown and converting that to Word via Pandoc and uploaded to a custom Copilot agent:
+2. The Pandoc batch conversion command for Step 4:
 
 ```bash
 for file in *.md; do pandoc "$file" -o "${file%.md}.docx"; done
