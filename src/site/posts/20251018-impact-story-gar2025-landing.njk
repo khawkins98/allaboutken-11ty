@@ -1,7 +1,7 @@
 ---
-title: 'Impact story: Visual storytelling for GAR 2025'
+title: 'Making disaster economics compelling for global policymakers'
 layout: layouts/post.njk
-teaser: 'Transformed abstract disaster economics into compelling narrative with interactive timelines, global maps, and choice-based futures — without sacrificing performance.'
+teaser: "UNDRR's flagship disaster risk report needed to communicate $2.3 trillion in annual losses — without burying the message in data or slowing access for users in disaster-prone regions."
 date: 2025-10-18
 tags:
   - posts
@@ -21,112 +21,69 @@ image_meta:
 ---
 
 {% markdown %}
-> tl;dr
->
-> - 40% engagement lift during campaign period compared to prior GAR launch baseline
-> - Maintained Core Web Vitals green despite heavy interactive content (animated timelines, embedded maps, Datawrapper charts)
-> - Delivered interactive storytelling for "Three Spirals of Unsustainable Development" with global maps, GDP projections, choice-based futures
-> - Cross-functional delivery (editorial, design, engineering) translating narrative ambitions into performant implementation for flagship report serving policymakers, donors, and journalists globally
+
+**Engagement** | **Performance** | **Reach**
 
 {% from "partials/orgs.njk" import orgIntro %}
 
 <p class="kh-text-body--3">{{ orgIntro(org) }}</p>
 
-The Global Assessment Report on Disaster Risk Reduction (GAR) is UNDRR's flagship report on disaster risk — widely referenced by policymakers, donors, and practitioners making billion-dollar decisions. GAR 2025's thesis: disaster costs now exceed $2.3 trillion annually when cascading impacts are included, but this destructive cycle isn't inevitable.
+The Global Assessment Report on Disaster Risk Reduction (GAR) is UNDRR's flagship publication — referenced by policymakers making billion-dollar decisions. GAR 2025's central thesis is urgent: disaster costs now exceed $2.3 trillion annually when cascading impacts are included.
 
-The challenge: how do you make macroeconomic arguments about fiscal crises, insurance markets, and climate scenarios compelling to both UN delegates and general public? The page needed to communicate urgent stakes while giving multiple audience segments clear pathways into complex evidence.
+But macroeconomic arguments don't move people. Fiscal crises and insurance market breakdowns are abstract. We needed a landing page that made these stakes tangible within seconds — while staying fast on slow connections in disaster-prone regions.
 
-I led content structure, UX decisions, and platform implementation — translating editorial priorities into component patterns, setting performance budgets, and ensuring the page stayed fast worldwide despite interactive maps, animated data visualizations, and rich media throughout.
+I led content structure, UX decisions, and platform implementation. The work required constant translation between editorial ambitions and technical constraints.
 
-## Problem
+## How do you make abstract economics visceral?
 
-Flagship report launches often default to long pages with heavy media and abstract framing — burying the key message and slowing global access. We needed a landing that made the stakes clear in seconds, gave multiple audience segments onward paths, and stayed fast despite rich interactive content.
+Flagship report launches often default to long pages with heavy media and abstract framing. The key message gets buried. Global access slows to a crawl. We faced a harder challenge: the GAR 2025 thesis involved interconnected economic spirals that couldn't be simplified into a single soundbite.
 
-## Content strategy: outcomes first, evidence accessible
+**We started with the number that stops people: $2.3 trillion.**
 
-**Opening hook: "$2.3 trillion annually"**
+Then immediately connected macro to personal: "But the real cost is far higher." This framing made economic abstractions tangible before diving into complexity.
 
-We led with the staggering total cost figure, then immediately connected macro to personal: "But the real cost is far higher." This framing made economic abstractions tangible.
+**The Three Spirals became our narrative backbone.**
 
-**The Three Spirals framework**
+The report identified three interconnected downward spirals — increasing debt with decreasing income, unsustainable risk transfer, and the respond-repeat humanitarian trap. Rather than explain all three upfront, each spiral got its own expandable section with problem framing, real-world examples (Micronesia's 46% GDP impact, US insurance market withdrawal), and concrete "Breaking the Spiral" solutions.
 
-Structured the core narrative around three interconnected downward spirals:
+**Choice-based futures made policy personal.**
 
-1. **Spiral One: Increasing Debt, Decreasing Income** - How disasters shrink GDP and trigger fiscal crises
-2. **Spiral Two: Unsustainable Risk Transfer** - Insurance market breakdown and "un-insurability"
-3. **Spiral Three: Respond-Repeat** - The humanitarian aid trap
+We presented two stark 2050 scenarios: "Generation Jolt" (high-regret path) vs "Generation Regeneration" (resilience-invested future). Abstract policy choices became visceral when framed as competing futures.
 
-Each spiral included its own expandable section with:
+## What happens when editorial ambition meets performance budgets?
 
-- Problem framing
-- Real-world examples (Micronesia's 46% GDP impact, US insurance withdrawal)
-- Links to interactive map evidence
-- Concrete "Breaking the Spiral" solutions
+The page brief was ambitious: an animated GDP projection timeline showing hazard impacts across seven climate scenarios (Net Zero 2050 through Current Policies), six embedded interactive maps (fiscal gaps, earthquake projections, drought impacts), and a Datawrapper scatterplot comparing disaster losses — North America's $69.6B (0.23% GDP) vs Micronesia's $4.3B (46.1% GDP).
 
-**Choice-based narrative: Generation Jolt vs Generation Regeneration**
+Any single element could tank Core Web Vitals. Together, they seemed impossible.
 
-Presented two stark 2050 scenarios — high-regret vs. resilience-invested futures — making abstract policy choices visceral and personal.
+**We set explicit performance budgets before design began.** Every new element required justification against the budget. Some ideas didn't make the cut.
 
-## Interactive elements: making data explorable
+**Lazy loading everywhere.** All interactive embeds and below-fold images loaded on demand. Intersection Observer API triggered animations only when visible.
 
-**Animated GDP projection timeline**
+**Fallbacks for constrained users.** Static content for users with JS disabled or slow connections. CDN tuning for efficient global delivery to disaster-prone regions.
 
-The page opens with an animated visualization showing expected hazard impacts on GDP from 2030-2100 across seven climate scenarios (Net Zero 2050, Current Policies, Delayed Transition, etc.). Users can pause, explore, and see their choices play out over decades.
+**Accessibility wasn't an afterthought.** All interactive maps remained keyboard-navigable. Alt text and ARIA labels on every visualization. Color-blind safe palettes. Text alternatives for animated content. These weren't nice-to-haves — they were requirements for a page serving users in bandwidth-constrained regions.
 
-**Embedded interactive maps** (linked to full exploration tool):
-- Fiscal gap return periods (when countries can't meet debt obligations)
-- Earthquake loss projections by region
-- Nature-related fiscal risk
-- Droughts and land degradation
-- Water scarcity and child malnutrition
-- Internally displaced persons
+## What did we actually achieve?
 
-**Datawrapper scatterplot**
+**Engagement**: 40% lift during campaign period compared to GAR 2022 launch baseline — measured via time on page, scroll depth, and interactive element engagement.
 
-Compared direct disaster losses vs. % of GDP across regions — showing North America's $69.6B (0.23% GDP) vs Micronesia's $4.3B (46.1% GDP). Made relative impact vs absolute losses immediately visual.
+**Performance**: Core Web Vitals stayed green despite the heaviest interactive content load we'd attempted. Users in disaster-prone regions with constrained bandwidth could still access the evidence.
 
-**Data counters and dynamic figures**
+**Reach**: Interactive maps and data visualizations were widely shared on social media, extending report reach beyond traditional policy audiences. Policymakers explored detailed maps. Journalists pulled scannable claims. General audiences engaged with choice-based scenarios.
 
-Animated the "$2.3 trillion annually" figure on scroll to emphasize scale.
+## Why did this actually work?
 
-## Technical execution: performance with richness
+The editorial team brought the Three Spirals framework and evidence hierarchy. The design team created data visualizations and interactive components. I translated between these priorities and platform constraints.
 
-**The challenge**: Page includes animated timelines, embedded maps, multiple third-party visualizations (Datawrapper), high-res imagery, and interactive tabs. This could easily tank Core Web Vitals.
+The critical moment came early: acknowledging that not every editorial ambition would survive the performance budget. That conversation — had before design began rather than during development — prevented the usual pattern where features get cut at the last minute.
 
-**Solutions implemented**:
-
-- Lazy loading for all interactive embeds and below-fold images
-- Intersection Observer API to trigger animations only when visible
-- Deterministic image pipelines with responsive sizing (already in place from platform work)
-- Budget checks during development: every new element justified against performance impact
-- Fallback content for users with JS disabled or slow connections
-- CDN tuning to serve heavy assets efficiently worldwide
-
-**Accessibility maintained throughout**:
-
-- All interactive maps keyboard-navigable
-- Alt text and ARIA (Accessible Rich Internet Applications) labels on data visualizations
-- Color-blind safe palettes on charts
-- Text alternatives for animated content
-
-## Outcomes
-
-- **Engagement lift**: 40% increase during campaign period compared to GAR 2022 launch baseline (measured via time on page, scroll depth, and interactive element engagement)
-- **Performance maintained**: Core Web Vitals stayed green despite heavy interactive content load
-- **Global accessibility**: Fast experience worldwide, including bandwidth-constrained regions
-- **Multi-audience success**: Clear pathways served policymakers (exploring detailed maps), journalists (scannable claims), and general public (choice-based scenarios)
-- **Campaign amplification**: Interactive maps and data visualizations widely shared on social media, extending report reach beyond traditional policy audiences
-
-## What made this work
-
-Cross-functional coordination was essential. Editorial team brought the Three Spirals narrative framework and evidence hierarchy. Design team created the data visualizations and interactive components. I translated between these priorities and platform constraints — ensuring editorial ambitions remained technically feasible while performance budgets stayed realistic.
-
-The result: a landing page that honored the report's complexity while making it accessible, maintained technical performance while enabling rich interactivity, and served multiple audiences without fragmenting the core message.
+The result: a page that honored the report's complexity while making it accessible, maintained technical performance while enabling rich interactivity, and served multiple audiences without fragmenting the core message.
 
 ## Links
 
 - [GAR 2025 live page](https://www.undrr.org/gar/gar2025)
 - [Interactive map exploration tool](https://www.undrr.org/gar/gar2025/map-exploration)
-- [From performance failures to trusted delivery](/work/2025/impact-story-platform-recovery-optimization/) - Platform recovery work that enabled reliable high-stakes campaign launches
+- Related: [Recovering platform performance after a cloud migration failure](/work/2025/impact-story-platform-recovery-optimization/) — the infrastructure work that enabled reliable high-stakes launches
 
 {% endmarkdown %}
