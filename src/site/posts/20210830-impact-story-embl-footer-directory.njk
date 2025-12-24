@@ -1,7 +1,7 @@
 ---
-title: "Impact story: Improving user journeys spanning 80 web properties"
+title: "Untangling an 80-link footer into scannable navigation"
 layout: layouts/post.njk
-teaser: "Blending contemporary navigation structures with tried and tested sitemaps."
+teaser: "EMBL.org's footer had become a screen-and-a-half of densely packed links — failing users and stakeholders alike."
 date: 2021-08-30
 tags:
   - posts
@@ -17,27 +17,23 @@ kens_status: ready_for_publication
 ---
 
 {% markdown %}
-> tl;dr
->
-> - Split sitemap‑like content out of EMBL.org's overgrown footer; created a separate, scannable directory
-> - Footer refocused on orientation tasks (about, contact, social) — reduced from 80+ links to ~20 essential links
-> - Directory improved findability with categorized structure and search — became the maintained map of EMBL's digital ecosystem
-> - Improved Search Engine Optimization (SEO), internal stakeholder satisfaction, and user task completion
-> - Delivered through collaboration across content, Information Architecture (IA), and engineering teams
-
 {% from "partials/orgs.njk" import orgIntro %}
+
+**Findability** | **Governance** | **Scale**
 
 <p class="kh-text-body--3">{{ orgIntro(org) }}</p>
 
 EMBL.org's footer had become a "footmap" — a screen-and-a-half of densely packed links attempting to be both a site map and a footer. Users scrolling to the bottom of a page encountered 80+ links organized into 12 columns, overwhelming the page with competing calls to action.
 
-The problem wasn't unique to EMBL. Many large organizational sites accumulate footer links over time as stakeholders request "just add it to the footer." But footers serve specific jobs — orientation (What is this organization?), contact (How do I reach you?), and wayfinding (Where can I go from here?). When footers try to be comprehensive site maps, they fail at all three jobs.
+The problem wasn't unique to EMBL. Many large organizational sites accumulate footer links as stakeholders request "just add it to the footer."
 
-There was just too much (and yet too little) content crammed into the bottom of each page and it was a grey blob to our users' needs and our goals.
+But footers serve specific jobs — orientation (What is this organization?), contact (How do I reach you?), and wayfinding (Where can I go from here?). When footers try to be comprehensive site maps, they fail at all three.
 
-We split these roles: the footer would handle orientation and contact, while a new Directory page would provide the comprehensive map of EMBL's digital ecosystem. This wasn't just visual cleanup — it fundamentally rethought how users navigate a large scientific organization.
+There was just too much (and yet too little) content crammed into the bottom of each page — a grey blob failing both users and organizational goals.
 
-## Problem
+I led the team to split these roles: the footer would handle orientation and contact, while a new Directory page would provide the comprehensive map of EMBL's digital ecosystem. This wasn't just visual cleanup — it fundamentally rethought how users navigate a large scientific organization.
+
+## What was actually broken?
 
 EMBL.org's overgrown footer created friction for users and stakeholders alike:
 
@@ -59,11 +55,11 @@ EMBL.org's overgrown footer created friction for users and stakeholders alike:
 - **No clear wayfinding strategy**: Stakeholders wanted better content discovery but footer couldn't solve that at scale
 - **Missing analytics**: Footer link clicks lumped together — no clear signal about which areas users actually needed
 
-## Approach: reframing footer and directory roles
+## How did I split the footer's jobs?
 
 **Define distinct jobs for footer vs directory**
 
-We started with user research and analytics to understand footer behavior:
+I started with user research and analytics to understand footer behavior:
 
 - **Footer clicks concentrated on orientation links**: "About EMBL," "Contact," "Careers" accounted for 60%+ of footer traffic
 - **Site map links rarely clicked**: Comprehensive link lists (research areas, services, facilities) each received <2% of footer clicks
@@ -75,7 +71,7 @@ This suggested two distinct needs:
 
 **Footer redesign: focused on orientation**
 
-We reduced the footer from 80+ links to ~20 essential links organized around user questions:
+I reduced the footer from 80+ links to ~20 essential links organized around user questions:
 
 **Section 1: About EMBL** (~6 links):
 - What is EMBL?
@@ -130,7 +126,7 @@ Both the footer and directory used Visual Framework (VF) components, meaning:
 - **Versioned updates**: Changes to footer or directory structure propagated through VF versioning — properties could upgrade when ready
 - **Consistent experience**: Users moving between EMBL properties encountered familiar footer and directory patterns
 
-## Outcomes
+## What changed for users and stakeholders?
 
 **User experience** (what visitors noticed):
 
@@ -158,16 +154,18 @@ Both the footer and directory used Visual Framework (VF) components, meaning:
 - **Directory pattern replicated**: Several EMBL properties created their own directories modeled on EMBL.org's approach
 - **Sustained improvement**: Footer remained focused — governance process prevented future link creep
 
-## What made this work
+## Why did this approach actually work?
 
-Footer redesigns often fail because they're treated as visual problems rather than structural problems. We succeeded by reframing the question: not "how do we fit more links in the footer?" but "what jobs should the footer and directory each perform?"
+Footer redesigns often fail because they're treated as visual problems rather than structural problems. I succeeded by reframing the question: not "how do we fit more links in the footer?" but "what jobs should the footer and directory each perform?"
 
-The directory approach hit a sweet spot between modern mega menus and old-school sitemaps. Like mega menus, it provides scannable categories with descriptions so users can quickly orient. Like traditional sitemaps, it's comprehensive and lives on a dedicated page where users can search (Ctrl+F) or scroll through everything. This hybrid works particularly well for accessibility: screen reader users can navigate by headings, keyboard users can tab through categorized sections, and sighted users can scan visually. The single-page format also means users don't need to remember where they saw something — they can search the page instantly.
+The directory approach hit a sweet spot between modern mega menus and old-school sitemaps. Like mega menus, it provides scannable categories with descriptions. Like traditional sitemaps, it's comprehensive and lives on a dedicated page where users can search (Ctrl+F) or scroll through everything.
+
+This hybrid works particularly well for accessibility: screen reader users navigate by headings, keyboard users tab through categorized sections, and sighted users scan visually. The single-page format means users can search the page instantly.
 
 Key factors:
 
 - **User research grounded decisions**: Analytics showing orientation links dominated footer traffic justified focusing the footer — stakeholders couldn't argue with user behavior
-- **Two-part solution**: Creating the Directory meant we didn't "lose" comprehensive navigation — footer could be focused because directory existed
+- **Two-part solution**: Creating the Directory meant users didn't lose comprehensive navigation — footer could be focused because directory existed
 - **Governance commitment**: Leadership agreed to evaluate footer requests against orientation criteria — prevented future link creep
 - **Visual Framework leverage**: Using VF patterns meant improvements propagated across properties — multiplied impact beyond EMBL.org
 - **Content team ownership**: Clear directory ownership meant it stayed maintained as a living document rather than becoming stale

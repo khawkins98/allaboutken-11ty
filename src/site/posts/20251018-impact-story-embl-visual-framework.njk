@@ -1,7 +1,7 @@
 ---
-title: 'Impact story: Enabling coherent content, UX and design at scale with the Visual Framework'
+title: 'Building a component library adopted across 50+ scientific properties'
 layout: layouts/post.njk
-teaser: 'Architected and led a component library adopted across 50+ scientific properties, accelerating delivery and standardizing UX.'
+teaser: 'Dozens of teams across six countries were solving the same UI problems independently — duplicating effort and fragmenting user experience.'
 date: 2019-11-12
 tags:
   - posts
@@ -21,25 +21,19 @@ image_meta:
 ---
 
 {% markdown %}
-> tl;dr
->
-> - 50+ properties adopted framework across EMBL's international network (Drupal, WordPress, static sites, React)
-> - 40% reduction in implementation time for sites using full framework adoption
-> - Improved accessibility, performance, and UX consistency through quality defaults and shared patterns
-> - Flexible integration (full adoption, partial, visual-only, or inspiration mode) enabled organic adoption without mandates
-> - Delivered through light governance with contribution process, semantic versioning, and cross-team collaboration
-
 {% from "partials/orgs.njk" import orgIntro %}
+
+**Adoption** | **Efficiency** | **Quality**
 
 <p class="kh-text-body--3">{{ orgIntro(org) }}</p>
 
 At EMBL, dozens of teams across six international sites shipped digital properties with different stacks (Drupal, WordPress, static sites, React apps), timelines, and constraints. Each team was solving the same UI problems independently: navigation, cards, grids, form patterns. The result was duplicated effort, fragmented brand experience, and slow delivery. A research group launching a new microsite would spend weeks rebuilding patterns that already existed elsewhere.
 
-Our goal was to create a shared component library that worked across all those environments without forcing teams into a single technology stack or slowing them down with heavyweight tooling.
+My goal was to create a shared component library that worked across all those environments without forcing teams into a single technology stack or slowing them down with heavyweight tooling.
 
-We started small with patterns that respected accessibility, performance, and editorial realities. The framework spread because it reduced rework and shortened delivery time — not because we mandated it.
+I started small with patterns that respected accessibility, performance, and editorial realities. The framework spread because it reduced rework and shortened delivery time — not because it was mandated.
 
-## Problem
+## What was actually broken?
 
 Dozens of properties were duplicating UI effort, fragmenting brand and UX, and slowing delivery across a pan-European scientific organization spanning Heidelberg, Hinxton, Hamburg, Grenoble, Rome, and Barcelona.
 
@@ -50,11 +44,11 @@ Specific pain points:
 - **Slow delivery**: Teams spent weeks on UI fundamentals instead of content and features
 - **No shared knowledge**: Best practices for accessibility, performance, and responsive design weren't propagating across teams
 
-## Approach: building for adoption, not compliance
+## How I built for adoption, not compliance?
 
 **Start with real patterns from production sites**
 
-We didn't design in a vacuum. We audited existing EMBL properties, identified common patterns (mastheads, navigation, content cards, page grids), and codified the best versions. This gave teams confidence that the framework solved their actual problems.
+I didn't design in a vacuum. I audited existing EMBL properties, identified common patterns (mastheads, navigation, content cards, page grids), and codified the best versions. This gave teams confidence that the framework solved their actual problems.
 
 **Choose tooling for flexibility, not lock-in**
 
@@ -66,7 +60,7 @@ We didn't design in a vacuum. We audited existing EMBL properties, identified co
 
 **Make adoption easy, not mandatory**
 
-We provided multiple integration paths:
+I provided multiple integration paths:
 - **Full adoption**: Install via npm, import components and styles, use the full design system
 - **Partial adoption**: Cherry-pick individual components (just the grid, just the navigation)
 - **Visual-only**: Just import design tokens and rebuild components in your own stack
@@ -82,11 +76,11 @@ Every component was:
 - **Responsive**: Mobile-first design with tested breakpoints
 - **Documented**: Live examples, code snippets, integration guides, and design rationale
 
-We demonstrated that using the framework made teams' work better, not just "more standardized."
+I demonstrated that using the framework made teams' work better, not just "more standardized."
 
 **Governance without gatekeeping**
 
-We established light governance:
+I established light governance:
 - **Contribution process**: Teams could propose new components or improvements via GitHub
 - **Versioning discipline**: Semantic versioning, clear changelogs, deprecation warnings before breaking changes
 - **Quarterly sync**: Cross-team meetings to share usage patterns and discuss priorities
@@ -94,11 +88,11 @@ We established light governance:
 
 This kept the framework evolving without creating bottlenecks.
 
-## Adoption story: how it spread
+## How the framework spread?
 
 **Early adopters (first 6 months)**
 
-We started with two friendly teams: EMBL.org (the flagship site) and EMBL-EBI (the bioinformatics institute). These were high-visibility properties with committed partners. We worked closely with them to ensure the framework solved real problems, not theoretical ones.
+I started with two friendly teams: EMBL.org (the flagship site) and EMBL-EBI (the bioinformatics institute). These were high-visibility properties with committed partners. By working closely with them, I ensured the framework solved real problems, not theoretical ones.
 
 Seeing the framework work on major sites gave other teams confidence to try it.
 
@@ -109,7 +103,7 @@ Adoption accelerated when teams saw concrete benefits:
 - The careers site redesign adopted the navigation and card components, cutting development time by 40%
 - Multiple teams reported improved accessibility audit results after switching to framework components
 
-Word spread organically through EMBL's communications network. We didn't need to sell it — teams asked to use it.
+Word spread organically through EMBL's communications network. I didn't need to sell it — teams asked to use it.
 
 **Scale (18+ months)**
 
@@ -124,7 +118,7 @@ By 18 months, the framework was adopted across:
 - **Consistent UX**: Users moving between EMBL properties encountered familiar patterns
 - **Shared problem-solving**: Teams contributed improvements back to the framework, benefiting everyone
 
-## Outcomes
+## What changed across EMBL's digital ecosystem?
 
 **Adoption and reach**:
 - **50+ properties** using the framework across EMBL's international network
@@ -146,9 +140,9 @@ By 18 months, the framework was adopted across:
 - **Best practices propagation** via documented components and rationale
 - **Reduced tribal knowledge** by codifying design and development decisions
 
-## What made this work
+## Why did this approach actually work?
 
-The framework succeeded because we optimized for adoption, not perfection. We didn't try to force teams into a single stack or workflow. Instead, we made it easier to do the right thing by providing high-quality, flexible components that solved real problems.
+The framework succeeded because I optimized for adoption, not perfection. I didn't try to force teams into a single stack or workflow. Instead, I made it easier to do the right thing by providing high-quality, flexible components that solved real problems.
 
 Key factors:
 - **Starting with real patterns** from production sites, not theoretical ideals
