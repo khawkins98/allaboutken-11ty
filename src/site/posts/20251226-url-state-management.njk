@@ -1,0 +1,39 @@
+---
+title: "URLs are the state management you should use"
+layout: layouts/digesting.njk
+teaser: "How well-designed URLs can replace state stores with shareable, bookmarkable state."
+date: 2025-12-26
+digest_link: https://alfy.blog/2025/10/31/your-url-is-your-state.html
+tags: digesting
+topics:
+  - web development
+  - state management
+  - URL design
+kens_status: ready_for_publication
+---
+
+{% markdown %}
+
+Ahmad El-Alfy's [earlier post on the hidden costs of URL design](https://alfy.blog/2025/10/16/hidden-cost-of-url-design.html) shows how ambiguous URLs can multiply backend load and inflate infrastructure costs by 40%. Flat URLs like `/leather-jacket` force expensive resolution logic because the system can't tell if it's a product, category, or page.
+
+But his [latest post](https://alfy.blog/2025/10/31/your-url-is-your-state.html) flips the equation: when URLs are **well-designed**, they become powerful state containers. I encounter SPAs all the time that break on refresh or lose state when you share a link. He reframes URLs as first-class state management—not just addresses, but contracts between your app and users.
+
+The [PrismJS download page](https://prismjs.com/download.html#themes=prism-okaidia&languages=markup+css+clike+javascript&plugins=line-numbers) is the perfect example. Look at the URL:
+
+`https://prismjs.com/download.html#` `themes` `=` `prism-okaidia` `&` `languages` `=` `markup+css+clike+javascript` `&` `plugins` `=` `line-numbers`
+
+Your selected theme, languages, and plugins are encoded right there. Copy the link, share it, bookmark it. The configuration reconstructs perfectly. No database, no cookies, no store.
+
+This also enables **power-user URL editing** — manually tweaking parameters to navigate or discover features. Change `prism-okaidia` to `prism-twilight` in the URL bar, hit enter, and the theme switches instantly. Shareable links become explorable interfaces.
+
+> That PrismJS URL reminded me of something important: good URLs don't just point to content. They describe a conversation between the user and the application. They capture intent, preserve context, and enable sharing in ways that no other state management solution can match.
+
+**What belongs in URLs**: search queries, filters, pagination, view modes, date ranges — anything that affects what's displayed and should be shareable.
+
+**What doesn't**: sensitive data, temporary UI state, unsaved form input, or massive nested structures.
+
+The pushState vs replaceState distinction is subtle but important: use `pushState` for distinct actions (navigating to a new filter); use `replaceState` for refinements (typing into a search box). One deserves a back-button entry, the other doesn't.
+
+Modern APIs like `URLSearchParams` make this trivial to implement. The harder part is shifting mindset: URLs aren't just routing — they're your most underutilized state layer.
+
+{% endmarkdown %}
