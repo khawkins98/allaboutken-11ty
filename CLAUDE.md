@@ -153,7 +153,8 @@ The site uses a unique CSS activation pattern:
    - Changes auto-compile and trigger browser reload
 3. **Making content changes**: Edit `.njk` files in `src/site/`
    - Eleventy auto-rebuilds and reloads browser
-4. **Images**: Place in `src/site/images/`
+4. **Images**: Place in `src/site/images/blog/`
+   - Reference in frontmatter as `/blog/filename.jpg` (not `/images/blog/`)
    - In dev: transformed on-request
    - In production: all transformed at build time
 5. **Building for production**: `yarn build`
@@ -179,10 +180,10 @@ topics:
   - Topic 2
 org: Organization  # Optional: for impact stories (used with orgIntro macro)
 permalink: /posts/custom-url/  # Optional
-image: /path/to/image.jpg  # Optional: for in-page hero images (NOT used for social sharing)
+image: /blog/example-image.jpg  # Optional: for in-page hero images (NOT used for social sharing)
 image_meta:
-  text: 'Caption text'
-  alt: 'Alt text'  # Also used for og:image:alt and twitter:image:alt
+  text: 'Location or context. Own work.'  # Caption for sighted users
+  altext: 'Descriptive alt text for screen readers'
 via: 'https://example.com/source'  # Optional: source/attribution URL for link posts
 
 # OpenGraph/Twitter Card Overrides (optional):
@@ -191,6 +192,15 @@ og_description: 'Custom OG description'  # Overrides default: teaser or site des
 og_image: 'https://example.com/custom-image.jpg'  # Full URL - ONLY way to override dynamic social card
 ---
 ```
+
+**Image paths**:
+- Place image files in: `src/site/images/blog/`
+- Reference in frontmatter as: `/blog/filename.jpg` (NOT `/images/blog/`)
+- The `/images/` prefix is added automatically by the build process
+
+**Image attribution**:
+- For Ken's own photos/illustrations: use "Own work." (not "Photo by Ken Hawkins")
+- Include location context in the `text` caption, e.g., "OneSiam Skywalk, Bangkok. Own work."
 
 **OpenGraph/Twitter defaults** (if not overridden in frontmatter):
 - `og:title` / `twitter:title`: `{{ title }} | All about Ken Hawkins`
