@@ -1,0 +1,183 @@
+---
+title: 'How to measure impact when analytics lie'
+layout: layouts/post.njk
+teaser: "You've defined success. Now what? Most analytics dashboards won't answer the questions that matter."
+date: 2026-01-15
+tags:
+  - posts
+topics:
+  - analytics
+  - content strategy
+  - web metrics
+image: /blog/how-to-measure-impact-when-analytics-lie.jpg
+image_meta:
+  text: 'Since 1410, the <a href="https://en.wikipedia.org/wiki/Prague_astronomical_clock#See_also">Prague Astronomical Clock</a> has answered more than "what time is it?" — a reminder that useful measurement requires the right questions. Photo by <a href="https://www.flickr.com/photos/abhijeetrane/4240605222/">Abhijeet Rane</a> (CC BY 2.0)'
+  altext: 'The Prague Astronomical Clock face showing its ornate dials for tracking time, sunrise, sunset, and celestial positions'
+kens_status: final_draft
+---
+
+{% markdown %}
+
+In [Measuring success beyond the page view](/posts/20251203-measuring-success-beyond-page-view/), I argued that the measurement problem is really a strategy problem. You can't measure success if you haven't defined it.
+
+Here's what operationalizing "did the right people find this?" actually looks like — based on my work building analytics infrastructure for 14+ websites across a large organization.
+
+> ## tl;dr
+>
+> - No analytics benchmarks exist for IGOs, government agencies, or technical policy organizations — you have to synthesize from adjacent sectors and decide what applies
+> - Content-type classification is the foundation: a 50% bounce rate on reference content is success; the same rate on a landing page is failure
+> - "Right audience" detection requires engineering: ASN lookup for institutional visitors, traffic source bucketing with strategic weights
+> - Direct user feedback and topic-level analysis fill gaps that engagement metrics miss
+> - Some impact will never appear in analytics — plan for that
+
+## The benchmark problem
+
+Before you can measure performance, you need to know what "good" looks like. For most organizations, that means industry benchmarks.
+
+Here's the problem: **no analytics benchmarks exist for intergovernmental organizations, government agencies, or technical policy bodies**. No published studies. No cross-agency comparison data. When I searched for benchmarks relevant to a technical policy organization — something between a nonprofit and a news publisher — I found a gap.
+
+The solution required synthesizing data from adjacent sectors: [M+R Benchmarks](https://mrbenchmarks.com/) (fundraising nonprofits), [RKD Group studies](https://info.rkdgroup.com/seobenchmark) (2,000+ nonprofit websites), [First Page Sage](https://firstpagesage.com/reports/whats-a-good-engagement-rate-fc/) (cross-industry GA4 data), [Similarweb](https://www.similarweb.com/blog/research/business-benchmarking/news-industry-benchmarks/) (news/media), and several others. Then making explicit decisions about what applies.
+
+**Key finding:** The widely-cited benchmark that "nonprofits get 16% of traffic from social media" comes from fundraising organizations running emotional campaigns and viral content. For a technical policy organization — where audiences discover content through search queries like "climate adaptation framework" or "regulatory compliance guidance" — that benchmark is misleading. A more appropriate target: 3-8% social traffic. Lower social traffic isn't a problem to fix; it's appropriate for how professional audiences actually find authoritative content.
+
+That was a useful reframe. We stopped chasing a benchmark that was never meant for us.
+
+This isn't unique to social traffic. Industry benchmarks are generalizations — useful starting points, but rarely applicable without adaptation. An organization's actual audience behavior, content mix, and strategic goals should shape targets, not the other way around. The question isn't "how do we hit the benchmark?" but "does this benchmark reflect success for *our* context?"
+
+This research process became essential infrastructure. You can't set meaningful targets without understanding which benchmarks apply to your specific content and audience.
+
+{% endmarkdown %}
+
+<aside class="kh-note-box">
+  <span class="kh-note-box__label">Shifting baselines:</span>
+  These benchmarks are also becoming less reliable as <a href="/posts/20250914-ai-and-the-commoditization-of-reference/">AI tools increasingly satisfy reference queries</a> without a click. Traffic to terminology pages and how-to content is declining across the web — not because the content is less valuable, but because consumption has moved inside chat interfaces. This makes incoming link analysis and referrer categorization even more important as success signals, since page views alone increasingly undercount actual reach.
+</aside>
+
+{% markdown %}
+
+## Content-type classification
+
+The core insight from Part 1 was that different content types require different success signals. Implementation means making that classification explicit.
+
+Every page carries a metatag identifying its content type:
+
+```html
+<meta name="vf:page-type" content="category;terminology">
+<meta name="vf:page-type" content="category;publication">
+<meta name="vf:page-type" content="category;news">
+```
+
+The tracking script reads this on page load and sends it to GA4 as a custom dimension. Now you can analyze performance by content type — and apply appropriate expectations to each:
+
+| Content Type | Expected Engagement | What "Success" Looks Like |
+|--------------|---------------------|---------------------------|
+| Reference pages (terminology, glossary) | 30-50% | User found answer quickly; high scroll completion |
+| Interactive tools (dashboards, calculators) | 70-85% | Long session duration; return visits |
+| Downloads (publications, reports) | 35-55% | Time on page before download; download completion |
+| News/articles | 50-65% | Scroll depth; time on page |
+| Landing pages | 55-70% | Low bounce; pages per session; conversion actions |
+| Event pages | 45-60% | Registration clicks; return visits |
+
+**The shift:** Stop asking "is our engagement rate good?" Start asking "for this content type, is this engagement appropriate?"
+
+A high bounce rate on reference content is often a positive signal — users found what they needed efficiently. Conversely, low engagement on interactive content indicates a problem. Universal benchmarks obscure this.
+
+## Detecting "right audience"
+
+For a policy organization, audience quality matters more than volume. 10,000 visits from random visitors is less valuable than 100 visits from decision-makers. Traditional analytics tells you demographics and geography — but not whether visitors came from government ministries, research institutions, or the general public.
+
+### Network-type detection
+
+Every visitor's IP address maps to an Autonomous System Number (ASN) — essentially, the network they're connecting from. A server-side endpoint performs a lookup and classifies the network into categories:
+
+- Academic (universities, research institutions)
+- Government (ministries, agencies)
+- Intergovernmental (international organizations)
+- NGO (nonprofits, foundations)
+- Commercial/Other
+
+The key privacy consideration: the lookup happens server-side on your own infrastructure, and only the *category* — not the specific organization name — gets sent to analytics. The IP address is processed momentarily to derive a category, then discarded. What reaches GA4 is "academic" or "government," not "Harvard University" or "Government of Japan."
+
+A report showing "58% of traffic from institutional networks" validates reach to target audiences in ways that page views never could.
+
+_Privacy by design: This approach supports GDPR compliance through data minimization — granular IP-derived information never leaves your server, and third parties receive only aggregate classification. Combined with your existing legal basis for analytics (typically legitimate interest with appropriate documentation), you can understand institutional reach without creating new privacy exposure. But, as always, I am not a lawyer and this is not legal advice._
+
+### Traffic source bucketing
+
+GA4's default source/medium tells you *where* traffic comes from, not *who*. "google / organic" is useful, but "harvard.edu / referral" tells you more about audience quality.
+
+We classify referrer domains into 14 strategic buckets with different weights. The weights reflect strategic priority: government and core stakeholder visits represent direct policy influence, academic referrals signal research uptake, while general search and social traffic — though valuable for awareness — are baseline signals rather than indicators of reaching decision-makers.
+
+| Bucket | Weight | Rationale |
+|--------|--------|-----------|
+| Core stakeholders | 5× | Your primary audience — partner agencies, key institutions |
+| Government | 5× | Policy influence — `.gov`, `europa.eu`, ministries |
+| Academic | 4× | Research community — `.edu`, publishers, journals |
+| Domain community | 3× | Practitioners in your field — specialist orgs, professional networks |
+| AI Chatbots | 2× | Emerging signal — ChatGPT, Perplexity, Claude referrals |
+| Search | 1× | Baseline — Google, Bing, DuckDuckGo |
+| Social | 1× | Awareness — LinkedIn, Twitter, Facebook |
+| Other | 0.5× | Unclassified sources |
+
+An "impact score" multiplies sessions by weight. 100 sessions from a government site (5×) scores higher than 400 sessions from unclassified sources (0.5×). The dashboard visualizes weighted impact, not raw sessions.
+
+## Direct feedback signals
+
+Engagement metrics are proxies. Sometimes you can just ask.
+
+A lightweight "Was this page helpful?" widget tracks clicks on Yes/No feedback buttons. This gets sent to GA4 with the page container identified, enabling analysis like:
+
+- Satisfaction rate by content type (terminology pages: 78% helpful; publications: 65%)
+- Pages with low satisfaction flagged for review
+- Trends over time as content is updated
+
+It's not a survey — it's a passive signal from engaged users, captured at the moment of use. Combined with tracking which network types drive traffic, you can surface patterns even from small visitor counts.
+
+## Topic-level analysis
+
+"Top pages" lists tell you what's popular. They don't tell you which *topics* resonate.
+
+Content is tagged with taxonomy terms via metatag:
+
+```html
+<meta name="vf:page-terms" content="topic:Climate+region:Europe+policy:Adaptation">
+```
+
+The backend parses these and aggregates by topic. Now you can answer: "Which policy areas drive the most demand?" and "Are we producing enough content on adaptation?" — questions that page-level analytics can't address.
+
+## What we still can't measure
+
+Honesty matters here. Some impact will never appear in analytics:
+
+**Download ≠ read.** We track download clicks, not whether anyone opened the 200-page PDF.
+
+**Policy influence is invisible.** No way to track if a publication informed a national strategy. That requires qualitative validation — tracking where content is cited, monitoring policy changes, surveying stakeholders.
+
+**Multilingual patterns are murky.** Limited benchmarks exist for multilingual sites. Do non-English pages have different engagement patterns? We don't have good external data to compare against.
+
+**Event traffic decay is undefined.** What's "normal" decline after a major conference? No benchmarks exist. I looked.
+
+The goal isn't perfect measurement — it's better questions. From "how many page views?" to "did the right people find and use this?" This connects to a broader tension: [data isn't knowledge](/posts/20250912-knowledge-over-data/). Analytics show clicks; wisdom requires human interpretation.
+
+## Adapting this to your situation
+
+The specific implementation — ASN lookup endpoints, metatag conventions, Apps Script as GA4 API proxy — is tailored to this ecosystem. But the approach transfers:
+
+1. **Research your benchmarks** before accepting industry defaults. Decide explicitly what applies.
+2. **Classify content by type** in your CMS. Make success criteria type-specific.
+3. **Engineer audience quality signals** — referrer categorization, network detection, or whatever's feasible in your stack.
+4. **Capture direct feedback** where engagement metrics are insufficient.
+5. **Aggregate by topic**, not just page, to understand thematic demand.
+6. **Document what you can't measure** so stakeholders don't expect analytics to answer everything.
+
+The organizations that get this right stop asking "how many people saw this?" and start asking "did the right people find it and use it?" That reorientation changes the conversation — and the content strategy that follows.
+
+## What's next
+
+This infrastructure answers questions we couldn't ask before — but it also reveals gaps. Low-traffic pages reaching key stakeholders still look like "underperforming content" in most reports. We can see that a government ministry visited, but not whether the visit informed a decision. Bridging that gap requires tighter feedback loops with stakeholders, not better analytics.
+
+The next iteration: an "intended audience" field in the CMS — casual, core, or bespoke — that flows through to GA4 as a custom dimension. Then you can compare actual traffic composition against editorial intent, content by content, rather than measuring everything against the same generic benchmark.
+
+If you're wrestling with similar measurement challenges — especially in government, policy, or nonprofit contexts where the benchmarks don't exist — I'd be interested to hear how you're approaching it.
+
+{% endmarkdown %}
