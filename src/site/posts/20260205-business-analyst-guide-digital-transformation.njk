@@ -1,0 +1,364 @@
+---
+title: "The practitioner's guide to planning digital transformation (Parts 3-4)"
+layout: layouts/post.njk
+teaser: 'How to assess maturity, build the business case, and avoid the change management pitfalls that derail most digital transformation initiatives.'
+date: 2026-02-05
+image: /blog/line-guides-bangkok-lines-only.jpg
+image_meta:
+  altext: Escalators and elevated walkways at Bangkok's OneSiam Skywalk — multiple pathways converging in a complex urban transit hub (line drawing)
+  text: OneSiam Skywalk, Bangkok. Own work.
+tags:
+  - posts
+topics:
+  - digital transformation
+  - business analysis
+  - requirements
+  - project management
+---
+
+{% markdown %}
+
+**You've been tasked with "digital transformation."** Senior leadership wants it. The budget committee needs an ROI. The technical team wants requirements. And you're the one who has to make sense of it all — whether your title is business analyst, project manager, product owner, or just "the person who figures things out." You're translating between stakeholders, documenting requirements, and turning vague goals into actionable plans.
+
+*This is Parts 3-4 of my digital transformation series. Start with [Parts 1-2: Digital transformation for complex organizations](/posts/20260130-digital-transformation-complex-organizations/) for the strategic framework.*
+
+Most digital transformation projects fail — [McKinsey puts the success rate at only 30%](https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-twenty-one-exes-of-digital-transformation) — usually not because of bad technology, but because of poor requirements, unclear success criteria, and no baseline assessment. The vague becomes vaguer. Budgets balloon. Stakeholders disengage.
+
+This guide covers the mechanics that prevent that: assessment, requirements, business case development, resource planning, and risk management. It's the tactical companion to strategic frameworks — the part that answers "how do we actually plan and execute this?"
+
+> ## tl;dr
+>
+> **Part 3: Assess & Define** — Baseline your digital maturity, elicit requirements from stakeholders, and set measurable success criteria.
+>
+> **Part 4: Plan & Execute** — Build the business case around avoided costs, secure dedicated capacity, and manage the risks that actually derail initiatives.
+
+---
+
+## Part 3: Assess & Define
+
+Before you can plan transformation, you need to know where you are, what stakeholders actually need, and what success looks like. This section covers assessment, requirements, and success criteria.
+
+### 1. Digital maturity assessment: Know where you are
+
+You can't build a roadmap without a baseline. Yet most transformation initiatives skip assessment and jump straight to solutions. This creates two problems: you're solving for unknown gaps, and you have no way to measure improvement.
+
+Assessment prevents "solutions looking for problems" and creates shared understanding of what actually needs to change.
+
+#### Assessment dimensions
+
+I use a lightweight framework based on industry models ([BCG](https://www.bcg.com/capabilities/digital-technology-data/digital-maturity), [Deloitte](https://www.deloitte.com/us/en/insights/topics/digital-transformation/digital-maturity-pivot-model.html), [Google/BCG](https://www.thinkwithgoogle.com/intl/en-emea/marketing-strategies/app-and-mobile/how-digital-marketing-maturity-helps-you-personalise-marketing-scale/)) adapted for content-heavy organizations. Five dimensions, each scored Yes/Partial/No:
+
+**Content & Publishing**
+- Do you measure task completion (not just pageviews)?
+- Is content structured with semantic metadata?
+- Can editors articulate audience tasks for their content?
+
+**Measurement & Analytics**
+- Do you track beyond pageviews (findability, downstream impact)?
+- Are metrics tied to business objectives?
+- Can you demonstrate content ROI?
+
+**Technology & Infrastructure**
+- Does your content and data platform — whether a CMS like Drupal, a custom backend, or a database-driven system — support [disciplined content](/posts/20180122-content-action-model/) (clear purpose, measurable goals)?
+- Do you have machine-readable taxonomies (structured labels systems can process)?
+- Can you emit JSON-LD or schema markup?
+
+**Governance & Process**
+- Do you have documented content workflows?
+- Is there clear accountability for content outcomes?
+- Are there incentives for adopting new practices?
+
+**People & Skills**
+- Do editors understand user-centered content principles?
+- Do developers know semantic HTML and accessibility?
+- Does senior leadership understand digital metrics beyond traffic?
+
+#### Scoring
+
+- **15+ Yes**: Mature — focus on optimization and innovation
+- **8-14 Yes**: Emerging — establish infrastructure systematically
+- **0-7 Yes**: Nascent — start with foundational changes
+
+This isn't about judgment. A nascent organization isn't a failing — it's just at a different starting point. The assessment tells you where to focus effort.
+
+{% endmarkdown %}
+
+<aside class="kh-note-box">
+  <span class="kh-note-box__label">Template:</span>
+  Create a simple scorecard: 15 questions (3 per dimension) in a table format. Score each Yes (1 point), Partial (0.5 points), No (0 points). Total score guides your starting phase.
+</aside>
+
+{% markdown %}
+
+#### How to conduct the assessment
+
+**Method 1: Stakeholder workshop** (fastest)
+- Gather cross-functional group (senior leaders, technologists, editors)
+- Walk through each question together
+- Discuss and score collaboratively
+- Captures different perspectives but can be political
+
+**Method 2: Individual interviews** (most thorough)
+- Interview 10-15 people across roles
+- Score independently
+- Analyze gaps between groups (senior leaders say "Yes," editors say "No")
+- Takes longer but reveals organizational misalignment
+
+Use the scores as conversation starters, not final verdicts. If senior leadership thinks measurement is strong but editors can't access analytics, that's valuable signal.
+
+---
+
+### 2. Requirements elicitation: What you need from stakeholders
+
+Digital transformation means different things to different stakeholders. Senior leadership wants strategic outcomes. Technologists want specifications. Editors want their jobs to be easier. Your job is to translate between them and document requirements that all three groups can validate.
+
+This isn't about writing a 100-page requirements document. It's about using structured techniques to surface what each group actually needs — then documenting it in a way that guides decisions.
+
+#### The three stakeholder groups
+
+**Senior leadership** wants clarity, predictability, accountability. They need strategic aims converted into testable digital outputs — things they can report on, defend, and explain to boards.
+
+**Technologists** want feasibility, requirements, constraints. They need technical jargon translated into choices and trade-offs that non-technical people can actually decide on.
+
+**Editors** (content creators, publishers) want simplicity, relevance, speed. Someone needs to advocate for them — even when no one else in the room is.
+
+#### Elicitation techniques for each group
+
+**For Senior Leadership: Structured interviews**
+
+Senior leaders are time-constrained. Prepare focused questions that extract strategic intent, not just aspirations.
+
+Sample questions:
+- "What does 'digital transformation' success look like in 12 months? What would you report to the board?"
+- "What metrics do you currently track? How could digital work support those?"
+- "What content or digital failures have you experienced? What caused them?"
+- "How much investment can you justify without demonstrated ROI?"
+
+The goal is to translate "we need better digital presence" into "we need to increase discoverability for policy briefs by 30% as measured by government domain referrals."
+
+**For Technologists: Document analysis + observation**
+
+Don't just ask developers what's possible — observe what's actually happening.
+
+Review:
+- Platform documentation (what features exist vs. what's used)
+- Current architecture diagrams
+- Analytics setup (what's being tracked)
+- Integration points (what systems talk to each other)
+
+Ask:
+- "What's technically feasible with our current stack?"
+- "What would require platform changes?"
+- "Where do you spend most time on manual work?"
+- "What breaks most often?"
+
+This surfaces hidden constraints. The platform might technically support structured metadata, but if the API is so slow that editors won't use it, that's a real constraint.
+
+**For Editors: Observation + focus groups**
+
+Editors will tell you what they think you want to hear. Watch them work instead.
+
+Observation technique:
+- Sit with an editor for 2 hours while they create content
+- Don't interrupt — just note where they struggle
+- Ask "why did you do that?" when they use workarounds
+- Document manual processes that should be automated
+
+Focus group questions:
+- "What takes the most time in your workflow?"
+- "What questions can't you answer?" (e.g., "Is anyone reading this?")
+- "What would make your job easier?"
+- "When do you ignore the official process? Why?"
+
+This reveals the gap between documented workflow and actual practice. If editors copy-paste content into Word to check formatting, your platform's preview isn't working.
+
+#### Documenting requirements
+
+Use standard BA categories: functional, non-functional, constraints.
+
+**Sample functional requirements** (what the system must do)
+- FR-001: System shall allow editors to tag content with audience tasks
+- FR-002: System shall measure task completion rates per page
+- FR-003: System shall generate semantic metadata automatically from editor inputs
+
+**Sample non-functional requirements** (quality attributes)
+- NFR-001: Task completion tracking shall not slow page load by >100ms
+- NFR-002: Editor training shall take <2 days per person
+- NFR-003: Metadata system shall integrate with existing platform without data migration
+
+**Sample constraints**
+- Cannot replace current platform (must work within existing systems)
+- Must comply with accessibility standards (WCAG 2.1 AA)
+- Must not disrupt current publishing workflows during pilot phase
+- Budget cannot exceed $X for first 6 months
+
+Prioritize requirements using MoSCoW (Must/Should/Could/Won't):
+- **Must have**: Task completion tracking, semantic HTML
+- **Should have**: Automated metadata generation, editor dashboards
+- **Could have**: AI-powered taxonomy suggestions
+- **Won't have** (this phase): Full content inventory migration, new platform
+
+{% endmarkdown %}
+
+<aside class="kh-note-box">
+  <span class="kh-note-box__label">Pro tip:</span>
+  When stakeholders disagree on requirements, document both views and the decision criteria. "Senior leadership wants automated publishing; editors want review gates. Decision: implement review gates with optional auto-publish for low-risk content types (defined in governance model)."
+</aside>
+
+{% markdown %}
+
+---
+
+### 3. Success criteria: Specific, measurable targets
+
+Vague goals produce vague results. "Improve digital presence" isn't measurable. "Increase task completion rate by 25% on top-traffic pages within 6 months" is.
+
+Success criteria should be specific enough that anyone can verify whether you achieved them. Use the OKR framework: Objectives (directional goals) supported by Key Results (measurable outcomes).
+
+#### Framework: OKRs for digital transformation
+
+**Objective 1: Make content measurably useful**
+- KR1: 80% of editors can articulate the audience task for their content (measured via spot checks)
+- KR2: Task completion tracking implemented on 100% of top-traffic pages
+- KR3: Measured task completion rate improves 25% from baseline
+
+**Objective 2: Establish AI-ready content infrastructure**
+- KR1: 100% of new content uses semantic HTML (validated via automated checks)
+- KR2: 50% of existing high-value content has JSON-LD markup
+- KR3: Citation/reference mentions in AI-generated responses increase 2x from baseline
+
+**Objective 3: Demonstrate ROI**
+- KR1: Editorial efficiency improves by 15 hours/week (quantified time savings)
+- KR2: Content discoverability improves 20% (measured via organic search increase from target audiences)
+- KR3: Avoided cost: Prevent $100K+ in low-performing content investment through early measurement
+
+#### Phase-based acceptance criteria
+
+Break objectives into phases with clear gates. Each phase ends with GO/NO-GO decision.
+
+**Pilot Phase (Months 1-3)**
+- ✅ 5 pages have audience task documentation (what task + how to measure)
+- ✅ Task completion tracking implemented on pilot pages
+- ✅ 10 editors trained and using framework
+- ✅ Baseline metrics captured for all pilot pages
+- ✅ GO criteria: Measurable improvement in 2+ pilot metrics; editor satisfaction >7/10
+
+**Rollout Phase (Months 4-9)**
+- ✅ 50% of content inventory assessed with audience task framework
+- ✅ Semantic metadata on 100 high-priority pages
+- ✅ All editors trained (200+)
+- ✅ Documented 10% improvement in key metrics vs. baseline
+- ✅ GO criteria: Adoption rate >80%; metrics trending positive; sponsor approves scale
+
+**Optimization Phase (Months 10-12)**
+- ✅ Full measurement → improvement cycle operational
+- ✅ AI-generated responses cite content 2x baseline
+- ✅ ROI case study documented with quantified benefits
+- ✅ Governance model established and operating independently
+
+The GO/NO-GO gates are critical. If the pilot doesn't demonstrate improvement, you iterate or cancel — you don't keep something that doesn't work.
+
+This phase-gate approach builds in permission to learn and adjust. You're not aiming for the complete solution upfront — you're shipping something focused and high-quality, gathering feedback, and letting audience demand guide what comes next. Teams need to feel safe surfacing problems early.
+
+Celebrate what you learned, not just what you shipped.
+
+---
+
+## Part 4: Plan & Execute
+
+You've assessed where you are, gathered requirements, and defined success criteria. Now you need to secure budget, plan resources, and manage risks.
+
+### Build the business case
+
+Finance won't approve "better digital presence." They'll approve "invest $X to save $Y in editorial efficiency and prevent $Z in failed content spend."
+
+**Frame benefits as avoided costs, not speculative gains.** Senior leadership responds to "prevent $200K in failed content investment" more than "possibly gain traffic." The former is concrete; the latter is speculative.
+
+The benefit categories that matter most:
+- **Time savings**: Editorial efficiency improvements (quantify with time studies)
+- **Risk reduction**: Catching underperforming content in pilot phase instead of after full investment
+- **Reach improvement**: Increased discoverability — directionally significant even when hard to monetize
+
+The cost categories to account for:
+- **Labor**: Staff time for training, implementation, ongoing work (often underestimated)
+- **Technology**: Platform upgrades, tools, integrations
+- **Opportunity cost**: What else could the team do with this time?
+
+Most transformation initiatives underestimate labor costs and overestimate technology costs. The real investment is people's time.
+
+### Resource realities
+
+"We'll do this with existing staff in their spare time" rarely works. Transformation requires dedicated capacity — not full-time necessarily, but protected time.
+
+**Key roles to fill** (can be fractional):
+- Someone who owns the initiative and manages stakeholders
+- Someone who understands content strategy and can train editors
+- Someone who can implement technical standards (semantic HTML, structured data)
+- Someone tracking requirements and progress (that's you)
+
+### What derails initiatives
+
+The gap that kills most initiatives isn't technical. It's change management. Editors resist workflow changes without visible incentives and demonstrated time savings.
+
+Three risks appear in nearly every digital transformation:
+
+**Leadership attention fades.** Secure 12-month commitment upfront. Show quick wins by month 3. Brief leadership monthly with metrics, not just activity.
+
+**Editors resist workflow changes.** This is the highest-probability risk. Mitigate by involving editors in framework design, tracking time savings during pilot, and making adoption visible and celebrated.
+
+**Scope creeps beyond budget.** Lock scope for pilot phase. Use phase gates — require a new business case for scope additions rather than absorbing them.
+
+### The critical path
+
+Some work can happen in parallel. Some cannot. The sequence that cannot slip:
+
+1. **Stakeholder alignment** → enables requirements elicitation
+2. **Business case approval** → enables team formation
+3. **Pilot validation** → enables rollout approval
+
+Everything else can flex. Training and technical infrastructure can run in parallel. Documentation and governance development can overlap.
+
+Build 20% buffer into timelines. Identify dependencies early. The critical path runs through validation gates, not deliverable dates.
+
+{% endmarkdown %}
+
+<aside class="kh-note-box">
+  <span class="kh-note-box__label">Template:</span>
+  For structured planning, create templates covering: business case (costs, benefits, ROI calculation), resource plan (roles, capacity, timeline), and risk register (probability, impact, mitigation).
+</aside>
+
+{% markdown %}
+
+---
+
+## Putting it together
+
+This guide covers the mechanics that strategic frameworks often skip: how to assess, how to elicit requirements, how to quantify ROI, how to plan resources, and how to manage risks.
+
+The strategic framework tells you **what** to establish (stakeholder alignment, audience task frameworks, measurement systems, AI-ready infrastructure). This guide tells you **how** to plan and execute it.
+
+**Key success factors**:
+- Start with baseline assessment — don't skip this
+- Build the business case with quantified benefits (time savings + avoided costs)
+- Use phase gates to validate before scaling
+- Involve stakeholders early and often (especially editors)
+- Document everything (requirements, decisions, learnings)
+
+**Common pitfalls**:
+- Starting implementation without requirements
+- Building business case without baseline metrics (makes ROI impossible to prove)
+- Underestimating change management (editors resist without incentives)
+- Skipping pilot validation (rolling out something that doesn't work)
+- Treating this as pure technology project (it's mostly about people and process)
+
+Digital transformation is as much about requirements discipline and stakeholder management as it is about technology. The skills that matter here — elicitation, documentation, risk management, change impact analysis — are what make the vague concrete and the aspirational measurable.
+
+If you're planning a digital transformation initiative and need help with requirements, business case development, or implementation planning, I'd love to hear about your challenges.
+
+{% endmarkdown %}
+
+<aside class="kh-note-box">
+  <span class="kh-note-box__label">Related</span>
+
+  This guide is the tactical companion to <a href="/posts/20260130-digital-transformation-complex-organizations/">Digital transformation for complex organizations</a>, which presents the strategic framework (The Groundwork + The Process). Use both together: the framework for the vision, this guide for the execution.
+</aside>
