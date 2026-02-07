@@ -1,5 +1,4 @@
 const { DateTime } = require('luxon');
-const _            = require('lodash');
 const Path         = require('path');
 const { execSync } = require('child_process');
 const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
