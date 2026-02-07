@@ -283,5 +283,23 @@
       color: var(--kh-color--blue);
     }
   }
+
+  /* Code + live demo container (codeAndDemo shortcode) */
+  .kh-demo {
+    margin-bottom: 2rem;
+
+    pre {
+      margin-bottom: 0;
+      border-radius: 1rem 1rem 0 0;
+    }
+  }
+
+  .kh-demo__live {
+    background: #fff;
+    border: 1px solid #d0d0ce;
+    border-top: none;
+    border-radius: 0 0 1rem 1rem;
+    padding: 1.5rem;
+  }
 }
 }
