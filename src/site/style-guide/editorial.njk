@@ -1,0 +1,282 @@
+---
+title: Editorial style guide
+layout: layouts/base.njk
+teaser: 'Voice, tone, and structure standards for AllAboutKen.com content.'
+date: 2026-02-07
+templateEngineOverride: njk
+permalink: /style-guide/editorial/
+---
+
+<article class="kh-grid-stylized kh-u-margin__top--1200">
+  <div></div>
+  <div class="kh-content">
+    <p class="kh-breadcrumb"><a href="/style-guide/components/">Component reference</a> ·  Editorial style guide</p>
+    <h1 class="kh-font-headline kh-text-heading--1">{{ title }}</h1>
+    <p class="kh-text-body--3">A public reference for the voice, structure, and editorial standards used across this site. Useful for contributors, AI assistants, and future me.</p>
+
+{% markdown %}
+
+## Voice and tone
+
+This site writes like a practitioner talking to other practitioners — friendly, specific, and generous with examples.
+
+**Core principles:**
+
+- **Approachable but confident** — conversational without being performative. Contractions are fine. Hedging ("sort of", "basically") is not.
+- **Show first, tell second** — lead with code, visuals, or examples before explaining. The reader should see the thing before reading about it.
+- **Evidence over hype** — be concrete. Avoid superlatives ("best", "always", "never") unless backed by evidence. Prefer specific numbers and named tools.
+- **Generous with links** — link to sources, related posts, and external references using descriptive anchor text. Never "click here."
+- **Lightly self-deprecating** — humor is welcome, but sparingly (0 – 1 per post). Never as a substitute for clarity.
+
+**Perspective and tense:**
+
+- First-person singular ("I") for personal experience. "We" only when describing genuinely collaborative work.
+- Impact stories always use "I" — they're portfolio pieces showcasing personal contribution.
+- Default to present tense. Past tense for specific events or chronology.
+
+---
+
+## Content types
+
+### Blog posts
+
+Focused technical or observational writing. Tutorials, implementation guides, discoveries, opinions.
+
+- **Length:** 600 – 1,200 words
+- **Title:** Concise, no trailing punctuation, sentence case
+- **Teaser:** One sentence, persuasive, 25 words or fewer
+- **Opening:** Crisp value statement — what the reader gets or why it matters
+- **tl;dr block:** Add one near the top for posts over 700 words
+- **Structure:** H2/H3 sections, bullets and steps over dense paragraphs, code before explanation
+- **Closing:** Restate the main point, invite feedback, link to related content
+
+### Impact stories
+
+Portfolio case studies demonstrating measurable outcomes through narrative.
+
+- **Length:** 600 – 1,200 words (shorter and scannable beats exhaustive)
+- **Title format:** Gerund phrase preferred ("Reclaiming three weeks of editorial time every month")
+- **Teaser:** Sets up challenge/tension, not metrics
+- **Result themes:** Three bold phrases near the top (`**Efficiency** | **Reliability** | **Consistency**`)
+- **Section headers:** Use questions for narrative momentum ("What was actually breaking?")
+- **Perspective:** Always "I" — even for collaborative work, frame around personal contribution
+- **Metrics:** Specific numbers with baselines ("0.88s → 0.45s", not "50% faster"), plus human-impact framing ("equivalent to 3 full work weeks")
+- **Tone:** Show process, tradeoffs, and strategic vulnerability. Acknowledge what almost didn't work.
+
+### Digesting posts
+
+Short-form commentary on things I've read or discovered.
+
+- Never reuse the source article's title — rewrite in your own voice
+- Focus on what you learned or discovered
+- Make titles specific and actionable
+- Link back to the source prominently
+
+---
+
+## Structure templates
+
+### Blog post skeleton
+
+```text
+Opening value statement (1 – 2 sentences)
+tl;dr or "You'll learn" block (if > 700 words)
+---
+## Section heading
+Body content with bullets, code, visuals
+## Section heading
+More content
+---
+Closing: restate main point, invite feedback, related links
+```
+
+### Impact story skeleton
+
+```text
+**Result theme 1** | **Result theme 2** | **Result theme 3**
+Organization context box (orgIntro macro)
+---
+Opening (2 – 3 short paragraphs: stakes, challenge, your role)
+## What was the problem? (question header)
+Challenge details
+## How did you approach it? (question header)
+Solution with constraints and tradeoffs
+## What were the outcomes? (question header)
+Metrics with human-impact framing
+## Why did this work? (question header)
+Reflection — specific factors, not generic lessons
+---
+Related links
+```
+
+---
+
+## Formatting rules
+
+### Headlines
+
+- Sentence case unless a proper noun is involved
+- No trailing punctuation
+- Heading hierarchy must be sequential: H2 → H3 → H4 (never skip levels)
+
+### Teasers
+
+- One sentence, 25 words or fewer
+- Persuasive — sell the value, not the topic
+- Avoid links unless essential
+
+### Em dashes
+
+Use spaced em dashes for readability: `word — word` (space, em dash, space). In source, write `--` and the build converts to `—`.
+
+### Links
+
+- Embed on descriptive nouns or phrases — describe where the link goes
+- Use absolute URLs for external links, relative for internal (`/work/2025/slug/`)
+- Verify all links resolve before publishing
+
+### Images
+
+- Place files in `src/site/images/blog/`
+- Reference in frontmatter as `/blog/filename.jpg` (the build adds `/images/` automatically)
+- Always include `image_meta.altext` (screen readers) and `image_meta.text` (visible caption)
+- For your own photos: use "Own work." as attribution, not "Photo by Ken Hawkins"
+
+### Code blocks
+
+- Use fenced code blocks with language identifiers inside `{%raw%}{% markdown %}{%endraw%}` sections
+- Show code or visuals before explaining them in prose
+- Keep inline comments minimal — let the code speak
+- For Nunjucks templates in code fences, wrap in `{%raw%}{% raw %}…{% endraw %}{%endraw%}` to prevent evaluation
+
+### Lists
+
+- Convert dense prose into bullets or numbered steps
+- Prefer bullets for unordered information, numbers for sequential steps
+- Keep list items parallel in structure
+
+### Paragraphs
+
+- Blog posts: 2 – 4 sentences
+- Impact stories: 2 – 3 sentences (tighter for scannability)
+- Single-sentence paragraphs are fine for emphasis
+
+---
+
+## Frontmatter reference
+
+### Blog post
+
+```yaml
+---
+title: 'Concise, clear headline'
+layout: layouts/post.njk
+teaser: 'One-sentence persuasive summary (≤ 25 words).'
+image: '/blog/example.jpg'
+image_meta:
+  text: 'Attribution or context.'
+  altext: 'Accurate alt text for screen readers.'
+date: YYYY-MM-DD
+tags:
+  - posts
+topics:
+  - keyword one
+  - keyword two
+via: 'https://example.com/source'  # optional: source attribution
+kens_status: draft  # draft | final_draft | ready_for_publication
+---
+```
+
+### Impact story
+
+```yaml
+---
+title: '[Gerund phrase describing the work]'
+layout: layouts/post.njk
+teaser: 'Narrative hook — tension/challenge, not metrics.'
+date: YYYY-MM-DD
+tags:
+  - posts
+  - impact-stories
+topics:
+  - keyword one
+  - keyword two
+org: Organization Name
+permalink: /work/YYYY/impact-story-slug/
+image: '/blog/example.jpg'
+image_meta:
+  altext: 'Descriptive alt text.'
+  text: 'Attribution or context.'
+kens_status: draft
+---
+```
+
+### OpenGraph overrides
+
+All pages get auto-generated social cards by default. Override individual fields when needed:
+
+```yaml
+og_title: 'Custom OG Title'
+og_description: 'Custom OG description'
+og_image: 'https://example.com/custom-image.jpg'  # full URL required
+```
+
+---
+
+## Note boxes
+
+Use the `kh-note-box` pattern for asides, updates, or contextual callouts:
+
+```html
+<aside class="kh-note-box">
+  <span class="kh-note-box__label">Update</span>
+  Your short note content goes here.
+</aside>
+```
+
+Keep the label short: "Update", "Sidebar", "Related", "Context". Place a blank line before and after the aside.
+
+---
+
+## Cross-linking
+
+- **Impact story → impact story:** Link to stories covering related domains or time periods
+- **Impact story → blog post:** Link to tutorials explaining techniques used
+- **Blog post → impact story:** Reference portfolio context where techniques were applied at scale
+- Use descriptive link text explaining *why* the link is relevant
+- Add brief parenthetical context when helpful: "(similar caching approach)"
+- Prefer relative URLs for internal content
+
+---
+
+## Quality checklist
+
+Before publishing any content, verify:
+
+- [ ] Headline is concise with no trailing punctuation
+- [ ] Teaser is one sentence, 25 words or fewer, and persuasive
+- [ ] Opening includes a crisp value statement
+- [ ] tl;dr or "You'll learn" block added for posts over 700 words
+- [ ] Dense prose converted to bullets or steps
+- [ ] Code and visuals shown before deep explanation
+- [ ] All images have alt text and attribution
+- [ ] Internal and external links verified
+- [ ] Heading hierarchy is sequential (H2 → H3 → H4)
+- [ ] No trailing whitespace or inconsistent spacing
+- [ ] Warm closing restating main point and inviting feedback
+- [ ] Frontmatter complete: title, teaser, date, layout, tags, topics
+
+### Impact story additions
+
+- [ ] Title uses gerund format
+- [ ] Result themes (3 short phrases) appear near the top
+- [ ] Section headers are questions
+- [ ] Uses "I" perspective throughout
+- [ ] Shows constraints, tradeoffs, and vulnerability
+- [ ] Metrics include human-impact framing
+- [ ] 600 – 1,200 words
+
+{% endmarkdown %}
+
+  </div>
+</article>
