@@ -28,7 +28,7 @@ permalink: 404.html
       <div class="kh-sidebar__inner">
         <div class="kh-form__item" style="display:none">
           <label class="kh-form__label kh-search__label kh-u-sr-only" for="{{ search_client_id }}">{{ context.search_label }}</label>
-          <input type="search" id="search" placeholder="{{ context.search_client_prompt }}" name="{{ context.search_client_id }}" class="kh-form__input kh-search__input" {%- if search_client_autofocus %} autofocus{%- endif %} data-kh-search-client-side-input data-kh-search-client-side-destination-prefix="{{context.search_client_destination_prefix}}">
+          <input type="search" id="{{ context.search_client_id }}" placeholder="{{ context.search_client_prompt }}" name="{{ context.search_client_id }}" class="kh-form__input kh-search__input" {%- if search_client_autofocus %} autofocus{%- endif %} data-kh-search-client-side-input data-kh-search-client-side-destination-prefix="{{context.search_client_destination_prefix}}">
         </div>
         {%- if context.search_client_button -%}
         <button type="submit" class="kh-button">
@@ -47,5 +47,5 @@ permalink: 404.html
     .replace('components/detail/','')
     .replace(/\//g, ' ')
     .trim();
-  document.getElementById('search').value = truncatedUrl;
+  document.getElementById('search_query').value = truncatedUrl;
 </script>
