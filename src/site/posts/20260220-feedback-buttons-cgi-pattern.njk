@@ -1,0 +1,183 @@
+---
+title: "Adding feedback buttons to a static site with a 1994 web pattern"
+layout: layouts/post.njk
+teaser: "A Cloudflare Worker is just a CGI script, and that's exactly what a static site needs."
+date: 2026-02-20
+tags:
+  - posts
+topics:
+  - web development
+  - static sites
+  - Cloudflare Workers
+  - retro web
+kens_status: draft
+---
+
+{% markdown %}
+
+I wanted to add "Was this useful?" buttons to my blog posts -- thumbs up, thumbs down, maybe a star rating. The site runs on GitHub Pages. No backend. No database. No server-side anything. And I didn't want JavaScript in the interaction itself.
+
+The solution turned out to be 30 years old.
+
+> **tl;dr**
+>
+> - A Cloudflare Worker handles feedback clicks via HTTP redirect -- no client-side JS needed
+> - The pattern is identical to how 1994 web rings counted click-throughs
+> - CSS `:target` shows a "Thanks!" message after the redirect without page navigation
+> - An SVG badge displays live feedback counts -- the 1996 hit counter, reborn
+> - [PLACEHOLDER: Link to the Worker repo or npm package once published]
+
+## The constraint that made it interesting
+
+This site already uses [a CSS-only toggle](/posts/20250906-css-naked-css-only/) to disable all styles with a checkbox. The search form works without JavaScript. [URLs carry state](/posts/20251226-url-state-management/) instead of client-side stores. The pattern is clear: HTML and CSS do the work; JavaScript is an enhancement, not a dependency.
+
+Feedback buttons should follow the same rule. Click a link, register the vote, done. No `fetch()` calls, no framework, no hydration. If JavaScript fails to load, the feedback still works.
+
+The problem is obvious: GitHub Pages serves static files. There's nowhere for the vote to go.
+
+## What a 1998 web developer would do
+
+In 1998, your personal page on GeoCities was static HTML -- just like GitHub Pages today. You had no backend. But you wanted interactivity: hit counters, guestbooks, polls. So you used other people's CGI scripts. An `<img>` tag could point to a script on someone else's server that generated a counter image. A `<form>` action could submit to a remote CGI script that appended to a flat file and redirected back.
+
+The web was always a composition of origins. Your static page was the frontend; the internet was the backend.
+
+Web rings used this exact architecture. The "Next site" button was a link to a central CGI script:
+
+```
+http://www.webring.org/cgi-bin/webring?ring=navships;id=002;next
+```
+
+Click it, and the script would increment a counter, look up the next site, and return a `302 Found` redirect. The user barely noticed the hop. This pattern worked in Mosaic. It works in every browser ever made. It's pure HTTP.
+
+Replace "next site in the ring" with "the post you just read" and "click-through count" with "thumbs-up count." The architecture is identical.
+
+## The redirect-count-redirect pattern
+
+Here's what happens when a reader clicks the thumbs-up button:
+
+```
+Reader clicks "👍 Yes" on a blog post
+  → GET https://feedback.allaboutken.com/up/posts/my-post/
+  → Worker increments counter in KV storage
+  → Worker returns: 302 Location: https://www.allaboutken.com/posts/my-post/#thanks
+  → Browser follows redirect back to the same post
+  → CSS :target reveals "Thanks for the feedback!" message
+  → Reader never truly left the page
+```
+
+The `#thanks` fragment in the redirect URL is doing real work. It's [URL-as-state](/posts/20251226-url-state-management/) again -- the fragment triggers a `:target` CSS rule that reveals a thank-you message that was always in the HTML, just hidden. No JavaScript needed to show it.
+
+The Worker itself is around 50 lines. It handles three routes:
+
+- `/up/posts/slug/` and `/down/posts/slug/` -- increment a KV counter, redirect back
+- `/count/posts/slug.svg` -- return a dynamic SVG badge showing the current count
+
+That SVG endpoint is the 1996 hit counter pattern. A `<img>` tag pointing to a script that returns a dynamically generated image:
+
+```html
+<img src="https://feedback.allaboutken.com/count/posts/my-post.svg"
+     alt="47 people found this useful">
+```
+
+The browser thinks it's loading a normal image. The Worker is secretly running code. This is exactly what `<img src="/cgi-bin/counter.pl">` did in 1996, except the "CGI script" runs on a global edge network instead of a Pentium II under someone's desk.
+
+## Standing on shoulders
+
+I'm not the first person to think of this. Two projects proved different halves of the solution:
+
+**[vberlier/poll](https://github.com/vberlier/poll)** is a Cloudflare Worker (written in Rust, MIT-licensed) that implements the redirect-count-redirect pattern with SVG result widgets. It's the exact 1994 web ring architecture applied to voting. No client-side JavaScript. It proved the interaction pattern works.
+
+**Andrew Walpole** [built a like button](https://andrewwalpole.com/blog/building-a-like-button-with-cloudflare-workers/) for his Eleventy blog using Cloudflare Workers and KV storage. He deployed it, ran it in production, and wrote about the experience. It proved the Eleventy + Workers + KV infrastructure works. But his approach uses client-side JavaScript -- petite-vue renders the button, and `fetch()` API calls communicate with the Worker.
+
+Nobody had combined them. Walpole's infrastructure with vberlier's interaction pattern -- a feedback system for a static Eleventy site that works without a single line of client-side JavaScript.
+
+## Keeping bots honest
+
+The obvious concern: what stops a crawler from wandering onto `/feedback/up/posts/my-post/` and registering a false vote?
+
+Five layers of defense, from prevention to cleanup:
+
+1. **Don't advertise the paths.** `robots.txt` disallows `/feedback/`. The sitemap excludes feedback URLs. Feedback links carry `rel="nofollow"`.
+2. **Tell arrivals to leave.** Feedback pages include `<meta name="robots" content="noindex, nofollow">`.
+3. **Server-side filtering.** The Worker checks `User-Agent` against known bot signatures and validates request headers. Simple crawlers don't send `Referer` or `Accept-Language` headers that real browsers do.
+4. **Rate limiting.** One vote per IP per post within a time window, enforced by the Worker. [PLACEHOLDER: Confirm rate limiting approach -- Workers Rate Limiting binding vs. KV-based TTL]
+5. **Data cleanup.** KV counters can be reset with `wrangler kv:key delete`. If a bot swarm hits, zero the affected counters and move on.
+
+The site previously used a GoatCounter `<noscript>` tracking pixel. That's actually a bot magnet -- simple crawlers load images but skip JavaScript. [PLACEHOLDER: Confirm whether noscript pixel was removed]
+
+## Privacy by design
+
+No consent banner needed. The Worker increments a counter in KV storage -- no IP addresses stored, no User-Agent logged, no cookies set. [GoatCounter's GDPR analysis](https://www.goatcounter.com/help/gdpr) applies here with even more confidence: if aggregate-only page view counting falls under legitimate interest, then an anonymous integer counter certainly does.
+
+[PLACEHOLDER: Confirm the privacy page update language once the feature is live]
+
+## What the HTML looks like
+
+The feedback UI on each post is a pair of plain links:
+
+```html
+<h2>Was this useful?</h2>
+<p>
+  <a href="https://feedback.allaboutken.com/up/posts/my-post/"
+     rel="nofollow">👍 Yes</a>
+  <a href="https://feedback.allaboutken.com/down/posts/my-post/"
+     rel="nofollow">👎 Not really</a>
+</p>
+
+<!-- Hidden until #thanks fragment is in the URL -->
+<p id="thanks">Thanks for the feedback!</p>
+```
+
+[PLACEHOLDER: Update with final HTML once the template is integrated. Confirm CSS classes (kh-button, kh-feedback, etc.) and grid layout used]
+
+The `:target` CSS:
+
+```css
+#thanks {
+  display: none;
+}
+#thanks:target {
+  display: block;
+}
+```
+
+That's it. Two links. One hidden paragraph. A few lines of CSS. The complexity lives in the Worker, where it belongs -- on the server side, invisible to the reader.
+
+## ISMAP: the delightfully archaic star rating
+
+[PLACEHOLDER: This section depends on whether star ratings ship in v1 or are deferred]
+
+For star ratings, HTML offers something from 1993 that still works: server-side image maps. Wrap an `<img>` in an `<a>` tag with the `ismap` attribute, and clicking the image appends `?x,y` coordinates to the URL:
+
+```html
+<a href="https://feedback.allaboutken.com/rate/posts/my-post/">
+  <img src="/images/five-stars-empty.svg" ismap
+       alt="Rate this post from 1 to 5 stars">
+</a>
+```
+
+Click on the third star, and the browser sends `?147,20`. The Worker calculates which star based on the X coordinate and records the rating. Server-side image maps were first supported in NCSA Mosaic 1.1. They still work in every browser.
+
+## A Cloudflare Worker is a CGI script
+
+The [thesis of this whole project](/posts/20260216-90s-desktop-paradigm-browser-utilities/) keeps showing up: old patterns, new infrastructure. A Cloudflare Worker runs on someone else's server, handles one HTTP request, reads/writes a small data store, and returns a response. The only differences from 1998:
+
+- It runs on a global edge network instead of a single machine
+- The "flat file" is a KV store instead of `/var/www/data/counter.txt`
+- The free tier is 100,000 requests/day instead of "whatever the sysadmin allows"
+- You deploy via `wrangler deploy` instead of FTPing a Perl script to `/cgi-bin/`
+
+The web development patterns haven't changed. The infrastructure got better. If you need interactivity on a static site, think like it's 1998 and point your links at someone else's server. That server just happens to be a globally distributed edge network now.
+
+[PLACEHOLDER: Final paragraph -- link to the Worker repo/package if we open-source it, invitation for others to use it on their Eleventy sites, link to the feedback buttons on this very post as a live demo]
+
+---
+
+**Related posts:**
+- [Exposing HTML: The No-JS nudist CSS toggle](/posts/20250906-css-naked-css-only/) -- same "no JavaScript required" philosophy
+- [URLs are the state management you should use](/posts/20251226-url-state-management/) -- the `#thanks` fragment is URL-as-state
+- [Your browser utility wants to be a floating palette](/posts/20260216-90s-desktop-paradigm-browser-utilities/) -- old UI patterns, new infrastructure
+- [Measuring success beyond the page view](/posts/20251203-measuring-success-beyond-page-view/) -- why "Was this useful?" matters more than page views
+- [How to measure impact when analytics lie](/posts/20260115-how-to-measure-impact-when-analytics-lie/) -- privacy-respecting signals over surveillance
+
+{% endmarkdown %}
