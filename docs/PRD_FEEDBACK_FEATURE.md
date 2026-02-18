@@ -51,14 +51,9 @@ What's missing is a **low-friction, in-page signal** — something closer to a t
 
 4. GoatCounter's existing `<script>` tag (already in `base.njk`) automatically records the page view. The URL path `/feedback/up/posts/my-post-slug/` is the data point.
 
-5. As a **noscript fallback**, the thank-you page also includes a GoatCounter counting pixel:
-   ```html
-   <noscript>
-     <img src="https://khawkins98.goatcounter.com/count?p=/feedback/up/posts/my-post-slug/">
-   </noscript>
-   ```
+5. Feedback data is queryable directly in the GoatCounter dashboard by filtering for paths starting with `/feedback/`.
 
-6. Feedback data is queryable directly in the GoatCounter dashboard by filtering for paths starting with `/feedback/`.
+   **Note on noscript pixels:** An earlier version of this design included a `<noscript><img>` GoatCounter pixel as a fallback for JS-disabled browsers. This was **removed** because the pixel is a bot magnet — simple crawlers load images but don't execute JS, so the pixel would count bot visits while GoatCounter's JS-based counting already filters them out. See "Bot and Crawler Mitigation" for details.
 
 **Why this is interesting (the archaic web angle):**
 
@@ -317,8 +312,7 @@ This needs to generate multiple pages per post (one per feedback type). Two opti
 A minimal layout (extends `base.njk`) that shows:
 - "Thanks for your feedback on: {post title}"
 - A link back to the original post: "← Return to the post"
-- The GoatCounter noscript pixel for the feedback URL
-- `noindex` meta tag (these pages shouldn't appear in search)
+- `<meta name="robots" content="noindex, nofollow">` (these pages shouldn't appear in search or be crawled further)
 - Excluded from search index via `kh-search-client-side--no-index` class
 - Excluded from sitemap
 - Excluded from RSS feed
@@ -333,8 +327,8 @@ Add a feedback section to `post.njk`, after the article content and before the "
   <div class="kh-content kh-grid__col--span-2">
     <h2 class="kh-text-heading--2">Was this useful?</h2>
     <p class="kh-cluster kh-feedback">
-      <a href="/feedback/up{{ page.url }}" class="kh-button kh-button--sm">👍 Yes</a>
-      <a href="/feedback/down{{ page.url }}" class="kh-button kh-button--sm">👎 Not really</a>
+      <a href="/feedback/up{{ page.url }}" rel="nofollow" class="kh-button kh-button--sm">👍 Yes</a>
+      <a href="/feedback/down{{ page.url }}" rel="nofollow" class="kh-button kh-button--sm">👎 Not really</a>
     </p>
   </div>
 </article>
@@ -401,12 +395,68 @@ In the GoatCounter dashboard, feedback shows up as page views:
 - Without JavaScript: works identically (no JS involved)
 - With CSS disabled via toggle: links remain functional, just unstyled
 
-### What About Abuse / Gaming?
+### Bot and Crawler Mitigation
 
-- GoatCounter de-duplicates by session (combination of User-Agent + rough location), so rapid repeat clicks from the same browser are partially mitigated
+This is the hardest problem in the design. Since every page load of a feedback URL counts as a "vote," any bot that crawls those pages creates phantom feedback. Even well-intentioned crawlers (Googlebot, Bingbot, Ahrefsbot) would pollute the data if they discover and visit `/feedback/up/posts/...` pages.
+
+The defense is layered — no single measure is sufficient, but combined they should keep the signal-to-noise ratio usable.
+
+**Layer 1: Prevent discovery (stop bots from finding the URLs)**
+
+| Mechanism | What it does | Stops |
+|---|---|---|
+| `robots.txt` `Disallow: /feedback/` | Tells well-behaved crawlers not to visit any `/feedback/` path | Googlebot, Bingbot, most commercial crawlers |
+| `rel="nofollow"` on all feedback links in `post.njk` | Tells crawlers not to follow the link, so they never discover the target URL | Crawlers that respect `nofollow` (most major ones) |
+| Exclude from `sitemap.xml` | Feedback pages never appear in the sitemap | Crawlers that use sitemap as their URL source |
+| Exclude from RSS feed | Feedback URLs don't appear in feed content | Feed readers and feed-crawling bots |
+| `eleventyExcludeFromCollections: true` | Pages aren't in `collections.all`, so no internal Eleventy-generated listing links to them | Crawlers following internal link graphs |
+
+The combination of `robots.txt` + `rel="nofollow"` + sitemap exclusion means a well-behaved crawler has **no way to discover these URLs** through normal means. The pages exist, but nothing points a crawler at them.
+
+**Layer 2: Instruct crawlers that do arrive**
+
+| Mechanism | What it does |
+|---|---|
+| `<meta name="robots" content="noindex, nofollow">` on thank-you pages | Tells any crawler that arrives not to index the page or follow its links |
+| No outbound links from thank-you pages to other feedback pages | Even if a bot reaches one feedback page, it won't discover others from there |
+
+**Layer 3: GoatCounter's built-in bot filtering**
+
+GoatCounter already filters known bots:
+- Checks `User-Agent` against a maintained list of known crawlers (uses the `isbot` detection library)
+- Ignores requests from common bot IP ranges
+- Provides a "Filter bots" toggle in the dashboard
+
+This is the main defense against bots that ignore `robots.txt`. GoatCounter won't count visits from anything that identifies as Googlebot, Bingbot, etc. — even if the bot visits the page anyway.
+
+**Layer 4: Drop the `<noscript>` counting pixel**
+
+The original design included a `<noscript>` GoatCounter pixel on thank-you pages as a fallback for JS-disabled browsers. **This should be removed or reconsidered**, because:
+
+- Most bots that ignore `robots.txt` are simple HTTP fetchers — they load HTML and images but don't execute JavaScript
+- The `<noscript><img>` pixel fires for exactly these clients: things that load images but skip JS
+- GoatCounter's JavaScript-based counting already has bot filtering built in; the raw pixel endpoint may have weaker filtering
+- The tradeoff: a JS-disabled human visitor's feedback wouldn't be counted. But JS-disabled bots' "feedback" also wouldn't be counted. Given that bots vastly outnumber JS-disabled humans, dropping the pixel is a net improvement in data quality
+
+**Recommendation:** Rely solely on GoatCounter's JavaScript-based counting. No `<noscript>` pixel. Accept the tiny data loss from JS-disabled human visitors in exchange for much cleaner data.
+
+**Layer 5: Data hygiene**
+
+Even with all the above, some noise will get through. Mitigation at the analysis level:
+
+- **Spike detection**: A sudden burst of feedback across many posts simultaneously is almost certainly a crawler — ignore it
+- **GoatCounter's referrer data**: Bot visits often have no referrer or come from suspicious sources. Filter these in the dashboard
+- **Path pattern analysis**: A bot that hits every `/feedback/up/...` and `/feedback/down/...` page in sequence is easy to spot
+- **Session de-duplication**: GoatCounter groups hits by session (User-Agent + approximate location). A bot cycling through pages would show as one session with hundreds of hits — trivially filterable
+- **Manual baseline**: For the first few weeks after launch, compare feedback counts against total post traffic to establish a reasonable ratio. If a post with 10 views has 50 thumbs up, something is wrong
+
+**What about intentional abuse / gaming?**
+
+- GoatCounter's session de-duplication means a single person clicking the same link repeatedly doesn't multiply their vote significantly
 - There's no way to fully prevent gaming on a static site without JavaScript or a backend
 - For a personal blog, this is an acceptable tradeoff — the feedback is directional, not scientific
 - If gaming becomes a real problem, GoatCounter's dashboard shows traffic patterns that would reveal anomalies
+- The worst case is that feedback data becomes noisy enough to be useless — but no data is lost, no systems are compromised, and the feature can be removed by deleting a few template files
 
 ---
 
@@ -438,17 +488,21 @@ In the GoatCounter dashboard, feedback shows up as page views:
 
 ### Phase 1: Core Infrastructure
 1. Create feedback thank-you page layout (`src/site/_includes/layouts/feedback.njk`)
+   - `<meta name="robots" content="noindex, nofollow">`
+   - No `<noscript>` pixel (rely on GoatCounter JS only — see Bot Mitigation)
+   - `kh-search-client-side--no-index` class on body content
 2. Create pagination templates for thumbs up/down (`src/site/feedback-up.njk`, `src/site/feedback-down.njk`)
-3. Add feedback section to `post.njk`
-4. Add CSS for feedback section
-5. Exclude feedback pages from sitemap and social card generation
+   - `eleventyExcludeFromCollections: true` (excludes from sitemap, social cards, RSS)
+3. Add feedback section to `post.njk` — links use `rel="nofollow"` to prevent crawler discovery
+4. Add `Disallow: /feedback/` to `robots.njk`
+5. Add CSS for feedback section
 6. Test with `yarn dev` — verify pages generate, links work, GoatCounter records views
 
 ### Phase 2: Polish
 7. Add `<meta http-equiv="refresh">` auto-return on thank-you pages (if decided)
 8. Refine thank-you page design and copy
-9. Add `noindex` meta to feedback pages
-10. Verify feedback data appears correctly in GoatCounter dashboard
+9. Verify feedback data appears correctly in GoatCounter dashboard
+10. Monitor for bot noise in first weeks — establish baseline feedback-to-traffic ratio
 
 ### Phase 3: Star Ratings (Future)
 11. Refactor to computed collection (cross-product of posts × feedback types)
@@ -463,7 +517,7 @@ In the GoatCounter dashboard, feedback shows up as page views:
 - Feedback links render on all blog posts
 - Clicking a feedback link navigates to a thank-you page and records a GoatCounter event
 - Feedback data is visible in GoatCounter dashboard under `/feedback/` paths
-- The entire flow works with JavaScript disabled (via noscript pixel)
+- The flow relies on GoatCounter's JS for counting (noscript pixel intentionally omitted to reduce bot noise — see Bot Mitigation)
 - No new external service dependencies
 - Build time increase is negligible (< 1 second)
 - Passes `yarn lint:css` and `yarn build` without errors
