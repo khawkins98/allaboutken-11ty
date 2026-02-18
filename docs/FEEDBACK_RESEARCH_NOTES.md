@@ -403,6 +403,40 @@ This is workable but coarse. The layered bot prevention (robots.txt, nofollow, G
 
 **Why it matters:** This proves the pattern works. We could either use this directly, fork it, or build our own Worker inspired by it. The SVG widget endpoint is particularly relevant — it's the hit counter pattern reborn.
 
+### Andrew Walpole's like button — Eleventy + CF Workers + KV (with client-side JS)
+
+**The closest real-world precedent for what we're building.** Andrew Walpole built a "like" button for his Eleventy blog using Cloudflare Workers and KV storage. He wrote two blog posts about it:
+
+- **"Building a Like Button with Cloudflare Workers"** — andrewwalpole.com/blog/building-a-like-button-with-cloudflare-workers/
+- **"Audit Content Reads with Cloudflare KV"** — andrewwalpole.com/blog/audit-content-reads-with-cloudflare-kv/
+
+**His architecture:**
+- Cloudflare Worker with KV namespace for storing like counts
+- Client-side JavaScript (petite-vue) renders the like button and handles click events
+- Fetch API calls to the Worker endpoint (not a redirect)
+- The Worker returns JSON; the UI updates the count in-place
+
+**What this proves:** The Eleventy + Cloudflare Workers + KV infrastructure works. Walpole deployed it, ran it in production, and wrote about the experience. The plumbing is proven.
+
+**Where it diverges from our approach:**
+- Walpole's interaction **requires JavaScript** — the button is rendered by petite-vue and communicates via `fetch()` API calls
+- No redirect pattern — it's a modern SPA-style API call
+- No SVG badge — counts are rendered client-side
+- No fallback for JS-disabled browsers
+
+**The gap this reveals:** Nobody has combined the *infrastructure* Walpole proved (Eleventy + CF Workers + KV) with the *interaction pattern* vberlier/poll proved (redirect-count-redirect, no client JS). That's the novel combination we're building.
+
+### The gap analysis — what doesn't exist yet
+
+| Component | Proven by | Uses client JS? |
+|---|---|---|
+| Eleventy + CF Workers + KV | Andrew Walpole | Yes (petite-vue + fetch) |
+| Redirect-count-redirect pattern | vberlier/poll | No |
+| SVG badge for showing counts | vberlier/poll | No |
+| **All three combined for Eleventy** | **Nobody** | **No** |
+
+**Blog post angle:** "Walpole proved the infrastructure works. vberlier/poll proved the no-JS pattern works. Nobody has combined them. We did — and the result is a feedback system for a static Eleventy site that works without a single line of client-side JavaScript, using a web architecture pattern from 1994."
+
 ### Other tools evaluated
 
 | Project | Type | No-JS? | Open Source? | Notes |
@@ -710,6 +744,13 @@ The blog post could open with a callback to "URLs are the state management you s
 - API documentation: goatcounter.com/help/api
 - v2.4.0 release notes (Manage pageviews): github.com/arp242/goatcounter/releases/tag/v2.4.0
 - GitHub repository: github.com/arp242/goatcounter
+
+### Eleventy + Cloudflare Workers precedents
+
+- Andrew Walpole: "Building a Like Button with Cloudflare Workers": andrewwalpole.com/blog/building-a-like-button-with-cloudflare-workers/
+- Andrew Walpole: "Audit Content Reads with Cloudflare KV": andrewwalpole.com/blog/audit-content-reads-with-cloudflare-kv/
+- Jon Kuperman: dynamic-static-11ty (Eleventy + Workers example): github.com/jkup/dynamic-static-11ty
+- Dmytro Kozin: "How to Create a Full Stack Website Using Cloudflare Workers and 11ty" (Medium): medium.com/@nicku5765
 
 ### Existing feedback tools
 
