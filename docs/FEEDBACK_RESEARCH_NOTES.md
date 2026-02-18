@@ -380,25 +380,344 @@ This is workable but coarse. The layered bot prevention (robots.txt, nofollow, G
 
 ---
 
-## Appendix: Reference links
+## Part 7: Existing solutions — who's already done this?
 
-**Web history:**
-- Webring history (Wikipedia): en.wikipedia.org/wiki/Webring
-- Webring history (Tedium): tedium.co/2020/11/20/webring-history
-- Visitor counters & 90s internet (WideAngle): wideangle.co/blog/visitor-counter-geocities-and-the-90s
-- `<input type="image">` (MDN): developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/image
-- Server-side image maps (InformIT): informit.com/articles/article.aspx?p=26145&seqNum=9
+### vberlier/poll — The exact redirect-count-redirect pattern
 
-**Cloudflare Workers:**
-- Pricing & free tier: developers.cloudflare.com/workers/platform/pricing
-- KV limits: developers.cloudflare.com/kv/platform/limits
-- Redirect examples: developers.cloudflare.com/workers/examples/redirect
-- Making static sites dynamic (Cloudflare blog): blog.cloudflare.com/using-workers-to-make-static-sites-dynamic
+**This is the closest existing project to what we're building.** It's an MIT-licensed Cloudflare Worker written in Rust that implements the redirect-count-redirect pattern. No client-side JavaScript required.
+
+- **GitHub:** github.com/vberlier/poll
+- **Live instance:** poll.fizzy.wtf
+
+**How it works:**
+1. You put a plain `<a>` link on your page: `<a href="https://poll.fizzy.wtf/vote?scope.poll_name=option">`
+2. User clicks → Worker increments counter in KV → returns redirect (uses `history.back()` by default, or 302 to explicit `?redirect=URL`)
+3. SVG result widgets available as `<img>` tags: `<img src="https://poll.fizzy.wtf/show?scope.poll=option">`
+4. Vote deduplication via cookies
+
+**Endpoints:**
+- `/vote?scope.poll=option` — Cast a vote
+- `/vote?scope.poll=option&redirect=URL` — Cast with explicit redirect target
+- `/show?scope.poll=option` — SVG bar chart widget
+- `/count?scope.poll=option` — Vote count for specific option
+
+**Why it matters:** This proves the pattern works. We could either use this directly, fork it, or build our own Worker inspired by it. The SVG widget endpoint is particularly relevant — it's the hit counter pattern reborn.
+
+### Other tools evaluated
+
+| Project | Type | No-JS? | Open Source? | Notes |
+|---|---|---|---|---|
+| **vberlier/poll** | CF Worker | **Yes** | Yes (MIT) | Exact redirect pattern, SVG widgets |
+| **Applause Button** | Self-hosted | No (JS widget) | Yes | Medium-style clap; hosted service defunct, self-host only |
+| **Lyket** | SaaS | No (JS widget) | Client only | Free tier: 500 pageviews/mo — too low |
+| **Giscus** | GitHub Discussions | No (JS widget) | Yes | Requires GitHub account for readers |
+| **Rockee** | SaaS | No (JS widget) | No | Lightweight but commercial |
+| **FeedbackFin** | Webhook | No (JS widget) | Yes | Text feedback form, not reaction buttons |
+| **CounterAPI.dev** | API | Needs JS | Partial | Free counter API — no redirect, no SVG |
+| **Webmention.io** | IndieWeb | Varies | Yes | Already on the site; captures remote reactions, not on-page |
+
+**Key finding:** No Eleventy-specific feedback plugin exists. Every existing tool either requires client-side JavaScript or is the vberlier/poll project. The redirect-count-redirect pattern appears to be genuinely uncommon — which is what makes it interesting for a blog post.
+
+**Blog post angle:** "We looked for an existing solution and found exactly one project (vberlier/poll) that uses the 1994 web ring redirect pattern for feedback. Maybe there should be more. Maybe we can make one that other Eleventy sites can use."
+
+---
+
+## Part 8: Cloudflare Worker implementation plan
+
+### What we need
+
+The site already runs through Cloudflare (DNS). The free plan includes Workers + KV with no credit card required.
+
+**Free tier limits (relevant to a feedback counter):**
+
+| Resource | Limit |
+|---|---|
+| Worker requests | 100,000/day |
+| CPU time | 10ms per invocation |
+| KV reads | 100,000/day |
+| KV writes | 1,000/day |
+| KV storage | 1 GB total |
+
+The 1,000 KV writes/day is the binding constraint — that's 1,000 feedback clicks per day. More than enough for a personal blog.
+
+### Setup steps
+
+1. **Install Wrangler CLI:** `npm create cloudflare@latest -- feedback-worker`
+2. **Authenticate:** `npx wrangler login` (opens browser for OAuth)
+3. **Create KV namespace:** `npx wrangler kv namespace create FEEDBACK_COUNTS`
+4. **Configure `wrangler.toml`** with the KV binding and custom domain
+5. **Deploy:** `npx wrangler deploy`
+6. **Custom domain:** `feedback.allaboutken.com` — Cloudflare auto-provisions DNS + TLS
+
+### Configuration file
+
+```toml
+name = "feedback-worker"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# Custom domain (Cloudflare handles DNS + TLS automatically)
+[[routes]]
+pattern = "feedback.allaboutken.com"
+custom_domain = true
+
+# KV namespace for storing counts
+[[kv_namespaces]]
+binding = "FEEDBACK_COUNTS"
+id = "<created-by-wrangler-kv-namespace-create>"
+```
+
+### Worker code sketch
+
+The Worker is ~50 lines:
+
+```javascript
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    const { pathname } = url;
+
+    // /up/posts/my-post-slug/ → increment, redirect back
+    if (pathname.startsWith('/up/') || pathname.startsWith('/down/')) {
+      const type = pathname.startsWith('/up/') ? 'up' : 'down';
+      const postPath = pathname.replace(/^\/(up|down)\//, '').replace(/\/$/, '');
+      const key = `count:${type}:${postPath}`;
+
+      const current = await env.FEEDBACK_COUNTS.get(key);
+      const newCount = (parseInt(current, 10) || 0) + 1;
+
+      // Write in background so redirect returns instantly
+      ctx.waitUntil(env.FEEDBACK_COUNTS.put(key, newCount.toString()));
+
+      const destination = `https://www.allaboutken.com/${postPath}/#thanks`;
+      return Response.redirect(destination, 302);
+    }
+
+    // /count/posts/my-post-slug.svg → return SVG badge
+    if (pathname.startsWith('/count/') && pathname.endsWith('.svg')) {
+      const postPath = pathname.replace(/^\/count\//, '').replace(/\.svg$/, '');
+      const upKey = `count:up:${postPath}`;
+      const count = parseInt(await env.FEEDBACK_COUNTS.get(upKey), 10) || 0;
+
+      return new Response(generateBadgeSvg(count), {
+        headers: {
+          'Content-Type': 'image/svg+xml',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Access-Control-Allow-Origin': 'https://www.allaboutken.com',
+        },
+      });
+    }
+
+    return new Response('Not found', { status: 404 });
+  },
+};
+```
+
+### Rate limiting
+
+Two options:
+
+**Option A: Workers Rate Limiting binding (GA since Sept 2025)**
+
+```toml
+[[ratelimits]]
+name = "UPVOTE_LIMITER"
+namespace_id = "1001"
+  [ratelimits.simple]
+  limit = 10
+  period = 60
+```
+
+**Option B: KV-based TTL approach (free tier safe)**
+
+Store `ratelimit:{ip-hash}` keys with `expirationTtl: 60` — one extra read/write per request but stays within free limits.
+
+### Secrets and keys
+
+The basic counter Worker needs **zero secrets**. KV namespace IDs in `wrangler.toml` are not sensitive. If an admin endpoint is added later, protect it with:
+
+```bash
+npx wrangler secret put ADMIN_TOKEN
+```
+
+For local dev, use a `.dev.vars` file (gitignored).
+
+### CI/CD via GitHub Actions
+
+```yaml
+name: Deploy Feedback Worker
+on:
+  push:
+    branches: [main]
+    paths: ['worker/**']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: 'worker'
+```
+
+Needs two GitHub secrets: `CLOUDFLARE_API_TOKEN` (create via Cloudflare dashboard → API Tokens → "Edit Cloudflare Workers" template) and `CLOUDFLARE_ACCOUNT_ID`.
+
+### Local testing
+
+```bash
+npx wrangler dev
+# Worker runs at http://localhost:8787
+# KV is simulated locally in .wrangler/state/
+
+curl -v http://localhost:8787/up/posts/my-post-slug/   # Should 302 redirect
+curl http://localhost:8787/count/posts/my-post-slug.svg  # Should return SVG
+```
+
+---
+
+## Part 9: Related posts on the site
+
+These existing posts thematically connect to the feedback feature and could be cross-linked in the blog post:
+
+### Directly relevant (web standards, no-JS, retro patterns)
+
+| Post | Theme connection |
+|---|---|
+| **Exposing HTML: The No-JS nudist CSS toggle** (`/posts/20250906-css-naked-css-only/`) | "No JavaScript. No build trickery. Just a checkbox in the footer and modern CSS." Same philosophy as the feedback feature. |
+| **URLs are the state management you should use** (`/posts/20251226-url-state-management/`) | The feedback feature literally uses URLs as state — `/feedback/up/post-slug/` IS the vote. The `#thanks` fragment IS the UI state. |
+| **Your browser utility wants to be a floating palette** (`/posts/20260216-90s-desktop-paradigm-browser-utilities/`) | Late-90s desktop UI patterns applied to modern web design. Same "old patterns, new infrastructure" thesis. |
+| **Output: An HTML-native tag once again saves JS befuddling** (`/posts/20251013-html-output-tag/`) | Discovering that HTML has native capabilities that make JS unnecessary. Same discovery process. |
+| **Publishing since the 2000s** (`/posts/20200208-its-been-20-years/`) | Historical perspective on web evolution. The feedback post extends this thread. |
+
+### Analytics and measurement
+
+| Post | Theme connection |
+|---|---|
+| **How to measure impact when analytics lie** (`/posts/20260115-how-to-measure-impact-when-analytics-lie/`) | Privacy-by-design measurement. The feedback feature is another take on meaningful, privacy-respecting signals. |
+| **Measuring success beyond the page view** (`/posts/20251203-measuring-success-beyond-page-view/`) | Explicitly discusses "Was this page helpful?" feedback. The feedback feature implements exactly this idea. |
+| **Sacrificing knowledge in the name of data** (`/posts/20250912-knowledge-over-data/`) | Data vs. knowledge — the feedback feature provides directional knowledge, not scientific data. |
+
+### Static sites and simplicity
+
+| Post | Theme connection |
+|---|---|
+| **A simpler, faster site: moving to pure Eleventy v3** (`/posts/20250831-site-overhaul-eleventy-v3/`) | Removed 7,183 lines while improving the site. The feedback feature follows this "do more with less" ethos. |
+| **Creating warm, dappled light with CSS and SVG** (`/posts/20251108-sunlit-dappled-light-effect/`) | Pure CSS and SVG, no JavaScript. Shows what's possible without JS. |
+| **Predictable, token-based filenames with Eleventy Image** (`/posts/20250907-deterministic-image-filenames/`) | Thoughtful technical choices in the Eleventy build pipeline. |
+
+### Indie web and privacy
+
+| Post | Theme connection |
+|---|---|
+| **Individualism is the flavor AI chatbots can't stomach** (`/posts/20250914-ai-and-the-commoditization-of-reference/`) | The "small shop" beating the "big box" through craft and individuality. Building your own feedback system vs. using a SaaS widget. |
+
+### Blog post cross-linking strategy
+
+The blog post could open with a callback to "URLs are the state management you should use" — because the feedback feature is literally URL-as-state. It could reference the CSS toggle post as prior art for "no-JS interactivity." And it could close with the measurement posts, framing the feedback feature as a practical implementation of "measuring success beyond the page view."
+
+---
+
+## Appendix A: Primary sources and specifications
+
+### RFCs and W3C specs
+
+| Pattern | Spec | Date | Link |
+|---|---|---|---|
+| HTML 2.0 (forms, `INPUT IMAGE`, `ISMAP`) | RFC 1866 | Nov 1995 | rfc-editor.org/rfc/rfc1866 |
+| HTML 3.2 (`ISMAP`, client-side maps) | W3C REC-html32 | Jan 1997 | w3.org/TR/REC-html32 |
+| HTML 4.0 (`NOSCRIPT`, scripts) | W3C HTML 4.01 | Dec 1997 | w3.org/TR/html401/interact/scripts.html |
+| CGI 1.1 | RFC 3875 | Oct 2004 | datatracker.ietf.org/doc/html/rfc3875 |
+| `mailto:` (original) | RFC 1738 | Dec 1994 | ietf.org/rfc/rfc1738.txt |
+| `mailto:` (expanded) | RFC 2368 | Jul 1998 | datatracker.ietf.org/doc/html/rfc2368 |
+| `mailto:` (current) | RFC 6068 | Oct 2010 | datatracker.ietf.org/doc/html/rfc6068 |
+| File upload in forms | RFC 1867 | Nov 1995 | ietf.org/rfc/rfc1867.txt |
+| `meta refresh` | Not in any RFC; Netscape proprietary (~1995), now in WHATWG HTML Living Standard | — | html.spec.whatwg.org |
+
+### MDN modern references
+
+- `<input type="image">`: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/image
+- `<noscript>`: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/noscript
+- `HTMLImageElement.isMap`: developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/isMap
+- `<meta http-equiv="refresh">`: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meta/http-equiv
+
+### Historical retrospectives
+
+**Web rings:**
+- Tedium: "Webring History: Social Media Before Social Media" — tedium.co/2020/11/20/webring-history
+- Wikipedia: Webring — en.wikipedia.org/wiki/Webring
+- WebRing History (official): webring.com/webring-history
+
+**Hit counters:**
+- Priceonomics: "Hit Counters: The Analytics Tool of the Early Web" — priceonomics.com/hit-counters-the-analytics-tool-of-the-early-web
+- Wide Angle: "Visitor Counters, Blinking Tags, GeoCities" — wideangle.co/blog/visitor-counter-geocities-and-the-90s
+- Matt's Script Archive: scriptarchive.com (the original source of 1990s counter scripts)
+
+**CGI scripts:**
+- Rick Carlino: "What Were CGI Scripts?" — rickcarlino.com/2019/what-were-cgi-scripts.html
+- Cybercultural: "1993: CGI Scripts and Early Server-Side Web Programming" — cybercultural.com/p/1993-cgi-scripts-and-early-server-side-web-programming
+- Matt's Script Archive (est. 1995): scriptarchive.com
+- NMS ("Not Matt's Scripts") rewrite: nms-cgi.sourceforge.net
+
+**Server-side image maps:**
+- Rick Carlino: "What Were Server-Side Image Maps?" — rickcarlino.com/2021/what-were-server-side-image-maps.html
+- NCSA Imagemap Tutorial (University of Oviedo mirror): www6.uniovi.es/~antonio/ncsa_httpd/tutorials/imagemapping.html
+- NCSA Imagemap Tutorial (University of Genoa mirror): www.diam.unige.it/informatica/documentazione/httpd_docs/docs/tutorials/imagemapping.html
+
+**Tracking pixels / web bugs:**
+- Richard M. Smith: "The Web Bug FAQ" (1999, hosted by EFF): w2.eff.org/Privacy/Marketing/web_bug.html
+- Wikipedia: Web beacon — en.wikipedia.org/wiki/Web_beacon
+
+**Guestbooks:**
+- Matt's Script Archive: Guestbook — scriptarchive.com/guestbook.html
+- O'Reilly: "Running a CGI Guestbook" — oreilly.com/library/view/perl-for-web/1565926471/ch12.html
+- Veronica Explains: "Guestbooks: The Cozy 90s Web Fad" (video) — tilvids.com/w/7pTHGVbQkfPSQKHQufcYi7
+
+**GeoCities / Bravenet:**
+- Wikipedia: GeoCities — en.wikipedia.org/wiki/GeoCities
+- Cybercultural: "GeoCities in 1995" — cybercultural.com/p/geocities-1995
+- Bravenet (still operational): bravenet.com
+- Cameron's World (GeoCities collage): cameronsworld.net
+- Internet Archive: GeoCities Special Collection: archive.org/web/geocities.php
+- localghost.dev: "Building a website like it's 1999... in 2022": localghost.dev/blog/building-a-website-like-it-s-1999-in-2022
+
+**`<form method="GET">` pre-JavaScript:**
+- Jukka Korpela: "Methods GET and POST in HTML forms" — jkorpela.fi/forms/methods.html
+
+**`mailto:` form action in browsers:**
+- Mozilla Bug #61893 (documenting the GeoCities/Tripod era): bugzilla.mozilla.org/show_bug.cgi?id=61893
+
+### Cloudflare Workers documentation
+
+- Workers pricing & free tier: developers.cloudflare.com/workers/platform/pricing
+- Workers KV limits: developers.cloudflare.com/kv/platform/limits
+- Workers KV getting started: developers.cloudflare.com/kv/get-started
+- Workers redirect examples: developers.cloudflare.com/workers/examples/redirect
+- Workers custom domains: developers.cloudflare.com/workers/configuration/routing/custom-domains
+- Workers secrets: developers.cloudflare.com/workers/configuration/secrets
+- Workers rate limiting (GA Sept 2025): developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit
+- Workers GitHub Actions: developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions
+- Wrangler action on GitHub Marketplace: github.com/marketplace/actions/deploy-to-cloudflare-workers-with-wrangler
+- Using Workers to make static sites dynamic (Cloudflare blog): blog.cloudflare.com/using-workers-to-make-static-sites-dynamic
 - Hit counter with Workers + KV tutorial: linzichun.com/posts/web-counter-cloudflare-worker
 
-**GoatCounter:**
+### GoatCounter documentation
+
 - GDPR documentation: goatcounter.com/help/gdpr
 - Privacy policy: goatcounter.com/privacy
 - API documentation: goatcounter.com/help/api
 - v2.4.0 release notes (Manage pageviews): github.com/arp242/goatcounter/releases/tag/v2.4.0
 - GitHub repository: github.com/arp242/goatcounter
+
+### Existing feedback tools
+
+- vberlier/poll (CF Worker, MIT, exact redirect pattern): github.com/vberlier/poll
+- Applause Button (self-hosted clap button): applause-button.com / github.com/ColinEberhardt/applause-button
+- Lyket (SaaS reaction buttons): lyket.dev
+- Giscus (GitHub Discussions comments): giscus.app
+- FeedbackFin (open-source webhook widget): feedbackfin.com
+- sound-buttons/worker-click-counter (CF Worker counter): github.com/sound-buttons/worker-click-counter
+- Webmention.io (IndieWeb reactions): webmention.io
+- CounterAPI.dev (free counter API): counterapi.dev
