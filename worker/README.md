@@ -37,3 +37,10 @@ npx wrangler deploy     # deploy to Cloudflare
 ## Adapting for your own site
 
 See the [setup tutorial](https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/#setting-this-up-on-your-own-site) in the blog post, or check the comments in `wrangler.toml` for the three values you need to change.
+
+## Credits
+
+Inspired by two projects that proved different halves of the solution:
+
+- **[poll.fizzy.wtf](https://poll.fizzy.wtf)** ([source](https://github.com/vberlier/poll)) — MIT-licensed Cloudflare Worker that implements the redirect-count-redirect pattern with SVG result widgets. Proved the architecture works for voting without client-side JavaScript.
+- **[Andrew Walpole](https://andrewwalpole.com/blog/building-a-like-button-with-cloudflare-workers/)** — Built a like button for his Eleventy blog using Cloudflare Workers and KV storage. Proved the Eleventy + Workers + KV infrastructure works in production.
