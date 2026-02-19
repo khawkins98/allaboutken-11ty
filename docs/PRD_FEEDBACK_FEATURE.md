@@ -1,6 +1,6 @@
 # PRD: No-JavaScript Post Feedback System
 
-**Status:** Draft / RFC
+**Status:** Implemented (Phase 1 + 2 complete)
 **Author:** Ken Hawkins
 **Date:** 2026-02-18
 
@@ -33,7 +33,7 @@ What's missing is a **low-friction, in-page signal** — something closer to a t
 
 ## Approaches Explored
 
-### Approach 1: GoatCounter Page-View Counting (Recommended)
+### Approach 1: GoatCounter Page-View Counting (Not chosen)
 
 **Concept:** Each feedback option is a plain HTML link to a static "thank you" page. Eleventy generates these pages at build time. When the reader clicks, they land on the thank-you page, and **GoatCounter automatically counts that page view** — the URL path itself encodes the feedback signal.
 
@@ -231,143 +231,127 @@ CSS `:target` (CSS3, ~2001) combined with CSS background-image loading is a genu
 
 ## Recommended Approach
 
-**Primary: Approach 1 (GoatCounter Page-View Counting)** with elements of **Approach 2 (HTML Forms)** for the star rating variant.
+**Primary: Cloudflare Worker redirect-count-redirect pattern** — a modern implementation of the 1994 web ring CGI architecture.
 
 ### Rationale
 
-1. **Zero new dependencies** — GoatCounter is already integrated and paid-for
-2. **Proven Eleventy pattern** — pagination-generated pages already work for social cards
-3. **No JavaScript** — plain links and/or GET forms
-4. **Data is immediately useful** — GoatCounter dashboard provides filtering, date ranges, and export
-5. **Archaic charm** — the mechanism is literally "click a link, the page view is the vote." This is how the web worked before JavaScript existed
-6. **Privacy-first** — no cookies, no PII, consistent with site philosophy
+1. **No page navigation** — the Worker returns a 302 redirect back to the original post with a `#thanks` fragment; the reader never truly leaves
+2. **Dedicated data store** — feedback counts live in Cloudflare KV, separate from analytics noise
+3. **Server-side bot filtering** — Worker checks User-Agent and request headers before counting
+4. **Rate limiting** — one vote per IP+path per 24 hours, enforced server-side via KV TTL keys
+5. **Live feedback counts** — SVG badge endpoint returns a dynamically generated image (the 1996 hit counter pattern)
+6. **No client-side JavaScript** — the interaction is pure HTML links and HTTP redirects
+7. **Privacy-first** — no cookies, no PII stored; only anonymous integer counters in KV
+8. **Archaic charm** — the architecture is identical to how web rings counted click-throughs in 1994
+
+### Why not GoatCounter (Approach 1)?
+
+GoatCounter was the original recommendation. The Worker approach wins on:
+- **UX**: redirect back vs. navigate to thank-you page
+- **Data quality**: dedicated counters vs. mixed with analytics noise
+- **Bot resistance**: server-side filtering vs. client-side JS only
+- **Counts display**: SVG badge vs. build-time API dependency
+- **Rate limiting**: per-IP enforcement vs. session de-duplication only
+
+The tradeoff is one new dependency (Cloudflare Workers, free tier). The site already runs through Cloudflare DNS, so no new account is needed.
 
 ### Feedback Types
 
-Start with **two tiers**, to be implemented in order:
+**Implemented: Positive-only feedback** — a single "Yes, this was useful" button:
+- Simplest to implement and interpret
+- One link per post, minimal UI surface area
+- Clear signal: which posts helped people
+- The Worker still supports `/down/` routes, but the UI doesn't expose them — binary up/down adds complexity (what does the count mean? net? total?) without much signal for a personal blog
 
-**Tier 1: Binary feedback (thumbs up / thumbs down)**
-- Simplest to implement and understand
-- Two links per post, minimal UI surface area
-- Clear signal: was this useful or not?
+**Future: Star rating (1–5 stars)** via ISMAP server-side image maps — deferred to v2. The Worker already supports arbitrary path-based counting, so adding star routes is straightforward.
 
-**Tier 2: Star rating (1–5 stars)**
-- Richer signal than binary
-- Implemented as a GET form with radio inputs styled as stars (CSS-only star styling)
-- Submits to the same thank-you page infrastructure
-
-Tier 1 should be built first. Tier 2 can be added later if the binary signal feels insufficient.
+**Feature gap vs. poll.fizzy.wtf:** poll.fizzy.wtf supports arbitrary key-value voting via query parameters (`?key=value`), allowing multiple questions and answers with no code changes. This Worker only counts one signal per post. That's a deliberate scope constraint — if flexible multi-question polls are needed, poll.fizzy.wtf has the better architecture for it.
 
 ---
 
 ## Technical Design
 
-### URL Structure
+### Architecture
+
+The feedback system is a Cloudflare Worker at `feedback.allaboutken.com` that implements three route families:
 
 ```
-/feedback/{type}/{original-page-url}/
+feedback.allaboutken.com/up/{post-path}/       → count vote, 302 redirect back
+feedback.allaboutken.com/count/{post-path}.svg → SVG badge with count
+feedback.allaboutken.com/count/{post-path}/    → plain text count
 ```
 
-Examples:
+The Worker also supports `/down/` routes, but the UI currently only exposes the positive feedback button.
+
+The Worker lives in `worker/` at the repo root, deployed independently from the static site via its own GitHub Actions workflow.
+
+### Worker Routes
+
+**Vote routes (`/up/` and `/down/`)**:
+1. Parse the vote type and post path from the URL
+2. Bot check: reject requests with known bot User-Agent substrings or missing `Accept-Language` header
+3. Rate limit: SHA-256 hash of IP + path stored as a KV key with 24-hour TTL. If key exists, skip counting but still redirect
+4. Increment: `count:{type}:{path}` key in KV via `ctx.waitUntil()` (non-blocking)
+5. Redirect: `302 Location: https://www.allaboutken.com/{path}/#thanks`
+
+**Badge route (`/count/{path}.svg`)**:
+1. Read `count:up:{path}` from KV
+2. Generate a shields.io-style SVG badge
+3. Return with `Content-Type: image/svg+xml`, 5-minute cache, CORS restricted to site origin
+
+**Everything else**: 404
+
+### KV Data Schema
+
 ```
-/feedback/up/posts/my-post-slug/
-/feedback/down/posts/my-post-slug/
-/feedback/stars-3/posts/my-post-slug/
+count:up:posts/my-post-slug      → "47"     (thumbs-up count)
+count:down:posts/my-post-slug    → "3"      (thumbs-down count)
+rl:<sha256-hash>                 → "1"      (rate limit flag, 24h TTL)
 ```
-
-### Generated Pages
-
-A new Eleventy pagination template (similar to `social-cards.njk`):
-
-**`src/site/feedback.njk`**
-```yaml
----
-pagination:
-  data: collections.posts
-  size: 1
-  alias: feedbackPost
-permalink: false  # Handled by custom permalink logic
-eleventyExcludeFromCollections: true
----
-```
-
-This needs to generate multiple pages per post (one per feedback type). Two options:
-
-**Option A: Multiple pagination templates**
-- `src/site/feedback-up.njk` → `/feedback/up/{post-url}/`
-- `src/site/feedback-down.njk` → `/feedback/down/{post-url}/`
-- Simple but repetitive
-
-**Option B: JavaScript data cascade + pagination**
-- Generate a computed collection that cross-products posts × feedback types
-- Single template, more complex data setup
-- Cleaner long-term, especially when adding star ratings
-
-**Recommendation:** Start with Option A (two simple templates) for Tier 1. Refactor to Option B when/if Tier 2 is added.
-
-### Thank-You Page Template
-
-**`src/site/_includes/layouts/feedback.njk`**
-
-A minimal layout (extends `base.njk`) that shows:
-- "Thanks for your feedback on: {post title}"
-- A link back to the original post: "← Return to the post"
-- `<meta name="robots" content="noindex, nofollow">` (these pages shouldn't appear in search or be crawled further)
-- Excluded from search index via `kh-search-client-side--no-index` class
-- Excluded from sitemap
-- Excluded from RSS feed
 
 ### Post Template Changes
 
-Add a feedback section to `post.njk`, after the article content and before the "Comment?" section:
+Feedback section inserted into `post.njk`, inside the `kh-stack` wrapper, **before** the "Comment?" section:
 
 ```html
 <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
   <div class="kh-grid__col--span-1"></div>
   <div class="kh-content kh-grid__col--span-2">
     <h2 class="kh-text-heading--2">Was this useful?</h2>
-    <p class="kh-cluster kh-feedback">
-      <a href="/feedback/up{{ page.url }}" rel="nofollow" class="kh-button kh-button--sm">👍 Yes</a>
-      <a href="/feedback/down{{ page.url }}" rel="nofollow" class="kh-button kh-button--sm">👎 Not really</a>
+    <p class="kh-cluster">
+      <a href="https://feedback.allaboutken.com/up{{ page.url }}"
+         rel="nofollow" class="kh-button kh-button--sm">👍 Yes, this was useful</a>
     </p>
+    <p id="thanks" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback!</p>
   </div>
 </article>
 ```
 
+The `#thanks` element is hidden by default and revealed via CSS `:target` when the Worker redirects back with the `#thanks` fragment.
+
 ### CSS
 
-New styles needed (scoped under `body:has(#kh-css-toggle:checked)`):
+Two rules added inside `body:has(#kh-css-toggle:checked)` in `index.scss`:
 
-- `.kh-feedback` — flex layout for feedback buttons, appropriate spacing
-- Feedback buttons reuse existing `.kh-button` / `.kh-button--sm` styles
-- Thank-you page styling — minimal, centered content
-- For star ratings (Tier 2): CSS-only star display using radio buttons + `~` sibling selectors
+```scss
+.kh-feedback-thanks {
+  display: none;
+}
 
-### GoatCounter Data Structure
-
-In the GoatCounter dashboard, feedback shows up as page views:
-
-```
-/feedback/up/posts/my-post-slug/     → 47 views (47 thumbs up)
-/feedback/down/posts/my-post-slug/   → 3 views  (3 thumbs down)
+.kh-feedback-thanks:target {
+  display: block;
+}
 ```
 
-**Querying feedback:**
-- Filter paths by `/feedback/` prefix to see all feedback
-- Filter by `/feedback/up/` to see all positive feedback
-- Export data via GoatCounter's CSV export or API
-- GoatCounter API: `GET https://khawkins98.goatcounter.com/api/v1/stats/hits?filter=/feedback/`
+Feedback buttons reuse existing `.kh-button` / `.kh-button--sm` styles. The feedback section uses `kh-u-do-not-print` to hide from print.
 
 ### Build Considerations
 
-- Feedback pages are generated at build time — no runtime cost
-- Each post generates 2 additional pages (up/down) — for ~100 posts, that's ~200 extra static files (trivial)
-- Feedback pages should be excluded from:
-  - `collections.posts` (already handled by `eleventyExcludeFromCollections`)
-  - Search index (via `kh-search-client-side--no-index` class)
-  - RSS feed (feed only includes `collections.posts`)
-  - Sitemap (add exclusion condition)
-  - Social cards generation (the social-cards pagination uses `collections.all`, so either filter in that template or accept the minimal overhead)
+The Worker approach **simplifies** the build compared to the original GoatCounter design:
+- No extra pages generated by Eleventy (no feedback thank-you pages, no pagination templates)
+- No exclusions needed from collections, sitemap, RSS, or social cards
+- No changes to `robots.txt` (feedback URLs are on a different origin)
+- The only site-side changes are: one template block in `post.njk`, two CSS rules in `index.scss`
 
 ---
 
@@ -380,8 +364,8 @@ In the GoatCounter dashboard, feedback shows up as page views:
 
 ### Copy
 - Heading: "Was this useful?" (direct, low-pressure)
-- Buttons: "👍 Yes" / "👎 Not really" (friendly, non-judgmental)
-- Thank-you page: "Thanks for the feedback!" with a return link
+- Button: "👍 Yes, this was useful" (positive-only, friendly)
+- Thank-you message: "Thanks for the feedback!" (revealed via CSS `:target`, no page navigation)
 - The heading and button text should be iterable — this is the kind of thing to A/B test by feel over time
 
 ### Accessibility
@@ -397,127 +381,106 @@ In the GoatCounter dashboard, feedback shows up as page views:
 
 ### Bot and Crawler Mitigation
 
-This is the hardest problem in the design. Since every page load of a feedback URL counts as a "vote," any bot that crawls those pages creates phantom feedback. Even well-intentioned crawlers (Googlebot, Bingbot, Ahrefsbot) would pollute the data if they discover and visit `/feedback/up/posts/...` pages.
+The Worker approach provides significantly stronger bot defense than the original GoatCounter design, because filtering happens server-side before any count is incremented.
 
-The defense is layered — no single measure is sufficient, but combined they should keep the signal-to-noise ratio usable.
-
-**Layer 1: Prevent discovery (stop bots from finding the URLs)**
-
-| Mechanism | What it does | Stops |
-|---|---|---|
-| `robots.txt` `Disallow: /feedback/` | Tells well-behaved crawlers not to visit any `/feedback/` path | Googlebot, Bingbot, most commercial crawlers |
-| `rel="nofollow"` on all feedback links in `post.njk` | Tells crawlers not to follow the link, so they never discover the target URL | Crawlers that respect `nofollow` (most major ones) |
-| Exclude from `sitemap.xml` | Feedback pages never appear in the sitemap | Crawlers that use sitemap as their URL source |
-| Exclude from RSS feed | Feedback URLs don't appear in feed content | Feed readers and feed-crawling bots |
-| `eleventyExcludeFromCollections: true` | Pages aren't in `collections.all`, so no internal Eleventy-generated listing links to them | Crawlers following internal link graphs |
-
-The combination of `robots.txt` + `rel="nofollow"` + sitemap exclusion means a well-behaved crawler has **no way to discover these URLs** through normal means. The pages exist, but nothing points a crawler at them.
-
-**Layer 2: Instruct crawlers that do arrive**
+**Layer 1: Prevent discovery**
 
 | Mechanism | What it does |
 |---|---|
-| `<meta name="robots" content="noindex, nofollow">` on thank-you pages | Tells any crawler that arrives not to index the page or follow its links |
-| No outbound links from thank-you pages to other feedback pages | Even if a bot reaches one feedback page, it won't discover others from there |
+| `rel="nofollow"` on feedback links in `post.njk` | Tells crawlers not to follow the link |
+| Feedback URLs are on a different origin (`feedback.allaboutken.com`) | Not discoverable via site crawl unless a bot follows `nofollow` links |
+| No sitemap or robots.txt entries needed | The Worker is a separate origin; site-side `robots.txt` doesn't apply |
 
-**Layer 3: GoatCounter's built-in bot filtering**
+**Layer 2: Worker-side bot filtering**
 
-GoatCounter already filters known bots:
-- Checks `User-Agent` against a maintained list of known crawlers (uses the `isbot` detection library)
-- Ignores requests from common bot IP ranges
-- Provides a "Filter bots" toggle in the dashboard
+The Worker rejects requests before counting:
+- **User-Agent check**: rejects requests matching ~30 known bot UA substrings (Googlebot, Bingbot, Ahrefsbot, GPTBot, etc.)
+- **Missing User-Agent**: rejected (real browsers always send one)
+- **Missing `Accept-Language` header**: rejected (browsers always send it; most bots don't)
+- Rejected requests return a 404, not a redirect — bots get no signal that the endpoint exists
 
-This is the main defense against bots that ignore `robots.txt`. GoatCounter won't count visits from anything that identifies as Googlebot, Bingbot, etc. — even if the bot visits the page anyway.
+**Layer 3: Rate limiting**
 
-**Layer 4: Drop the `<noscript>` counting pixel**
+One vote per IP+path per 24 hours, enforced via KV TTL keys:
+- SHA-256 hash of `IP:type:path` stored with `expirationTtl: 86400`
+- If the key exists, the Worker still redirects (good UX) but doesn't increment the counter
+- This prevents both bot spam and human over-clicking
 
-The original design included a `<noscript>` GoatCounter pixel on thank-you pages as a fallback for JS-disabled browsers. **This should be removed or reconsidered**, because:
+**Layer 4: Data cleanup**
 
-- Most bots that ignore `robots.txt` are simple HTTP fetchers — they load HTML and images but don't execute JavaScript
-- The `<noscript><img>` pixel fires for exactly these clients: things that load images but skip JS
-- GoatCounter's JavaScript-based counting already has bot filtering built in; the raw pixel endpoint may have weaker filtering
-- The tradeoff: a JS-disabled human visitor's feedback wouldn't be counted. But JS-disabled bots' "feedback" also wouldn't be counted. Given that bots vastly outnumber JS-disabled humans, dropping the pixel is a net improvement in data quality
-
-**Recommendation:** Rely solely on GoatCounter's JavaScript-based counting. No `<noscript>` pixel. Accept the tiny data loss from JS-disabled human visitors in exchange for much cleaner data.
-
-**Layer 5: Data hygiene**
-
-Even with all the above, some noise will get through. Mitigation at the analysis level:
-
-- **Spike detection**: A sudden burst of feedback across many posts simultaneously is almost certainly a crawler — ignore it
-- **GoatCounter's referrer data**: Bot visits often have no referrer or come from suspicious sources. Filter these in the dashboard
-- **Path pattern analysis**: A bot that hits every `/feedback/up/...` and `/feedback/down/...` page in sequence is easy to spot
-- **Session de-duplication**: GoatCounter groups hits by session (User-Agent + approximate location). A bot cycling through pages would show as one session with hundreds of hits — trivially filterable
-- **Manual baseline**: For the first few weeks after launch, compare feedback counts against total post traffic to establish a reasonable ratio. If a post with 10 views has 50 thumbs up, something is wrong
+KV counters can be managed directly:
+- `wrangler kv:key delete` to zero specific counters
+- `wrangler kv:key list` to audit all keys
+- Worker logic can be updated to add new filtering rules without redeploying the site
 
 **What about intentional abuse / gaming?**
 
-- GoatCounter's session de-duplication means a single person clicking the same link repeatedly doesn't multiply their vote significantly
-- There's no way to fully prevent gaming on a static site without JavaScript or a backend
+- Rate limiting means one vote per IP per post per day
 - For a personal blog, this is an acceptable tradeoff — the feedback is directional, not scientific
-- If gaming becomes a real problem, GoatCounter's dashboard shows traffic patterns that would reveal anomalies
-- The worst case is that feedback data becomes noisy enough to be useless — but no data is lost, no systems are compromised, and the feature can be removed by deleting a few template files
+- The worst case is noisy data, not compromised systems
+- The feature can be disabled by removing the template block from `post.njk`
 
 ---
 
-## Open Questions
+## Open Questions (Resolved)
 
-1. **Should feedback be available on all posts or only recent ones?** Generating pages for the full archive increases build output but is trivially cheap. Recommend: all posts, for simplicity.
+1. ~~**Should feedback be available on all posts or only recent ones?**~~ **Resolved: all posts.** The feedback button is in `post.njk`, so it appears on every post automatically.
 
-2. **Should the thank-you page auto-redirect back to the post?** A `<meta http-equiv="refresh">` tag could send the reader back after a few seconds. This is another gloriously old-school HTML feature (HTTP-EQUIV is from HTML 2.0). Downside: the reader might not see the thank-you message. Could compromise with a 3–5 second delay.
+2. ~~**Should the thank-you page auto-redirect back to the post?**~~ **Resolved: no thank-you page.** The Worker 302-redirects back to the post with `#thanks` fragment. CSS `:target` reveals the message in-place. No separate page needed.
 
-3. **Should feedback data be pulled into the build?** GoatCounter has an API. A build-time script could fetch feedback counts and inject them into the site as data (showing "47 people found this useful"). This would be a Phase 2 enhancement — it adds a build-time API dependency and caching complexity.
+3. ~~**Should feedback data be pulled into the build?**~~ **Resolved: not yet.** Live SVG badge and plain text count endpoints serve counts directly. Build-time fetch remains a future option via the `/count/{path}/` endpoint.
 
-4. **Star ratings or binary?** Start with binary (thumbs up/down). It's simpler to build, simpler to interpret, and lower friction for the reader. Stars can be added later if the binary signal isn't granular enough.
+4. ~~**Star ratings or binary?**~~ **Resolved: positive-only for now.** A single "Yes, this was useful" button. Stars via ISMAP deferred to v2.
 
-5. **Should impact stories and regular posts have different feedback prompts?** Impact stories are professional case studies; the prompt might be better as "Was this case study helpful?" vs. the more casual "Was this useful?" for blog posts.
+5. **Should impact stories and regular posts have different feedback prompts?** Still open. Currently all posts use "Was this useful?" — may revisit once there's feedback data to evaluate.
 
 ---
 
 ## Future Possibilities
 
-- **Build-time feedback counts**: Fetch from GoatCounter API during build, display on post pages as static text ("X people found this useful"). No client-side JS needed.
-- **Feedback dashboard page**: A site page (like `/feedback/`) that shows aggregated feedback across all posts, built from GoatCounter data at build time.
-- **Star rating tier**: CSS-only star rating form using the same infrastructure.
+- **Build-time feedback counts**: Fetch from Worker's `/count/{path}/` endpoint during build, bake counts into static HTML. No client-side JS needed.
+- **Feedback dashboard page**: A site page (like `/feedback/`) that shows aggregated feedback across all posts, built from KV data at build time via `wrangler kv key list`.
+- **Star rating via ISMAP**: Server-side image maps (HTML 1993) for 1–5 star ratings. Worker parses click coordinates to determine rating.
 - **Feedback on non-post pages**: Extend to work pages, the style guide, etc.
 - **Webmention integration**: If someone boosts/likes the post via Webmention (already partially set up via webmention.io), surface that alongside the feedback counts.
+- **Arbitrary key-value polls**: Adopt poll.fizzy.wtf's `?key=value` query parameter pattern for flexible multi-question polls. Currently out of scope — adds validation complexity and unbounded KV key patterns.
 
 ---
 
 ## Implementation Plan
 
-### Phase 1: Core Infrastructure
-1. Create feedback thank-you page layout (`src/site/_includes/layouts/feedback.njk`)
-   - `<meta name="robots" content="noindex, nofollow">`
-   - No `<noscript>` pixel (rely on GoatCounter JS only — see Bot Mitigation)
-   - `kh-search-client-side--no-index` class on body content
-2. Create pagination templates for thumbs up/down (`src/site/feedback-up.njk`, `src/site/feedback-down.njk`)
-   - `eleventyExcludeFromCollections: true` (excludes from sitemap, social cards, RSS)
-3. Add feedback section to `post.njk` — links use `rel="nofollow"` to prevent crawler discovery
-4. Add `Disallow: /feedback/` to `robots.njk`
-5. Add CSS for feedback section
-6. Test with `yarn dev` — verify pages generate, links work, GoatCounter records views
+### Phase 1: Worker + Site Integration ✓ Complete
+1. ✓ Create `worker/` directory with `package.json`, `wrangler.toml`, and `src/index.js`
+2. ✓ Worker implements: vote routes (`/up/`, `/down/`), SVG badge route (`/count/.svg`), plain text count route (`/count/`), bot filtering, rate limiting, Referer origin check, dynamic CORS
+3. ✓ Add feedback section to `post.njk` — positive-only button with `rel="nofollow"`, SVG badge
+4. ✓ Add `:target` CSS for `#thanks` reveal in `index.scss`
+5. ✓ Add `.wrangler` and `worker/node_modules` to `.gitignore`
+6. ✓ Create GitHub Actions workflow for Worker deployment (`deploy-feedback-worker.yml`)
+7. ✓ Test locally: `cd worker && npm install && npm run dev` → routes verified
+8. ✓ Test site build: `yarn build` → passes
 
-### Phase 2: Polish
-7. Add `<meta http-equiv="refresh">` auto-return on thank-you pages (if decided)
-8. Refine thank-you page design and copy
-9. Verify feedback data appears correctly in GoatCounter dashboard
-10. Monitor for bot noise in first weeks — establish baseline feedback-to-traffic ratio
+### Phase 2: Deployment ✓ Complete
+9. ✓ Run `npx wrangler kv namespace create FEEDBACK_COUNTS` and update `wrangler.toml` with real namespace ID
+10. ✓ Custom domain `feedback.allaboutken.com` provisioned via `wrangler deploy` (Cloudflare DNS)
+11. ✗ GitHub repository secrets not yet configured (Worker deployed manually via `npx wrangler deploy`)
+12. ✓ Deploy Worker: `npx wrangler deploy` → live at `feedback.allaboutken.com`
+13. ✓ End-to-end test: vote button → 302 redirect → count increments → SVG badge updates
 
 ### Phase 3: Star Ratings (Future)
-11. Refactor to computed collection (cross-product of posts × feedback types)
-12. Add star rating form to post template
-13. CSS-only star styling
-14. Generate star-rating thank-you pages
+14. Add ISMAP star rating image + route to Worker
+15. Worker parses click coordinates to determine star rating
+16. Add star rating UI to post template
 
 ---
 
 ## Success Criteria
 
 - Feedback links render on all blog posts
-- Clicking a feedback link navigates to a thank-you page and records a GoatCounter event
-- Feedback data is visible in GoatCounter dashboard under `/feedback/` paths
-- The flow relies on GoatCounter's JS for counting (noscript pixel intentionally omitted to reduce bot noise — see Bot Mitigation)
-- No new external service dependencies
-- Build time increase is negligible (< 1 second)
-- Passes `yarn lint:css` and `yarn build` without errors
+- Clicking a feedback link redirects via the Worker and returns to the original post with `#thanks` visible
+- Worker increments KV counter on each unique vote (rate-limited to one per IP+path per 24h)
+- SVG badge endpoint returns correct count
+- Bot requests are rejected (return 404, not counted)
+- Site build passes: `yarn build` completes without errors
+- CSS lint passes: `yarn lint:css` completes without errors
+- Feedback section is hidden in print preview (`kh-u-do-not-print`)
+- `#thanks` message is hidden by default, visible only when fragment is in URL
