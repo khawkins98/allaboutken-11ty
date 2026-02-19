@@ -362,21 +362,21 @@ This is workable but coarse. The layered bot prevention (robots.txt, nofollow, G
 
 ## Part 6: What we chose and why
 
-*(To be filled in after implementation decisions are made. This section will form the core of the blog post.)*
+Decisions made 2026-02-19. This section forms the core of the blog post.
 
 ### Decision log
 
 | Question | Decision | Rationale |
 |---|---|---|
-| GoatCounter vs. Worker? | TBD | |
-| Binary (thumbs) vs. stars? | TBD | |
-| Show counts on posts? | TBD | |
-| Auto-redirect back? | TBD | |
-| ISMAP star rating? | TBD | |
+| GoatCounter vs. Worker? | **Worker** | Dedicated data store (not mixed with analytics noise), server-side bot filtering + rate limiting, no page navigation (302 redirect back), SVG badge for counts — all impossible with GoatCounter alone |
+| Binary (thumbs) vs. stars? | **Binary first** | Lower friction, simpler to implement and interpret. Stars can be added later via ISMAP if binary signal feels insufficient |
+| Show counts on posts? | **Yes, via SVG badge** | `<img src="https://feedback.allaboutken.com/count/posts/slug.svg">` — the 1996 hit counter pattern reborn. 5-minute cache, CORS restricted to site origin |
+| Auto-redirect back? | **Yes, via 302 + `#thanks` fragment** | Worker returns `302 Location: https://www.allaboutken.com/posts/slug/#thanks`. CSS `:target` reveals the thank-you message. Reader never truly leaves the page |
+| ISMAP star rating? | **Deferred to v2** | Delightfully archaic and genuinely functional, but binary is sufficient for launch. ISMAP + Worker coordinate parsing is a natural v2 addition |
 
 ### What we'd tell a 1998 web developer
 
-*(For the blog post conclusion: the web development patterns haven't changed. The infrastructure got better. A Cloudflare Worker is a CGI script. An SVG badge is a hit counter. A 302 redirect is a web ring hop. The best ideas in web development are 30 years old.)*
+The web development patterns haven't changed. The infrastructure got better. A Cloudflare Worker is a CGI script — it runs on someone else's server, handles one HTTP request, reads/writes a small data store, and returns a response. An SVG badge is a hit counter. A 302 redirect is a web ring hop. The best ideas in web development are 30 years old.
 
 ---
 

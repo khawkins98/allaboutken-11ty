@@ -1,0 +1,28 @@
+# Feedback Worker — redirect-count-redirect pattern
+# Setup guide: https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/
+#
+# If you're adapting this for your own site, update:
+#   1. "pattern" below — your subdomain (e.g. feedback.yourdomain.com)
+#   2. "id" under [[kv_namespaces]] — run: npx wrangler kv namespace create FEEDBACK_COUNTS
+#   3. SITE_ORIGIN in src/index.js — your site's URL
+
+name = "feedback-worker"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# Custom domain — Cloudflare handles DNS + TLS automatically.
+# Requires the domain to be on Cloudflare DNS.
+#
+# If your domain is NOT on Cloudflare DNS, remove the [[routes]] block entirely.
+# Your Worker will be available at: feedback-worker.<your-account>.workers.dev
+# Use that URL in your feedback links instead. (Untested — let me know if it works.)
+[[routes]]
+pattern = "feedback.allaboutken.com"
+custom_domain = true
+
+# KV namespace for storing feedback counts.
+# Create your own with: npx wrangler kv namespace create FEEDBACK_COUNTS
+# Then replace the id below with the one Wrangler prints.
+[[kv_namespaces]]
+binding = "FEEDBACK_COUNTS"
+id = "d6f11bb06b7344848e499889c025343a"

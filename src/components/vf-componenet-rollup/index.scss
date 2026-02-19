@@ -1142,6 +1142,14 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
+  .kh-feedback-thanks {
+    display: none;
+  }
+
+  .kh-feedback-thanks:target {
+    display: block;
+  }
+
   @media print {
     .kh-content a:not([class*='kh-']),
     .kh-content a:not([class*='kh-']):visited {

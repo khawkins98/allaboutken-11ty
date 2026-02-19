@@ -83,6 +83,20 @@ templateEngineOverride: njk
 </script>
 
 <div class="kh-stack kh-u-padding__top--800">
+  <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
+    <div class="kh-grid__col--span-1">
+    </div>
+    <div class="kh-content kh-grid__col--span-2">
+      <h2 class="kh-text-heading--2">Was this useful?</h2>
+      <p class="kh-cluster">
+        <a href="https://feedback.allaboutken.com/up{{ page.url }}"
+           rel="nofollow" class="kh-button kh-button--sm">👍 Yes, this was useful</a>
+      </p>
+      <p id="thanks" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback!</p>
+      <p><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Number of readers who found this useful"></p>
+    </div>
+  </article>
+
 {%- if comment != false %}
   <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
     <div class="kh-grid__col--span-1">
