@@ -13,7 +13,8 @@
  * Routes:
  *   /up/{path}/        — increment thumbs-up, 302 redirect back to post
  *   /down/{path}/      — increment thumbs-down, 302 redirect back to post
- *   /count/{path}.svg  — SVG badge image (image/svg+xml, 5-min cache)
+ *   /count/{path}.svg  — SVG number (image/svg+xml, 5-min cache)
+ *                        ?color=white for light text; defaults to black.
  *                        Use in <img> tags. Not CSS-styleable from the page.
  *   /count/{path}/     — plain text number (text/plain, 5-min cache)
  *                        Use for build-time fetches, JS enhancements, or scripts.
@@ -84,20 +85,13 @@ async function hashKey(ip, path) {
     .join('');
 }
 
-function generateBadgeSvg(count) {
-  const label = 'useful';
+function generateBadgeSvg(count, color) {
   const value = String(count);
-  const labelWidth = label.length * 7 + 10;
-  const valueWidth = value.length * 7 + 10;
-  const totalWidth = labelWidth + valueWidth;
+  const fill = color === 'white' ? '#fff' : '#000';
+  const width = value.length * 8 + 4;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="20">
-  <rect width="${labelWidth}" height="20" fill="#555"/>
-  <rect x="${labelWidth}" width="${valueWidth}" height="20" fill="#3b6fb6"/>
-  <g fill="#fff" font-family="Verdana,Geneva,sans-serif" font-size="11" text-rendering="geometricPrecision">
-    <text x="${labelWidth / 2}" y="14" text-anchor="middle">${label}</text>
-    <text x="${labelWidth + valueWidth / 2}" y="14" text-anchor="middle">${value}</text>
-  </g>
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="20">
+  <text x="${width / 2}" y="15" text-anchor="middle" fill="${fill}" font-family="Verdana,Geneva,sans-serif" font-size="13" text-rendering="geometricPrecision">${value}</text>
 </svg>`;
 }
 
@@ -159,7 +153,8 @@ export default {
       const corsOrigin = getAllowedOrigin(request);
 
       if (isSvg) {
-        return new Response(generateBadgeSvg(count), {
+        const color = url.searchParams.get('color') || 'black';
+        return new Response(generateBadgeSvg(count, color), {
           headers: {
             'Content-Type': 'image/svg+xml',
             'Cache-Control': 'public, max-age=300',
