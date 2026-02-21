@@ -16,7 +16,7 @@ A Cloudflare Worker that powers the "Was this useful?" button on [allaboutken.co
 | Route | Response |
 |---|---|
 | `/up/{path}/` | Increment count, 302 redirect back |
-| `/count/{path}.svg` | SVG badge image (5-min cache) |
+| `/count/{path}.svg` | SVG number (5-min cache). `?color=white` for dark backgrounds |
 | `/count/{path}/` | Plain text count (5-min cache) |
 
 ## Files

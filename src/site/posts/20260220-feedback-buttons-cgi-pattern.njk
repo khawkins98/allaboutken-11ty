@@ -25,7 +25,7 @@ The solution turned out to be 30(!) years old.
 > - A Cloudflare Worker handles feedback clicks via HTTP redirect -- no client-side JS needed
 > - The pattern is identical to how 1994 web rings counted click-throughs
 > - CSS `:target` shows a "Thanks!" message after the redirect without page navigation
-> - An SVG badge displays live feedback counts -- the 1996 hit counter, reborn
+> - An SVG endpoint returns just the number -- the 1996 hit counter, reborn
 > - The Worker source is in the [`worker/` directory](https://github.com/khawkins98/allaboutken-11ty/tree/main/worker) of this site's repo
 
 ## The constraint that made it interesting
@@ -75,32 +75,20 @@ The current implementation tracks positive feedback only -- a single "Yes, this 
 The Worker itself is around 80 lines. It handles three route families:
 
 - **`/up/posts/slug/`** -- increment a KV counter, 302 redirect back to the post
-- **`/count/posts/slug.svg`** -- return a dynamic SVG badge image (`image/svg+xml`, 5-minute cache). Drop it in an `<img>` tag. Not CSS-styleable from the page since it's a separate document.
+- **`/count/posts/slug.svg`** -- return the count as an SVG number (`image/svg+xml`, 5-minute cache). Drop it in an `<img>` tag. Add `?color=white` for light text on dark backgrounds; defaults to black. Not CSS-styleable from the page since it's a separate document.
 - **`/count/posts/slug/`** -- return the count as plain text (`text/plain`, 5-minute cache). Use this for build-time fetches, a small JS enhancement that injects the number into a `<span>` you can style, or scripting.
 
 The SVG endpoint is the 1996 hit counter pattern. An `<img>` tag pointing to a script that returns a dynamically generated image:
 
 ```html
-<img src="https://feedback.allaboutken.com/count/posts/my-post.svg"
-     alt="47 people found this useful">
+<img src="https://feedback.allaboutken.com/count/posts/my-post.svg" alt="47 people found this useful">
 ```
 
 The browser thinks it's loading a normal image. The Worker is secretly running code. This is exactly what `<img src="/cgi-bin/counter.pl">` did in 1996, except the "CGI script" runs on a global edge network instead of a Pentium II under someone's desk.
 
-The plain text endpoint opens up other possibilities:
-
-```bash
-curl https://feedback.allaboutken.com/count/posts/my-post/
-# → 47
-```
-
-You could fetch counts at build time and bake them into static HTML, or use a few lines of client-side JS to populate a styled element. The SVG badge works with zero JavaScript; the text endpoint is there when you want more control.
-
-Here's what each endpoint returns for this post, live:
-
 {% endmarkdown %}
 
-<h3 class="kh-text-heading--3">The vote button</h3>
+<h3 class="kh-text-heading--3">Real world demo</h3>
 <p>A plain <code>&lt;a&gt;</code> link. No JavaScript. The Worker handles the rest.</p>
 <p class="kh-cluster">
   <a href="https://feedback.allaboutken.com/up{{ page.url }}" rel="nofollow" class="kh-button kh-button--sm">👍 Yes, this was useful</a>
@@ -109,19 +97,26 @@ Here's what each endpoint returns for this post, live:
    rel="nofollow"&gt;👍 Yes, this was useful&lt;/a&gt;</code></pre>
 <p>API call: <code>GET /up{{ page.url }}</code> → <code>302</code> redirect to <code>https://www.allaboutken.com{{ page.url }}#thanks</code></p>
 
-<h3 class="kh-text-heading--3">SVG badge (no JavaScript)</h3>
-<p>An <code>&lt;img&gt;</code> tag. The browser fetches it like any image. Not CSS-styleable since it's a separate document.</p>
-<p><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count for this post" style="display:inline;vertical-align:middle"></p>
-<pre><code>&lt;img src="https://feedback.allaboutken.com/count{{ page.url }}.svg"&gt;</code></pre>
-<p>API call: <code>GET /count{{ page.url }}.svg</code> → <code>image/svg+xml</code>, 5-minute cache</p>
+<h4 class="kh-text-heading--3">SVG count (no JavaScript)</h4>
 
-<h3 class="kh-text-heading--3">Plain text count</h3>
+<p>The SVG returns just the number. Set <code>height:1.5em</code> and it sits inline with text at any font size. Add <code>?color=white</code> for dark backgrounds.</p>
+
+<p><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"> people found this useful &nbsp; <span style="background:#333;padding:2px 6px;border-radius:3px"><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg?color=white" alt="Feedback count" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"></span></p>
+
+<p>Because the height is in <code>em</code>, it scales with the surrounding text:</p>
+
+<p style="font-size:0.85em"><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"> people (small)</p>
+
+<p style="font-size:1.5em"><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"> people (large)</p>
+
+
+<h4 class="kh-text-heading--3">Plain text count</h4>
 <p>Returns just the number. Use for build-time fetches, shell scripts, or data export.</p>
 <pre><code>curl https://feedback.allaboutken.com/count{{ page.url }}
 # → a number</code></pre>
-<p>API call: <code>GET /count{{ page.url }}</code> → <code>text/plain</code>, 5-minute cache</p>
 
-<h3 class="kh-text-heading--3">Styled with a JS enhancement</h3>
+<details class="kh-details">
+<summary><h3>Styled with a JS enhancement</h3></summary>
 <p>Fetch the plain text count and inject it into a <code>&lt;span&gt;</code> you control. The only option that needs JavaScript, but gives you full CSS control.</p>
 <p><span id="js-feedback-count" class="kh-badge">...</span> people found this useful</p>
 <script>
@@ -138,10 +133,11 @@ fetch('https://feedback.allaboutken.com/count{{ page.url }}')
     document.getElementById('js-feedback-count').textContent = n.trim();
   });
 &lt;/script&gt;</code></pre>
+</details>
 
+<details class="kh-details">
+<summary><h2>Standing on shoulders</h2></summary>
 {% markdown %}
-
-## Standing on shoulders
 
 I'm not the first person to think of this. Two projects proved different halves of the solution:
 
@@ -163,7 +159,6 @@ Try poll.fizzy.wtf live -- was this section of the post clear?
 </p>
 {% markdown %}
 
-
 **Why not just use poll.fizzy.wtf directly?** You could -- and if you want the quickest path to feedback buttons, you probably should. It's MIT-licensed and ready to deploy. I built my own because I wanted a few things it doesn't do:
 
 - **No cookies.** poll.fizzy.wtf deduplicates votes with cookies. My Worker uses a hashed IP with a 24-hour TTL -- no cookies set, ever.
@@ -175,7 +170,14 @@ On the flip side, poll.fizzy.wtf does something mine doesn't: **arbitrary key-va
 
 If those tradeoffs don't matter to you, poll.fizzy.wtf is a perfectly good choice and saves you the setup.
 
-## Keeping bots honest
+{% endmarkdown %}
+</details>
+{% markdown %}
+
+{% endmarkdown %}
+<details class="kh-details">
+<summary><h2>Keeping bots honest</h2></summary>
+{% markdown %}
 
 The obvious concern: what stops a crawler from wandering onto `/feedback/up/posts/my-post/` and registering a false vote?
 
@@ -189,9 +191,13 @@ Five layers of defense, from prevention to cleanup:
 
 An earlier design used GoatCounter page views as the counting mechanism, with a `<noscript>` tracking pixel as a JS-disabled fallback. That pixel is actually a bot magnet -- simple crawlers load images but skip JavaScript, so the pixel counts bots while the JS-based counter filters them out. The Worker approach sidesteps this entirely: counting happens server-side, before any HTML is returned.
 
-## Approaches we considered but didn't choose
+{% endmarkdown %}
+</details>
+<details class="kh-details">
+<summary><h2>Approaches I considered but didn't choose</h2></summary>
+{% markdown %}
 
-The Worker wasn't the first idea. The design process explored six approaches. The ones we passed on are interesting because they reveal the design space.
+The Worker wasn't the first idea. The design process explored six approaches. The ones I passed on are interesting because they reveal the design space.
 
 **GoatCounter page-view counting.** The most obvious approach: feedback links go to static thank-you pages generated by Eleventy, and GoatCounter (already on the site) counts the page view. The URL path encodes the vote -- `/feedback/up/posts/my-post/` is a thumbs-up. Zero new dependencies. But it navigates the reader away from the post, the data mixes with analytics noise, and there's no way to show counts without a build-time API call. The Worker wins on UX, data quality, and bot resistance.
 
@@ -202,6 +208,10 @@ The Worker wasn't the first idea. The design process explored six approaches. Th
 **GitHub Issue links.** Pre-filled issue URLs as feedback buttons. The data lives in the repo's issue tracker -- structured, searchable, exportable, free. But it requires a GitHub account (excludes roughly 95% of readers), navigates away to GitHub, requires authentication, and makes feedback public. Could work as a "detailed feedback" channel, not as a primary low-friction mechanism.
 
 **External form services.** Formspree, Basin, Google Forms -- a `<form method="POST">` pointing at a third-party service. True form submission, data stored somewhere you control (sort of). But it's a new SaaS dependency, the free tiers have submission limits, it redirects to a third-party confirmation page, and it runs against this site's self-hosted philosophy. Cloudflare Workers is technically also "someone else's server," but the code is ours, the data is ours, and the free tier is generous enough to be effectively permanent for a personal blog.
+
+{% endmarkdown %}
+</details>
+{% markdown %}
 
 ## Privacy by design
 
@@ -214,53 +224,19 @@ Rate-limiting uses a SHA-256 hash of the IP address, stored as a KV key with a 2
 The feedback UI on each post is a pair of plain links inside the same grid layout used by the rest of the post:
 
 ```html
-<article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
-  <div class="kh-grid__col--span-1"></div>
-  <div class="kh-content kh-grid__col--span-2">
-    <h2 class="kh-text-heading--2">Was this useful?</h2>
-    <p class="kh-cluster">
-      <a href="https://feedback.allaboutken.com/up/posts/my-post/"
-         rel="nofollow" class="kh-button kh-button--sm">👍 Yes, this was useful</a>
-    </p>
-    <p id="thanks" class="kh-feedback-thanks"
-       aria-live="polite">Thanks for the feedback!</p>
-  </div>
-</article>
+<p class="kh-u-do-not-print">
+  <a href="https://feedback.allaboutken.com/up/posts/my-post/" rel="nofollow" class="kh-button kh-button--sm">👍 Yes, this was useful</a>
+  <span id="thanks" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback!</span>
+</p>
 ```
 
-The button reuses the existing `kh-button--sm` class. `kh-u-do-not-print` hides the section from print. `aria-live="polite"` announces the thank-you message to screen readers when it appears.
-
-The `:target` CSS, scoped under the site's `body:has(#kh-css-toggle:checked)` selector:
-
-```css
-.kh-feedback-thanks {
-  display: none;
-}
-.kh-feedback-thanks:target {
-  display: block;
-}
-```
+`kh-u-do-not-print` hides the section from print. `aria-live="polite"` announces the thank-you message to screen readers when it appears.
 
 Two links. One hidden paragraph. A few lines of CSS. The complexity lives in the Worker, where it belongs -- on the server side, invisible to the reader.
 
-## ISMAP: the delightfully archaic star rating (coming in v2)
-
-The current implementation is positive-only -- a single "Yes, this was useful" button. That's enough signal for a personal blog: I want to know which posts helped people, not which ones didn't. Star ratings are the natural next step, and the approach is too good not to mention, because it uses an HTML feature from 1993 that still works in every browser.
-
-For star ratings, HTML offers [server-side image maps](https://rickcarlino.com/2021/what-were-server-side-image-maps.html). Wrap an `<img>` in an `<a>` tag with the `ismap` attribute, and clicking the image appends `?x,y` coordinates to the URL:
-
-```html
-<a href="https://feedback.allaboutken.com/rate/posts/my-post/">
-  <img src="/images/five-stars-empty.svg" ismap
-       alt="Rate this post from 1 to 5 stars">
-</a>
-```
-
-Click on the third star, and the browser sends `?147,20`. The Worker calculates which star based on the X coordinate and records the rating. Server-side image maps were first supported in NCSA Mosaic 1.1. They still work in every browser.
-
 ## Thinking of Cloudflare Worker as a CGI script
 
-The [thesis of this whole project](/posts/20260216-90s-desktop-paradigm-browser-utilities/) keeps showing up: old patterns, new infrastructure. A Cloudflare Worker runs on someone else's server, handles one HTTP request, reads/writes a small data store, and returns a response. The only differences from 1998:
+The idea here keeps showing up: old patterns, new infrastructure. A Cloudflare Worker runs on someone else's server, handles one HTTP request, reads/writes a small data store, and returns a response. The only differences from 1998:
 
 - It runs on a global edge network instead of a single machine
 - The "flat file" is a KV store instead of `/var/www/data/counter.txt`
@@ -346,6 +322,21 @@ And the CSS:
 **Free tier limits:** 100,000 Worker requests/day, 1,000 KV writes/day. The writes are the constraint -- 1,000 feedback clicks per day, more than enough for most sites.
 
 You can try the feedback buttons at the bottom of this post.
+
+## What's next: star ratings via ISMAP
+
+The current implementation is positive-only -- a single "Yes, this was useful" button. That's enough signal for a personal blog: I want to know which posts helped people, not which ones didn't. But star ratings are the natural next step, and the approach is too good not to mention, because it uses an HTML feature from 1993 that still works in every browser.
+
+For star ratings, HTML offers [server-side image maps](https://rickcarlino.com/2021/what-were-server-side-image-maps.html). Wrap an `<img>` in an `<a>` tag with the `ismap` attribute, and clicking the image appends `?x,y` coordinates to the URL:
+
+```html
+<a href="https://feedback.allaboutken.com/rate/posts/my-post/">
+  <img src="/images/five-stars-empty.svg" ismap
+       alt="Rate this post from 1 to 5 stars">
+</a>
+```
+
+Click on the third star, and the browser sends `?147,20`. The Worker calculates which star based on the X coordinate and records the rating. Server-side image maps were first supported in NCSA Mosaic 1.1. They still work in every browser.
 
 ---
 
