@@ -36,9 +36,9 @@ That's not accidental -- it's why the site runs on [Eleventy](https://www.11ty.d
 
 Feedback buttons should follow the same rule. Click a link, register the vote, done. No `fetch()` calls, no framework, no hydration. If JavaScript fails to load, the feedback still works.
 
-The problem is obvious: GitHub Pages serves static files. There's nowhere for the vote to go.
+The problem is obvious: the site is static HTML, so were do we put the brain?
 
-## What a 1998 web developer would do
+## What would a 1998 webmaster do?
 
 In 1998, your personal page on GeoCities was static HTML -- just like GitHub Pages today. You had no backend. But you wanted interactivity: hit counters, guestbooks, polls. So you used other people's [CGI scripts](https://rickcarlino.com/2019/what-were-cgi-scripts.html) -- small programs that ran on a web server, handled one HTTP request, and returned a response. An `<img>` tag could point to a CGI script on someone else's server that generated a counter image. A `<form>` action could submit to a remote script that appended to a flat file and redirected back.
 
@@ -70,8 +70,6 @@ Reader clicks "👍 Yes" on a blog post
 
 The `#thanks` fragment in the redirect URL is doing real work. It's [URL-as-state](/posts/20251226-url-state-management/) again -- the fragment triggers a `:target` CSS rule that reveals a thank-you message that was always in the HTML, just hidden. No JavaScript needed to show it.
 
-The current implementation tracks positive feedback only -- a single "Yes, this was useful" button. The Worker supports `/down/` routes too, but the UI doesn't expose them yet. Binary up/down adds complexity (what does the count mean? net? total?) without much signal for a personal blog. A future version may add star ratings via the ISMAP pattern described below.
-
 The Worker itself is around 80 lines. It handles three route families:
 
 - **`/up/posts/slug/`** -- increment a KV counter, 302 redirect back to the post
@@ -86,18 +84,20 @@ The SVG endpoint is the 1996 hit counter pattern. An `<img>` tag pointing to a s
 
 The browser thinks it's loading a normal image. The Worker is secretly running code. This is exactly what `<img src="/cgi-bin/counter.pl">` did in 1996, except the "CGI script" runs on a global edge network instead of a Pentium II under someone's desk.
 
+_Aside: The current implementation tracks positive feedback only -- a single "Yes, this was useful" button. The Worker supports `/down/` routes too, but the UI doesn't expose them yet. Binary up/down adds complexity (what does the count mean? net? total?) without much signal for a personal blog. A future version may add star ratings via ISMAP (see [What's next](#whats-next) at the end of this post)._
+
+
 {% endmarkdown %}
 
-<h3 class="kh-text-heading--3">Real world demo</h3>
-<p>A plain <code>&lt;a&gt;</code> link. No JavaScript. The Worker handles the rest.</p>
+<h3 class="kh-text-heading--3">Demo time</h3>
+<p>A plain <code>&lt;a&gt;</code> link. No JavaScript. The Worker handles the rest. <code>aria-live="polite"</code> on the thank-you message announces it to screen readers when it appears.</p>
 <p class="kh-cluster">
   <a href="https://feedback.allaboutken.com/up{{ page.url }}" rel="nofollow" class="kh-button kh-button--sm">👍 Yes, this was useful</a>
 </p>
-<pre><code>&lt;a href="https://feedback.allaboutken.com/up{{ page.url }}"
-   rel="nofollow"&gt;👍 Yes, this was useful&lt;/a&gt;</code></pre>
-<p>API call: <code>GET /up{{ page.url }}</code> → <code>302</code> redirect to <code>https://www.allaboutken.com{{ page.url }}#thanks</code></p>
+<pre><code>&lt;a href="https://feedback.allaboutken.com/up{{ page.url }}" rel="nofollow"&gt;👍 Yes, this was useful&lt;/a&gt;
+&lt;span id="thanks" class="kh-feedback-thanks" aria-live="polite"&gt;Thanks for the feedback!&lt;/span&gt;</code></pre>
 
-<h4 class="kh-text-heading--3">SVG count (no JavaScript)</h4>
+<h4>SVG count (no JavaScript)</h4>
 
 <p>The SVG returns just the number. Set <code>height:1.5em</code> and it sits inline with text at any font size. Add <code>?color=white</code> for dark backgrounds.</p>
 
@@ -105,19 +105,20 @@ The browser thinks it's loading a normal image. The Worker is secretly running c
 
 <p>Because the height is in <code>em</code>, it scales with the surrounding text:</p>
 
-<p style="font-size:0.85em"><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"> people (small)</p>
+<p style="font-size:0.85em">Small: <img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"> people</p>
 
-<p style="font-size:1.5em"><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"> people (large)</p>
+<p style="font-size:1.5em">Large: <img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"> people</p>
 
+<hr>
 
-<h4 class="kh-text-heading--3">Plain text count</h4>
+<h4>Plain text count</h4>
 <p>Returns just the number. Use for build-time fetches, shell scripts, or data export.</p>
 <pre><code>curl https://feedback.allaboutken.com/count{{ page.url }}
 # → a number</code></pre>
 
 <details class="kh-details">
 <summary><h3>Styled with a JS enhancement</h3></summary>
-<p>Fetch the plain text count and inject it into a <code>&lt;span&gt;</code> you control. The only option that needs JavaScript, but gives you full CSS control.</p>
+<p>If you're OK with a bit of JS, fetch the plain text count and inject it into a <code>&lt;span&gt;</code> you control.</p>
 <p><span id="js-feedback-count" class="kh-badge">...</span> people found this useful</p>
 <script>
 fetch('https://feedback.allaboutken.com/count{{ page.url }}')
@@ -135,106 +136,9 @@ fetch('https://feedback.allaboutken.com/count{{ page.url }}')
 &lt;/script&gt;</code></pre>
 </details>
 
-<details class="kh-details">
-<summary><h2>Standing on shoulders</h2></summary>
 {% markdown %}
 
-I'm not the first person to think of this. Two projects proved different halves of the solution:
-
-**Andrew Walpole** [built a like button](https://andrewwalpole.com/blog/building-a-like-button-with-cloudflare-workers/) for his Eleventy blog using Cloudflare Workers and KV storage. He deployed it, ran it in production, and wrote about the experience. It proved the Eleventy + Workers + KV infrastructure works. But his approach uses client-side JavaScript -- petite-vue renders the button, and `fetch()` API calls communicate with the Worker.
-
-**[poll.fizzy.wtf](https://github.com/poll.fizzy.wtf)** is a Cloudflare Worker (written in Rust, MIT-licensed) that implements the redirect-count-redirect pattern with SVG result widgets. It's the 1994 web ring architecture applied to voting. No client-side JavaScript. Here's what using it looks like:
-
-```html
-<a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=yes&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👍 Yes <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=yes" alt="Yes votes" style="display:inline;vertical-align:middle"></a>
-<a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=no&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👎 Not really <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=no" alt="No votes" style="display:inline;vertical-align:middle"></a>
-```
-
-Try poll.fizzy.wtf live -- was this section of the post clear?
-
-{% endmarkdown %}
-<p>
-  <a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=yes&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👍 Yes <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=yes" alt="Yes votes" style="display:inline;vertical-align:middle"></a>
-  <a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=no&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👎 Not really <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=no" alt="No votes" style="display:inline;vertical-align:middle"></a>
-</p>
-{% markdown %}
-
-**Why not just use poll.fizzy.wtf directly?** You could -- and if you want the quickest path to feedback buttons, you probably should. It's MIT-licensed and ready to deploy. I built my own because I wanted a few things it doesn't do:
-
-- **No cookies.** poll.fizzy.wtf deduplicates votes with cookies. My Worker uses a hashed IP with a 24-hour TTL -- no cookies set, ever.
-- **Bot filtering.** poll.fizzy.wtf trusts all requests. My Worker checks User-Agent, `Accept-Language`, and `Referer` headers before counting.
-- **Single-tenant.** My Worker hardcodes one site origin and rejects requests referred from anywhere else. poll.fizzy.wtf is designed as a shared service.
-- **Data ownership.** My KV namespace, my data. I can list all keys with `wrangler kv key list`, export counts to CSV, or wipe individual counters. With poll.fizzy.wtf the data lives on someone else's KV store.
-
-On the flip side, poll.fizzy.wtf does something mine doesn't: **arbitrary key-value voting.** Its `?key=value` query parameter approach lets you create any poll on the fly -- multiple questions, multiple answers, no code changes. My Worker only counts one signal per post (positive feedback). That's a deliberate scope constraint for now, but if you need flexible multi-question polls, poll.fizzy.wtf has the better architecture for it.
-
-If those tradeoffs don't matter to you, poll.fizzy.wtf is a perfectly good choice and saves you the setup.
-
-{% endmarkdown %}
-</details>
-{% markdown %}
-
-{% endmarkdown %}
-<details class="kh-details">
-<summary><h2>Keeping bots honest</h2></summary>
-{% markdown %}
-
-The obvious concern: what stops a crawler from wandering onto `/feedback/up/posts/my-post/` and registering a false vote?
-
-Five layers of defense, from prevention to cleanup:
-
-1. **Don't advertise the paths.** `robots.txt` disallows `/feedback/`. The sitemap excludes feedback URLs. Feedback links carry `rel="nofollow"`.
-2. **Tell arrivals to leave.** Feedback pages include `<meta name="robots" content="noindex, nofollow">`.
-3. **Server-side filtering.** The Worker checks `User-Agent` against known bot signatures and validates request headers. Simple crawlers don't send `Referer` or `Accept-Language` headers that real browsers do.
-4. **Rate limiting.** One vote per IP per post per 24 hours, enforced by the Worker via KV TTL keys. A SHA-256 hash of the IP and path is stored with a 24-hour expiration -- if it exists, the redirect still works but the counter doesn't increment.
-5. **Data cleanup.** KV counters can be reset with `wrangler kv:key delete`. If a bot swarm hits, zero the affected counters and move on.
-
-An earlier design used GoatCounter page views as the counting mechanism, with a `<noscript>` tracking pixel as a JS-disabled fallback. That pixel is actually a bot magnet -- simple crawlers load images but skip JavaScript, so the pixel counts bots while the JS-based counter filters them out. The Worker approach sidesteps this entirely: counting happens server-side, before any HTML is returned.
-
-{% endmarkdown %}
-</details>
-<details class="kh-details">
-<summary><h2>Approaches I considered but didn't choose</h2></summary>
-{% markdown %}
-
-The Worker wasn't the first idea. The design process explored six approaches. The ones I passed on are interesting because they reveal the design space.
-
-**GoatCounter page-view counting.** The most obvious approach: feedback links go to static thank-you pages generated by Eleventy, and GoatCounter (already on the site) counts the page view. The URL path encodes the vote -- `/feedback/up/posts/my-post/` is a thumbs-up. Zero new dependencies. But it navigates the reader away from the post, the data mixes with analytics noise, and there's no way to show counts without a build-time API call. The Worker wins on UX, data quality, and bot resistance.
-
-**CSS `:target` with a tracking pixel.** The most technically creative approach. Anchor links trigger `:target`, which reveals a hidden `<span>` whose `background-image` points to a GoatCounter counting pixel. The browser loads the image when the element becomes visible -- CSS as an analytics transport. The problem: browsers may skip `background-image` loads on previously-hidden elements, especially with `display: none` to `display: block` transitions. It's fragile to test, unreliable across browsers, and raises accessibility concerns since screen readers may not announce the state change. Fascinating, but too brittle for production.
-
-**Mailto links.** `mailto:` with pre-filled subject lines -- [RFC 1738](https://www.ietf.org/rfc/rfc1738.txt), 1994. Your inbox as a feedback database. Each email subject encodes the vote: "Feedback: 👍 for 'Post Title'". You could even write a GitHub Action that reads a dedicated inbox and tallies the votes. Delightfully archaic, astronomically high friction, and it exposes your email to spam. A thought experiment, not a real solution.
-
-**GitHub Issue links.** Pre-filled issue URLs as feedback buttons. The data lives in the repo's issue tracker -- structured, searchable, exportable, free. But it requires a GitHub account (excludes roughly 95% of readers), navigates away to GitHub, requires authentication, and makes feedback public. Could work as a "detailed feedback" channel, not as a primary low-friction mechanism.
-
-**External form services.** Formspree, Basin, Google Forms -- a `<form method="POST">` pointing at a third-party service. True form submission, data stored somewhere you control (sort of). But it's a new SaaS dependency, the free tiers have submission limits, it redirects to a third-party confirmation page, and it runs against this site's self-hosted philosophy. Cloudflare Workers is technically also "someone else's server," but the code is ours, the data is ours, and the free tier is generous enough to be effectively permanent for a personal blog.
-
-{% endmarkdown %}
-</details>
-{% markdown %}
-
-## Privacy by design
-
-No consent banner needed. The Worker increments a counter in KV storage -- no IP addresses stored, no User-Agent logged, no cookies set. [GoatCounter's GDPR analysis](https://www.goatcounter.com/help/gdpr) applies here with even more confidence: if aggregate-only page view counting falls under legitimate interest, then an anonymous integer counter certainly does.
-
-Rate-limiting uses a SHA-256 hash of the IP address, stored as a KV key with a 24-hour TTL. The hash is not reversible and expires automatically. No persistent identifier is created.
-
-## What the HTML looks like
-
-The feedback UI on each post is a pair of plain links inside the same grid layout used by the rest of the post:
-
-```html
-<p class="kh-u-do-not-print">
-  <a href="https://feedback.allaboutken.com/up/posts/my-post/" rel="nofollow" class="kh-button kh-button--sm">👍 Yes, this was useful</a>
-  <span id="thanks" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback!</span>
-</p>
-```
-
-`kh-u-do-not-print` hides the section from print. `aria-live="polite"` announces the thank-you message to screen readers when it appears.
-
-Two links. One hidden paragraph. A few lines of CSS. The complexity lives in the Worker, where it belongs -- on the server side, invisible to the reader.
-
-## Thinking of Cloudflare Worker as a CGI script
+## Musing: Cloudflare Workers are the new CGI script
 
 The idea here keeps showing up: old patterns, new infrastructure. A Cloudflare Worker runs on someone else's server, handles one HTTP request, reads/writes a small data store, and returns a response. The only differences from 1998:
 
@@ -323,11 +227,9 @@ And the CSS:
 
 You can try the feedback buttons at the bottom of this post.
 
-## What's next: star ratings via ISMAP
+## What's next
 
-The current implementation is positive-only -- a single "Yes, this was useful" button. That's enough signal for a personal blog: I want to know which posts helped people, not which ones didn't. But star ratings are the natural next step, and the approach is too good not to mention, because it uses an HTML feature from 1993 that still works in every browser.
-
-For star ratings, HTML offers [server-side image maps](https://rickcarlino.com/2021/what-were-server-side-image-maps.html). Wrap an `<img>` in an `<a>` tag with the `ismap` attribute, and clicking the image appends `?x,y` coordinates to the URL:
+**Star ratings via ISMAP.** The current implementation is positive-only -- a single "Yes, this was useful" button. Star ratings are the natural next step, and the approach is too good not to mention: HTML's [server-side image maps](https://rickcarlino.com/2021/what-were-server-side-image-maps.html). Wrap an `<img>` in an `<a>` with the `ismap` attribute, and clicking the image appends `?x,y` coordinates to the URL. The Worker calculates which star from the X coordinate. Server-side image maps were first supported in NCSA Mosaic 1.1 (1993). They still work in every browser.
 
 ```html
 <a href="https://feedback.allaboutken.com/rate/posts/my-post/">
@@ -336,7 +238,97 @@ For star ratings, HTML offers [server-side image maps](https://rickcarlino.com/2
 </a>
 ```
 
-Click on the third star, and the browser sends `?147,20`. The Worker calculates which star based on the X coordinate and records the rating. Server-side image maps were first supported in NCSA Mosaic 1.1. They still work in every browser.
+**A popularity index from my own data.** Because the Worker and KV namespace are mine, I can crawl every counter at build time and rank posts by feedback count. An Eleventy data file that calls `wrangler kv key list` or hits the `/count/` endpoints, sorts the results, and generates a "most useful posts" page -- no third-party analytics dependency, no JavaScript on the client. The data is already there; it just needs a build step.
+
+**A community web ring for Eleventy sites.** The architecture generalizes. If multiple Eleventy sites each ran their own feedback Worker, a shared index could aggregate the counts -- "top rated Eleventy posts this month" in the spirit of a classic web ring. Each site keeps its own data, the index just reads the public `/count/` endpoints. The pattern is cooperative, not centralized: no shared database, no sign-up, just HTTP.
+
+## Additional commentary
+
+{% endmarkdown %}
+<details class="kh-details">
+<summary><h3>Privacy by design</h3></summary>
+{% markdown %}
+
+No consent banner needed. The Worker increments a counter in KV storage -- no IP addresses stored, no User-Agent logged, no cookies set. [GoatCounter's GDPR analysis](https://www.goatcounter.com/help/gdpr) applies here with even more confidence: if aggregate-only page view counting falls under legitimate interest, then an anonymous integer counter certainly does.
+
+Rate-limiting uses a SHA-256 hash of the IP address, stored as a KV key with a 24-hour TTL. The hash is not reversible and expires automatically. No persistent identifier is created.
+
+{% endmarkdown %}
+</details>
+<details class="kh-details">
+<summary><h3>Keeping bots honest</h3></summary>
+{% markdown %}
+
+The obvious concern: what stops a crawler from wandering onto `/feedback/up/posts/my-post/` and registering a false vote?
+
+Five layers of defense, from prevention to cleanup:
+
+1. **Don't advertise the paths.** `robots.txt` disallows `/feedback/`. The sitemap excludes feedback URLs. Feedback links carry `rel="nofollow"`.
+2. **Tell arrivals to leave.** Feedback pages include `<meta name="robots" content="noindex, nofollow">`.
+3. **Server-side filtering.** The Worker checks `User-Agent` against known bot signatures and validates request headers. Simple crawlers don't send `Referer` or `Accept-Language` headers that real browsers do.
+4. **Rate limiting.** One vote per IP per post per 24 hours, enforced by the Worker via KV TTL keys. A SHA-256 hash of the IP and path is stored with a 24-hour expiration -- if it exists, the redirect still works but the counter doesn't increment.
+5. **Data cleanup.** KV counters can be reset with `wrangler kv:key delete`. If a bot swarm hits, zero the affected counters and move on.
+
+An earlier design used GoatCounter page views as the counting mechanism, with a `<noscript>` tracking pixel as a JS-disabled fallback. That pixel is actually a bot magnet -- simple crawlers load images but skip JavaScript, so the pixel counts bots while the JS-based counter filters them out. The Worker approach sidesteps this entirely: counting happens server-side, before any HTML is returned.
+
+{% endmarkdown %}
+</details>
+<details class="kh-details">
+<summary><h3>Standing on shoulders</h3></summary>
+{% markdown %}
+
+I'm not the first person to think of this. Two projects proved different halves of the solution:
+
+**Andrew Walpole** [built a like button](https://andrewwalpole.com/blog/building-a-like-button-with-cloudflare-workers/) for his Eleventy blog using Cloudflare Workers and KV storage. He deployed it, ran it in production, and wrote about the experience. It proved the Eleventy + Workers + KV infrastructure works. But his approach uses client-side JavaScript -- petite-vue renders the button, and `fetch()` API calls communicate with the Worker.
+
+**[poll.fizzy.wtf](https://github.com/poll.fizzy.wtf)** is a Cloudflare Worker (written in Rust, MIT-licensed) that implements the redirect-count-redirect pattern with SVG result widgets. It's the 1994 web ring architecture applied to voting. No client-side JavaScript. Here's what using it looks like:
+
+```html
+<a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=yes&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👍 Yes <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=yes" alt="Yes votes" style="display:inline;vertical-align:middle"></a>
+<a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=no&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👎 Not really <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=no" alt="No votes" style="display:inline;vertical-align:middle"></a>
+```
+
+Try poll.fizzy.wtf live -- was this section of the post clear?
+
+{% endmarkdown %}
+<p>
+  <a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=yes&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👍 Yes <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=yes" alt="Yes votes" style="display:inline;vertical-align:middle"></a>
+  <a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=no&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👎 Not really <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=no" alt="No votes" style="display:inline;vertical-align:middle"></a>
+</p>
+{% markdown %}
+
+**Why not just use poll.fizzy.wtf directly?** You could -- and if you want the quickest path to feedback buttons, you probably should. It's MIT-licensed and ready to deploy. I built my own because I wanted a few things it doesn't do:
+
+- **No cookies.** poll.fizzy.wtf deduplicates votes with cookies. My Worker uses a hashed IP with a 24-hour TTL -- no cookies set, ever.
+- **Bot filtering.** poll.fizzy.wtf trusts all requests. My Worker checks User-Agent, `Accept-Language`, and `Referer` headers before counting.
+- **Single-tenant.** My Worker hardcodes one site origin and rejects requests referred from anywhere else. poll.fizzy.wtf is designed as a shared service.
+- **Data ownership.** My KV namespace, my data. I can list all keys with `wrangler kv key list`, export counts to CSV, or wipe individual counters. With poll.fizzy.wtf the data lives on someone else's KV store.
+
+On the flip side, poll.fizzy.wtf does something mine doesn't: **arbitrary key-value voting.** Its `?key=value` query parameter approach lets you create any poll on the fly -- multiple questions, multiple answers, no code changes. My Worker only counts one signal per post (positive feedback). That's a deliberate scope constraint for now, but if you need flexible multi-question polls, poll.fizzy.wtf has the better architecture for it.
+
+If those tradeoffs don't matter to you, poll.fizzy.wtf is a perfectly good choice and saves you the setup.
+
+{% endmarkdown %}
+</details>
+<details class="kh-details">
+<summary><h3>Approaches I considered but didn't choose</h3></summary>
+{% markdown %}
+
+The Worker wasn't the first idea. The design process explored six approaches. The ones I passed on are interesting because they reveal the design space.
+
+**GoatCounter page-view counting.** The most obvious approach: feedback links go to static thank-you pages generated by Eleventy, and GoatCounter (already on the site) counts the page view. The URL path encodes the vote -- `/feedback/up/posts/my-post/` is a thumbs-up. Zero new dependencies. But it navigates the reader away from the post, the data mixes with analytics noise, and there's no way to show counts without a build-time API call. The Worker wins on UX, data quality, and bot resistance.
+
+**CSS `:target` with a tracking pixel.** The most technically creative approach. Anchor links trigger `:target`, which reveals a hidden `<span>` whose `background-image` points to a GoatCounter counting pixel. The browser loads the image when the element becomes visible -- CSS as an analytics transport. The problem: browsers may skip `background-image` loads on previously-hidden elements, especially with `display: none` to `display: block` transitions. It's fragile to test, unreliable across browsers, and raises accessibility concerns since screen readers may not announce the state change. Fascinating, but too brittle for production.
+
+**Mailto links.** `mailto:` with pre-filled subject lines -- [RFC 1738](https://www.ietf.org/rfc/rfc1738.txt), 1994. Your inbox as a feedback database. Each email subject encodes the vote: "Feedback: 👍 for 'Post Title'". You could even write a GitHub Action that reads a dedicated inbox and tallies the votes. Delightfully archaic, astronomically high friction, and it exposes your email to spam. A thought experiment, not a real solution.
+
+**GitHub Issue links.** Pre-filled issue URLs as feedback buttons. The data lives in the repo's issue tracker -- structured, searchable, exportable, free. But it requires a GitHub account (excludes roughly 95% of readers), navigates away to GitHub, requires authentication, and makes feedback public. Could work as a "detailed feedback" channel, not as a primary low-friction mechanism.
+
+**External form services.** Formspree, Basin, Google Forms -- a `<form method="POST">` pointing at a third-party service. True form submission, data stored somewhere you control (sort of). But it's a new SaaS dependency, the free tiers have submission limits, it redirects to a third-party confirmation page, and it runs against this site's self-hosted philosophy. Cloudflare Workers is technically also "someone else's server," but the code is ours, the data is ours, and the free tier is generous enough to be effectively permanent for a personal blog.
+
+{% endmarkdown %}
+</details>
+{% markdown %}
 
 ---
 
