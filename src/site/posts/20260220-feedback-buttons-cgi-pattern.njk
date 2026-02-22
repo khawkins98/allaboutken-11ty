@@ -14,7 +14,7 @@ image: /blog/1990s-pc.jpg
 image_meta:
   text: "A 1990s desktop and its hit counter -- the original feedback system. Image made with <a href='https://www.loras.dev/'>Loras.dev</a>."
   altext: 'Illustration of a 1990s desktop PC with CRT monitor showing a browser window, beside a smaller screen displaying a hit counter, in a retro poster style.'
-kens_status: draft
+kens_status: ready_for_publication
 ---
 
 {% markdown %}
@@ -54,7 +54,7 @@ The web was always a composition of origins. Your static page was the frontend; 
 http://www.webring.org/cgi-bin/webring?ring=navships;id=002;next
 ```
 
-Click it, and the script would increment a counter, look up the next site, and return a `302 Found` redirect. The user barely noticed the hop. This pattern worked in Mosaic. It works in every browser ever made. It's pure HTTP.
+Click it, and the script would increment a counter, look up the next site, and return a `302 Found` redirect. The user barely noticed the hop. This pattern worked in Mosaic. It still works in every browser today. It's pure HTTP.
 
 Replace "next site in the ring" with "the post you just read" and "click-through count" with "thumbs-up count." The architecture is identical.
 
@@ -74,7 +74,7 @@ Reader clicks "👍 Yes" on a blog post
 
 The `#thanks` fragment in the redirect URL is doing real work. It's [URL-as-state](/posts/20251226-url-state-management/) again -- the fragment triggers a `:target` CSS rule that reveals a thank-you message that was always in the HTML, just hidden. No JavaScript needed to show it.
 
-The Worker itself is around 80 lines. It handles three route families:
+The Worker itself is under 200 lines. It handles three route families:
 
 - **`/up/posts/slug/`** -- increment a KV counter, 302 redirect back to the post
 - **`/count/posts/slug.svg`** -- return the count as an SVG number (`image/svg+xml`, 5-minute cache). Drop it in an `<img>` tag. Add `?color=white` for light text on dark backgrounds; defaults to black. Not CSS-styleable from the page since it's a separate document.
@@ -151,9 +151,9 @@ The idea here keeps showing up: old patterns, new infrastructure. A Cloudflare W
 - The free tier is 100,000 requests/day instead of "whatever the sysadmin allows"
 - You deploy via `wrangler deploy` instead of FTPing a Perl script to `/cgi-bin/`
 
-The web development patterns haven't changed. The infrastructure got better. If you need interactivity on a static site, think like it's 1998 and point your links at someone else's server. That server just happens to be a globally distributed edge network now.
+The fundamental patterns haven't changed. The infrastructure got better. If you need interactivity on a static site, think like it's 1998 and point your links at someone else's server. That server just happens to be a globally distributed edge network now.
 
-The [Worker source code](https://github.com/khawkins98/allaboutken-11ty/tree/main/worker) is in this site's repo -- about 80 lines of JavaScript, no dependencies beyond Wrangler. The pattern works for anything: polls, reactions, RSVP counters, hit counters. Sage Weil built it in 1994. I'm just running it on better hardware.
+The [Worker source code](https://github.com/khawkins98/allaboutken-11ty/tree/main/worker) is in this site's repo -- under 200 lines of JavaScript, no dependencies beyond Wrangler. The pattern works for anything: polls, reactions, RSVP counters, hit counters. Sage Weil built it in 1994. I'm just running it on better hardware.
 
 ## Setting this up on your own site
 
@@ -222,7 +222,7 @@ And the CSS:
 
 `rel="nofollow"` keeps crawlers from following the links. The Worker handles bot filtering, rate limiting, and the redirect.
 
-**7. CI/CD** (optional). The Worker is ~80 lines and unlikely to change often -- `npx wrangler deploy` from your machine is fine for occasional updates. If you do want automated deploys, add a GitHub Actions workflow that runs `wrangler deploy` when `worker/**` changes. Two repository secrets needed:
+**7. CI/CD** (optional). The Worker is unlikely to change often -- `npx wrangler deploy` from your machine is fine for occasional updates. If you do want automated deploys, add a GitHub Actions workflow that runs `wrangler deploy` when `worker/**` changes. Two repository secrets needed:
 
 - `CLOUDFLARE_API_TOKEN` -- create via Cloudflare dashboard → API Tokens → "Edit Cloudflare Workers" template
 - `CLOUDFLARE_ACCOUNT_ID` -- visible on your Cloudflare dashboard overview
@@ -261,15 +261,15 @@ Rate-limiting uses a SHA-256 hash of the IP address, stored as a KV key with a 2
 <summary><h3>Keeping bots honest</h3></summary>
 {% markdown %}
 
-The obvious concern: what stops a crawler from wandering onto `/feedback/up/posts/my-post/` and registering a false vote?
+The obvious concern: what stops a crawler from wandering onto `feedback.allaboutken.com/up/posts/my-post/` and registering a false vote?
 
 Five layers of defense, from prevention to cleanup:
 
-1. **Don't advertise the paths.** `robots.txt` disallows `/feedback/`. The sitemap excludes feedback URLs. Feedback links carry `rel="nofollow"`.
-2. **Tell arrivals to leave.** Feedback pages include `<meta name="robots" content="noindex, nofollow">`.
+1. **Don't advertise the paths.** Feedback links carry `rel="nofollow"`, so search engines won't follow them from the post to the Worker.
+2. **Return nothing indexable.** Vote URLs return 302 redirects -- no HTML, no content for a crawler to store. Count endpoints return raw SVG or plain text, not pages.
 3. **Server-side filtering.** The Worker checks `User-Agent` against known bot signatures and validates request headers. Simple crawlers don't send `Referer` or `Accept-Language` headers that real browsers do.
 4. **Rate limiting.** One vote per IP per post per 24 hours, enforced by the Worker via KV TTL keys. A SHA-256 hash of the IP and path is stored with a 24-hour expiration -- if it exists, the redirect still works but the counter doesn't increment.
-5. **Data cleanup.** KV counters can be reset with `wrangler kv:key delete`. If a bot swarm hits, zero the affected counters and move on.
+5. **Data cleanup.** KV counters can be reset with `wrangler kv key delete`. If a bot swarm hits, zero the affected counters and move on.
 
 An earlier design used GoatCounter page views as the counting mechanism, with a `<noscript>` tracking pixel as a JS-disabled fallback. That pixel is actually a bot magnet -- simple crawlers load images but skip JavaScript, so the pixel counts bots while the JS-based counter filters them out. The Worker approach sidesteps this entirely: counting happens server-side, before any HTML is returned.
 
@@ -283,7 +283,7 @@ I'm not the first person to think of this. Two projects proved different halves 
 
 **Andrew Walpole** [built a like button](https://andrewwalpole.com/blog/building-a-like-button-with-cloudflare-workers/) for his Eleventy blog using Cloudflare Workers and KV storage. He deployed it, ran it in production, and wrote about the experience. It proved the Eleventy + Workers + KV infrastructure works. But his approach uses client-side JavaScript -- petite-vue renders the button, and `fetch()` API calls communicate with the Worker.
 
-**[poll.fizzy.wtf](https://github.com/poll.fizzy.wtf)** is a Cloudflare Worker (written in Rust, MIT-licensed) that implements the redirect-count-redirect pattern with SVG result widgets. It's the 1994 web ring architecture applied to voting. No client-side JavaScript. Here's what using it looks like:
+**[poll.fizzy.wtf](https://github.com/vberlier/poll)** is a Cloudflare Worker (written in Rust, MIT-licensed) that implements the redirect-count-redirect pattern with SVG result widgets. It's the 1994 web ring architecture applied to voting. No client-side JavaScript. Here's what using it looks like:
 
 ```html
 <a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=yes&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👍 Yes <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=yes" alt="Yes votes" style="display:inline;vertical-align:middle"></a>
