@@ -34,6 +34,7 @@ permalink: /style-guide/components/
         <a href="#spacing">Spacing</a> ·
         <a href="#font-variations">Font variations</a> ·
         <a href="#video">Video embed</a> ·
+        <a href="#feedback-toast">Feedback toast</a> ·
         <a href="#accessibility">Accessibility</a> ·
         <a href="#utilities">Utilities</a>
       </p>
@@ -792,6 +793,62 @@ The `.kh-video` wrapper provides a responsive 16:9 container. Iframes, objects, 
   <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:#d0d0ce;display:flex;align-items:center;justify-content:center;color:#707372;font-size:18px;">16:9 video placeholder</div>
 </div>
 {% endcodeAndDemo %}
+
+  </div>
+</section>
+
+{# ── FEEDBACK TOAST ── #}
+<section class="kh-grid-stylized kh-u-padding__top--800" id="feedback-toast">
+  <div></div>
+  <div class="kh-content kh-content--wide">
+{% markdown %}
+## Feedback toast
+
+A fixed bottom banner triggered by CSS `:target`. Used after the [feedback Worker](/posts/20260220-feedback-buttons-cgi-pattern/) redirects back with a `#thanks` fragment. No JavaScript required.
+
+### How it works
+
+1. The element is hidden by default (`display: none`)
+2. When `#thanks` appears in the URL, `:target` activates the banner
+3. Banner slides up from the bottom with a spring easing (0.6s)
+4. A blue timer bar along the top border shrinks from 100% to 0 over 15 seconds
+5. After 15 seconds the banner slides back down and hides
+
+### Markup
+
+The element needs an `id` that matches the URL fragment, the `.kh-feedback-thanks` class, and `aria-live="polite"` so screen readers announce the message.
+
+```html
+<span id="thanks" class="kh-feedback-thanks" aria-live="polite">
+  Thanks for the feedback!
+</span>
+```
+
+The feedback link redirects back to the page with the fragment:
+
+```html
+<a href="https://feedback.example.com/up/posts/my-post/"
+   rel="nofollow">👍 This was useful</a>
+```
+
+The Worker returns `302 Location: https://example.com/posts/my-post/#thanks`, which activates `:target` on the banner element.
+
+### Design details
+
+- **Surface**: `#fafafa` background, blue text — matches button palette
+- **3D shadow**: `box-shadow` above the banner uses `--kh-color--blue--dark`
+- **Timer bar**: `::after` pseudo-element, 4px blue line, shrinks linearly over 15s
+- **Emoji**: `::before` adds a 🎉 prefix
+- **Auto-dismiss**: `kh-banner-out` animation fires at 15s, slides the banner down and sets `visibility: hidden`
+- **Reusable**: works anywhere — the `position: fixed` breaks out of any container context
+{% endmarkdown %}
+
+<h3>Demo</h3>
+<p>Click the link below to trigger the toast. It appends <code>#feedback-toast-demo</code> to the URL, activating the <code>:target</code> state on the demo element.</p>
+<p class="kh-cluster">
+  <a href="#feedback-toast-demo" class="kh-button kh-button--sm">Trigger toast demo</a>
+</p>
+<span id="feedback-toast-demo" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback!</span>
 
   </div>
 </section>
