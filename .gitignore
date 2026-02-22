@@ -13,3 +13,5 @@ yarn-error.log
 build
 temp
 .cache
+.wrangler
+worker/node_modules

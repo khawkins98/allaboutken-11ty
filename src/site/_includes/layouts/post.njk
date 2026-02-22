@@ -83,7 +83,7 @@ templateEngineOverride: njk
 </script>
 
 <div class="kh-stack kh-u-padding__top--800">
-{%- if comment != false %}
+  {%- if comment != false %}
   <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
     <div class="kh-grid__col--span-1">
     </div>
@@ -95,6 +95,15 @@ templateEngineOverride: njk
         <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
         <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
       </p>
+      <div class="kh-content kh-grid__col--span-2">
+        <h2 class="kh-text-heading--2 kh-u-sr-only">Was this useful?</h2>
+        <p class="kh-cluster">
+          <a href="https://feedback.allaboutken.com/up{{ page.url }}"
+            rel="nofollow" class="kh-button kh-button--sm">👍 This was useful</a>
+        <span id="thanks" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback!</span>
+        <span><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"> people found this useful</span>
+        </p>
+      </div>
     </div>
   </article>
   {%- endif %}

@@ -1,0 +1,29 @@
+---
+title: Style guide
+layout: layouts/base.njk
+teaser: 'How this site looks and how it reads.'
+date: 2026-02-21
+templateEngineOverride: njk
+permalink: /style-guide/
+---
+
+<article class="kh-grid-stylized kh-u-margin__top--1200">
+  <div></div>
+  <div class="kh-content">
+    <h1 class="kh-font-headline kh-text-heading--1">{{ title }}</h1>
+    <p class="kh-text-body--1">{{ teaser }}</p>
+
+{% markdown %}
+
+## [Component reference](/style-guide/components/)
+
+Live demos of every visual pattern on the site -- buttons, grids, cards, code blocks, the lot. If something looks wrong there, it looks wrong everywhere.
+
+## [Editorial style guide](/style-guide/editorial/)
+
+Voice, tone, structure, formatting. What a blog post should look like, what an impact story needs, how frontmatter works. Written for contributors, AI assistants, and future me.
+
+{% endmarkdown %}
+
+  </div>
+</article>
