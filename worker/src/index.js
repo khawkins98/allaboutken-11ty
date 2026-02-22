@@ -157,7 +157,7 @@ export default {
         return new Response(generateBadgeSvg(count, color), {
           headers: {
             'Content-Type': 'image/svg+xml',
-            'Cache-Control': 'public, max-age=300',
+            'Cache-Control': 'public, max-age=2',
             'Access-Control-Allow-Origin': corsOrigin,
           },
         });
@@ -167,7 +167,7 @@ export default {
       return new Response(String(count), {
         headers: {
           'Content-Type': 'text/plain',
-          'Cache-Control': 'public, max-age=300',
+          'Cache-Control': 'public, max-age=2',
           'Access-Control-Allow-Origin': corsOrigin,
         },
       });

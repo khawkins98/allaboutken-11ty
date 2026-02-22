@@ -77,8 +77,8 @@ The `#thanks` fragment in the redirect URL is doing real work. It's [URL-as-stat
 The Worker itself is under 200 lines. It handles three route families:
 
 - **`/up/posts/slug/`** -- increment a KV counter, 302 redirect back to the post
-- **`/count/posts/slug.svg`** -- return the count as an SVG number (`image/svg+xml`, 5-minute cache). Drop it in an `<img>` tag. Add `?color=white` for light text on dark backgrounds; defaults to black. Not CSS-styleable from the page since it's a separate document.
-- **`/count/posts/slug/`** -- return the count as plain text (`text/plain`, 5-minute cache). Use this for build-time fetches, a small JS enhancement that injects the number into a `<span>` you can style, or scripting.
+- **`/count/posts/slug.svg`** -- return the count as an SVG number (`image/svg+xml`, 2-second cache). Drop it in an `<img>` tag. Add `?color=white` for light text on dark backgrounds; defaults to black. Not CSS-styleable from the page since it's a separate document.
+- **`/count/posts/slug/`** -- return the count as plain text (`text/plain`, 2-second cache). Use this for build-time fetches, a small JS enhancement that injects the number into a `<span>` you can style, or scripting.
 
 The SVG endpoint is the 1996 hit counter pattern. An `<img>` tag pointing to a script that returns a dynamically generated image:
 
