@@ -22,6 +22,7 @@ permalink: /style-guide/components/
         <a href="#badges-labels">Badges &amp; labels</a> ·
         <a href="#note-boxes">Note boxes</a> ·
         <a href="#content-boxes">Content boxes</a> ·
+        <a href="#details">Collapsible details</a> ·
         <a href="#blockquotes">Blockquotes</a> ·
         <a href="#code">Code</a> ·
         <a href="#figures">Figures &amp; images</a> ·
@@ -256,6 +257,55 @@ General-purpose container with a bottom border accent. Themeable via `--kh-box-t
   <p>Links inside <code>.kh-box__text</code> inherit the current color.</p>
 </div>
 {% endcodeAndDemo %}
+
+  </div>
+</section>
+
+{# ── COLLAPSIBLE DETAILS ── #}
+<section class="kh-grid-stylized kh-u-padding__top--800" id="details">
+  <div></div>
+  <div class="kh-content kh-content--wide">
+{% markdown %}
+## Collapsible details
+
+A styled `<details>` element for secondary content that readers can expand on demand. Uses the site's blue border and offset shadow to match the button aesthetic. The heading inside `<summary>` renders inline next to the disclosure triangle.
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<details class="kh-details">
+  <summary><h3>Section title goes here</h3></summary>
+  <p>This content is hidden by default and revealed when the reader clicks the summary. Use it for supplementary information, prior art, alternative approaches, or anything that would interrupt the main flow.</p>
+  <p>Any HTML works inside — lists, code blocks, images.</p>
+</details>
+{% endcodeAndDemo %}
+
+{% markdown %}
+### Open by default
+
+Add the `open` attribute to show the content expanded on page load:
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<details class="kh-details" open>
+  <summary><h3>Expanded by default</h3></summary>
+  <p>The open state adds a bottom border below the summary to separate it from the content. The disclosure triangle rotates to indicate the expanded state.</p>
+</details>
+{% endcodeAndDemo %}
+
+{% markdown %}
+### When to use
+
+- Lengthy prior art or background that most readers can skip
+- Alternative approaches considered but not chosen
+- Technical implementation details on a non-technical post
+- Code examples that supplement but aren't essential to the narrative
+
+### Markup notes
+
+- The heading level inside `<summary>` should match your document outline (use `<h2>`, `<h3>`, etc. as appropriate)
+- The `.kh-details` class handles all styling — no additional classes needed on child elements
+- Works with `{% raw %}{% markdown %}{% endraw %}` blocks inside for rich content
+{% endmarkdown %}
 
   </div>
 </section>
