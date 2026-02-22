@@ -1,5 +1,5 @@
 ---
-title: "No-JS feedback buttons for static sites, using a 1994 web pattern"
+title: "Feedback buttons without JavaScript, using a 1990s web pattern"
 layout: layouts/post.njk
 teaser: "A Cloudflare Worker is just a CGI script, and that's exactly what a static site needs."
 date: 2026-02-20
@@ -17,7 +17,7 @@ kens_status: draft
 
 I wanted to add a "Was this useful?" button to my blog posts. The site runs on GitHub Pages. No backend. No database. No server-side anything. And I didn't want JavaScript in the interaction itself.
 
-The solution turned out to be 30(!) years old.
+The solution turned out to be three decades(!) old.
 
 > **tl;dr**
 >
@@ -28,7 +28,7 @@ The solution turned out to be 30(!) years old.
 > - An SVG endpoint returns just the number -- the 1996 hit counter, reborn
 > - The Worker source is in the [`worker/` directory](https://github.com/khawkins98/allaboutken-11ty/tree/main/worker) of this site's repo
 
-## The constraint that made it interesting
+## Constraints as a design tool
 
 This site already uses [a CSS-only toggle](/posts/20250906-css-naked-css-only/) to disable all styles with a checkbox. The search form works without JavaScript. [URLs carry state](/posts/20251226-url-state-management/) instead of client-side stores. The pattern is clear: HTML and CSS do the work; JavaScript is an enhancement, not a dependency.
 
@@ -36,7 +36,7 @@ That's not accidental -- it's why the site runs on [Eleventy](https://www.11ty.d
 
 Feedback buttons should follow the same rule. Click a link, register the vote, done. No `fetch()` calls, no framework, no hydration. If JavaScript fails to load, the feedback still works.
 
-The problem is obvious: the site is static HTML, so were do we put the brain?
+The problem is obvious: the site is static HTML, so where do we put the brain?
 
 ## What would a 1998 webmaster do?
 
@@ -89,7 +89,7 @@ _Aside: The current implementation tracks positive feedback only -- a single "Ye
 
 {% endmarkdown %}
 
-<h3 class="kh-text-heading--3">Demo time</h3>
+<h3 class="kh-text-heading--3">Demo</h3>
 <p>A plain <code>&lt;a&gt;</code> link. No JavaScript. The Worker handles the rest. <code>aria-live="polite"</code> on the thank-you message announces it to screen readers when it appears.</p>
 <p class="kh-cluster">
   <a href="https://feedback.allaboutken.com/up{{ page.url }}" rel="nofollow" class="kh-button kh-button--sm">👍 Yes, this was useful</a>
@@ -149,7 +149,7 @@ The idea here keeps showing up: old patterns, new infrastructure. A Cloudflare W
 
 The web development patterns haven't changed. The infrastructure got better. If you need interactivity on a static site, think like it's 1998 and point your links at someone else's server. That server just happens to be a globally distributed edge network now.
 
-The [Worker source code](https://github.com/khawkins98/allaboutken-11ty/tree/main/worker) is in this site's repo -- about 80 lines of JavaScript, no dependencies beyond Wrangler. The pattern works for anything: polls, reactions, RSVP counters, hit counters. Sage Weil built it in 1994. We're just running it on better hardware.
+The [Worker source code](https://github.com/khawkins98/allaboutken-11ty/tree/main/worker) is in this site's repo -- about 80 lines of JavaScript, no dependencies beyond Wrangler. The pattern works for anything: polls, reactions, RSVP counters, hit counters. Sage Weil built it in 1994. I'm just running it on better hardware.
 
 ## Setting this up on your own site
 
@@ -225,8 +225,6 @@ And the CSS:
 
 **Free tier limits:** 100,000 Worker requests/day, 1,000 KV writes/day. The writes are the constraint -- 1,000 feedback clicks per day, more than enough for most sites.
 
-You can try the feedback buttons at the bottom of this post.
-
 ## What's next
 
 **Star ratings via ISMAP.** The current implementation is positive-only -- a single "Yes, this was useful" button. Star ratings are the natural next step, and the approach is too good not to mention: HTML's [server-side image maps](https://rickcarlino.com/2021/what-were-server-side-image-maps.html). Wrap an `<img>` in an `<a>` with the `ismap` attribute, and clicking the image appends `?x,y` coordinates to the URL. The Worker calculates which star from the X coordinate. Server-side image maps were first supported in NCSA Mosaic 1.1 (1993). They still work in every browser.
@@ -242,7 +240,7 @@ You can try the feedback buttons at the bottom of this post.
 
 **A community web ring for Eleventy sites.** The architecture generalizes. If multiple Eleventy sites each ran their own feedback Worker, a shared index could aggregate the counts -- "top rated Eleventy posts this month" in the spirit of a classic web ring. Each site keeps its own data, the index just reads the public `/count/` endpoints. The pattern is cooperative, not centralized: no shared database, no sign-up, just HTTP.
 
-## Additional commentary
+## Behind the decisions
 
 {% endmarkdown %}
 <details class="kh-details">
@@ -329,6 +327,8 @@ The Worker wasn't the first idea. The design process explored six approaches. Th
 {% endmarkdown %}
 </details>
 {% markdown %}
+
+The feedback buttons are live on this post -- scroll down and try them. If you set this up on your own site, I'd genuinely like to hear how it goes.
 
 ---
 
