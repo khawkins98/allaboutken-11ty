@@ -1,6 +1,6 @@
 const { DateTime } = require('luxon');
 const Path         = require('path');
-const { execSync } = require('child_process');
+const { execSync, exec } = require('child_process');
 const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 // const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
 
@@ -369,12 +369,22 @@ module.exports = function(config) {
   // Watch source images for changes
   config.addWatchTarget("./src/site/images");
 
-  // Post-build tasks
+  // Post-build: generate Pagefind search index
   config.on('eleventy.after', () => {
-    try {
-      execSync('node scripts/build-search-index.js', { stdio: 'inherit' });
-    } catch (e) {
-      console.error('Search index build failed in eleventy.after');
+    const cmd = 'npx pagefind --site build';
+    if (isDev) {
+      // Run in background so dev rebuilds aren't blocked
+      const child = exec(cmd, (err) => {
+        if (err) console.error('Pagefind index build failed');
+      });
+      child.stdout?.pipe(process.stdout);
+      child.stderr?.pipe(process.stderr);
+    } else {
+      try {
+        execSync(cmd, { stdio: 'inherit' });
+      } catch (e) {
+        console.error('Pagefind index build failed');
+      }
     }
   });
 

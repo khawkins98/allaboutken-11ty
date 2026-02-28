@@ -12,36 +12,23 @@ permalink: 404.html
   <div>
   <h1 class="kh-intro__heading"> 4-oh-no-4! <span class="emoji">😨</span></h1>
   <p class="kh-intro__text">This link is busted.</p>
-    {% set context = {
-      search_client_button_text: "Try a search for it",
-      search_client_autofocus: false,
-      search_client_prompt: "Search my site",
-      search_client_script: "/search_index.js",
-      search_client_button: true,
-      search_client_action: "/search/",
-      search_client_results: true,
-      search_client_id: "search_query",
-      search_client_destination_prefix: ""
-    } %}
 
-    <form action="{{ context.search_client_action }}" method="GET" class="kh-form kh-form--search kh-form--search--responsive kh-sidebar kh-sidebar--end">
+    <form action="/search/" method="GET" class="kh-form kh-form--search kh-form--search--responsive kh-sidebar kh-sidebar--end">
       <div class="kh-sidebar__inner">
         <div class="kh-form__item" style="display:none">
-          <label class="kh-form__label kh-search__label kh-u-sr-only" for="{{ search_client_id }}">{{ context.search_label }}</label>
-          <input type="search" id="{{ context.search_client_id }}" placeholder="{{ context.search_client_prompt }}" name="{{ context.search_client_id }}" class="kh-form__input kh-search__input" {%- if search_client_autofocus %} autofocus{%- endif %} data-kh-search-client-side-input data-kh-search-client-side-destination-prefix="{{context.search_client_destination_prefix}}">
+          <label class="kh-form__label kh-search__label kh-u-sr-only" for="search_query">Search my site</label>
+          <input type="search" id="search_query" placeholder="Search my site" name="search_query" class="kh-form__input kh-search__input">
         </div>
-        {%- if context.search_client_button -%}
         <button type="submit" class="kh-button">
-          {{ context.search_client_button_text }}
+          Try a search for it
         </button>
-        {%- endif -%}
       </div>
     </form>
   </div>
 </section>
 
 <script>
-  // pre-populate the search with the query string
+  // Pre-populate the search with the broken URL path
   var truncatedUrl = window.location.pathname
     .replace(/\.html$/, '')
     .replace('components/detail/','')
