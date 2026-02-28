@@ -13,7 +13,6 @@
     "clean": "rm -rf build",
     "sass": "sass --load-path src/components --no-source-map src/components/vf-componenet-rollup/index.scss:build/css/styles.css",
     "eleventy": "ELEVENTY_ENV=production eleventy --config=eleventy.js",
-    "search:index": "node scripts/build-search-index.js",
     "lint:css": "stylelint \"src/**/*.scss\" \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.scss\" \"src/**/*.css\" --fix",
     "build": "yarn clean && yarn sass && yarn eleventy && echo '🏋 Build completed'",
@@ -26,15 +25,13 @@
     "@11ty/eleventy": "^3.1.2",
     "luxon": "^3.7.2",
     "markdown-it": "^14.1.0",
-    "markdown-it-anchor": "^9.2.0",
-    "node-html-parser": "7.0.1",
-    "strip-js": "1.2.0",
-    "striptags": "3.2.0"
+    "markdown-it-anchor": "^9.2.0"
   },
   "devDependencies": {
     "@11ty/eleventy-img": "^6.0.0",
     "@stylistic/stylelint-plugin": "^4.0.0",
     "concurrently": "^9.2.1",
+    "pagefind": "^1.4.0",
     "sass": "^1.93.2",
     "stylelint": "^16.25.0",
     "stylelint-config-prettier": "^9.0.5",

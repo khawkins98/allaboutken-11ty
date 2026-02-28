@@ -1,0 +1,113 @@
+---
+title: "Site search without a search service"
+layout: layouts/post.njk
+teaser: "No API keys, no external service -- just a build step and one HTML attribute."
+date: 2026-02-28
+tags:
+  - posts
+topics:
+  - eleventy
+  - search
+  - static sites
+kens_status: draft
+---
+
+{% markdown %}
+
+This site's search runs entirely at build time. Pagefind indexes the HTML that Eleventy generates, produces a chunked index, and the browser loads only the fragments it needs per query. No external service, no API keys, no framework. Here's how I set it up and what I learned along the way.
+
+> ## tl;dr
+>
+> - Pagefind indexes your built HTML and produces a chunked search index -- ~10 KB initial download
+> - One `data-pagefind-body` attribute controls what gets indexed
+> - Runs as an `eleventy.after` hook, async in dev so rebuilds aren't blocked
+> - Replaced an aging Lunr.js setup (unmaintained since 2020, 204 KB upfront download)
+> - [Full diff on GitHub](https://github.com/khawkins98/allaboutken-11ty/pull/24)
+
+### Why not Lunr.js
+
+This site previously used Lunr.js, which had the right idea: build-time indexing, client-side querying, no external service. But Lunr hasn't had a release since 2020, and the setup had accumulated problems -- a 204 KB gzip download before any search could happen, 93 social card pages polluting the index, no highlighted excerpts, and `innerHTML` rendering that was one bad index entry away from XSS. A [technical audit](https://github.com/khawkins98/allaboutken-11ty/pull/24) made the case for starting fresh.
+
+### How it works
+
+Pagefind's integration comes down to one HTML attribute. Add `data-pagefind-body` to your main content wrapper and Pagefind indexes only that element. Pages without it (social cards, redirect stubs, anything outside your base layout) are automatically excluded.
+
+For boilerplate within content pages (comments sections, previous/next navigation), `data-pagefind-ignore` on that wrapper keeps it out of the index.
+
+The build integration is an `eleventy.after` hook:
+
+```js
+let pagefindChild = null;
+config.on('eleventy.after', () => {
+  const cmd = 'pagefind --site build --exclude-selectors "pre, code"';
+  if (isDev) {
+    if (pagefindChild) {
+      pagefindChild.kill();
+      pagefindChild = null;
+    }
+    pagefindChild = exec(cmd, (err) => {
+      pagefindChild = null;
+      if (err && !err.killed) console.error('Pagefind index build failed');
+    });
+  } else {
+    execSync(cmd, { stdio: 'inherit' });
+  }
+});
+```
+
+In production, `execSync` so the build waits for the index. In dev, `exec` (async) so rebuilds aren't blocked. Search catches up a few seconds after each save.
+
+The search page is about 80 lines. Here's the key part -- Pagefind lazy-loads as an ES module the first time someone searches:
+
+```js
+async function init() {
+  if (!pagefind) {
+    pagefind = await import('/pagefind/pagefind.js');
+    await pagefind.options({ excerptLength: 30 });
+  }
+  return pagefind;
+}
+```
+
+The rest is debounced input handling, XSS-safe rendering, and URL parameter preservation so the 404 page can redirect to search. One thing I discovered post-launch: code examples were showing up in search excerpts as raw HTML. Adding `--exclude-selectors "pre, code"` to the Pagefind command fixed that. You can also use `data-pagefind-ignore` on individual elements, but the CLI flag is cleaner for a global rule.
+
+### Before and after
+
+| Metric | Lunr.js | Pagefind |
+|---|---|---|
+| Initial download (gzip) | 204 KB | ~10 KB |
+| Per-query download | 0 | ~10-30 KB |
+| Pages indexed | 194 (incl. social cards) | 89 (content only) |
+| Unmaintained dependencies | 3 | 0 |
+| Highlighted excerpts | No | Yes |
+| Build time impact | ~0s (Node script) | ~0.2s |
+
+The initial download difference is the headline number, but the index quality matters more. Going from 194 pages (half junk) to 89 content-only pages means search results are actually useful now.
+
+### Tips if you're doing this
+
+1. **Use `data-pagefind-body` rather than listing exclusions.** Add it to your main content wrapper and everything else is excluded by default. Much cleaner than maintaining a list of things to ignore.
+
+2. **Exclude code blocks from indexing.** Run Pagefind with `--exclude-selectors "pre, code"` unless you want raw HTML from code examples showing up in search excerpts.
+
+3. **Run Pagefind async in dev mode.** Use `exec` (not `execSync`) in your dev build hook so Eleventy rebuilds aren't blocked. Search lags a few seconds behind each rebuild, which is fine for development.
+
+4. **Kill previous Pagefind runs on rebuild.** In dev mode, overlapping builds can corrupt the index. Track the child process and kill it before spawning a new one.
+
+5. **Add a `<noscript>` fallback.** A link to DuckDuckGo `site:yoursite.com` costs nothing and handles the JS-disabled case.
+
+### Tradeoffs
+
+Pagefind is not free of cost. It loads a ~75 KB WASM module, not pure JS like Lunr was. You also get less control over the indexing pipeline; Lunr let you customize tokenization and stemming, while Pagefind's index is more of a black box.
+
+The chunked architecture means each search makes network requests to load index fragments on demand. Lunr was one-and-done after the initial load. For a site this size you'd never notice, but the tradeoff is real.
+
+It's also another build tool, though it replaced a three-dependency Node script, so net complexity went down.
+
+The best search system for a static site is still the same idea Lunr had ten years ago: build-time indexing, client-side querying, no external service. Pagefind just does it with a better architecture and someone still maintaining it. If your site search hasn't been touched in a while, the [migration PR](https://github.com/khawkins98/allaboutken-11ty/pull/24) might be a useful reference. I'd be curious to hear if you've run into anything different.
+
+### Related posts
+
+- [A simpler, faster site: moving to pure Eleventy v3](/posts/20250831-site-overhaul-eleventy-v3)
+
+{% endmarkdown %}

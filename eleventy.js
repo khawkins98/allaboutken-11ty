@@ -1,6 +1,6 @@
 const { DateTime } = require('luxon');
 const Path         = require('path');
-const { execSync } = require('child_process');
+const { execSync, exec } = require('child_process');
 const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 // const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
 
@@ -289,7 +289,7 @@ module.exports = function(config) {
     );
     const escaped = escapeHtml(snippet);
     return [
-      '<div class="kh-demo">',
+      '<div class="kh-demo" data-pagefind-ignore>',
       `<pre><code class="language-${lang}">${escaped}</code></pre>`,
       '<div class="kh-demo__live">',
       snippet,
@@ -369,12 +369,29 @@ module.exports = function(config) {
   // Watch source images for changes
   config.addWatchTarget("./src/site/images");
 
-  // Post-build tasks
+  // Post-build: generate Pagefind search index
+  let pagefindChild = null;
   config.on('eleventy.after', () => {
-    try {
-      execSync('node scripts/build-search-index.js', { stdio: 'inherit' });
-    } catch (e) {
-      console.error('Search index build failed in eleventy.after');
+    const cmd = 'pagefind --site build --exclude-selectors "pre, code"';
+    if (isDev) {
+      // Kill any previous run so overlapping builds don't corrupt the index
+      if (pagefindChild) {
+        pagefindChild.kill();
+        pagefindChild = null;
+      }
+      // Run in background so dev rebuilds aren't blocked
+      pagefindChild = exec(cmd, (err) => {
+        pagefindChild = null;
+        if (err && !err.killed) console.error('Pagefind index build failed');
+      });
+      pagefindChild.stdout?.pipe(process.stdout);
+      pagefindChild.stderr?.pipe(process.stderr);
+    } else {
+      try {
+        execSync(cmd, { stdio: 'inherit' });
+      } catch (e) {
+        console.error('Pagefind index build failed');
+      }
     }
   });
 
