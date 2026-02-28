@@ -6,49 +6,120 @@ templateEngineOverride: njk
 noindex: true
 ---
 
+<div data-pagefind-ignore>
 <section class="kh-grid-stylized kh-stack">
   <div></div>
   <div>
-    {% set context = {
-      search_client_button_text: "Search",
-      search_client_autofocus: false,
-      search_client_prompt: "Search my site",
-      search_client_script: "/search_index.js",
-      search_client_button: true,
-      search_client_action: "/search/",
-      search_client_id: "search_query",
-      search_client_destination_prefix: ""
-    } %}
-
     <h1>{{title}}</h1>
 
-    <form action="{{ context.search_client_action }}" method="GET" class="kh-form kh-form--search kh-form--search--responsive kh-sidebar kh-sidebar--end">
+    <form action="/search/" method="GET" class="kh-form kh-form--search kh-form--search--responsive kh-sidebar kh-sidebar--end">
       <div class="kh-sidebar__inner">
         <div class="kh-form__item">
-          <label class="kh-form__label kh-search__label kh-u-sr-only" for="{{ search_client_id }}">{{ context.search_label }}</label>
-          <input type="search" id="search" placeholder="{{ context.search_client_prompt }}" name="{{ context.search_client_id }}" class="kh-form__input vf-search__input" {%- if search_client_autofocus %} autofocus{%- endif %} data-kh-search-client-side-input data-kh-search-client-side-destination-prefix="{{context.search_client_destination_prefix}}">
+          <label class="kh-form__label kh-search__label kh-u-sr-only" for="search">Search my site</label>
+          <input type="search" id="search" placeholder="Search my site" name="search_query" class="kh-form__input vf-search__input">
         </div>
-        {%- if context.search_client_button -%}
         <button type="submit" class="kh-button">
-          {{ context.search_client_button_text }}
+          Search
         </button>
-        {%- endif -%}
       </div>
     </form>
 
-    <script src="/js-search-lunr.js"></script>
-    <script src="/js-search-client-side.js"></script>
-    <script src="{{ context.search_client_script }}"></script>
+    <noscript>
+      <p>Search requires JavaScript. You can also try
+        <a href="https://duckduckgo.com/?q=site%3Aallaboutken.com">searching on DuckDuckGo</a>.
+      </p>
+    </noscript>
+
     <div class="kh-content kh-grid kh-search-client-side">
-      <div class="results-container" data-kh-search-client-side-results>
-        Loading...
-      </div>
+      <div id="search-results"></div>
     </div>
   </div>
 </section>
 
-<script type="text/javascript">
-  window.addEventListener("DOMContentLoaded", (event) => {
-    khSearchClientSide();
+<script type="module">
+  const input = document.getElementById('search');
+  const resultsEl = document.getElementById('search-results');
+  let pagefind = null;
+  let debounceTimer = null;
+
+  async function init() {
+    if (!pagefind) {
+      pagefind = await import('/pagefind/pagefind.js');
+      await pagefind.options({ excerptLength: 30 });
+    }
+    return pagefind;
+  }
+
+  const escDiv = document.createElement('div');
+  function esc(s) {
+    escDiv.textContent = s;
+    return escDiv.innerHTML;
+  }
+
+  async function doSearch(query) {
+    if (!query || !query.trim()) {
+      resultsEl.innerHTML = '';
+      return;
+    }
+
+    resultsEl.innerHTML = '<p>Searching...</p>';
+
+    try {
+      const pf = await init();
+      const search = await pf.search(query);
+
+      if (search.results.length === 0) {
+        resultsEl.innerHTML = '<p>No results found.</p>';
+        return;
+      }
+
+      const toShow = search.results.slice(0, 10);
+      const fragments = await Promise.all(toShow.map(r => r.data()));
+
+      const total = search.results.length;
+      const shown = toShow.length;
+      const countText = total > shown
+        ? `Showing ${shown} of ${total} results.`
+        : `${total} result${total === 1 ? '' : 's'} found.`;
+
+      const html = fragments.map(item => `
+        <article class="kh-search-result">
+          <a href="${esc(item.url)}"><h3>${esc(item.meta?.title || item.url)}</h3></a>
+          <p class="snippet">${item.excerpt}</p>
+          <p><code>${esc(item.url)}</code></p>
+        </article>
+      `).join('');
+
+      resultsEl.innerHTML = `<p>${countText}</p>` + html;
+    } catch (err) {
+      console.error('Search failed:', err);
+      resultsEl.innerHTML = '<p>Search is temporarily unavailable. Try <a href="https://duckduckgo.com/?q=site%3Aallaboutken.com">searching on DuckDuckGo</a> instead.</p>';
+    }
+  }
+
+  // Read query from URL on page load
+  const params = new URLSearchParams(window.location.search);
+  const initialQuery = params.get('search_query');
+  if (initialQuery) {
+    input.value = initialQuery;
+    doSearch(initialQuery);
+  }
+
+  // Debounced input handler
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => doSearch(input.value), 300);
+  });
+
+  // Also search on form submit (prevents page reload, updates URL)
+  input.closest('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    clearTimeout(debounceTimer);
+    const query = input.value;
+    const url = new URL(window.location);
+    url.searchParams.set('search_query', query);
+    window.history.replaceState({}, '', url);
+    doSearch(query);
   });
 </script>
+</div>
