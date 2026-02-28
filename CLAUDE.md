@@ -33,8 +33,6 @@ yarn lint:css:fix   # Auto-fix stylelint issues
 - Key rules: max nesting depth of 1, max 3 compound selectors, no duplicate selectors
 - Ignores `build/`, `node_modules/`, and minified CSS
 
-### Other
-
 ## Deployment
 
 - GitHub Pages via GitHub Actions (`.github/workflows/build-and-deploy.yml`)
