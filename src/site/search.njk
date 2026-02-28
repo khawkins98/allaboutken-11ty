@@ -50,10 +50,10 @@ noindex: true
     return pagefind;
   }
 
+  const escDiv = document.createElement('div');
   function esc(s) {
-    const d = document.createElement('div');
-    d.textContent = s;
-    return d.innerHTML;
+    escDiv.textContent = s;
+    return escDiv.innerHTML;
   }
 
   async function doSearch(query) {
