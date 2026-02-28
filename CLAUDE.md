@@ -16,7 +16,7 @@ yarn start        # Alias for yarn dev
 
 ### Build
 ```bash
-yarn build        # Clean → compile Sass → Eleventy production → search index
+yarn build        # Clean → compile Sass → Eleventy production (includes Pagefind indexing)
 yarn clean        # Remove /build directory
 yarn sass         # Compile Sass to build/css/styles.css
 yarn eleventy     # Run Eleventy build (sets ELEVENTY_ENV=production)
@@ -34,9 +34,6 @@ yarn lint:css:fix   # Auto-fix stylelint issues
 - Ignores `build/`, `node_modules/`, and minified CSS
 
 ### Other
-```bash
-yarn search:index   # Build client-side search index (runs automatically post-build)
-```
 
 ## Deployment
 
@@ -62,10 +59,12 @@ yarn search:index   # Build client-side search index (runs automatically post-bu
    - Data: `src/site/_data/`
    - Includes: `src/site/_includes/`
 
-3. **Post-build**: Search index generation via `scripts/build-search-index.js`
+3. **Post-build**: Pagefind search index generation
    - Runs automatically after Eleventy build (via `eleventy.after` event)
-   - Crawls built HTML files in `/build`
-   - Generates `build/search_index.js` for client-side search
+   - In production: `npx pagefind --site build` runs synchronously
+   - In dev: runs in background so rebuilds aren't blocked
+   - Only pages with `data-pagefind-body` (on `<main>` in `base.njk`) are indexed
+   - Output: `build/pagefind/` (chunked index, JS, WASM)
 
 ### Image Handling
 
@@ -257,14 +256,15 @@ Supported organizations (defined in `src/site/_includes/partials/orgs.njk`):
 {% endcodeAndDemo %}
 ```
 
-## Search Index
+## Search
 
-The search functionality is powered by a post-build script (`scripts/build-search-index.js`):
-- Walks all `.html` files in `build/`
-- Extracts title (from `<title>` tag) and body content (from `<body>`)
-- Excludes elements with class `kh-search-client-side--no-index`
-- Strips JavaScript and HTML tags
-- Outputs `build/search_index.js` with array of `{id, title, text, tags, url}` objects
+Search is powered by [Pagefind](https://pagefind.app/), a static search library:
+- Index built at deploy time via `npx pagefind --site build` (in `eleventy.after` hook)
+- Only `<main data-pagefind-body>` content is indexed (social cards, `/node/` redirects excluded automatically)
+- Post boilerplate (comments, prev/next nav) excluded via `data-pagefind-ignore` on `post.njk`
+- Search page (`src/site/search.njk`) uses Pagefind's JS API with `<script type="module">`
+- Chunked index: users download ~10 KB JS initially, ~10-30 KB per query (fragments loaded on demand)
+- `?search_query=` URL parameter preserved for 404 page redirect flow
 
 ## RSS Feed
 
@@ -311,5 +311,5 @@ Beyond blog posts, these pages exist in `src/site/`:
 - `src/site/_includes/layouts/base.njk` - Base HTML template
 - `src/site/_includes/layouts/post.njk` - Blog post template
 - `src/site/_data/siteConfig.json` - Site-wide configuration
-- `scripts/build-search-index.js` - Search index generator
+- `src/site/search.njk` - Pagefind-powered search page
 - `docs/EDITORIAL_HANDBOOK.md` - Editorial standards and guidelines

@@ -26,7 +26,7 @@ This site is built and published with a small, readable stack and a bias for fle
 - **Language & tooling**: Node.js (Yarn scripts), Nunjucks templates, Markdown via Markdown‑It with `markdown-it-anchor`
 - **Styles**: Sass compiled to a single CSS file; custom utility classes; normalize; type set with the Recursive font
   - Previously used the EMBL Visual Framework (VF) and Gulp; the [migration to a simpler Eleventy v3 stack is documented here](/posts/20250831-site-overhaul-eleventy-v3).
-- **Search**: Static index generated at build time; client‑side search with Lunr.js. Source: [search page template](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/search.njk), [client‑side script](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/js-search-client-side.js), [index builder](https://github.com/khawkins98/allaboutken-11ty/blob/main/scripts/build-search-index.js)
+- **Search**: [Pagefind](https://pagefind.app/) — a static search library that indexes the built HTML at deploy time and serves chunked index fragments on demand. Source: [search page template](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/search.njk)
 - **Hosting**: Vercel (auto‑deploys from GitHub, automatic HTTPS, CDN)
 - **Domain**: Cloudflare (DNS, security, performance)
 - Fonts: [Recursive](/posts/20250904-switching-to-recursive)

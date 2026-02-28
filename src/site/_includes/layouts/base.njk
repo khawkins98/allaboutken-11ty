@@ -85,7 +85,7 @@
     <a href="#main-content" class="kh-u-sr-only kh-skip-link">Skip to main content</a>
     <!-- Visible when CSS is off (hidden by CSS when on) -->
     <aside class="kh-css-off-note">If you're reading this the site styles are currently disabled. Toggle the “CSS” checkbox in the footer to restore styling.<hr></aside>
-    <header class="kh-global-header | kh-search-client-side--no-index" role="banner">
+    <header class="kh-global-header" role="banner">
       <a href="/" class="kh-logo kh-navigation__link">AllAboutKen.com</a>
       <nav class="kh-cluster kh-navigation kh-u-do-not-print kh-u-show-for-medium">
         <ul class="kh-navigation__list">
@@ -110,7 +110,7 @@
         </ul>
       </nav>
     </header>
-    <main role="main" id="main-content">
+    <main role="main" id="main-content" data-pagefind-body>
     {{ content | safe }}
     </main>
     {% include "footer.njk" %}
