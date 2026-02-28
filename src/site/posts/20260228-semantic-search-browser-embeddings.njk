@@ -1,0 +1,187 @@
+---
+title: "Semantic search on a static site, no API keys required"
+layout: layouts/post.njk
+teaser: "Vector embeddings at build time, cosine similarity in the browser. The same 23 MB model runs both sides."
+date: 2026-02-28
+tags:
+  - posts
+topics:
+  - eleventy
+  - search
+  - machine learning
+  - static sites
+kens_status: draft
+---
+
+{% markdown %}
+
+Last week I [replaced Lunr.js with Pagefind](/posts/20260228-replacing-lunr-with-pagefind/) for keyword search on this site. Pagefind works well -- you type "eleventy image plugin" and get back pages containing those words, ranked by BM25. But keyword search has a ceiling. Search for "making websites faster" and you'll miss a post titled "performance optimization" because the words don't overlap.
+
+Semantic search matches meaning instead of keywords. A query about "making websites faster" finds posts about performance, caching, and build optimization even if those exact words never appear in the query.
+
+The constraint I set: no LLM, no SaaS, no API keys. Everything runs locally -- embeddings generated at build time, queries processed in the browser. The same model runs on both sides.
+
+> ## tl;dr
+>
+> - Build-time script generates vector embeddings for all posts using [MiniLM-L6-v2](https://huggingface.co/Xenova/all-MiniLM-L6-v2) via [Transformers.js](https://huggingface.co/docs/transformers.js)
+> - Produces a ~700 KB `vectors.json` file shipped as a static asset
+> - Browser loads the same model on first query (~23 MB, cached afterward)
+> - Cosine similarity ranks posts by meaning, not keywords
+> - [Try it at /ask/](/ask/)
+
+## How vector search works
+
+Traditional search (Lunr, Pagefind, Elasticsearch) builds an inverted index: for each word, store which documents contain it. Query terms get looked up in the index and documents are ranked by term frequency, document length, and similar signals. This works well when the user's words match the author's words.
+
+Vector search takes a different approach. A small neural network (in this case, [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)) reads a piece of text and produces a fixed-length array of numbers -- a 384-dimension vector -- that captures the text's meaning. Two texts about similar topics produce vectors that point in similar directions, even if they share no words.
+
+At query time, the same model converts the question into a vector. [Cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity) measures how close the query vector is to each document vector. The closest documents are the most relevant results.
+
+The entire ranking function is ten lines:
+
+```js
+function cosineSimilarity(a, b) {
+  let dot = 0, normA = 0, normB = 0;
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i];
+    normA += a[i] * a[i];
+    normB += b[i] * b[i];
+  }
+  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+```
+
+## The build-time half
+
+A Node.js script runs after Eleventy and Pagefind in the build pipeline. It reads every HTML file in the `build/` directory, extracts text from `<main data-pagefind-body>` (reusing Pagefind's content boundary), and generates an embedding for each page.
+
+The input to the model is the page title, meta description, and the first 500 characters of body text concatenated together. More on why that specific combination in the next section.
+
+```js
+const text = title + ' ' + description + ' ' + bodyText.slice(0, 500);
+const output = await extractor(text, { pooling: 'mean', normalize: true });
+```
+
+The output is a JSON file:
+
+```json
+{
+  "model": "Xenova/all-MiniLM-L6-v2",
+  "dimension": 384,
+  "documents": [
+    {
+      "url": "/posts/example/",
+      "title": "...",
+      "teaser": "...",
+      "date": "2026-02-28",
+      "embedding": [0.023, -0.041, ...]
+    }
+  ]
+}
+```
+
+For 88 pages, the file is 719 KB raw. Gzip brings that down to roughly 80 KB over the wire. The embedding step adds about six seconds to a production build (after the model is cached locally).
+
+The `package.json` change is minimal:
+
+```json
+"embeddings": "node scripts/generate-embeddings.js",
+"build": "yarn clean && yarn sass && yarn eleventy && yarn embeddings && echo 'Build completed'"
+```
+
+Embeddings run after Eleventy (which runs Pagefind in its `eleventy.after` hook), so the full HTML output is available. The script is not included in `yarn dev` -- it's too slow for iterative development. Run `yarn build` once to generate vectors, then `yarn dev` as usual.
+
+## The browser half
+
+The [/ask/](/ask/) page loads nothing on initial visit. On first query submit, three things happen:
+
+1. Fetch `/semantic-search/vectors.json` (~80 KB gzipped)
+2. Import Transformers.js from jsDelivr CDN
+3. Initialize the MiniLM pipeline (~23 MB model download, with progress bar)
+
+The model downloads once and lives in the browser's Cache Storage. Second visits skip straight to step 3, which completes in under two seconds. Subsequent queries within the same session are near-instant -- embed the query (~100 ms), compute 88 cosine similarities (< 1 ms), sort and display.
+
+```js
+// Lazy-load on first query, not on page load
+const { pipeline } = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3');
+extractor = await pipeline('feature-extraction', vectorData.model, {
+  dtype: 'q8',
+  progress_callback: (progress) => {
+    if (progress.status === 'progress') {
+      progressBar.value = Math.round(progress.progress);
+    }
+  },
+});
+```
+
+Results are filtered by a similarity threshold (score > 0.25) and limited to five. Below that threshold, results tend to be noise. The response templates are simple conditionals -- no LLM generates the answer text:
+
+- Zero results: "I couldn't find anything closely related. Try rephrasing, or use keyword search."
+- One high-confidence result: "I found one post that closely matches:"
+- Multiple results: "Here are N posts that might be relevant:"
+
+Every response includes a fallback link to Pagefind keyword search.
+
+## What the model sees
+
+MiniLM-L6-v2 is a sentence transformer -- a BERT variant fine-tuned for producing sentence embeddings. It was trained on over a billion sentence pairs and distilled from a larger model. The "L6" means six transformer layers (BERT-base has twelve), and the output is 384 dimensions (half of BERT's 768). Smaller and faster, at the cost of some nuance.
+
+It doesn't understand content the way a large language model would. It maps text into a geometric space where similar meanings cluster together. "Performance optimization" and "making websites faster" land near each other because the model learned from millions of examples that those phrases appear in similar contexts.
+
+The input you feed it matters more than I expected. Just the title loses too much nuance. The entire article dilutes the signal with boilerplate. Title + description + first 500 characters of body text turned out to be a good balance -- enough to capture the topic, short enough that the embedding stays focused.
+
+## Pagefind and semantic search compared
+
+| | Pagefind (keyword) | Semantic search |
+|---|---|---|
+| Query type | Exact and fuzzy keyword matching | Natural language, meaning-based |
+| Initial download | ~10 KB JS + ~75 KB WASM | ~80 KB vectors + ~23 MB model (cached) |
+| Per-query cost | ~10-30 KB index fragments | ~100 ms compute, no network |
+| Best for | Known terms, specific phrases | Exploratory questions, topic discovery |
+| Excerpts | Yes, highlighted in context | No (shows teaser only) |
+| Build dependency | Rust binary (via npm) | Node.js + ONNX runtime |
+
+They solve different problems. Pagefind is better when you know the words. Semantic search is better when you know the idea but not the vocabulary. The search page links to /ask/, and /ask/ links back.
+
+## Tradeoffs
+
+**The 23 MB elephant.** The model is large for a static site feature. The full-precision (fp32) ONNX file is 90 MB -- I use the 8-bit quantized version (`dtype: 'q8'`), which brings it down to 23 MB with negligible quality loss for sentence embeddings. It downloads once and caches, so repeat visitors pay nothing, but the first query on a new device is a real wait. The progress bar helps set expectations. Going smaller (4-bit quantization) would save a few more megabytes but the quality starts to slip.
+
+**No excerpts.** Pagefind shows highlighted excerpts with the matching terms in context. Semantic search can only show the teaser from frontmatter. The model doesn't know which sentences were most relevant to the query, just that the overall document is similar. Adding extractive summarization would help but is a much harder problem.
+
+**Threshold tuning.** The 0.25 cosine similarity cutoff is hand-tuned. Too low and irrelevant results creep in. Too high and you miss valid matches. There's no perfect number -- it depends on the corpus and the kinds of queries people ask.
+
+**CDN dependency.** The model loads from jsDelivr. If the CDN is down, the page shows an error with a link to keyword search. Self-hosting the model files would remove this dependency but add ~23 MB to the deploy artifact.
+
+**Build-time coupling.** The embedding script reads Eleventy's HTML output directly, so it depends on the build directory structure. If the HTML format changes, the text extraction regex could break. A proper HTML parser would be more robust, but regex handles the current templates fine.
+
+**No conversational LLM.** You could add a small LLM on top of the embeddings to generate natural-language answers -- "Based on these three posts, you probably want..." -- instead of a plain ranked list. I skipped it. Nobody visits /ask/ to chat; they want to find a post. A list with teasers and match scores does that.
+
+The size gap is also hard to justify. Even small LLMs (1-3B parameters) need 1-4 GB downloads and [WebGPU support](https://caniuse.com/webgpu), which still isn't in Firefox or on older devices. Embeddings alone are ~23 MB and run on WASM. If conversational models shrink to the point where they run on CPU without a multi-gigabyte download, I'd reconsider.
+
+## Tips if you're doing this
+
+1. **Reuse your existing content boundary.** If you already have `data-pagefind-body` or similar markup, use it as the extraction boundary for embeddings too. One source of truth for "what counts as content."
+
+2. **Concatenate title + description + truncated body.** Don't feed the model raw HTML or entire articles. The title and description carry disproportionate signal. A few hundred characters of body text adds topic specificity without diluting the embedding.
+
+3. **Lazy-load everything.** Don't download the model on page load. Most visitors will never use semantic search. Load on first interaction and show a progress bar.
+
+4. **Ship both search types.** Keyword and semantic search solve different problems. Cross-link between them so users can switch when one doesn't find what they need.
+
+5. **Set a similarity threshold.** Without a cutoff, every query returns results -- even nonsense queries. Start at 0.25 and adjust based on your corpus.
+
+## What I'd change
+
+I'd like to show relevant snippets instead of just the frontmatter teaser -- figuring out which paragraph best matches the query is a harder problem, but it would make the results more useful.
+
+If I'm feeling ambitious, merging Pagefind's keyword score with the semantic similarity score into a single ranked list would give the best of both. For now, it's two search experiences on a static site with no backend. [Try it](/ask/).
+
+---
+
+**Related posts:**
+- [Site search without a search service](/posts/20260228-replacing-lunr-with-pagefind/) -- the Pagefind keyword search this builds on
+- [Collaborate on any webpage with a bookmarklet](/posts/20260225-introducing-pinment/) -- another "do it in the browser" project from the same week
+- [A simpler, faster site: moving to pure Eleventy v3](/posts/20250831-site-overhaul-eleventy-v3/) -- the foundation this all runs on
+
+{% endmarkdown %}

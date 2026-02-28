@@ -16,10 +16,11 @@ yarn start        # Alias for yarn dev
 
 ### Build
 ```bash
-yarn build        # Clean → compile Sass → Eleventy production (includes Pagefind indexing)
+yarn build        # Clean → compile Sass → Eleventy production (includes Pagefind + embeddings)
 yarn clean        # Remove /build directory
 yarn sass         # Compile Sass to build/css/styles.css
 yarn eleventy     # Run Eleventy build (sets ELEVENTY_ENV=production)
+yarn embeddings   # Generate semantic search vectors (runs after Eleventy in build)
 ```
 
 ### Linting
@@ -63,6 +64,14 @@ yarn lint:css:fix   # Auto-fix stylelint issues
    - In dev: runs in background so rebuilds aren't blocked
    - Only pages with `data-pagefind-body` (on `<main>` in `base.njk`) are indexed
    - Output: `build/pagefind/` (chunked index, JS, WASM)
+
+4. **Post-build**: Semantic search embedding generation
+   - Script: `scripts/generate-embeddings.js` (runs via `yarn embeddings` in `yarn build`)
+   - Uses `@huggingface/transformers` with `Xenova/all-MiniLM-L6-v2` model
+   - Reads `build/**/*.html`, extracts text from `<main data-pagefind-body>`, generates 384-dimension embeddings
+   - Skips non-content paths (`/social/`, `/node/`, `/search/`, `/ask/`, etc.)
+   - Output: `build/semantic-search/vectors.json` (~700 KB, ~88 documents)
+   - NOT run in `yarn dev` (too slow for iterative dev); run `yarn build` once to generate vectors
 
 ### Image Handling
 
@@ -168,7 +177,8 @@ The site uses a unique CSS activation pattern:
    - Cleans build dir
    - Compiles Sass
    - Runs Eleventy with production env
-   - Generates search index
+   - Generates Pagefind search index (via `eleventy.after` hook)
+   - Generates semantic search embeddings (via `yarn embeddings`)
 
 ## Important Patterns
 
@@ -256,6 +266,8 @@ Supported organizations (defined in `src/site/_includes/partials/orgs.njk`):
 
 ## Search
 
+### Keyword Search (Pagefind)
+
 Search is powered by [Pagefind](https://pagefind.app/), a static search library:
 - Index built at deploy time via `npx pagefind --site build` (in `eleventy.after` hook)
 - Only `<main data-pagefind-body>` content is indexed (social cards, `/node/` redirects excluded automatically)
@@ -263,6 +275,19 @@ Search is powered by [Pagefind](https://pagefind.app/), a static search library:
 - Search page (`src/site/search.njk`) uses Pagefind's JS API with `<script type="module">`
 - Chunked index: users download ~10 KB JS initially, ~10-30 KB per query (fragments loaded on demand)
 - `?search_query=` URL parameter preserved for 404 page redirect flow
+
+### Semantic Search ("Ask my site")
+
+Semantic search at `/ask/` (`src/site/ask.njk`) lets visitors ask natural-language questions:
+- **Build time**: `scripts/generate-embeddings.js` generates vector embeddings for all content using MiniLM-L6-v2 via Transformers.js, writes `build/semantic-search/vectors.json`
+- **Browser**: On first query, loads the same model from jsDelivr CDN (~23 MB q8 quantized, cached), embeds the query, ranks posts by cosine similarity against pre-computed vectors
+- **No LLM, no SaaS, no API keys** -- everything runs locally at build time and in the browser
+- Results filtered by similarity threshold (>0.25), limited to top 5
+- Conversational chat-bubble UI with `.kh-ask*` CSS classes
+- Cross-linked from `/search/` page
+- `?q=` URL parameter preserved via `history.replaceState`
+- `<noscript>` fallback links to `/search/`
+- CSS: `.kh-ask*` classes in `index.scss` (chat bubbles, result cards, progress bar)
 
 ## RSS Feed
 
@@ -298,7 +323,8 @@ Beyond blog posts, these pages exist in `src/site/`:
 - `src/site/node/` - Legacy Drupal URL redirect pages (HTML passthrough, not Eleventy-processed content)
 - `feed.njk` / `feed.xsl.njk` - RSS feed with XSLT styling
 - `social-cards.njk` - Pagination-generated social card pages at `/social/<page-url>/`
-- `search.njk` - Client-side search page
+- `search.njk` - Client-side keyword search page (Pagefind)
+- `ask.njk` - Semantic search page ("Ask my site", Transformers.js in-browser)
 - `sitemap.njk` / `robots.njk` - SEO files generated at build time
 
 ## Key Files to Know
@@ -309,5 +335,7 @@ Beyond blog posts, these pages exist in `src/site/`:
 - `src/site/_includes/layouts/base.njk` - Base HTML template
 - `src/site/_includes/layouts/post.njk` - Blog post template
 - `src/site/_data/siteConfig.json` - Site-wide configuration
-- `src/site/search.njk` - Pagefind-powered search page
+- `src/site/search.njk` - Pagefind-powered keyword search page
+- `src/site/ask.njk` - Semantic search page (Transformers.js)
+- `scripts/generate-embeddings.js` - Build-time embedding generation script
 - `docs/EDITORIAL_HANDBOOK.md` - Editorial standards and guidelines
