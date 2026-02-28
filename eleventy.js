@@ -289,7 +289,7 @@ module.exports = function(config) {
     );
     const escaped = escapeHtml(snippet);
     return [
-      '<div class="kh-demo">',
+      '<div class="kh-demo" data-pagefind-ignore>',
       `<pre><code class="language-${lang}">${escaped}</code></pre>`,
       '<div class="kh-demo__live">',
       snippet,
@@ -370,15 +370,22 @@ module.exports = function(config) {
   config.addWatchTarget("./src/site/images");
 
   // Post-build: generate Pagefind search index
+  let pagefindChild = null;
   config.on('eleventy.after', () => {
-    const cmd = 'npx pagefind --site build';
+    const cmd = 'pagefind --site build --exclude-selectors "pre, code"';
     if (isDev) {
+      // Kill any previous run so overlapping builds don't corrupt the index
+      if (pagefindChild) {
+        pagefindChild.kill();
+        pagefindChild = null;
+      }
       // Run in background so dev rebuilds aren't blocked
-      const child = exec(cmd, (err) => {
-        if (err) console.error('Pagefind index build failed');
+      pagefindChild = exec(cmd, (err) => {
+        pagefindChild = null;
+        if (err && !err.killed) console.error('Pagefind index build failed');
       });
-      child.stdout?.pipe(process.stdout);
-      child.stderr?.pipe(process.stderr);
+      pagefindChild.stdout?.pipe(process.stdout);
+      pagefindChild.stderr?.pipe(process.stderr);
     } else {
       try {
         execSync(cmd, { stdio: 'inherit' });

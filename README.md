@@ -36,7 +36,7 @@ This site runs on Eleventy v3 with Dart Sass for CSS. The legacy Visual Framewor
 ## Notes
 
 - Images are processed by the Eleventy Image Transform plugin configured in [`eleventy.js`](eleventy.js) and output to `build/img/`
-- The search index is generated post-build via [`scripts/build-search-index.js`](scripts/build-search-index.js)
+- Search is powered by [Pagefind](https://pagefind.app/), which indexes the built HTML automatically via the `eleventy.after` hook
 - Eleventy config: [`eleventy.js`](eleventy.js)
 
 ## Dynamic Social Sharing Images
