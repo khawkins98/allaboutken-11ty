@@ -36,7 +36,7 @@ The markdown-it config converts `--` to `—` automatically. Write `--` in conte
 ### Semantic search model self-hosting
 HuggingFace serves ONNX files through signed CloudFront URLs that change on every request, breaking browser cache. The model files are downloaded via `eleventy.after` hook to `build/semantic-search/model/` and served as static assets. Transformers.js and ONNX Runtime WASM load from jsDelivr (deterministic URLs, caches fine).
 
-Transformers.js disables "local" model loading in browsers by default. In `ask.njk`, we set `env.allowLocalModels = true` and `env.localModelPath = '/'`, then use model ID `'semantic-search/model'` (must look like `org/model` to pass validation). Bare paths and full URLs both fail.
+Transformers.js disables "local" model loading in browsers by default. In `search.njk`, we set `env.allowLocalModels = true` and `env.localModelPath = '/'`, then use model ID `'semantic-search/model'` (must look like `org/model` to pass validation). Bare paths and full URLs both fail.
 
 ### Updating the embedding model
 Must change in **two places**: `MODEL_NAME` in `scripts/generate-embeddings.js` AND `modelName` in `eleventy.js`. Both sides must use the same model. See the header comment in `generate-embeddings.js` for full instructions.
