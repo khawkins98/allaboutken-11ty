@@ -1295,6 +1295,78 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
+  // Search widget: connected tabs + panel
+  .kh-search-widget {
+    position: relative;
+  }
+
+  .kh-search-widget__panel {
+    border: 4px solid var(--kh-color--blue);
+    border-radius: 0 4px 4px 4px;
+    box-shadow: 6px 6px 0 var(--kh-color--blue--dark);
+    background: #fafafa;
+    padding: 1.5rem;
+  }
+
+  // No-JS fallback: full border-radius when tabs are hidden
+  .kh-search-widget:not(:has(.kh-search-mode:not([hidden]))) .kh-search-widget__panel {
+    border-radius: 4px;
+  }
+
+  // Reduce nested .kh-details weight inside the panel
+  .kh-search-widget__panel .kh-details {
+    border-width: 1px;
+    box-shadow: none;
+    margin-bottom: 0;
+  }
+
+  .kh-search-mode {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .kh-search-mode__option {
+    cursor: pointer;
+    padding: 8px 16px;
+    border: 4px solid var(--kh-color--blue);
+    margin-right: -4px;
+    margin-bottom: -4px;
+    font-size: .9rem;
+    font-weight: 700;
+    background: #fafafa;
+
+    &:first-of-type {
+      border-radius: 4px 4px 0 0;
+    }
+
+    &:last-of-type {
+      border-radius: 0 4px 0 0;
+    }
+
+    input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    &:has(input:focus-visible) {
+      outline: 3px solid var(--kh-color--orange);
+      outline-offset: -3px;
+    }
+
+    &:has(input:checked) {
+      background: #fafafa;
+      color: var(--kh-color--blue);
+      border-bottom-color: #fafafa;
+    }
+  }
+
   // Semantic search chat-bubble UI (.kh-ask*)
   .kh-ask {
     max-width: 70ch;
