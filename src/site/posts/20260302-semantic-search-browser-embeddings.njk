@@ -15,18 +15,18 @@ kens_status: draft
 
 {% markdown %}
 
-Last week I [replaced Lunr.js with Pagefind](/posts/20260228-replacing-lunr-with-pagefind/) for keyword search on this site. Pagefind works well -- you type "eleventy image plugin" and get back pages containing those words, ranked by [BM25](https://en.wikipedia.org/wiki/Okapi_BM25). But keyword search has a ceiling. Search for "making websites faster" and you'll miss a post titled "performance optimization" because the words don't overlap.
+Last week I [replaced Lunr.js with Pagefind](/posts/20260228-replacing-lunr-with-pagefind/) for keyword search on this site. Pagefind works well -- you type "eleventy image plugin" and get back pages containing those words, ranked by [BM25](https://en.wikipedia.org/wiki/Okapi_BM25). But keyword search has a ceiling. Search for "[why meetings kill productivity](/search/?search_query=why+meetings+kill+productivity)" and you'll miss a post titled "[It's true, short disruptions costs lots of time](/posts/20251013-distracting-engineers-is-harmful/)" because the words don't overlap.
 
 With LLM-powered search showing up everywhere, I wanted to see how close I could get to that natural-language experience on a static site without any cloud infrastructure. No API keys, no SaaS, no server. Could the same embedding model run at build time and in the browser, and would the results actually be useful?
 
-The answer is mostly yes. You have to download ~30 MB on first use, which is a lot. But everything caches, it runs entirely on your device, and the results are surprisingly good -- it finds posts by meaning, not just matching words.
+The answer is mostly yes. The visitors browser has to download ~30 MB on first use, which is a lot. But everything caches, it runs entirely on your device, and the results are better than I expected.
 
-To be honest, this is a bit silly. I don't get much search traffic, and Pagefind already handles keyword search well. But this site is my playground -- the place where I try things to see how they work, then think about where they might matter at a bigger scale. Vector search on a personal blog is a toy. Vector search on a documentation site with hundreds of pages and users who don't know the right terminology? That's a different conversation.
+While I don't get much search traffic, and Pagefind already handles keyword search well, this is a bit silly. But this site is my playground -- the place where I try things to see how they work, then think about where they might matter at a bigger scale. Vector search on a personal blog is a toy. Vector search on a documentation site with hundreds of pages and users who don't know the right terminology? That's a different conversation.
 
 > ## tl;dr
 >
 > - Build-time script generates vector embeddings for all posts using [MiniLM-L6-v2](https://huggingface.co/Xenova/all-MiniLM-L6-v2) via [Transformers.js](https://huggingface.co/docs/transformers.js)
-> - Produces a ~700 KB `vectors.json` file shipped as a static asset
+> - Produces a ~700 KB [`vectors.json`](/semantic-search/vectors.json) file shipped as a static asset
 > - Browser loads the same model on first query (~30 MB with WASM runtime, cached afterward)
 > - Cosine similarity ranks posts by meaning, not keywords
 > - [Try it on the search page](/search/?search_type=semantic)
@@ -35,27 +35,13 @@ To be honest, this is a bit silly. I don't get much search traffic, and Pagefind
 
 Traditional search (Lunr, Pagefind, Elasticsearch) builds an inverted index: for each word, store which documents contain it. Query terms get looked up in the index and documents are ranked by term frequency, document length, and similar signals. This works well when the user's words match the author's words.
 
-Vector search takes a different approach. A small neural network (in this case, [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)) reads a piece of text and produces a fixed-length array of numbers -- a 384-dimension vector -- that captures the text's meaning. Two texts about similar topics produce vectors that point in similar directions, even if they share no words.
+With vector search, a small neural network ([all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)) reads a piece of text and produces a fixed-length array of numbers -- a 384-dimension vector -- that captures the text's meaning. Two texts about similar topics produce vectors that point in similar directions, even if they share no words.
 
-At query time, the same model converts the question into a vector. [Cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity) measures how close the query vector is to each document vector. The closest documents are the most relevant results.
-
-The entire ranking function is ten lines:
-
-```js
-function cosineSimilarity(a, b) {
-  let dot = 0, normA = 0, normB = 0;
-  for (let i = 0; i < a.length; i++) {
-    dot += a[i] * b[i];
-    normA += a[i] * a[i];
-    normB += b[i] * b[i];
-  }
-  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
-}
-```
+At query time, the same model converts the question into a vector. The ranking itself is just [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity). All the intelligence is handed off to the model that produces the vectors.
 
 ## The build-time half
 
-A Node.js script runs after Eleventy and Pagefind in the build pipeline. It reads every HTML file in the `build/` directory, extracts text from `<main data-pagefind-body>` (reusing Pagefind's content boundary), and generates an embedding for each page.
+A Node.js script runs after Eleventy in the build pipeline. It reads every HTML file in the `build/` directory, extracts text from `<main data-pagefind-body>` (the same element Pagefind uses to decide what's content), and generates an embedding for each page.
 
 The input to the model is the page title, meta description, and the first 500 characters of body text concatenated together. More on why that specific combination in the next section.
 
@@ -93,7 +79,11 @@ The `package.json` change is minimal:
 
 Embeddings run after Eleventy (which runs Pagefind in its `eleventy.after` hook), so the full HTML output is available.
 
-The `@huggingface/transformers` dependency is heavy -- roughly 476 MB in `node_modules`, mostly [ONNX Runtime](https://onnxruntime.ai/) native binaries for running the model in Node.js. It ships prebuilt binaries for every platform (macOS, Linux, Windows, multiple architectures), and there's no way to install only the one you need. This is the same kind of tradeoff as Pagefind shipping a Rust binary for its indexing step: the build-time tooling is large because something has to actually run the neural network over your content. The output is small and fast to query, but producing it requires real compute. A Python script with just [`onnxruntime`](https://pypi.org/project/onnxruntime/) and [`tokenizers`](https://pypi.org/project/tokenizers/) (no PyTorch) would cut the footprint to ~75-100 MB -- [ChromaDB uses this approach](https://github.com/chroma-core/onnx-embedding) in production. You could also compile a Rust binary with [fastembed-rs](https://github.com/Anush008/fastembed-rs), though it's a library, not a CLI, so you'd need to write a wrapper. Either way, it means adding a non-Node dependency to the build. For now, one fat npm install is simpler.
+The `@huggingface/transformers` dependency is heavy -- roughly 476 MB in `node_modules`, mostly [ONNX Runtime](https://onnxruntime.ai/) native binaries for running the model in Node.js. It ships prebuilt binaries for every platform (macOS, Linux, Windows, multiple architectures), and there's no way to install only the one you need.
+
+This is the same kind of tradeoff as Pagefind shipping a Rust binary for its indexing step: the build-time tooling is large because something has to actually run the neural network over your content. The output is small and fast to query, but producing it requires real compute.
+
+A Python script with just [`onnxruntime`](https://pypi.org/project/onnxruntime/) and [`tokenizers`](https://pypi.org/project/tokenizers/) (no PyTorch) would cut the footprint to ~75-100 MB -- [ChromaDB uses this approach](https://github.com/chroma-core/onnx-embedding) in production. You could also compile a Rust binary with [fastembed-rs](https://github.com/Anush008/fastembed-rs), though it's a library, not a CLI, so you'd need to write a wrapper. Either way, it means adding a non-Node dependency to the build. For now, one fat npm install is simpler.
 
 The embedding script is not included in `yarn dev` -- it's too slow for iterative development. Run `yarn build` once to generate vectors, then `yarn dev` as usual. The model files for the browser (more on that below) are downloaded separately in an `eleventy.after` hook, so `yarn dev` still has them even without running the full build pipeline.
 
@@ -147,7 +137,7 @@ Every response includes a fallback link to Pagefind keyword search.
 
 MiniLM-L6-v2 is a [sentence transformer](https://www.sbert.net/) -- a BERT variant fine-tuned for producing sentence embeddings. It was trained on [over a billion sentence pairs](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) and distilled from a larger model. The "L6" means six transformer layers (BERT-base has twelve), and the output is 384 dimensions (half of BERT's 768). Smaller and faster, at the cost of some nuance.
 
-It doesn't understand content the way a large language model would. It maps text into a geometric space where similar meanings cluster together. "Performance optimization" and "making websites faster" land near each other because the model learned from millions of examples that those phrases appear in similar contexts.
+It doesn't understand content the way a large language model would. It maps text into a geometric space where similar meanings cluster together. "Why meetings kill productivity" and "short disruptions cost lots of time" land near each other because the model learned from millions of examples that those phrases appear in similar contexts.
 
 The input you feed it matters more than I expected. Just the title loses too much nuance. The entire article dilutes the signal with boilerplate. Title + description + first 500 characters of body text turned out to be a good balance -- enough to capture the topic, short enough that the embedding stays focused.
 
@@ -162,7 +152,7 @@ The input you feed it matters more than I expected. Just the title loses too muc
 | Excerpts | Yes, highlighted in context | No (shows teaser only) |
 | Build dependency | Rust binary (via npm) | ~476 MB ONNX runtime (via npm) |
 
-They solve different problems. Pagefind is better when you know the words. Semantic search is better when you know the idea but not the vocabulary. Both live on the same search page -- keyword search is the default, and semantic search is an opt-in that loads on demand.
+Pagefind is better when you know the words. Semantic search is better when you know the idea but not the vocabulary. Both live on the same search page -- keyword search is the default, and semantic search is an opt-in that loads on demand.
 
 A few examples from this site to make it concrete.
 
@@ -176,7 +166,7 @@ The semantic results aren't always right. Some matches feel like a stretch, and 
 
 ## Tradeoffs
 
-**The 30 MB elephant.** The first query downloads the quantized model (~23 MB) plus the ONNX Runtime WASM engine (~4 MB), tokenizer, and Transformers.js library -- about 30 MB total. The full-precision model is 90 MB; 8-bit quantization (`dtype: 'q8'`) gets it to 23 MB with negligible quality loss for sentence embeddings. Everything caches, so repeat visitors pay nothing, but the first query on a new device is a real wait. The progress bar helps set expectations. I looked at lighter alternatives (see the Model2Vec note in "What I'd change") but nothing I tested matched the result quality of running a real transformer -- the 30 MB is the cost of results that actually work.
+**The 30 MB elephant.** The first query downloads the quantized model (~23 MB) plus the ONNX Runtime WASM engine (~4 MB), tokenizer, and Transformers.js library -- about 30 MB total. The full-precision model is 90 MB; 8-bit quantization (`dtype: 'q8'`) gets it to 23 MB with no noticeable quality loss for sentence embeddings. Everything caches, so repeat visitors pay nothing, but the first query on a new device is a real wait. The progress bar helps set expectations. I looked at lighter alternatives (see the Model2Vec note in "What I'd change") but nothing I tested matched the result quality of running a real transformer -- the 30 MB is the cost of results that actually work.
 
 **No excerpts.** Pagefind shows highlighted excerpts with the matching terms in context. Semantic search can only show the teaser from frontmatter. The model doesn't know which sentences were most relevant to the query, just that the overall document is similar. Adding extractive summarization would help but is a much harder problem.
 
