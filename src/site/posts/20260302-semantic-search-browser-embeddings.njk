@@ -2,7 +2,7 @@
 title: "Semantic search on a static site, no API keys required"
 layout: layouts/post.njk
 teaser: "Vector embeddings at build time, cosine similarity in the browser. The same 23 MB model runs both sides."
-date: 2026-02-28
+date: 2026-03-02
 tags:
   - posts
 topics:
@@ -20,6 +20,8 @@ Last week I [replaced Lunr.js with Pagefind](/posts/20260228-replacing-lunr-with
 With LLM-powered search showing up everywhere, I wanted to see how close I could get to that natural-language experience on a static site without any cloud infrastructure. No API keys, no SaaS, no server. Could the same embedding model run at build time and in the browser, and would the results actually be useful?
 
 The answer is mostly yes. You have to download ~30 MB on first use, which is a lot. But everything caches, it runs entirely on your device, and the results are surprisingly good -- it finds posts by meaning, not just matching words.
+
+To be honest, this is a bit silly. I don't get much search traffic, and Pagefind already handles keyword search well. But this site is my playground -- the place where I try things to see how they work, then think about where they might matter at a bigger scale. Vector search on a personal blog is a toy. Vector search on a documentation site with hundreds of pages and users who don't know the right terminology? That's a different conversation.
 
 > ## tl;dr
 >
@@ -204,7 +206,7 @@ The size gap is also hard to justify. Even small LLMs (1-3B parameters) need 1-4
 
 I'd like to show relevant snippets instead of just the frontmatter teaser -- figuring out which paragraph best matches the query is a harder problem, but it would make the results more useful.
 
-If I'm feeling ambitious, merging Pagefind's keyword score with the semantic similarity score into a single ranked list would give the best of both. For now, it's two search experiences on a static site with no backend. [Try it](/ask/).
+If I'm feeling ambitious, merging Pagefind's keyword score with the semantic similarity score into a single ranked list would give the best of both. For now, it's two search experiences on a static site with no backend -- overkill for a personal blog, but a useful sketch for how this could work on sites where search actually matters. [Try it](/ask/).
 
 ---
 
