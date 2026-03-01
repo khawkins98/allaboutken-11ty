@@ -7,12 +7,12 @@
  *
  * Run after `yarn eleventy` (which also runs Pagefind).
  *
- * Model files for browser self-hosting are handled separately by the
- * eleventy.after hook in eleventy.js (runs in both dev and production).
+ * The browser fetches the model directly from HuggingFace at query time;
+ * Transformers.js handles caching via the Cache API.
  *
  * To update the model:
- *   1. Change MODEL_NAME below AND modelName in eleventy.js
- *   2. Run `yarn build` to regenerate embeddings and download new model files
+ *   1. Change MODEL_NAME below AND the model ID in search.njk
+ *   2. Run `yarn build` to regenerate embeddings
  *   3. Both build-time and browser-side must use the same model
  *   4. Browse https://huggingface.co/models?library=transformers.js&sort=trending
  *      for compatible models (look for ONNX exports with sentence-transformers)

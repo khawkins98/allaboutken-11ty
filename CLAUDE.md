@@ -31,19 +31,17 @@ The directory `src/components/vf-componenet-rollup/` is a legacy name. The typo 
 The markdown-it config converts `--` to `—` automatically. Write `--` in content, it renders as `—`.
 
 ### Embeddings don't run in dev
-`yarn embeddings` is too slow for iterative development. Run `yarn build` once to generate `vectors.json`, then `yarn dev` as usual. The model files for the browser are downloaded separately in an `eleventy.after` hook, so `yarn dev` still has them. The `@huggingface/transformers` devDependency is ~476 MB in node_modules (ONNX runtime ships native binaries for every platform). It's needed to run the model at build time -- there's no lighter alternative.
+`yarn embeddings` is too slow for iterative development. Run `yarn build` once to generate `vectors.json`, then `yarn dev` as usual. The `@huggingface/transformers` devDependency is ~476 MB in node_modules (ONNX runtime ships native binaries for every platform). It's needed to run the model at build time -- there's no lighter alternative.
 
-### Semantic search model self-hosting
-HuggingFace serves ONNX files through signed CloudFront URLs that change on every request, breaking browser cache. The model files are downloaded via `eleventy.after` hook to `build/semantic-search/model/` and served as static assets. Transformers.js and ONNX Runtime WASM load from jsDelivr (deterministic URLs, caches fine).
-
-Transformers.js disables "local" model loading in browsers by default. In `search.njk`, we set `env.allowLocalModels = true` and `env.localModelPath = '/'`, then use model ID `'semantic-search/model'` (must look like `org/model` to pass validation). Bare paths and full URLs both fail.
+### Semantic search model loading
+The browser fetches the model directly from HuggingFace at query time. Transformers.js caches it using the Cache API (keyed by model ID, not URL), so the ~23 MB download only happens once per browser. Transformers.js and ONNX Runtime WASM load from jsDelivr.
 
 ### Updating the embedding model
-Must change in **two places**: `MODEL_NAME` in `scripts/generate-embeddings.js` AND `modelName` in `eleventy.js`. Both sides must use the same model. See the header comment in `generate-embeddings.js` for full instructions.
+Must change in **two places**: `MODEL_NAME` in `scripts/generate-embeddings.js` AND the model ID in `search.njk`. Both sides must use the same model. See the header comment in `generate-embeddings.js` for full instructions.
 
 ## Project structure (brief)
 
-- `eleventy.js` -- All config: filters, shortcodes, collections, image transform, Pagefind/model hooks
+- `eleventy.js` -- All config: filters, shortcodes, collections, image transform, Pagefind hook
 - `src/components/vf-componenet-rollup/` -- Sass entry point and all CSS
 - `src/site/` -- Templates, posts, data, includes
 - `scripts/generate-embeddings.js` -- Build-time vector embeddings
