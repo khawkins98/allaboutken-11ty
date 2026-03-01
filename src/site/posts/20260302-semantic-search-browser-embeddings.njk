@@ -29,7 +29,7 @@ To be honest, this is a bit silly. I don't get much search traffic, and Pagefind
 > - Produces a ~700 KB `vectors.json` file shipped as a static asset
 > - Browser loads the same model on first query (~30 MB with WASM runtime, cached afterward)
 > - Cosine similarity ranks posts by meaning, not keywords
-> - [Try it at /ask/](/ask/)
+> - [Try it on the search page](/search/?search_type=semantic)
 
 ## How vector search works
 
@@ -99,7 +99,7 @@ The embedding script is not included in `yarn dev` -- it's too slow for iterativ
 
 ## The browser half
 
-The [/ask/](/ask/) page loads nothing on initial visit. On first query submit, three things happen:
+The semantic search UI loads nothing on initial visit. On first query submit, three things happen:
 
 1. Fetch `/semantic-search/vectors.json` (~80 KB gzipped)
 2. Import Transformers.js from [jsDelivr](https://www.jsdelivr.com/) CDN
@@ -162,7 +162,7 @@ The input you feed it matters more than I expected. Just the title loses too muc
 | Excerpts | Yes, highlighted in context | No (shows teaser only) |
 | Build dependency | Rust binary (via npm) | ~476 MB ONNX runtime (via npm) |
 
-They solve different problems. Pagefind is better when you know the words. Semantic search is better when you know the idea but not the vocabulary. The search page links to /ask/, and /ask/ links back.
+They solve different problems. Pagefind is better when you know the words. Semantic search is better when you know the idea but not the vocabulary. Both live on the same search page -- keyword search is the default, and semantic search is an opt-in that loads on demand.
 
 A few examples from this site to make it concrete.
 
@@ -186,7 +186,7 @@ The semantic results aren't always right. Some matches feel like a stretch, and 
 
 **Build-time coupling.** The embedding script reads Eleventy's HTML output directly, so it depends on the build directory structure. If the HTML format changes, the text extraction regex could break. A proper HTML parser would be more robust, but regex handles the current templates fine.
 
-**No conversational LLM.** You could add a small LLM on top of the embeddings to generate natural-language answers -- "Based on these three posts, you probably want..." -- instead of a plain ranked list. I skipped it. Nobody visits /ask/ to chat; they want to find a post. A list with teasers and match scores does that.
+**No conversational LLM.** You could add a small LLM on top of the embeddings to generate natural-language answers -- "Based on these three posts, you probably want..." -- instead of a plain ranked list. I skipped it. Nobody uses the search page to chat; they want to find a post. A list with teasers and match scores does that.
 
 The size gap is also hard to justify. Even small LLMs (1-3B parameters) need 1-4 GB downloads and [WebGPU support](https://caniuse.com/webgpu), which still isn't in Firefox or on older devices. Embeddings alone are ~30 MB and run on WASM. If conversational models shrink to the point where they run on CPU without a multi-gigabyte download, I'd reconsider.
 
@@ -212,9 +212,9 @@ The size gap is also hard to justify. Even small LLMs (1-3B parameters) need 1-4
 
 **Eliminate the ONNX runtime with static embeddings.** [Model2Vec](https://github.com/MinishLab/model2vec) distills a transformer into a lookup table -- tokenize, index into a matrix, average, normalize. No neural network inference, no WASM runtime. The browser download would drop from ~30 MB to ~4-15 MB and query-time inference would be instant. I tested the [potion](https://huggingface.co/minishlab) models (2M, 4M, and 8M parameters) against MiniLM-L6-v2 on my actual content, though, and the results were disappointing. For queries like "improving search on a static site," MiniLM correctly finds the two search-related posts. All three potion models miss both entirely. On "design systems," potion returns the 404 page, Privacy Policy, and Colophon -- pages with short generic text that become false attractors after mean pooling. The Jaccard overlap between MiniLM's top results and potion-8M's was about 32% across my test queries. On [MTEB benchmarks](https://huggingface.co/blog/Pringled/model2vec), potion-base-8M scores ~89% of MiniLM's average, but that gap matters more on a small corpus where the margin between a good result and garbage is thin. If static embedding models keep improving -- and they are -- this could change fast.
 
-**Merge keyword and semantic results.** Pagefind and /ask/ are separate right now. The better experience would be to show Pagefind keyword results instantly, load the embedding model in a background Web Worker, then merge the two result sets when the model is ready. The user always sees something immediately instead of watching a progress bar. [Sift](https://github.com/romanI04/sift) does exactly this -- it stores FTS5 keyword indexes and vector embeddings in a single SQLite file, shows keyword results first, then upgrades to semantic. It also uses HTTP range requests to read only the index pages it needs, which would matter for larger sites.
+**Merge keyword and semantic results more deeply.** Keyword and semantic search now live on the same page -- semantic is an opt-in below keyword results. The next step would be to load the embedding model in a background Web Worker and merge the two result sets automatically when the model is ready. The user always sees keyword results immediately instead of watching a progress bar, and semantic results appear alongside when ready. [Sift](https://github.com/romanI04/sift) does exactly this -- it stores FTS5 keyword indexes and vector embeddings in a single SQLite file, shows keyword results first, then upgrades to semantic. It also uses HTTP range requests to read only the index pages it needs, which would matter for larger sites.
 
-For now, it's two separate search experiences on a static site with no backend -- overkill for a personal blog, but a useful sketch for how this could work on sites where search actually matters. [Try it](/ask/).
+For now, it's two search modes on one page on a static site with no backend -- overkill for a personal blog, but a useful sketch for how this could work on sites where search actually matters. [Try it](/search/?search_type=semantic).
 
 ---
 
