@@ -41,11 +41,12 @@ noindex: true
       </p>
       <p>
         When you ask a question, the same model runs in your browser to convert your question into a
-        fingerprint, then finds posts with the most similar fingerprints. The model downloads once (~23 MB)
-        and is cached by your browser for future visits.
+        fingerprint, then finds posts with the most similar fingerprints. The model and its runtime download once (~30 MB)
+        and are cached by your browser for future visits.
       </p>
       <p>
         No AI generates the answers -- the results are real posts, ranked by relevance.
+        This is a bit of an experiment -- read more about <a href="/posts/20260228-semantic-search-browser-embeddings/">how and why I built this</a>.
         For exact keyword matching, try <a href="/search/">keyword search</a>.
       </p>
     </details>
@@ -135,13 +136,20 @@ noindex: true
     if (!resp.ok) throw new Error(`Failed to load vectors: ${resp.status}`);
     vectorData = await resp.json();
 
-    // Import Transformers.js from CDN
-    statusMsg.innerHTML = '<p>Loading search model (one-time ~23 MB download)...</p><progress id="model-progress" max="100" value="0"></progress>';
-    const { pipeline: tfPipeline } = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3');
+    // Import Transformers.js from CDN and configure for self-hosted model
+    statusMsg.innerHTML = '<p>Loading search model (one-time ~30 MB download)...</p><progress id="model-progress" max="100" value="0"></progress>';
+    const { env: tfEnv, pipeline: tfPipeline } = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3');
+
+    // Enable local model loading and point to site root.
+    // Transformers.js defaults to disabling local models in browsers.
+    // With localModelPath = '/', the model ID 'semantic-search/model'
+    // resolves to fetch('/semantic-search/model/tokenizer.json') etc.
+    tfEnv.allowLocalModels = true;
+    tfEnv.localModelPath = '/';
 
     const progressBar = document.getElementById('model-progress');
 
-    extractor = await tfPipeline('feature-extraction', vectorData.model, {
+    extractor = await tfPipeline('feature-extraction', 'semantic-search/model', {
       dtype: 'q8',
       progress_callback: (progress) => {
         if (progress.status === 'progress' && progressBar) {
