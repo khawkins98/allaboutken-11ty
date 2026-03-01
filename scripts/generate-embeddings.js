@@ -33,7 +33,6 @@ const SKIP_PATTERNS = [
   /\/node\//,
   /\/404\.html$/,
   /\/search\//,
-  /\/ask\//,
   /\/sitemap/,
   /\/robots/,
   /\/feed/,

@@ -1313,13 +1313,6 @@ body:has(#kh-css-toggle:checked) {
     border-radius: 4px;
   }
 
-  // Reduce nested .kh-details weight inside the panel
-  .kh-search-widget__panel .kh-details {
-    border-width: 1px;
-    box-shadow: none;
-    margin-bottom: 0;
-  }
-
   .kh-search-mode {
     border: none;
     padding: 0;

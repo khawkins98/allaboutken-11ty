@@ -112,21 +112,15 @@ noindex: true
   window.setMode = setMode;
 
   function setMode(mode) {
-    if (mode === 'semantic') {
-      keywordSection.setAttribute('hidden', '');
-      semanticSection.removeAttribute('hidden');
-      modeFieldset.querySelector('input[value="semantic"]').checked = true;
-      askInput.focus();
-    } else {
-      semanticSection.setAttribute('hidden', '');
-      keywordSection.removeAttribute('hidden');
-      modeFieldset.querySelector('input[value="keyword"]').checked = true;
-      input.focus();
-    }
+    const isSemantic = mode === 'semantic';
+    const [show, hide] = isSemantic ? [semanticSection, keywordSection] : [keywordSection, semanticSection];
+    hide.setAttribute('hidden', '');
+    show.removeAttribute('hidden');
+    modeFieldset.querySelector(`input[value="${mode}"]`).checked = true;
+    (isSemantic ? askInput : input).focus();
 
-    // Update URL
     const url = new URL(window.location);
-    if (mode === 'semantic') {
+    if (isSemantic) {
       url.searchParams.set('search_type', 'semantic');
     } else {
       url.searchParams.delete('search_type');
@@ -240,16 +234,11 @@ noindex: true
     return msg;
   }
 
-  function cosineSimilarity(a, b) {
+  // Dot product — vectors are already unit-length (normalize: true)
+  function dotSimilarity(a, b) {
     let dot = 0;
-    let normA = 0;
-    let normB = 0;
-    for (let i = 0; i < a.length; i++) {
-      dot += a[i] * b[i];
-      normA += a[i] * a[i];
-      normB += b[i] * b[i];
-    }
-    return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+    for (let i = 0; i < a.length; i++) dot += a[i] * b[i];
+    return dot;
   }
 
   function formatDate(dateStr) {
@@ -291,18 +280,19 @@ noindex: true
   }
 
   async function loadModel(statusMsg) {
-    statusMsg.innerHTML = '<p>Loading search index...</p>';
-    const resp = await fetch('/semantic-search/vectors.json');
-    if (!resp.ok) throw new Error(`Failed to load vectors: ${resp.status}`);
-    vectorData = await resp.json();
+    statusMsg.innerHTML = '<p>Loading search model (one-time ~30 MB download)...</p><progress max="100" value="0"></progress>';
+    const progressBar = statusMsg.querySelector('progress');
 
-    statusMsg.innerHTML = '<p>Loading search model (one-time ~30 MB download)...</p><progress id="model-progress" max="100" value="0"></progress>';
-    const { env: tfEnv, pipeline: tfPipeline } = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3');
+    // Fetch vectors and import Transformers.js in parallel
+    const [vectorResp, { env: tfEnv, pipeline: tfPipeline }] = await Promise.all([
+      fetch('/semantic-search/vectors.json'),
+      import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3'),
+    ]);
+    if (!vectorResp.ok) throw new Error(`Failed to load vectors: ${vectorResp.status}`);
+    vectorData = await vectorResp.json();
 
     tfEnv.allowLocalModels = true;
     tfEnv.localModelPath = '/';
-
-    const progressBar = document.getElementById('model-progress');
 
     extractor = await tfPipeline('feature-extraction', 'semantic-search/model', {
       dtype: 'q8',
@@ -336,18 +326,19 @@ noindex: true
       const thinkingMsg = addMessage('status', '<p>Searching...</p>');
 
       const output = await extractor(query, { pooling: 'mean', normalize: true });
-      const queryVec = Array.from(output.data);
+      const queryVec = output.data; // Float32Array, no copy needed
 
-      const scored = vectorData.documents.map(doc => ({
-        ...doc,
-        score: cosineSimilarity(queryVec, doc.embedding),
-      }));
-
+      // Score with lightweight index pairs, then look up originals for top results
+      const docs = vectorData.documents;
+      const scored = docs.map((doc, i) => ({ i, score: dotSimilarity(queryVec, doc.embedding) }));
       scored.sort((a, b) => b.score - a.score);
 
       // Short queries (abbreviations like "CV") produce weaker embeddings — lower the threshold
       const threshold = query.trim().length < 4 ? 0.15 : 0.25;
-      const results = scored.filter(d => d.score > threshold).slice(0, 5);
+      const results = scored
+        .filter(d => d.score > threshold)
+        .slice(0, 5)
+        .map(d => ({ ...docs[d.i], score: d.score }));
 
       thinkingMsg.remove();
       addMessage('system', renderResults(results, query));
