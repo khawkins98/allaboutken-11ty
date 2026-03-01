@@ -10,52 +10,154 @@ noindex: true
 <section class="kh-grid-stylized kh-stack">
   <div></div>
   <div>
-    <h1>{{title}}</h1>
+    <h1 id="search-heading">{{title}}</h1>
 
-    <form action="/search/" method="GET" class="kh-form kh-form--search kh-form--search--responsive kh-sidebar kh-sidebar--end">
-      <div class="kh-sidebar__inner">
-        <div class="kh-form__item">
-          <label class="kh-form__label kh-search__label kh-u-sr-only" for="search">Search my site</label>
-          <input type="search" id="search" placeholder="Search my site" name="search_query" class="kh-form__input vf-search__input">
+    <div class="kh-search-widget">
+      <fieldset id="search-mode" class="kh-search-mode" hidden>
+        <legend class="kh-u-sr-only">Search mode</legend>
+        <label class="kh-search-mode__option">
+          <input type="radio" name="search_mode" value="keyword" checked>
+          Search by keyword
+        </label>
+        <label class="kh-search-mode__option">
+          <input type="radio" name="search_mode" value="semantic">
+          Search semantically
+        </label>
+      </fieldset>
+
+      <div class="kh-search-widget__panel">
+        <div id="keyword-section">
+          <form action="/search/" method="GET" class="kh-form kh-form--search kh-form--search--responsive kh-sidebar kh-sidebar--end">
+            <div class="kh-sidebar__inner">
+              <div class="kh-form__item">
+                <label class="kh-form__label kh-search__label kh-u-sr-only" for="search">Search my site</label>
+                <input type="search" id="search" placeholder="Search my site" name="search_query" class="kh-form__input vf-search__input">
+              </div>
+              <button type="submit" class="kh-button">
+                Search
+              </button>
+            </div>
+          </form>
+
+          <noscript>
+            <p>Search requires JavaScript. You can also try
+              <a href="https://duckduckgo.com/?q=site%3Aallaboutken.com">searching on DuckDuckGo</a>.
+            </p>
+          </noscript>
+
+          <div class="kh-content kh-grid kh-search-client-side">
+            <div id="search-results"></div>
+          </div>
         </div>
-        <button type="submit" class="kh-button">
-          Search
-        </button>
+
+        <div id="semantic-section" hidden>
+          <p class="kh-text-body--3">
+            Understands meaning, not just keywords. Runs in your browser.
+          </p>
+
+          <div class="kh-ask" aria-label="Semantic search conversation">
+            <div class="kh-ask__conversation" id="ask-conversation" role="log" aria-live="polite" aria-relevant="additions">
+            </div>
+
+            <form class="kh-ask__input-area" id="ask-form" action="/search/" method="GET">
+              <label class="kh-u-sr-only" for="ask-input">Ask a question about this site</label>
+              <input type="text" id="ask-input" name="q" placeholder="e.g. articles about improving search" class="kh-form__input kh-ask__input" autocomplete="off">
+              <button type="submit" class="kh-button kh-ask__submit">Ask</button>
+            </form>
+          </div>
+
+            <h3>How does this work?</h3>
+            <p>
+              This uses <strong>semantic search</strong> -- it understands the <em>meaning</em> of your question,
+              not just keywords. At build time, every post is converted into a mathematical "fingerprint"
+              (a 384-dimension vector) using a small language model called
+              <a href="https://huggingface.co/Xenova/all-MiniLM-L6-v2">MiniLM-L6-v2</a>.
+            </p>
+            <p>
+              When you ask a question, the same model runs in your browser to convert your question into a
+              fingerprint, then finds posts with the most similar fingerprints. The model and its runtime download once (~30 MB)
+              and are cached by your browser for future visits.
+            </p>
+            <p>
+              No AI generates the answers -- the results are real posts, ranked by relevance.
+              This is a bit of an experiment -- read more about <a href="/posts/20260302-semantic-search-browser-embeddings/">how and why I built this</a>.
+            </p>
+        </div>
       </div>
-    </form>
-
-    <p class="kh-text-body--3">Want smarter results? Try <a href="/ask/">asking in plain English</a>.</p>
-
-    <noscript>
-      <p>Search requires JavaScript. You can also try
-        <a href="https://duckduckgo.com/?q=site%3Aallaboutken.com">searching on DuckDuckGo</a>.
-      </p>
-    </noscript>
-
-    <div class="kh-content kh-grid kh-search-client-side">
-      <div id="search-results"></div>
     </div>
   </div>
 </section>
 
 <script type="module">
+  // --- Shared utilities ---
+  const escDiv = document.createElement('div');
+  function esc(s) {
+    escDiv.textContent = s;
+    return escDiv.innerHTML;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+
+  // --- Mode toggle ---
+  const modeFieldset = document.getElementById('search-mode');
+  const keywordSection = document.getElementById('keyword-section');
+  const semanticSection = document.getElementById('semantic-section');
+  const modeRadios = modeFieldset.querySelectorAll('input[name="search_mode"]');
+
+  // Show the toggle (requires JS); visually hide the heading (tabs replace it)
+  modeFieldset.removeAttribute('hidden');
+  document.getElementById('search-heading').classList.add('kh-u-sr-only');
+
+  // Exposed on window for inline onclick fallback links
+  window.setMode = setMode;
+
+  function setMode(mode) {
+    if (mode === 'semantic') {
+      keywordSection.setAttribute('hidden', '');
+      semanticSection.removeAttribute('hidden');
+      modeFieldset.querySelector('input[value="semantic"]').checked = true;
+      askInput.focus();
+    } else {
+      semanticSection.setAttribute('hidden', '');
+      keywordSection.removeAttribute('hidden');
+      modeFieldset.querySelector('input[value="keyword"]').checked = true;
+      input.focus();
+    }
+
+    // Update URL
+    const url = new URL(window.location);
+    if (mode === 'semantic') {
+      url.searchParams.set('search_type', 'semantic');
+    } else {
+      url.searchParams.delete('search_type');
+    }
+    window.history.replaceState({}, '', url);
+  }
+
+  modeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      setMode(radio.value);
+      // Carry query across when switching
+      if (radio.value === 'semantic' && input.value.trim()) {
+        askInput.value = input.value.trim();
+      } else if (radio.value === 'keyword' && askInput.value.trim()) {
+        input.value = askInput.value.trim();
+      }
+    });
+  });
+
+  // --- Keyword search (Pagefind) ---
   const input = document.getElementById('search');
   const resultsEl = document.getElementById('search-results');
   let pagefind = null;
   let debounceTimer = null;
 
-  async function init() {
+  async function initPagefind() {
     if (!pagefind) {
       pagefind = await import('/pagefind/pagefind.js');
       await pagefind.options({ excerptLength: 30 });
     }
     return pagefind;
-  }
-
-  const escDiv = document.createElement('div');
-  function esc(s) {
-    escDiv.textContent = s;
-    return escDiv.innerHTML;
   }
 
   async function doSearch(query) {
@@ -67,7 +169,7 @@ noindex: true
     resultsEl.innerHTML = '<p>Searching...</p>';
 
     try {
-      const pf = await init();
+      const pf = await initPagefind();
       const search = await pf.search(query);
 
       if (search.results.length === 0) {
@@ -99,21 +201,17 @@ noindex: true
     }
   }
 
-  // Read query from URL on page load
-  const params = new URLSearchParams(window.location.search);
   const initialQuery = params.get('search_query');
   if (initialQuery) {
     input.value = initialQuery;
     doSearch(initialQuery);
   }
 
-  // Debounced input handler
   input.addEventListener('input', () => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => doSearch(input.value), 300);
   });
 
-  // Also search on form submit (prevents page reload, updates URL)
   input.closest('form').addEventListener('submit', (e) => {
     e.preventDefault();
     clearTimeout(debounceTimer);
@@ -123,5 +221,157 @@ noindex: true
     window.history.replaceState({}, '', url);
     doSearch(query);
   });
+
+  // --- Semantic search ---
+  const askForm = document.getElementById('ask-form');
+  const askInput = document.getElementById('ask-input');
+  const conversation = document.getElementById('ask-conversation');
+
+  let extractor = null;
+  let vectorData = null;
+  let isLoading = false;
+
+  function addMessage(type, html) {
+    const msg = document.createElement('div');
+    msg.className = `kh-ask__message kh-ask__message--${type}`;
+    msg.innerHTML = html;
+    conversation.appendChild(msg);
+    conversation.scrollTop = conversation.scrollHeight;
+    return msg;
+  }
+
+  function cosineSimilarity(a, b) {
+    let dot = 0;
+    let normA = 0;
+    let normB = 0;
+    for (let i = 0; i < a.length; i++) {
+      dot += a[i] * b[i];
+      normA += a[i] * a[i];
+      normB += b[i] * b[i];
+    }
+    return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    } catch {
+      return '';
+    }
+  }
+
+  function renderResults(results, query) {
+    if (results.length === 0) {
+      return `<p>I couldn't find anything closely related to that. Try rephrasing, or switch to <a href="#" onclick="setMode('keyword'); return false;">keyword search</a>.</p>`;
+    }
+
+    let intro;
+    if (results.length === 1 && results[0].score > 0.45) {
+      intro = '<p>I found one post that closely matches:</p>';
+    } else {
+      intro = `<p>Here are ${results.length} post${results.length === 1 ? '' : 's'} that might be relevant:</p>`;
+    }
+
+    const cards = results.map(r => {
+      const date = formatDate(r.date);
+      const score = Math.round(r.score * 100);
+      const meta = [date, `${score}% match`].filter(Boolean).join(' · ');
+      return `<div class="kh-ask__result">
+        <a href="${esc(r.url)}"><h3>${esc(r.title || r.url)}</h3></a>
+        ${r.teaser ? `<p>${esc(r.teaser)}</p>` : ''}
+        <p class="kh-ask__result-meta">${esc(meta)}</p>
+      </div>`;
+    }).join('');
+
+    const fallback = `<p class="kh-ask__fallback">Not what you were looking for? Switch to <a href="#" onclick="setMode('keyword'); return false;">keyword search</a>.</p>`;
+
+    return `${intro}<div class="kh-ask__results">${cards}</div>${fallback}`;
+  }
+
+  async function loadModel(statusMsg) {
+    statusMsg.innerHTML = '<p>Loading search index...</p>';
+    const resp = await fetch('/semantic-search/vectors.json');
+    if (!resp.ok) throw new Error(`Failed to load vectors: ${resp.status}`);
+    vectorData = await resp.json();
+
+    statusMsg.innerHTML = '<p>Loading search model (one-time ~30 MB download)...</p><progress id="model-progress" max="100" value="0"></progress>';
+    const { env: tfEnv, pipeline: tfPipeline } = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3');
+
+    tfEnv.allowLocalModels = true;
+    tfEnv.localModelPath = '/';
+
+    const progressBar = document.getElementById('model-progress');
+
+    extractor = await tfPipeline('feature-extraction', 'semantic-search/model', {
+      dtype: 'q8',
+      progress_callback: (progress) => {
+        if (progress.status === 'progress' && progressBar) {
+          progressBar.value = Math.round(progress.progress);
+        }
+      },
+    });
+  }
+
+  async function handleQuery(query) {
+    if (!query.trim() || isLoading) return;
+    isLoading = true;
+
+    addMessage('user', `<p>${esc(query)}</p>`);
+    askInput.value = '';
+
+    const url = new URL(window.location);
+    url.searchParams.set('q', query);
+    url.searchParams.set('search_type', 'semantic');
+    window.history.replaceState({}, '', url);
+
+    try {
+      if (!extractor) {
+        const statusMsg = addMessage('status', '<p>Preparing search...</p>');
+        await loadModel(statusMsg);
+        statusMsg.remove();
+      }
+
+      const thinkingMsg = addMessage('status', '<p>Searching...</p>');
+
+      const output = await extractor(query, { pooling: 'mean', normalize: true });
+      const queryVec = Array.from(output.data);
+
+      const scored = vectorData.documents.map(doc => ({
+        ...doc,
+        score: cosineSimilarity(queryVec, doc.embedding),
+      }));
+
+      scored.sort((a, b) => b.score - a.score);
+
+      // Short queries (abbreviations like "CV") produce weaker embeddings — lower the threshold
+      const threshold = query.trim().length < 4 ? 0.15 : 0.25;
+      const results = scored.filter(d => d.score > threshold).slice(0, 5);
+
+      thinkingMsg.remove();
+      addMessage('system', renderResults(results, query));
+    } catch (err) {
+      console.error('Semantic search error:', err);
+      addMessage('system', `<p>Something went wrong loading the search model. Switch to <a href="#" onclick="setMode('keyword'); return false;">keyword search</a> instead.</p>`);
+    }
+
+    isLoading = false;
+  }
+
+  askForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    handleQuery(askInput.value);
+  });
+
+  // --- Initial state from URL params ---
+  if (params.get('search_type') === 'semantic') {
+    setMode('semantic');
+    const semanticQuery = params.get('q') || params.get('search_query') || '';
+    if (semanticQuery) {
+      askInput.value = semanticQuery;
+      handleQuery(semanticQuery);
+    }
+  }
 </script>
 </div>

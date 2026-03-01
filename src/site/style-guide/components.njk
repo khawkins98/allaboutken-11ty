@@ -28,6 +28,7 @@ permalink: /style-guide/components/
         <a href="#figures">Figures &amp; images</a> ·
         <a href="#tables">Tables</a> ·
         <a href="#forms">Forms</a> ·
+        <a href="#search-mode-toggle">Search mode toggle</a> ·
         <a href="#summary-cards">Summary cards</a> ·
         <a href="#metrics">Metrics</a> ·
         <a href="#layout">Layout</a> ·
@@ -496,6 +497,48 @@ Form elements used for the site search. The search input has a custom SVG cancel
 </div>
 <a href="#forms" class="kh-button">Search</a>
 {% endcodeAndDemo %}
+
+  </div>
+</section>
+
+{# ── SEARCH MODE TOGGLE ── #}
+<section class="kh-grid-stylized kh-u-padding__top--800" id="search-mode-toggle">
+  <div></div>
+  <div class="kh-content kh-content--wide">
+{% markdown %}
+## Search mode toggle
+
+A tabbed radio control used on the [search page](/search/) to switch between keyword and semantic search. On the search page, the tabs sit above a `.kh-search-widget__panel` card — the active tab merges into the panel via a matching background and erased bottom border. Hidden radio inputs keep it accessible — keyboard users can arrow between options and screen readers announce the selected state.
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<div class="kh-search-widget">
+  <fieldset class="kh-search-mode">
+    <legend class="kh-u-sr-only">Search mode</legend>
+    <label class="kh-search-mode__option">
+      <input type="radio" name="demo_search_mode" value="keyword" checked>
+      Search by keyword
+    </label>
+    <label class="kh-search-mode__option">
+      <input type="radio" name="demo_search_mode" value="semantic">
+      Search semantically
+    </label>
+  </fieldset>
+  <div class="kh-search-widget__panel">
+    <p style="margin:0;color:var(--kh-color--grey)">Panel content goes here</p>
+  </div>
+</div>
+{% endcodeAndDemo %}
+
+{% markdown %}
+### Markup notes
+
+- The `<fieldset>` starts with `hidden` in production — JavaScript removes it on load (progressive enhancement, since the toggle only works with JS)
+- Radio `name` must be unique per instance to avoid conflicts
+- The active state uses `:has(input:checked)` to style the parent label — no JS needed for the visual toggle
+- `:has(input:focus-visible)` provides an orange outline for keyboard focus
+- Wrap in `.kh-search-widget` with a `.kh-search-widget__panel` to get the connected tabs-to-card effect
+{% endmarkdown %}
 
   </div>
 </section>
