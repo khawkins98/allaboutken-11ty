@@ -278,10 +278,7 @@ noindex: true
     if (!vectorResp.ok) throw new Error(`Failed to load vectors: ${vectorResp.status}`);
     vectorData = await vectorResp.json();
 
-    tfEnv.allowLocalModels = true;
-    tfEnv.localModelPath = '/';
-
-    extractor = await tfPipeline('feature-extraction', 'semantic-search/model', {
+    extractor = await tfPipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
       dtype: 'q8',
       progress_callback: (progress) => {
         if (progress.status === 'progress' && progressBar) {
