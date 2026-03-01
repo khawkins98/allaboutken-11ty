@@ -395,6 +395,38 @@ module.exports = function(config) {
     }
   });
 
+  // Post-build: ensure semantic search model files exist for browser self-hosting.
+  // Downloads from HuggingFace once, then skips on subsequent rebuilds.
+  // Separate from embedding generation (yarn embeddings), which is too slow for dev.
+  const modelDir = Path.join('build', 'semantic-search', 'model');
+  const modelName = 'Xenova/all-MiniLM-L6-v2';
+  const modelFiles = [
+    'config.json',
+    'tokenizer.json',
+    'tokenizer_config.json',
+    'onnx/model_quantized.onnx',
+  ];
+  config.on('eleventy.after', async () => {
+    const fs = require('fs');
+    const onnxPath = Path.join(modelDir, 'onnx', 'model_quantized.onnx');
+    if (fs.existsSync(onnxPath)) return; // already downloaded
+
+    console.log('[semantic-search] Downloading model files for browser self-hosting...');
+    fs.mkdirSync(Path.join(modelDir, 'onnx'), { recursive: true });
+    for (const file of modelFiles) {
+      const url = `https://huggingface.co/${modelName}/resolve/main/${file}`;
+      console.log(`[semantic-search]   ${file}...`);
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        console.error(`[semantic-search] Failed to download ${file}: ${resp.status}`);
+        return;
+      }
+      fs.writeFileSync(Path.join(modelDir, file), Buffer.from(await resp.arrayBuffer()));
+    }
+    const sizeMB = Math.round(fs.statSync(onnxPath).size / 1024 / 1024);
+    console.log(`[semantic-search] Model files ready (${sizeMB} MB ONNX model)`);
+  });
+
   // Collections
   config.addCollection('impactStories', (collectionApi) => {
     try {

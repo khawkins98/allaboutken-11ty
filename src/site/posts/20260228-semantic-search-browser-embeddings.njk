@@ -17,15 +17,15 @@ kens_status: draft
 
 Last week I [replaced Lunr.js with Pagefind](/posts/20260228-replacing-lunr-with-pagefind/) for keyword search on this site. Pagefind works well -- you type "eleventy image plugin" and get back pages containing those words, ranked by BM25. But keyword search has a ceiling. Search for "making websites faster" and you'll miss a post titled "performance optimization" because the words don't overlap.
 
-Semantic search matches meaning instead of keywords. A query about "making websites faster" finds posts about performance, caching, and build optimization even if those exact words never appear in the query.
+With LLM-powered search showing up everywhere, I wanted to see how close I could get to that natural-language experience on a static site without any cloud infrastructure. No API keys, no SaaS, no server. Could the same embedding model run at build time and in the browser, and would the results actually be useful?
 
-The constraint I set: no LLM, no SaaS, no API keys. Everything runs locally -- embeddings generated at build time, queries processed in the browser. The same model runs on both sides.
+The answer is mostly yes. You have to download ~30 MB on first use, which is a lot. But everything caches, it runs entirely on your device, and the results are surprisingly good -- it finds posts by meaning, not just matching words.
 
 > ## tl;dr
 >
 > - Build-time script generates vector embeddings for all posts using [MiniLM-L6-v2](https://huggingface.co/Xenova/all-MiniLM-L6-v2) via [Transformers.js](https://huggingface.co/docs/transformers.js)
 > - Produces a ~700 KB `vectors.json` file shipped as a static asset
-> - Browser loads the same model on first query (~23 MB, cached afterward)
+> - Browser loads the same model on first query (~30 MB with WASM runtime, cached afterward)
 > - Cosine similarity ranks posts by meaning, not keywords
 > - [Try it at /ask/](/ask/)
 
@@ -89,7 +89,9 @@ The `package.json` change is minimal:
 "build": "yarn clean && yarn sass && yarn eleventy && yarn embeddings && echo 'Build completed'"
 ```
 
-Embeddings run after Eleventy (which runs Pagefind in its `eleventy.after` hook), so the full HTML output is available. The script is not included in `yarn dev` -- it's too slow for iterative development. Run `yarn build` once to generate vectors, then `yarn dev` as usual.
+Embeddings run after Eleventy (which runs Pagefind in its `eleventy.after` hook), so the full HTML output is available.
+
+The embedding script itself is not included in `yarn dev` -- it's too slow for iterative development. Run `yarn build` once to generate vectors, then `yarn dev` as usual. The model files for the browser (more on that below) are downloaded separately in an `eleventy.after` hook, so `yarn dev` still has them even without running the full build pipeline.
 
 ## The browser half
 
@@ -97,14 +99,17 @@ The [/ask/](/ask/) page loads nothing on initial visit. On first query submit, t
 
 1. Fetch `/semantic-search/vectors.json` (~80 KB gzipped)
 2. Import Transformers.js from jsDelivr CDN
-3. Initialize the MiniLM pipeline (~23 MB model download, with progress bar)
+3. Initialize the MiniLM pipeline (~23 MB model + ~4 MB WASM runtime, with progress bar)
 
-The model downloads once and lives in the browser's Cache Storage. Second visits skip straight to step 3, which completes in under two seconds. Subsequent queries within the same session are near-instant -- embed the query (~100 ms), compute 88 cosine similarities (< 1 ms), sort and display.
+The model and runtime download once and cache normally. Subsequent queries within the same session are near-instant -- embed the query (~100 ms), compute 88 cosine similarities (< 1 ms), sort and display.
 
 ```js
 // Lazy-load on first query, not on page load
-const { pipeline } = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3');
-extractor = await pipeline('feature-extraction', vectorData.model, {
+const { env, pipeline } = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3');
+env.allowLocalModels = true;
+env.localModelPath = '/';
+
+extractor = await pipeline('feature-extraction', 'semantic-search/model', {
   dtype: 'q8',
   progress_callback: (progress) => {
     if (progress.status === 'progress') {
@@ -113,6 +118,18 @@ extractor = await pipeline('feature-extraction', vectorData.model, {
   },
 });
 ```
+
+### Self-hosting the model
+
+The model files are self-hosted rather than loaded from HuggingFace at query time. HuggingFace serves large files through signed CloudFront URLs -- the download URL changes on every request, so the browser cache never matches and the 23 MB model re-downloads on every visit.
+
+An `eleventy.after` hook downloads the four model files (config, tokenizer, tokenizer config, quantized ONNX weights) from HuggingFace once and deploys them as static assets at `build/semantic-search/model/`. The hook skips the download if the files already exist, so dev rebuilds stay fast. The browser loads them from the same origin with normal HTTP caching.
+
+Getting Transformers.js to load from your own server instead of HuggingFace takes some coaxing -- that's what the `env.allowLocalModels` and `env.localModelPath` lines in the code above are doing. Transformers.js disables "local" model loading in browsers by default, and it validates model identifiers against a HuggingFace regex, so bare paths like `/semantic-search/model/` and full URLs both fail. The model ID has to look like `org/model` -- `semantic-search/model` passes the check, and with `localModelPath` set to `/`, the library fetches `/semantic-search/model/tokenizer.json` and so on. Works the same in dev and production.
+
+I thought about self-hosting the Transformers.js library and ONNX Runtime WASM engine too, but jsDelivr uses deterministic URLs that cache normally. The signed-URL problem is specific to HuggingFace's model hosting. Since this page is more playground than critical infrastructure, the CDN dependency is fine.
+
+To update the model, change `MODEL_NAME` in `scripts/generate-embeddings.js` and `modelName` in `eleventy.js`, then rebuild. Both sides need the same model -- build-time vectors and browser-side query vectors have to come from the same embedding space.
 
 Results are filtered by a similarity threshold (score > 0.25) and limited to five. Below that threshold, results tend to be noise. The response templates are simple conditionals -- no LLM generates the answer text:
 
@@ -135,7 +152,7 @@ The input you feed it matters more than I expected. Just the title loses too muc
 | | Pagefind (keyword) | Semantic search |
 |---|---|---|
 | Query type | Exact and fuzzy keyword matching | Natural language, meaning-based |
-| Initial download | ~10 KB JS + ~75 KB WASM | ~80 KB vectors + ~23 MB model (cached) |
+| Initial download | ~10 KB JS + ~75 KB WASM | ~80 KB vectors + ~30 MB model + runtime (cached) |
 | Per-query cost | ~10-30 KB index fragments | ~100 ms compute, no network |
 | Best for | Known terms, specific phrases | Exploratory questions, topic discovery |
 | Excerpts | Yes, highlighted in context | No (shows teaser only) |
@@ -143,21 +160,31 @@ The input you feed it matters more than I expected. Just the title loses too muc
 
 They solve different problems. Pagefind is better when you know the words. Semantic search is better when you know the idea but not the vocabulary. The search page links to /ask/, and /ask/ links back.
 
+A few examples from this site to make it concrete.
+
+Search for "design systems" on Pagefind and you get the one post with those words in the title. Semantic search also finds posts about decoupling content from platforms, building reusable components for scientific websites, and untangling an organization's navigation -- related work that never uses the phrase "design system."
+
+Try "how to work with AI effectively" and Pagefind matches everything with "AI" in it, which is half the blog at this point. Semantic search ranks the context engineering and integration posts highest and pushes the less relevant mentions further down.
+
+"Measuring website success" is another good one. Pagefind finds posts with "measuring" in the title. Semantic search connects it to the analytics infrastructure post about audience quality and to a post about doubling conversion rates -- related by concept, not vocabulary.
+
+The semantic results aren't always right. Some matches feel like a stretch, and it misses things. But the queries where it works well are exactly the ones where keyword search falls flat.
+
 ## Tradeoffs
 
-**The 23 MB elephant.** The model is large for a static site feature. The full-precision (fp32) ONNX file is 90 MB -- I use the 8-bit quantized version (`dtype: 'q8'`), which brings it down to 23 MB with negligible quality loss for sentence embeddings. It downloads once and caches, so repeat visitors pay nothing, but the first query on a new device is a real wait. The progress bar helps set expectations. Going smaller (4-bit quantization) would save a few more megabytes but the quality starts to slip.
+**The 30 MB elephant.** The first query downloads the quantized model (~23 MB) plus the ONNX Runtime WASM engine (~4 MB), tokenizer, and Transformers.js library -- about 30 MB total. The full-precision model is 90 MB; 8-bit quantization (`dtype: 'q8'`) gets it to 23 MB with negligible quality loss for sentence embeddings. Everything caches, so repeat visitors pay nothing, but the first query on a new device is a real wait. The progress bar helps set expectations.
 
 **No excerpts.** Pagefind shows highlighted excerpts with the matching terms in context. Semantic search can only show the teaser from frontmatter. The model doesn't know which sentences were most relevant to the query, just that the overall document is similar. Adding extractive summarization would help but is a much harder problem.
 
 **Threshold tuning.** The 0.25 cosine similarity cutoff is hand-tuned. Too low and irrelevant results creep in. Too high and you miss valid matches. There's no perfect number -- it depends on the corpus and the kinds of queries people ask.
 
-**CDN dependency.** The model loads from jsDelivr. If the CDN is down, the page shows an error with a link to keyword search. Self-hosting the model files would remove this dependency but add ~23 MB to the deploy artifact.
+**CDN dependency.** Transformers.js and the ONNX Runtime WASM engine load from jsDelivr. The model files are self-hosted (HuggingFace's signed URLs break browser caching), but the JS and WASM cache fine from jsDelivr. If jsDelivr is down, the page shows an error with a link to keyword search.
 
 **Build-time coupling.** The embedding script reads Eleventy's HTML output directly, so it depends on the build directory structure. If the HTML format changes, the text extraction regex could break. A proper HTML parser would be more robust, but regex handles the current templates fine.
 
 **No conversational LLM.** You could add a small LLM on top of the embeddings to generate natural-language answers -- "Based on these three posts, you probably want..." -- instead of a plain ranked list. I skipped it. Nobody visits /ask/ to chat; they want to find a post. A list with teasers and match scores does that.
 
-The size gap is also hard to justify. Even small LLMs (1-3B parameters) need 1-4 GB downloads and [WebGPU support](https://caniuse.com/webgpu), which still isn't in Firefox or on older devices. Embeddings alone are ~23 MB and run on WASM. If conversational models shrink to the point where they run on CPU without a multi-gigabyte download, I'd reconsider.
+The size gap is also hard to justify. Even small LLMs (1-3B parameters) need 1-4 GB downloads and [WebGPU support](https://caniuse.com/webgpu), which still isn't in Firefox or on older devices. Embeddings alone are ~30 MB and run on WASM. If conversational models shrink to the point where they run on CPU without a multi-gigabyte download, I'd reconsider.
 
 ## Tips if you're doing this
 
@@ -170,6 +197,8 @@ The size gap is also hard to justify. Even small LLMs (1-3B parameters) need 1-4
 4. **Ship both search types.** Keyword and semantic search solve different problems. Cross-link between them so users can switch when one doesn't find what they need.
 
 5. **Set a similarity threshold.** Without a cutoff, every query returns results -- even nonsense queries. Start at 0.25 and adjust based on your corpus.
+
+6. **Self-host the model files.** HuggingFace serves ONNX files through signed CloudFront URLs that change on every request, breaking browser cache. Download them at build time and serve as static assets. You'll need to set `env.allowLocalModels = true` and `env.localModelPath` to your site root, and use a model ID in `org/model` format so it passes Transformers.js's validation.
 
 ## What I'd change
 
