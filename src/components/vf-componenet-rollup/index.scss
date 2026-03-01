@@ -1385,10 +1385,6 @@ body:has(#kh-css-toggle:checked) {
   }
 
   // Semantic search chat-bubble UI (.kh-ask*)
-  .kh-ask {
-    max-width: 70ch;
-  }
-
   .kh-ask__conversation {
     display: flex;
     flex-direction: column;
