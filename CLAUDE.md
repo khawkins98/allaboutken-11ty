@@ -31,7 +31,7 @@ The directory `src/components/vf-componenet-rollup/` is a legacy name. The typo 
 The markdown-it config converts `--` to `—` automatically. Write `--` in content, it renders as `—`.
 
 ### Embeddings don't run in dev
-`yarn embeddings` is too slow for iterative development. Run `yarn build` once to generate `vectors.json`, then `yarn dev` as usual. The model files for the browser are downloaded separately in an `eleventy.after` hook, so `yarn dev` still has them.
+`yarn embeddings` is too slow for iterative development. Run `yarn build` once to generate `vectors.json`, then `yarn dev` as usual. The model files for the browser are downloaded separately in an `eleventy.after` hook, so `yarn dev` still has them. The `@huggingface/transformers` devDependency is ~476 MB in node_modules (ONNX runtime ships native binaries for every platform). It's needed to run the model at build time -- there's no lighter alternative.
 
 ### Semantic search model self-hosting
 HuggingFace serves ONNX files through signed CloudFront URLs that change on every request, breaking browser cache. The model files are downloaded via `eleventy.after` hook to `build/semantic-search/model/` and served as static assets. Transformers.js and ONNX Runtime WASM load from jsDelivr (deterministic URLs, caches fine).

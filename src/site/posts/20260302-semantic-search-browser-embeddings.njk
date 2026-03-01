@@ -93,7 +93,9 @@ The `package.json` change is minimal:
 
 Embeddings run after Eleventy (which runs Pagefind in its `eleventy.after` hook), so the full HTML output is available.
 
-The embedding script itself is not included in `yarn dev` -- it's too slow for iterative development. Run `yarn build` once to generate vectors, then `yarn dev` as usual. The model files for the browser (more on that below) are downloaded separately in an `eleventy.after` hook, so `yarn dev` still has them even without running the full build pipeline.
+The `@huggingface/transformers` dependency is heavy -- roughly 476 MB in `node_modules`, mostly ONNX Runtime native binaries for running the model in Node.js. It ships prebuilt binaries for every platform (macOS, Linux, Windows, multiple architectures), and there's no way to install only the one you need. This is the same kind of tradeoff as Pagefind shipping a Rust binary for its indexing step: the build-time tooling is large because something has to actually run the neural network over your content. The output is small and fast to query, but producing it requires real compute.
+
+The embedding script is not included in `yarn dev` -- it's too slow for iterative development. Run `yarn build` once to generate vectors, then `yarn dev` as usual. The model files for the browser (more on that below) are downloaded separately in an `eleventy.after` hook, so `yarn dev` still has them even without running the full build pipeline.
 
 ## The browser half
 
@@ -158,7 +160,7 @@ The input you feed it matters more than I expected. Just the title loses too muc
 | Per-query cost | ~10-30 KB index fragments | ~100 ms compute, no network |
 | Best for | Known terms, specific phrases | Exploratory questions, topic discovery |
 | Excerpts | Yes, highlighted in context | No (shows teaser only) |
-| Build dependency | Rust binary (via npm) | Node.js + ONNX runtime |
+| Build dependency | Rust binary (via npm) | ~476 MB ONNX runtime (via npm) |
 
 They solve different problems. Pagefind is better when you know the words. Semantic search is better when you know the idea but not the vocabulary. The search page links to /ask/, and /ask/ links back.
 
