@@ -51,9 +51,7 @@ noindex: true
         </div>
 
         <div id="semantic-section" hidden>
-          <p class="kh-text-body--3">
-            Understands meaning, not just keywords. Runs in your browser.
-          </p>
+          <p><small>Describe what you're looking for in your own words. This <a href="/posts/20260302-semantic-search-browser-embeddings/">searches by meaning</a>, not exact keywords -- and everything runs locally in your browser.</small></p>
 
           <div class="kh-ask" aria-label="Semantic search conversation">
             <div class="kh-ask__conversation" id="ask-conversation" role="log" aria-live="polite" aria-relevant="additions">
@@ -66,22 +64,6 @@ noindex: true
             </form>
           </div>
 
-            <h3>How does this work?</h3>
-            <p>
-              This uses <strong>semantic search</strong> -- it understands the <em>meaning</em> of your question,
-              not just keywords. At build time, every post is converted into a mathematical "fingerprint"
-              (a 384-dimension vector) using a small language model called
-              <a href="https://huggingface.co/Xenova/all-MiniLM-L6-v2">MiniLM-L6-v2</a>.
-            </p>
-            <p>
-              When you ask a question, the same model runs in your browser to convert your question into a
-              fingerprint, then finds posts with the most similar fingerprints. The model and its runtime download once (~30 MB)
-              and are cached by your browser for future visits.
-            </p>
-            <p>
-              No AI generates the answers -- the results are real posts, ranked by relevance.
-              This is a bit of an experiment -- read more about <a href="/posts/20260302-semantic-search-browser-embeddings/">how and why I built this</a>.
-            </p>
         </div>
       </div>
     </div>
@@ -257,10 +239,12 @@ noindex: true
     }
 
     let intro;
-    if (results.length === 1 && results[0].score > 0.45) {
-      intro = '<p>I found one post that closely matches:</p>';
+    if (results.length === 1) {
+      intro = results[0].score > 0.45
+        ? '<p>I found one post that closely matches:</p>'
+        : '<p>I found one post that might be relevant:</p>';
     } else {
-      intro = `<p>Here are ${results.length} post${results.length === 1 ? '' : 's'} that might be relevant:</p>`;
+      intro = `<p>Here are ${results.length} posts that might be relevant:</p>`;
     }
 
     const cards = results.map(r => {
