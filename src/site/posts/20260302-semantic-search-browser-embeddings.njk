@@ -208,7 +208,9 @@ The size gap is also hard to justify. Even small LLMs (1-3B parameters) need 1-4
 
 I'd like to show relevant snippets instead of just the frontmatter teaser -- figuring out which paragraph best matches the query is a harder problem, but it would make the results more useful.
 
-If I'm feeling ambitious, merging Pagefind's keyword score with the semantic similarity score into a single ranked list would give the best of both. For now, it's two search experiences on a static site with no backend -- overkill for a personal blog, but a useful sketch for how this could work on sites where search actually matters. [Try it](/ask/).
+If I'm feeling ambitious, merging Pagefind's keyword score with the semantic similarity score into a single ranked list would give the best of both. [Sift](https://github.com/romanI04/sift) does something like this well -- it stores everything in a SQLite file, uses FTS5 for instant keyword results, then upgrades to semantic results once the model loads. The keyword results appear immediately while the user waits for the 30 MB model download, which is a much better first-visit experience than a progress bar and nothing else. Sift also uses HTTP range requests to read only the index pages it needs instead of downloading the whole file, which would matter for larger sites.
+
+For now, it's two separate search experiences on a static site with no backend -- overkill for a personal blog, but a useful sketch for how this could work on sites where search actually matters. [Try it](/ask/).
 
 ---
 
