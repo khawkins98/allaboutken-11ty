@@ -70,13 +70,6 @@ The output is a JSON file:
 
 For 88 pages, the file is 719 KB raw. Gzip brings that down to roughly 80 KB over the wire. The embedding step adds about six seconds to a production build (after the model is cached locally).
 
-The `package.json` change is minimal:
-
-```json
-"embeddings": "node scripts/generate-embeddings.js",
-"build": "yarn clean && yarn sass && yarn eleventy && yarn embeddings && echo 'Build completed'"
-```
-
 Embeddings run after Eleventy (which runs Pagefind in its `eleventy.after` hook), so the full HTML output is available.
 
 The `@huggingface/transformers` dependency is heavy -- roughly 476 MB in `node_modules`, mostly [ONNX Runtime](https://onnxruntime.ai/) native binaries for running the model in Node.js. It ships prebuilt binaries for every platform (macOS, Linux, Windows, multiple architectures), and there's no way to install only the one you need.
@@ -111,15 +104,7 @@ extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
 });
 ```
 
-### Why not self-host the model?
-
-I initially self-hosted the model files to avoid HuggingFace's signed CloudFront URLs, which change on every request and break the browser's HTTP cache. An `eleventy.after` hook downloaded the four model files at build time and served them as static assets.
-
-It worked, but created a different caching problem. Transformers.js has its own [Cache API](https://developer.mozilla.org/en-US/docs/Web/API/Cache) layer that caches model files by model ID, not by URL -- which is exactly how it handles HuggingFace's signed URLs. Setting `env.allowLocalModels = true` to load from my own server bypassed that cache layer, so the 23 MB model re-downloaded on every visit anyway.
-
-The simpler approach: let Transformers.js fetch from HuggingFace directly and handle caching itself. The model downloads once, gets stored in the Cache API, and subsequent visits load it locally. No build hook, no path hacks, no `env.allowLocalModels` workaround.
-
-To update the model, change `MODEL_NAME` in `scripts/generate-embeddings.js`. Build-time vectors and browser-side query vectors have to come from the same embedding space.
+Transformers.js handles model caching via the browser's [Cache API](https://developer.mozilla.org/en-US/docs/Web/API/Cache), keyed by model ID. The ~23 MB download happens once; subsequent visits load from cache.
 
 Results are filtered by a similarity threshold (score > 0.25) and limited to five. Below that threshold, results tend to be noise. The response templates are simple conditionals -- no LLM generates the answer text:
 
@@ -170,11 +155,7 @@ The semantic results aren't always right. Some matches feel like a stretch, and 
 
 **CDN dependency.** Transformers.js and the ONNX Runtime WASM load from jsDelivr; the model files load from HuggingFace via Transformers.js's Cache API. If either CDN is down, the page shows an error with a link to keyword search.
 
-**Build-time coupling.** The embedding script reads Eleventy's HTML output directly, so it depends on the build directory structure. If the HTML format changes, the text extraction regex could break. A proper HTML parser would be more robust, but regex handles the current templates fine.
-
-**No conversational LLM.** You could add a small LLM on top of the embeddings to generate natural-language answers -- "Based on these three posts, you probably want..." -- instead of a plain ranked list. I skipped it. Nobody uses the search page to chat; they want to find a post. A list with teasers and match scores does that.
-
-The size gap is also hard to justify. Even small LLMs (1-3B parameters) need 1-4 GB downloads and [WebGPU support](https://caniuse.com/webgpu), which still isn't in Firefox or on older devices. Embeddings alone are ~30 MB and run on WASM. If conversational models shrink to the point where they run on CPU without a multi-gigabyte download, I'd reconsider.
+**No conversational LLM.** You could generate natural-language answers on top of the embeddings, but even small LLMs need 1-4 GB downloads and [WebGPU support](https://caniuse.com/webgpu). For finding a blog post, a ranked list with teasers does the job.
 
 ## Tips if you're doing this
 
@@ -187,8 +168,6 @@ The size gap is also hard to justify. Even small LLMs (1-3B parameters) need 1-4
 4. **Ship both search types.** Keyword and semantic search solve different problems. Cross-link between them so users can switch when one doesn't find what they need.
 
 5. **Set a similarity threshold.** Without a cutoff, every query returns results -- even nonsense queries. Start at 0.25 and adjust based on your corpus.
-
-6. **Let Transformers.js handle model caching.** HuggingFace serves files through signed URLs that break the browser's HTTP cache, but Transformers.js caches by model ID using the Cache API. Don't self-host the model files to work around this -- you'll bypass the Cache API and make caching worse.
 
 ## What I'd change
 
