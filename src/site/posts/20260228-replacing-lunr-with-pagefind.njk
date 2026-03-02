@@ -105,8 +105,11 @@ It's also another build tool, though it replaced a three-dependency Node script,
 
 The best search for a static site is still the idea Lunr had ten years ago: index at build time, query in the browser, skip the external service. Pagefind does the same thing with a chunked index and active maintenance. If your site search hasn't been touched in a while, the [migration PR](https://github.com/khawkins98/allaboutken-11ty/pull/24) might be a useful reference. I'd be curious to hear if you've run into anything different.
 
+**Update, 2 March 2026:** Getting Pagefind working got me curious about what's possible beyond keyword matching. I've since added [semantic search](/posts/20260302-semantic-search-browser-embeddings/) -- same philosophy (no API keys, runs in the browser), but it uses vector embeddings to match by meaning instead of exact words. [Try it out](/search/?search_type=semantic).
+
 ## Related posts
 
+- [Semantic search on a static site, no API keys required](/posts/20260302-semantic-search-browser-embeddings/)
 - [A simpler, faster site: moving to pure Eleventy v3](/posts/20250831-site-overhaul-eleventy-v3)
 
 {% endmarkdown %}
