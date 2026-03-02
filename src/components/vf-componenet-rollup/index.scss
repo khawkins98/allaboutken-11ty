@@ -12,6 +12,12 @@ html {
   scroll-padding-top: 13vh;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 // This acts as our root selector so we can use it to toggle the custom CSS
 body:has(#kh-css-toggle:checked) {
   @include normalize.kh-normalize();
@@ -683,7 +689,12 @@ body:has(#kh-css-toggle:checked) {
   :is(h1, h2, h3, h4, h5, h6):target {
     border-left: 4px solid var(--kh-color--orange);
     padding-left: 0.5em;
-    animation: kh-target-pop 0.4s ease-out;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :is(h1, h2, h3, h4, h5, h6):target {
+      animation: kh-target-pop 0.4s ease-out;
+    }
   }
 
   @keyframes kh-target-pop {
