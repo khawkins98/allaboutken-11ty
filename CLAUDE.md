@@ -45,6 +45,7 @@ Must change in **two places**: `MODEL_NAME` in `scripts/generate-embeddings.mjs`
 - `src/components/vf-componenet-rollup/` -- Sass entry point and all CSS
 - `src/site/` -- Templates, posts, data, includes
 - `scripts/generate-embeddings.mjs` -- Build-time vector embeddings
+- `scripts/image-generate/` -- Image generation scripts, config, and docs
 - `docs/` -- Editorial handbook, publishing workflow, reviewer roles
 
 ## Editorial system
