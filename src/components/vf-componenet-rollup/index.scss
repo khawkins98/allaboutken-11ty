@@ -2,17 +2,27 @@
 @use './normalize' as normalize;
 @use './kh-content' as kh-content;
 @use './settings' as *;
+@use './semantic-search' as semantic-search;
 @use '../kh-ambience/kh-ambience' as kh-ambience;
 
 html {
   line-height: 1.15; // Correct the line height in all browsers.
   -webkit-text-size-adjust: 100%; // Prevent adjustments of font size after orientation changes in iOS.
+  scroll-behavior: smooth;
+  scroll-padding-top: 13vh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 // This acts as our root selector so we can use it to toggle the custom CSS
 body:has(#kh-css-toggle:checked) {
   @include normalize.kh-normalize();
   @include kh-content.kh-vf-content();
+  @include semantic-search.semantic-search-styles();
   --kh-color--grey: #707372;
   --kh-color--grey--darkest: #373a36;
   --kh-color--blue: #3b6fb6;
@@ -673,6 +683,31 @@ body:has(#kh-css-toggle:checked) {
     line-height: 1.333;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
     text-wrap: balance;
+  }
+
+  // Highlight anchor-linked headings
+  :is(h1, h2, h3, h4, h5, h6):target {
+    border-left: 4px solid var(--kh-color--orange);
+    padding-left: 0.5em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :is(h1, h2, h3, h4, h5, h6):target {
+      animation: kh-target-pop 0.4s ease-out;
+    }
+  }
+
+  @keyframes kh-target-pop {
+    0% {
+      opacity: 0;
+      letter-spacing: 0.3em;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      letter-spacing: normal;
+      transform: scale(1);
+    }
   }
 
   .kh-text-heading--3 {
