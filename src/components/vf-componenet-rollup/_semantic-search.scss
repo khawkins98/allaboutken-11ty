@@ -4,7 +4,8 @@
   // Search widget: connected tabs + panel
   .kh-search-widget {
     position: relative;
-    padding: 1rem 0;
+    // Horizontal padding accommodates the panel box-shadow on narrow screens
+    padding: 1rem 10px;
     padding-bottom: 2rem;
   }
 
@@ -24,8 +25,9 @@
 
   .kh-search-widget__panel {
     border: 4px solid var(--kh-color--blue);
-    border-radius: 0 4px 4px 4px;
-    box-shadow: 6px 6px 0 var(--kh-color--blue--dark);
+    // Tabs span full width on mobile, so use uniform radius
+    border-radius: 0 0 4px 4px;
+    box-shadow: 4px 4px 0 var(--kh-color--blue--dark);
     background: #fafafa;
     padding: 1rem;
   }
@@ -33,6 +35,8 @@
   @media (min-width: $kh-breakpoint--sm) {
     .kh-search-widget__panel {
       padding: 1.5rem;
+      border-radius: 0 4px 4px 4px;
+      box-shadow: 6px 6px 0 var(--kh-color--blue--dark);
     }
   }
 
@@ -53,13 +57,17 @@
 
   .kh-search-mode__option {
     cursor: pointer;
-    padding: 8px 12px;
+    // Larger tap target on mobile (44px minimum recommended)
+    padding: 10px 12px;
     border: 4px solid var(--kh-color--blue);
     margin-right: -4px;
     margin-bottom: -4px;
     font-size: 0.8rem;
     font-weight: 700;
     background: #fafafa;
+    // On mobile, tabs share width equally so they span the full panel
+    flex: 1;
+    text-align: center;
 
     &:first-of-type {
       border-radius: 4px 0 0 0;
@@ -94,6 +102,16 @@
     flex-direction: column;
     gap: 0.75rem;
     padding: 1rem 0;
+    // Keep input visible on mobile by capping conversation height
+    max-height: 60vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  @media (min-width: $kh-breakpoint--sm) {
+    .kh-ask__conversation {
+      max-height: none;
+    }
   }
 
   .kh-ask__message {
@@ -101,6 +119,8 @@
     padding: 0.75rem 1rem;
     border-radius: 1rem;
     line-height: 1.5;
+    overflow-wrap: break-word;
+    word-break: break-word;
 
     p {
       margin: 0 0 0.5rem;
@@ -181,6 +201,9 @@
   .kh-ask__result {
     padding: 0.5rem 0;
     border-bottom: 1px solid #e0ddd8;
+    // Prevent long URLs or words from causing horizontal overflow
+    overflow-wrap: break-word;
+    word-break: break-word;
 
     &:last-child {
       border-bottom: none;
@@ -225,6 +248,8 @@
     .kh-search-mode__option {
       padding: 8px 16px;
       font-size: 0.9rem;
+      flex: none;
+      text-align: left;
     }
   }
 
