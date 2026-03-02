@@ -1,5 +1,5 @@
 // Semantic search module
-// Embedding model must match scripts/generate-embeddings.js — see that file for details.
+// Embedding model must match scripts/generate-embeddings.mjs — see that file for details.
 
 const VECTORS_URL = '/semantic-search/vectors.json';
 const TRANSFORMERS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3';

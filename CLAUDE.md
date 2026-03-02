@@ -37,14 +37,14 @@ The markdown-it config converts `--` to `—` automatically. Write `--` in conte
 The browser fetches the model directly from HuggingFace at query time. Transformers.js caches it using the Cache API (keyed by model ID, not URL), so the ~23 MB download only happens once per browser. Transformers.js and ONNX Runtime WASM load from jsDelivr.
 
 ### Updating the embedding model
-Must change in **two places**: `MODEL_NAME` in `scripts/generate-embeddings.js` AND the model ID in `search.njk`. Both sides must use the same model. See the header comment in `generate-embeddings.js` for full instructions.
+Must change in **two places**: `MODEL_NAME` in `scripts/generate-embeddings.mjs` AND the model ID in `search.njk`. Both sides must use the same model. See the header comment in `generate-embeddings.mjs` for full instructions.
 
 ## Project structure (brief)
 
 - `eleventy.js` -- All config: filters, shortcodes, collections, image transform, Pagefind hook
 - `src/components/vf-componenet-rollup/` -- Sass entry point and all CSS
 - `src/site/` -- Templates, posts, data, includes
-- `scripts/generate-embeddings.js` -- Build-time vector embeddings
+- `scripts/generate-embeddings.mjs` -- Build-time vector embeddings
 - `docs/` -- Editorial handbook, publishing workflow, reviewer roles
 
 ## Editorial system
