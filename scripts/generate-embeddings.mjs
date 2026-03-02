@@ -79,6 +79,56 @@ function stripTags(html) {
 }
 
 /**
+ * Split body text into overlapping chunks for embedding.
+ * Each chunk is ~1000 chars with ~200-char overlap (stride 800).
+ * Boundaries snap to sentence-ending punctuation when possible.
+ */
+function chunkText(bodyText) {
+  if (bodyText.length < 1000) {
+    return [{ text: bodyText, snippet: bodyText.slice(0, 200) }];
+  }
+
+  const chunks = [];
+  let start = 0;
+  while (start < bodyText.length) {
+    let end = start + 1000;
+
+    if (end < bodyText.length) {
+      // Try to snap to sentence boundary within a 100-char window before the target end
+      const window = bodyText.slice(end - 100, end);
+      const sentenceEnd = Math.max(
+        window.lastIndexOf('. '),
+        window.lastIndexOf('? '),
+        window.lastIndexOf('! ')
+      );
+      if (sentenceEnd !== -1) {
+        // +2 to include the punctuation and space
+        end = end - 100 + sentenceEnd + 2;
+      } else {
+        // Fall back to nearest space
+        const spaceIdx = window.lastIndexOf(' ');
+        if (spaceIdx !== -1) {
+          end = end - 100 + spaceIdx + 1;
+        }
+      }
+    } else {
+      end = bodyText.length;
+    }
+
+    const text = bodyText.slice(start, end).trim();
+    if (text.length > 0) {
+      chunks.push({ text, snippet: text.slice(0, 200) });
+    }
+
+    start = start + 800;
+    // Stop if we've captured the end
+    if (end >= bodyText.length) break;
+  }
+
+  return chunks;
+}
+
+/**
  * Extract content from an HTML file.
  * Returns null if the page should be skipped.
  */
@@ -125,8 +175,9 @@ async function main() {
   const allFiles = findHtmlFiles(BUILD_DIR);
   console.log(`Found ${allFiles.length} HTML files in ${BUILD_DIR}/`);
 
-  // Filter and extract content
-  const documents = [];
+  // Filter, extract content, and split into chunks
+  const entries = [];
+  let pageCount = 0;
   for (const file of allFiles) {
     const urlPath = '/' + relative(BUILD_DIR, file).replace(/index\.html$/, '').replace(/\.html$/, '/');
 
@@ -137,21 +188,35 @@ async function main() {
     const content = extractContent(html);
     if (!content) continue;
 
-    documents.push({
-      url: urlPath,
-      title: content.title,
-      teaser: content.description,
-      date: content.date,
-      // Title + description carry the most signal; 500 chars of body adds topic
-      // specificity without diluting the embedding with boilerplate.
-      text: content.title + ' ' + content.description + ' ' + content.bodyText.slice(0, 500),
-    });
+    pageCount++;
+    const chunks = chunkText(content.bodyText);
+    for (let ci = 0; ci < chunks.length; ci++) {
+      const chunk = chunks[ci];
+      // Chunk 0 gets title + description + body for maximum signal;
+      // later chunks get title + body only (description would dilute).
+      const embeddingInput = ci === 0
+        ? content.title + ' ' + content.description + ' ' + chunk.text
+        : content.title + ' ' + chunk.text;
+
+      const entry = {
+        url: urlPath,
+        title: content.title,
+        snippet: chunk.snippet,
+        embeddingInput,
+      };
+      // Only chunk 0 carries teaser and date (used for display)
+      if (ci === 0) {
+        entry.teaser = content.description;
+        entry.date = content.date;
+      }
+      entries.push(entry);
+    }
   }
 
-  console.log(`Extracted content from ${documents.length} pages`);
+  console.log(`Extracted content from ${pageCount} pages (${entries.length} chunks)`);
 
-  if (documents.length === 0) {
-    console.warn('No documents found to embed. Skipping.');
+  if (entries.length === 0) {
+    console.warn('No content found to embed. Skipping.');
     return;
   }
 
@@ -164,21 +229,24 @@ async function main() {
   // Generate embeddings
   console.log('Generating embeddings...');
   const results = [];
-  for (let i = 0; i < documents.length; i++) {
-    const doc = documents[i];
-    const output = await extractor(doc.text, { pooling: 'mean', normalize: true });
-    const embedding = Array.from(output.data);
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const output = await extractor(entry.embeddingInput, { pooling: 'mean', normalize: true });
+    // Round to 4 decimal places — well within MiniLM's noise floor, reduces JSON size
+    const embedding = Array.from(output.data).map(v => Math.round(v * 10000) / 10000);
 
-    results.push({
-      url: doc.url,
-      title: doc.title,
-      teaser: doc.teaser,
-      date: doc.date,
+    const chunk = {
+      url: entry.url,
+      title: entry.title,
+      snippet: entry.snippet,
       embedding,
-    });
+    };
+    if (entry.teaser) chunk.teaser = entry.teaser;
+    if (entry.date) chunk.date = entry.date;
+    results.push(chunk);
 
-    if ((i + 1) % 10 === 0 || i === documents.length - 1) {
-      console.log(`  ${i + 1}/${documents.length} pages embedded`);
+    if ((i + 1) % 10 === 0 || i === entries.length - 1) {
+      console.log(`  ${i + 1}/${entries.length} chunks embedded`);
     }
   }
 
@@ -187,12 +255,13 @@ async function main() {
   const output = {
     model: MODEL_NAME,
     dimension: results[0].embedding.length,
-    documents: results,
+    version: 2,
+    chunks: results,
   };
 
   writeFileSync(OUTPUT_FILE, JSON.stringify(output));
   const fileSizeKB = Math.round(statSync(OUTPUT_FILE).size / 1024);
-  console.log(`Wrote ${OUTPUT_FILE} (${fileSizeKB} KB, ${results.length} documents, ${output.dimension} dimensions)`);
+  console.log(`Wrote ${OUTPUT_FILE} (${fileSizeKB} KB, ${pageCount} pages, ${results.length} chunks, ${output.dimension} dimensions)`);
   // Model files for browser self-hosting are downloaded separately
   // via eleventy.after hook in eleventy.js (runs in both dev and production).
 }

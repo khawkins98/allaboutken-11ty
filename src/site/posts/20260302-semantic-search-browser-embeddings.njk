@@ -34,7 +34,8 @@ As I don't get much traffic, this is a bit silly. But it's the perfect thing for
 > ## tl;dr
 >
 > - Build-time script generates vector embeddings for all posts using [MiniLM-L6-v2](https://huggingface.co/Xenova/all-MiniLM-L6-v2) via [Transformers.js](https://huggingface.co/docs/transformers.js)
-> - Produces a ~700 KB [`vectors.json`](/semantic-search/vectors.json) file shipped as a static asset
+> - Splits each post into overlapping chunks and embeds them separately -- relevant content deep in a post is no longer invisible
+> - Produces a [`vectors.json`](/semantic-search/vectors.json) file shipped as a static asset
 > - Browser loads the same model on first query (~30 MB with WASM runtime, cached afterward)
 > - Cosine similarity ranks posts by meaning, not keywords
 > - [Try it on the search page](/search/?search_type=semantic)
@@ -57,25 +58,30 @@ Want a visual explanation of the difference between keyword and vector search? T
 
 ## The build-time half
 
-A Node.js script runs after Eleventy in the build pipeline. It reads every HTML file in the `build/` directory, extracts text from `<main data-pagefind-body>` (the same element Pagefind uses to decide what's content), and generates an embedding for each page.
+A Node.js script runs after Eleventy in the build pipeline. It reads every HTML file in the `build/` directory, extracts text from `<main data-pagefind-body>` (the same element Pagefind uses to decide what's content), and generates embeddings.
 
-The input to the model is the page title, meta description, and the first 500 characters of body text concatenated together. More on why that specific combination in the next section.
+MiniLM-L6-v2 has a 512-token (~2048 character) input limit -- anything longer gets silently truncated. So if the relevant content is 2000 characters into a post, a single whole-page embedding won't see it. The script splits each post's body into overlapping ~1000-character chunks (stride 800, snapping to sentence boundaries), then embeds each one separately. The first chunk gets the title, description, and body text; later chunks get the title and body text only.
 
 ```js
-const text = title + ' ' + description + ' ' + bodyText.slice(0, 500);
-const output = await extractor(text, { pooling: 'mean', normalize: true });
+const chunks = chunkText(content.bodyText);  // ~1000 chars each, 200-char overlap
+for (const chunk of chunks) {
+  const text = title + ' ' + chunk.text;     // chunk 0 also gets description
+  const output = await extractor(text, { pooling: 'mean', normalize: true });
+}
 ```
 
-The output is a JSON file:
+The output is a JSON file with one entry per chunk:
 
 ```json
 {
   "model": "Xenova/all-MiniLM-L6-v2",
   "dimension": 384,
-  "documents": [
+  "version": 2,
+  "chunks": [
     {
       "url": "/posts/example/",
       "title": "...",
+      "snippet": "First 200 chars of this chunk...",
       "teaser": "...",
       "date": "2026-02-28",
       "embedding": [0.023, -0.041, ...]
@@ -84,7 +90,9 @@ The output is a JSON file:
 }
 ```
 
-For 88 pages, the file is 719 KB raw. Gzip brings that down to roughly 80 KB over the wire. The embedding step adds about six seconds to a production build (after the model is cached locally).
+Each chunk carries a `snippet` -- the first 200 characters of that chunk's text -- which the browser can show in results instead of the generic meta description. Only the first chunk per page carries `teaser` and `date` to avoid bloating the file.
+
+Embeddings are rounded to 4 decimal places, well within MiniLM's noise floor. For ~88 pages producing ~670 chunks, the file is around 4 MB raw. Gzip brings that down considerably. The embedding step takes longer than the single-embedding approach but is still reasonable for a production build.
 
 Embeddings run after Eleventy (which runs Pagefind in its `eleventy.after` hook), so the full HTML output is available.
 
@@ -100,11 +108,11 @@ The embedding script is not included in `yarn dev` -- it's too slow for iterativ
 
 The semantic search UI loads nothing on initial visit. On first query submit, three things happen:
 
-1. Fetch `/semantic-search/vectors.json` (~80 KB gzipped)
+1. Fetch `/semantic-search/vectors.json`
 2. Import [Transformers.js from jsDelivr](https://cdn.jsdelivr.net/npm/@huggingface/transformers@3)
 3. Initialize the MiniLM pipeline (~23 MB model + ~4 MB WASM runtime, with progress bar)
 
-The model and runtime download once and cache normally. Subsequent queries within the same session are near-instant -- embed the query (~100 ms), compute 88 cosine similarities (< 1 ms), sort and display.
+The model and runtime download once and cache normally. Subsequent queries within the same session are near-instant -- embed the query (~100 ms), compute ~670 dot products across all chunks, deduplicate to the best-matching chunk per page, sort and display. The scoring loop plus Map dedup takes under 10 ms.
 
 ```js
 // Lazy-load on first query, not on page load
@@ -136,7 +144,7 @@ MiniLM-L6-v2 is a [sentence transformer](https://www.sbert.net/) -- a BERT varia
 
 It doesn't understand content the way a large language model would. It maps text into a geometric space where similar meanings cluster together. "Why meetings kill productivity" and "short disruptions cost lots of time" land near each other because the model learned from millions of examples that those phrases appear in similar contexts.
 
-The input you feed it matters more than I expected. Just the title loses too much nuance. The entire article dilutes the signal with boilerplate. Title + description + first 500 characters of body text turned out to be a good balance -- enough to capture the topic, short enough that the embedding stays focused.
+The input you feed it matters more than I expected. Just the title loses too much nuance. The entire article dilutes the signal with boilerplate. The model's hard limit is 512 tokens (~2048 characters) -- anything longer gets silently truncated. So instead of embedding each page as a single vector, the build script splits the body into overlapping ~1000-character chunks and embeds each one with the title prepended. At query time, the browser scores every chunk and keeps the best match per page. This means relevant content buried 3000 characters into a post still surfaces, and the best-matching chunk's snippet can be shown in results instead of the generic meta description.
 
 ## Pagefind and semantic search compared
 
@@ -146,7 +154,7 @@ The input you feed it matters more than I expected. Just the title loses too muc
 | Initial download | ~10 KB JS + ~75 KB WASM | ~80 KB vectors + ~30 MB model + runtime (cached) |
 | Per-query cost | ~10-30 KB index fragments | ~100 ms compute, no network |
 | Best for | Known terms, specific phrases | Exploratory questions, topic discovery |
-| Excerpts | Yes, highlighted in context | No (shows teaser only) |
+| Excerpts | Yes, highlighted in context | Yes (best-matching chunk snippet) |
 | Build dependency | Rust binary (via npm) | ~476 MB ONNX runtime (via npm) |
 
 Pagefind is better when you know the words. Semantic search is better when you know the idea but not the vocabulary. Both live on the same search page -- keyword search is the default, and semantic search is an opt-in that loads on demand.
@@ -155,7 +163,7 @@ Pagefind is better when you know the words. Semantic search is better when you k
 
 **The 30 MB elephant.** The first query downloads the quantized model (~23 MB) plus the ONNX Runtime WASM engine (~4 MB), tokenizer, and Transformers.js library -- about 30 MB total. The full-precision model is 90 MB; 8-bit quantization (`dtype: 'q8'`) gets it to 23 MB with no noticeable quality loss for sentence embeddings. Everything caches, so repeat visitors pay nothing, but the first query on a new device is a real wait. The progress bar helps set expectations. I looked at lighter alternatives (see the Model2Vec note in "What I'd change") but nothing I tested matched the result quality of running a real transformer -- the 30 MB is the cost of results that actually work.
 
-**No excerpts.** Pagefind shows highlighted excerpts with the matching terms in context. Semantic search can only show the teaser from frontmatter. The model doesn't know which sentences were most relevant to the query, just that the overall document is similar. Adding extractive summarization would help but is a much harder problem.
+**Chunking bloats vectors.json.** Splitting posts into overlapping chunks means ~7-8x more embeddings than one-per-page. The vectors file grows from ~700 KB to several megabytes raw, though gzip helps significantly. Build time increases proportionally. The payoff: results now show a relevant snippet from the best-matching chunk instead of the generic meta description, and content buried deep in a post actually surfaces.
 
 **Threshold tuning.** The 0.25 cosine similarity cutoff is hand-tuned. Too low and irrelevant results creep in. Too high and you miss valid matches. There's no perfect number -- it depends on the corpus and the kinds of queries people ask.
 
@@ -167,7 +175,7 @@ Pagefind is better when you know the words. Semantic search is better when you k
 
 1. **Reuse your existing content boundary.** If you already have `data-pagefind-body` or similar markup, use it as the extraction boundary for embeddings too. One source of truth for "what counts as content."
 
-2. **Concatenate title + description + truncated body.** Don't feed the model raw HTML or entire articles. The title and description carry disproportionate signal. A few hundred characters of body text adds topic specificity without diluting the embedding.
+2. **Chunk the body, prepend the title.** Don't feed the model raw HTML or entire articles -- MiniLM silently truncates past 512 tokens. Split the body into overlapping ~1000-character chunks, prepend the title to each, and embed separately. At query time, score every chunk and keep the best match per page. This surfaces content that's deep in long posts and gives you a relevant snippet for free.
 
 3. **Lazy-load everything.** Don't download the model on page load. Most visitors will never use semantic search. Load on first interaction and show a progress bar.
 
@@ -177,7 +185,7 @@ Pagefind is better when you know the words. Semantic search is better when you k
 
 ## What I'd explore
 
-**Show snippets, not just teasers.** Right now the results show the frontmatter teaser for each post. Embedding individual paragraphs or sections instead of whole documents would let me show which *part* of a post matches the query. Storage grows -- maybe 10-15x more embeddings -- but the results would be much more useful.
+**~~Show snippets, not just teasers.~~** Done. The build script now splits each post into overlapping chunks and embeds them separately. Results show the best-matching chunk's snippet instead of the generic meta description. Storage grew from ~700 KB to several megabytes for vectors.json, but the results are noticeably better -- queries about topics mentioned only deep in a post now surface correctly.
 
 **Shrink the vectors.** Each embedding is 384 float32 values (1,536 bytes). [Binary quantization](https://huggingface.co/blog/embedding-quantization) thresholds each value to a single bit and uses Hamming distance instead of cosine similarity. That's a 32x size reduction -- the vectors in vectors.json would go from ~700 KB to ~4 KB. Models trained with [Matryoshka representation learning](https://huggingface.co/blog/matryoshka) (like [mxbai-embed-xsmall-v1](https://huggingface.co/mixedbread-ai/mxbai-embed-xsmall-v1)) let you also truncate dimensions -- 384 down to 128 with ~85% quality retained. Combine both and each embedding becomes 16 bytes. For 88 documents this barely matters, but for thousands of chunks it would.
 

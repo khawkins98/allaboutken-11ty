@@ -58,9 +58,10 @@ export function initSemanticSearch({ esc, setMode }) {
       const date = formatDate(r.date);
       const score = Math.round(r.score * 100);
       const meta = [date, `${score}% match`].filter(Boolean).join(' · ');
+      const displayText = r.snippet || r.teaser || '';
       return `<div class="kh-ask__result">
         <a href="${esc(r.url)}"><h3>${esc(r.title || r.url)}</h3></a>
-        ${r.teaser ? `<p>${esc(r.teaser)}</p>` : ''}
+        ${displayText ? `<p>${esc(displayText)}</p>` : ''}
         <p class="kh-ask__result-meta">${esc(meta)}</p>
       </div>`;
     }).join('');
@@ -81,6 +82,7 @@ export function initSemanticSearch({ esc, setMode }) {
     ]);
     if (!vectorResp.ok) throw new Error(`Failed to load vectors: ${vectorResp.status}`);
     vectorData = await vectorResp.json();
+    if (vectorData.version !== 2) throw new Error('Stale vectors.json — run yarn build to regenerate');
 
     extractor = await tfPipeline('feature-extraction', MODEL_ID, {
       dtype: 'q8',
@@ -116,17 +118,23 @@ export function initSemanticSearch({ esc, setMode }) {
       const output = await extractor(query, { pooling: 'mean', normalize: true });
       const queryVec = output.data; // Float32Array, no copy needed
 
-      // Score with lightweight index pairs, then look up originals for top results
-      const docs = vectorData.documents;
-      const scored = docs.map((doc, i) => ({ i, score: dotSimilarity(queryVec, doc.embedding) }));
-      scored.sort((a, b) => b.score - a.score);
+      // Score every chunk, then keep best chunk per URL
+      const chunks = vectorData.chunks;
+      const scored = chunks.map((chunk, i) => ({ i, score: dotSimilarity(queryVec, chunk.embedding) }));
+      const bestByUrl = new Map();
+      for (const s of scored) {
+        const url = chunks[s.i].url;
+        const prev = bestByUrl.get(url);
+        if (!prev || s.score > prev.score) bestByUrl.set(url, s);
+      }
 
       // Short queries (abbreviations like "CV") produce weaker embeddings — lower the threshold
       const threshold = query.trim().length < 4 ? 0.15 : 0.25;
-      const results = scored
+      const results = [...bestByUrl.values()]
+        .sort((a, b) => b.score - a.score)
         .filter(d => d.score > threshold)
         .slice(0, 5)
-        .map(d => ({ ...docs[d.i], score: d.score }));
+        .map(d => ({ ...chunks[d.i], score: d.score }));
 
       thinkingMsg.remove();
       addMessage('system', renderResults(results, query));
