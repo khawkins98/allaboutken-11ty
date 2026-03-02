@@ -72,7 +72,7 @@ For 88 pages, the file is 719 KB raw. Gzip brings that down to roughly 80 KB ove
 
 Embeddings run after Eleventy (which runs Pagefind in its `eleventy.after` hook), so the full HTML output is available.
 
-The `@huggingface/transformers` dependency is heavy -- roughly 476 MB in `node_modules`, mostly [ONNX Runtime](https://onnxruntime.ai/) native binaries for running the model in Node.js. It ships prebuilt binaries for every platform (macOS, Linux, Windows, multiple architectures), and there's no way to install only the one you need.
+The build-time `@huggingface/transformers` dependency is heavy -- roughly 476 MB in `node_modules`, mostly [ONNX Runtime](https://onnxruntime.ai/) native binaries for running the model in Node.js. It ships prebuilt binaries for every platform (macOS, Linux, Windows, multiple architectures), and there's no way to install only the one you need. None of this ships to the browser -- it only runs during the build to generate the vectors.
 
 This is the same kind of tradeoff as Pagefind shipping a Rust binary for its indexing step: the build-time tooling is large because something has to actually run the neural network over your content. The output is small and fast to query, but producing it requires real compute.
 
