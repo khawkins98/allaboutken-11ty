@@ -15,7 +15,9 @@
     "eleventy": "ELEVENTY_ENV=production eleventy --config=eleventy.js",
     "lint:css": "stylelint \"src/**/*.scss\" \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.scss\" \"src/**/*.css\" --fix",
-    "build": "yarn clean && yarn sass && yarn eleventy && echo '🏋 Build completed'",
+    "embeddings": "node scripts/generate-embeddings.mjs",
+    "generate-image": "node scripts/image-generate/generate-image.mjs",
+    "build": "yarn clean && yarn sass && yarn eleventy && yarn embeddings && echo '🏋 Build completed'",
     "dev": "concurrently -k \"sass --load-path src/components --watch src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\"",
     "start": "yarn dev",
     "test": "echo \"Error: no test specified\" && exit 0",
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@11ty/eleventy-img": "^6.0.0",
+    "@huggingface/transformers": "^3.8.1",
     "@stylistic/stylelint-plugin": "^4.0.0",
     "concurrently": "^9.2.1",
     "pagefind": "^1.4.0",
