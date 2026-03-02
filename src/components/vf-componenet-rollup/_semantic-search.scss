@@ -4,8 +4,22 @@
   // Search widget: connected tabs + panel
   .kh-search-widget {
     position: relative;
-    padding: 4rem;
-    padding-bottom: 6rem;
+    padding: 1rem 0;
+    padding-bottom: 2rem;
+  }
+
+  @media (min-width: $kh-breakpoint--sm) {
+    .kh-search-widget {
+      padding: 2rem;
+      padding-bottom: 4rem;
+    }
+  }
+
+  @media (min-width: $kh-breakpoint--md) {
+    .kh-search-widget {
+      padding: 4rem;
+      padding-bottom: 6rem;
+    }
   }
 
   .kh-search-widget__panel {
@@ -13,7 +27,13 @@
     border-radius: 0 4px 4px 4px;
     box-shadow: 6px 6px 0 var(--kh-color--blue--dark);
     background: #fafafa;
-    padding: 1.5rem;
+    padding: 1rem;
+  }
+
+  @media (min-width: $kh-breakpoint--sm) {
+    .kh-search-widget__panel {
+      padding: 1.5rem;
+    }
   }
 
   // No-JS fallback: full border-radius when tabs are hidden
@@ -33,11 +53,11 @@
 
   .kh-search-mode__option {
     cursor: pointer;
-    padding: 8px 16px;
+    padding: 8px 12px;
     border: 4px solid var(--kh-color--blue);
     margin-right: -4px;
     margin-bottom: -4px;
-    font-size: .9rem;
+    font-size: 0.8rem;
     font-weight: 700;
     background: #fafafa;
 
@@ -201,9 +221,55 @@
     flex-shrink: 0;
   }
 
+  @media (min-width: $kh-breakpoint--sm) {
+    .kh-search-mode__option {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+  }
+
   @media (max-width: $kh-breakpoint--sm) {
     .kh-ask__message {
       max-width: 95%;
+    }
+
+    .kh-ask__input-area {
+      flex-wrap: wrap;
+    }
+
+    .kh-ask__input {
+      min-width: 0;
+      width: 100%;
+    }
+
+    // Reduce button box-shadow and margin to prevent horizontal overflow
+    .kh-search-widget .kh-button {
+      box-shadow: 4px 4px 0 var(--kh-color--blue--dark), -5px -5px rgb(0 0 0 / 0%);
+      margin: 0 8px 8px 0;
+      padding: 10px 16px;
+    }
+
+    .kh-search-widget .kh-button:focus,
+    .kh-search-widget .kh-button:hover {
+      box-shadow: 2px 2px 0 var(--kh-color--blue--dark), 2px 2px 4px rgb(30 30 30 / 25%), -5px -5px rgb(0 0 0 / 0%);
+      transform: translate(2px, 2px);
+    }
+
+    .kh-search-widget .kh-button:active {
+      box-shadow: 0 0 0 var(--kh-color--blue--dark), 2px 2px 2px rgb(30 30 30 / 12.5%), -5px -5px rgb(0 0 0 / 0%);
+      transform: translate(4px, 4px) translateZ(1px);
+    }
+
+    // Keyword search form: stack input and button vertically
+    .kh-search-widget .kh-sidebar__inner {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .kh-search-widget .kh-form__input {
+      margin-right: 0;
+      width: 100%;
+      box-sizing: border-box;
     }
   }
 }
