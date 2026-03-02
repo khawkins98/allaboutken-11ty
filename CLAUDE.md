@@ -37,7 +37,7 @@ The markdown-it config converts `--` to `—` automatically. Write `--` in conte
 The browser fetches the model directly from HuggingFace at query time. Transformers.js caches it using the Cache API (keyed by model ID, not URL), so the ~23 MB download only happens once per browser. Transformers.js and ONNX Runtime WASM load from jsDelivr.
 
 ### Updating the embedding model
-Must change in **two places**: `MODEL_NAME` in `scripts/generate-embeddings.mjs` AND the model ID in `search.njk`. Both sides must use the same model. See the header comment in `generate-embeddings.mjs` for full instructions.
+Must change in **two places**: `MODEL_NAME` in `scripts/generate-embeddings.mjs` AND `MODEL_ID` in `src/site/semantic-search.js`. Both sides must use the same model. See the header comment in `generate-embeddings.mjs` for full instructions.
 
 ## Project structure (brief)
 

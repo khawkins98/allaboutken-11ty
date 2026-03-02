@@ -11,7 +11,7 @@
  * Transformers.js handles caching via the Cache API.
  *
  * To update the model:
- *   1. Change MODEL_NAME below AND the model ID in search.njk
+ *   1. Change MODEL_NAME below AND MODEL_ID in src/site/semantic-search.js
  *   2. Run `yarn build` to regenerate embeddings
  *   3. Both build-time and browser-side must use the same model
  *   4. Browse https://huggingface.co/models?library=transformers.js&sort=trending
@@ -31,7 +31,7 @@ const MODEL_NAME = 'Xenova/all-MiniLM-L6-v2';
 const SKIP_PATTERNS = [
   /\/social\//,
   /\/node\//,
-  /\/404\.html$/,
+  /\/404\//,
   /\/search\//,
   /\/sitemap/,
   /\/robots/,
