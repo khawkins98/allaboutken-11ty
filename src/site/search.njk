@@ -7,71 +7,66 @@ noindex: true
 ---
 
 <div data-pagefind-ignore>
-<section class="kh-grid-stylized kh-stack">
-  <div></div>
-  <div>
-    <h1 id="search-heading">{{title}}</h1>
+  <h1 id="search-heading">{{title}}</h1>
 
-    <div class="kh-search-widget">
-      <fieldset id="search-mode" class="kh-search-mode" hidden>
-        <legend class="kh-u-sr-only">Search mode</legend>
-        <label class="kh-search-mode__option">
-          <input type="radio" name="search_mode" value="keyword" checked>
-          Search by keyword
-        </label>
-        <label class="kh-search-mode__option">
-          <input type="radio" name="search_mode" value="semantic">
-          Search semantically
-        </label>
-      </fieldset>
+  <div class="kh-search-widget">
+    <fieldset id="search-mode" class="kh-search-mode" hidden>
+      <legend class="kh-u-sr-only">Search mode</legend>
+      <label class="kh-search-mode__option">
+        <input type="radio" name="search_mode" value="keyword" checked>
+        Search by keyword
+      </label>
+      <label class="kh-search-mode__option">
+        <input type="radio" name="search_mode" value="semantic">
+        Search semantically
+      </label>
+    </fieldset>
 
-      <div class="kh-search-widget__panel">
-        <div id="keyword-section">
-          <p><small><a href="/posts/20260228-replacing-lunr-with-pagefind/">Runs locally in browser</a> and powered by Pagefind.</small></p>
-          <form action="/search/" method="GET" class="kh-form kh-form--search kh-form--search--responsive kh-sidebar kh-sidebar--end">
-            <div class="kh-sidebar__inner">
-              <div class="kh-form__item">
-                <label class="kh-form__label kh-search__label kh-u-sr-only" for="search">Search my site</label>
-                <input type="search" id="search" placeholder="Search my site" name="search_query" class="kh-form__input vf-search__input">
-              </div>
-              <button type="submit" class="kh-button">
-                Search
-              </button>
+    <div class="kh-search-widget__panel">
+      <div id="keyword-section">
+        <p><small><a href="/posts/20260228-replacing-lunr-with-pagefind/">Runs locally in browser</a> and powered by Pagefind.</small></p>
+        <form action="/search/" method="GET" class="kh-form kh-form--search kh-form--search--responsive kh-sidebar kh-sidebar--end">
+          <div class="kh-sidebar__inner">
+            <div class="kh-form__item">
+              <label class="kh-form__label kh-search__label kh-u-sr-only" for="search">Search my site</label>
+              <input type="search" id="search" placeholder="Search my site" name="search_query" class="kh-form__input vf-search__input">
             </div>
+            <button type="submit" class="kh-button">
+              Search
+            </button>
+          </div>
+        </form>
+
+        <noscript>
+          <p>Search requires JavaScript. You can also try
+            <a href="https://duckduckgo.com/?q=site%3Aallaboutken.com">searching on DuckDuckGo</a>.
+          </p>
+        </noscript>
+
+        <div class="kh-content kh-grid kh-search-client-side">
+          <div id="search-results"></div>
+        </div>
+      </div>
+
+      <div id="semantic-section" hidden>
+        <p>Search by describing what you're looking for in your own words.</p>
+
+        <p><small>This <a href="/posts/20260302-semantic-search-browser-embeddings/">searches by meaning</a>, not exact keywords -- and everything runs locally in your browser.</small></p>
+
+        <div class="kh-ask" aria-label="Semantic search conversation">
+          <div class="kh-ask__conversation" id="ask-conversation" role="log" aria-live="polite" aria-relevant="additions">
+          </div>
+
+          <form class="kh-ask__input-area" id="ask-form" action="/search/" method="GET">
+            <label class="kh-u-sr-only" for="ask-input">Ask a question about this site</label>
+            <input type="text" id="ask-input" name="q" placeholder="e.g. articles about improving search" class="kh-form__input kh-ask__input" autocomplete="off">
+            <button type="submit" class="kh-button kh-ask__submit">Ask</button>
           </form>
-
-          <noscript>
-            <p>Search requires JavaScript. You can also try
-              <a href="https://duckduckgo.com/?q=site%3Aallaboutken.com">searching on DuckDuckGo</a>.
-            </p>
-          </noscript>
-
-          <div class="kh-content kh-grid kh-search-client-side">
-            <div id="search-results"></div>
-          </div>
         </div>
 
-        <div id="semantic-section" hidden>
-          <p>Search by describing what you're looking for in your own words.</p>
-
-          <p><small>This <a href="/posts/20260302-semantic-search-browser-embeddings/">searches by meaning</a>, not exact keywords -- and everything runs locally in your browser.</small></p>
-
-          <div class="kh-ask" aria-label="Semantic search conversation">
-            <div class="kh-ask__conversation" id="ask-conversation" role="log" aria-live="polite" aria-relevant="additions">
-            </div>
-
-            <form class="kh-ask__input-area" id="ask-form" action="/search/" method="GET">
-              <label class="kh-u-sr-only" for="ask-input">Ask a question about this site</label>
-              <input type="text" id="ask-input" name="q" placeholder="e.g. articles about improving search" class="kh-form__input kh-ask__input" autocomplete="off">
-              <button type="submit" class="kh-button kh-ask__submit">Ask</button>
-            </form>
-          </div>
-
-        </div>
       </div>
     </div>
   </div>
-</section>
 
 <script type="module">
   import { initSemanticSearch } from '/semantic-search.js';
