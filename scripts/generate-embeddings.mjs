@@ -142,6 +142,8 @@ async function main() {
       title: content.title,
       teaser: content.description,
       date: content.date,
+      // Title + description carry the most signal; 500 chars of body adds topic
+      // specificity without diluting the embedding with boilerplate.
       text: content.title + ' ' + content.description + ' ' + content.bodyText.slice(0, 500),
     });
   }
