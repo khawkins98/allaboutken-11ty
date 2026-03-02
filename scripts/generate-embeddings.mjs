@@ -79,13 +79,42 @@ function stripTags(html) {
 }
 
 /**
+ * Extract a clean snippet from chunk text.
+ * Trims a leading partial sentence (for overlap chunks that start mid-sentence),
+ * then takes up to 200 chars and snaps to the last sentence end or space.
+ */
+function makeSnippet(text, isFirstChunk) {
+  let s = text;
+  // Non-first chunks start in the overlap zone — skip the leading partial sentence
+  if (!isFirstChunk) {
+    const firstSentenceEnd = s.search(/[.?!]\s/);
+    if (firstSentenceEnd !== -1 && firstSentenceEnd < 100) {
+      s = s.slice(firstSentenceEnd + 2);
+    }
+  }
+  if (s.length <= 200) return s;
+  // Snap to last sentence end within the 200-char window
+  const window = s.slice(0, 200);
+  const sentEnd = Math.max(
+    window.lastIndexOf('. '),
+    window.lastIndexOf('? '),
+    window.lastIndexOf('! ')
+  );
+  if (sentEnd > 80) return s.slice(0, sentEnd + 1);
+  // Fall back to last space
+  const spaceIdx = window.lastIndexOf(' ');
+  if (spaceIdx > 80) return s.slice(0, spaceIdx);
+  return window;
+}
+
+/**
  * Split body text into overlapping chunks for embedding.
  * Each chunk is ~1000 chars with ~200-char overlap (stride 800).
  * Boundaries snap to sentence-ending punctuation when possible.
  */
 function chunkText(bodyText) {
   if (bodyText.length < 1000) {
-    return [{ text: bodyText, snippet: bodyText.slice(0, 200) }];
+    return [{ text: bodyText, snippet: makeSnippet(bodyText, true) }];
   }
 
   const chunks = [];
@@ -115,9 +144,10 @@ function chunkText(bodyText) {
       end = bodyText.length;
     }
 
+    const isFirst = start === 0;
     const text = bodyText.slice(start, end).trim();
     if (text.length > 0) {
-      chunks.push({ text, snippet: text.slice(0, 200) });
+      chunks.push({ text, snippet: makeSnippet(text, isFirst) });
     }
 
     start = start + 800;

@@ -58,7 +58,10 @@ export function initSemanticSearch({ esc, setMode }) {
       const date = formatDate(r.date);
       const score = Math.round(r.score * 100);
       const meta = [date, `${score}% match`].filter(Boolean).join(' · ');
-      const displayText = r.snippet || r.teaser || '';
+      // Chunk 0 has teaser — its snippet starts at the beginning of the post.
+      // Later chunks start mid-text, so prefix with ellipsis.
+      const prefix = (r.snippet && !r.teaser) ? '\u2026 ' : '';
+      const displayText = r.snippet ? prefix + r.snippet + ' \u2026' : r.teaser || '';
       return `<div class="kh-ask__result">
         <a href="${esc(r.url)}"><h3>${esc(r.title || r.url)}</h3></a>
         ${displayText ? `<p>${esc(displayText)}</p>` : ''}
