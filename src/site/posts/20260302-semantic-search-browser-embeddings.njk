@@ -3,6 +3,10 @@ title: "Semantic search on a static site, no API keys required"
 layout: layouts/post.njk
 teaser: "Vector embeddings at build time, cosine similarity in the browser. The same 23 MB model runs both sides."
 date: 2026-03-02
+image: /blog/semantic-search-vectors.jpg
+image_meta:
+  text: "Glowing points in a dark field -- vectors finding each other by meaning, not by name. Image made with <a href='https://huggingface.co/black-forest-labs/FLUX.2-dev'>FLUX.2-dev</a>."
+  altext: 'Woodcut-style print of glowing amber and white orbs scattered across a dark background with rough white hatching marks'
 tags:
   - posts
 topics:
@@ -15,13 +19,17 @@ kens_status: draft
 
 {% markdown %}
 
-Last week I [replaced Lunr.js with Pagefind](/posts/20260228-replacing-lunr-with-pagefind/) for keyword search on this site. Pagefind works well -- you type "eleventy image plugin" and get back pages containing those words, ranked by [BM25](https://en.wikipedia.org/wiki/Okapi_BM25). But keyword search has a ceiling. Search for "[why meetings kill productivity](/search/?search_query=why+meetings+kill+productivity)" and you'll miss a post titled "[It's true, short disruptions costs lots of time](/posts/20251013-distracting-engineers-is-harmful/)" because the words don't overlap.
+Last week I [replaced Lunr.js with Pagefind](/posts/20260228-replacing-lunr-with-pagefind/) for keyword search on this site. Pagefind works well ... type "eleventy image plugin" and get back pages containing those words. But search for "[image formatting](/search/?search_query=image+formatting)" and you'll miss the post you want.
 
-With LLM-powered search showing up everywhere, I wanted to see how close I could get to that natural-language experience on a static site without any cloud infrastructure. No API keys, no SaaS, no server. Could the same embedding model run at build time and in the browser, and would the results actually be useful?
+AI would find it better.
 
-The answer is mostly yes. The visitors browser has to download ~30 MB on first use, which is a lot. But everything caches, it runs entirely on your device, and the results are better than I expected.
+I wanted to see how close I could get to natural-language search experience on a static site without any cloud infrastructure. No API keys, no SaaS, no server. Could the same embedding model run at build time and in the browser, and would the results actually be useful?
 
-While I don't get much search traffic, and Pagefind already handles keyword search well, this is a bit silly. But this site is my playground -- the place where I try things to see how they work, then think about where they might matter at a bigger scale. Vector search on a personal blog is a toy. Vector search on a documentation site with hundreds of pages and users who don't know the right terminology? That's a different conversation.
+The answer is mostly: yes. Although the visitor's browser has to download ~30 MB on first use, the query runs entirely on device, and results are quite good.
+
+{% endmarkdown %}<a href="/search/?search_type=semantic" class="kh-button">Try the semantic search</a>{% markdown %}
+
+As I don't get much traffic, this is a bit silly. But it's the perfect thing for my website playground. Vector search on a personal blog is a toy. Vector search on a documentation site with hundreds of pages and users who don't know the right terminology is a different story.
 
 > ## tl;dr
 >
@@ -38,6 +46,14 @@ Traditional search (Lunr, Pagefind, Elasticsearch) builds an inverted index: for
 With vector search, a small neural network ([all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)) reads a piece of text and produces a fixed-length array of numbers -- a 384-dimension vector -- that captures the text's meaning. Two texts about similar topics produce vectors that point in similar directions, even if they share no words.
 
 At query time, the same model converts the question into a vector. The ranking itself is just [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity). All the intelligence is handed off to the model that produces the vectors.
+
+Want a visual explanation of the difference between keyword and vector search? This video covers it well:
+
+{% endmarkdown %}
+<aside class="kh-video">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Ryme6rUbhX8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</aside>
+{% markdown %}
 
 ## The build-time half
 
@@ -135,16 +151,6 @@ The input you feed it matters more than I expected. Just the title loses too muc
 
 Pagefind is better when you know the words. Semantic search is better when you know the idea but not the vocabulary. Both live on the same search page -- keyword search is the default, and semantic search is an opt-in that loads on demand.
 
-A few examples from this site to make it concrete.
-
-Search for "design systems" on Pagefind and you get the one post with those words in the title. Semantic search also finds posts about decoupling content from platforms, building reusable components for scientific websites, and untangling an organization's navigation -- related work that never uses the phrase "design system."
-
-Try "how to work with AI effectively" and Pagefind matches everything with "AI" in it, which is half the blog at this point. Semantic search ranks the context engineering and integration posts highest and pushes the less relevant mentions further down.
-
-"Measuring website success" is another good one. Pagefind finds posts with "measuring" in the title. Semantic search connects it to the analytics infrastructure post about audience quality and to a post about doubling conversion rates -- related by concept, not vocabulary.
-
-The semantic results aren't always right. Some matches feel like a stretch, and it misses things. But the queries where it works well are exactly the ones where keyword search falls flat.
-
 ## Tradeoffs
 
 **The 30 MB elephant.** The first query downloads the quantized model (~23 MB) plus the ONNX Runtime WASM engine (~4 MB), tokenizer, and Transformers.js library -- about 30 MB total. The full-precision model is 90 MB; 8-bit quantization (`dtype: 'q8'`) gets it to 23 MB with no noticeable quality loss for sentence embeddings. Everything caches, so repeat visitors pay nothing, but the first query on a new device is a real wait. The progress bar helps set expectations. I looked at lighter alternatives (see the Model2Vec note in "What I'd change") but nothing I tested matched the result quality of running a real transformer -- the 30 MB is the cost of results that actually work.
@@ -169,7 +175,7 @@ The semantic results aren't always right. Some matches feel like a stretch, and 
 
 5. **Set a similarity threshold.** Without a cutoff, every query returns results -- even nonsense queries. Start at 0.25 and adjust based on your corpus.
 
-## What I'd change
+## What I'd explore
 
 **Show snippets, not just teasers.** Right now the results show the frontmatter teaser for each post. Embedding individual paragraphs or sections instead of whole documents would let me show which *part* of a post matches the query. Storage grows -- maybe 10-15x more embeddings -- but the results would be much more useful.
 
