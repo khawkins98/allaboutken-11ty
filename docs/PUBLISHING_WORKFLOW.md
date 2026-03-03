@@ -48,7 +48,7 @@ Activities
 - Hero image pipeline — see [Image Generation guide](../scripts/image-generate/IMAGE_GENERATION.md):
   - If you have a relevant photo or screenshot, use it directly; otherwise generate one at `/image-generator/`
   - Post-process the chosen image: crop to composition, adjust saturation/contrast if needed
-  - Rename from `generated-*.jpg` to a descriptive filename (e.g., `pagefind-paths-through-grass.jpg`) and update the `image:` frontmatter value to match — a mismatch produces broken images only visible in production
+  - Name the file descriptively when saving (e.g., `pagefind-paths-through-grass`) — a mismatch between filename and `image:` frontmatter produces broken images only visible in production
   - Write real `image_meta.altext` and `image_meta.text` after reviewing the final image
 - ME verifies draft meets scope and is ready for technical review
 
