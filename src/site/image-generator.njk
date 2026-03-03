@@ -168,13 +168,11 @@ eleventyExcludeFromCollections: true
     .advanced-body { margin-top: 14px; }
     .label-hint { font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 0.72rem; }
 
-    /* Guidance slider */
-    .slider-wrap { display: flex; align-items: center; gap: 8px; }
-    .slider-wrap input[type=range] {
-      flex: 1; width: auto; padding: 0; border: none;
-      accent-color: var(--amber);
-    }
-    .slider-val { font-family: var(--mono); font-size: 0.82rem; color: var(--ink); min-width: 2.2ch; }
+    /* Seed row */
+    .seed-header { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+    .seed-header label { margin-bottom: 0; }
+    .seed-row { display: flex; gap: 8px; }
+    .seed-row input { flex: 1; min-width: 0; }
 
     /* Status bar */
     .status-bar {
@@ -367,12 +365,19 @@ eleventyExcludeFromCollections: true
           <option value="5">5</option>
         </select>
       </div>
-      <div>
-        <label for="guidance">Guidance <span id="guidance-val" class="slider-val">3.5</span></label>
-        <div class="slider-wrap">
-          <input type="range" id="guidance" min="1.5" max="7" step="0.5" value="3.5">
-        </div>
-        <p class="hint">Lower = more creative. Higher = closer to prompt.</p>
+      <div style="flex: 0 0 120px">
+        <label for="guidance">Guidance</label>
+        <select id="guidance">
+          <option value="1.5">1.5</option>
+          <option value="2">2</option>
+          <option value="2.5">2.5</option>
+          <option value="3">3</option>
+          <option value="3.5" selected>3.5</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
       </div>
       <div style="flex: 0 0 auto; display: flex; align-items: flex-end;">
         <button class="btn-primary" id="gen-btn">Generate</button>
@@ -408,9 +413,12 @@ eleventyExcludeFromCollections: true
           </div>
         </div>
         <div class="section">
-          <label for="seed">Seed <span class="label-hint">(blank = random per image)</span></label>
-          <input type="number" id="seed" min="0" max="2147483647" placeholder="e.g. 1234567890">
-          <p class="hint">Fix the seed to reproduce an earlier result. All images use this seed when set.</p>
+          <div class="seed-header">
+            <label>Seeds <span class="label-hint">(blank = random)</span></label>
+            <button class="btn-secondary btn-sm" id="randomize-seeds" type="button">Randomize</button>
+          </div>
+          <div id="seed-fields" class="seed-row"></div>
+          <p class="hint">Fix a seed to reproduce an earlier result. Leave blank for random.</p>
         </div>
       </div>
     </details>
@@ -514,13 +522,12 @@ const snippetArea = document.getElementById('snippet-area');
 const snippetEl   = document.getElementById('snippet');
 const copyBtn     = document.getElementById('copy-btn');
 const guidanceEl  = document.getElementById('guidance');
-const guidanceVal = document.getElementById('guidance-val');
 const stylePrefixEl = document.getElementById('style-prefix');
 const negPromptEl   = document.getElementById('neg-prompt');
 const stepsEl       = document.getElementById('steps');
 const imgWidthEl    = document.getElementById('img-width');
 const imgHeightEl   = document.getElementById('img-height');
-const seedEl        = document.getElementById('seed');
+const seedFieldsEl  = document.getElementById('seed-fields');
 
 // --- Init ---
 // 1. Set defaults
@@ -532,11 +539,10 @@ const URL_FIELDS = [
   { key: 'q',        el: promptEl,       def: '',                              ev: 'input'  },
   { key: 'prefix',   el: stylePrefixEl,  def: CONFIG.style.prefix,            ev: 'input'  },
   { key: 'neg',      el: negPromptEl,    def: CONFIG.style.negativePrompt,     ev: 'input'  },
-  { key: 'guidance', el: guidanceEl,     def: '3.5',                          ev: 'input'  },
+  { key: 'guidance', el: guidanceEl,     def: '3.5',                          ev: 'change' },
   { key: 'steps',    el: stepsEl,        def: '20',                           ev: 'input'  },
   { key: 'w',        el: imgWidthEl,     def: '1280',                         ev: 'input'  },
   { key: 'h',        el: imgHeightEl,    def: '832',                          ev: 'input'  },
-  { key: 'seed',     el: seedEl,         def: '',                             ev: 'input'  },
   { key: 'count',    el: countEl,        def: '3',                            ev: 'change' },
 ];
 
@@ -550,6 +556,9 @@ function syncUrl() {
   for (const { key, el, def } of URL_FIELDS) {
     if (el.value !== def) p.set(key, el.value);
   }
+  // Seed URL state: comma-separated, omit if all blank
+  const seedVals = getSeedInputs().map(el => el.value.trim());
+  if (seedVals.some(v => v)) p.set('seed', seedVals.join(','));
   const qs = p.toString();
   history.replaceState(null, '', qs ? '?' + qs : location.pathname);
 }
@@ -557,6 +566,39 @@ function syncUrl() {
 for (const { el, ev } of URL_FIELDS) {
   el.addEventListener(ev, syncUrl);
 }
+
+// --- Seed fields (one per image, dynamic with count) ---
+function getSeedInputs() { return [...seedFieldsEl.querySelectorAll('input')]; }
+function randSeed() { return Math.floor(Math.random() * 2147483647); }
+
+function buildSeedFields(count, values) {
+  seedFieldsEl.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const inp = document.createElement('input');
+    inp.type = 'number'; inp.min = '0'; inp.max = '2147483647';
+    inp.placeholder = 'random';
+    if (values && values[i]) inp.value = values[i];
+    inp.addEventListener('input', syncUrl);
+    seedFieldsEl.appendChild(inp);
+  }
+}
+
+// Build initial seed fields from count + URL
+const initSeedVals = urlP.has('seed') ? urlP.get('seed').split(',') : [];
+buildSeedFields(parseInt(countEl.value, 10), initSeedVals);
+
+// Rebuild when count changes
+countEl.addEventListener('change', () => {
+  const cur = getSeedInputs().map(el => el.value);
+  buildSeedFields(parseInt(countEl.value, 10), cur);
+  syncUrl();
+});
+
+// Randomize button
+document.getElementById('randomize-seeds').addEventListener('click', () => {
+  getSeedInputs().forEach(el => el.value = randSeed());
+  syncUrl();
+});
 
 // Reset advanced options to CONFIG defaults
 document.getElementById('reset-advanced').addEventListener('click', e => {
@@ -566,13 +608,9 @@ document.getElementById('reset-advanced').addEventListener('click', e => {
   stepsEl.value       = '20';
   imgWidthEl.value    = '1280';
   imgHeightEl.value   = '832';
-  seedEl.value        = '';
+  getSeedInputs().forEach(el => el.value = '');
   syncUrl();
 });
-
-// 3. Sync derived displays after URL restore
-guidanceEl.addEventListener('input', () => { guidanceVal.textContent = guidanceEl.value; });
-guidanceVal.textContent = guidanceEl.value;
 
 const savedKey = localStorage.getItem('together_api_key');
 if (savedKey) { apiKeyEl.value = savedKey; saveKeyEl.checked = true; }
@@ -637,11 +675,12 @@ genBtn.addEventListener('click', async () => {
   const imgHeight   = parseInt(imgHeightEl.value, 10);
   const negPrompt   = negPromptEl.value.trim();
 
-  // Fixed seed → all images use it; blank → random per image for variety
-  const fixedSeed = seedEl.value.trim() ? parseInt(seedEl.value, 10) : null;
-  const seeds = fixedSeed !== null
-    ? Array(count).fill(fixedSeed)
-    : Array.from({ length: count }, () => Math.floor(Math.random() * 2147483647));
+  // Read per-image seeds; blank fields get a random seed
+  const seedInputs = getSeedInputs();
+  const seeds = Array.from({ length: count }, (_, i) => {
+    const v = seedInputs[i] && seedInputs[i].value.trim();
+    return v ? parseInt(v, 10) : randSeed();
+  });
 
   const ENDPOINT = 'https://api.together.xyz/v1/images/generations';
 
