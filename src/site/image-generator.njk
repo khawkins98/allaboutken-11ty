@@ -1178,7 +1178,8 @@ function showSnippet(baseName) {
   snippetEl.textContent =
     'image: /blog/' + baseName + '.jpg\n' +
     'image_meta:\n' +
-    '  text: "[DRAFT — describe what you see]. ' + CONFIG.attribution + '"\n' +
+    '  text: "[DRAFT — describe what you see]"\n' +
+    '  credit: "' + CONFIG.attribution + '"\n' +
     '  altext: \'[DRAFT — describe image for screen readers]\'';
 }
 

@@ -397,11 +397,30 @@ body:has(#kh-css-toggle:checked) {
     margin: 0;
   }
 
+  @media (min-width: $kh-breakpoint--md) {
+    .kh-figure {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: var(--kh-page-grid-gap);
+    }
+
+    .kh-figure > * {
+      grid-column: span 2;
+    }
+  }
+
   .kh-figure__caption {
     color: #373a36;
     font-weight: 500;
     line-height: 1.71;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
+  }
+
+  .kh-figure__credit {
+    display: block;
+    text-align: right;
+    color: #737373;
+    font-size: 0.75rem;
   }
 
   .kh-figure__image {
