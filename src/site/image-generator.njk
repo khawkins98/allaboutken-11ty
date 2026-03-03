@@ -879,6 +879,16 @@ genBtn.addEventListener('click', async () => {
 // --- Select ---
 let sourceImg = null;
 
+function suggestFilename() {
+  const STOP = new Set(['a','an','the','of','in','on','at','to','for','and','or',
+                        'with','from','by','into','over','through','no','not','just']);
+  const words = promptEl.value.trim().toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .split(/\s+/)
+    .filter(w => w.length > 2 && !STOP.has(w));
+  return words.slice(0, 3).join('-') || 'generated';
+}
+
 function selectImage(cell) {
   cells.forEach(c => c.classList.remove('is-selected'));
   cell.classList.add('is-selected');
@@ -890,6 +900,8 @@ function selectImage(cell) {
   initCrop(img);
   editDivider.hidden = false;
   editSection.hidden = false;
+  // Suggest a filename from the prompt if the field is blank or was auto-suggested
+  if (!filenameEl.dataset.userEdited) filenameEl.value = suggestFilename();
   editSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -1091,6 +1103,7 @@ conEl.addEventListener('input', () => { conVal.textContent = conEl.value + '%'; 
 hueEl.addEventListener('input', () => { hueVal.textContent = hueEl.value + '°'; applyAdjustments(); });
 bpEl.addEventListener('input',  () => { bpVal.textContent  = bpEl.value;        applyAdjustments(); });
 wpEl.addEventListener('input',  () => { wpVal.textContent  = wpEl.value;        applyAdjustments(); });
+filenameEl.addEventListener('input', () => { filenameEl.dataset.userEdited = 'true'; });
 resetAdjustBtn.addEventListener('click', () => {
   satEl.value = '100'; satVal.textContent = '100%';
   conEl.value = '100'; conVal.textContent = '100%';
