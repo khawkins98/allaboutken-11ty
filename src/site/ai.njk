@@ -8,7 +8,7 @@ active_path: front
 description: Transparent notes on how I use AI in my writing workflow.
 topics:
   - AI
-lastUpdated: 2025-09-29
+lastUpdated: 2026-03-03
 ---
 
 {#
@@ -42,7 +42,7 @@ These are my <code>/ai</code> notes on how I use (or don't use) AI here. The for
 
 AI has introduced challenges for writers and readers alike, but it's also lowered the friction to ship words. Here I'm being transparent about my AI usage, to be conversational and to perhaps help others find a good balance between AI helping and AI taking over.
 
-My approach has evolved quickly -- three months ago I wasn't using AI at all. Now it's woven into my writing process, though posts remain primarily me-authored; AI accelerates the way I capture ideas, draft structure and bounce ideas.
+My approach has evolved quickly and keeps evolving. Posts remain primarily me-authored; AI accelerates the way I capture ideas, draft structure, and pressure-test arguments.
 
 ## A common writing workflow now
 
@@ -61,7 +61,9 @@ I do this partly to learn about the tools and limitations. AI-generated outlines
 
 | Tool | Type | Status | Description |
 |------|------|--------|-------------|
-| **Cursor** | IDE | <span class="kh-badge">Current</span> | Primary IDE with AI pair‑programming built on VS Code with GPT and Claude integration. Strong inline completions and refactors. Used to maintain this site. |
+| **[Claude Code](https://claude.ai/code)** | AI coding agent | <span class="kh-badge">Current</span> | CLI agent for longer coding sessions on this site. Project memory, custom skills, and hooks keep it aligned to site conventions without repeating context each time. |
+| **GitHub Copilot** | AI coding agent | <span class="kh-badge">Testing</span> | Exploring the terminal interface for coding tasks. |
+| **Cursor** | IDE | <span class="kh-badge">Past</span> | AI pair‑programming IDE built on VS Code. Replaced by Claude Code for most tasks. |
 | **Fireflies** | Transcription | <span class="kh-badge">Current</span> | Meeting recorder and transcription with integrations for Zoom, Teams, and Google Meet. Quick search, summaries, and action items across calls. |
 | **Highlight.app** | Desktop assistant and audio transcription | <span class="kh-badge">Current</span> | Lightweight desktop recorder for capturing quick audio notes from calls. Fast, friction‑free capture; mostly for audio memos, pushing toward structured snippets. |
 | **Manus** | AI agents | <span class="kh-badge">Testing</span> | Comprehensive AI agent platform for complex multi-step tasks beyond note-to-draft assistance. Early days; exploring broader workflow automation capabilities. |
@@ -74,7 +76,8 @@ I do this partly to learn about the tools and limitations. AI-generated outlines
 | **[Chrome DevTools MCP](https://developer.chrome.com/blog/chrome-devtools-mcp)** | MCP | <span class="kh-badge">Current</span> | MCP server for Chrome DevTools automation and inspection. |
 | **[Awesome ChatGPT Prompts](https://github.com/f/awesome-chatgpt-prompts?tab=readme-ov-file)** | AI agent prompts | <span class="kh-badge">Current</span> | Open collection of LLM prompts. |
 | **Commet Browser** | AI assisted browser | <span class="kh-badge">Current</span> | AI‑assisted browsing for research and summaries. |
-| **[Loras](https://www.loras.dev/)** | AI image maker | <span class="kh-badge">Current</span> | Fun and lightweight; I want to find time to play with the source. |
+| **[Together AI](https://www.together.ai/) + FLUX.2-dev** | AI image generation | <span class="kh-badge">Current</span> | Hero image generation via the FLUX.2-dev model, run from a browser tool built into this site. Prompt, generate three in parallel, crop, save. About $0.03 a post. See [the post about it](/blog/blog-art-that-belongs/). |
+| **[Loras](https://www.loras.dev/)** | AI image maker | <span class="kh-badge">Past</span> | Fun and lightweight. Moved to FLUX.2-dev for more control over style and tighter workflow integration. |
 
 </section>
 
@@ -82,9 +85,9 @@ I do this partly to learn about the tools and limitations. AI-generated outlines
 
 ## What's next
 
-I'm aiming to update this page as my tools and practices evolve. The landscape changes quickly, and transparency means keeping this current.
+The image generation workflow is now settled enough that I wrote a post about it. Next I want to see if the audio→draft pipeline can get tighter -- there's still too much manual cleanup between transcription and a usable outline.
 
-If you have a favorite tool or profile I should try, I'd love pointers — reach out if you've found something that works well in your workflow.
+If you have a tool or approach that's working for you, I'd love to hear it.
 
 {% endmarkdown %}
 
