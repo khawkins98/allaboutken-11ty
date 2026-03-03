@@ -101,6 +101,32 @@ Each image costs roughly $0.01 via Together AI (FLUX.2-dev). Three images per po
 
 All defaults (style prefix, negative prompt, steps, dimensions, attribution) live in the `CONFIG` object at the top of `src/site/image-generator.njk`. There is no external config file -- edit the SPA source directly.
 
+## Reference images
+
+Paste one or more public image URLs to guide generation. This uses Together AI's `reference_images` parameter on FLUX.2-dev.
+
+### What it does
+
+Reference images influence the generated output -- style transfer, composition reference, or multi-image compositing ("person from image 1 in setting from image 2"). The text prompt still controls the subject; the reference images nudge style and structure.
+
+### How to use it
+
+1. Click **+ Add reference image** below the prompt
+2. Paste a public image URL -- a thumbnail preview confirms it loaded
+3. Add more references as needed (up to 8)
+4. Use "image 1", "image 2" etc. in your prompt to reference specific inputs
+5. Generate as usual
+
+### Requirements
+
+- URLs must be publicly accessible (no auth headers, no localhost)
+- Up to 8 reference images per request
+- When no reference images are provided, generation works exactly as before (text-to-image only)
+
+### URL state
+
+Reference images are saved in the URL as `ref0=`, `ref1=`, etc., so setups with references are bookmarkable. Reset All clears all references.
+
 ## Reproducibility
 
 The generator shows a seed for each image in the metadata strip below its result. To reproduce an image, paste its seed into the Seed field under Advanced options, or pass seeds via the URL as `?seed=123,456,789` where each comma-separated value controls one image slot. Each image uses its corresponding seed from the list; leave the field blank for random seeds. Same seed + same prompt + same model = same image for that slot, but editing the style prefix will produce different results even with the same seed.
