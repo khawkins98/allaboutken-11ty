@@ -19,7 +19,11 @@ Place images in `src/site/images/blog/`. Reference them in frontmatter as `/blog
 `image` in frontmatter is for in-page hero images only. Social sharing images (`og:image`) are auto-generated screenshots. Override with `og_image` (full URL) in frontmatter if needed. This confuses people because every other blog engine uses `image` for both.
 
 ### Image attribution
-For Ken's own photos: use "Own work." (not "Photo by Ken Hawkins"). Include location context in the `text` caption, e.g., "OneSiam Skywalk, Bangkok. Own work."
+For Ken's own photos: use `credit: "Own work."` (not "Photo by Ken Hawkins"). Include location context in the `text` caption, e.g.:
+```yaml
+text: "OneSiam Skywalk, Bangkok."
+credit: "Own work."
+```
 
 ### The CSS toggle
 All custom styles are scoped under `body:has(#kh-css-toggle:checked)` (see `index.scss:12`). This is intentional -- it enables a CSS-free viewing mode. New styles must go inside this scope or they won't apply.
