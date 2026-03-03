@@ -1,54 +1,34 @@
 # Image generation
 
-Generate hero images for blog posts using Together AI's FLUX.2-dev model. Two tools: a bash script for quick one-offs, and a Node script that reads post context and suggests prompts.
+Generate hero images for blog posts using Together AI's FLUX.2-dev model via the browser-based image generator at `/image-generator/`.
 
 Style is Japanese blockprint -- high-contrast black ink woodcut on cream with sparse warm amber accent.
 
 ## Setup
 
 1. Get an API key at <https://api.together.ai/settings/api-keys>
-2. Save it to `.env` in the project root:
+2. Open `/image-generator/` in your browser and paste the key (check "Remember in this browser" to save it in localStorage)
 
-```bash
-echo "TOGETHER_API_KEY=your-key-here" > .env
-```
+## Workflow
 
-`.env` is gitignored, so your key stays local.
+1. Write your subject prompt -- go abstract and evocative, not literal. One subject per image.
+2. Adjust guidance and steps if needed (defaults: guidance 3.5, steps 20)
+3. Click Generate -- three images run in parallel (~20--30s)
+4. Click an image to select it, then drag the corner handles to crop
+5. Enter a descriptive filename (no `.jpg`), click Save -- the browser prompts you to save to `src/site/images/blog/`
+6. Copy the frontmatter snippet and paste it into your post
+7. Write real `altext` and `image_meta.text` after reviewing the actual image (the snippet marks both as `[DRAFT]`)
 
-## Two tools
+The URL updates as you change options, so setups are bookmarkable.
 
-### `yarn generate-image <file.njk>` -- post-aware workflow (interactive)
+## Advanced options
 
-Reads a post's frontmatter, classifies the post type, and suggests prompts. Generates images in parallel (~30s for 3 vs ~90s one at a time), opens them in Preview, and waits for you to pick one. After you pick, it copies a ready-to-paste frontmatter snippet to your clipboard and offers to delete the unchosen images.
+Click "Advanced options" to edit:
 
-This script requires interactive terminal input (it prompts you to pick an image and confirm deletion). It cannot be run non-interactively by a script or AI assistant -- use the bash script below for that.
-
-```bash
-yarn generate-image src/site/posts/20260302-semantic-search-browser-embeddings.njk
-yarn generate-image --prompt "custom prompt" src/site/posts/my-post.njk
-yarn generate-image --count 5 src/site/posts/my-post.njk
-```
-
-Options:
-- `--count N` -- number of options to generate (default: 3)
-- `--prompt "..."` -- skip auto-generation, use this prompt directly
-
-### `./scripts/image-generate/generate-image.sh` -- quick one-offs (non-interactive)
-
-For when you already know the prompt and just want an image. Runs without interaction (as long as `TOGETHER_API_KEY` is set in `.env`), so it works from scripts and AI assistants too.
-
-Outputs the file path and a one-line `image:` hint. You will need to add `image_meta.text` and `image_meta.altext` to your frontmatter yourself -- see [Image credits](#image-credits) below for the format and attribution string.
-
-```bash
-./scripts/image-generate/generate-image.sh "a magnifying glass over scattered dots"
-./scripts/image-generate/generate-image.sh --seed 42 "rerun with same seed"
-```
-
-Options:
-- `--seed N` -- reproducibility seed
-- `--width N` -- image width (default: 1280)
-- `--height N` -- image height (default: 832)
-- `--help` -- full usage
+- **Style prefix** -- prepended to every prompt. The default blockprint prefix is the whole trick; edit with care.
+- **Negative prompt** -- tells the model what to avoid.
+- **Steps** -- ~20 is the sweet spot: good quality, fast generation. Going higher gives diminishing returns and takes noticeably longer. Below 15 quality drops off.
+- **Width / Height** -- default 1280×832. Changing dimensions also changes the crop aspect ratio.
 
 ## Writing prompts
 
@@ -100,42 +80,18 @@ Same as own photo. Description + "Own work."
 
 ### Writing credits
 
-Describe the image as rendered, not what the prompt asked for. `altext` describes what a viewer sees -- write both fields after looking at the actual image. The script marks `altext` as `[DRAFT]` to remind you.
+Describe the image as rendered, not what the prompt asked for. `altext` describes what a viewer sees -- write both fields after looking at the actual image. The generator marks `altext` as `[DRAFT]` to remind you.
 
-The FLUX.2-dev attribution string is in `image-config.json` so both scripts stay consistent.
-
-## Where this fits
-
-Image generation happens during Stage 1 (Drafting) in the [publishing workflow](../../docs/PUBLISHING_WORKFLOW.md):
-
-1. Write the post content and frontmatter
-2. Run `yarn generate-image src/site/posts/my-post.njk`
-3. Pick an image -- the script copies a frontmatter snippet to your clipboard and offers to delete unchosen images (defaults to yes, press `n` to keep them)
-4. Post-process if needed (crop, adjust saturation -- see below)
-5. Rename the file from `generated-*.jpg` to something descriptive
-6. Update the `image:` line in your frontmatter to match the new filename -- the clipboard snippet still has the old timestamp name
-7. Write real `altext` and `image_meta.text` (replace the `[DRAFT]` placeholders after looking at the actual image)
-8. Move on to technical review
+The FLUX.2-dev attribution string is in `image-config.json`.
 
 ## Post-processing
 
-The generated image opens in Preview. Before committing it, you'll usually want to touch it up:
+The Save dialog drops a JPEG into `src/site/images/blog/`. Before committing, you may want to:
 
-- **Crop** -- the default 1280x832 frame often has dead space. Crop in on the strongest part of the composition. A tighter crop almost always looks better as a hero image.
-- **Saturation and contrast** -- the blockprint style occasionally renders too flat or too hot. Nudge saturation or levels if needed.
-- **Any editor works** -- Preview's Adjust Color tool is fine for quick fixes. Photoshop, Pixelmator, whatever you have.
+- **Crop** -- use the in-browser crop tool before saving; a tighter crop almost always looks better as a hero image.
+- **Saturation and contrast** -- if the result is too flat or too hot, nudge levels in Preview or any editor.
 
-Don't worry about manual optimization (resizing, format conversion, compression). Eleventy's image plugin handles all of that at build time -- it generates responsive AVIF/WebP/JPEG variants at 320/600/900/1280px widths automatically.
-
-### Rename the file
-
-The scripts save images as `generated-<timestamp>.jpg`. Rename to something descriptive before committing:
-
-```bash
-mv src/site/images/blog/generated-1709312400-2.jpg src/site/images/blog/pagefind-paths-through-grass.jpg
-```
-
-The clipboard snippet the script copied still references the old timestamp filename. After renaming, update the `image:` value in your frontmatter to match the new name. A mismatch here produces broken images that only show up in production (the build adds `/images/` to the path automatically, so you won't catch it in the source).
+Don't worry about resizing, format conversion, or compression. Eleventy's image plugin handles all of that at build time.
 
 ## Cost
 
@@ -143,8 +99,8 @@ Each image costs roughly $0.01 via Together AI (FLUX.2-dev). Three images per po
 
 ## Config
 
-Both tools read from `image-config.json` in this directory. Style prefix, negative prompt, steps, dimensions, and attribution are all there.
+`image-config.json` in this directory holds the canonical style prefix, negative prompt, steps, and dimensions. The browser tool has these baked in as defaults -- if you change the config file, also update `CONFIG` in `src/site/image-generator.njk`.
 
 ## Reproducibility
 
-The bash script prints the seed used for each generation. Pass `--seed N` to get the same image again. The Node script shows seeds too. Same seed + same prompt + same model = same image, but changing the style prefix in the config will produce different results even with the same seed.
+The generator shows seeds in the image metadata strip below each result. Note a seed and re-enter it as a fixed URL param (`?seed=...`) to regenerate the same image. Same seed + same prompt + same model = same image, but editing the style prefix will produce different results even with the same seed.

@@ -4,7 +4,7 @@
     "blockprint": {
       "prefix": "blockprint style, japaneseblockprint style, bold black ink woodcut, linocut carved texture, two-color print, deep black and cream with sparse warm amber accent, flat areas of color, no gradients, high contrast graphic, cream paper background, no text, no words,",
       "negativePrompt": "smooth shading, photoreal, complex lighting, 3d render, gradient, blurry, soft focus",
-      "steps": 28
+      "steps": 20
     }
   },
   "defaults": {

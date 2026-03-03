@@ -46,7 +46,7 @@ Activities
 - Author writes content; TR may flag technical gaps early
 - GW shapes outline, lede, section order, transitions; converts dense prose to scannable bullets/steps; preserves author voice
 - Hero image pipeline — see [Image Generation guide](../scripts/image-generate/IMAGE_GENERATION.md):
-  - If you have a relevant photo or screenshot, use it directly; otherwise generate one with `yarn generate-image <post.njk>`
+  - If you have a relevant photo or screenshot, use it directly; otherwise generate one at `/image-generator/`
   - Post-process the chosen image: crop to composition, adjust saturation/contrast if needed
   - Rename from `generated-*.jpg` to a descriptive filename (e.g., `pagefind-paths-through-grass.jpg`) and update the `image:` frontmatter value to match — a mismatch produces broken images only visible in production
   - Write real `image_meta.altext` and `image_meta.text` after reviewing the final image
