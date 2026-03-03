@@ -202,6 +202,15 @@
   }
 
   @media (max-width: $kh-breakpoint--sm) {
+    .kh-search-widget {
+      padding: 0.5rem;
+      padding-bottom: 2rem;
+    }
+
+    .kh-search-widget__panel {
+      padding: 1rem;
+    }
+
     .kh-ask__message {
       max-width: 95%;
     }
