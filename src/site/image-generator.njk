@@ -154,7 +154,7 @@ eleventyExcludeFromCollections: true
     .advanced-details summary::before { content: '▶ '; font-size: 0.65rem; }
     .advanced-details[open] summary::before { content: '▼ '; }
     .advanced-details summary::-webkit-details-marker { display: none; }
-    .reset-btn { margin-left: auto; text-transform: none; letter-spacing: 0; font-size: 0.72rem; }
+
     .advanced-body { margin-top: 14px; }
     .label-hint { font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 0.72rem; }
 
@@ -165,6 +165,29 @@ eleventyExcludeFromCollections: true
       accent-color: var(--amber);
     }
     .slider-val { font-family: var(--mono); font-size: 0.82rem; color: var(--ink); min-width: 2.2ch; }
+
+    /* Count radio buttons */
+    .count-radio { display: flex; gap: 6px; }
+    .count-radio label {
+      display: flex; align-items: center; justify-content: center;
+      width: 44px; height: 36px;
+      border: 1px solid var(--border); border-radius: 4px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      background: white; color: var(--ink);
+      text-transform: none; letter-spacing: 0; margin-bottom: 0;
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .count-radio input[type=radio] { display: none; }
+    .count-radio input[type=radio]:checked + label {
+      background: var(--ink); color: var(--cream); border-color: var(--ink);
+    }
+    .count-radio label:hover { background: var(--code-bg); }
+    .count-radio input[type=radio]:checked + label:hover { background: #333; }
+
+    /* Dimension presets */
+    .preset-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .preset-btn { font-family: var(--mono); font-size: 0.75rem; }
+    .preset-btn.is-active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
 
     /* Seed row */
     .seed-header { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
@@ -347,6 +370,8 @@ eleventyExcludeFromCollections: true
       </p>
     </div>
 
+    <div id="tool-body" hidden>
+
     <!-- Prompt + style -->
     <div class="section">
       <label for="prompt">Subject prompt</label>
@@ -354,39 +379,35 @@ eleventyExcludeFromCollections: true
       <p class="hint">Model: <a href="https://huggingface.co/black-forest-labs/FLUX.2-dev" target="_blank" rel="noopener">FLUX.2-dev</a> via Together AI.</p>
     </div>
 
-    <!-- Options + generate -->
+    <!-- Options -->
     <div class="row section">
-      <div style="flex: 0 0 100px">
-        <label for="count">Images</label>
-        <select id="count">
-          <option value="1">1</option>
-          <option value="3" selected>3</option>
-          <option value="5">5</option>
-        </select>
+      <div style="flex: 0 0 auto;">
+        <label>Images</label>
+        <div class="count-radio">
+          <input type="radio" name="count" id="count-1" value="1"><label for="count-1">1</label>
+          <input type="radio" name="count" id="count-3" value="3" checked><label for="count-3">3</label>
+          <input type="radio" name="count" id="count-5" value="5"><label for="count-5">5</label>
+        </div>
       </div>
       <div style="flex: 0 0 120px">
         <label for="guidance">Guidance</label>
         <select id="guidance">
-          <option value="1.5">1.5</option>
-          <option value="2">2</option>
+          <option value="1.5" selected>1.5 — very loose | default</option>
+          <option value="2">2 — loose</option>
           <option value="2.5">2.5</option>
           <option value="3">3</option>
-          <option value="3.5" selected>3.5</option>
+          <option value="3.5">3.5 — normal</option>
           <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
+          <option value="5">5 — strict</option>
+          <option value="6">6 — very strict</option>
+          <option value="7">7 — rigid</option>
         </select>
-      </div>
-      <div style="flex: 0 0 auto; display: flex; align-items: flex-end; gap: 10px;">
-        <button class="btn-primary" id="gen-btn">Generate <span style="opacity:0.65;font-weight:400;font-size:0.8em">(~$0.03)</span></button>
-        <a href="#" id="test-sound" style="font-size:0.78rem; color:var(--mid); align-self:center; white-space:nowrap;">test sound</a>
       </div>
     </div>
 
     <!-- Advanced options -->
     <details class="advanced-details section">
-      <summary>Advanced options <button class="btn-secondary btn-sm reset-btn" id="reset-advanced" type="button">Reset to defaults</button></summary>
+      <summary>Advanced options</summary>
       <div class="advanced-body">
         <div class="section">
           <label for="style-prefix">Style prefix <span class="label-hint">(prepended to every prompt)</span></label>
@@ -404,13 +425,17 @@ eleventyExcludeFromCollections: true
           </div>
           <div>
             <label for="img-width">Width (px)</label>
-            <input type="number" id="img-width" min="512" max="2048" step="64" value="1280">
+            <input type="number" id="img-width" min="128" max="2048" step="32" value="1280">
           </div>
           <div>
             <label for="img-height">Height (px)</label>
-            <input type="number" id="img-height" min="512" max="2048" step="64" value="832">
-            <p class="hint">Changing dimensions affects crop ratio.</p>
+            <input type="number" id="img-height" min="128" max="2048" step="32" value="832">
+            <p class="hint">Must be multiples of 32, 128–2048.</p>
           </div>
+        </div>
+        <div class="section">
+          <label>Presets</label>
+          <div class="preset-row" id="dim-presets"></div>
         </div>
         <div class="section">
           <div class="seed-header">
@@ -422,6 +447,14 @@ eleventyExcludeFromCollections: true
         </div>
       </div>
     </details>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 8px;">
+      <button class="btn-secondary btn-sm" id="reset-all" type="button">Reset all to defaults</button>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <a href="#" id="test-sound" style="font-size:0.78rem; color:var(--mid); white-space:nowrap;">test sound</a>
+        <button class="btn-primary" id="gen-btn">Generate <span style="opacity:0.65;font-weight:400;font-size:0.8em">(~$0.03)</span></button>
+      </div>
+    </div>
 
     <div id="status" hidden class="status-bar"></div>
 
@@ -442,7 +475,7 @@ eleventyExcludeFromCollections: true
     <!-- Crop + save -->
     <div id="edit-section" hidden>
       <div class="section">
-        <label>Crop — drag corners to resize (locked to 20:13)</label>
+        <label>Crop — drag corners to resize</label>
         <div class="crop-wrap">
           <canvas id="crop-canvas"></canvas>
         </div>
@@ -484,6 +517,8 @@ eleventyExcludeFromCollections: true
       <div id="save-status" hidden class="status-bar" style="margin-top: 12px;"></div>
     </div>
 
+    </div><!-- /tool-body -->
+
   </div>
 
 {% raw %}
@@ -503,7 +538,13 @@ const CONFIG = {
 const apiKeyEl    = document.getElementById('api-key');
 const saveKeyEl   = document.getElementById('save-key');
 const promptEl    = document.getElementById('prompt');
-const countEl     = document.getElementById('count');
+// Shim: presents the same .value / .addEventListener interface as the old <select>
+// so all downstream code (URL_FIELDS, seed rebuild, generate) works unchanged.
+const countEl = {
+  get value() { return (document.querySelector('input[name=count]:checked') || document.getElementById('count-3')).value; },
+  set value(v) { const r = document.querySelector('input[name=count][value="' + v + '"]'); if (r) r.checked = true; },
+  addEventListener(ev, fn) { document.querySelectorAll('input[name=count]').forEach(r => r.addEventListener(ev, fn)); }
+};
 const genBtn      = document.getElementById('gen-btn');
 const statusEl    = document.getElementById('status');
 const resultsEl   = document.getElementById('results');
@@ -539,13 +580,13 @@ negPromptEl.value   = CONFIG.style.negativePrompt;
 // 2. URL state — restore any saved params on load, then keep URL in sync
 const URL_FIELDS = [
   { key: 'q',        el: promptEl,       def: '',                              ev: 'input'  },
-  { key: 'prefix',   el: stylePrefixEl,  def: CONFIG.style.prefix,            ev: 'input'  },
+  { key: 'prefix',   el: stylePrefixEl,  def: CONFIG.style.prefix,             ev: 'input'  },
   { key: 'neg',      el: negPromptEl,    def: CONFIG.style.negativePrompt,     ev: 'input'  },
-  { key: 'guidance', el: guidanceEl,     def: '3.5',                          ev: 'change' },
-  { key: 'steps',    el: stepsEl,        def: '20',                           ev: 'input'  },
-  { key: 'w',        el: imgWidthEl,     def: '1280',                         ev: 'input'  },
-  { key: 'h',        el: imgHeightEl,    def: '832',                          ev: 'input'  },
-  { key: 'count',    el: countEl,        def: '3',                            ev: 'change' },
+  { key: 'guidance', el: guidanceEl,     def: '1.5',                           ev: 'change' },
+  { key: 'steps',    el: stepsEl,        def: '20',                            ev: 'input'  },
+  { key: 'w',        el: imgWidthEl,     def: '1280',                          ev: 'input'  },
+  { key: 'h',        el: imgHeightEl,    def: '832',                           ev: 'input'  },
+  { key: 'count',    el: countEl,        def: '3',                             ev: 'change' },
 ];
 
 const urlP = new URLSearchParams(location.search);
@@ -568,6 +609,60 @@ function syncUrl() {
 for (const { el, ev } of URL_FIELDS) {
   el.addEventListener(ev, syncUrl);
 }
+
+// --- Dimension presets ---
+// All dimensions must be multiples of 32 (Together AI FLUX.2-dev requirement;
+// error message says 16 but 16-only values are rejected in practice)
+const DIM_PRESETS = [
+  { label: '1280×832',  w: 1280, h: 832,  note: 'default' },
+  { label: '1024×576',  w: 1024, h: 576,  note: '16:9' },
+  { label: '1152×768',  w: 1152, h: 768,  note: '3:2' },
+  { label: '1024×768',  w: 1024, h: 768,  note: '4:3' },
+  { label: '1536×864',  w: 1536, h: 864,  note: '16:9 large' },
+];
+
+const dimPresetsEl = document.getElementById('dim-presets');
+let presetBtns = []; // cached after build
+
+function updatePresetHighlight() {
+  const w = imgWidthEl.value, h = imgHeightEl.value;
+  presetBtns.forEach(btn => {
+    btn.classList.toggle('is-active', btn.dataset.w === w && btn.dataset.h === h);
+  });
+}
+
+DIM_PRESETS.forEach(({ label, w, h, note }) => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'btn-secondary btn-sm preset-btn';
+  btn.dataset.w = w; btn.dataset.h = h;
+  btn.title = note;
+  btn.textContent = label;
+  btn.addEventListener('click', () => {
+    imgWidthEl.value = w; imgHeightEl.value = h;
+    updatePresetHighlight();
+    syncUrl();
+  });
+  dimPresetsEl.appendChild(btn);
+  presetBtns.push(btn);
+});
+
+imgWidthEl.addEventListener('input', updatePresetHighlight);
+imgHeightEl.addEventListener('input', updatePresetHighlight);
+updatePresetHighlight();
+
+// Snap width/height to nearest multiple of 32, clamp to API limits.
+// (Together AI requires multiples of 32 despite the error message saying 16.)
+function snapDim(el) {
+  const v = parseInt(el.value, 10);
+  if (isNaN(v)) return;
+  const snapped = Math.round(Math.max(128, Math.min(2048, v)) / 32) * 32;
+  if (String(snapped) === el.value) return; // already valid — skip extra syncUrl
+  el.value = snapped;
+  syncUrl();
+}
+imgWidthEl.addEventListener('blur', () => snapDim(imgWidthEl));
+imgHeightEl.addEventListener('blur', () => snapDim(imgHeightEl));
 
 // --- Seed fields (one per image, dynamic with count) ---
 function getSeedInputs() { return [...seedFieldsEl.querySelectorAll('input')]; }
@@ -601,27 +696,26 @@ document.getElementById('randomize-seeds').addEventListener('click', () => {
   syncUrl();
 });
 
-// Reset advanced options to CONFIG defaults
-document.getElementById('reset-advanced').addEventListener('click', e => {
-  e.preventDefault(); // don't toggle the <details>
-  stylePrefixEl.value = CONFIG.style.prefix;
-  negPromptEl.value   = CONFIG.style.negativePrompt;
-  stepsEl.value       = '20';
-  imgWidthEl.value    = '1280';
-  imgHeightEl.value   = '832';
-  getSeedInputs().forEach(el => el.value = '');
+// Reset everything to defaults (API key preserved)
+document.getElementById('reset-all').addEventListener('click', () => {
+  URL_FIELDS.forEach(({ el, def }) => el.value = def);
+  buildSeedFields(parseInt(countEl.value, 10), []);
+  updatePresetHighlight();
   syncUrl();
 });
 
 const savedKey = localStorage.getItem('together_api_key');
 if (savedKey) { apiKeyEl.value = savedKey; saveKeyEl.checked = true; }
 
-saveKeyEl.addEventListener('change', syncKey);
-apiKeyEl.addEventListener('input', syncKey);
+const toolBodyEl = document.getElementById('tool-body');
 function syncKey() {
   if (saveKeyEl.checked) localStorage.setItem('together_api_key', apiKeyEl.value);
   else localStorage.removeItem('together_api_key');
+  toolBodyEl.hidden = !apiKeyEl.value.trim();
 }
+saveKeyEl.addEventListener('change', syncKey);
+apiKeyEl.addEventListener('input', syncKey);
+syncKey(); // set initial visibility
 
 // --- Status helpers ---
 function setStatus(msg, type) {
@@ -651,7 +745,7 @@ genBtn.addEventListener('click', async () => {
   const count = parseInt(countEl.value, 10);
   genBtn.disabled = true;
   playCaching();
-  setStatus('Generating ' + count + ' image' + (count > 1 ? 's' : '') + ' in parallel…');
+  setStatus('Generating ' + count + ' image' + (count > 1 ? 's in parallel' : '') + '…');
 
   editDivider.hidden = true;
   editSection.hidden = true;
@@ -788,7 +882,7 @@ function selectImage(cell) {
 // --- Crop ---
 // Aspect ratio is live — reads the current width/height inputs so changing
 // dimensions in Advanced options is reflected in the crop handles.
-const aspect = () => parseInt(imgWidthEl.value, 10) / parseInt(imgHeightEl.value, 10);
+
 let cropState = null; // { x, y, w, h } in source pixels
 let cropCtx   = null; // cached 2D context
 let drag      = null;
@@ -803,24 +897,24 @@ const CORNER_CFG = {
 };
 
 // Returns new { x, y, w, h } for a corner drag, or null if constraints prevent it
-function applyCornerDrag(handle, dx, sc, W, H) {
+function applyCornerDrag(handle, dx, dy, sc, W, H) {
   const { left, top } = CORNER_CFG[handle];
   let { x, y, w, h } = sc;
 
   if (left) {
     const nx = Math.max(0, Math.min(sc.x + sc.w - 40, sc.x + dx));
-    w = sc.x + sc.w - nx; // anchor right edge, shrink/grow from left
+    w = sc.x + sc.w - nx;
     x = nx;
   } else {
-    w = Math.max(40, Math.min(W - sc.x, sc.w + dx)); // anchor left edge, grow/shrink right
+    w = Math.max(40, Math.min(W - sc.x, sc.w + dx));
   }
-  h = w / aspect();
 
   if (top) {
-    y = sc.y + sc.h - h; // anchor bottom edge, move top
-    if (y < 0) return null;
+    const ny = Math.max(0, Math.min(sc.y + sc.h - 40, sc.y + dy));
+    h = sc.y + sc.h - ny;
+    y = ny;
   } else {
-    if (sc.y + h > H) return null; // anchor top edge, check bottom fits
+    h = Math.max(40, Math.min(H - sc.y, sc.h + dy));
   }
 
   return { x, y, w, h };
@@ -913,7 +1007,7 @@ window.addEventListener('mousemove', e => {
       w: sc.w, h: sc.h
     };
   } else {
-    const result = applyCornerDrag(drag.handle, dx, sc, W, H);
+    const result = applyCornerDrag(drag.handle, dx, dy, sc, W, H);
     if (result) cropState = result;
   }
   drawCrop();
@@ -1015,36 +1109,85 @@ function showSnippet(baseName) {
 
 document.getElementById('test-sound').addEventListener('click', e => { e.preventDefault(); playCaching(); });
 
-// --- Cash register sound (Web Audio API, no external files) ---
+// --- Money sounds (Web Audio API, no external files) ---
+// One AudioContext reused across calls (browsers limit simultaneous contexts)
+let _ac = null;
+function ac() {
+  if (!_ac || _ac.state === 'closed') _ac = new (window.AudioContext || window.webkitAudioContext)();
+  return _ac;
+}
+function osc(ctx, type, freq, start, stop, gainStart, gainEnd) {
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(freq, start);
+  g.gain.setValueAtTime(gainStart, start);
+  g.gain.exponentialRampToValueAtTime(gainEnd || 0.001, stop);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(start); o.stop(stop + 0.01);
+  return { o, g };
+}
+
+// Ka-ching — classic cash register thunk + bright bell
+function soundKaChing() {
+  const ctx = ac(), t = ctx.currentTime;
+  const thunk = ctx.createOscillator(), tg = ctx.createGain();
+  thunk.type = 'square';
+  thunk.frequency.setValueAtTime(900, t);
+  thunk.frequency.exponentialRampToValueAtTime(180, t + 0.06);
+  tg.gain.setValueAtTime(0.28, t);
+  tg.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+  thunk.connect(tg); tg.connect(ctx.destination);
+  thunk.start(t); thunk.stop(t + 0.09);
+  osc(ctx, 'sine', 2400, t + 0.07, t + 0.65, 0.32, 0.001);
+}
+
+// Tink — light metallic ping
+function soundTink() {
+  const ctx = ac(), t = ctx.currentTime;
+  osc(ctx, 'sine', 3400, t, t + 0.22, 0.35, 0.001);
+  osc(ctx, 'sine', 5100, t, t + 0.1,  0.12, 0.001);
+}
+
+// Badoink — springy cartoon boing
+function soundBadoink() {
+  const ctx = ac(), t = ctx.currentTime;
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(120, t);
+  o.frequency.exponentialRampToValueAtTime(1100, t + 0.07);
+  o.frequency.exponentialRampToValueAtTime(90,   t + 0.55);
+  g.gain.setValueAtTime(0.38, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(t); o.stop(t + 0.65);
+}
+
+// Coins — three quick coin tinks tumbling down
+function soundCoins() {
+  const ctx = ac(), t = ctx.currentTime;
+  [[0,    2200, 0.28],
+   [0.09, 1900, 0.22],
+   [0.17, 2500, 0.18],
+   [0.24, 1700, 0.14]].forEach(([dt, freq, vol]) => {
+    osc(ctx, 'triangle', freq, t + dt, t + dt + 0.18, vol, 0.001);
+  });
+}
+
+// Jackpot — ascending three-note slot-machine arpeggio
+function soundJackpot() {
+  const ctx = ac(), t = ctx.currentTime;
+  [[0,    880,  0.25],
+   [0.12, 1100, 0.25],
+   [0.24, 1760, 0.30]].forEach(([dt, freq, vol]) => {
+    osc(ctx, 'sine', freq, t + dt, t + dt + 0.35, vol, 0.001);
+  });
+}
+
+const SOUNDS = [soundKaChing, soundTink, soundBadoink, soundCoins, soundJackpot];
+
 function playCaching() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const now = ctx.currentTime;
-    // "cha" — short high click
-    const click = ctx.createOscillator();
-    const clickGain = ctx.createGain();
-    click.type = 'square';
-    click.frequency.setValueAtTime(1200, now);
-    click.frequency.exponentialRampToValueAtTime(600, now + 0.04);
-    clickGain.gain.setValueAtTime(0.25, now);
-    clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-    click.connect(clickGain);
-    clickGain.connect(ctx.destination);
-    click.start(now);
-    click.stop(now + 0.06);
-    // "ching" — bright bell tone
-    const bell = ctx.createOscillator();
-    const bellGain = ctx.createGain();
-    bell.type = 'sine';
-    bell.frequency.setValueAtTime(2200, now + 0.05);
-    bellGain.gain.setValueAtTime(0.0, now);
-    bellGain.gain.setValueAtTime(0.3, now + 0.05);
-    bellGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
-    bell.connect(bellGain);
-    bellGain.connect(ctx.destination);
-    bell.start(now + 0.05);
-    bell.stop(now + 0.6);
-  } catch (_) { /* AudioContext unavailable — silent fail */ }
+  try { SOUNDS[Math.floor(Math.random() * SOUNDS.length)](); }
+  catch (_) { /* AudioContext unavailable — silent fail */ }
 }
 
 copyBtn.addEventListener('click', () => {
