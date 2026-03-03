@@ -168,6 +168,14 @@ eleventyExcludeFromCollections: true
     .advanced-body { margin-top: 14px; }
     .label-hint { font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 0.72rem; }
 
+    /* Range sliders (crop adjustments) */
+    .slider-wrap { display: flex; align-items: center; gap: 8px; }
+    .slider-wrap input[type=range] {
+      flex: 1; width: auto; padding: 0; border: none;
+      accent-color: var(--amber);
+    }
+    .slider-val { font-family: var(--mono); font-size: 0.82rem; color: var(--ink); min-width: 2.2ch; }
+
     /* Seed row */
     .seed-header { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
     .seed-header label { margin-bottom: 0; }
@@ -587,11 +595,10 @@ function buildSeedFields(count, values) {
 const initSeedVals = urlP.has('seed') ? urlP.get('seed').split(',') : [];
 buildSeedFields(parseInt(countEl.value, 10), initSeedVals);
 
-// Rebuild when count changes
+// Rebuild when count changes (syncUrl already fires via URL_FIELDS listener)
 countEl.addEventListener('change', () => {
   const cur = getSeedInputs().map(el => el.value);
   buildSeedFields(parseInt(countEl.value, 10), cur);
-  syncUrl();
 });
 
 // Randomize button
