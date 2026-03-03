@@ -63,7 +63,7 @@
 - Generated images use a Japanese blockprint style: high-contrast woodcut, cream/black palette with sparse warm amber accent
 - No people, no text, no brand logos, no screenshots of interfaces in generated images
 - Own photos and screenshots are fine as hero images when they're relevant — use "Own work." attribution (not "Photo by Ken Hawkins")
-- Generated images go through post-processing (crop, saturation) and file rename before committing — see [Image Generation guide](../scripts/image-generate/IMAGE_GENERATION.md) for the full workflow, prompt philosophy, and tools
+- Generated images go through post-processing (crop, saturation) and file rename before committing — see [Image Generation guide](IMAGE_GENERATION.md) for the full workflow, prompt philosophy, and tools
 
 **Calls to action**:
 
