@@ -95,7 +95,9 @@ Don't worry about resizing, format conversion, or compression. Eleventy's image 
 
 ## Cost
 
-Each image costs roughly $0.01 via Together AI (FLUX.2-dev). Three images per post is about $0.03. Check usage at <https://api.together.ai/settings/billing>.
+Together AI charges per megapixel for image generation. The Generate button shows a live estimate based on image count, dimensions, and steps. At defaults (3 images, 1280×832, 20 steps), expect ~$0.03 per generation. Higher steps or larger dimensions cost proportionally more. Reference images don't appear to add per-image cost. Check actual usage at <https://api.together.ai/settings/billing>.
+
+The per-megapixel rate for FLUX.2-dev isn't published yet -- the `CONFIG.cost.perMegapixel` value is back-calculated from observed billing. Update it if Together AI publishes the official rate.
 
 ## Config
 
@@ -107,20 +109,26 @@ Paste one or more public image URLs to guide generation. This uses Together AI's
 
 ### What it does
 
-Reference images influence the generated output -- style transfer, composition reference, or multi-image compositing ("person from image 1 in setting from image 2"). The text prompt still controls the subject; the reference images nudge style and structure.
+The model locks in specific visual elements from the reference images -- character identity, color palette, design language, composition -- while varying the rest of the scene based on your text prompt. The text prompt still controls the subject; the references constrain style and structure.
+
+With a single reference, this works like style transfer or image-to-image editing ("change the background to a forest"). With multiple references, you can composite elements from different images ("the character from image 1 in the setting from image 2"). The model understands image content, so you can reference elements by index ("image 1", "image 2") or describe them naturally ("the building in the background").
+
+Reference images don't appear to affect generation cost or time.
 
 ### How to use it
 
 1. Click **+ Add reference image** below the prompt
 2. Paste a public image URL -- a thumbnail preview confirms it loaded
 3. Add more references as needed (up to 8)
-4. Use "image 1", "image 2" etc. in your prompt to reference specific inputs
+4. Reference specific inputs in your prompt -- by index ("image 1") or by describing their content
 5. Generate as usual
 
-### Requirements
+### Limits
 
 - URLs must be publicly accessible (no auth headers, no localhost)
 - Up to 8 reference images per request
+- Each reference must be at least 400×400px
+- Total input across all references: 9 megapixels max
 - When no reference images are provided, generation works exactly as before (text-to-image only)
 
 ### URL state
