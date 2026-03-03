@@ -3,10 +3,10 @@ title: "Blog art that belongs"
 layout: layouts/post.njk
 teaser: "One style prefix baked into every prompt. That's what makes AI blog art look like a set rather than a random pile."
 date: 2026-03-03
-image: /blog/placeholder.jpg
+image: /blog/art-that-belongs.jpg
 image_meta:
-  altext: 'Placeholder'
-  text: 'Placeholder'
+  altext: 'Woodcut-style crowd of hands holding cameras and phones, all pointed forward, with warm amber sky behind angular rooftops'
+  text: "Same tool, same style, every shot different. Image made with <a href='https://huggingface.co/black-forest-labs/FLUX.2-dev'>FLUX.2-dev</a>."
 tags:
   - posts
 topics:
@@ -47,6 +47,6 @@ I built a [small browser tool](/image-generator/) that lives in the site itself.
 
 The URL updates as you change options, so any setup is bookmarkable. Advanced options expose the style prefix, negative prompt, steps, and dimensions -- useful for experimenting without touching config files.
 
-About 20 diffusion steps is the sweet spot: results look the same as 28 to 35 but generate noticeably faster. Three images per post runs about $0.03. The approach is [on GitHub](https://github.com/khawkins98/allaboutken-11ty/tree/main/scripts/image-generate) if you want to adapt it.
+About 20 diffusion steps is the sweet spot: results look the same as 28 to 35 but generate noticeably faster. Three images per post runs about $0.03. The tool is a [single self-contained page](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/image-generator.njk) if you want to adapt it.
 
 {% endmarkdown %}

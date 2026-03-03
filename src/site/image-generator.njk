@@ -40,25 +40,16 @@ eleventyExcludeFromCollections: true
       --mono: 'Courier New', monospace;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      max-width: none !important;
-      padding: 0 !important;
-    }
+
     header {
-      background: var(--ink);
-      color: var(--cream);
       padding: 12px 24px;
       display: flex;
       align-items: center;
       gap: 12px;
     }
-    .site-name {
-      color: var(--cream);
+    .site-name a {
       text-decoration: none;
-      font-size: 0.9rem;
-      opacity: 0.65;
     }
-    .site-name:hover { opacity: 1; }
     .header-sep { color: var(--cream); opacity: 0.35; font-size: 0.85rem; }
     header h1 { font-size: 1rem; font-weight: 600; }
     .badge {
@@ -72,7 +63,6 @@ eleventyExcludeFromCollections: true
       text-transform: uppercase;
     }
     .container { max-width: 1000px; margin: 0 auto; padding: 28px 24px; }
-
     .section { margin-bottom: 20px; }
     label {
       display: block;
@@ -353,6 +343,7 @@ eleventyExcludeFromCollections: true
       </div>
       <p class="hint">Stored in localStorage.
         <a href="https://api.together.ai/settings/api-keys" target="_blank" rel="noopener">Forgot your key?</a>
+        · <a href="https://api.together.ai/settings/billing" target="_blank" rel="noopener">Check balance →</a>
       </p>
     </div>
 
@@ -387,8 +378,9 @@ eleventyExcludeFromCollections: true
           <option value="7">7</option>
         </select>
       </div>
-      <div style="flex: 0 0 auto; display: flex; align-items: flex-end;">
-        <button class="btn-primary" id="gen-btn">Generate</button>
+      <div style="flex: 0 0 auto; display: flex; align-items: flex-end; gap: 10px;">
+        <button class="btn-primary" id="gen-btn">Generate <span style="opacity:0.65;font-weight:400;font-size:0.8em">(~$0.03)</span></button>
+        <a href="#" id="test-sound" style="font-size:0.78rem; color:var(--mid); align-self:center; white-space:nowrap;">test sound</a>
       </div>
     </div>
 
@@ -488,6 +480,8 @@ eleventyExcludeFromCollections: true
         </div>
         <pre class="snippet" id="snippet"></pre>
       </div>
+
+      <div id="save-status" hidden class="status-bar" style="margin-top: 12px;"></div>
     </div>
 
   </div>
@@ -637,6 +631,14 @@ function setStatus(msg, type) {
 }
 function clearStatus() { statusEl.hidden = true; }
 
+const saveStatusEl = document.getElementById('save-status');
+function setSaveStatus(msg, type) {
+  saveStatusEl.hidden = false;
+  saveStatusEl.className = 'status-bar' + (type ? ' is-' + type : '');
+  saveStatusEl.textContent = msg;
+  saveStatusEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
 // --- Generate ---
 let cells = []; // module-scope so selectImage can iterate them
 
@@ -648,6 +650,7 @@ genBtn.addEventListener('click', async () => {
 
   const count = parseInt(countEl.value, 10);
   genBtn.disabled = true;
+  playCaching();
   setStatus('Generating ' + count + ' image' + (count > 1 ? 's' : '') + ' in parallel…');
 
   editDivider.hidden = true;
@@ -980,7 +983,7 @@ saveBtn.addEventListener('click', async () => {
         await writable.write(blob);
         await writable.close();
         showSnippet(fh.name.replace(/\.jpe?g$/i, ''));
-        setStatus('Saved as ' + fh.name + ' — add to src/site/images/blog/ if not already there.', 'success');
+        setSaveStatus('Saved as ' + fh.name + ' — add to src/site/images/blog/ if not already there.', 'success');
         return;
       } catch (e) {
         if (e.name === 'AbortError') return;
@@ -994,10 +997,10 @@ saveBtn.addEventListener('click', async () => {
     a.href = url; a.download = filename; a.click();
     URL.revokeObjectURL(url);
     showSnippet(rawName);
-    setStatus('Downloaded as ' + filename + ' — move to src/site/images/blog/.', 'success');
+    setSaveStatus('Downloaded as ' + filename + ' — move to src/site/images/blog/.', 'success');
 
   } catch (err) {
-    setStatus('Save failed: ' + err.message, 'error');
+    setSaveStatus('Save failed: ' + err.message, 'error');
   }
 });
 
@@ -1008,6 +1011,40 @@ function showSnippet(baseName) {
     'image_meta:\n' +
     '  text: "[DRAFT — describe what you see]. ' + CONFIG.attribution + '"\n' +
     '  altext: \'[DRAFT — describe image for screen readers]\'';
+}
+
+document.getElementById('test-sound').addEventListener('click', e => { e.preventDefault(); playCaching(); });
+
+// --- Cash register sound (Web Audio API, no external files) ---
+function playCaching() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = ctx.currentTime;
+    // "cha" — short high click
+    const click = ctx.createOscillator();
+    const clickGain = ctx.createGain();
+    click.type = 'square';
+    click.frequency.setValueAtTime(1200, now);
+    click.frequency.exponentialRampToValueAtTime(600, now + 0.04);
+    clickGain.gain.setValueAtTime(0.25, now);
+    clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    click.connect(clickGain);
+    clickGain.connect(ctx.destination);
+    click.start(now);
+    click.stop(now + 0.06);
+    // "ching" — bright bell tone
+    const bell = ctx.createOscillator();
+    const bellGain = ctx.createGain();
+    bell.type = 'sine';
+    bell.frequency.setValueAtTime(2200, now + 0.05);
+    bellGain.gain.setValueAtTime(0.0, now);
+    bellGain.gain.setValueAtTime(0.3, now + 0.05);
+    bellGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+    bell.connect(bellGain);
+    bellGain.connect(ctx.destination);
+    bell.start(now + 0.05);
+    bell.stop(now + 0.6);
+  } catch (_) { /* AudioContext unavailable — silent fail */ }
 }
 
 copyBtn.addEventListener('click', () => {
