@@ -839,6 +839,7 @@ function addRefRow(value) {
   removeBtn.className = 'ref-remove';
   removeBtn.textContent = '×';
   removeBtn.title = 'Remove';
+  removeBtn.setAttribute('aria-label', 'Remove reference image');
   removeBtn.addEventListener('click', () => {
     row.remove();
     updateRefHint();
@@ -862,7 +863,7 @@ refAddBtn.addEventListener('click', () => {
 // Restore reference images from URL
 {
   let i = 0;
-  while (urlP.has('ref' + i)) { addRefRow(urlP.get('ref' + i)); i++; }
+  while (i < 8 && urlP.has('ref' + i)) { addRefRow(urlP.get('ref' + i)); i++; }
 }
 
 // --- Status helpers ---
@@ -953,7 +954,7 @@ genBtn.addEventListener('click', async () => {
     response_format: 'base64',
     output_format: 'jpeg',
     negative_prompt: negPrompt,
-    ...(refUrls.length > 0 && { reference_images: refUrls })
+    ...(refUrls.length > 0 && { reference_images: refUrls.slice(0, 8) })
   });
 
   // Show the request in the debug panel (seed shown as first value; others vary only by seed)
