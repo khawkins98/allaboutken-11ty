@@ -698,10 +698,12 @@ function buildSeedFields(count, values) {
 const initSeedVals = urlP.has('seed') ? urlP.get('seed').split(',') : [];
 buildSeedFields(parseInt(countEl.value, 10), initSeedVals);
 
-// Rebuild when count changes (syncUrl already fires via URL_FIELDS listener)
+// Rebuild when count changes; syncUrl must come after buildSeedFields so seed
+// fields exist before their values are written to the URL.
 countEl.addEventListener('change', () => {
   const cur = getSeedInputs().map(el => el.value);
   buildSeedFields(parseInt(countEl.value, 10), cur);
+  syncUrl();
 });
 
 // Randomize button
@@ -789,8 +791,11 @@ genBtn.addEventListener('click', async () => {
   const fullPrompt  = stylePrefix + ' ' + subject;
   const guidance    = parseFloat(guidanceEl.value);
   const steps       = parseInt(stepsEl.value, 10);
-  const imgWidth    = parseInt(imgWidthEl.value, 10);
-  const imgHeight   = parseInt(imgHeightEl.value, 10);
+  // Snap dimensions to multiples of 32 in case blur handler hasn't fired yet
+  const imgWidth    = Math.round(parseInt(imgWidthEl.value,  10) / 32) * 32;
+  const imgHeight   = Math.round(parseInt(imgHeightEl.value, 10) / 32) * 32;
+  imgWidthEl.value  = String(imgWidth);
+  imgHeightEl.value = String(imgHeight);
   const negPrompt   = negPromptEl.value.trim();
 
   // Read per-image seeds; blank fields get a random seed
