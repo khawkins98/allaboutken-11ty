@@ -45,7 +45,11 @@ Activities
 - JEA applies Handbook structure: headings, bullets, fenced code, tl;dr when appropriate
 - Author writes content; TR may flag technical gaps early
 - GW shapes outline, lede, section order, transitions; converts dense prose to scannable bullets/steps; preserves author voice
-- Hero image generated via `yarn generate-image <post.njk>` — see [Image Generation guide](../scripts/image-generate/IMAGE_GENERATION.md)
+- Hero image pipeline — see [Image Generation guide](../scripts/image-generate/IMAGE_GENERATION.md):
+  - If you have a relevant photo or screenshot, use it directly; otherwise generate one at `/image-generator/`
+  - Post-process the chosen image: crop to composition, adjust saturation/contrast if needed
+  - Name the file descriptively when saving (e.g., `pagefind-paths-through-grass`) — a mismatch between filename and `image:` frontmatter produces broken images only visible in production
+  - Write real `image_meta.altext` and `image_meta.text` after reviewing the final image
 - ME verifies draft meets scope and is ready for technical review
 
 ## Stage 2 — Technical Review

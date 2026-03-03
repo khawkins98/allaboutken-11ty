@@ -1,0 +1,40 @@
+---
+title: "Blog art that belongs"
+layout: layouts/post.njk
+teaser: "Every post needs a hero image. Sometimes you don't need the perfect one -- you just need something that doesn't clash."
+date: 2026-03-03
+image: /blog/spaghetti-of-the-sky.jpg
+image_meta:
+  altext: 'Woodcut-style print of a tangled mass of white lines billowing across a dark sky above a flat amber-lit horizon and silhouetted landscape'
+  text: "The sky rises full of spaghetti. Image made with <a href='https://huggingface.co/black-forest-labs/FLUX.2-dev'>FLUX.2-dev</a>."
+tags:
+  - posts
+topics:
+  - eleventy
+  - tools
+  - design
+kens_status: draft
+---
+
+{% markdown %}
+
+For a while I was using [Loras](https://www.loras.dev/) for post art. Fine results, but the workflow sat completely outside of my writing flow and I'd never be able to fully adapt that to my style and iterate ... and, well, learn more about using image generators.
+
+When [FLUX.2-dev](https://github.com/black-forest-labs/flux2) came out I wanted to try it -- and connect it to the blog workflow directly rather than bolt on another external script. So I built a [small browser tool](/image-generator/) that lives in the site itself. Paste your [Together AI](https://www.together.ai/) key, type a subject, hit Generate -- three images run in parallel in about 20-30 seconds. Click one, crop, save straight to `src/site/images/blog/`. The tool spits out a frontmatter snippet ready to paste. All without leaving the browser.
+
+{% endmarkdown %}
+<figure class="kh-figure">
+  <img class="kh-figure__image" width="600" src="/images/blog/pagefind-paths-through-grass.jpg" alt="Blockprint-style woodcut of two winding pale paths through dark dense grass with warm amber accents">
+  <figcaption class="kh-figure__caption">For a post about search without external services: "paths worn into grass by footsteps, no paved road, just natural routes."</figcaption>
+</figure>
+<figure class="kh-figure">
+  <img class="kh-figure__image" width="600" src="/images/blog/semantic-search-vectors.jpg" alt="Woodcut-style print of glowing amber and white orbs scattered across a dark background with rough white hatching marks">
+  <figcaption class="kh-figure__caption">For a post about vector embeddings: "glowing points scattered in a dark field, some clustered, some drifting apart."</figcaption>
+</figure>
+{% markdown %}
+
+A consistent style prefix keeps images looking like a set across posts rather than a random pile. The rest is just picking a prompt that fits the feel of the post.
+
+Three images run about $0.03 via Together AI. The tool is a [single self-contained page](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/image-generator.njk) if you want to adapt it.
+
+{% endmarkdown %}

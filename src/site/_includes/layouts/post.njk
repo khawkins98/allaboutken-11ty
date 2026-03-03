@@ -46,7 +46,7 @@ templateEngineOverride: njk
         </div>
         {% endif %}
         {% if teaser -%}
-        <p class="kh-text-body--1">{{ teaser | safe }}</p>
+        <p class="kh-text-body--1">{{ teaser | emdash | safe }}</p>
         {%- endif %}
         {{ content | safe }}
       </div>
