@@ -31,6 +31,9 @@ templateEngineOverride: njk
       {% if href %}<a href="{{ href }}">{% endif %}
       <img class="kh-figure__image kh-figure__image--lead" width="600" src="/images{{ image | url }}" alt="{{ image_meta.altext or '' }}">
       {% if href %}</a>{% endif %}
+      {% if image_meta and image_meta.credit %}
+      <small class="kh-figure__credit">{{ image_meta.credit | safe }}</small>
+      {% endif %}
       {% if image_meta and image_meta.text %}
       <figcaption class="kh-figure__caption">{{ image_meta.text | safe }}</figcaption>
       {% endif %}
