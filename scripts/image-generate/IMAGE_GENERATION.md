@@ -17,9 +17,11 @@ echo "TOGETHER_API_KEY=your-key-here" > .env
 
 ## Two tools
 
-### `yarn generate-image <file.njk>` -- post-aware workflow
+### `yarn generate-image <file.njk>` -- post-aware workflow (interactive)
 
-Reads a post's frontmatter, classifies the post type, and suggests prompts. Generates images in parallel (~30s for 3 vs ~90s one at a time), opens them in Preview, and waits for you to pick one. Copies a frontmatter snippet to clipboard.
+Reads a post's frontmatter, classifies the post type, and suggests prompts. Generates images in parallel (~30s for 3 vs ~90s one at a time), opens them in Preview, and waits for you to pick one. After you pick, it copies a ready-to-paste frontmatter snippet to your clipboard and offers to delete the unchosen images.
+
+This script requires interactive terminal input (it prompts you to pick an image and confirm deletion). It cannot be run non-interactively by a script or AI assistant -- use the bash script below for that.
 
 ```bash
 yarn generate-image src/site/posts/20260302-semantic-search-browser-embeddings.njk
@@ -31,9 +33,11 @@ Options:
 - `--count N` -- number of options to generate (default: 3)
 - `--prompt "..."` -- skip auto-generation, use this prompt directly
 
-### `./scripts/image-generate/generate-image.sh` -- quick one-offs
+### `./scripts/image-generate/generate-image.sh` -- quick one-offs (non-interactive)
 
-For when you already know the prompt and just want an image.
+For when you already know the prompt and just want an image. Runs without interaction (as long as `TOGETHER_API_KEY` is set in `.env`), so it works from scripts and AI assistants too.
+
+Outputs the file path and a one-line `image:` hint. You will need to add `image_meta.text` and `image_meta.altext` to your frontmatter yourself -- see [Image credits](#image-credits) below for the format and attribution string.
 
 ```bash
 ./scripts/image-generate/generate-image.sh "a magnifying glass over scattered dots"
@@ -106,9 +110,36 @@ Image generation happens during Stage 1 (Drafting) in the [publishing workflow](
 
 1. Write the post content and frontmatter
 2. Run `yarn generate-image src/site/posts/my-post.njk`
-3. Pick an image, paste the frontmatter snippet
-4. Write real alt text (replace the `[DRAFT]` placeholder)
-5. Move on to technical review
+3. Pick an image -- the script copies a frontmatter snippet to your clipboard and offers to delete unchosen images (defaults to yes, press `n` to keep them)
+4. Post-process if needed (crop, adjust saturation -- see below)
+5. Rename the file from `generated-*.jpg` to something descriptive
+6. Update the `image:` line in your frontmatter to match the new filename -- the clipboard snippet still has the old timestamp name
+7. Write real `altext` and `image_meta.text` (replace the `[DRAFT]` placeholders after looking at the actual image)
+8. Move on to technical review
+
+## Post-processing
+
+The generated image opens in Preview. Before committing it, you'll usually want to touch it up:
+
+- **Crop** -- the default 1280x832 frame often has dead space. Crop in on the strongest part of the composition. A tighter crop almost always looks better as a hero image.
+- **Saturation and contrast** -- the blockprint style occasionally renders too flat or too hot. Nudge saturation or levels if needed.
+- **Any editor works** -- Preview's Adjust Color tool is fine for quick fixes. Photoshop, Pixelmator, whatever you have.
+
+Don't worry about manual optimization (resizing, format conversion, compression). Eleventy's image plugin handles all of that at build time -- it generates responsive AVIF/WebP/JPEG variants at 320/600/900/1280px widths automatically.
+
+### Rename the file
+
+The scripts save images as `generated-<timestamp>.jpg`. Rename to something descriptive before committing:
+
+```bash
+mv src/site/images/blog/generated-1709312400-2.jpg src/site/images/blog/pagefind-paths-through-grass.jpg
+```
+
+The clipboard snippet the script copied still references the old timestamp filename. After renaming, update the `image:` value in your frontmatter to match the new name. A mismatch here produces broken images that only show up in production (the build adds `/images/` to the path automatically, so you won't catch it in the source).
+
+## Cost
+
+Each image costs roughly $0.01 via Together AI (FLUX.2-dev). Three images per post is about $0.03. Check usage at <https://api.together.ai/settings/billing>.
 
 ## Config
 
