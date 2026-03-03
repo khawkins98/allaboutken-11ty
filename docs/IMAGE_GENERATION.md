@@ -12,23 +12,15 @@ Style is Japanese blockprint -- high-contrast black ink woodcut on cream with sp
 ## Workflow
 
 1. Write your subject prompt -- go abstract and evocative, not literal. One subject per image.
-2. Adjust guidance and steps if needed (defaults: guidance 1.5, steps 20)
-3. Click Generate -- three images run in parallel (~20--30s)
-4. Click an image to select it, then drag the corner handles to crop
-5. Enter a descriptive filename (no `.jpg`), click Save -- the browser prompts you to save to `src/site/images/blog/`
-6. Copy the frontmatter snippet and paste it into your post
-7. Write real `altext` and `image_meta.text` after reviewing the actual image (the snippet marks both as `[DRAFT]`)
+2. Optionally add reference images to guide style, composition, or combine elements from multiple sources.
+3. Adjust guidance and steps if needed (defaults: guidance 1.5, steps 20)
+4. Click Generate -- three images run in parallel (~20--30s)
+5. Click an image to select it, then drag the corner handles to crop
+6. Enter a descriptive filename (no `.jpg`), click Save -- the browser prompts you to save to `src/site/images/blog/`
+7. Copy the frontmatter snippet and paste it into your post
+8. Write real `altext` and `image_meta.text` after reviewing the actual image (the snippet marks both as `[DRAFT]`)
 
-The URL updates as you change options, so setups are bookmarkable.
-
-## Advanced options
-
-Click "Advanced options" to edit:
-
-- **Style prefix** -- prepended to every prompt. The default blockprint prefix is the whole trick; edit with care.
-- **Negative prompt** -- tells the model what to avoid.
-- **Steps** -- ~20 is the sweet spot: good quality, fast generation. Going higher gives diminishing returns and takes noticeably longer. Below 15 quality drops off.
-- **Width / Height** -- default 1280×832. Changing dimensions also changes the crop aspect ratio.
+The URL updates as you change options, so setups are bookmarkable. See the Tips & FAQ at the bottom of the page for cost, reference images, steps, and reproducibility.
 
 ## Writing prompts
 
@@ -92,15 +84,3 @@ The Save dialog drops a JPEG into `src/site/images/blog/`. Before committing, yo
 - **Saturation and contrast** -- if the result is too flat or too hot, nudge levels in Preview or any editor.
 
 Don't worry about resizing, format conversion, or compression. Eleventy's image plugin handles all of that at build time.
-
-## Cost
-
-Each image costs roughly $0.01 via Together AI (FLUX.2-dev). Three images per post is about $0.03. Check usage at <https://api.together.ai/settings/billing>.
-
-## Config
-
-All defaults (style prefix, negative prompt, steps, dimensions, attribution) live in the `CONFIG` object at the top of `src/site/image-generator.njk`. There is no external config file -- edit the SPA source directly.
-
-## Reproducibility
-
-The generator shows a seed for each image in the metadata strip below its result. To reproduce an image, paste its seed into the Seed field under Advanced options, or pass seeds via the URL as `?seed=123,456,789` where each comma-separated value controls one image slot. Each image uses its corresponding seed from the list; leave the field blank for random seeds. Same seed + same prompt + same model = same image for that slot, but editing the style prefix will produce different results even with the same seed.
