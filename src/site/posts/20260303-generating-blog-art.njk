@@ -1,7 +1,7 @@
 ---
-title: "Penny-a-piece blog art"
+title: "Blog art that belongs"
 layout: layouts/post.njk
-teaser: "I needed blog art that didn't look like AI slop. A constrained style and a 30-second script got me there."
+teaser: "One style prefix baked into every prompt. That's what makes AI blog art look like a set rather than a random pile."
 date: 2026-03-03
 image: /blog/placeholder.jpg
 image_meta:
@@ -18,15 +18,15 @@ kens_status: draft
 
 {% markdown %}
 
-Every post needs a hero image, and I kept putting it off. Stock photos feel wrong for a personal blog. I can't draw. Hunting for the right Creative Commons image was eating more time than writing the post itself.
+Every post needs a hero image. Sometimes you don't need the perfect one -- you just need something that doesn't clash. Stock photos give you random results. AI generation gives you consistent ones.
 
-AI image generation is cheap now -- a penny per image via [Together AI](https://www.together.ai/) running [FLUX.2-dev](https://huggingface.co/black-forest-labs/FLUX.2-dev). But the default output looks like AI slop.
+The model I'm using is [FLUX.2-dev](https://huggingface.co/black-forest-labs/FLUX.2-dev) via [Together AI](https://www.together.ai/), running about a penny per image. But the model isn't the trick -- the style constraint is.
 
 ## The style is the whole trick
 
-What made this work was constraining to a Japanese blockprint aesthetic: high-contrast black ink woodcut on cream paper, sparse warm amber accent, no gradients. Every prompt gets the same style prefix baked in.
+Japanese blockprint aesthetic: high-contrast black ink woodcut on cream paper, sparse warm amber accent, no gradients. Every prompt gets the same style prefix baked in.
 
-A limited palette reads as a deliberate design choice, not a generated artifact. High contrast holds up at small sizes and in dark mode. More importantly, the consistency across posts looks like an intentional visual identity -- not a random collection of AI images.
+A limited palette reads as a deliberate choice, not a generated artifact. High contrast holds up at small sizes and in dark mode. The consistency across posts starts to look like a set -- not a random pile of AI images.
 
 {% endmarkdown %}
 <figure class="kh-figure">
@@ -41,20 +41,12 @@ A limited palette reads as a deliberate design choice, not a generated artifact.
 
 The other rule I settled on: abstract subjects only. Sailboats, paths through grass, kites with cut strings. Think about the feeling of the post, not its subject matter. "A magnifying glass over scattered dots" works better for a search post than "a search results page." FLUX.2-dev can't render text anyway, which honestly helps -- no temptation to put words on the image.
 
-## Semi-automated
+## The generator
 
-I wrote a [Node script](https://github.com/khawkins98/allaboutken-11ty/blob/main/scripts/image-generate/generate-image.mjs) that reads a post's frontmatter, guesses whether it's technical/impact/opinion, and picks prompts from a small library. It fires off three generations in parallel -- about 30 seconds -- then opens them all in Preview.
+I built a [small browser tool](/image-generator/) that lives in the site itself. Paste your Together AI key, type a subject, hit Generate -- three images run in parallel in about 20-30 seconds. Click one, drag the corners to crop, save straight to `src/site/images/blog/`. The tool outputs a frontmatter snippet ready to paste.
 
-```
-$ yarn generate-image src/site/posts/20260303-generating-blog-art.njk
+The URL updates as you change options, so any setup is bookmarkable. Advanced options expose the style prefix, negative prompt, steps, and dimensions -- useful for experimenting without touching config files.
 
-Generating 3 images for "Penny-a-piece blog art" (technical)...
-```
-
-Pick a number and the script copies a frontmatter snippet to your clipboard. It offers to clean up the unchosen files. I usually crop a bit and nudge the saturation before committing -- Eleventy handles the responsive formats at build time so there's nothing else to fuss with.
-
-There's also a [bash script](https://github.com/khawkins98/allaboutken-11ty/blob/main/scripts/image-generate/generate-image.sh) for when you already know the prompt. Both read from the same config.
-
-Three images per post runs about $0.03. [Scripts are on GitHub](https://github.com/khawkins98/allaboutken-11ty/tree/main/scripts/image-generate) if you want to steal the approach.
+About 20 diffusion steps is the sweet spot: results look the same as 28 to 35 but generate noticeably faster. Three images per post runs about $0.03. The approach is [on GitHub](https://github.com/khawkins98/allaboutken-11ty/tree/main/scripts/image-generate) if you want to adapt it.
 
 {% endmarkdown %}
