@@ -82,7 +82,7 @@ Same as own photo. Description + "Own work."
 
 Describe the image as rendered, not what the prompt asked for. `altext` describes what a viewer sees -- write both fields after looking at the actual image. The generator marks `altext` as `[DRAFT]` to remind you.
 
-The FLUX.2-dev attribution string is in `image-config.json`.
+The FLUX.2-dev attribution string is baked into the generator's `CONFIG` object (in `src/site/image-generator.njk`).
 
 ## Post-processing
 
@@ -99,8 +99,8 @@ Each image costs roughly $0.01 via Together AI (FLUX.2-dev). Three images per po
 
 ## Config
 
-`image-config.json` in this directory holds the canonical style prefix, negative prompt, steps, and dimensions. The browser tool has these baked in as defaults -- if you change the config file, also update `CONFIG` in `src/site/image-generator.njk`.
+All defaults (style prefix, negative prompt, steps, dimensions, attribution) live in the `CONFIG` object at the top of `src/site/image-generator.njk`. There is no external config file -- edit the SPA source directly.
 
 ## Reproducibility
 
-The generator shows seeds in the image metadata strip below each result. Note a seed and re-enter it as a fixed URL param (`?seed=...`) to regenerate the same image. Same seed + same prompt + same model = same image, but editing the style prefix will produce different results even with the same seed.
+The generator shows seeds in the metadata strip below each result. Note the seed if you want to reproduce an image later -- same seed + same prompt + same model = same image. (There's no seed input in the UI yet; re-running with a saved seed would require adding a `seed` field to the URL state.)
