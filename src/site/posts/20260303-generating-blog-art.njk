@@ -1,0 +1,60 @@
+---
+title: "Penny-a-piece blog art"
+layout: layouts/post.njk
+teaser: "I needed blog art that didn't look like AI slop. A constrained style and a 30-second script got me there."
+date: 2026-03-03
+image: /blog/placeholder.jpg
+image_meta:
+  altext: 'Placeholder'
+  text: 'Placeholder'
+tags:
+  - posts
+topics:
+  - eleventy
+  - tools
+  - design
+kens_status: draft
+---
+
+{% markdown %}
+
+Every post needs a hero image, and I kept putting it off. Stock photos feel wrong for a personal blog. I can't draw. Hunting for the right Creative Commons image was eating more time than writing the post itself.
+
+AI image generation is cheap now -- a penny per image via [Together AI](https://www.together.ai/) running [FLUX.2-dev](https://huggingface.co/black-forest-labs/FLUX.2-dev). But the default output looks like AI slop.
+
+## The style is the whole trick
+
+What made this work was constraining to a Japanese blockprint aesthetic: high-contrast black ink woodcut on cream paper, sparse warm amber accent, no gradients. Every prompt gets the same style prefix baked in.
+
+A limited palette reads as a deliberate design choice, not a generated artifact. High contrast holds up at small sizes and in dark mode. More importantly, the consistency across posts looks like an intentional visual identity -- not a random collection of AI images.
+
+{% endmarkdown %}
+<figure class="kh-figure">
+  <img class="kh-figure__image" width="600" src="/images/blog/pagefind-paths-through-grass.jpg" alt="Blockprint-style woodcut of two winding pale paths through dark dense grass with warm amber accents">
+  <figcaption class="kh-figure__caption">For a post about search without external services: "paths worn into grass by footsteps, no paved road, just natural routes."</figcaption>
+</figure>
+<figure class="kh-figure">
+  <img class="kh-figure__image" width="600" src="/images/blog/semantic-search-vectors.jpg" alt="Woodcut-style print of glowing amber and white orbs scattered across a dark background with rough white hatching marks">
+  <figcaption class="kh-figure__caption">For a post about vector embeddings: "glowing points scattered in a dark field, some clustered, some drifting apart."</figcaption>
+</figure>
+{% markdown %}
+
+The other rule I settled on: abstract subjects only. Sailboats, paths through grass, kites with cut strings. Think about the feeling of the post, not its subject matter. "A magnifying glass over scattered dots" works better for a search post than "a search results page." FLUX.2-dev can't render text anyway, which honestly helps -- no temptation to put words on the image.
+
+## Semi-automated
+
+I wrote a [Node script](https://github.com/khawkins98/allaboutken-11ty/blob/main/scripts/image-generate/generate-image.mjs) that reads a post's frontmatter, guesses whether it's technical/impact/opinion, and picks prompts from a small library. It fires off three generations in parallel -- about 30 seconds -- then opens them all in Preview.
+
+```
+$ yarn generate-image src/site/posts/20260303-generating-blog-art.njk
+
+Generating 3 images for "Penny-a-piece blog art" (technical)...
+```
+
+Pick a number and the script copies a frontmatter snippet to your clipboard. It offers to clean up the unchosen files. I usually crop a bit and nudge the saturation before committing -- Eleventy handles the responsive formats at build time so there's nothing else to fuss with.
+
+There's also a [bash script](https://github.com/khawkins98/allaboutken-11ty/blob/main/scripts/image-generate/generate-image.sh) for when you already know the prompt. Both read from the same config.
+
+Three images per post runs about $0.03. [Scripts are on GitHub](https://github.com/khawkins98/allaboutken-11ty/tree/main/scripts/image-generate) if you want to steal the approach.
+
+{% endmarkdown %}
