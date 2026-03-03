@@ -335,6 +335,33 @@ eleventyExcludeFromCollections: true
     .key-row input { flex: 1; }
     .key-remember { display: flex; align-items: center; gap: 5px; font-size: 0.82rem; color: var(--mid); white-space: nowrap; cursor: pointer; }
     .key-remember input[type=checkbox] { width: auto; cursor: pointer; }
+
+    /* Reference images */
+    .ref-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .ref-row input { flex: 1; min-width: 0; }
+    .ref-thumb {
+      width: 48px; height: 48px; object-fit: cover;
+      border: 1px solid var(--border); border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .ref-thumb-err {
+      width: 48px; height: 48px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px dashed var(--border); border-radius: 3px;
+      font-size: 0.75rem; color: var(--mid); background: var(--code-bg);
+    }
+    .ref-remove {
+      background: none; border: none; cursor: pointer;
+      font-size: 1.1rem; color: var(--mid); padding: 4px 6px; line-height: 1;
+    }
+    .ref-remove:hover { color: #c44; }
+
+    /* Tips & FAQ footer */
+    .faq { max-width: 820px; margin: 48px auto 32px; padding: 0 24px; font-size: 0.78rem; color: var(--mid); line-height: 1.6; }
+    .faq h2 { font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.72rem; margin: 0 0 12px; color: var(--mid); }
+    .faq dt { font-weight: 600; margin-top: 10px; }
+    .faq dd { margin: 2px 0 0; }
+    .faq a { color: var(--amber); }
   </style>
 </head>
 <body>
@@ -377,6 +404,17 @@ eleventyExcludeFromCollections: true
       <label for="prompt">Subject prompt</label>
       <textarea id="prompt" placeholder="e.g. a bird's nest cradled in the fork of a bare branch&#10;&#10;Go abstract and evocative — not literal. One subject. No text or faces."></textarea>
       <p class="hint">Model: <a href="https://huggingface.co/black-forest-labs/FLUX.2-dev" target="_blank" rel="noopener">FLUX.2-dev</a> via Together AI.</p>
+    </div>
+
+    <!-- Reference images (optional) -->
+    <div class="section" id="ref-section">
+      <label>Reference images <span class="label-hint">(optional)</span></label>
+      <p class="hint">Guide the output with existing images — match a color palette, borrow a composition, or combine elements from multiple sources. No extra cost.</p>
+      <div id="ref-list"></div>
+      <button class="btn-secondary btn-sm" id="ref-add-btn" type="button">+ Add reference image</button>
+      <p class="hint" id="ref-hint" hidden>
+        Use "image 1", "image 2" in your prompt, or describe content naturally. Min 400×400px each, up to 8.
+      </p>
     </div>
 
     <!-- Options -->
@@ -450,11 +488,9 @@ eleventyExcludeFromCollections: true
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 8px;">
       <button class="btn-secondary btn-sm" id="reset-all" type="button">Reset all to defaults</button>
-      <div style="display:flex; align-items:center; gap:10px;">
-        <a href="#" id="test-sound" style="font-size:0.78rem; color:var(--mid); white-space:nowrap;">test sound</a>
-        <button class="btn-primary" id="gen-btn">Generate <span style="opacity:0.65;font-weight:400;font-size:0.8em">(~$0.03)</span></button>
-      </div>
+      <button class="btn-primary" id="gen-btn">Generate <span id="cost-est" style="opacity:0.65;font-weight:400;font-size:0.8em"></span></button>
     </div>
+    <p class="hint" style="text-align:right"><span id="cost-text"></span><a href="https://api.together.ai/settings/billing" target="_blank" rel="noopener">check actual usage →</a></p>
 
     <div id="status" hidden class="status-bar"></div>
 
@@ -529,17 +565,38 @@ eleventyExcludeFromCollections: true
 
   </div>
 
+  <footer class="faq">
+    <h2>Tips &amp; FAQ</h2>
+    <dl>
+      <dt>How is the cost estimate calculated?</dt>
+      <dd>Together AI charges per megapixel of output. The estimate is <code>count × $/MP × megapixels × (steps ÷ default&nbsp;steps)</code>. Larger dimensions or more steps cost proportionally more. Reference images don't add extra cost. The per-MP rate for FLUX.2-dev isn't published yet, so the estimate is approximate — <a href="https://api.together.ai/settings/billing" target="_blank" rel="noopener">check billing</a> for actual charges.</dd>
+      <dt>What do reference images actually do?</dt>
+      <dd>They lock in visual elements — color palette, composition, character identity — while your text prompt controls the subject. One reference works like style transfer. Multiple references let you composite elements ("the character from image 1 in the setting from image 2"). The model understands content, so you can reference by index or describe what you want naturally.</dd>
+      <dt>Why do my images look different at higher step counts?</dt>
+      <dd>~20 steps is the sweet spot for FLUX.2-dev. Going higher gives diminishing returns and takes longer. Below 15, quality drops off. The style prefix does most of the visual heavy lifting — editing it will change results more than tweaking steps.</dd>
+      <dt>Can the model render text or faces?</dt>
+      <dd>No. FLUX.2-dev can't render readable text, and the blockprint style doesn't suit portraits. The style prefix already includes "no text, no words." Don't prompt for named people or brands.</dd>
+      <dt>How do I reproduce an exact image?</dt>
+      <dd>Each result shows a seed in the metadata strip below it. Paste it into the Seed field under Advanced options, or add <code>?seed=123</code> to the URL. Same seed + same prompt + same settings = same image.</dd>
+    </dl>
+  </footer>
+
 {% raw %}
 <script>
 const CONFIG = {
   model: 'black-forest-labs/FLUX.2-dev',
   style: {
     prefix: 'blockprint style, japaneseblockprint style, bold black ink woodcut, linocut carved texture, two-color print, deep black and cream with sparse warm amber accent, flat areas of color, no gradients, high contrast graphic, cream paper background, no text, no words,',
-    negativePrompt: 'smooth shading, photoreal, complex lighting, 3d render, gradient, blurry, soft focus',
-    steps: 20  // ~20 is the sweet spot: good quality, half the time of 28+
+    negativePrompt: 'smooth shading, photoreal, complex lighting, 3d render, gradient, blurry, soft focus'
   },
-  defaults: { width: 1280, height: 832 },
-  attribution: "Image made with <a href='https://huggingface.co/black-forest-labs/FLUX.2-dev'>FLUX.2-dev</a>."
+  // ~20 steps is the sweet spot: good quality, half the time of 28+
+  defaults: { width: 1280, height: 832, steps: 20 },
+  attribution: "Image made with <a href='https://huggingface.co/black-forest-labs/FLUX.2-dev'>FLUX.2-dev</a>.",
+  // Cost estimate: Together AI charges per megapixel; steps beyond the default
+  // cost proportionally more.  The per-MP rate for FLUX.2-dev isn't published
+  // yet, so this is back-calculated from observed billing (~$0.01 per 1280×832
+  // image at 20 steps).  Update when Together AI publishes the rate.
+  cost: { perMegapixel: 0.0094 }
 };
 
 // --- DOM refs ---
@@ -597,9 +654,9 @@ const URL_FIELDS = [
   { key: 'prefix',   el: stylePrefixEl,  def: CONFIG.style.prefix,             ev: 'input'  },
   { key: 'neg',      el: negPromptEl,    def: CONFIG.style.negativePrompt,     ev: 'input'  },
   { key: 'guidance', el: guidanceEl,     def: '1.5',                           ev: 'change' },
-  { key: 'steps',    el: stepsEl,        def: '20',                            ev: 'input'  },
-  { key: 'w',        el: imgWidthEl,     def: '1280',                          ev: 'input'  },
-  { key: 'h',        el: imgHeightEl,    def: '832',                           ev: 'input'  },
+  { key: 'steps',    el: stepsEl,        def: String(CONFIG.defaults.steps),   ev: 'input'  },
+  { key: 'w',        el: imgWidthEl,     def: String(CONFIG.defaults.width),   ev: 'input'  },
+  { key: 'h',        el: imgHeightEl,    def: String(CONFIG.defaults.height),  ev: 'input'  },
   { key: 'count',    el: countEl,        def: '3',                             ev: 'change' },
 ];
 
@@ -613,11 +670,15 @@ function syncUrl() {
   for (const { key, el, def } of URL_FIELDS) {
     if (el.value !== def) p.set(key, el.value);
   }
+  // Reference image URL state: numbered params ref0, ref1, ...
+  const refUrls = getRefUrls();
+  refUrls.forEach((url, i) => p.set('ref' + i, url));
   // Seed URL state: comma-separated, omit if all blank
   const seedVals = getSeedInputs().map(el => el.value.trim());
   if (seedVals.some(v => v)) p.set('seed', seedVals.join(','));
   const qs = p.toString();
   history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+  updateCostEstimate();
 }
 
 for (const { el, ev } of URL_FIELDS) {
@@ -628,7 +689,7 @@ for (const { el, ev } of URL_FIELDS) {
 // All dimensions must be multiples of 32 (Together AI FLUX.2-dev requirement;
 // error message says 16 but 16-only values are rejected in practice)
 const DIM_PRESETS = [
-  { label: '1280×832',  w: 1280, h: 832,  note: 'default' },
+  { label: CONFIG.defaults.width + '×' + CONFIG.defaults.height, w: CONFIG.defaults.width, h: CONFIG.defaults.height, note: 'default' },
   { label: '1024×576',  w: 1024, h: 576,  note: '16:9' },
   { label: '1152×768',  w: 1152, h: 768,  note: '3:2' },
   { label: '1024×768',  w: 1024, h: 768,  note: '4:3' },
@@ -716,6 +777,8 @@ document.getElementById('randomize-seeds').addEventListener('click', () => {
 document.getElementById('reset-all').addEventListener('click', () => {
   URL_FIELDS.forEach(({ el, def }) => el.value = def);
   buildSeedFields(parseInt(countEl.value, 10), []);
+  refListEl.innerHTML = '';
+  updateRefHint();
   updatePresetHighlight();
   syncUrl();
 });
@@ -732,6 +795,134 @@ function syncKey() {
 saveKeyEl.addEventListener('change', syncKey);
 apiKeyEl.addEventListener('input', syncKey);
 syncKey(); // set initial visibility
+
+// --- Reference images ---
+const refListEl  = document.getElementById('ref-list');
+const refAddBtn  = document.getElementById('ref-add-btn');
+const refHintEl  = document.getElementById('ref-hint');
+
+function getRefUrls() {
+  return Array.from(refListEl.querySelectorAll('input[type=text]'))
+    .map(el => el.value.trim())
+    .filter(v => v);
+}
+
+function updateRefHint() {
+  const count = refListEl.children.length;
+  refHintEl.hidden = count === 0;
+  refAddBtn.hidden = count >= 8;
+}
+
+function makeThumbPlaceholder(text) {
+  const el = document.createElement('div');
+  el.className = 'ref-thumb-err';
+  el.textContent = text || '';
+  return el;
+}
+
+function addRefRow(value) {
+  const row = document.createElement('div');
+  row.className = 'ref-row';
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'https://...';
+  input.value = value || '';
+
+  let preview = makeThumbPlaceholder();
+  let thumbGen = 0;
+
+  function loadThumb() {
+    const gen = ++thumbGen;
+    const url = input.value.trim();
+    if (!url) {
+      if (preview.tagName === 'IMG') {
+        const ph = makeThumbPlaceholder();
+        row.replaceChild(ph, preview);
+        preview = ph;
+      }
+      return;
+    }
+    const img = document.createElement('img');
+    img.className = 'ref-thumb';
+    img.src = url;
+    img.onload = () => {
+      if (gen !== thumbGen) return;
+      row.replaceChild(img, preview); preview = img;
+    };
+    img.onerror = () => {
+      if (gen !== thumbGen) return;
+      const err = makeThumbPlaceholder('!');
+      row.replaceChild(err, preview);
+      preview = err;
+    };
+  }
+
+  input.addEventListener('blur', () => { loadThumb(); syncUrl(); });
+  input.addEventListener('paste', () => setTimeout(() => { loadThumb(); syncUrl(); }, 0));
+  input.addEventListener('input', syncUrl);
+
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'ref-remove';
+  removeBtn.textContent = '×';
+  removeBtn.title = 'Remove';
+  removeBtn.setAttribute('aria-label', 'Remove reference image');
+  removeBtn.addEventListener('click', () => {
+    row.remove();
+    updateRefHint();
+    syncUrl();
+  });
+
+  row.appendChild(input);
+  row.appendChild(preview);
+  row.appendChild(removeBtn);
+  refListEl.appendChild(row);
+  updateRefHint();
+
+  if (value) loadThumb();
+}
+
+refAddBtn.addEventListener('click', () => {
+  addRefRow('');
+  refListEl.lastElementChild.querySelector('input').focus();
+});
+
+// Restore reference images from URL
+{
+  let i = 0;
+  while (i < 8 && urlP.has('ref' + i)) { addRefRow(urlP.get('ref' + i)); i++; }
+}
+
+// --- Cost estimate ---
+// Together AI charges per megapixel; steps beyond the default cost proportionally
+// more.  Reference images don't appear to add per-image cost (they condition the
+// generation, not multiply it).  Formula: count × perMP × MP × stepMultiplier.
+const costEstEl  = document.getElementById('cost-est');
+const costTextEl = document.getElementById('cost-text');
+
+let _costKey = '';
+function updateCostEstimate() {
+  const count = parseInt(countEl.value, 10) || 3;
+  const steps = parseInt(stepsEl.value, 10) || CONFIG.defaults.steps;
+  const w = parseInt(imgWidthEl.value, 10) || CONFIG.defaults.width;
+  const h = parseInt(imgHeightEl.value, 10) || CONFIG.defaults.height;
+  const refs = getRefUrls().length; // doesn't affect cost, but shown in the hint text
+  const key = count + '|' + steps + '|' + w + '|' + h + '|' + refs;
+  if (key === _costKey) return;
+  _costKey = key;
+  const mp = (w * h) / 1e6;
+  const stepMult = Math.max(1, steps / CONFIG.defaults.steps);
+  const total = count * CONFIG.cost.perMegapixel * mp * stepMult;
+  costEstEl.textContent = total < 0.005 ? '(< $0.01)' : '(~$' + total.toFixed(2) + ')';
+  const parts = [count + ' image' + (count > 1 ? 's' : '')];
+  if (steps !== CONFIG.defaults.steps) parts.push(steps + ' steps');
+  if (w !== CONFIG.defaults.width || h !== CONFIG.defaults.height) parts.push(w + '×' + h);
+  if (refs > 0) parts.push(refs + ' ref' + (refs > 1 ? 's' : ''));
+  costTextEl.textContent = parts.join(' \u00b7 ') + ' \u00b7 ';
+}
+
+updateCostEstimate();
 
 // --- Status helpers ---
 function setStatus(msg, type) {
@@ -807,25 +998,30 @@ genBtn.addEventListener('click', async () => {
 
   const ENDPOINT = 'https://api.together.xyz/v1/images/generations';
 
-  // Show the request in the debug panel (seed shown as first value; others vary only by seed)
-  const reqDetailsEl = document.getElementById('req-details');
-  const reqBodyEl = document.getElementById('req-body');
-  const samplePayload = {
+  // Reference images (if any)
+  const refUrls = getRefUrls();
+
+  const buildPayload = (seed) => ({
     model: CONFIG.model,
     prompt: fullPrompt,
     width: imgWidth,
     height: imgHeight,
     steps: steps,
     guidance_scale: guidance,
-    seed: seeds[0],
+    seed: seed,
     response_format: 'base64',
     output_format: 'jpeg',
-    negative_prompt: negPrompt
-  };
+    negative_prompt: negPrompt,
+    ...(refUrls.length > 0 && { reference_images: refUrls.slice(0, 8) })
+  });
+
+  // Show the request in the debug panel (seed shown as first value; others vary only by seed)
+  const reqDetailsEl = document.getElementById('req-details');
+  const reqBodyEl = document.getElementById('req-body');
   reqBodyEl.textContent =
     'POST ' + ENDPOINT + '\n' +
     'Authorization: Bearer [redacted]\n\n' +
-    JSON.stringify(samplePayload, null, 2) +
+    JSON.stringify(buildPayload(seeds[0]), null, 2) +
     (count > 1 ? '\n\n// ' + count + ' requests sent in parallel; seed varies per image' : '');
   reqDetailsEl.hidden = false;
 
@@ -836,18 +1032,7 @@ genBtn.addEventListener('click', async () => {
         'Authorization': 'Bearer ' + key,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        model: CONFIG.model,
-        prompt: fullPrompt,
-        width: imgWidth,
-        height: imgHeight,
-        steps: steps,
-        guidance_scale: guidance,
-        seed: seed,
-        response_format: 'base64',
-        output_format: 'jpeg',
-        negative_prompt: negPrompt
-      })
+      body: JSON.stringify(buildPayload(seed))
     });
     if (!resp.ok) {
       const err = await resp.json().catch(() => ({}));
@@ -1183,7 +1368,6 @@ function showSnippet(baseName) {
     '  altext: \'[DRAFT — describe image for screen readers]\'';
 }
 
-document.getElementById('test-sound').addEventListener('click', e => { e.preventDefault(); playCaching(); });
 
 // --- Money sounds (Web Audio API, no external files) ---
 // One AudioContext reused across calls (browsers limit simultaneous contexts)
