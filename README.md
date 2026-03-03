@@ -1,55 +1,60 @@
-# allaboutken-11ty
+![allaboutken.com — Hello. I am Ken Hawkins.](.github/site-hero.jpg)
 
-This site runs on Eleventy v3 with Dart Sass for CSS. The legacy Visual Framework build (once used here to dogfood VF during my EMBL/EMBL‑EBI work) has been removed; local SCSS and simple Nunjucks templates remain for a lighter, more experimental setup.
+# allaboutken.com
+
+[My personal site](https://www.allaboutken.com/) and digital playground, with writing about digital transformation, web platform engineering, and practical AI. Built on Eleventy v3, hosted on Vercel.
+
+Most posts are practitioner-level takes and technical tutorials. The [Work section](https://www.allaboutken.com/work/) collects impact stories from real projects: design systems, platform migrations, editorial tooling, with actual metrics where I have them.
+
+## What's interesting
+
+- **Semantic search without a backend.** Build-time vector embeddings (MiniLM-L6-v2 via Transformers.js) + in-browser cosine similarity. Same model runs both sides. No API keys, no server. [Read the post](https://www.allaboutken.com/posts/20260302-semantic-search-browser-embeddings/)
+- **Keyword search via Pagefind.** Rust-based static indexer, ~10 KB JS on the client. Runs as an Eleventy after-hook. [Read the post](https://www.allaboutken.com/posts/20260228-replacing-lunr-with-pagefind/)
+- **CSS-free viewing mode.** All custom styles are scoped under `body:has(#kh-css-toggle:checked)`. The site renders legibly with zero CSS. [Read the post](https://www.allaboutken.com/posts/20250906-css-naked-css-only/)
+- **AI-assisted image generation pipeline.** `scripts/image-generate/` -- prompt templates, model config, and docs for generating consistent blog imagery. [Read the post](https://www.allaboutken.com/posts/20260303-generating-blog-art/)
+- **Readable image filenames.** Eleventy Image normally hashes filenames (`a1b2c3d4.avif`). A custom `filenameFormat` keeps them human-readable (`blog-my-photo-600.avif`). [Read the post](https://www.allaboutken.com/posts/20250907-deterministic-image-filenames/)
+- **Feedback buttons without JavaScript.** A Cloudflare Worker acts as a CGI script for a static site -- thumbs up/down with no JS, no framework. [Read the post](https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/)
 
 ## Quick start
 
-1. Install Node and Yarn
-   - [Node.js](https://nodejs.org/)
-   - [Yarn](https://yarnpkg.com/)
-2. Install dependencies
-   - `yarn install`
-3. Start development server
-   - `yarn dev` (or `yarn start`) — watches Sass and serves Eleventy with live reload
-4. Build static site to `/build`
-   - `yarn build`
+```bash
+yarn install
+yarn dev      # Sass watch + Eleventy --serve
+yarn build    # Full production build: clean → sass → eleventy → embeddings
+              # The embeddings step downloads ~476 MB of ONNX Runtime on first run for the build-time ML toolchain.
+```
 
-## Scripts
+## Stack
 
-- `yarn dev`: runs Sass in watch mode and Eleventy `--serve`
-- `yarn start`: alias for `yarn dev`
-- `yarn build`: clean → compile Sass → Eleventy production build
+| Layer           | Choice                                                                        |
+| --------------- | ----------------------------------------------------------------------------- |
+| Site generator  | [Eleventy v3](https://www.11ty.dev/)                                          |
+| CSS             | Sass, scoped to a toggle                                                      |
+| Keyword search  | [Pagefind](https://pagefind.app/)                                             |
+| Semantic search | [Transformers.js](https://huggingface.co/docs/transformers.js) + MiniLM-L6-v2 |
+| Deployment      | Vercel (auto-deploys from GitHub) + GitHub Actions                            |
+| Templates       | Nunjucks + Markdown                                                           |
 
-## CSS
+## Repository layout
 
-- Entry: `src/components/vf-componenet-rollup/index.scss`
-  - Uses `@use` for `normalize` and content styling
-  - Breakpoints centralized in `src/components/vf-componenet-rollup/_settings.scss`
-- Output: `build/css/styles.css`
+```
+src/site/         Templates, posts, data, includes
+src/components/   Sass entry point and component styles
+scripts/          Build-time tooling (embeddings, image generation)
+docs/             Editorial handbook, publishing workflow, reviewer roles
+eleventy.js       All config: filters, shortcodes, collections, image transform
+```
 
-## Templates & content
+For the full stack breakdown and design principles, see the [colophon](https://www.allaboutken.com/colophon/).
 
-- Nunjucks templates under `src/site/`
-- Posts/pages often wrap sections in `{% markdown %}…{% endmarkdown %}` for fenced code and Markdown formatting
-- Legacy custom tags (`render`, `codeblock`) were removed; posts now use plain HTML or fenced code
+## Social cards
 
-## Notes
+All pages auto-generate OpenGraph/Twitter card images via [Eleventy's Screenshot Service](https://www.11ty.dev/docs/services/opengraph/):
 
-- Images are processed by the Eleventy Image Transform plugin configured in [`eleventy.js`](eleventy.js) and output to `build/img/`
-- Search is powered by [Pagefind](https://pagefind.app/), which indexes the built HTML automatically via the `eleventy.after` hook
-- Eleventy config: [`eleventy.js`](eleventy.js)
+- Card pages live at `/social/<page-url>/`
+- Override with `og_image: 'https://full-url.jpg'` in frontmatter
 
-## Dynamic Social Sharing Images
-
-All pages automatically generate social sharing images (OpenGraph/Twitter cards) using [Eleventy's Screenshot Service](https://www.11ty.dev/docs/services/opengraph/):
-
-- **Social card pages**: Auto-generated at `/social/<page-url>/` for every page (see [`src/site/social-cards.njk`](src/site/social-cards.njk))
-- **Card template**: [`src/site/_includes/layouts/social-card.njk`](src/site/_includes/layouts/social-card.njk) (1200×630px, styled HTML)
-- **Screenshot service**: Captures card pages as images on-demand via `https://v1.screenshot.11ty.dev/`
-- **Testing locally**: Visit card pages directly (e.g., `http://localhost:8080/social/posts/sunlit-dappled-light-effect/`)
-- **Override**: Add `og_image: 'https://full-url.jpg'` in frontmatter to use a custom image instead
-
-The `ogImageUrl` shortcode (defined in `eleventy.js`) generates screenshot URLs automatically.
+<!-- Link to a blog post here once written -->
 
 ## Monitoring
 
