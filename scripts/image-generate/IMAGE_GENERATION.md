@@ -103,4 +103,4 @@ All defaults (style prefix, negative prompt, steps, dimensions, attribution) liv
 
 ## Reproducibility
 
-The generator shows seeds in the metadata strip below each result. Note the seed if you want to reproduce an image later -- same seed + same prompt + same model = same image. (There's no seed input in the UI yet; re-running with a saved seed would require adding a `seed` field to the URL state.)
+The generator shows seeds in the metadata strip below each result. To reproduce an image, paste its seed into the Seed field under Advanced options (or pass `?seed=...` in the URL). When a seed is set, all images use it; leave it blank for random seeds. Same seed + same prompt + same model = same image, but editing the style prefix will produce different results even with the same seed.

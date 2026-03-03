@@ -407,6 +407,11 @@ eleventyExcludeFromCollections: true
             <p class="hint">Changing dimensions affects crop ratio.</p>
           </div>
         </div>
+        <div class="section">
+          <label for="seed">Seed <span class="label-hint">(blank = random per image)</span></label>
+          <input type="number" id="seed" min="0" max="2147483647" placeholder="e.g. 1234567890">
+          <p class="hint">Fix the seed to reproduce an earlier result. All images use this seed when set.</p>
+        </div>
       </div>
     </details>
 
@@ -515,6 +520,7 @@ const negPromptEl   = document.getElementById('neg-prompt');
 const stepsEl       = document.getElementById('steps');
 const imgWidthEl    = document.getElementById('img-width');
 const imgHeightEl   = document.getElementById('img-height');
+const seedEl        = document.getElementById('seed');
 
 // --- Init ---
 // 1. Set defaults
@@ -530,6 +536,7 @@ const URL_FIELDS = [
   { key: 'steps',    el: stepsEl,        def: '20',                           ev: 'input'  },
   { key: 'w',        el: imgWidthEl,     def: '1280',                         ev: 'input'  },
   { key: 'h',        el: imgHeightEl,    def: '832',                          ev: 'input'  },
+  { key: 'seed',     el: seedEl,         def: '',                             ev: 'input'  },
   { key: 'count',    el: countEl,        def: '3',                            ev: 'change' },
 ];
 
@@ -559,6 +566,7 @@ document.getElementById('reset-advanced').addEventListener('click', e => {
   stepsEl.value       = '20';
   imgWidthEl.value    = '1280';
   imgHeightEl.value   = '832';
+  seedEl.value        = '';
   syncUrl();
 });
 
@@ -629,8 +637,11 @@ genBtn.addEventListener('click', async () => {
   const imgHeight   = parseInt(imgHeightEl.value, 10);
   const negPrompt   = negPromptEl.value.trim();
 
-  // Give each parallel generation a distinct random seed for visual variety
-  const seeds = Array.from({ length: count }, () => Math.floor(Math.random() * 2147483647));
+  // Fixed seed → all images use it; blank → random per image for variety
+  const fixedSeed = seedEl.value.trim() ? parseInt(seedEl.value, 10) : null;
+  const seeds = fixedSeed !== null
+    ? Array(count).fill(fixedSeed)
+    : Array.from({ length: count }, () => Math.floor(Math.random() * 2147483647));
 
   const ENDPOINT = 'https://api.together.xyz/v1/images/generations';
 
