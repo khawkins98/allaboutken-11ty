@@ -12,7 +12,7 @@ Style is Japanese blockprint -- high-contrast black ink woodcut on cream with sp
 ## Workflow
 
 1. Write your subject prompt -- go abstract and evocative, not literal. One subject per image.
-2. Adjust guidance and steps if needed (defaults: guidance 3.5, steps 20)
+2. Adjust guidance and steps if needed (defaults: guidance 1.5, steps 20)
 3. Click Generate -- three images run in parallel (~20--30s)
 4. Click an image to select it, then drag the corner handles to crop
 5. Enter a descriptive filename (no `.jpg`), click Save -- the browser prompts you to save to `src/site/images/blog/`
@@ -103,4 +103,4 @@ All defaults (style prefix, negative prompt, steps, dimensions, attribution) liv
 
 ## Reproducibility
 
-The generator shows seeds in the metadata strip below each result. To reproduce an image, paste its seed into the Seed field under Advanced options (or pass `?seed=...` in the URL). When a seed is set, all images use it; leave it blank for random seeds. Same seed + same prompt + same model = same image, but editing the style prefix will produce different results even with the same seed.
+The generator shows a seed for each image in the metadata strip below its result. To reproduce an image, paste its seed into the Seed field under Advanced options, or pass seeds via the URL as `?seed=123,456,789` where each comma-separated value controls one image slot. Each image uses its corresponding seed from the list; leave the field blank for random seeds. Same seed + same prompt + same model = same image for that slot, but editing the style prefix will produce different results even with the same seed.
