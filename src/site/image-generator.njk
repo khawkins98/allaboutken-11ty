@@ -23,7 +23,11 @@ eleventyExcludeFromCollections: true
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f5f0e8">
   <title>Image Generator — dev tool</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
   <link rel="stylesheet" href="/css/styles.css">
   <style>
     :root {
@@ -32,13 +36,11 @@ eleventyExcludeFromCollections: true
       --amber: #c8860a;
       --mid: #6b6b6b;
       --border: #d0c8b8;
-      --bg: #fff;
       --code-bg: #eee8d8;
       --mono: 'Courier New', monospace;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      min-height: 100vh;
       max-width: none !important;
       padding: 0 !important;
     }
@@ -86,7 +88,6 @@ eleventyExcludeFromCollections: true
       padding: 9px 12px;
       border: 1px solid var(--border);
       border-radius: 4px;
-      font-family: inherit;
       font-size: 0.95rem;
       background: white;
       color: var(--ink);
@@ -106,7 +107,6 @@ eleventyExcludeFromCollections: true
       cursor: pointer;
       border: none;
       border-radius: 4px;
-      font-family: inherit;
       font-weight: 600;
       padding: 9px 18px;
       font-size: 0.9rem;
