@@ -4,7 +4,7 @@ teaser: "Thoughts, lessons learned, and the occasional web oddity."
 layout: layouts/base.njk
 pagination:
   data: collections.blogPosts
-  size: 20
+  size: 15
   alias: pagedPosts
 permalink: "/blog/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 }}/{% endif %}"
 ---
