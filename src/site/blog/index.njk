@@ -31,7 +31,7 @@ permalink: "/blog/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1
     <h3 class="kh-font-headline kh-summary__title">
       <a href="{{ post.url | url}}" class="kh-summary__link">{{ post.data.title }}</a>
     </h3>
-    <p class="kh-content kh-summary__text">{{ post.data.teaser | safe }}</p>
+    <p class="kh-content kh-summary__text">{{ post.data.teaser | emdash | safe }}</p>
   </article>
   {%- endfor -%}
 
