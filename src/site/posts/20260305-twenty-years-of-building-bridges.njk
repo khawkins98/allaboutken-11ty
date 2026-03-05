@@ -1,0 +1,72 @@
+---
+title: "Twenty years of building bridges between people and platforms"
+layout: layouts/post.njk
+teaser: "From newsroom deadlines to UN disaster risk systems -- what two decades of digital work taught me about translating between the people who build technology and the people who need it."
+date: 2026-03-05
+tags:
+  - posts
+topics:
+  - digital transformation
+  - career
+  - content strategy
+  - design systems
+kens_status: draft
+---
+
+{% markdown %}
+
+I started my career at a newspaper in Mississippi in 2000, laying out pages on deadline. Twenty-five years later I'm leading a 15-site Drupal ecosystem at the United Nations Office for Disaster Risk Reduction. The through-line isn't technology -- it's translation.
+
+Every role I've held has been, at its core, about bridging gaps: between what leadership wants and what technology can deliver, between what content teams produce and what audiences actually need, between how systems *are* built and how they *should* be built. This post is a look back at the threads that connect my work, and what I've learned along the way.
+
+## Journalism: the foundation that still holds
+
+My first decade was in newsrooms -- production management at The Daily Journal, then graphics reporting at The Post and Courier and The Beaufort Gazette. Journalism taught me three things that have shaped everything since:
+
+1. **Deadlines are real.** You ship on time or the paper doesn't print. This discipline carries straight into platform work where "we'll fix it next sprint" compounds into technical debt.
+2. **Audience comes first.** A story that doesn't reach its audience has failed, no matter how well-written. The same is true for a website, a design system, or a content strategy.
+3. **Clarity is a skill.** Explaining complex things simply -- to editors, to readers, now to stakeholders and developers -- is the most transferable skill I have.
+
+I co-founded [TheDigitel.com](https://thedigitel.com) in 2009, a hyperlocal news platform that the New York Times featured for its approach to dynamic advertising. It was my first real experience building a digital product from scratch, and it taught me how quickly editorial ambition outpaces technical capacity when you don't have a shared framework for deciding what matters.
+
+## Design systems: adoption over mandate
+
+At EMBL-EBI and then EMBL, I spent six years building the [Visual Framework](https://stable.visual-framework.dev/) -- a component library adopted across 50+ scientific web properties. The key insight wasn't technical. It was organizational: **design systems succeed when they solve real problems for real teams, not when they're mandated from above.**
+
+We built components that reduced development time, made accessibility the default, and let teams ship without starting from scratch. The framework worked because adoption was organic -- teams used it because it made their work easier, not because a memo told them to.
+
+That experience also produced some of my most-read posts: [Building your first page with the Visual Framework 2.0](/posts/20191118-first-page-with-the-visual-framework.html), and the work on [integrating Fractal components with Eleventy](/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html) that pushed static sites closer to the design system.
+
+## The Content-Action Model
+
+One framework has followed me across organizations: the [Content-Action Model](/posts/20180122-content-action-model.html). It started as a way to align EMBL's sprawling web presence around a simple question: **what should a user be able to *do* after encountering this content?**
+
+Every piece of content exists to enable an action -- reading further, downloading data, contacting a team, making a decision. When you map content to actions and actions to organizational goals, you get a shared language that executives, content teams, and developers can all use. It cuts through the "talking past each other" problem that stalls most digital transformation efforts.
+
+I've applied CAM at every organization since. At UNDRR, it's the backbone of how we evaluate whether our 15 sites are actually serving the people who need disaster risk information to make decisions.
+
+## Platform work at scale
+
+At DRS Technical Solutions in Stuttgart, I managed large-scale Drupal platforms serving 150,000+ users with integrated e-commerce. At UNDRR, the scale is different -- 15 sites across multiple domains -- but the lesson is the same: **platforms survive on governance, not heroics.**
+
+The [impact stories](/work/) on my site document this in detail: recovering a platform from years of ad-hoc decisions, establishing content workflows that don't depend on any single person, and building measurement into the foundation so that "is this working?" has an answer beyond gut feeling.
+
+The numbers tell the story: 50--70% faster delivery, 20% cost reduction, +40% engagement increases. But those numbers came from boring work -- standardizing templates, documenting decisions, measuring task completion instead of pageviews, and [being honest about what analytics actually tell us](/posts/20260115-how-to-measure-impact-when-analytics-lie.html).
+
+## AI readiness: structured content pays off
+
+The recent wave of AI tools has validated something I've been advocating for years: **structured, well-governed content is the prerequisite for everything that comes next.**
+
+Organizations that treated their content as a pile of PDFs and web pages are now scrambling to make it AI-readable. Organizations that invested in structured data (RDF, SKOS, JSON-LD), consistent metadata, and clear information architecture are already there. I wrote about this in [AI isn't software](/posts/20251107-ai-isnt-software.html) and [Smart AI integration: context first](/posts/20250919-smart-ai-integration-context-first.html).
+
+On this blog, I've been practicing what I preach -- building [semantic search with browser-side embeddings](/posts/20260302-semantic-search-browser-embeddings.html) and [replacing Lunr with Pagefind](/posts/20260228-replacing-lunr-with-pagefind.html) to make content findable without external API dependencies. [Effective context engineering for AI agents](/posts/20251003-effective-context-engineering-for-ai-agents.html) captures what I've learned about making AI tools actually useful in practice.
+
+## What connects all of it
+
+Looking back, the common thread isn't any single technology or framework. It's the belief that **digital work succeeds when the people involved understand each other well enough to move forward together.**
+
+Whether it's a newsroom editor and a page designer, a molecular biologist and a web developer, or a UN director and a Drupal architect -- the work is translation. Building shared language. Making the invisible visible. Turning "we should do something about our website" into a measurable plan that ships.
+
+That's what twenty years of building bridges has taught me. The technology changes. The need for translation doesn't.
+
+{% endmarkdown %}
