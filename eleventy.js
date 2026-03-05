@@ -406,6 +406,36 @@ module.exports = function(config) {
     }
   });
 
+  config.addCollection('blogPosts', (collectionApi) => {
+    try {
+      return collectionApi.getAll()
+        .filter((item) => {
+          const tags = item.data?.tags || [];
+          const tagArr = Array.isArray(tags) ? tags : [tags];
+          return tagArr.includes('posts')
+            && !tagArr.includes('case-studies')
+            && !tagArr.includes('impact-stories');
+        })
+        .sort((a, b) => b.date - a.date);
+    } catch (e) {
+      return [];
+    }
+  });
+
+  config.addCollection('allContent', (collectionApi) => {
+    try {
+      return collectionApi.getAll()
+        .filter((item) => {
+          const tags = item.data?.tags || [];
+          const tagArr = Array.isArray(tags) ? tags : [tags];
+          return tagArr.includes('posts') || tagArr.includes('digesting');
+        })
+        .sort((a, b) => b.date - a.date);
+    } catch (e) {
+      return [];
+    }
+  });
+
   // Image transforms run on-request in dev; no separate watcher is required
 
   // If you have other `addPlugin` calls, it’s important that UpgradeHelper is added last.
