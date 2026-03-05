@@ -54,15 +54,7 @@ I ship systems that deliver impact. I understand technology and human organizati
     {% set isNote = ('note' in tags) %}
     {% set isImpactStory = ('impact-stories' in tags) %}
     <article class="kh-summary kh-summary--news">
-      <div class="kh-summary__date">{{ post.date | dateDisplay }}
-      {% if isDigesting %}
-        | <a href="/digesting">Digesting</a>
-      {% elif isImpactStory %}
-        | <a href="/work">Project note</a>
-      {% elif isNote %}
-        | Note post
-      {% endif %}
-      </div>
+      <div class="kh-summary__date">{{ post.date | dateDisplay }}{% if isDigesting %} | <a href="/digesting">Digesting</a>{% elif isImpactStory %} | <a href="/work">Project note</a>{% elif isNote %} | Note post{% endif %}</div>
       {% if (not isNote) and (not isDigesting) and post.data.image %}
         <a href="{{ post.url }}" class="kh-summary__image">
           <img width="300" class="kh-summary__image" src="/images{{ post.data.image }}" alt="{{ post.data.title }}">
@@ -71,14 +63,14 @@ I ship systems that deliver impact. I understand technology and human organizati
       <h3 class="kh-summary__title">
         <a href="{{ post.url }}" class="kh-summary__link">{{ post.data.title }}</a>
       </h3>
-      <p class="kh-content kh-summary__text">{{ post.data.teaser | safe }}</p>
+      <p class="kh-content kh-summary__text">{{ post.data.teaser | emdash | safe }}</p>
     </article>
     {%- endfor -%}
-    <article class="kh-summary kh-summary--news">
-      <h3 class="kh-summary__title">
-        <a href="/blog" class="kh-summary__link">More on the blog ↦</a>
-      </h3>
-    </article>
+    <p class="kh-cluster">
+      <a href="/blog">Blog ↦</a>
+      <a href="/digesting">Digesting ↦</a>
+      <a href="/work">Project notes ↦</a>
+    </p>
   </section>
 
 </section>
