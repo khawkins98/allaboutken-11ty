@@ -24,14 +24,6 @@ I ship systems that deliver impact. I understand technology and human organizati
 
     {%- endmarkdown %}
 
-     <article class="kh-summary kh-summary--news | kh-content">
-    {% set latestDigesting = collections.digesting | reverse | first %}
-    {% set latestImpactStory = collections.impactStories | first %}
-    <ul>
-    <li>Latest project note: <a href="{{ latestImpactStory.url }}">{{ latestImpactStory.data.title | replace('Impact story: ', '') }}</a></li>
-    <li id="digesting">Currently digesting: <a href="{{ latestDigesting.url }}">{{ latestDigesting.data.title }}</a></li>
-    </ul>
-    </article>
   </div>
 </section>
 </div>
@@ -54,18 +46,17 @@ I ship systems that deliver impact. I understand technology and human organizati
 <section class="kh-card-container kh-grid-stylized">
   <span></span>
   <section>
-    <h2 id="recently" class="kh-text-heading--2">Recent blogging</h2>
+    <h2 id="recently" class="kh-text-heading--2">Recent writing</h2>
 
-    {%- for post in collections.posts.slice(-10) | reverse -%}
-    {%- if not (post.data.tags and ('impact-stories' in post.data.tags)) -%}
-    <article class="kh-summary kh-summary--news">
-      {% set isNote = (post.data.tags and ('note' in post.data.tags))  %}
-      <div class="kh-summary__date">{{ post.date | dateDisplay }}
-      {% if isNote %}
-       | Note post
-      {% endif %}
-      </div>
-      {% if (not isNote) and post.data.image %}
+    {%- for post in collections.allContent | limitItems(10) -%}
+    {% set tags = post.data.tags or [] %}
+    {% set isDigesting = ('digesting' in tags) %}
+    {% set isNote = ('note' in tags) %}
+    {% set isImpactStory = ('impact-stories' in tags) %}
+    <article class="kh-summary kh-summary--news{% if isDigesting %} kh-summary--highlight{% endif %}">
+      {% if isDigesting %}<a href="/digesting" class="kh-summary__tab">Digesting</a>{% endif %}
+      <div class="kh-summary__date">{{ post.date | dateDisplay }}{% if isImpactStory %} | <a href="/work">Project note</a>{% elif isNote %} | Note post{% endif %}</div>
+      {% if (not isNote) and (not isDigesting) and post.data.image %}
         <a href="{{ post.url }}" class="kh-summary__image">
           <img width="300" class="kh-summary__image" src="/images{{ post.data.image }}" alt="{{ post.data.title }}">
         </a>
@@ -73,16 +64,15 @@ I ship systems that deliver impact. I understand technology and human organizati
       <h3 class="kh-summary__title">
         <a href="{{ post.url }}" class="kh-summary__link">{{ post.data.title }}</a>
       </h3>
-      <p class="kh-content kh-summary__text">{{ post.data.teaser | safe }}</p>
-      {#- {{loop.index}} -#}
+      <p class="kh-content kh-summary__text">{{ post.data.teaser | emdash | safe }}</p>
     </article>
-    {%- endif -%}
     {%- endfor -%}
-    <article class="kh-summary kh-summary--news">
-      <h3 class="kh-summary__title">
-        <a href="/blog" class="kh-summary__link">Read {{ collections.posts | length - 3}} more posts on the blog ↦</a>
-      </h3>
-    </article>
+    <p class="kh-cluster">
+      <a href="/all">All writing ↦</a>
+      <a href="/blog">Blog ↦</a>
+      <a href="/digesting">Digesting ↦</a>
+      <a href="/work">Project notes ↦</a>
+    </p>
   </section>
 
 </section>
