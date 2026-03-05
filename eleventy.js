@@ -396,11 +396,16 @@ module.exports = function(config) {
   });
 
   // Collections
+  function getTagArray(item) {
+    const tags = item.data?.tags || [];
+    return Array.isArray(tags) ? tags : [tags];
+  }
+
   config.addCollection('impactStories', (collectionApi) => {
     try {
       return collectionApi.getAll()
-        .filter((item) => Array.isArray(item.data && item.data.tags) && item.data.tags.includes('impact-stories'))
-        .sort((a, b) => (a.date > b.date ? -1 : 1));
+        .filter((item) => getTagArray(item).includes('impact-stories'))
+        .sort((a, b) => b.date - a.date);
     } catch (e) {
       return [];
     }
@@ -410,11 +415,10 @@ module.exports = function(config) {
     try {
       return collectionApi.getAll()
         .filter((item) => {
-          const tags = item.data?.tags || [];
-          const tagArr = Array.isArray(tags) ? tags : [tags];
-          return tagArr.includes('posts')
-            && !tagArr.includes('case-studies')
-            && !tagArr.includes('impact-stories');
+          const tags = getTagArray(item);
+          return tags.includes('posts')
+            && !tags.includes('case-studies')
+            && !tags.includes('impact-stories');
         })
         .sort((a, b) => b.date - a.date);
     } catch (e) {
@@ -426,9 +430,8 @@ module.exports = function(config) {
     try {
       return collectionApi.getAll()
         .filter((item) => {
-          const tags = item.data?.tags || [];
-          const tagArr = Array.isArray(tags) ? tags : [tags];
-          return tagArr.includes('posts') || tagArr.includes('digesting');
+          const tags = getTagArray(item);
+          return tags.includes('posts') || tags.includes('digesting');
         })
         .sort((a, b) => b.date - a.date);
     } catch (e) {

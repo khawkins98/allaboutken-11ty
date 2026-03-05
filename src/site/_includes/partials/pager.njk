@@ -1,0 +1,20 @@
+{%- set pagerLabel = pagerLabel or "Pagination" -%}
+{%- set pagerNewer = pagerNewer or "Newer" -%}
+{%- set pagerOlder = pagerOlder or "Older" -%}
+{% if pagination.hrefs.length > 1 %}
+<nav class="kh-pager" aria-label="{{ pagerLabel }}">
+  <ul class="kh-pager__list">
+    {% if pagination.href.previous %}
+      <li><a href="{{ pagination.href.previous }}" class="kh-pager__link">&larr; {{ pagerNewer }}</a></li>
+    {% endif %}
+    {% for href in pagination.hrefs %}
+      <li>
+        <a href="{{ href }}" class="kh-pager__link {% if loop.index0 == pagination.pageNumber %}kh-pager__link--current{% endif %}"{% if loop.index0 == pagination.pageNumber %} aria-current="page"{% endif %}>{{ loop.index }}</a>
+      </li>
+    {% endfor %}
+    {% if pagination.href.next %}
+      <li><a href="{{ pagination.href.next }}" class="kh-pager__link">{{ pagerOlder }} &rarr;</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
