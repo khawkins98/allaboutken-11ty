@@ -17,42 +17,10 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
     {% include "partials/search-box.njk" %}
 
   {%- for post in pagedPosts -%}
-    {% set tags = post.data.tags or [] %}
-    {% set isDigesting = ('digesting' in tags) %}
-    {% set isNote = ('note' in tags) %}
-    {% set isImpactStory = ('impact-stories' in tags) %}
-    <article class="kh-summary kh-summary--news{% if isDigesting %} kh-summary--highlight{% endif %}">
-      {% if isDigesting %}<a href="/digesting" class="kh-summary__tab">Digesting</a>{% endif %}
-      <div class="kh-summary__date">{{ post.date | dateDisplay }}{% if isImpactStory %} | <a href="/work">Project note</a>{% elif isNote %} | Note post{% endif %}</div>
-      {% if (not isNote) and (not isDigesting) and post.data.image %}
-        <a href="{{ post.url }}" class="kh-summary__image">
-          <img width="300" class="kh-summary__image" src="/images{{ post.data.image }}" alt="{{ post.data.title }}">
-        </a>
-      {% endif %}
-      <h3 class="kh-font-headline kh-summary__title">
-        <a href="{{ post.url | url}}" class="kh-summary__link">{{ post.data.title }}</a>
-      </h3>
-      <p class="kh-content kh-summary__text">{{ post.data.teaser | emdash | safe }}</p>
-    </article>
+    {% include "partials/post-summary.njk" %}
   {%- endfor -%}
 
-  {% if pagination.hrefs.length > 1 %}
-  <nav class="kh-pager" aria-label="Pagination">
-    <ul class="kh-pager__list">
-      {% if pagination.href.previous %}
-        <li><a href="{{ pagination.href.previous }}" class="kh-pager__link">&larr; Newer</a></li>
-      {% endif %}
-      {% for href in pagination.hrefs %}
-        <li>
-          <a href="{{ href }}" class="kh-pager__link {% if loop.index0 == pagination.pageNumber %}kh-pager__link--current{% endif %}"{% if loop.index0 == pagination.pageNumber %} aria-current="page"{% endif %}>{{ loop.index }}</a>
-        </li>
-      {% endfor %}
-      {% if pagination.href.next %}
-        <li><a href="{{ pagination.href.next }}" class="kh-pager__link">Older &rarr;</a></li>
-      {% endif %}
-    </ul>
-  </nav>
-  {% endif %}
+  {% include "partials/pager.njk" %}
 
   </section>
 </div>
