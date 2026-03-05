@@ -1,8 +1,8 @@
 {% set searchId = searchId or "search-box" %}
-<form action="/search/" method="GET" class="kh-form kh-form--search kh-form--search--responsive">
+<form action="/search/" method="GET" class="kh-form kh-form--search kh-form--search--responsive | kh-u-margin__bottom--600">
   <div class="kh-form__item">
     <label class="kh-form__label kh-u-sr-only" for="{{ searchId }}">Search my site</label>
-    <input type="search" id="{{ searchId }}" placeholder="Search my site" name="search_query" class="kh-form__input vf-search__input">
+    <input type="search" id="{{ searchId }}" placeholder="Search my site" name="search_query" class="kh-form__input kh-search__input">
     <button type="submit" class="kh-button kh-button--sm">Search</button>
   </div>
 </form>
