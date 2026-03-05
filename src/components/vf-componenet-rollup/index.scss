@@ -1314,6 +1314,44 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
+  // Pagination pager
+  .kh-pager {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--kh-color--grey--lightest);
+  }
+
+  .kh-pager__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+  }
+
+  .kh-pager__link {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border: 2px solid var(--kh-color--blue);
+    border-radius: 999px;
+    color: var(--kh-color--blue);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+
+    &:hover {
+      background: var(--kh-color--blue);
+      color: #fff;
+    }
+  }
+
+  .kh-pager__link--current {
+    background: var(--kh-color--blue);
+    color: #fff;
+  }
+
   @media print {
     .kh-content a:not([class*='kh-']),
     .kh-content a:not([class*='kh-']):visited {
