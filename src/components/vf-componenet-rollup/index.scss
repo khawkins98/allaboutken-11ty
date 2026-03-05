@@ -1351,6 +1351,7 @@ body:has(#kh-css-toggle:checked) {
     font-size: 0.875rem;
     line-height: 1;
     transition: all linear 125ms;
+    margin-bottom: 1rem;
 
     &:hover {
       box-shadow: 2px 2px 0 var(--kh-color--blue--dark);
@@ -1358,12 +1359,12 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
+  .kh-pager__link:visited {
+    color: var(--kh-color--blue);
+  }
+
   .kh-pager__link--current {
-    background: var(--kh-color--blue);
-    color: #fff;
-    box-shadow: none;
-    transform: translate(4px, 4px);
-    cursor: default;
+    background-color: var(--kh-color--orange);
   }
 
   @media print {
