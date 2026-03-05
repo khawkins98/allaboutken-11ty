@@ -1331,7 +1331,7 @@ body:has(#kh-css-toggle:checked) {
   .kh-pager__list {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.25rem;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -1361,6 +1361,9 @@ body:has(#kh-css-toggle:checked) {
   .kh-pager__link--current {
     background: var(--kh-color--blue);
     color: #fff;
+    box-shadow: none;
+    transform: translate(4px, 4px);
+    cursor: default;
   }
 
   @media print {
