@@ -4,7 +4,7 @@ teaser: "Everything in one place — blog posts, digesting bookmarks, and projec
 layout: layouts/base.njk
 pagination:
   data: collections.allContent
-  size: 20
+  size: 15
   alias: pagedPosts
 permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 }}/{% endif %}"
 ---
