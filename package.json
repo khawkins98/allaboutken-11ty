@@ -19,7 +19,7 @@
     "build": "yarn clean && yarn sass && yarn eleventy && yarn embeddings && echo '🏋 Build completed'",
     "dev": "concurrently -k \"sass --load-path src/components --watch src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\"",
     "start": "yarn dev",
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "bun test",
     "update-components": "yarn upgrade-interactive --latest"
   },
   "dependencies": {
