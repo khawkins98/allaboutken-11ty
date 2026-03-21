@@ -9,7 +9,7 @@
     {% endif %}
     {% for href in pagination.hrefs %}
       <li>
-        <a href="{{ href }}" class="kh-pager__link {% if loop.index0 == pagination.pageNumber %}kh-pager__link--current{% endif %}"{% if loop.index0 == pagination.pageNumber %} aria-current="page"{% endif %}>{{ loop.index }}</a>
+        <a href="{{ href }}" class="kh-pager__link {% if loop.index0 == pagination.pageNumber %}kh-pager__link--current{% endif %}"{% if loop.index0 == pagination.pageNumber %} aria-current="page"{% endif %} aria-label="Page {{ loop.index }}">{{ loop.index }}</a>
       </li>
     {% endfor %}
     {% if pagination.href.next %}

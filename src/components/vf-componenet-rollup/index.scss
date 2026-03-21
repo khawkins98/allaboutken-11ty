@@ -342,7 +342,7 @@ body:has(#kh-css-toggle:checked) {
     font-weight: 700;
     line-height: 1;
     margin: 0 16px 16px 0;
-    outline: 0;
+    outline: none;
     padding: 12px 24px;
     position: relative;
     text-align: center;
@@ -363,6 +363,11 @@ body:has(#kh-css-toggle:checked) {
     text-decoration: none;
     transform: translate(4px, 4px);
     transition: all linear 125ms;
+  }
+
+  .kh-button:focus-visible {
+    outline: 3px solid var(--kh-color--blue--dark);
+    outline-offset: 3px;
   }
 
   .kh-button--sm {
@@ -908,6 +913,7 @@ body:has(#kh-css-toggle:checked) {
   // Display styling for expressive headlines
   .kh-font-headline--display {
     --kh-headline-display-color: var(--kh-color--orange);
+    display: block;
     font-size: 60px !important;
     letter-spacing: -1px;
   }
