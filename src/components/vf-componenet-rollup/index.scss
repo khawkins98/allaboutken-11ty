@@ -419,7 +419,7 @@ body:has(#kh-css-toggle:checked) {
   .kh-figure__credit {
     display: block;
     text-align: right;
-    color: #737373;
+    color: #6f6f6f; /* darkened from #737373: was ~4.4:1 on cream bg, fails WCAG 1.4.3 at 12px; #6f6f6f gives ~4.7:1 */
     font-size: 0.75rem;
   }
 
@@ -499,7 +499,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-summary__date {
-    color: #707372;
+    color: #6d6d6d; /* darkened from #707372: was ~4.45:1 on cream bg, borderline fail at 13px; #6d6d6d gives ~4.9:1 */
     font-size: 13px;
     font-weight: 400;
     line-height: 1.57;
@@ -550,7 +550,7 @@ body:has(#kh-css-toggle:checked) {
     transform-origin: left top;
     transform: rotate(-90deg) translateX(-100%);
     background: var(--kh-color--orange);
-    color: #fff;
+    color: #222; /* darkened from #fff: white on orange fails WCAG 1.4.3 at 11px (2.15:1); #222 on orange gives 7.4:1 */
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.05em;
