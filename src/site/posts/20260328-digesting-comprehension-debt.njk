@@ -1,0 +1,42 @@
+---
+title: "I AIn't known what's in my code anymore"
+layout: layouts/digesting.njk
+teaser: "AI-generated code is outpacing human understanding -- and teams need to self-govern before someone else does."
+date: 2026-03-28
+digest_link: https://addyosmani.com/blog/comprehension-debt/
+tags: digesting
+topics:
+  - AI
+  - code review
+  - software engineering
+  - governance
+  - comprehension debt
+  - technical debt
+kens_status: draft
+---
+
+{% markdown %}
+
+Addy Osmani's [Comprehension Debt](https://addyosmani.com/blog/comprehension-debt/) puts a name to something a lot of teams feel but haven't said out loud: there's a growing gap between how much code lives in a system and how much of it anyone actually understands. Technical debt announces itself -- things slow down, builds break. Comprehension debt is sneakier. Your metrics are green, tests pass, and nobody can explain what the system actually does.
+
+## Self-governance before someone else governs for you
+
+This isn't about waiting for government regulation. It's about teams deciding to hold themselves accountable. When AI-generated code runs in healthcare, finance, government infrastructure -- "the AI wrote it and we didn't fully review it" is going to be a hard position to defend in a post-incident investigation. External scrutiny is coming for high-stakes domains, but the teams that build comprehension habits now, as self-governance, are going to be in a much better place than the ones chasing merge velocity and hoping for the best.
+
+## What comprehension discipline looks like
+
+Osmani reframes the question: not "how do we generate more code?" but "how do we actually understand what we're shipping?" Verification has to be structural, not an afterthought. Does the code have documentation, tests, linting -- not as box-ticking but as evidence someone thought through the intent? Does it actually solve the user story, not just pass the tests? Can someone who didn't write it follow what's happening?
+
+He cites [a study of 52 software engineers](https://arxiv.org/abs/2601.20245) showing that those who passively delegated to AI scored 17% lower on a follow-up comprehension quiz (50% vs 67%). The tool worked. The understanding didn't come with it.
+
+## Go further: test for comprehensibility
+
+One thing I try to do with AI-assisted code is stop after the refactor and ask: what is actually happening here? Not what got renamed or what pattern got applied. What's the actual flow? Can I draw a simple diagram of the sequence of events? Does it hold together?
+
+Think of it as a comprehension test for the humans who maintain the code. If you can't summarise what it does in plain language, you don't understand it well enough to ship. If the flow diagram looks like spaghetti, the code probably is too, no matter how clean the syntax looks.
+
+Good modular code is explainable in parts. Each piece does one thing, connections are clear, the overall flow is traceable. When AI generates something that works but you can't summarise it simply -- pay attention. That's comprehension debt piling up.
+
+The habit I keep coming back to is asking "can I explain this?" at every step. When the answer is no, I treat it as a blocker. It's the same instinct behind [planning before prompting](/posts/effective-ai-work-is-project-management/) -- the comprehension work is where the real value lives, and [AI doesn't remove that work](/posts/ai-coding-tools-turned-my-once-a-year-hobby-project-into-a-daily-habit/), it just changes where you do it.
+
+{% endmarkdown %}
