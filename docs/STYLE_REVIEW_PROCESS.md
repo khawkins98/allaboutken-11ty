@@ -123,7 +123,7 @@ Edit `editorial.njk` with the validated changes. Update any role files in `docs/
 
 ## Why this works
 
-The process draws on three disciplines. None of them is sufficient alone, but they cover each other's blind spots.
+The process draws on three disciplines.
 
 **Computational stylistics** gives you numbers before you start interpreting. Stylometry research (Mosteller & Wallace, 1964; Burrows, 2002) found that the most reliable authorial fingerprints are in function words -- articles, prepositions, pronouns -- because writers use them without thinking. Sentence length distributions, vocabulary richness, punctuation density: all measurable, all author-specific. Burrows' Delta metric (z-scores of the 100 -- 150 most frequent words) is still the standard for authorship attribution.
 
@@ -141,7 +141,7 @@ The catch is that counting things tells you *what* a writer does, not *why*. Hea
 
 The editorial step asks a question the other two can't: is this pattern serving the writing, or is it just a habit? Not everything worth measuring is worth codifying.
 
-**LLM-assisted analysis** does the close-reading work at speed. A skilled editor could surface the same patterns, but it would take hours. An LLM can name a recurring move ("diplomatic candor"), compare two texts contrastively, and check whether a pattern recurs across samples -- all in minutes.
+**LLM-assisted analysis** does the close-reading work at speed. A skilled editor could surface the same patterns, but it would take hours. An LLM can name a recurring move ("diplomatic candor"), compare two texts contrastively, and check whether a pattern recurs across samples.
 
 The trade-off: without structured prompts, LLMs default to "the writing is clear, engaging, and professional," which describes all competent writing and helps with nothing. They also catch surface features more reliably than deep rhetorical structure, and they will occasionally invent patterns that aren't there (Wegmann et al., 2022, found that many "style transfer" systems actually transfer topic or sentiment, not fine-grained authorial style -- the same risk applies to style *extraction*). Validate against the source text.
 
