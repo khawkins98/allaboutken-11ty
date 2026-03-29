@@ -1,6 +1,6 @@
 # Style Review Process
 
-How to extract voice and style patterns from your own writing, then fold findings into the [Editorial style guide](https://allaboutken.com/style-guide/editorial/) (source: `src/site/style-guide/editorial.njk`).
+How to extract voice and style patterns from your own writing and apply them to the [Editorial style guide](https://allaboutken.com/style-guide/editorial/) (source: `src/site/style-guide/editorial.njk`).
 
 Run this when your writing feels like it's drifted from the guide, when you write something in a different register that reveals patterns you hadn't noticed, or every 6 -- 12 months as a check.
 
@@ -80,6 +80,7 @@ Read `src/site/style-guide/editorial.njk` and sort each finding from Step 3:
 
 - **Already codified** -- the guide captures this. Move on.
 - **Gap** -- a real pattern the guide doesn't mention. Candidate for addition.
+- **Misscoped** -- the guide mentions this, but in the wrong section or scoped too narrowly. A pattern that lives under "Arguing a position" but actually appears in every register belongs in core voice. Reclassify, don't duplicate.
 - **Contradiction** -- the guide says one thing, the writing does another. Decide which is right.
 - **Situational** -- only appears in one register. Note it but don't codify unless it recurs.
 
@@ -87,7 +88,7 @@ Read `src/site/style-guide/editorial.njk` and sort each finding from Step 3:
 
 ## Step 5: Codify at the right altitude
 
-For each gap, draft a style guide entry. Lead with the principle (one sentence), add a concrete example from the corpus, and include a "but not" boundary where useful.
+For each gap, write a style guide entry and add it to `editorial.njk` in the appropriate section. Lead with the principle (one sentence), add a concrete example from the corpus, and include a "but not" boundary where useful. For misscoped patterns, move the existing entry rather than duplicating it.
 
 The altitude matters. "Always use three 'It's not that' clauses" is too specific -- it becomes a formula. "Be persuasive" is too abstract -- it says nothing. The sweet spot is principle + one example.
 
@@ -105,7 +106,14 @@ There is no metric for "does this sound like me?" The gut check is the metric.
 
 ## Step 7: Update and commit
 
-Edit `editorial.njk` with the validated changes. Update any role files in `docs/ROLE_*.md` if relevant. Commit with a message that references this process. Note the date and samples used so the next review has a baseline.
+A style review ripples beyond the style guide. Update each of these as needed:
+
+- `src/site/style-guide/editorial.njk` -- the canonical style guide. This always gets updated.
+- `docs/ROLE_*.md` -- if the changes affect a reviewer role's scope (e.g., the editorial style editor now enforces a new pattern).
+- `CLAUDE.md` and `AGENTS.md` -- if file references, section descriptions, or editorial system pointers have changed.
+- Consolidation -- if the review reveals redundant or outdated docs, delete them and update pointers rather than leaving dead references.
+
+Commit with a message that references this process. Note the date and samples used so the next review has a baseline.
 
 ---
 
@@ -114,10 +122,11 @@ Edit `editorial.njk` with the validated changes. Update any role files in `docs/
 - [ ] 5 -- 10 samples collected, spread across type and register
 - [ ] Quantitative baseline computed (sentence length, paragraph length, punctuation, readability)
 - [ ] Rhetorical patterns extracted (structural, persuasive, voice markers)
-- [ ] Patterns compared against current style guide (gaps, contradictions, situational)
+- [ ] Patterns compared against current style guide (gaps, misscoped, contradictions, situational)
 - [ ] New entries drafted at the right altitude (principle + example + boundary)
 - [ ] Validated by generating test output and flagging mismatches
-- [ ] Style guide updated, changes committed
+- [ ] Style guide updated, related docs checked (CLAUDE.md, AGENTS.md, role files), changes committed
+- [ ] Process itself reviewed -- any steps need adjusting based on what this run revealed?
 
 ---
 
@@ -153,6 +162,32 @@ The trade-off: without structured prompts, LLMs default to "the writing is clear
 | Comparison against guide | Editorial | Gap analysis, intentionality judgment |
 | Codification | Editorial | Right altitude (principle + example + boundary) |
 | Validation | LLM + Editorial | Generation test + gut check |
+
+### First run: March 2026
+
+The first run of this process used four samples across three registers:
+
+- **Content-Action Model post** (2018, conceptual/framework, 1,724 words)
+- **Integrating Eleventy with gulp** (2019, technical tutorial, 1,271 words)
+- **Publishing since the 2000s** (2020, reflective/personal, 1,872 words)
+- **Internal email on programme-implementation dynamics** (2026, high-stakes diplomatic)
+
+The cross-sample analysis confirmed 10 patterns already in the guide and surfaced 7 new ones. Five were added to the style guide: em dashes as layering devices, colloquial restatement, distilled aphorisms, authority through specificity, and structural problem framing (elevated from opinion-only to core voice). Two were noted but not codified (conversational section headers, closings as relational posture) because the existing guidance already covered them adequately.
+
+The re-run against the updated guide caught something the first pass missed: "structural problem framing" was already in the guide under "Arguing a position," but scoped only to opinion pieces. The cross-sample evidence showed it in every register, including the Eleventy tutorial. This led to adding the "Misscoped" category in Step 4 -- the process didn't originally have a way to flag patterns that were codified but in the wrong place.
+
+The re-run also revealed that Step 7 was too narrow. It said "edit editorial.njk, update role files, commit" -- but the actual review also consolidated the editorial handbook, deleted archived roles, updated CLAUDE.md and AGENTS.md, and restructured file references. Step 7 now reflects this wider scope.
+
+### How the process improves itself
+
+Each run should leave the process itself slightly better, not just the style guide. The findings from a review can reveal:
+
+- Missing categories in Step 4 (like "Misscoped," added after the first run)
+- Steps that are too narrow or too broad (Step 7's scope expanded after the first run)
+- Prompt template improvements for Step 3 (if the LLM consistently missed a pattern type, add it to the template)
+- Methodology gaps (if a finding contradicts the research assumptions, update the "Why this works" section)
+
+Note what you changed in the process and why when you commit, so future runs can trace the evolution.
 
 ### Further reading
 
