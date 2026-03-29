@@ -538,6 +538,36 @@ A tabbed radio control used on the [search page](/search/) to switch between key
 - The active state uses `:has(input:checked)` to style the parent label — no JS needed for the visual toggle
 - `:has(input:focus-visible)` provides an orange outline for keyboard focus
 - Wrap in `.kh-search-widget` with a `.kh-search-widget__panel` to get the connected tabs-to-card effect
+
+### Search form
+
+`.kh-search-widget__form` is a shared flex layout used by both the keyword and semantic search inputs. The button includes two inner spans — `.kh-button__label` (text) and `.kh-button__icon` (unicode arrow) — that swap at the mobile breakpoint.
+
+- **Desktop:** full text button ("Search" / "Ask") with the standard border + shadow style
+- **Mobile (&lt;600px):** text hidden, button becomes a small blue circle with a `→` arrow, positioned inside the input field
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<div class="kh-search-widget">
+  <div class="kh-search-widget__panel" style="border-radius:4px">
+    <form class="kh-search-widget__form" onsubmit="return false">
+      <label class="kh-u-sr-only" for="demo-search">Search</label>
+      <input type="search" id="demo-search" placeholder="Search my site" class="kh-form__input">
+      <button type="submit" class="kh-button" aria-label="Search">
+        <span class="kh-button__label" aria-hidden="true">Search</span>
+        <span class="kh-button__icon" aria-hidden="true">&#x2192;</span>
+      </button>
+    </form>
+  </div>
+</div>
+{% endcodeAndDemo %}
+
+{% markdown %}
+#### Markup notes
+
+- Always include `aria-label` on the button so the purpose is announced when only the icon is visible
+- `.kh-button__label` and `.kh-button__icon` both carry `aria-hidden="true"` — the `aria-label` is the accessible name
+- Resize to a narrow viewport to see the icon-inside-input behaviour
 {% endmarkdown %}
 
   </div>

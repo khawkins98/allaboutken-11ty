@@ -25,16 +25,13 @@ noindex: true
     <div class="kh-search-widget__panel">
       <div id="keyword-section">
         <p><small><a href="/posts/20260228-replacing-lunr-with-pagefind/">Runs locally in browser</a> and powered by Pagefind.</small></p>
-        <form action="/search/" method="GET" class="kh-form kh-form--search kh-form--search--responsive kh-sidebar kh-sidebar--end">
-          <div class="kh-sidebar__inner">
-            <div class="kh-form__item">
-              <label class="kh-form__label kh-search__label kh-u-sr-only" for="search">Search my site</label>
-              <input type="search" id="search" placeholder="Search my site" name="search_query" class="kh-form__input kh-search__input">
-            </div>
-            <button type="submit" class="kh-button">
-              Search
-            </button>
-          </div>
+        <form action="/search/" method="GET" class="kh-search-widget__form">
+          <label class="kh-u-sr-only" for="search">Search my site</label>
+          <input type="search" id="search" placeholder="Search my site" name="search_query" class="kh-form__input">
+          <button type="submit" class="kh-button" aria-label="Search">
+            <span class="kh-button__label" aria-hidden="true">Search</span>
+            <span class="kh-button__icon" aria-hidden="true">&#x2192;</span>
+          </button>
         </form>
 
         <noscript>
@@ -57,10 +54,13 @@ noindex: true
           <div class="kh-ask__conversation" id="ask-conversation" role="log" aria-live="polite" aria-relevant="additions">
           </div>
 
-          <form class="kh-ask__input-area" id="ask-form" action="/search/" method="GET">
+          <form class="kh-search-widget__form" id="ask-form" action="/search/" method="GET">
             <label class="kh-u-sr-only" for="ask-input">Ask a question about this site</label>
-            <input type="text" id="ask-input" name="q" placeholder="e.g. articles about improving search" class="kh-form__input kh-ask__input" autocomplete="off">
-            <button type="submit" class="kh-button kh-ask__submit">Ask</button>
+            <input type="text" id="ask-input" name="q" placeholder="e.g. articles about improving search" class="kh-form__input" autocomplete="off">
+            <button type="submit" class="kh-button" aria-label="Ask">
+              <span class="kh-button__label" aria-hidden="true">Ask</span>
+              <span class="kh-button__icon" aria-hidden="true">&#x2192;</span>
+            </button>
           </form>
         </div>
 
