@@ -132,7 +132,11 @@ Commit with a message that references this process. Note the date and samples us
 
 ## Why this works
 
-The process draws on three disciplines.
+Before LLMs, extracting editorial style was a two-track effort. Computational stylists could measure things -- sentence length, vocabulary richness, function word frequencies -- but the tools (Stylo, AntConc, JGAAP) required technical skill, and the output was statistical, not actionable. You'd know an author favoured em dashes, but not what they were using them *for*. Meanwhile, editorial teams built style guides the manual way: read a lot of the author's work, notice patterns, argue about them in meetings, write down the decisions. This was slow, subjective, and depended on having a skilled editor with strong instincts and enough time.
+
+LLMs changed what's practical. The close-reading work that used to require a trained editor spending hours with the corpus can now be done in minutes -- an LLM can name patterns, compare samples contrastively, and surface rhetorical moves that a statistical tool would miss entirely. But LLMs brought their own problems: generic descriptions ("the writing is clear and engaging"), hallucinated patterns, and a tendency to capture surface features while missing deeper rhetorical structure.
+
+This process blends all three traditions. Computational tools provide the objective baseline that keeps the analysis honest. Editorial judgment decides which patterns are intentional and worth codifying. LLM-assisted analysis does the labour-intensive pattern extraction at speed. Each layer compensates for what the others miss.
 
 **Computational stylistics** gives you numbers before you start interpreting. Stylometry research (Mosteller & Wallace, 1964; Burrows, 2002) found that the most reliable authorial fingerprints are in function words -- articles, prepositions, pronouns -- because writers use them without thinking. Sentence length distributions, vocabulary richness, punctuation density: all measurable, all author-specific. Burrows' Delta metric (z-scores of the 100 -- 150 most frequent words) is still the standard for authorship attribution.
 
