@@ -50,14 +50,13 @@ Must change in **two places**: `MODEL_NAME` in `scripts/generate-embeddings.mjs`
 - `src/site/` -- Templates, posts, data, includes
 - `scripts/generate-embeddings.mjs` -- Build-time vector embeddings
 - `docs/IMAGE_GENERATION.md` -- Image generation guide (setup, prompts, credits)
-- `docs/` -- Editorial handbook, publishing workflow, reviewer roles
+- `docs/` -- Publishing workflow, reviewer roles
 
 ## Editorial system
 
 When working on blog posts or impact stories, read the docs:
 
-- `src/site/style-guide/editorial.njk` -- Canonical style guide (voice, tone, structure)
-- `docs/EDITORIAL_HANDBOOK.md` -- Internal supplement
+- `src/site/style-guide/editorial.njk` -- Canonical style guide (voice, tone, structure, reasoning, formatting)
 - `docs/PUBLISHING_WORKFLOW.md` -- End-to-end publishing workflow
 - `docs/ROLE_*.md` -- Reviewer roles (technical, editorial, SEO)
 
