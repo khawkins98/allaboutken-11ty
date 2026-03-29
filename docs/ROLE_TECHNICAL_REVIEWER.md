@@ -16,4 +16,4 @@ As Technical Reviewer, I ensure posts are technically correct and production-rea
 - With specific line numbers and clear reasoning
 - Including small reusable templates/checklists when patterns recur
 
-**Reference:** All checks follow standards in `docs/EDITORIAL_HANDBOOK.md`.
+**Reference:** All checks follow standards in the [Editorial style guide](https://allaboutken.com/style-guide/editorial/) (source: `src/site/style-guide/editorial.njk`).

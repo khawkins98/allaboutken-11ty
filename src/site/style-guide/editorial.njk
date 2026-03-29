@@ -16,6 +16,15 @@ permalink: /style-guide/editorial/
 
 {% markdown %}
 
+## Author context
+
+- **Role**: Ken Hawkins — web design architect and product-minded editorial lead.
+- **Focus**: information architecture, design systems, Eleventy/Drupal, and pragmatic content tooling.
+- **Unique value**: translating between communications and engineering; show-first, evidence-led writing; reusable, production-ready patterns.
+- **Style anchors**: approachable, specific, generous with links and examples.
+
+---
+
 ## Voice and tone
 
 This site writes like a practitioner talking to other practitioners — friendly, specific, and generous with examples.
@@ -64,7 +73,7 @@ The core voice stays consistent, but tone shifts by purpose:
 
 Focused technical or observational writing. Tutorials, implementation guides, discoveries, opinions.
 
-- **Length:** 600 – 1,200 words
+- **Length:** 800 – 1,500 words. Deep dives (series posts, architecture walkthroughs) can run to 2,500, but past 2,000 words ask whether it should be split into parts. Length should serve the argument, not pad it.
 - **Title:** Concise, no trailing punctuation, sentence case
 - **Teaser:** One sentence, persuasive, 25 words or fewer
 - **Opening:** Crisp value statement — what the reader gets or why it matters
@@ -76,7 +85,7 @@ Focused technical or observational writing. Tutorials, implementation guides, di
 
 Portfolio case studies demonstrating measurable outcomes through narrative.
 
-- **Length:** 600 – 1,200 words (shorter and scannable beats exhaustive)
+- **Length:** 600 – 1,200 words (shorter and scannable beats exhaustive — resist the temptation to expand these)
 - **Title format:** Gerund phrase preferred ("Reclaiming three weeks of editorial time every month")
 - **Teaser:** Sets up challenge/tension, not metrics
 - **Result themes:** Three bold phrases near the top (`**Efficiency** | **Reliability** | **Consistency**`)
@@ -103,6 +112,7 @@ Short-form commentary on things I've read or discovered. The key principle: neve
 
 **Guidelines:**
 
+- **Length:** 200 – 500 words
 - Link back to the source prominently (via `digest_link` in frontmatter)
 - Keep commentary brief — this is a reaction, not a rewrite
 - No trailing punctuation on titles
@@ -154,6 +164,7 @@ Related links
 - Sentence case unless a proper noun is involved
 - No trailing punctuation
 - Heading hierarchy must be sequential: H2 → H3 → H4 (never skip levels)
+- Be informative — avoid cleverness that hides meaning ("The plot thickens" → "Why migrations break silently")
 
 ### Teasers
 
@@ -179,6 +190,7 @@ Use spaced em dashes for readability: `word — word` (space, em dash, space). I
 - For your own photos: use "Own work." as attribution, not "Photo by Ken Hawkins"
 - If you have a relevant photo or screenshot, use it. If not, generate a hero image at [`/image-generator/`](/image-generator/) -- see the [Image Generation guide](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/IMAGE_GENERATION.md) for setup, prompts, and post-processing
 - Generated images use a Japanese blockprint style: high-contrast woodcut on cream with sparse warm amber accent. Prompts should be abstract and evocative (a sailboat, paths through grass) rather than literal depictions of the topic
+- Generated images must not include people, text, brand logos, or screenshots of interfaces
 
 ### Code blocks
 
@@ -199,6 +211,14 @@ Use spaced em dashes for readability: `word — word` (space, em dash, space). I
 - Blog posts: 2 – 4 sentences
 - Impact stories: 2 – 3 sentences (tighter for scannability)
 - Single-sentence paragraphs are fine for emphasis
+
+### Terminology
+
+Consistent casing and formatting for proper nouns and technical terms:
+
+- **Product names as published**: Drupal (not drupal), JavaScript (not Javascript), GitHub (not Github), Eleventy (not 11ty in prose)
+- **Compound modifiers**: hyphenate when used as adjectives ("front-end development"), not as nouns ("the front end")
+- **Acronyms**: spell out on first use, then abbreviate ("Content Management System (CMS)")
 
 ### Rhythm and pacing
 
@@ -331,6 +351,31 @@ Use the `codeAndDemo` paired shortcode to show a snippet as both an escaped code
 
 ---
 
+## Reasoning and evidence
+
+Claims should be sound, scoped, and supported. Run these checks before publishing:
+
+- **Quantifiers**: soften absolutes unless supported — avoid "always", "never", "best" without evidence
+- **Causality**: prefer "correlates with" or "contributed to" over causal claims unless you can show mechanism or cite evidence
+- **Generality**: don't overgeneralize from specific contexts — state the task, model, audience, or constraints
+- **Dichotomies**: replace false either/or framing with both/and where the reality is a spectrum
+- **Scope**: keep claims within the post's stated audience and sources
+- **Evidence**: every non-obvious claim needs a citation or internal justification
+
+---
+
+## Arguing a position
+
+When writing analysis, opinion, or recommendation pieces — posts where you're diagnosing a problem, critiquing an approach, or advocating for a change — these patterns strengthen the argument:
+
+- **Diplomatic candor** — be direct about what's broken without making it personal. Separate the problem from the people. "Not because anyone is incapable, but because the team's orientation is toward X rather than Y" is more persuasive than either softening the diagnosis or naming names. Critique the structure, not the individual.
+- **Preemptive fairness** — acknowledge the strongest counterargument before the reader raises it. "To be fair, it may not have been articulated clearly enough" or "I'm somewhat unfairly calling out one example." This disarms defensiveness and signals that you've considered other perspectives. It strengthens your position rather than weakening it.
+- **Anaphoric buildup** — repetition with a pivot. "It's not that X. It's not that Y. It's not that Z. It's that..." builds momentum toward the real point. Use sparingly — once per post at most. It works because it systematically eliminates alternative explanations before landing on yours.
+- **Distill to a single intervention** — after building a complex diagnosis, collapse it into one actionable recommendation. "If I were to reduce this to a single intervention, it would be this:" This gives the reader something concrete to act on. Place it *after* the evidence, not before — it earns its weight from the argument that precedes it.
+- **Register shifts** — alternate between precise language ("high entropy stakeholder relationship") and plain-spoken phrasing ("things are discussed, agreed, and then lost"). The contrast creates texture and keeps the reader engaged. Technical vocabulary establishes authority; plain language creates trust. Neither alone is enough.
+
+---
+
 ## Dos and don'ts
 
 **Do:**
@@ -351,6 +396,7 @@ Use the `codeAndDemo` paired shortcode to show a snippet as both an escaped code
 - Embed "click here" — link meaningful phrases instead
 - Leave trailing whitespace or inconsistent heading levels
 - Use emojis as replacements for clear writing
+- Repeat the same point in different words across sections — state it once, clearly
 
 ---
 
@@ -440,6 +486,9 @@ Before publishing any content, verify:
 - [ ] Warm closing restating main point and inviting feedback
 - [ ] Frontmatter complete: title, teaser, date, layout, tags, topics
 - [ ] Markdown polished: correct heading levels, fenced code, consistent formatting
+- [ ] Length is within target for content type (blog 800 – 1,500; impact 600 – 1,200; digesting 200 – 500)
+- [ ] If over 2,000 words: is it earning that length, or should it split into parts?
+- [ ] Claims are scoped, supported, and free of unsupported absolutes
 
 ### Impact story additions
 

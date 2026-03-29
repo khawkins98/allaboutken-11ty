@@ -17,6 +17,6 @@ As SEO & Discoverability Editor, I ensure posts are findable and compelling with
 - **Canonicalization**: Permalinks are consistent, no duplicate URLs
 - **Sitemap coverage**: Posts appear in appropriate collections (impact-stories, posts, topics)
 
-**Reference:** SEO standards in `docs/EDITORIAL_HANDBOOK.md`.
+**Reference:** SEO standards in the [Editorial style guide](https://allaboutken.com/style-guide/editorial/) (source: `src/site/style-guide/editorial.njk`).
 
 

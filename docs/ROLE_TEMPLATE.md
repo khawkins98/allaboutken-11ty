@@ -17,7 +17,7 @@ As [Role Name], I ensure [specific outcome].
 - **[Action 1]**: How you improve content in this area
 - **[Action 2]**: What you deliver or recommend
 
-**Reference:** [Standards/guidelines] in `docs/EDITORIAL_HANDBOOK.md`.
+**Reference:** [Standards/guidelines] in the [Editorial style guide](https://allaboutken.com/style-guide/editorial/).
 ```
 
 ## Guidelines for Writing Roles
@@ -26,7 +26,7 @@ As [Role Name], I ensure [specific outcome].
 - Focus on specific, concrete responsibilities
 - Use bullet lists with bold labels for scannability
 - Give examples or context where helpful
-- Reference the Editorial Handbook as source of truth
+- Reference the Editorial style guide as source of truth
 - Keep it under ~20 lines
 
 **DON'T:**
@@ -52,5 +52,5 @@ As Technical Reviewer, I ensure posts are technically correct and production-rea
 - Directly in source files with specific line numbers
 - Including small reusable templates when patterns recur
 
-**Reference:** All checks follow standards in `docs/EDITORIAL_HANDBOOK.md`.
+**Reference:** All checks follow standards in the [Editorial style guide](https://allaboutken.com/style-guide/editorial/).
 ```
