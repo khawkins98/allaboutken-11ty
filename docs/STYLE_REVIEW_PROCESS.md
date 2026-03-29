@@ -127,15 +127,23 @@ The process draws on three disciplines. None of them is sufficient alone, but th
 
 **Computational stylistics** gives you numbers before you start interpreting. Stylometry research (Mosteller & Wallace, 1964; Burrows, 2002) found that the most reliable authorial fingerprints are in function words -- articles, prepositions, pronouns -- because writers use them without thinking. Sentence length distributions, vocabulary richness, punctuation density: all measurable, all author-specific. Burrows' Delta metric (z-scores of the 100 -- 150 most frequent words) is still the standard for authorship attribution.
 
+Tools for this step: Stylo (R package, Computational Stylistics Group), AntConc (Laurence Anthony) for keyword and collocation analysis, Coh-Metrix (Graesser & McNamara) for cohesion and complexity across 100+ dimensions. For periodic reviews, an LLM computing basics from pasted text is adequate.
+
 The catch is that counting things tells you *what* a writer does, not *why*. Heavy em dash use is a measurable fact. Using em dashes specifically to pivot from technical to plain language is a rhetorical choice that no metric will find. That's what Step 3 is for.
 
-**Editorial tradition** is where the judgment lives. Content strategy (Halvorson, 2009; Fenton & Kiefer Lee, 2014) formalised the process of moving from "what do we actually do?" to "what should we do?" -- content audits, decision-point identification, voice/tone separation. Mailchimp's insight that voice stays constant but tone shifts by context remains useful. The "we are X but not Y" exercise is simple and it works.
+**Editorial tradition** is where the judgment lives. Content strategy (Halvorson, 2009; Fenton & Kiefer Lee, 2014) formalised the process of moving from "what do we actually do?" to "what should we do?":
+
+1. Content audit -- catalogue what exists, descriptively.
+2. Decision-point identification -- style guides are collections of resolved ambiguities.
+3. Voice/tone separation -- voice is permanent personality; tone shifts by context (Mailchimp, Kiefer Lee ~2012).
+4. "We are X but not Y" -- define traits with boundaries. The boundary prevents overcorrection.
+5. Before-and-after examples -- the most useful entries show an edit in context, not a rule in isolation.
 
 The editorial step asks a question the other two can't: is this pattern serving the writing, or is it just a habit? Not everything worth measuring is worth codifying.
 
 **LLM-assisted analysis** does the close-reading work at speed. A skilled editor could surface the same patterns, but it would take hours. An LLM can name a recurring move ("diplomatic candor"), compare two texts contrastively, and check whether a pattern recurs across samples -- all in minutes.
 
-The trade-off: without structured prompts, LLMs default to "the writing is clear, engaging, and professional," which describes all competent writing and helps with nothing. They also catch surface features more reliably than deep rhetorical structure, and they will occasionally invent patterns that aren't there. Validate against the source text.
+The trade-off: without structured prompts, LLMs default to "the writing is clear, engaging, and professional," which describes all competent writing and helps with nothing. They also catch surface features more reliably than deep rhetorical structure, and they will occasionally invent patterns that aren't there (Wegmann et al., 2022, found that many "style transfer" systems actually transfer topic or sentiment, not fine-grained authorial style -- the same risk applies to style *extraction*). Validate against the source text.
 
 | Step | Tradition | What it adds |
 |------|-----------|--------------|
