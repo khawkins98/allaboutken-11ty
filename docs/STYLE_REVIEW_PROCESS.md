@@ -189,12 +189,31 @@ Each run should leave the process itself slightly better, not just the style gui
 
 Note what you changed in the process and why when you commit, so future runs can trace the evolution.
 
+### Related work and landscape
+
+As of March 2026, no shipping product or open-source tool closes the full loop described here (sample analysis → gap detection against a living guide → codification → meta-improvement of the process). Several projects cover parts of it:
+
+- **Every.to's AI Style Guide methodology** (Dan Shipper) -- the closest practitioner description. Five-step process ending with "use the guide for a week, notice corrections, update." Manual and not systematised, but the right instinct. [every.to/guides/ai-style-guide](https://every.to/guides/ai-style-guide)
+- **Voice DNA Creator** (az9713, Claude Code skill) -- analyses 3-10 samples, outputs a structured JSON voice profile with version history and validation loop. Iteration is manual user feedback, not automated gap analysis. [github.com/az9713/ai-co-writing-claude-skills](https://github.com/az9713/ai-co-writing-claude-skills)
+- **Voice Analyser MCP** (Houtini) -- MCP server with corpus collection from sitemaps, 14 statistical analysis engines, and style guide generation. Single-use extraction, no iteration. [github.com/houtini-ai/voice-analyser-mcp](https://github.com/houtini-ai/voice-analyser-mcp)
+- **Spiral** (Every) -- captures voice through collaborative interviews, can scan recent posts weighted by engagement. More sophisticated capture than most tools, but produces a static profile. [writewithspiral.com](https://writewithspiral.com)
+
+Most commercial tools (Jasper, Writer, Grammarly, Sudowrite) create voice profiles that live inside the tool. The key difference in this approach: the style guide is a public, human-readable, version-controlled document that any tool or human can use. Portability and inspectability over lock-in.
+
 ### Further reading
 
-- Burrows, J. (2002). "Delta: a Measure of Stylistic Difference and a Guide to Likely Authorship." *Literary and Linguistic Computing*, 17(3).
-- Mosteller, F. & Wallace, D. (1964). *Inference and Disputed Authorship: The Federalist*. Addison-Wesley.
-- Richards, S. (2017). *Content Design*. Content Design London.
-- Wegmann, A. et al. (2022). "What is the 'Style' of a Writer?" *Computational Linguistics*.
-- Fenton, N. & Kiefer Lee, K. (2014). *Nicely Said: Writing for the Web with Style and Purpose*. New Riders.
-- Biber, D. (1988). *Variation across Speech and Writing*. Cambridge University Press.
-- Halvorson, K. (2009). *Content Strategy for the Web*. New Riders.
+**Foundational stylometry:**
+- Mosteller, F. & Wallace, D. (1964). *Inference and Disputed Authorship: The Federalist*. Addison-Wesley. — The landmark study using function word frequencies to resolve disputed authorship.
+- Burrows, J. (2002). "Delta: a Measure of Stylistic Difference and a Guide to Likely Authorship." *Literary and Linguistic Computing*, 17(3). — Introduced the standard distance metric for computational authorship attribution.
+- Biber, D. (1988). *Variation across Speech and Writing*. Cambridge University Press. — Multi-dimensional analysis framework for identifying register and style features.
+
+**Content strategy and editorial process:**
+- Halvorson, K. (2009). *Content Strategy for the Web*. New Riders. — Formalised the content audit → style guide pipeline.
+- Fenton, N. & Kiefer Lee, K. (2014). *Nicely Said: Writing for the Web with Style and Purpose*. New Riders. — Voice/tone worksheets and the "we are X but not Y" exercise.
+- Richards, S. (2017). *Content Design*. Content Design London. — Evidence-based style guidance derived from user research (GOV.UK).
+
+**LLM-era style research:**
+- Wegmann, A. et al. (2022). "What is the 'Style' of a Writer?" *Computational Linguistics*. — Found that most "style transfer" systems transfer topic/sentiment, not authorial style. Directly relevant to why validation matters.
+- PerFine (2025). "Iterative Critique-Refine Framework for Personalized Writing." [arxiv.org/html/2510.24469](https://arxiv.org/html/2510.24469) — Retriever-generator-critic loop iterating on tone, vocabulary, and structure. Closest academic work to this process, but operates per-piece rather than on a persistent guide.
+- "Who Owns the Text? Design Patterns for Preserving Authorship in AI-Assisted Writing" (2026). [arxiv.org/html/2601.10236](https://arxiv.org/html/2601.10236) — Examines how AI tools can preserve rather than flatten authorial voice.
+- Meta HyperAgents (2026). [ai.meta.com/research/publications/hyperagents](https://ai.meta.com/research/publications/hyperagents/) — Agents that rewrite their own modification procedures ("metacognitive self-modification"). The theoretical extreme of what the "How the process improves itself" section does pragmatically.
