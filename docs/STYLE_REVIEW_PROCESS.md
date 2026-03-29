@@ -203,17 +203,17 @@ Most commercial tools (Jasper, Writer, Grammarly, Sudowrite) create voice profil
 ### Further reading
 
 **Foundational stylometry:**
-- Mosteller, F. & Wallace, D. (1964). *Inference and Disputed Authorship: The Federalist*. Addison-Wesley. — The landmark study using function word frequencies to resolve disputed authorship.
-- Burrows, J. (2002). "Delta: a Measure of Stylistic Difference and a Guide to Likely Authorship." *Literary and Linguistic Computing*, 17(3). — Introduced the standard distance metric for computational authorship attribution.
-- Biber, D. (1988). *Variation across Speech and Writing*. Cambridge University Press. — Multi-dimensional analysis framework for identifying register and style features.
+- Mosteller, F. & Wallace, D. (1964). [*Inference and Disputed Authorship: The Federalist*](https://link.springer.com/book/10.1007/978-1-4612-5256-6). Addison-Wesley. — The landmark study using function word frequencies to resolve disputed authorship.
+- Burrows, J. (2002). ["Delta: a Measure of Stylistic Difference and a Guide to Likely Authorship."](https://doi.org/10.1093/llc/17.3.267) *Literary and Linguistic Computing*, 17(3). — Introduced the standard distance metric for computational authorship attribution.
+- Biber, D. (1988). [*Variation across Speech and Writing*](https://doi.org/10.1017/CBO9780511621024). Cambridge University Press. — Multi-dimensional analysis framework for identifying register and style features.
 
 **Content strategy and editorial process:**
-- Halvorson, K. (2009). *Content Strategy for the Web*. New Riders. — Formalised the content audit → style guide pipeline.
-- Fenton, N. & Kiefer Lee, K. (2014). *Nicely Said: Writing for the Web with Style and Purpose*. New Riders. — Voice/tone worksheets and the "we are X but not Y" exercise.
-- Richards, S. (2017). *Content Design*. Content Design London. — Evidence-based style guidance derived from user research (GOV.UK).
+- Halvorson, K. (2009). [*Content Strategy for the Web*](https://www.oreilly.com/library/view/content-strategy-for/9780135159033/). New Riders. — Formalised the content audit → style guide pipeline.
+- Fenton, N. & Kiefer Lee, K. (2014). [*Nicely Said: Writing for the Web with Style and Purpose*](https://www.oreilly.com/library/view/nicely-said/9780133156836/). New Riders. — Voice/tone worksheets and the "we are X but not Y" exercise.
+- Richards, S. (2017). [*Content Design*](https://contentdesign.london/shop/content-design-by-sarah-winters). Content Design London. — Evidence-based style guidance derived from user research (GOV.UK).
 
 **LLM-era style research:**
-- Wegmann, A. et al. (2022). "What is the 'Style' of a Writer?" *Computational Linguistics*. — Found that most "style transfer" systems transfer topic/sentiment, not authorial style. Directly relevant to why validation matters.
+- Wegmann, A. et al. (2022). ["What is the 'Style' of a Writer?"](https://doi.org/10.1162/coli_a_00519) *Computational Linguistics*. — Found that most "style transfer" systems transfer topic/sentiment, not authorial style. Directly relevant to why validation matters.
 - PerFine (2025). "Iterative Critique-Refine Framework for Personalized Writing." [arxiv.org/html/2510.24469](https://arxiv.org/html/2510.24469) — Retriever-generator-critic loop iterating on tone, vocabulary, and structure. Closest academic work to this process, but operates per-piece rather than on a persistent guide.
 - "Who Owns the Text? Design Patterns for Preserving Authorship in AI-Assisted Writing" (2026). [arxiv.org/html/2601.10236](https://arxiv.org/html/2601.10236) — Examines how AI tools can preserve rather than flatten authorial voice.
 - Meta HyperAgents (2026). [ai.meta.com/research/publications/hyperagents](https://ai.meta.com/research/publications/hyperagents/) — Agents that rewrite their own modification procedures ("metacognitive self-modification"). The theoretical extreme of what the "How the process improves itself" section does pragmatically.
