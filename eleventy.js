@@ -3,6 +3,7 @@ const Path         = require('path');
 const { execSync, exec } = require('child_process');
 const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 // const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
+const filters = require("./src/lib/filters");
 
 module.exports = function(config) {
   const isDev = process.env.ELEVENTY_ENV === 'development';
@@ -26,37 +27,7 @@ module.exports = function(config) {
       reoptimise: true
     },
     // Deterministic file names: <dir-token>-<base-name>-<width>.<format>
-    filenameFormat: function filenameFormat(id, src, width, format) {
-      try {
-        let baseName = '';
-        let dirToken = '';
-        if (typeof src === 'string') {
-          if (src.startsWith('http://') || src.startsWith('https://')) {
-            const u = new URL(src);
-            baseName = Path.basename(u.pathname) || u.hostname;
-            const parts = (u.pathname || '').split('/').filter(Boolean);
-            dirToken = parts.length > 1 ? parts[parts.length - 2] : '';
-          } else {
-            baseName = Path.basename(src);
-            const parentDir = Path.basename(Path.dirname(src));
-            dirToken = parentDir;
-          }
-        }
-        baseName = String(baseName || 'image').replace(/\.[a-z0-9]+$/i, '');
-        const safe = baseName
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/^-+|-+$/g, '');
-        const dirSafe = String(dirToken || '')
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/^-+|-+$/g, '');
-        const name = dirSafe ? `${dirSafe}-${safe}` : safe;
-        return `${name}-${width}.${format}`;
-      } catch (e) {
-        return `${id}-${width}.${format}`;
-      }
-    },
+    filenameFormat: filters.filenameFormat,
     htmlOptions: {
       img: {
         decoding: "async",
@@ -106,98 +77,27 @@ module.exports = function(config) {
   // -----
 
   // Add any utility filters
-  config.addFilter("dateDisplay", (dateObj, format = "d LLL y") => {
-    return DateTime.fromJSDate(dateObj, {
-      zone: "utc"
-    }).toFormat(format);
-  });
+  config.addFilter("dateDisplay", filters.dateDisplay);
 
   // Return the first N items of an array (more specific name to avoid collisions)
-  config.addFilter("limitItems", (array, n) => {
-    if (!Array.isArray(array)) return array;
-    if (typeof n !== 'number') return array;
-    return n < 0 ? array.slice(n) : array.slice(0, n);
-  });
+  config.addFilter("limitItems", filters.limitItems);
 
   // Ensure trailing slash on URLs for canonical IDs
-  config.addFilter("ensureTrailingSlash", (value) => {
-    const v = String(value || '');
-    if (!v) return v;
-    return v.endsWith('/') ? v : v + '/';
-  });
-  config.addFilter("rssDate", (dateObj) => {
-    return DateTime.fromJSDate(dateObj, { zone: "utc" }).toISO();
-  });
-  config.addFilter("rssLastUpdatedDate", (posts) => {
-    if (!Array.isArray(posts) || posts.length === 0) return DateTime.now().toISO();
-    const latest = posts.reduce((a, b) => (a.date > b.date ? a : b));
-    return DateTime.fromJSDate(latest.date, { zone: "utc" }).toISO();
-  });
+  config.addFilter("ensureTrailingSlash", filters.ensureTrailingSlash);
+  config.addFilter("rssDate", filters.rssDate);
+  config.addFilter("rssLastUpdatedDate", filters.rssLastUpdatedDate);
   // Convert double hyphens to em dashes for nicer typography
-  config.addFilter("emdash", (value) => {
-    const v = String(value || '');
-    return v.replace(/--/g, '—');
-  });
-  config.addFilter("htmlToAbsoluteUrls", (content, siteBaseUrl) => {
-    const base = (siteBaseUrl || '').replace(/\/$/, '');
-    const html = content || '';
-    return html
-      // href attributes
-      .replace(/href="\/(?!\/)/g, `href="${base}/`)
-      // src attributes
-      .replace(/src="\/(?!\/)/g, `src="${base}/`)
-      // srcset attributes (handles comma-separated URLs)
-      .replace(/srcset="([^"]*)"/g, (m, val) => {
-        const updated = (val || '').replace(/\s+\/(?!\/)/g, ` ${base}/`).replace(/^\/(?!\/)/, `${base}/`);
-        return `srcset="${updated}"`;
-      });
-  });
+  config.addFilter("emdash", filters.emdash);
+  config.addFilter("htmlToAbsoluteUrls", filters.htmlToAbsoluteUrls);
 
   // Strip unsafe elements/attributes from feed content
-  config.addFilter("sanitizeFeedHtml", (content) => {
-    const html = String(content || '');
-    return html
-      // remove script/style/link/iframe blocks
-      .replace(/<script[\s\S]*?<\/script>/gi, '')
-      .replace(/<style[\s\S]*?<\/style>/gi, '')
-      .replace(/<link[^>]*>/gi, '')
-      .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
-      // drop inline style attributes
-      .replace(/\sstyle="[^"]*"/gi, '')
-      // drop inline event handlers (on*)
-      .replace(/\son[a-z]+="[^"]*"/gi, '');
-  });
+  config.addFilter("sanitizeFeedHtml", filters.sanitizeFeedHtml);
 
   // Compute plain-text word count from HTML content
-  config.addFilter("wordCount", (content) => {
-    try {
-      const html = String(content || '');
-      const cleaned = html
-        .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-        .replace(/<style[\s\S]*?<\/style>/gi, ' ')
-        .replace(/<iframe[\s\S]*?<\/iframe>/gi, ' ')
-        .replace(/<noscript[\s\S]*?<\/noscript>/gi, ' ')
-        .replace(/<[^>]+>/g, ' ') // strip remaining tags
-        .replace(/&[a-z#0-9]+;/gi, ' ') // drop entities
-        .replace(/[\s\n\r\t]+/g, ' ') // collapse whitespace
-        .trim();
-      if (!cleaned) return 0;
-      return cleaned.split(/\s+/).filter(Boolean).length;
-    } catch (e) {
-      return 0;
-    }
-  });
+  config.addFilter("wordCount", filters.wordCount);
 
   // Format a number with locale separators (e.g., 1,234)
-  config.addFilter("formatNumber", (value, locale = 'en-US') => {
-    try {
-      const n = Number(value);
-      if (!isFinite(n)) return String(value ?? '');
-      return n.toLocaleString(locale);
-    } catch (e) {
-      return String(value ?? '');
-    }
-  });
+  config.addFilter("formatNumber", filters.formatNumber);
 
   // // Estimate reading time in minutes at ~225 words per minute (min 1)
   // config.addFilter("readingTime", (content, wpm = 225) => {
@@ -233,17 +133,7 @@ module.exports = function(config) {
     // Add ids to all heading levels so we can deep-link
     level: [1, 2, 3, 4, 5, 6],
     // Create clean ASCII slugs: remove punctuation/specials, collapse spaces to '-'
-    slugify: (s) => (
-      (s || '')
-        .toString()
-        .toLowerCase()
-        .normalize('NFKD')
-        .replace(/[\u0300-\u036f]/g, '') // strip combining marks
-        .replace(/&amp;/g, 'and')
-        .replace(/[^a-z0-9\s-]/g, '') // drop punctuation and specials (e.g. ?!@():’–)
-        .replace(/[\s_-]+/g, '-')
-        .replace(/^-+|-+$/g, '')
-    ),
+    slugify: filters.slugify,
 
     // Append a discrete '#' permalink link to the end of the heading content
     permalink: (slug, opts, state, index) => {
