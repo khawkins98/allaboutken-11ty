@@ -346,6 +346,35 @@ Keep the label short: "Update", "Sidebar", "Related", "Context". Place a blank l
 
 ---
 
+## Margin notes
+
+Use `kh-marginnote` for supplementary citations, supporting evidence, and secondary references that enrich the argument without interrupting the main flow. On desktop they float into the right margin (Tufte-style); on mobile they render as block-level asides.
+
+```html
+<aside class="kh-marginnote">Gergely Orosz <a href="https://example.com">reports</a> practitioners saying AI now writes the majority of their production code.</aside>
+```
+
+**When to use:**
+
+- Supporting citations that back up an inline claim but aren't central to the argument
+- Additional context or definitions that help the interested reader without slowing the main reader
+- Attribution for quotes or data points already summarised in the body text
+
+**When not to use:**
+
+- Core arguments or evidence the reader needs to follow the post (keep these inline)
+- Lengthy asides over ~2 sentences (use a note box instead)
+- Decorative commentary or tangential opinions
+
+**Guidelines:**
+
+- Use raw HTML (`<aside class="kh-marginnote">`) inside {%raw%}`{% markdown %}`{%endraw%} blocks. Links must use `<a href="">` tags, not markdown link syntax.
+- Place a blank line before and after the aside
+- Keep margin notes to 1--2 sentences
+- In citation-heavy sections (3+ references in a paragraph), move the supplementary ones to margin notes and keep only the strongest evidence inline
+
+---
+
 ## Code and demo shortcode
 
 Use the `codeAndDemo` paired shortcode to show a snippet as both an escaped code block and a live rendered demo from the same source. Place it **outside** {%raw%}`{% markdown %}`{%endraw%} blocks (Markdown will double-escape otherwise).

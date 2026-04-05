@@ -1,0 +1,102 @@
+---
+title: "Four gears of AI-assisted development: from coding to context"
+layout: layouts/post.njk
+teaser: "Developers are moving from copy-paste to orchestration. Each gear shifts what the human actually contributes."
+date: 2026-04-05
+tags:
+  - posts
+topics:
+  - AI
+  - software engineering
+  - context engineering
+image: /blog/four-interlocking-cogs.jpg
+image_meta:
+  text: "Same mechanism, different scale."
+  credit: "Image made with <a href='https://huggingface.co/black-forest-labs/FLUX.2-dev'>FLUX.2-dev</a>."
+  altext: 'Woodcut-style print of four interlocking cog wheels ascending in size from left to right, bold black ink on cream paper with warm amber accent on the largest gear'
+kens_status: draft
+---
+
+{% markdown %}
+
+Most conversations about AI-assisted development treat it as a single thing you either do or don't do. You're "using AI" or you're not. That framing hides the real question, which isn't whether you're using AI but what you're using it *for*, and what you're still doing yourself.
+
+I keep seeing four gears. [I'm not the only one](#related-frameworks); others have mapped similar progressions, and the trajectory is consistent: developers are moving from writing code to directing systems that write code, and the human contribution is shifting from implementation to context.
+
+Not everyone moves through these linearly, and not every task calls for the same gear. But knowing which gear you're in changes what you should focus on next.
+
+> **tl;dr**
+>
+> - **Complement**: AI as an external reference; you shuttle context manually.
+> - **Integrate**: AI inside the IDE; faster coding, same workflow.
+> - **Delegate**: agentic coding; output scales, comprehension debt accumulates.
+> - **Orchestrate**: context becomes the work; you define what gets built and why.
+> - These aren't a ladder; they're gears. Different tasks call for different gears. The question is what each task actually needs from you.
+
+## First gear: AI as a side channel
+
+You copy-paste from ChatGPT, ask questions in a browser tab, use it as a faster Stack Overflow. The development workflow itself doesn't change. The IDE, the git flow, the review process are all the same. AI is an external reference, not an integrated tool.
+
+This is where most people started. It works, but the context is fragmented. You're manually shuttling information between the AI and your actual work, translating in both directions. The AI doesn't see your codebase; you're the bridge. It's useful in the same way that [reference content is useful](/posts/20250914-ai-and-the-commoditization-of-reference/), until you need something specific to your situation.
+
+## Second gear: AI inside the IDE
+
+AI moves inside the IDE. Copilot, inline completions, chat panels in VS Code or JetBrains. The tool now sees your code, your file structure, some of your project context. The workflow starts to change: you're writing alongside AI rather than consulting it separately.
+
+The leap is that the AI has access to local context it didn't have before. But the developer is still driving every decision, and the integration is mostly at the file level, not the project level. You're coding faster. You're still the one coding. The risk here is treating integration as the finish line: [bolting AI onto an unchanged workflow](/posts/20250919-smart-ai-integration-context-first/) without rethinking what the workflow should be.
+
+## Third gear: Agentic coding
+
+The AI doesn't just suggest lines; it executes multi-step tasks. Create a feature branch, write tests, refactor a module, fix a CI failure. The developer shifts from writing code to reviewing and directing. I've [felt this shift personally](/posts/20260304-digesting-burning-out-ai-coding-agents/). AI tools turned a once-a-year hobby project into a daily habit, but the "90% problem" is real: the last 10% still needs a human who understands the system.
+
+<aside class="kh-marginnote">Gergely Orosz <a href="https://newsletter.pragmaticengineer.com/p/when-ai-writes-almost-all-code-what">reports</a> practitioners saying AI now writes the majority of their production code. Even long-time skeptics are reversing position as the latest models cross capability thresholds.</aside>
+
+This is where a lot of the industry is right now. Andrej Karpathy [describes the shift](https://x.com/karpathy/status/2015883857489522876): "I rapidly went from about 80% manual+autocomplete coding and 20% agents to 80% agent coding and 20% edits+touchups."
+
+<aside class="kh-marginnote">Steve Yegge's <a href="https://newsletter.pragmaticengineer.com/p/steve-yegge-on-ai-agents-and-the">eight levels of agent adoption</a> trace the trust curve inside this gear, from "permissions turned on" through "YOLO mode" to "diffs scroll by, you may or may not look at them."</aside>
+
+The progression is real. So is the risk. Yegge warns that engineers who only occasionally use AI tools risk getting left behind: "You're going to get fired and you're one of the best engineers I know."
+
+That's where [comprehension debt](/posts/20260328-digesting-comprehension-debt/) sets in. Output volume goes up, but if you're not holding the context of what's being built, you're accumulating code nobody understands. A [study on AI-assisted skill formation](https://arxiv.org/abs/2601.20245) found that developers who fully delegated showed limited productivity gains but lost conceptual understanding, code reading ability, and debugging skills.
+
+<aside class="kh-marginnote"><a href="/posts/20251104-digesting-fedora-ai-contribution-policy/">Fedora's AI contribution policy</a> is one example of teams building accountability structures around this risk.</aside>
+
+As Osmani [writes](https://addyo.substack.com/p/the-80-problem-in-agentic-coding): "If your ability to 'read' doesn't scale at the same rate as the agent's ability to 'output,' you aren't engineering anymore. You're rubber stamping."
+
+## Fourth gear: Context as the work
+
+The developer focuses on the strategic and contextual layer. What are we building and why? How does it fit the system? What are the constraints the AI doesn't know about?
+
+This is where the AI process meaningfully changes. In lower gears, the AI works from whatever context it can infer: your open file, your last prompt, the code it can see. In fourth gear, you give it the context it can't discover on its own. Architecture decisions, business constraints, the reason a module is shaped the way it is. The difference in output quality is stark. An AI with a style guide, a `CLAUDE.md`, and a well-structured codebase produces work that fits the system. Without that context, it produces code that works but doesn't belong.
+
+Software development best practices (architecture, testing, modularity, documentation) become the implementation detail they always were. You still need them more than ever, because the volume of code that needs to be architecturally sound has grown dramatically. But the human contribution shifts from applying those practices line by line to [ensuring they're embedded in the context](/posts/20250929-ai-must-rtfm-context-curators/) the AI works from.
+
+This is what [planning over prompting](/posts/20250923-effective-ai-work-is-project-management/) looks like in practice. The work is specifying outcomes, defining boundaries, [curating the context](/posts/20250929-ai-must-rtfm-context-curators/) that shapes what gets built. In practical terms, this looks like [extracting patterns from your best work and encoding them as guidance](/posts/20251221-evidence-based-writing-guides-drupal-ai/).
+
+There's a comic irony here. Many developers who spent years avoiding documentation will find that [the real work *is* documentation](/posts/20250929-ai-must-rtfm-context-curators/). Writing down what the system does, why it's shaped the way it is, what constraints matter. The context that human developers always needed but could sometimes get away without; AI developers can't. Fourth gear turns every developer into a technical writer, and it turns out that was always the job description. We just didn't know it.
+
+The [career ladder was always a context-acquisition pipeline](/posts/20260329-digesting-software-engineering-splits-three/); fourth gear is where that becomes explicit.
+
+## Know which gear you're in
+
+These gears aren't a ladder. First gear isn't worse than third; try pulling away in third and you'll stall. A quick question belongs in first gear. An architecture decision belongs in fourth. Reaching for a higher gear than the task requires isn't ambition; it's a bad fit and more risk for no payoff.
+
+Most people shift between gears constantly. You might orchestrate for architecture decisions and complement for debugging. An engineer stuck in second when the work calls for fourth is optimizing the wrong thing; an engineer forcing third on a task that needs careful first-gear thinking is delegating before they understand the problem. The question isn't "what gear should I be in?" It's "what does this task actually need from me, and am I providing that?"
+
+The trajectory across all four gears points the same way: as AI takes on more of the implementation, the human contribution shifts toward context. Understanding the problem, the system, the constraints the model can't see. That was always the hard part of development. Now it's becoming the only part that's yours.
+
+<h2 id="related-frameworks">Related frameworks</h2>
+
+- [From Coder to Orchestrator](https://humanwhocodes.com/blog/2026/01/coder-orchestrator-future-software-engineering/) -- Nicholas Zakas on the three-stage shift
+- [Steve Yegge on AI agents and the future of programming](https://newsletter.pragmaticengineer.com/p/steve-yegge-on-ai-agents-and-the) -- eight levels of agent adoption
+- [The Developer AI Maturity Curve](https://medium.com/@paul.bernard_80815/the-developer-ai-maturity-curve-dd8406039956) -- Paul Bernard's four-stage manufacturing metaphor
+- [The 80% Problem in Agentic Coding](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) -- Addy Osmani on what happens when agents do most of the work
+
+## Related writing
+
+- [The ladder was always context](/posts/20260329-digesting-software-engineering-splits-three/) (Mar 2026) -- why the career ladder was really a context-acquisition pipeline
+- [I AIn't known what's in my code anymore](/posts/20260328-digesting-comprehension-debt/) (Mar 2026) -- the third-gear risk: delegation without comprehension
+- [AI coding tools turned my once-a-year hobby project into a daily habit](/posts/20260304-digesting-burning-out-ai-coding-agents/) (Mar 2026) -- personal experience shifting from second to third gear
+- [The power of the pause: How planning beats prompt tuning](/posts/20250923-effective-ai-work-is-project-management/) (Sep 2025) -- fourth gear in practice: planning is the work
+
+{% endmarkdown %}
