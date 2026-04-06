@@ -310,11 +310,15 @@
       border-left: 2px solid var(--kh-color--orange);
       padding-left: 0.75rem;
       background: none;
+      z-index: 1;
+      position: relative;
     }
 
     @media (min-width: 1300px) {
       width: 240px;
       margin-right: -280px;
+      z-index: 1;
+      position: relative;
     }
 
     a {
