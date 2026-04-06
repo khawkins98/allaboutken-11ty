@@ -1,0 +1,71 @@
+---
+title: "Recursion: it’s fonts all the way down"
+layout: layouts/post.njk
+teaser: "I’ve moved from Now Alt to Recursive, an open‑source variable font that unifies UI text and code with one flexible file."
+image: "/blog/font-recursive-screengrab.jpg"
+image_meta:
+  text: "A demonstration of Recursive’s breadth."
+  altext: "A sample of letter forms from Recursive."
+date: 2025-09-04
+url: /posts/20250904-switching-to-recursive.html
+active_path: blog
+tags:
+  - note
+  - posts
+topics:
+  - typography
+  - variable fonts
+  - performance
+---
+
+{% markdown %}
+
+It's nice to be [able to tinker with the site](/posts/20250831-site-overhaul-eleventy-v3/) more freely again -- in that spirit it's time to update the look, and while researching a more expressive font I found [Recursive](https://www.recursive.design/).
+
+It's an excellent <span title="Variable fonts are single font files that behave like more than multiple font faces, letting you dynamically adjust width, slant, and other properties for more fun.">variable font</span> by [ArrowType (Stephen Nixon)](https://www.arrowtype.com/about), free and open‑source under the SIL Open Font License 1.1.
+
+> Despite the challenge of production, a spectrum of expression within a single typeface has clear advantages for users. Some of the most compelling typographic layouts use multiple, complementary fonts. However, because different fonts usually have different metrics, such layouts can easily become a headache for visual design and technical implementation. Recursive, by contrast, provides multiple voices from a single, easy-to-use font file.
+
+[Learn more about the Recursive and its creation here](https://www.recursive.design/process/).
+
+Recursive is a lot of fun and I look forward to getting to know it better.
+
+I chose to self‑host the WOFF2, it's a _not_ tiny 295 KB (roughly ~200 KB larger than my previous setup with Now Alt). I think it's worth it.
+
+### Compare the two
+
+You're already here, so here's a quick before and after of the near drop in change:
+
+<article class="kh-bleed-out">
+  <div id="image-compare" style="max-width: 100%; height: 490px;">
+    <img src="/images/blog/font-change-now-alt.jpg" alt="Before: Now Alt" loading="lazy" />
+    <img src="/images/blog/font-change-recursive.jpg" alt="After: Recursive" loading="lazy" />
+  </div>
+  <figcaption class="kh-text-body--3">Drag to compare: Now Alt (before) vs Recursive (after)</figcaption>
+</article>
+
+<link rel="stylesheet" href="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.css">
+<script defer src="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.js"></script>
+<script defer>
+  window.addEventListener('DOMContentLoaded', function () {
+    var el = document.getElementById('image-compare');
+    if (el && window.ImageCompare) {
+      new ImageCompare(el, {
+        showLabels: true,
+        labelOptions: { before: 'Now Alt', after: 'Recursive', onHover: false },
+        controlColor: '#000000',
+        controlShadow: true,
+        startingPoint: 50,
+        smoothing: true,
+        smoothingAmount: 120,
+        fluidMode: true
+      }).mount();
+    }
+  });
+</script>
+
+### A parting word for my old font
+
+[Now Alt](https://usemodify.com/fonts/now-alt/)’s geometric warmth for headings was a pleasure, but I wanted something fresh and expressive. Thanks old friend.
+
+{% endmarkdown %}

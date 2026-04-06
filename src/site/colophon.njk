@@ -1,0 +1,85 @@
+---
+title: Colophon
+layout: layouts/digesting.njk
+date: 2025-09-10
+lastUpdated: 2026-03-03
+templateEngineOverride: njk
+---
+
+{% if lastUpdated %}
+<small>Last updated: {{ lastUpdated | dateDisplay('d LLL yyyy') }}</small>
+{% endif %}
+
+<aside class="kh-note-box">
+<span class="kh-note-box__label">What's a colophon?</span>
+Historically a colophon summarized how a book was made — who printed it, where, and when. On the web, a colophon is a short page describing how a site is built and the principles behind it (see <a href="https://en.wikipedia.org/wiki/Colophon_(publishing)">colophon in publishing</a> and <a href="https://indieweb.org/colophon">IndieWeb colophon</a>).
+</span>
+</aside>
+
+{% markdown %}
+
+This site is built and published with a small, readable stack and a bias for flexibility and performance.
+
+## Stack
+
+- **Static site generator**: [Eleventy (11ty) v3](https://www.11ty.dev/)
+- **Language & tooling**: Node.js (Yarn scripts), Nunjucks templates, Markdown via Markdown‑It with `markdown-it-anchor`
+- **Styles**: Sass compiled to a single CSS file; custom utility classes; normalize; type set with the Recursive font
+  - Previously used the EMBL Visual Framework (VF) and Gulp; the [migration to a simpler Eleventy v3 stack is documented here](/posts/20250831-site-overhaul-eleventy-v3).
+- **Search**: Two modes on the [search page](/search/):
+  - [Pagefind](https://pagefind.app/) — static keyword search, indexes built HTML at deploy time, serves chunked index fragments on demand. Source: [search page template](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/search.njk)
+  - Semantic search — build-time vector embeddings (MiniLM-L6-v2 via [Transformers.js](https://huggingface.co/docs/transformers.js)) + in-browser cosine similarity. Same model runs both sides; no API keys, no server. [Read the post](/posts/20260302-semantic-search-browser-embeddings/)
+- **Hosting**: Vercel (auto‑deploys from GitHub, automatic HTTPS, CDN)
+- **Domain**: Cloudflare (DNS, security, performance)
+- Fonts: [Recursive](/posts/20250904-switching-to-recursive)
+
+## Build & source
+
+- **Source code**: [`github.com/khawkins98/allaboutken-11ty`](https://github.com/khawkins98/allaboutken-11ty/)
+- **Images**: [Eleventy Image plugin](https://www.11ty.dev/docs/plugins/image) ([Sharp](https://sharp.pixelplumbing.com/) under the hood) configured to [generate deterministic, token‑based filenames](/posts/20250907-deterministic-image-filenames)
+- **Social sharing images**: Auto‑generated OpenGraph/Twitter cards using [Eleventy's Screenshot Service](https://www.11ty.dev/docs/services/opengraph/) — dynamically captures styled HTML pages as 1200×630px images
+- **Build command**: `yarn build` → compiles Sass, runs Eleventy, processes images, builds search index
+
+## Privacy
+
+- **Analytics**: [GoatCounter](https://www.goatcounter.com/) (cookie‑free, aggregate counts only). See their rationale on GDPR consent and legitimate interest: [GDPR consent notices](https://khawkins98.goatcounter.com/help/gdpr).
+- **No trackers**: No ad tech, no cross‑site profiling.
+
+## Principles
+
+- Prefer simple, inspectable pages over heavy frameworks.
+- Ship as little JS as practical; keep content readable without it.
+- Optimize images and typography for legibility.
+- Document decisions in public when it helps future me (and you).
+
+{% endmarkdown %}
+
+<section class="kh-u-padding__top--600">
+  <h2 class="kh-u-sr-only">Classic web badges</h2>
+  <div class="kh-badges" role="list">
+    <a role="listitem" class="kh-badge__link" href="https://indieweb.org/Webmention" title="Webmentions supported">
+      <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/webmentions.1627619603.png" alt="Webmentions supported." loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+    <a role="listitem" class="kh-badge__link" href="https://indieweb.org/" title="IndieWeb">
+      <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/indieweb.1117854059.png" alt="I W C Now! indieweb.org." loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+    <a role="listitem" class="kh-badge__link" href="https://www.w3.org/developers/tools/" title="I heart validator">
+      <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/heartvalidator.492094636.png" alt="I heart validator." loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+    <a role="listitem" class="kh-badge__link" href="https://www.w3.org/QA/Tips/iso-date" title="ISO-8601 dates">
+      <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/iso.1707930409.png" alt="ISO-8601 now! YYYY-MM-DD." loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+    <a role="listitem" class="kh-badge__link" href="https://tintara.tripod.com/FramesSuck.html" title="Campaign against frames!">
+      <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/frames-suck.2280495098.png" alt="The text “Campaign against frames!” next to a crossed-out webpage full of frames." loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+    <a role="listitem" class="kh-badge__link" href="https://eightyeightthirty.one/" title="eighty eight thirty one">
+      <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/eightyeightthirtyone.4286714267.png" alt="eighty eight thirty dot one." loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+    <a role="listitem" class="kh-badge__link" href="https://www.11ty.dev/" title="Built with Eleventy">
+      <img class="kh-badge__img" width="176" height="62" src="https://chrisburnell.com/images/animated/built-with-eleventy.gif" alt="Built with Eleventy 88×31 animated badge" loading="lazy" decoding="async" eleventy:ignore>
+    </a>
+  </div>
+  <p class="kh-u-text-color--grey">Badges sourced from <a href="https://seirdy.one/meta/badges/">Seirdy’s “Classic web badges”</a> — licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY‑SA 4.0</a>. Eleventy badge by <a href="https://chrisburnell.com/note/eleventy-animated-88x31/">Chris Burnell</a>.</p>
+</section>
+
+<hr>

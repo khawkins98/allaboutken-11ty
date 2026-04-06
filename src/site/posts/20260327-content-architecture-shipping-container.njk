@@ -1,0 +1,198 @@
+---
+title: 'Content architecture: the delivery problem'
+layout: layouts/post.njk
+teaser: 'The technology works, the design looks good, but content can''t get to the reader -- because nobody agreed on what a card is.'
+date: 2026-03-27
+image: /blog/content-architecture-shipping-container.jpg
+image_meta:
+  altext: Aerial view of a large container port showing hundreds of standardized shipping containers in uniform rows
+  text: Standardized containers at scale. The box itself is simple -- what it enables is interoperability.
+  credit: '<a href="https://unsplash.com/photos/sAue4xwd1zE">Ed Wingate</a> (Unsplash).'
+tags:
+  - posts
+topics:
+  - content architecture
+  - design systems
+  - information architecture
+  - content strategy
+  - structured content
+  - content modeling
+kens_status: final_draft
+---
+
+{% markdown %}
+
+For roughly the tenth time in my career, I find myself explaining to a colleague why the technical project they're struggling with -- the stack is solid, the design is robust -- isn't failing because of engineering or design. It's failing because of absent content architecture: the missing relationship of content from one platform to the next.
+
+The content architecture is the glue between design, engineering, and editorial. But it consistently gets the least attention, because when it works, nobody notices.
+
+While less important for small startups, it's critical for organizations at scale. Without standards we drown in a sea of disparate containers. A news item gets published in the CMS. It needs to appear on five properties. But each property built its own card with slightly different fields -- one expects a summary, another expects a teaser, a third doesn't have an image field at all. The feed breaks, or worse, renders half-formed content that nobody catches until a stakeholder sees it on a live page. That's the cost of absent content architecture: not a dramatic failure, but a slow bleed of broken interchange that compounds with every new property.
+
+<!-- Pattern: Table of contents (TOC) for long-form posts. Use in place of tl;dr
+     when the post has 5+ sections and the reader benefits from seeing the structure
+     up front. Format as a blockquote with linked section headings. -->
+> ## In this post
+>
+> - [Shipping containers can teach us a lot about communicating at scale](#shipping-containers-can-teach-us-a-lot-about-communicating-at-scale)
+> - [Content specs: the discipline nobody owns](#content-specs-the-discipline-nobody-owns)
+> - [A long lineage](#a-long-lineage)
+> - [What I keep learning](#what-i-keep-learning)
+> - [Why content architecture storytelling is hard](#why-content-architecture-storytelling-is-hard)
+> - [Where this goes](#where-this-goes)
+> - [A working definition](#a-working-definition)
+
+---
+
+I've been having this conversation for more than a decade -- at newspapers, at EMBL (a pan-European scientific organization), at UNDRR, and with every new product team I work with. The technology changes. The frameworks change. The conversation stays the same. And I find myself reaching for metaphors, because the direct version -- "the content structure matters more than the visual design" -- doesn't land with people who haven't had to scale the same content type hundreds of times across dozens of properties and felt it break.
+
+These conversations are with smart people who are good at their jobs. Most intuitively understand the brand value of consistent visual design across properties. They get the technical efficiency argument for not maintaining six different stacks. But when you start talking about why a news article needs to be constructed out of the same constituent parts everywhere, why a card needs the same fields on every property, you get one of two reactions. Either "well, yes, of course" -- as though structural consistency is a natural law that will maintain itself without effort -- or "why would that matter?" Neither reaction stops a team from building a new ultra-card with slightly different assumptions, and then someone tries to syndicate content across two sites ... and it doesn't. 
+
+It's never a dramatic failure. It's a slow accumulation of small structural differences that individually seem harmless and collectively make content immovable.
+
+## Shipping containers can teach us a lot about communicating at scale
+
+Before [1956](https://www.smithsonianmag.com/innovation/shipping-container-idea-before-time-180963730/), global shipping was a mess. Every port, every ship, every rail depot handled cargo differently. Crates came in every size. Loading a ship meant manually stacking irregularly shaped freight -- and unloading it at the other end meant unpacking everything and repacking it for the next leg. [Containerization](https://transportgeography.org/contents/chapter5/intermodal-transportation-containerization/) changed this with a deceptively simple idea: standardize the box.
+
+As the Transport Geography project puts it, the shipping container's value "is not what it is -- a simple box -- but what it enables: intermodalism." A container's standardized corner castings allow it to move between ships, trucks, and trains without anyone touching what's inside. The ship doesn't care whether the container holds electronics or textiles. The crane doesn't need to know. The interface is standard; the contents are free.
+
+<aside class="kh-marginnote">Economist <a href="https://conversableeconomist.com/2026/01/15/standardization-as-a-tool-for-development/">Timothy Taylor</a> argues that McLean's decision to open-license the standard was as important as the design itself.</aside>
+
+A detail that's easy to miss: in 1965, Malcolm McLean granted free licenses to his container patents to ISO, which then codified the dimensions, stacking rules, and corner fittings. Standardization only works when adoption is free. The same is true for content architecture: open, documented content schemas -- agreements about what fields a component must carry, which are required, and how they relate to each other -- that any team can adopt without permission.
+
+The fragmentation that shipping containers solved -- every port handling cargo differently -- is the same problem content architecture solves for the web. When an organization runs multiple websites, each with its own team and stack and design, every team naturally defines their own content structures. Their own card. Their own hero. Their own article format. Each one works perfectly in isolation. But when content needs to travel between systems -- syndicated news feeds, shared search results, cross-property content blocks -- every structural difference becomes a crack that content falls through.
+
+The Mangrove component library I lead at UNDRR is our organization's tool to solve this. Yes, many organizations have design systems and component libraries, but Mangrove is primarily a content architecture masquerading as a design system. 
+
+> As I wrote in [its documentation](https://unisdr.github.io/undrr-mangrove/?path=/docs/getting-started-about-mangrove--docs): "You can redesign how a card looks without touching Mangrove. You cannot remove the primary link from a card without breaking every content feed that expects cards to have links." 
+
+Mangrove's visual treatment of a card -- rounded corners or square, drop shadow or flat -- is up to each property's theme. The content structure -- image, title, link, summary text -- is the corner casting. It's the standardized interface that lets the card dock into any system. Each property's CSS theme is the ship or truck: it carries the card differently, but relies on the interface being consistent.
+
+In practice, what content architecture produces is a *schema* -- a formal definition of each content type's fields, their types, whether they're required or optional, and how they relate to other content types. If your organization runs multiple web properties, it should be thinking about content schemas the same way it thinks about design tokens or brand guidelines: as shared infrastructure that makes everything downstream cheaper and more consistent.
+
+## Content specs: the discipline nobody owns
+
+Content architecture sits between design and engineering, and in most organizations, neither discipline claims it. Designers think about how things look. Engineers think about how things work. Communications thinks about what the content does, but not how it's formed. Content architecture thinks about what things *are*. (I've explored this gap before in the [Content-Action Model](/posts/20180122-content-action-model.html), which tries to bridge the space between what content does and how it's structured.) People do this work -- content strategists, information architects -- but it rarely has a seat at the table when the component library is being specced. So the question of what a card carries tends to get answered implicitly, by whoever builds the first implementation, rather than by someone thinking about how content will need to move between systems.
+
+> [Abby Covert](https://abbycovert.com/), the information architect and author of *How to Make Sense of Any Mess*, has been open about this gap. When she arrived at Etsy as their first IA, her own manager [described what she did](https://abbycovert.com/writing/i-choose-me/) as "invisible work" (2020). She's spent her career making the case that information architecture is something everyone practices but nobody owns -- and that this orphaned status is the root of the problem. 
+
+> [Vicky Teinaki](https://www.vickyteinaki.com/blog/a-plea-for-the-lost-practice-of-information-architecture/), an alumna of the UK's [Government Digital Service](https://designnotes.blog.gov.uk/author/vicky-teinaki-senior-interaction-designer-gds/) (GDS), uses the Winchester Mystery House as a metaphor for what happens without IA: 160 rooms, 47 stairways, 6 kitchens, no coherent plan. She argues that IA "got absorbed into user experience, and then got forgotten entirely when it suddenly became easy to churn out high-fidelity visual prototypes without tackling underlying structural decisions" (2024).
+
+I recognize that pattern. Content architecture keeps falling through the cracks because it occupies a gap between disciplines that are individually well understood.
+
+Information architecture is well defined. Rosenfeld, Morville, and Arango's [canonical text](https://e-edu.nbu.bg/pluginfile.php/62325/mod_resource/content/1/Information_Architecture_For_The_Web_And_Beyond_Fourth_Edition.pdf) calls it "the structural design of shared information environments." [Jorge Arango describes IA](https://jarango.com/2024/09/15/whats-the-difference-between-information-architecture-and-content-strategy/) as "context strategy" -- designing the frame around content, borrowing Brian Eno's distinction between working "inside" (the work itself) and "outside" (the context that shapes how we experience it). Content strategy is equally established -- it's the editorial discipline of planning, creating, and governing the work inside that frame. And design systems have matured into a discipline of their own -- encoding visual and interaction patterns into reusable components.
+
+<aside class="kh-marginnote">The closest industry definition: <a href="https://www.contentful.com/blog/content-architecture/">Contentful (2025)</a> frames it as "the organization and structure of content itself" vs IA's focus on "the information that content communicates." Directionally right, but too vague to act on.</aside>
+
+None of these disciplines formally claims the structural contract between them: the definition of what a component *carries*. IA defines where content lives and how you find it. Content strategy defines what gets made and why. Design systems define how it looks and behaves. Content architecture defines what it *is* -- the fields, the relationships, the interface that lets a card dock into any system. It's neither the content nor the frame nor the visual treatment. It's the corner casting. And the artifact it produces is a content schema: a formal, shareable definition of each content type that any team can build against.
+
+Mike Wills captured this gap precisely in his 2021 A List Apart article "[A Content Model Is Not a Design System](https://alistapart.com/article/a-content-model-is-not-a-design-system/)." He distinguishes between nonsemantic types -- "teaser," "media block," "card" -- named for how content *looks*, and semantic types -- "publication," "partner listing," "news item" -- named for what content *is*. The nonsemantic names "might make it easy to lay out content, but don't help delivery channels understand the content's meaning." The semantic ones let "each delivery channel understand the content and use it as it sees fit."
+
+That distinction is what makes content syndication at scale work. A card that carries an image, a title, a link, and a summary -- whether it's expressed as an `mg-card` BEM class or a React `<Card>` component with typed props -- can travel between PreventionWeb, the Sendai Framework Monitor, and the International Recovery Platform because every system knows what to expect. The CSS methodology doesn't matter. What matters is whether the content contract exists and whether it's shared across properties. A team using Tailwind with a well-defined `<Card image={...} title={...} link={...}>` component has the same content architecture as one using BEM. A team that builds a card with no shared contract -- regardless of how they style it -- has bespoke freight that works where it was built and breaks everywhere else.
+
+<aside class="kh-marginnote"><a href="https://deanebarker.net/books/squirrel/content-modeling/">Deane Barker</a> (O'Reilly's <em>Web Content Management</em>): "The web page is actually a piece of media <em>created by</em> your content… it's simply a representation of your content."</aside>
+
+<aside class="kh-marginnote"><a href="https://www.sanity.io/blog/why-design-driven-content-modeling-creates-technical-debt">Sanity.io</a> on naming: "That <code>TestimonialCard_v2</code> type becomes useless when you redesign the testimonials section next quarter." A <code>Person</code> is a person wherever it appears.</aside>
+
+The content and its rendering are fundamentally different things. Name a content type by what it looks like -- `TestimonialCard_v2`, `FeaturedHero` -- and it breaks the next time you redesign. Name it by what it is -- `Person`, `NewsItem` -- and the schema survives.
+
+<details class="kh-details">
+<summary><h2 id="a-long-lineage">A long lineage</h2></summary>
+
+<p>This thinking has a long lineage, and I want to credit the people whose work shaped my approach.</p>
+
+<p>The idea that content should be separated from presentation is as old as the web standards movement. <a href="https://csszengarden.com/">CSS Zen Garden</a>, launched by Dave Shea in 2003, demonstrated the principle visually: one HTML document, hundreds of wildly different designs, achieved entirely through CSS. Jeffrey Zeldman's <a href="https://en.wikipedia.org/wiki/Designing_with_Web_Standards"><em>Designing with Web Standards</em></a> codified this as the "trinity of web standards" -- structure, presentation, and behavior as separate concerns. CSS Zen Garden proved you could separate markup from visual design. Content architecture extends that separation to the content layer: what a card carries, not just how it's styled.</p>
+
+<p>The structured content movement made this concrete for content, not just code. Karen McGrane's <a href="https://abookapart.com/products/content-strategy-for-mobile"><em>Content Strategy for Mobile</em></a> (2012) introduced the "blobs vs. chunks" framework: content trapped in a WYSIWYG editor is a blob -- an amorphous mass that only works in the container it was poured into. Structured content is "chunks" -- discrete, labeled pieces with metadata that can flow into any vessel. She framed this as a war: "We are in a war of Blobs versus Chunks." Sara Wachter-Boettcher's <a href="https://rosenfeldmedia.com/books/content-everywhere/"><em>Content Everywhere</em></a> (2012) extended this with a practical analogy: structured content is "like a recipe with obvious chunks to it... consistent from one recipe to the next: ingredients, instructions, and so on."</p>
+
+<p><a href="https://alistapart.com/article/battle-for-the-body-field/">Jeff Eaton</a> -- McGrane's collaborator at Autogram -- brought this fight to the CMS layer. His A List Apart piece "The Battle for the Body Field" (2014) argued that the WYSIWYG body field is the central battleground: teams need a "content vocabulary" of structured fields and entities, not raw HTML pasted into a textarea. Anyone who has inherited a Drupal site where everything lives in the body field knows exactly what he means.</p>
+
+<p>Daniel Jacobson at NPR built the <a href="https://www.lullabot.com/articles/understanding-create-once-publish-everywhere-cope">COPE principle</a> (Create Once, Publish Everywhere), starting with a unified CMS in 2002 and launching a <a href="https://insertcontenthere.com/episode-11/">public API in 2008</a> -- the first media company to do so -- using a content API as a single distribution channel. When new platforms emerged -- RSS, podcasts, mobile apps -- NPR didn't re-create content. They built new presentation layers that consumed the same API. The organizational argument was straightforward: COPE allowed "a lot of work to be done by a reduced staff, saving time, effort, and overhead."</p>
+
+<p>Brad Frost's <a href="https://bradfrost.com/blog/post/the-many-faces-of-themeable-design-systems/">themeable design systems work</a> brought this thinking into the component era. His door analogy captures the structure-vs-style separation cleanly: "There's a finite number of ways to make a functional front door to a house, but there are limitless aesthetic possibilities: paint color, handle style, trim, and other design flourishes." Components are door frames. Design tokens are paint and hardware. You don't manufacture a new door for each brand -- you buy a new can of paint.</p>
+
+<p>The design systems community has largely solved the theming problem. Google's <a href="https://m3.material.io/foundations/design-tokens">Material Design 3</a>, IBM's <a href="https://carbondesignsystem.com/elements/themes/overview/">Carbon</a>, Microsoft's <a href="https://fluent2.microsoft.design/design-tokens">Fluent</a>, Salesforce's Lightning, and GitHub's Primer all use semantic token architectures -- the same component, themed differently per context. The <a href="https://www.w3.org/community/design-tokens/">W3C Design Tokens Community Group</a> published a community group report in 2025, with editors from Adobe, Google, Microsoft, Salesforce, Shopify, and Figma. Design tokens handle paint.</p>
+
+<p>What hasn't been as widely adopted is the content structure layer underneath. Organizations that manage multiple brands have figured this out through necessity -- <a href="https://ionic.io/resources/case-studies/volkswagen-group">Volkswagen's GroupUI</a> applies shared component contracts across the group's brands -- VW, Audi, Skoda, Porsche, MAN, Scania, and others, and Conde Nast's Verso system powers Vogue, The New Yorker, and Wired from the same content components. The UK's Government Digital Service formalized this at platform scale: in 2015, Daniel Roseman <a href="https://technology.blog.gov.uk/2015/01/07/validating-a-distributed-architecture-with-json-schema/">described</a> how GOV.UK used JSON Schema as the contract between its publishing apps, content store, and frontend rendering -- a shared schema repository that any team could validate against. In the years since, they've only tightened that integration, moving schemas into the publishing API itself and building a <a href="https://insidegovuk.blog.gov.uk/2026/01/20/testing-a-new-gov-uk-publishing-application-content-block-manager/">content block system</a> (2026) where updating a single pension rate propagates to every page that references it. But most of the industry is still treating content structures as implementation details rather than shared infrastructure. The theming problem is solved. The content architecture problem is still mostly invisible.</p>
+
+</details>
+
+<details class="kh-details">
+<summary><h2 id="what-i-keep-learning">What I keep learning</h2></summary>
+
+<p>At <a href="/work/2019/impact-story-embl-visual-framework/">EMBL</a>, I built the Visual Framework to solve a specific version of this problem: dozens of teams across six countries were building the same navigation, cards, buttons, and grids independently. Multiple platforms fixed the same bugs independently. Version 1.x was tightly coupled to the EMBL-EBI brand, which meant teams that wanted the UX patterns but not the visual identity couldn't use it. Version 2.0 introduced design tokens so organizations could bring their own colors and spacing. The framework spread because it <a href="/posts/20170723-corporate-design-through-ia.html">reduced rework</a> -- not because it was mandated.</p>
+
+<p>At UNDRR, the problem is sharper because <a href="/posts/20260130-digital-transformation-complex-organizations/">content syndication</a> makes structural alignment non-optional. UNDRR publishes news, publications, and partner listings in Drupal. That content is syndicated across PreventionWeb, MCR2030, IRP, and other properties -- both through a content API and as rendered HTML with shared <code>mg-</code> CSS class names. The HTML syndication path is a pragmatic complement to the API: for properties that need to consume content today without building custom rendering layers, shared markup with shared content structures is a practical middle ground. The content contract is still defined; it's just expressed in HTML structure and class names rather than a JSON schema.</p>
+
+<p>The tradeoff works because the contract is enforced. If a property uses different content structures, syndicated content either renders broken or doesn't render at all. When UNDRR eventually rebrands, properties using Mangrove update a CSS import. Properties with their own content components do that work alone.</p>
+
+<p>The Mangrove theme files are small. PreventionWeb: 48 lines of variable overrides. IRP: 50 lines. MCR2030: 65 lines. That's the entire visual identity layer. The content structure -- what a card carries, what a hero contains, how the mega menu is organized -- is the expensive, shared infrastructure underneath. Getting that right is what makes the 50-line theme files possible.</p>
+
+</details>
+
+## Why content architecture storytelling is hard
+
+I've thought a lot about why this argument is so hard to make stick. Michael Andrews at Story Needle observed (2024) that resistance to separating content from presentation "comes from people in all roles -- not just writers accustomed to WYSIWYG editors, but also developers who exaggerate the complexity, UX designers who don't always see its value, and [vendors who play on this fear](https://storyneedle.com/separating-content-and-presentation-moving-past-fud/)." That matches my experience.
+
+The deeper problem is that content architecture is invisible. When a team ships a beautiful card component, everyone can see it. When someone defines the content structure that makes cards interoperable across five properties, nobody sees anything -- not until someone tries to syndicate content and it just works. The effort that went into *defining what a card is* doesn't produce a visible artifact. It produces an absence of problems.
+
+Product teams have real delivery pressure. Adopting shared structures adds a constraint with no immediate payoff for their specific project, and I get why that's frustrating. But unexamined divergence is expensive, and the cost compounds: content rollout, design iteration, maintenance, reuse, user experience. The organizational math wins. Someone has to keep making the case.
+
+<aside class="kh-marginnote"><a href="https://amyhupe.co.uk/articles/bringing-intention-to-design-systems/">Amy Hupe</a> (GOV.UK Design System): "Teams often get so laser-focused on delivering the artefacts that they forget about the work involved in changing people's mindsets and behaviours."</aside>
+
+<aside class="kh-marginnote"><a href="https://deanvipond.medium.com/a-short-ish-history-of-the-nhs-design-system-part-4-2019-putting-the-design-system-out-there-3b2515eb25e8">Dean Vipond</a> on the NHS design system (2022): "We needed to take the time to explain that this work would be 2-way."</aside>
+
+Adoption is a culture problem, not a tooling problem. Design systems teams learn this the hard way -- the GOV.UK and NHS teams both found that shipping components isn't enough without changing mindsets. But the payoff can be dramatic: during COVID-19, the NHS [shipped its "Get an isolation note" service in two weeks](https://deanvipond.medium.com/a-short-ish-history-of-the-nhs-design-system-part-5-2020-21-the-covid-years-50261d19fb3e) because the shared components already existed.
+
+Brad Frost frames the cost argument as: it's "the difference between manufacturing a brand-new door versus buying a new can of paint." When you multiply that across every card, hero, and footer in a multi-property ecosystem, the economics become clear. But the economics are only visible at the organizational level, not at the individual project level. That's why the person sitting at the brand level -- which is where I usually sit -- keeps having this conversation.
+
+## Where this goes
+
+The web standards community solved the structure-vs-presentation problem for markup twenty years ago. The design systems community is solving it for components and tokens now. The structured content community has been solving it for content models for a decade. These are different problems, but they share a common principle: **what something is should be defined separately from how it looks**.
+
+<aside class="kh-marginnote">Schema.org's <a href="https://schema.org/NewsArticle"><code>NewsArticle</code></a> is a content schema: <code>headline</code>, <code>datePublished</code>, <code>author</code>, <code>image</code>. Fields are typed (author can be a <code>Person</code> or <code>Organization</code>), have cardinality, and inherit from parent types (<code>NewsArticle</code> → <code>Article</code> → <code>CreativeWork</code> → <code>Thing</code>).</aside>
+
+There's already proof that content schemas work at global scale. [Schema.org](https://schema.org/) -- founded in 2011 by Google, Microsoft, Yahoo, and Yandex -- is essentially content architecture for the open web. Competing companies agreed on shared content types with explicit fields, types, and business rules. These are the same decisions any organization makes when defining its own content schemas -- schema.org just made them once, openly, for everyone.
+
+The lesson isn't that every organization should use schema.org internally (though aligning with it helps). The lesson is that the *pattern* works: define the content type, specify its fields and constraints, make the schema open, and let every system build its own presentation against the shared structure. Schema.org did for the open web what McLean's ISO containers did for shipping -- and what your organization's content schemas can do for its own ecosystem.
+
+Content architecture is what connects these efforts. As accessibility specialist [Hidde de Vries](https://hidde.blog/more-to-give-than-just-the-div-semantics-and-how-to-get-them-right/) puts it: "One of the web's killer features is that it comes with a language for shared semantics." Content architecture is what happens when you take that language seriously across an entire ecosystem -- and content schemas are how you codify it.
+
+What does a card carry? What does a news article contain? What are the shared structures that make content portable across properties, themes, and redesigns? Not glamorous questions. They don't produce beautiful mockups or impressive demos. They produce the plumbing that makes everything else work.
+
+I've been doing this work for over a decade. New stacks replace old ones, teams reorganize, platforms get rebuilt from scratch -- but the absence of shared content structures keeps producing the same failures. That says something about what actually matters in web work at scale: not the visual layer, not the technology, but the content contracts between them.
+
+## A working definition
+
+Content architecture doesn't yet have a single agreed-upon definition. Here's the one I work from, drawn from the arguments above:
+
+> **Content architecture** is the practice of defining shared content structures -- the fields, relationships, and constraints that determine what a component carries -- so that content can move between systems, themes, and redesigns without breaking. It is distinct from information architecture (how content is found and navigated), content strategy (what gets made and why), and design systems (how content looks and behaves). Content architecture defines what content *is*. Its primary artifact is the content schema: a formal, shareable definition of each content type that any team can build against -- the same pattern that schema.org proved works at web scale.
+
+And for teams starting this work, a minimal framework:
+
+1. **Name by meaning, not appearance.** A "news item" survives a redesign. A "featured card with sidebar layout" doesn't. Use semantic types.
+2. **Define the contract.** For each content type, document the required fields and their relationships. What does a card carry? Image, title, link, summary -- or something else? Write it down.
+3. **Separate structure from treatment.** The content contract should be the same everywhere. The CSS is up to each property. If changing a theme breaks the content, the contract is too coupled to the presentation.
+4. **Test portability.** Can this component's content move to another property and render correctly? If not, where does the structure diverge? That's where your content architecture has a gap.
+5. **Make the contract shared and open.** A content architecture that lives in one team's head isn't architecture -- it's tribal knowledge. Document it where any team can adopt it without permission. McLean open-licensed his container patents for the same reason.
+
+This isn't a maturity model or a certification. It's five questions to ask before the component library gets specced. If you're navigating similar problems across web properties, I'd like to hear how you're approaching them.
+
+---
+
+The principle behind content architecture is older than the web. Word document templates with named styles -- Heading 1, Body Text, Block Quote -- were content architecture in miniature. Tag content by what it is, not how it looks, and the structure survives a redesign. Anyone who's inherited a document where someone made text big and bold instead of using Heading 1 has felt the cost of skipping this step.
+
+
+- **Related reading on this site:** [Building a component library adopted across 50+ scientific properties](/work/2019/impact-story-embl-visual-framework/) -- the EMBL Visual Framework impact story | [Digital transformation for complex organizations](/posts/20260130-digital-transformation-complex-organizations/) -- the broader organizational context for this work
+- **Community voices:** This post draws on well-known names, but a lot of the best thinking on content architecture comes from practitioners in the field. Here are some who shaped this piece or speak to the same challenges:
+[Leonie Watson](https://tink.uk/understanding-semantics/) (TetraLogical) |
+[Stratos Filalithis](https://blogs.ed.ac.uk/website-communications/university-design-system/) (University of Edinburgh, 2021) |
+[Eric Bailey](https://ericwbailey.website/published/truths-about-digital-accessibility/) (accessibility) |
+[Andrew Walpole](https://andrewwalpole.com/blog/invisible-contexts/) (design engineering) |
+[Lauren Pope](https://lapope.com/2023/12/09/content-modelling-and-structured-content-the-basics/) (content strategy, 2023) |
+[Canadian Digital Service](https://digital.canada.ca/2024/05/27/a-path-toward-a-unified-design-system-for-the-government-of-canada/) (government design systems, 2024) |
+[Eileen Webb](https://alistapart.com/article/training-the-cms/) (content modeling) |
+[Kristin Gasser](https://link.digicol.org/2024/10/recovering-from-years-of-yes/) (Arizona State University, 2024) |
+[LocalGov Drupal](https://localgovdrupal.org/products/localgov-drupal-cms) (56+ UK local councils) |
+[Craig Martin](https://www.goodreads.com/book/show/23127671-shipping-container) (*Shipping Container*, University of Edinburgh, 2016)
+
+{% endmarkdown %}

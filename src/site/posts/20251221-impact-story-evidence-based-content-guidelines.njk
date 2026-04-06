@@ -1,0 +1,173 @@
+---
+title: "Turning vague content guidelines into measurable AI-ready standards"
+layout: layouts/post.njk
+teaser: "UNDRR's AI assistant couldn't learn from vague guidelines like 'keep it concise.' I extracted patterns from high-quality examples to create measurable standards."
+date: 2025-12-21
+tags:
+  - posts
+  - impact-stories
+topics:
+  - content strategy
+  - AI
+  - Drupal
+  - editorial systems
+org: UNDRR
+permalink: /work/2025/impact-story-evidence-based-content-guidelines/
+---
+
+{% markdown %}
+
+**Consistency** | **Adoption** | **Reproducibility**
+
+{% from "partials/orgs.njk" import orgIntro %}
+
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+
+## Why couldn't an LLM use our existing guidelines?
+
+The request came from a content editor who'd just spent two hours fixing metadata on 15 publications — all tagged inconsistently despite existing "guidelines." When Microsoft 365 Copilot launched custom agents, the idea was obvious: build an AI assistant to help with drafting and tagging.
+
+I quickly discovered that our guidelines were scattered across wiki pages, email threads, and tribal knowledge. Most were vague: "Keep it concise." "Use clear language." "Tag appropriately."
+
+Try feeding that to an LLM. What does "concise" mean? How many tags is "appropriate"?
+
+**What existed**:
+- "Publications should introduce the PDF attachment"
+- "Use relevant theme tags"
+- "Follow UN editorial standards"
+
+**What an LLM needs**:
+- "Publications average 169 words (range: 150-200), typically 2-3 paragraphs"
+- "Use 2-4 theme tags; most common combinations: Governance + Risk assessment (26%)"
+- "56% of titles use colon pattern: 'Primary Topic: Specific focus'"
+
+The real challenge wasn't building an AI assistant — it was preparing knowledge the AI could actually use.
+
+## How should AI access institutional knowledge?
+
+The UNDRR platform spans 17+ domains with over a decade of content. I identified three options for how the AI assistant could access this knowledge:
+
+**Option 1: RAG (real-time queries)**
+Give the LLM access to query Drupal on-the-fly. Current examples, always fresh — but slow, inconsistent, and the LLM must discover patterns each time.
+
+**Option 2: MCP server (structured tools)**
+Build a custom server exposing Drupal content as tool calls. Hybrid approach — but requires infrastructure, only works with select LLMs, and still discovers patterns in real-time.
+
+**Option 3: Static knowledge base**
+Extract examples, analyze to discover patterns, codify as guidelines, upload as documents. Pre-analyzed, stable, auditable — and works with Microsoft 365 Copilot out of the box.
+
+## Why did I choose static knowledge over real-time retrieval?
+
+I chose Option 3 for three reasons:
+
+1. **Stability over freshness**: Content guidelines should be consistent. I didn't want the AI suggesting "write 180 words" one week and "write 210 words" the next because recent publications happened to be longer.
+
+2. **Curation over automation**: I didn't want the latest 50 publications — I wanted the *best* 50. Manual review ensured patterns represented best practices, not just current practices.
+
+3. **Auditability over emergence**: Bad suggestion? Check the source document. The same documentation works for both AI and human training — new editors read the guides the AI uses.
+
+## How did I discover what "good" actually looked like?
+
+My hypothesis: high-quality content already exists in the system. I didn't need to invent guidelines — I needed to identify the patterns that already make content successful.
+
+### Step 1: Extract best examples via Drush
+
+I created a custom Drush command to export content with full metadata — title, body, word count, and taxonomy terms for each node. The command filtered for published content from the last 3 years, and I manually reviewed to select the *best* 50, not just the most recent.
+
+### Step 2: Analyze patterns with Claude AI
+
+With 122 examples exported to Markdown, I asked Claude to extract quantitative patterns — word counts, title formats, tag usage, structural patterns. The goal: discover what high-quality content actually looks like, measured.
+
+**Publications** (50 examples):
+
+| Metric | Finding |
+|--------|---------|
+| Word count | 169 avg (range: 95-287) |
+| Paragraphs | 2.3 avg |
+| Title length | 82 chars avg |
+| Title pattern | 56% use colons |
+| Heading usage | 12% (mostly plain text) |
+| Theme tags | All 50 had 2-4 |
+| Hazard tags | Only 16% |
+
+<br>
+
+**News articles** (50 examples):
+
+| Metric | Finding |
+|--------|---------|
+| Word count | 782 avg |
+| Paragraphs | 14.2 avg |
+| Heading usage | 69% use H2/H3 |
+| Internal links | 4.2 avg per article |
+
+<br>
+
+**Theme co-occurrence analysis**:
+
+- Governance + Risk identification: 26%
+- Urban risk + Climate change: 18%
+- Early warning + Science and technology: 14%
+
+These are measurements, not intuitions — though selecting which content counted as "exemplary" involved editorial judgment.
+
+### Step 3: Codify as quantified guidelines
+
+Instead of subjective guidance like "keep titles concise," I now had:
+
+> Target 70-100 characters. Analysis shows high-quality publications average 82 characters, with 56% using colon pattern ('Primary Topic: Specific focus').
+
+Every guideline traces back to data. The AI assistant can apply these consistently because they're specific and measurable.
+
+### Step 4: Deploy via Microsoft 365 Copilot
+
+I converted the Markdown guides to Word format via Pandoc and created a custom Copilot agent with 7 knowledge documents (~181KB total): writing guides for publications, news, and events; complete metadata guidance (41 themes, 20 hazards, 257 countries); and editorial standards for PDF summarization.
+
+Here's what the assistant now produces. Given a 24-page academic paper on disaster memorial parks in Japan:
+
+> **Title**: Place Governance and Citizen-Driven Placemaking: Lessons from Disaster Memorial Parks after the 2011 Japan Tsunami
+> *(108 chars — within 70-110 target)*
+>
+> **Body**: This publication examines the transformation of lost places through government-led planning and citizen-driven placemaking in disaster memorial parks following the 2011 Great East Japan Earthquake and Tsunami. The study focuses on two major memorial parks in Rikuzentakata and Ishinomaki...
+> *(181 words — within 150-200 target)*
+>
+> **Themes**: Urban risk and planning, Recovery planning, Community-based DRR, Governance
+> *(4 themes — matches pattern)*
+>
+> **Hazard**: Tsunami *(tagged because content is hazard-specific)*
+>
+> **Countries**: Japan, Asia *(hierarchical tagging applied)*
+
+The assistant also flagged British English compliance and offered to suggest SEO keywords or alternative titles.
+
+I compared this output to the previous human-edited metadata for the same publication. The AI version was more complete and better aligned with the patterns I'd identified.
+
+## What did I actually achieve?
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Metadata consistency | Baseline | +34% |
+| Titles in target range | 52% | 78% |
+| Theme tag compliance | Variable | 2-4 tags standard |
+
+These aren't just numbers — they represent fewer correction cycles, less time spent second-guessing tagging decisions, and content that's findable because it's consistently categorized.
+
+## What surprised me?
+
+Starting with data challenged assumptions the team had held for years:
+
+- The assumption was publications should be detailed — they average 169 words
+- The assumption was hazard tags were essential — only 16% of high-quality publications use them
+- The assumption was news articles needed structure — 31% don't use headings at all
+
+The taxonomy team initially pushed back on the hazard tag finding. I checked manually. Claude was right.
+
+## Why did this actually work?
+
+LLMs don't learn well from large blobs of mixed-quality data. They need good examples with clear patterns. The approach is reproducible: Drush export → AI analysis → quantified guidelines → deployment. Isolate the good examples, discover their patterns, and your AI assistants finally have something they can apply.
+
+## Links
+
+- [Using AI to extract an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/) — tutorial version of this approach
+
+{% endmarkdown %}

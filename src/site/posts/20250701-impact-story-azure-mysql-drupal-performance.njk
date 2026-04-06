@@ -1,0 +1,96 @@
+---
+title: 'Recovering platform performance after a cloud migration failure'
+layout: layouts/post.njk
+teaser: "UNDRR's Azure migration followed the playbook — managed services, platform-as-a-service, letting the cloud handle complexity. Instead, performance degraded and user trust eroded."
+date: 2025-07-01
+tags:
+  - posts
+  - impact-stories
+topics:
+  - Drupal
+  - Azure
+  - performance optimization
+  - database performance
+  - cloud migration
+org: UNDRR
+permalink: /work/2025/impact-story-platform-recovery-optimization/
+kens_status: ready_for_publication
+---
+
+{% markdown %}
+
+**Performance** | **Reliability** | **Trust**
+
+{% from "partials/orgs.njk" import orgIntro %}
+
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+
+UNDRR's 15-site Drupal ecosystem migrated to Azure following best practices: managed services, platform-as-a-service, letting Azure handle infrastructure complexity. The "modern" architecture should have been faster, more reliable, more scalable.
+
+Instead, performance degraded. Long-tail content timed out. Daily page failures jumped 50%. Editor workflows slowed. User trust eroded.
+
+The database layer turned out to be the critical bottleneck. Load testing revealed Azure Database for MySQL was 2-3x slower than self-hosted alternatives on Drupal's query patterns. But fixing the database alone wouldn't restore trust — we needed platform-wide recovery.
+
+## Why did the best-practice architecture fail?
+
+We chose Azure Database for MySQL for good reasons: Microsoft's recommended architecture, automatic backups, high availability built in. Modern cloud-native applications favor managed databases.
+
+But Drupal generates specific query patterns that didn't match Azure MySQL's optimization profile. Complex joins, large result sets, bursty queries — especially on cold paths when cache misses.
+
+**Cold path failures were the symptom.** If no one visited a page recently, the first request would time out. Admin paths involving heavy queries slowed substantially. Performance was acceptable only when cache was warm — a fragile architecture.
+
+We needed rigorous evidence to justify reversing architectural decisions. Load testing alternated between Azure MySQL and MariaDB on a VM while keeping code static. The results were consistent: MariaDB outperformed the managed service by 2-3x on database-bound operations.
+
+## How do you recover when the foundation is wrong?
+
+Fixing the database alone wouldn't restore trust. We executed coordinated recovery across multiple fronts:
+
+**Database migration came first.** We moved to MariaDB on a VM with tight backup and continuity plans. This immediately cut database latency by 51% and reduced 503 errors by 77%.
+
+**Caching strategy became comprehensive.** Page cache, render cache, CDN layers. Cache warming for cold paths to prevent the timeout pattern. Tuned image pipelines for Core Web Vitals.
+
+**Editorial efficiency got dedicated focus.** Editors faced compounding delays — slow menu loads, timeout failures on save, manual workflows. We carved out a full release cycle for editorial efficiency, reclaiming 120 hours monthly per 100 editors. (See [full editorial efficiency story](/work/2025/impact-story-editorial-efficiency/).)
+
+**Platform standardization across 15 sites.** Consolidated asset handling, unified theming patterns, consistent editorial workflows. One platform, 15 sites.
+
+## How do you manage this level of complexity?
+
+This transformation required disciplined governance. We introduced a living risk register with owners, triggers, and mitigations. The database migration was flagged early as high-impact/high-risk, which allowed careful transition planning.
+
+We committed to a predictable 3-week release cadence with scope control. This gave stakeholders clear expectations and gave the team focus during significant platform change.
+
+We required measurable outcomes on every major ticket — not "improve performance" but "reduce 95th percentile TTFB to under 1s on admin paths." 90%+ of major tickets included defined success metrics.
+
+## What did we actually achieve?
+
+**Performance**: Median response time cut in half (0.88s → 0.45s) across 15 sites. Database latency reduced 51%. Doubled Lighthouse SEO scores on representative pages.
+
+**Reliability**: 503 errors reduced 77% after database migration. Daily page failures recovered from post-migration peak. Stability visible to users, particularly in bandwidth-constrained environments.
+
+**Cost**: 20% quarterly Azure spend reduction. Budget freed for content and features rather than infrastructure overhead.
+
+**User satisfaction**: 79.9% of visitors report sites are helpful (+7 percentage points year over year). 35,113 user responses validating that technical improvements translated to real experience gains.
+
+**Campaign impact**: GAR2025 landing achieved 40% engagement lift during campaign period. Platform stability enabled successful high-stakes launches.
+
+## Why did this actually work?
+
+This wasn't heroics. It was standardization, rigorous diagnosis, and patient execution across 15 sites. The compounding effect moved the needle.
+
+Cross-functional coordination across teams in Geneva, Bangkok, Bonn, New York, and Manila. Clear ownership, disciplined cadence, evidence-based decisions. When we hit the database bottleneck, we didn't guess — we benchmarked rigorously and made the infrastructure change with data in hand.
+
+The 79.9% satisfaction score wasn't an accident. It reflected our commitment to ensuring technical metrics translated to real user experience improvements.
+
+## Links
+
+**Deep dives**:
+
+- [Drupal delayed by Azure MySQL](/posts/20250710-metrics-of-caution-azure-mysql/) — Full benchmarking methodology
+- [Smart AI integration comes only with knowledge](/posts/20250919-smart-ai-integration-context-first/) — AI-readiness strategy
+
+**Related impact stories**:
+
+- [GAR 2025 visual storytelling](/work/2025/impact-story-gar2025-landing/) — Campaign success enabled by platform improvements
+- [Reclaiming editorial time](/work/2025/impact-story-editorial-efficiency/) — Editorial workflow optimization
+
+{% endmarkdown %}

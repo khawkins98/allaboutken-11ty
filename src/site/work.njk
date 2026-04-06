@@ -1,0 +1,61 @@
+---
+title: My work and impact
+teaser: 'Evidence-led impact stories: UNDRR platform transformation (50–70% faster), EMBL Visual Framework (50+ sites), editorial efficiency, and governance improvements.'
+layout: layouts/base.njk
+templateEngineOverride: njk
+---
+
+<div class="kh-grid-stylized">
+  <div></div>
+  <section class="kh-content kh-u-padding__top--800 kh-u-padding__bottom--200">
+    <h1 class="kh-text-heading--1">{{title}}</h1>
+    <p class="kh-intro__text">
+      Evidence‑backed impact across platforms & performance, design systems, and structured content for AI.
+    </p>
+    <p class="">
+      Want the broader picture? Read my <a href="/cv/">CV</a>, get in touch via
+      <a rel="me" href="mailto:khawkins98@gmail.com">email</a> or <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>,
+      <a href="/search/">search the site</a>, or browse the <a href="/blog">blog</a> to get more of a sense of me.
+    </p>
+  </section>
+</div>
+
+<section class="kh-grid-stylized kh-content kh-content--wide">
+  <span></span>
+  <section>
+    {% set stories = collections.impactStories or [] %}
+    {% if stories.length %}
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">What</th>
+            <th scope="col">When</th>
+            <th scope="col">Who</th>
+            <th scope="col">Topics</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for post in stories -%}
+          <tr>
+            <td>
+              <a href="{{ post.url }}">{{ post.data.title | replace('Impact story: ', '') }}</a>
+              {% if post.data.teaser %}<br><small>{{ post.data.teaser | striptags }}</small>{% endif %}
+            </td>
+            <td>{{ post.date | dateDisplay('y') }}</td>
+            <td>{% if post.data.org %}{{ post.data.org }}{% else %}&mdash;{% endif %}</td>
+            <td>
+              {% if post.data.topics -%}
+                {% for t in post.data.topics %}<span class="kh-label">{{ t }}</span>{% endfor %}
+              {%- endif %}
+            </td>
+          </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No impact stories yet.</p>
+    {% endif %}
+  </section>
+</section>
+
+<br>

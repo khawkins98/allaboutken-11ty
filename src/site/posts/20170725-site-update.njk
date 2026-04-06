@@ -5,6 +5,7 @@ teaser: 'As is apt for us web types, on <a href="https://web.archive.org/web/201
 image: "/blog/13903560833_970f66b3c2_k.jpg"
 image_meta:
   text: ""
+  credit: "Thanks to <a href='https://www.flickr.com/photos/xingxiyang/13903560833'>Flickr user Kiefer</a> for the CC image."
   altext: Jet engine.
 date: 2017-07-25
 url: /posts/20170725-site-update.html
@@ -14,7 +15,31 @@ tags: posts
 ---
 
 {% markdown %}
-Why? The content was slightly outdated and I was keen to move it from a Drupal-powered site to a Gulp powered site.
+**TL;DR**: I moved from Drupal to a simple static build powered by Gulp — faster, lighter, and easier to maintain for a small site.
 
-Why move from Drupal to a static site when I'm just working with simple content? That's exactly why.
+On 25 July 2017 I rebooted this website. The content felt dated and the stack was heavier than the site needed.
+
+If you’re curious about the previous version, you can browse it on [the Wayback Machine](https://web.archive.org/web/20170625193445/https://allaboutken.com).
+
+
+## Why a static site?
+
+- Simple content: posts and pages — no runtime or database required
+- Faster and more secure by default
+- Write in Markdown with version control
+- Fewer moving parts to maintain
+
+## What changed
+
+- Static build with Gulp for templates, assets, and deploy
+- Pruned and refreshed content
+- Leaner CSS and assets
+
+Note (2018): I updated the build to ZURB Panini 2 — see [ZURB Panini 2 migration](/posts/20180210-zurb-panini-2-migration.html).
+
+## Why not Drupal (for this)?
+
+Drupal is excellent for complex, multi‑author, workflow‑heavy sites. For a small personal site, the ongoing maintenance and module overhead weren’t justified.
+
+When the job is simple, the tool should be too.
 {% endmarkdown %}

@@ -1,27 +1,28 @@
 ---
 title: The blog
-subtitle: No homepage, yet.
-date: 2018-08-22 12:24:50
+teaser: "Thoughts, lessons learned, and the occasional web oddity."
 layout: layouts/base.njk
-#templateEngineOverride: njk
+pagination:
+  data: collections.blogPosts
+  size: 15
+  alias: pagedPosts
+permalink: "/blog/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 }}/{% endif %}"
 ---
 {%- set siteConfig = siteConfig.siteInformation -%}
 <div class="kh-grid-stylized">
   <div>
-    <h1 class="kh-font-now-alt kh-font-now-alt--display kh-text-heading--1">{{title}}</h1>
   </div>
   <section>
-  {%- for post in collections.posts | sort(true, true, attribute='date' ) -%}
-  <article class="kh-summary kh-summary--news">
-    <span class="kh-summary__date">{{ post.date | dateDisplay }}</span>
-    <a class="kh-summary__image" href="{{ post.url | url}}">
-      <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image | url }}" alt="{{ post.data.teaser }}" />
-    </a>
-    <h3 class="kh-font-now-alt kh-summary__title">
-      <a href="{{ post.url | url}}" class="kh-summary__link">{{ post.data.title }}</a>
-    </h3>
-    <p class="kh-content kh-summary__text">{{ post.data.teaser | safe }}</p>
-  </article>
+    <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
+    {% include "partials/search-box.njk" %}
+  {%- for post in pagedPosts -%}
+    {% include "partials/post-summary.njk" %}
   {%- endfor -%}
+
+  {% set pagerLabel = "Blog pagination" %}
+  {% set pagerNewer = "Newer posts" %}
+  {% set pagerOlder = "Older posts" %}
+  {% include "partials/pager.njk" %}
+
   </section>
 </div>

@@ -1,0 +1,70 @@
+---
+title: "A stop-gap Drupal module to kill Word Junk in CKEditor 5"
+layout: layouts/post.njk
+teaser: "A tiny CKEditor 5 plugin for Drupal that strips inline Word-like junk in one click."
+image: "/blog/demo-of-editing.gif"
+image_meta:
+  text: "A quick demo of the tool in action."
+  altext: "An animated gif showing the tool in action."
+date: 2025-09-19
+tags:
+  - posts
+topics:
+  - Drupal
+  - CKEditor
+  - editorial tooling
+  - JavaScript
+---
+
+{% markdown %}
+
+If your content editors are still fighting with messy HTML pasted from Word, you're not alone. When I returned to CKEditor 5 after a few years away from Drupal, I was frustrated to find a simple solution for this problem was still missing.
+
+Yes, you can block inline HTML or clean text on paste, but CKEditor 5 still lacks an easy way to select text and remove _all_ inline styles and Word‑like junk.
+
+Perhaps you, too, have seen fun like this?
+
+```html
+<p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:8pt;margin-left:0in;line-height:107%;font-size:11pt;font-family:'Calibri',sans-serif;"><span style="mso-fareast-language:EN-US;color:#1F4E79;background:white;"><b><i>Heading from Word</i></b></span>
+```
+
+🤮
+
+And it's not just our editors that feel the pain — look at this 5-year-running [Drupal.org thread](https://www.drupal.org/project/drupal/issues/3321254):
+
+> “We've got clients trying to paste in a lot of documents from Word, and the ‘remove formatting’ button only stripping styles from inline elements tends to leave the document with a broken mix of styling, mostly relating to sizing and spacing.
+>
+> Stripping styles after the fact in the filter prevents intentional styling and makes the editing experience very inconsistent when they're still visible within the editor.”
+>
+> **hephaestus (2 years ago)**
+
+Following comments in the thread show how this is still an ongoing pain point. Hopefully it does get sorted out soon, but in the interim it was becoming too painful to wait; So I had a look and it wasn't too hard to make a cleanup button for CKEditor 5 + Drupal.
+
+## The stopgap solution
+
+So I decided to build a simple, easy-to-maintain CKEditor 5 plugin for Drupal that does one thing: **aggressively strip Word-like junk** like inline styles, classes, and special characters.
+
+The goal was to create a tool that:
+
+  * Integrates cleanly into Drupal 10/11's CKEditor 5.
+  * Requires no heavy tooling to maintain.
+  * Gives editors a simple, on-demand cleanup button.
+
+The result? Editors can now wipe out Word junk with a single click, saving them time and reducing the need for constant content review.
+
+I got it working with the help of a few key resources:
+
+  * **[CKEditor 5 Plugin Pack source](https://git.drupalcode.org/project/ckeditor5_plugin_pack)** → provided a clear example of how Drupal discovers plugins.
+  * **[Drupal CKEditor 5 API docs](https://www.drupal.org/docs/drupal-apis/ckeditor-5-api/overview)** → offered crucial context on how to wire it all up.
+
+## Try it yourself
+
+We now have a button that can be added at `/admin/config/content/formats/manage/full_html` that does one job — removes the bad stuff.
+
+Download the module and check out the code:
+
+<a class="kh-button" href="https://github.com/khawkins98/ckeditor_clean_styles">CKEditor Clean Styles for Drupal</a>
+
+Feedback welcome.
+
+{% endmarkdown %}

@@ -1,53 +1,217 @@
 ---
-title: Search
-subtitle: No homepage, yet.
+title: Search my site
 date: 2020-09-12 21:24:50
 layout: layouts/base.njk
 templateEngineOverride: njk
+noindex: true
 ---
 
-<section class="kh-grid-stylized kh-grid-stylized--has-centered-content kh-stack">
-  <div></div>
-  <div>
-    {% set context = {
-      search_client_button_text: "Search",
-      search_client_autofocus: false,
-      search_client_prompt: "Search the site",
-      search_client_script: "/search_index.js",
-      search_client_button: true,
-      search_client_action: "/search/",
-      search_client_id: "search_query",
-      search_client_destination_prefix: ""
-    } %}
+<div data-pagefind-ignore>
+  <h1 id="search-heading">{{title}}</h1>
 
-    <form action="{{ context.search_client_action }}" method="GET" class="kh-form kh-form--search kh-form--search--responsive kh-sidebar kh-sidebar--end">
-      <div class="kh-sidebar__inner">
-        <div class="kh-form__item kh-search__item">
-          <label class="kh-form__label kh-search__label kh-u-sr-only" for="{{ search_client_id }}">{{ context.search_label }}</label>
-          <input type="search" id="search" placeholder="{{ context.search_client_prompt }}" name="{{ context.search_client_id }}" class="vf-form__input vf-search__input" {%- if search_client_autofocus %} autofocus{%- endif %} data-vf-search-client-side-input data-vf-search-client-side-destination-prefix="{{context.search_client_destination_prefix}}">
+  <div class="kh-search-widget">
+    <fieldset id="search-mode" class="kh-search-mode" hidden>
+      <legend class="kh-u-sr-only">Search mode</legend>
+      <label class="kh-search-mode__option">
+        <input type="radio" name="search_mode" value="keyword" checked>
+        Search by keyword
+      </label>
+      <label class="kh-search-mode__option">
+        <input type="radio" name="search_mode" value="semantic">
+        Search semantically
+      </label>
+    </fieldset>
+
+    <div class="kh-search-widget__panel">
+      <div id="keyword-section">
+        <p><small><a href="/posts/20260228-replacing-lunr-with-pagefind/">Runs locally in browser</a> and powered by Pagefind.</small></p>
+        <form action="/search/" method="GET" class="kh-search-widget__form">
+          <label class="kh-u-sr-only" for="search">Search my site</label>
+          <input type="search" id="search" placeholder="Search my site" name="search_query" class="kh-form__input">
+          <button type="submit" class="kh-button" aria-label="Search">
+            <span class="kh-button__label" aria-hidden="true">Search</span>
+            <span class="kh-button__icon" aria-hidden="true">&#x2192;</span>
+          </button>
+        </form>
+
+        <noscript>
+          <p>Search requires JavaScript. You can also try
+            <a href="https://duckduckgo.com/?q=site%3Aallaboutken.com">searching on DuckDuckGo</a>.
+          </p>
+        </noscript>
+
+        <div class="kh-content kh-grid kh-search-client-side">
+          <div id="search-results"></div>
         </div>
-        {%- if context.search_client_button -%}
-        <button type="submit" class="kh-button kh-button--primary kh-search__button">
-          <span class="kh-button__text">{{ context.search_client_button_text }}</span>
-        </button>
-        {%- endif -%}
-
       </div>
-    </form>
 
-    <script src="/js-search-lunr.js"></script>
-    <script src="/js-search-client-side.js"></script>
-    <script src="{{ context.search_client_script }}"></script>
-    <div class="kh-content kh-grid kh-search-client-side">
-      <div class="results-container" data-vf-search-client-side-results>
-        Loading...
+      <div id="semantic-section" hidden>
+        <p>Search by describing what you're looking for in your own words.</p>
+
+        <p><small>This <a href="/posts/20260302-semantic-search-browser-embeddings/">searches by meaning</a>, not exact keywords -- and everything runs locally in your browser.</small></p>
+
+        <div class="kh-ask" aria-label="Semantic search conversation">
+          <div class="kh-ask__conversation" id="ask-conversation" role="log" aria-live="polite" aria-relevant="additions">
+          </div>
+
+          <form class="kh-search-widget__form" id="ask-form" action="/search/" method="GET">
+            <label class="kh-u-sr-only" for="ask-input">Ask a question about this site</label>
+            <input type="text" id="ask-input" name="q" placeholder="e.g. articles about improving search" class="kh-form__input" autocomplete="off">
+            <button type="submit" class="kh-button" aria-label="Ask">
+              <span class="kh-button__label" aria-hidden="true">Ask</span>
+              <span class="kh-button__icon" aria-hidden="true">&#x2192;</span>
+            </button>
+          </form>
+        </div>
+
       </div>
     </div>
   </div>
-</section>
 
-<script type="text/javascript">
-  window.onload = function () {
-    vfSearchClientSide();
-  };
+<script type="module">
+  import { initSemanticSearch } from '/semantic-search.js';
+
+  // --- Shared utilities ---
+  const escDiv = document.createElement('div');
+  function esc(s) {
+    escDiv.textContent = s;
+    return escDiv.innerHTML;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+
+  // --- Mode toggle ---
+  const modeFieldset = document.getElementById('search-mode');
+  const keywordSection = document.getElementById('keyword-section');
+  const semanticSection = document.getElementById('semantic-section');
+  const modeRadios = modeFieldset.querySelectorAll('input[name="search_mode"]');
+
+  // Show the toggle (requires JS); visually hide the heading (tabs replace it)
+  modeFieldset.removeAttribute('hidden');
+  document.getElementById('search-heading').classList.add('kh-u-sr-only');
+
+  // Exposed on window for inline onclick fallback links
+  window.setMode = setMode;
+
+  let askInput; // set after module init; setMode() uses it at call time
+
+  function setMode(mode) {
+    const isSemantic = mode === 'semantic';
+    const [show, hide] = isSemantic ? [semanticSection, keywordSection] : [keywordSection, semanticSection];
+    hide.setAttribute('hidden', '');
+    show.removeAttribute('hidden');
+    modeFieldset.querySelector(`input[value="${mode}"]`).checked = true;
+    (isSemantic ? askInput : input).focus();
+
+    const url = new URL(window.location);
+    if (isSemantic) {
+      url.searchParams.set('search_type', 'semantic');
+    } else {
+      url.searchParams.delete('search_type');
+    }
+    window.history.replaceState({}, '', url);
+  }
+
+  modeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      setMode(radio.value);
+      // Carry query across when switching
+      if (radio.value === 'semantic' && input.value.trim()) {
+        askInput.value = input.value.trim();
+      } else if (radio.value === 'keyword' && askInput.value.trim()) {
+        input.value = askInput.value.trim();
+      }
+    });
+  });
+
+  // --- Keyword search (Pagefind) ---
+  const input = document.getElementById('search');
+  const resultsEl = document.getElementById('search-results');
+  let pagefind = null;
+  let debounceTimer = null;
+
+  async function initPagefind() {
+    if (!pagefind) {
+      pagefind = await import('/pagefind/pagefind.js');
+      await pagefind.options({ excerptLength: 30 });
+    }
+    return pagefind;
+  }
+
+  async function doSearch(query) {
+    if (!query || !query.trim()) {
+      resultsEl.innerHTML = '';
+      return;
+    }
+
+    resultsEl.innerHTML = '<p>Searching...</p>';
+
+    try {
+      const pf = await initPagefind();
+      const search = await pf.search(query);
+
+      if (search.results.length === 0) {
+        resultsEl.innerHTML = '<p>No results found.</p>';
+        return;
+      }
+
+      const toShow = search.results.slice(0, 10);
+      const fragments = await Promise.all(toShow.map(r => r.data()));
+
+      const total = search.results.length;
+      const shown = toShow.length;
+      const countText = total > shown
+        ? `Showing ${shown} of ${total} results.`
+        : `${total} result${total === 1 ? '' : 's'} found.`;
+
+      const html = fragments.map(item => `
+        <article class="kh-search-result">
+          <a href="${esc(item.url)}"><h3>${esc(item.meta?.title || item.url)}</h3></a>
+          <p class="snippet">${item.excerpt}</p>
+          <p><code>${esc(item.url)}</code></p>
+        </article>
+      `).join('');
+
+      resultsEl.innerHTML = `<p>${countText}</p>` + html;
+    } catch (err) {
+      console.error('Search failed:', err);
+      resultsEl.innerHTML = '<p>Search is temporarily unavailable. Try <a href="https://duckduckgo.com/?q=site%3Aallaboutken.com">searching on DuckDuckGo</a> instead.</p>';
+    }
+  }
+
+  const initialQuery = params.get('search_query');
+  if (initialQuery) {
+    input.value = initialQuery;
+    doSearch(initialQuery);
+  }
+
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => doSearch(input.value), 300);
+  });
+
+  input.closest('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    clearTimeout(debounceTimer);
+    const query = input.value;
+    const url = new URL(window.location);
+    url.searchParams.set('search_query', query);
+    window.history.replaceState({}, '', url);
+    doSearch(query);
+  });
+
+  // --- Semantic search ---
+  const semantic = initSemanticSearch({ esc, setMode });
+  askInput = semantic.askInput;
+
+  // --- Initial state from URL params ---
+  if (params.get('search_type') === 'semantic') {
+    setMode('semantic');
+    const semanticQuery = params.get('q') || params.get('search_query') || '';
+    if (semanticQuery) {
+      askInput.value = semanticQuery;
+      semantic.handleQuery(semanticQuery);
+    }
+  }
 </script>
+</div>

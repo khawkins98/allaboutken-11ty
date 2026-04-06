@@ -3,71 +3,116 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preload" as="font" href="/assets/kh-font/Recursive_VF_1.085--subset-GF_latin_basic.woff2" type="font/woff2" crossorigin>
     <link rel="stylesheet" media="all" href="{{ '/css/styles.css' | url }}" />
     <title>{{ title or (renderData and renderData.title) or siteConfig.siteInformation.title}} | All about Ken Hawkins</title>
+    <link rel="canonical" href="https://www.allaboutken.com{{ page.url | url }}" />
+    <link rel="webmention" href="https://webmention.io/allaboutken.com/webmention" />
+    <link rel="pingback" href="https://webmention.io/allaboutken.com/xmlrpc" />
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
     <link rel="manifest" href="/assets/ken-favicon/assets/site.webmanifest">
     <link rel="mask-icon" href="/assets/ken-favicon/assets/safari-pinned-tab.svg" color="#ffffff">
-    <meta name="msapplication-TileColor" content="#ffffff">
+    <link rel="webmention" href="https://webmention.io/www.allaboutken.com/webmention" />    <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
-    <meta name="description" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
+    <meta name="description" content="{{ (teaser or siteConfig.siteInformation.short_description) | striptags }}" />
     <meta name="MobileOptimized" content="width" />
     <meta name="HandheldFriendly" content="true" />
-    <meta name="abstract" content="Hello. I am Ken Hawkins. Builder of websites, project planner, newspaper nerd, information architect, lover of UX, consultant. Information structure is my thing." />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="keywords" content="Drupal, web development, Ken Hawkins, UX, information architecture" />
+    {% if noindex %}<meta name="robots" content="noindex,follow" />{% endif %}
+    {#- OpenGraph and Twitter meta tags with defaults and per-post overrides #}
+    {#- Compute values once for reuse #}
+    {%- set ogTitleComputed = og_title or (title ~ " | All about Ken Hawkins") %}
+    {%- set ogDescriptionComputed = og_description or teaser or siteConfig.siteInformation.short_description %}
+    {%- if og_image %}
+      {#- Explicit og_image override (full URL) - only way to bypass dynamic screenshots #}
+      {%- set ogImageComputed = og_image %}
+    {%- else %}
+      {#- Default: dynamic screenshot from social card page #}
+      {%- set ogImageComputed %}{% ogImageUrl %}{% endset %}
+    {%- endif %}
+    {#- OpenGraph meta tags #}
+    {%- if tags and ('posts' in tags) %}
+    <meta property="og:type" content="article" />
+    <meta property="article:published_time" content="{{ date }}" />
+    <meta property="article:author" content="{{ siteConfig.siteInformation.author }}" />
+    {% if tags %}{% for tag in tags %}<meta property="article:tag" content="{{ tag }}" />{% endfor %}{% endif %}
+    {% else %}
     <meta property="og:type" content="website" />
+    {% endif %}
     <meta property="og:site_name" content="All About Ken Hawkins" />
-    <meta property="og:url" content="https://www.allaboutken.com{{page.url | url }}" />
-    <meta property="og:title" content="{{title}} > All About Ken Hawkins" />
-    <meta property="og:image" content="https://www.allaboutken.com/images/crop-cinema{{image}}" />
+    <meta property="og:url" content="{{ siteConfig.siteInformation.url }}{{ page.url | url }}" />
+    <meta property="og:title" content="{{ ogTitleComputed }}" />
+    <meta property="og:description" content="{{ ogDescriptionComputed | striptags }}" />
+    <meta property="og:image" content="{{ ogImageComputed }}" />
+    {%- if image_meta and image_meta.alt %}<meta property="og:image:alt" content="{{ image_meta.alt }}" />{% endif %}
+    {# Twitter Card meta tags #}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@khawkins98" />
     <meta name="twitter:site:id" content="3723201" />
     <meta name="twitter:creator" content="@khawkins98" />
     <meta name="twitter:creator:id" content="3723201" />
-    <meta name="twitter:url" content="https://www.allaboutken.com{{page.url | url }}" />
-    <meta name="twitter:description" content="{{ teaser | safe }}" />
-    <meta name="twitter:image" content="https://www.allaboutken.com/images/crop-cinema{{image}}" />
+    <meta name="twitter:url" content="{{ siteConfig.siteInformation.url }}{{ page.url | url }}" />
+    <meta name="twitter:title" content="{{ ogTitleComputed }}" />
+    <meta name="twitter:description" content="{{ ogDescriptionComputed | striptags }}" />
+    <meta name="twitter:image" content="{{ ogImageComputed }}" />
+    {% if image_meta and image_meta.alt %}<meta name="twitter:image:alt" content="{{ image_meta.alt }}" />{% endif %}
     <meta name="dcterms.title" content="{{title}} > All About Ken Hawkins" />
     <meta name="dcterms.type" content="Text" />
-    <meta name="dcterms.identifier" content="https://allaboutken.com{{page.url | url }}" />
+    <meta name="dcterms.identifier" content="https://www.allaboutken.com{{page.url | url }}" />
     <meta name="dcterms.format" content="text/html" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.allaboutken.com/rss.xml">
     <meta name="generator" content="{{ eleventy.generator }}">
+    {%- if page.url == '/' %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://www.allaboutken.com/",
+      "name": "All about Ken Hawkins",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.allaboutken.com/search/?search_query={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    {% endif %}
   </head>
-  <body class="kh-body kh-stack{% if bodyClass %} {{ bodyClass }}{% endif %}">
+  <body class="kh-stack{% if bodyClass %} {{ bodyClass }}{% endif %}">
+    {% include "partials/ambience.njk" -%}
+    <a href="#main-content" class="kh-u-sr-only kh-skip-link">Skip to main content</a>
+    <!-- Visible when CSS is off (hidden by CSS when on) -->
+    <aside class="kh-css-off-note">If you're reading this the site styles are currently disabled. Toggle the “CSS” checkbox in the footer to restore styling.<hr></aside>
     <header class="kh-global-header" role="banner">
-      <a href="/" class="kh-logo">AllAboutKen.com</a>
+      <a href="/" class="kh-logo kh-navigation__link">AllAboutKen.com</a>
       <nav class="kh-cluster kh-navigation kh-u-do-not-print kh-u-show-for-medium">
         <ul class="kh-navigation__list">
           <li class="kh-navigation__item">
-            <a href="/blog" class="kh-navigation__link">Blog</a>
-          </li>
-          <li class="kh-navigation__item kh-u-show-for-medium-only">
-            <a href="mailto:khawkins98@gmail.com" class="kh-navigation__link">E-mail</a>
-          </li>
-          <li class="kh-navigation__item kh-u-show-for-large">
-            <a href="mailto:khawkins98@gmail.com" class="kh-navigation__link">khawkins98@gmail.com</a>
+            <a href="/blog" class="kh-navigation__link{% if page.url.startsWith('/blog') or (page.url.startsWith('/posts') and tags and not ('impact-stories' in tags)) %} kh-navigation__link--active{% endif %}">Blog</a>
           </li>
           <li class="kh-navigation__item">
-            <a href="https://toot.io/@khawkins98" class="kh-navigation__link">Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
+            <a href="/work" class="kh-navigation__link{% if page.url.startsWith('/work') %} kh-navigation__link--active{% endif %}">Work</a>
           </li>
           <li class="kh-navigation__item">
-            <a href="https://www.linkedin.com/in/allaboutken" class="kh-navigation__link">LinkedIn</a>
+            <a href="/digesting" class="kh-navigation__link{% if page.url.startsWith('/digesting') %} kh-navigation__link--active{% endif %}">Digesting</a>
+          </li>
+          <li class="kh-navigation__item">
+            <a href="/search/" class="kh-navigation__link{% if page.url.startsWith('/search') %} kh-navigation__link--active{% endif %}">Search</a>
+          </li>
+          <li class="kh-navigation__item">
+            <a href="/#hello" class="kh-navigation__link">Contact</a>
           </li>
         </ul>
       </nav>
     </header>
-    <main role="main">
+    <main role="main" id="main-content" data-pagefind-body>
     {{ content | safe }}
     </main>
-    {% if  page.url != '/' %}
-      {% include "footer.njk" %}
-    {% endif %}
-    {# <!-- This page was generated on {{ site.buildTime | dateDisplay('LLL d, yyyy - HH:mm') }} --> #}
-    <script src="{{ '/scripts.js' | url }}"></script>
+    {% include "footer.njk" %}
+    {#- <!-- This page was generated on {{ site.buildTime | dateDisplay('LLL d, yyyy - HH:mm') }} --> #}
+    <script src="{{ '/scripts.js' | url }}" defer></script>
+    <script data-goatcounter="https://khawkins98.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   </body>
 </html>

@@ -1,0 +1,33 @@
+---
+title: "Thoughtful AI integration beats bolted-on Clippy"
+layout: layouts/digesting.njk
+teaser: "Lullabot's thoughts on 'How to build your AI integration strategy right'."
+date: 2025-09-19
+tags:
+  - digesting
+  - note
+topics:
+  - AI
+  - content workflows
+---
+
+{% markdown %}
+
+Like many, I've been exploring how AI can assist my work and that of my colleagues. The theme is consistent: **it’s about giving AI the right context so it helps us do our jobs better — not replace us.**
+
+I appreciated this piece from Lullabot: <a href="https://www.lullabot.com/articles/smart-ai-integration-moving-beyond-chatbots-and-quick-fixes">Smart AI integration: moving beyond chatbots and quick fixes</a>
+
+> There’s a difference between AI that’s thoughtfully integrated and AI that’s just tacked on. Too often, we encounter AI implementations that feel like modern-day Clippy, popping up to “help” us in ways that miss the mark. Most AI implementations feel like afterthoughts...because they are.
+
+This is good mental fuel (and a persuasive piece to share) and I’m looking forward to expanding on a small prototype we built in Drupal (D10.4, ECA 2, and the contrib AI module). With a bit of glue code to expose a PDF’s extracted text as a token and a new “Send to AI” workflow state, editors can kick off assistance when it’s useful — not by default.
+
+In the example workflow, the system:
+
+- fetches the text of an uploaded PDF
+- sends it to ChatGPT
+- returns a short summary
+- proposes a title
+
+But that's just the technical tooling, we still need to make sure the AI has a well document IA to leverage.
+
+{% endmarkdown %}

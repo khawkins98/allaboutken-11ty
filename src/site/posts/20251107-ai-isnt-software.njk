@@ -1,0 +1,40 @@
+---
+title: "Why AI can't be debugged like traditional software"
+layout: layouts/digesting.njk
+teaser: "Boyd Kane explains why treating AI like debuggable code misses the fundamental difference in how these systems work."
+date: 2025-11-07
+digest_link: https://boydkane.com/essays/boss
+tags: digesting
+topics:
+  - AI
+  - software engineering
+kens_status: draft
+---
+
+{% markdown %}
+
+I enjoyed Boyd Kane's ["Why Your Boss Isn't Worried About AI"](https://boydkane.com/essays/boss) for honing in on a common assumption: that AI can be debugged and fixed like traditional software.
+
+It can't—at least not in the same way.
+
+The core insight: **AI problems typically stem from training data rather than traditional code bugs.**
+
+> The software that runs AI acts very differently to the software that runs most of your computer or your phone.
+
+Five key differences that matter:
+
+1. **Training data vs. code bugs**: Issues often stem from patterns in training data, not reviewable lines of code
+2. **Hard to debug**: You typically can't trace misbehavior back to specific training data
+3. **Hard to fix**: Retraining doesn't guarantee the problem won't resurface
+4. **Non-deterministic**: Tiny prompt changes can produce dramatically different outputs
+5. **Emergent capabilities**: Unexpected abilities can surface after release
+
+"Just fix it" doesn't work with AI the way it does with traditional software.
+
+## Earlier take: AI shouldn't even be called software
+
+Jon Stokes made a similar but more philosophical argument in his 2024 post ["AI is not software"](https://www.lesswrong.com/posts/iknSNTbb8deJwQuLJ/ai-is-not-software). Where Kane focuses on practical debugging differences, Stokes goes deeper into creation method: AI is "grown" from training data using mathematical algorithms, not coded with explicit human instructions.
+
+Stokes argues the software label itself confuses ethical and political discussions, while Kane focuses on why practical expectations (debugging, predictability) fail when you treat AI like traditional code. Both land on the same insight from different angles.
+
+{% endmarkdown %}

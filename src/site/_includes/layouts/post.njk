@@ -6,25 +6,50 @@ templateEngineOverride: njk
 
 <article class="kh-grid kh-grid__col-3">
   <div class="kh-grid__col--span-1">
+    {% set isImpactStory = tags and ('impact-stories' in tags) %}
+    <p class="kh-breadcrumb">
+      {% if isImpactStory %}
+        <a href="/work">← Work</a>
+      {% else %}
+        <a href="/blog">← Blog</a>
+      {% endif %}
+    </p>
     <section class="kh-u-background-color--yellow--dark kh-u-fullbleed">
-      <h1 class="kh-font-now-alt kh-font-now-alt--display kh-post-title kh-text-heading--1">{{title}}</h1>
+      <h1 class="kh-font-headline kh-post-title kh-text-heading--1">{{title}}</h1>
     </section>
-    <p><time datetime="{{ date }}" class="kh-summary__date">{{ date | dateDisplay }}</time> {% if topics %}&nbsp;&nbsp;<span class="kh-summary__author">Filed in: {{topics}}</span>{% endif %}</p>
+    <p>
+      <time datetime="{{ date }}" class="kh-summary__date">
+        {% if isImpactStory %}{{ date | dateDisplay('y') }}{% else %}{{ date | dateDisplay }}{% endif %}
+      </time>
+      <span class="kh-summary__author">{{ content | wordCount | formatNumber }} words</span>
+      {% if topics %}<span class="kh-summary__author">Filed in: {{ topics | join(', ') }}</span>{% endif %}
+    </p>
   </div>
-  <div class="kh-content kh-grid__col--span-2">
+  <div class="kh-post--text kh-content kh-grid__col--span-2">
+    {% if image %}
     <figure class="kh-figure">
       {% if href %}<a href="{{ href }}">{% endif %}
-      <img class="kh-figure__image" src="/images{{ image | url }}" alt="{{ image_meta.altext }}">
+      <img class="kh-figure__image kh-figure__image--lead" src="/images{{ image | url }}" alt="{{ image_meta.altext or image_meta.alt or '' }}">
       {% if href %}</a>{% endif %}
+      {% if image_meta and image_meta.credit %}
+      <small class="kh-figure__credit">{{ image_meta.credit | safe }}</small>
+      {% endif %}
       {% if image_meta and image_meta.text %}
       <figcaption class="kh-figure__caption">{{ image_meta.text | safe }}</figcaption>
       {% endif %}
     </figure>
+    {% endif %}
 
     <section class="kh-grid kh-grid__col-3">
       <div class="kh-grid__col--span-2">
+        {% if tags and ('note' in tags) %}
+        <div class="kh-note-box">
+          <span class="kh-note-box__label">Note:</span>
+          I'm getting more active by writing shorter form, more informal updates like this one.
+        </div>
+        {% endif %}
         {% if teaser -%}
-        <p class="kh-text-body--1">{{ teaser | safe }}</p>
+        <p class="kh-text-body--1">{{ teaser | emdash | safe }}</p>
         {%- endif %}
         {{ content | safe }}
       </div>
@@ -34,46 +59,79 @@ templateEngineOverride: njk
   </div>
 </article>
 
-<div class="kh-stack kh-u-padding__top--800">
-{% if comment != false %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.allaboutken.com{{ page.url | url }}"
+  },
+  "headline": {{ title | dump | safe }},
+  "description": {{ (teaser or siteConfig.siteInformation.short_description) | striptags | dump | safe }},
+  "datePublished": {{ date | dump | safe }},
+  "dateModified": {{ (updated or date) | dump | safe }},
+  "author": {
+    "@type": "Person",
+    "name": {{ siteConfig.siteInformation.author | dump | safe }}
+  },
+  {% if image -%}
+  "image": ["https://www.allaboutken.com/images{{ image | url }}"],
+  {%- endif %}
+  "publisher": {
+    "@type": "Person",
+    "name": {{ siteConfig.siteInformation.author | dump | safe }}
+  }
+}
+</script>
+
+<div class="kh-stack kh-u-padding__top--800" data-pagefind-ignore>
+  {%- if comment != false %}
   <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
     <div class="kh-grid__col--span-1">
-      <h2 class="kh-text-heading--2 kh-u-float__right--md">Comment?</h2>
     </div>
     <div class="kh-content kh-grid__col--span-2">
+      <h2 class="kh-text-heading--2">Comment?</h2>
       <p>Thanks for reading, if you have comment I'd love to hear it.</p>
-      <p>
+      <p class="kh-cluster">
         <a href="https://toot.io/@khawkins98">Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
-        {# &nbsp; <a href="/rss.xml">RSS feed</a> #}
-        &nbsp; <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
-        {# &nbsp; <a href="mailto:khawkins98@gmail.com">E-mail</a> #}
-        &nbsp; <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
+        <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+        <a href="mailto:khawkins98@gmail.com">khawkins98@gmail.com</a>
       </p>
+      <div class="kh-content kh-grid__col--span-2">
+        <h2 class="kh-text-heading--2 kh-u-sr-only">Was this useful?</h2>
+        <p class="kh-cluster">
+          <a href="https://feedback.allaboutken.com/up{{ page.url }}"
+            rel="nofollow" class="kh-button kh-button--sm">👍 This was useful</a>
+        <!-- Feedback toast: see /posts/20260220-feedback-buttons-cgi-pattern/ -->
+        <span id="thanks" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback!</span>
+        <span><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"> people found this useful</span>
+        </p>
+      </div>
     </div>
   </article>
-  {% endif %}
+  {%- endif %}
 
-  {% if page.url != '/privacy/' %}
+  {%- if page.url != '/privacy/' %}
   <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
     <div class="kh-grid__col--span-1">
-      <h2 class="kh-text-heading--2 kh-u-float__right--md">Read more</h2>
     </div>
     <div class="kh-content kh-grid__col--span-2">
-      {% set previousPost = collections.posts | getPreviousCollectionItem(page) %}
-      {% set nextPost = collections.posts | getNextCollectionItem(page) %}
+      <h2 class="kh-text-heading--2">Read more</h2>
+      {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
+      {%- set nextPost = collections.posts | getNextCollectionItem(page) %}
 
-      {% if previousPost %}
-      <p class="kh-text-body--3">Previously: <a href="{{ previousPost.url | url}}" class="kh-link">{{ previousPost.data.title }}</a></p>
+      {%- if previousPost %}
+      <p class="kh-text-body--3">Previously: <a href="{{ previousPost.url | url}}">{{ previousPost.data.title }}</a></p>
       {% endif %}
 
-      {% if nextPost %}
-      <p class="kh-text-body--3">Next: <a href="{{ previousPost.url | url}}" class="kh-link">{{ nextPost.data.title }}</a></p>
-      {% endif %}
-
+      {%- if nextPost %}
+      <p class="kh-text-body--3">Next: <a href="{{ nextPost.url | url}}">{{ nextPost.data.title }}</a></p>
+      {%- endif %}
       <p>
-        <a href="/blog" class="kh-button kh-button--secondary kh-button--sm"> ⇤ Blog index</a>
+        <a href="/blog" class="kh-button kh-button--sm"> ⇤ Blog index</a>
       </p>
     </div>
   </article>
-  {% endif %}
+  {%- endif %}
 </div>

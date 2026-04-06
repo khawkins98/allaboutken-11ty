@@ -1,0 +1,89 @@
+---
+title: AI in my workflow
+layout: layouts/digesting.njk
+teaser: 'These are my <code>/ai</code> notes on how I use (or do not use) AI here. The format is inspired by the <a href="https://slashpages.net/">slash pages</a> idea.'
+date: 2025-09-29
+templateEngineOverride: njk, md
+active_path: front
+description: Transparent notes on how I use AI in my writing workflow.
+topics:
+  - AI
+lastUpdated: 2026-03-03
+---
+
+{#
+{% if lastUpdated %}
+<small>Last updated: {{ lastUpdated | dateDisplay('d LLL yyyy') }}</small>
+{% endif %}
+#}
+
+These are my <code>/ai</code> notes on how I use (or don't use) AI here. The format is inspired by the <a href="https://slashpages.net/">slash pages</a> idea.
+
+<hr>
+
+<section class="kh-related">
+<h2>First, some recent writing on AI</h2>
+<ul>
+{% set count = 0 %}
+{% for post in collections.all | reverse %}
+  {% if post.data.topics and 'AI' in post.data.topics and post.url != page.url %}
+    {% if count < 6 %}
+      <li><a href="{{ post.url }}">{{ post.data.title }}</a></li>
+      {% set count = count + 1 %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+</ul>
+</section>
+
+<hr>
+
+{% markdown %}
+
+I use AI in my writing workflow, far more than I'd have predicted a year ago. Here I'm trying to be honest about what's actually working and what isn't.
+
+My approach keeps evolving. Posts remain primarily me-authored; AI helps with capturing ideas, roughing out structure, and pressure-testing arguments.
+
+## A common writing workflow now
+
+> TL;DR: I capture ideas quickly, structure with AI, write the content myself, then use AI to pressure-test and format.
+
+I do this partly to learn about the tools and their limits. AI-generated outlines usually need restructuring. Generated content always needs checking.
+
+<section class="kh-bleed-out">
+
+## Tools I'm using and interested in
+
+| Tool | Type | Status | Description |
+|------|------|--------|-------------|
+| **[Claude Code](https://claude.ai/code)** | AI coding agent | <span class="kh-badge">Current</span> | CLI agent for longer coding sessions on this site. Project memory, custom skills, and hooks keep it aligned to site conventions without repeating context each time. |
+| **GitHub Copilot** | AI coding agent | <span class="kh-badge">Testing</span> | Exploring the terminal interface for coding tasks. |
+| **Cursor** | IDE | <span class="kh-badge">Past</span> | AI pair‑programming IDE built on VS Code. Replaced by Claude Code for most tasks. |
+| **Fireflies** | Transcription | <span class="kh-badge">Current</span> | Meeting recorder and transcription with integrations for Zoom, Teams, and Google Meet. Quick search, summaries, and action items across calls. |
+| **Highlight.app** | Desktop assistant and audio transcription | <span class="kh-badge">Current</span> | Lightweight desktop recorder for capturing quick audio notes from calls. Fast, friction‑free capture; mostly for audio memos, pushing toward structured snippets. |
+| **Manus** | AI agents | <span class="kh-badge">Testing</span> | AI agent platform for multi-step tasks. I find this is exceptional at drafting HTML slides that can then be imported to PPT for refinement. |
+| **Perplexity** | AI agents | <span class="kh-badge">Current</span> | Free annual trial; good multi‑tool search and experimentation. |
+| **VEED** | Video/captions | <span class="kh-badge">Future</span> | Audio‑to‑captions and filler‑word trimming (ums/ahs) are excellent for quick polish on short clips. I don't have a regular need right now, but it's on my shortlist when I do. |
+| **[Claude Code agent profiles](https://github.com/wshobson/agents?tab=readme-ov-file)** | Code agents | <span class="kh-badge">Future</span> | Experimenting with custom sub‑agents (refactorer, security auditor) to tighten prompts and roles. Using community profiles from Claude Code Custom Agents repo. |
+| **Microsoft Copilot Studio** | Assistant builder | <span class="kh-badge">Testing</span> | Certainly not my first choice, but in a Microsoft ecosystem it unlocks useful integrations: grounding assistants on SharePoint/OneDrive content, and experimenting with a parent–child chat agent dispatcher pattern for routing tasks. |
+| **[Context7 MCP](https://context7.com/)** | MCP | <span class="kh-badge">Current</span> | MCP server for fetching library docs at query time -- handy when working with APIs I don't know by heart. |
+| **[Browser MCP](https://browsermcp.io/)** | MCP | <span class="kh-badge">Current</span> | MCP browser client for integrating local tools. |
+| **[Chrome DevTools MCP](https://developer.chrome.com/blog/chrome-devtools-mcp)** | MCP | <span class="kh-badge">Current</span> | MCP server for Chrome DevTools automation and inspection. |
+| **[Awesome ChatGPT Prompts](https://github.com/f/awesome-chatgpt-prompts?tab=readme-ov-file)** | AI agent prompts | <span class="kh-badge">Current</span> | Open collection of LLM prompts. |
+| **Commet Browser** | AI assisted browser | <span class="kh-badge">Current</span> | AI‑assisted browsing for research and summaries. |
+| **[Together AI](https://www.together.ai/) + FLUX.2-dev** | AI image generation | <span class="kh-badge">Current</span> | Hero image generation via the FLUX.2-dev model, run from a browser tool built into this site. Prompt, generate three in parallel, crop, save. About $0.03 a post. See [the post about it](/posts/20260303-generating-blog-art/). |
+| **[Loras](https://www.loras.dev/)** | AI image maker | <span class="kh-badge">Past</span> | Fun and lightweight. Moved to FLUX.2-dev for more control over style and tighter workflow integration. |
+
+</section>
+
+<br>
+
+## What's next
+
+The image generation workflow is now settled enough that I wrote a post about it. Next I want to see if the audio→draft pipeline can get tighter -- there's still too much manual cleanup between transcription and a usable outline.
+
+If you have a tool or approach that's working for you, I'd love to hear it.
+
+{% endmarkdown %}
+
+<hr>

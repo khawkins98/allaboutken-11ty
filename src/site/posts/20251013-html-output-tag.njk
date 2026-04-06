@@ -1,0 +1,61 @@
+---
+title: "Output: An HTML-native tag once again saves JS befuddling"
+layout: layouts/digesting.njk
+teaser: "Use the native HTML output element to announce dynamic results — semantic, accessible, and simple."
+date: 2025-10-13
+digest_link: https://denodell.com/blog/html-best-kept-secret-output-tag
+tags: digesting
+topics:
+  - html
+  - accessibility
+  - forms
+---
+
+{% markdown %}
+
+Den Odell writes on [`<output>`](https://html.spec.whatwg.org/multipage/form-elements.html#the-output-element), the semantic HTML element that feels like it's been hiding in the spec since 2008.
+
+The lovely little `<output>` tag is mapped to `role="status"` and makes dynamic updates possible without ARIA workarounds. A semantic-first principle everyone advocates and it's just there waiting for us. The irony is that component-driven frameworks trained an entire generation to abstract away from HTML semantics, turning everything into divs wrapped in utility classes.
+
+**I love stumbling on posts like this — calling attention to long-standing fundamentals that have been there all along, allowing us to do what we need in an elegant, legacy-friendly, and long-established way.**
+
+The opportunities should be plentiful: it doesn’t require a `<form>` and you can use `<output>` anywhere you update text as a result of user input or app events.
+
+## Demo time
+
+A no-form-required example; this just updates the `<output>` element's text when something changes:
+
+{% endmarkdown %}
+
+<style>
+.kh-demo pre { background: #f6f8fa; border: 1px solid #e2e8f0; border-radius: .5rem; padding: 1rem; overflow: auto; }
+.kh-demo__live { border: 1px solid #e2e8f0; border-radius: .5rem; padding: 1rem; background: #fff; }
+#result { display: block; min-height: 2.5rem; padding: .5rem .75rem; font-weight: 600; }
+</style>
+
+{% codeAndDemo 'html' -%}
+<output id="result">Waiting…</output>
+<button type="button" id="randomize" class="kh-button">Randomize</button>
+<script>
+    const out = document.getElementById('result');
+    const btn = document.getElementById('randomize');
+    const words = [
+        'bamboozle', 'flibbertigibbet', 'kerfuffle',
+        'skedaddle', 'whippersnapper', 'hullabaloo', 'malarkey'
+    ];
+    function randomPhrase(count = 3) {
+        return Array.from({ length: count }, () => (
+        words[Math.floor(Math.random() * words.length)]
+        )).join(' ');
+    }
+    function update() { out.textContent = randomPhrase(3); }
+    btn.addEventListener('click', update);
+    update();
+</script>
+{% endcodeAndDemo %}
+
+{% markdown %}
+
+Also worth a look: a [small working example from Bob Rudis](https://rud.is/drop/output.html) that shows a richer implementation in action.
+
+{% endmarkdown %}

@@ -1,0 +1,120 @@
+---
+title: "Site search without a search service"
+layout: layouts/post.njk
+teaser: "No API keys, no external service -- just a build step and one HTML attribute."
+date: 2026-02-28
+image: /blog/pagefind-paths-through-grass.jpg
+image_meta:
+  text: "Footworn paths winding through tall grass -- finding your own way without a paved road."
+  credit: "Image made with <a href='https://huggingface.co/black-forest-labs/FLUX.2-dev'>FLUX.2-dev</a>."
+  altext: "Blockprint-style woodcut of two winding pale paths through dark dense grass with warm amber accents"
+tags:
+  - posts
+topics:
+  - eleventy
+  - search
+  - static sites
+kens_status: published
+---
+
+{% markdown %}
+
+This site has full-text search with no backend service. The index is generated at build time from the same HTML that Eleventy produces, and queries run in the browser. A small JS module fetches the relevant index fragments with plain HTTP GETs -- no search API, no Cloudflare Worker.
+
+> ## tl;dr
+>
+> - Pagefind indexes my HTML and produces a chunked search index
+> - A `data-pagefind-body` attribute controls what gets indexed
+> - An `eleventy.after` hook runs async so dev rebuilds aren't blocked
+> - Replaced my aging Lunr.js setup (unmaintained since 2020, 204 KB upfront download)
+> - [Full diff on GitHub](https://github.com/khawkins98/allaboutken-11ty/pull/24)
+
+## Why not stick with Lunr.js?
+
+I previously used Lunr.js, which had the right idea: build-time indexing, client-side querying, no external service. Lunr was modeled after [Apache Solr](https://solr.apache.org/) (same inverted-index approach, TF-IDF ranking) just small enough to run in the browser. But Lunr hasn't had a release since 2020.
+
+Pagefind uses [BM25](https://en.wikipedia.org/wiki/Okapi_BM25) for ranking, the same algorithm behind Elasticsearch and modern Lucene. It's an evolution of TF-IDF that handles term frequency saturation and document length normalization better. The search runs as a Rust binary compiled to WASM, so queries execute in the browser without a server round-trip. The [migration PR](https://github.com/khawkins98/allaboutken-11ty/pull/24) has the full diff.
+
+## Why I switched to Pagefind
+
+Pagefind's integration comes down to one HTML attribute. Add `data-pagefind-body` to your main content wrapper and Pagefind indexes only that element. Pages without it (social cards, redirect stubs, anything outside your base layout) are automatically excluded.
+
+For boilerplate within content pages (comments sections, previous/next navigation), `data-pagefind-ignore` on that wrapper keeps it out of the index.
+
+The build integration is an `eleventy.after` hook:
+
+```js
+let pagefindChild = null;
+config.on('eleventy.after', () => {
+  const cmd = 'pagefind --site build --exclude-selectors "pre, code"';
+  if (isDev) {
+    if (pagefindChild) {
+      pagefindChild.kill();
+      pagefindChild = null;
+    }
+    pagefindChild = exec(cmd, (err) => {
+      pagefindChild = null;
+      if (err && !err.killed) console.error('Pagefind index build failed');
+    });
+  } else {
+    execSync(cmd, { stdio: 'inherit' });
+  }
+});
+```
+
+In production, `execSync` so the build waits for the index. In dev, `exec` (async) so rebuilds aren't blocked. Search catches up a few seconds after each save.
+
+The search page is about 80 lines of JavaScript. Here's the key part -- Pagefind lazy-loads as an ES module the first time someone searches:
+
+```js
+async function init() {
+  if (!pagefind) {
+    pagefind = await import('/pagefind/pagefind.js');
+    await pagefind.options({ excerptLength: 30 });
+  }
+  return pagefind;
+}
+```
+
+The rest handles debounced input, escapes output with `textContent` instead of `innerHTML`, and reads the URL parameter so the 404 page can redirect to search. One thing I discovered post-launch: code examples were showing up in search excerpts as raw HTML. Adding `--exclude-selectors "pre, code"` to the Pagefind command fixed that. You can also use `data-pagefind-ignore` on individual elements, but the CLI flag is cleaner for a global rule.
+
+## Before and after
+
+| Metric | Lunr.js | Pagefind |
+|---|---|---|
+| Initial download (gzip) | 204 KB | ~10 KB JS (+75 KB WASM on first search) |
+| Per-query download | 0 | ~10-30 KB |
+| Unmaintained dependencies | 3 | 0 |
+
+The download difference is obvious. The tradeoff is per-query cost: Lunr loaded everything upfront and searched instantly, while Pagefind fetches index fragments on demand. For a site this size, the fragments are small enough that you'd never notice.
+
+## Tips if you're doing this
+
+1. **Use `data-pagefind-body` rather than listing exclusions.** Add it to your main content wrapper and everything else is excluded by default. Much cleaner than maintaining a list of things to ignore.
+
+2. **Exclude code blocks from indexing.** Run Pagefind with `--exclude-selectors "pre, code"` unless you want raw HTML from code examples showing up in search excerpts.
+
+3. **Run Pagefind async in dev mode.** Use `exec` (not `execSync`) in your dev build hook so Eleventy rebuilds aren't blocked. Search lags a few seconds behind each rebuild, which is fine for development.
+
+4. **Kill previous Pagefind runs on rebuild.** In dev mode, overlapping builds can corrupt the index. Track the child process and kill it before spawning a new one.
+
+5. **Add a `<noscript>` fallback.** A link to DuckDuckGo `site:yoursite.com` costs nothing and handles the JS-disabled case.
+
+## Tradeoffs
+
+Pagefind isn't without cost. It loads a ~75 KB WASM module, not pure JS like Lunr was. You also get less control over the indexing pipeline; Lunr let you customize tokenization and stemming, while Pagefind's index is more of a black box.
+
+The chunked architecture means each search makes network requests to load index fragments on demand. Lunr was one-and-done after the initial load. For a site this size you'd never notice, but the tradeoff is real.
+
+It's also another build tool, though it replaced a three-dependency Node script, so net complexity went down.
+
+The best search for a static site is still the idea Lunr had ten years ago: index at build time, query in the browser, skip the external service. Pagefind does the same thing with a chunked index and active maintenance. If your site search hasn't been touched in a while, the [migration PR](https://github.com/khawkins98/allaboutken-11ty/pull/24) might be a useful reference. I'd be curious to hear if you've run into anything different.
+
+**Update, 2 March 2026:** Getting Pagefind working got me curious about what's possible beyond keyword matching. I've since added [semantic search](/posts/20260302-semantic-search-browser-embeddings/) -- same philosophy (no API keys, runs in the browser), but it uses vector embeddings to match by meaning instead of exact words. [Try it out](/search/?search_type=semantic).
+
+## Related posts
+
+- [Semantic search on a static site, no API keys required](/posts/20260302-semantic-search-browser-embeddings/)
+- [A simpler, faster site: moving to pure Eleventy v3](/posts/20250831-site-overhaul-eleventy-v3)
+
+{% endmarkdown %}

@@ -1,0 +1,183 @@
+---
+title: "Untangling an 80-link footer into scannable navigation"
+layout: layouts/post.njk
+teaser: "EMBL.org's footer had become a screen-and-a-half of densely packed links — failing users and stakeholders alike."
+date: 2021-08-30
+tags:
+  - posts
+  - impact-stories
+topics:
+  - information architecture
+  - navigation design
+  - user experience
+  - design systems
+org: EMBL
+permalink: /work/2021/impact-story-embl-footer-directory/
+kens_status: ready_for_publication
+---
+
+{% markdown %}
+{% from "partials/orgs.njk" import orgIntro %}
+
+**Findability** | **Governance** | **Scale**
+
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+
+EMBL.org's footer had become a "footmap" — a screen-and-a-half of densely packed links attempting to be both a site map and a footer. Users scrolling to the bottom of a page encountered 80+ links organized into 12 columns, overwhelming the page with competing calls to action.
+
+The problem wasn't unique to EMBL. Many large organizational sites accumulate footer links as stakeholders request "just add it to the footer."
+
+But footers serve specific jobs — orientation (What is this organization?), contact (How do I reach you?), and wayfinding (Where can I go from here?). When footers try to be comprehensive site maps, they fail at all three.
+
+There was just too much (and yet too little) content crammed into the bottom of each page — a grey blob failing both users and organizational goals.
+
+I led the team to split these roles: the footer would handle orientation and contact, while a new Directory page would provide the comprehensive map of EMBL's digital ecosystem. This wasn't just visual cleanup — it fundamentally rethought how users navigate a large scientific organization.
+
+## What was actually broken?
+
+EMBL.org's overgrown footer created friction for users and stakeholders alike:
+
+**User experience challenges**:
+- **Overwhelming choice**: 80+ links in 12 columns meant users couldn't quickly scan for what they needed
+- **Unclear hierarchy**: No visual distinction between high-priority links (contact) and low-priority links (archived reports)
+- **Competing with page content**: A screen-and-a-half footer meant users scrolling for content hit a wall of links before reaching related information
+- **Mobile experience**: 12-column footer collapsed into an endless scroll on mobile — users gave up before finding what they needed
+- **Orientation questions unanswered**: Footer didn't clearly answer "What is EMBL?" or "How do I contact you?" — critical orientation tasks for first-time visitors
+
+**Content management burden**:
+- **Link rot**: 80+ footer links meant frequent broken link cleanup as sections moved or were archived
+- **Governance unclear**: No ownership model — stakeholders requested footer additions without justification, and no one said no
+- **Duplication**: Many footer links duplicated primary navigation — confusing users and fragmenting analytics on page performance
+- **Update coordination**: Footer changes required coordinated deployments across multiple EMBL properties using the Visual Framework
+
+**Stakeholder frustration**:
+- **Poor discoverability**: Important sections buried in footer clutter got little traffic — stakeholders blamed "bad placement" rather than structural issues
+- **No clear wayfinding strategy**: Stakeholders wanted better content discovery but footer couldn't solve that at scale
+- **Missing analytics**: Footer link clicks lumped together — no clear signal about which areas users actually needed
+
+## How did I split the footer's jobs?
+
+**Define distinct jobs for footer vs directory**
+
+I started with user research and analytics to understand footer behavior:
+
+- **Footer clicks concentrated on orientation links**: "About EMBL," "Contact," "Careers" accounted for 60%+ of footer traffic
+- **Site map links rarely clicked**: Comprehensive link lists (research areas, services, facilities) each received <2% of footer clicks
+- **Users seeking comprehensive maps went to search**: When users wanted to explore EMBL holistically, they used search or gave up — footer didn't help
+
+This suggested two distinct needs:
+1. **Orientation and contact** (footer's proper job): Quick answers to "What is this?" and "How do I reach you?"
+2. **Comprehensive site mapping** (directory's job): Scannable overview of EMBL's entire digital ecosystem
+
+**Footer redesign: focused on orientation**
+
+I reduced the footer from 80+ links to ~20 essential links organized around user questions:
+
+**Section 1: About EMBL** (~6 links):
+- What is EMBL?
+- Mission and values
+- Locations (six international sites)
+- Leadership and governance
+- Work with us (careers)
+
+**Section 2: Contact and support** (~4 links):
+- Contact us
+- Press and media
+- Data protection and privacy
+- Accessibility statement
+
+**Section 3: Connect** (~4 links):
+- Newsletter signup
+- Social media (Twitter, LinkedIn, YouTube)
+- RSS feeds
+
+**Section 4: Quick links** (~6 links):
+- Directory (!)
+- Search
+- Site map
+- Terms of use
+- Cookie policy
+
+The new footer answered core orientation questions without overwhelming users. The "Directory" link prominently placed meant users seeking comprehensive navigation had a clear next step.
+
+**Directory design: comprehensive and scannable**
+
+The Directory page became EMBL's maintained map — a single-page overview of major content areas organized by user needs:
+
+**Structure**:
+- **Research**: Core EMBL research areas, labs, facilities
+- **Services**: Bioinformatics tools, data resources, core facilities
+- **Training**: Courses, PhD program, postdoctoral fellowships
+- **About**: Governance, history, locations, partnerships
+- **News and events**: Publications, press releases, seminars, conferences
+
+**Features**:
+- **Search integration**: Prominent search box at top for users who knew what they were looking for
+- **Categorized sections**: Clear headers with 5-10 links per category — scannable without overwhelming
+- **Descriptions**: Short descriptions under each link explaining what users would find — reduced guesswork
+- **Visual Framework patterns**: Used VF card components for consistent styling and responsive behavior
+- **Custom analytics**: Implemented Google Analytics custom events to track which directory regions users engaged with and capture in-browser search behavior (Ctrl+F/Cmd+F usage)
+
+**Apply Visual Framework patterns for propagation**
+
+Both the footer and directory used Visual Framework (VF) components, meaning:
+
+- **Other EMBL properties could adopt**: Footer and directory patterns available as VF components — EMBL-EBI, EMBL Heidelberg, and other properties could integrate at their own pace
+- **Versioned updates**: Changes to footer or directory structure propagated through VF versioning — properties could upgrade when ready
+- **Consistent experience**: Users moving between EMBL properties encountered familiar footer and directory patterns
+
+## What changed for users and stakeholders?
+
+**User experience** (what visitors noticed):
+
+- **Cleaner page bottoms**: Footer reduced from screen-and-a-half to ~300px — users could quickly scan for orientation links without overwhelming choice
+- **Faster task completion**: Orientation questions (contact, about, careers) answerable in 2-3 clicks instead of scanning 80+ links
+- **Better mobile experience**: Focused footer collapsed gracefully on mobile — orientation links immediately visible
+- **Improved findability**: Directory provided clear entry point for comprehensive site exploration — users seeking specific sections had a scannable map
+
+**SEO and discoverability** (what search engines saw):
+
+- **Better internal linking structure**: Directory created hub page with categorized links — improved crawlability and link equity distribution
+- **Reduced link bloat**: Footer no longer competing with page content for SEO relevance — primary content received clearer signals
+- **Clearer information architecture**: Categorized directory structure helped search engines understand EMBL's content hierarchy
+
+**Stakeholder satisfaction** (what internal teams experienced):
+
+- **Governance clarity**: Footer now curated — stakeholder requests evaluated against orientation criteria
+- **Directory ownership**: Content team maintained directory as living document — clear process for adding/removing sections
+- **Better analytics**: Custom Google Analytics events tracked directory region engagement and in-browser search behavior (Ctrl+F usage), providing actionable insights about which content areas users sought most — directly informed content strategy and proved the directory's value
+- **Reduced maintenance**: Fewer footer links meant less link rot cleanup
+
+**Adoption across properties**:
+
+- **VF footer component adopted by 10+ properties**: EMBL-EBI, EMBL Heidelberg, and other sites integrated the focused footer pattern
+- **Directory pattern replicated**: Several EMBL properties created their own directories modeled on EMBL.org's approach
+- **Sustained improvement**: Footer remained focused — governance process prevented future link creep
+
+## Why did this approach actually work?
+
+Footer redesigns often fail because they're treated as visual problems rather than structural problems. I succeeded by reframing the question: not "how do we fit more links in the footer?" but "what jobs should the footer and directory each perform?"
+
+The directory approach hit a sweet spot between modern mega menus and old-school sitemaps. Like mega menus, it provides scannable categories with descriptions. Like traditional sitemaps, it's comprehensive and lives on a dedicated page where users can search (Ctrl+F) or scroll through everything.
+
+This hybrid works particularly well for accessibility: screen reader users navigate by headings, keyboard users tab through categorized sections, and sighted users scan visually. The single-page format means users can search the page instantly.
+
+Key factors:
+
+- **User research grounded decisions**: Analytics showing orientation links dominated footer traffic justified focusing the footer — stakeholders couldn't argue with user behavior
+- **Two-part solution**: Creating the Directory meant users didn't lose comprehensive navigation — footer could be focused because directory existed
+- **Governance commitment**: Leadership agreed to evaluate footer requests against orientation criteria — prevented future link creep
+- **Visual Framework leverage**: Using VF patterns meant improvements propagated across properties — multiplied impact beyond EMBL.org
+- **Content team ownership**: Clear directory ownership meant it stayed maintained as a living document rather than becoming stale
+- **Collaboration across disciplines**: Content strategists, designers, and engineers co-designed the solution — no single discipline dominated
+
+The result: a footer that actually worked as a footer, and a directory that provided the comprehensive navigation users needed when they needed it.
+
+## Links and related writing
+
+- **Blog post**: [EMBL.org: Putting our best footer forward](/posts/20210830-embl-best-footer-forward/) (original EMBL Communications post detailing SEO and stakeholder impacts)
+- **Related impact story**: [EMBL Visual Framework](/work/2019/impact-story-embl-visual-framework/) (design system enabling footer/directory component propagation across properties)
+- **Live example**: [EMBL.org directory](https://www.embl.org/directory/) (see the directory in action)
+{% endmarkdown %}
+
+

@@ -1,0 +1,27 @@
+---
+title: Digesting
+teaser: A curated collection of interesting articles, tools, and ideas.
+date: 2025-09-27 12:00:00
+layout: layouts/base.njk
+---
+{%- set siteConfig = siteConfig.siteInformation -%}
+<div class="kh-grid-stylized">
+  <div>
+  </div>
+  <section>
+    <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
+    <p class="kh-text-body--3">A collection of interesting articles, tools, and ideas I've stumbled upon shared here as bookmarks and notes.</p>
+    {% set searchId = "digesting-search" %}
+    {% include "partials/search-box.njk" %}
+  {%- for post in collections.digesting | sort(true, true, attribute='date' ) -%}
+  <article class="kh-summary kh-summary--news">
+    <div class="kh-summary__date">{{ post.date | dateDisplay }}
+    </div>
+    <h3 class="kh-font-headline kh-summary__title">
+      <a href="{{ post.url | url}}" class="kh-summary__link">{{ post.data.title }}</a>
+    </h3>
+    <p class="kh-content kh-summary__text">{{ post.data.teaser | emdash | safe }}</p>
+  </article>
+  {%- endfor -%}
+  </section>
+</div>

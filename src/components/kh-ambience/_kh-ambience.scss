@@ -1,0 +1,200 @@
+/**
+ * Pseudomorphic Ambience
+ *
+ * Atmospheric background effect using pure CSS with image-based dappling
+ * Inspired by: Daylight Computer → Sunlit.place → Jacky Zhao's Sunlit
+ *
+ * See: https://www.allaboutken.com/posts/sunlit-dappled-light-effect/
+ */
+
+// ============================================================================
+// Configuration
+// ============================================================================
+
+// Scroll-driven animation values (sun angle and opacity)
+$kh-ambience-start-sun-angle: 60deg; // Sun angle at top of page
+$kh-ambience-sun-angle: 80deg; // Sun angle at bottom of page
+$kh-ambience-start-blinds-opacity: 0.9; // Blinds opacity at top of page
+$kh-ambience-end-blinds-opacity: 0.3; // Blinds opacity at bottom of page
+
+// Static values (constant throughout scroll)
+$kh-ambience-leaves-opacity: 0.07; // Leaves opacity on desktop
+$kh-ambience-leaves-opacity-mobile: 0.03; // Leaves opacity on mobile
+$kh-ambience-sway-speed: 11s; // Blinds sway animation duration
+
+// ============================================================================
+// CSS Custom Properties (for scroll-driven animation)
+// ============================================================================
+
+// Register custom properties for smooth interpolation in scroll-driven animations
+// Only animating sun-angle and opacity (slat dimensions remain constant)
+// Initial values match the starting state (top of page) in @keyframes kh-ambience-scroll-shift
+// https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline
+@property --ambience-sun-angle {
+  syntax: '<angle>';
+  initial-value: #{$kh-ambience-start-sun-angle};
+  inherits: true;
+}
+
+@property --ambience-blinds-opacity {
+  syntax: '<number>';
+  initial-value: #{$kh-ambience-start-blinds-opacity};
+  inherits: true;
+}
+
+// ============================================================================
+// Base Structure
+// ============================================================================
+
+// Scope all ambience styles under CSS-toggle system
+body:has(#kh-css-toggle:checked) {
+  #kh-dappled-light {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; // Above content but pointer-events: none means no interaction blocking
+    pointer-events: none; // Don't interfere with interactions
+    overflow: hidden;
+    mix-blend-mode: plus-lighter;
+
+    // Scroll-driven animation: shift sun angle and opacity as user scrolls
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline
+    animation: kh-ambience-scroll-shift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0% 100%;
+  }
+
+  // ============================================================================
+  // Layer 1: Dappled Leaves (Image-Based with SVG animation filter)
+  // ============================================================================
+
+  .kh-ambience-leaves {
+    position: absolute;
+    bottom: 0;
+    right: -200px;
+    width: 100vw;
+    height: 80vh;
+    opacity: $kh-ambience-leaves-opacity; // 0.07
+    will-change: transform filter; // Optimize for animation
+
+    // Use leaves.svg (converted from Sunlit repository) with distortion filter
+    background-image: url('/images/ambience-leaves.svg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    // SVG filter for animation effect + blur
+    filter: url(#kh-ambience-leaves-animation) blur(9px);
+  }
+
+  // Disable expensive SVG filter in Firefox; keep cheap blur only (Firefox-only at-rule)
+  @-moz-document url-prefix() {
+    .kh-ambience-leaves {
+      filter: blur(9px);
+    }
+  }
+
+  // ============================================================================
+  // Layer 2: Blinds/Shutters Shadows with 3D Perspective
+  // ============================================================================
+
+  .kh-ambience-blinds {
+    position: absolute;
+    top: -30vh;
+    right: 0;
+    width: 100vw;
+    height: 130vh;
+    opacity: var(--ambience-blinds-opacity);
+    filter: blur(9px);
+    will-change: transform, opacity; // Optimize for animation
+
+    // Mask blinds to fade from left edge to right
+    mask: linear-gradient(to top right, black 0%, transparent 100%) no-repeat;
+    -webkit-mask: linear-gradient(to top right, rgba(0, 0, 0, 0.7) 0%, transparent 100%) no-repeat;
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+
+    // 3D perspective transform (inspired by Sunlit)
+    // Creates the illusion of blinds cast on an angled wall
+    transform-origin: top right;
+    transform-style: preserve-3d;
+    transform: matrix3d(0.75, -0.0625, 0, 0.0008, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  }
+
+  .kh-ambience-shutters {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 110%; // Extra bleed
+    height: 100%;
+
+    // Use CSS custom property for sun-angle animation (slat dimensions are static)
+    background: repeating-linear-gradient(calc(var(--ambience-sun-angle, 80deg) + 120deg), transparent, transparent 89px, rgb(80 80 80 / 66%) 89px, rgb(117 117 117 / 60%) 167px);
+
+    mask-image: linear-gradient(to bottom right, transparent, white);
+  }
+
+  // ============================================================================
+  // Animation - Gated behind prefers-reduced-motion
+  // ============================================================================
+
+  @media (prefers-reduced-motion: no-preference) {
+    // Gentle sway on blinds (complementing the 3D transform)
+    .kh-ambience-blinds {
+      animation: kh-ambience-sway #{$kh-ambience-sway-speed} ease-in-out infinite;
+    }
+  }
+
+  @keyframes kh-ambience-sway {
+    0%,
+    100% {
+      transform: matrix3d(1.35, -0.0625, 0, 0.0008, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    }
+    33% {
+      transform: matrix3d(1.45, -0.0625, 0, 0.0008, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0.002, 0, 1) translateX(-15px) translateY(8px);
+    }
+    66% {
+      transform: matrix3d(1.45, -0.0625, 0, 0.0008, 0, 1, 0, 0, 0, 0, 1, 0, 0, -0.001, 0, 1) translateX(12px) translateY(-5px);
+    }
+  }
+
+  // ============================================================================
+  // Scroll-driven Animation (Sun Angle Shift + Opacity Fade)
+  // ============================================================================
+
+  @keyframes kh-ambience-scroll-shift {
+    0% {
+      // Top of page: Starting values (must match @property initial-value for smooth interpolation)
+      --ambience-sun-angle: #{$kh-ambience-start-sun-angle};
+      --ambience-blinds-opacity: #{$kh-ambience-start-blinds-opacity};
+    }
+    100% {
+      // Bottom of page: Ending values
+      --ambience-sun-angle: #{$kh-ambience-sun-angle};
+      --ambience-blinds-opacity: #{$kh-ambience-end-blinds-opacity};
+    }
+  }
+
+  // ============================================================================
+  // Accessibility: High Contrast Mode
+  // ============================================================================
+
+  @media (prefers-contrast: high) {
+    #kh-dappled-light {
+      display: none !important; // Remove all decorative effects
+    }
+  }
+
+  // ============================================================================
+  // Responsive: Reduce complexity on small screens
+  // ============================================================================
+
+  @media (max-width: 768px) {
+    // Reduce leaves opacity on mobile for performance
+    .kh-ambience-leaves {
+      opacity: $kh-ambience-leaves-opacity-mobile; // 0.1
+    }
+  }
+}

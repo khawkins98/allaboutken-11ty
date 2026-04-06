@@ -1,90 +1,80 @@
 ---
 title: Hello
 subtitle: I am Ken Hawkins.
+teaser: 'Platform Architect & Digital Strategy Lead with 20+ years delivering measurable transformation for UN, science, and media organizations.'
 date: 2018-08-22 12:24:50
 image: "/blog/drill-bits.jpg"
 layout: layouts/base.njk
 templateEngineOverride: njk
 ---
 <div class="kh-u-background-color--yellow--dark kh-u-fullbleed">
-<section class="kh-grid-stylized kh-grid-stylized--has-centered-content kh-u-padding__top--500">
+<section class="kh-grid-stylized kh-u-padding__top--500 kh-u-padding__bottom--500">
   <div></div>
   <div class="kh-content">
-    <h1 class="kh-font-now-alt kh-font-now-alt--display kh-text-heading--1">{{title}}. <br/><span class="kh-u-text--nowrap">I am</span> Ken Hawkins.</h1>
-    <h2 class="kh-text-heading--2">I bring structure and process to complex web projects.</h2>
+    <h1 class="kh-font-headline kh-text-heading--1">
+      <div class="kh-font-headline--display">{{title}}.</div>
+      <div class="kh-font-headline--display">
+        <span class="kh-u-text--nowrap">I am</span> Ken Hawkins.
+      </div>
+    </h1>
+    <h2 class="kh-text-heading--2">I help complex organizations turn their digital presence from information graveyards into measurable systems that work for human and machine audiences alike.</h2>
     {% markdown -%}
 
-    With [20 years](/cv/) experience in publishing and technology, I help projects move beyond content and problems into performant web platforms that [deliver](/posts/20180122-content-action-model.html) organisational goals.
+I ship systems that deliver impact. I understand technology and human organizational dynamics equally — and how to make them work together. Twenty years with [UN agencies, international science, and media](/cv) have sharpened that.
 
     {%- endmarkdown %}
-    {# **I am a deep thinker** who applies a strong conceptual background from years of crafting deadline-driven data-heavy infographics for newspapers, online publications driven by data and invocating marketing and tracking tools.  #}
 
-    {#- <dl>
-      <dt>Descriptors</dt>
-      <dd>Creator of websites, information architect, data geek, designer, newspaper nerd, lover of UX, consultant, <a href="https://twitter.com/euroia/status/912695523118927873" class="kh-link">information acrobat</a>. </dd>
-
-      <dt>Methodologies</dt>
-      <dd>Content modelling, design thinking, content structure and organisation, responsive design, analytics and metrics, principles of graphing, user centred design, user stories, user behaviour, Kanban.</dd>
-
-      <dt>Concisely</dt>
-      <dd>Ken Hawkins, Web Design Architect.</dd>
-    </dl> -#}
-
-    {#- <p>Say hello or dig deeper <span class="emoji">⤵</span></p> -#}
   </div>
 </section>
 </div>
 
+{#- What Sets Me Apart -#}
+{#- commented out for now
+<section class="kh-grid-stylized kh-u-padding__top--600 kh-u-padding__bottom--600">
+  <span></span>
+  <section class="kh-content">
+    <blockquote class="kh-quote kh-quote--featured">
+      <p>Ken is the rare professional who can sit with executives to discuss strategy, then build the technical architecture to deliver it, while ensuring the content teams and end users actually benefit. He's not just a consultant who talks about transformation — he's someone who ships working systems that last.</p>
+    </blockquote>
+    <blockquote class="kh-quote kh-quote--featured">
+      <p>Ken's not a pure developer or designer — he's a strategic technologist who builds sustainable systems for complex organizations with distributed teams.</p>
+    </blockquote>
+  </section>
+</section>
+-#}
+
 <section class="kh-card-container kh-grid-stylized">
-  <h2 id="recently" class="kh-text-heading--2">Recently</h2>
-  {#- <p class="kh-section-header__text">If I've made something interesting and had a bit of time, I've hopefully done a post on it.</p> -#}
+  <span></span>
   <section>
-    <div class="kh-grid kh-grid__col-4 summary-inline">
-    {%- for post in collections.posts.slice(-3) | reverse -%}
-    <article class="kh-summary kh-summary--news">
-      <span class="kh-summary__date">{{ post.date | dateDisplay }}</span>
-      <a href="{{ post.url }}" class="kh-summary__image">
-        <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
-      </a>
-      <h3 class="kh-summary__title">
-        <a href="{{ post.url }}" class="kh-summary__link">{{ post.data.title }}</a>
-      </h3>
-      {#- {{loop.index}} -#}
-    </article>
+    <h2 id="recently" class="kh-text-heading--2">Recent writing</h2>
+
+    {%- for post in collections.allContent | limitItems(10) -%}
+    {% include "partials/post-summary.njk" %}
     {%- endfor -%}
-    <article class="kh-summary kh-summary--news">
-      {# <span class="kh-summary__date">{{ post.date | dateDisplay }}</span> #}
-      {# <a href="{{ post.url }}" class="kh-summary__image">
-        <img class="kh-summary__image" src="/images/crop-cinema{{ post.data.image }}" alt="{{ post.data.title }}">
-      </a>   #}
-      <h3 class="kh-summary__title">
-        <a href="/blog" class="kh-summary__link">Read {{ collections.posts | length - 3}} more posts on the blog ↦</a>
-      </h3>
-      {#- {{loop.index}} -#}
-    </article>
-    </div>
+    <p class="kh-cluster">
+      <a href="/all">All writing ↦</a>
+      <a href="/blog">Blog ↦</a>
+      <a href="/digesting">Digesting ↦</a>
+      <a href="/work">Project notes ↦</a>
+    </p>
   </section>
 
 </section>
 
 {#- Contact -#}
-<section class="kh-grid-stylized kh-grid-stylized--has-centered-content">
-  <h2 id="hello" class="kh-text-heading--2">Say hello</h2>
+<section class="kh-grid-stylized">
+  <span></span>
   <section>
-    <p class="kh-text-body--2">
-      I'm currently fully engaged helping a global leader <a href="https://www.preventionweb.net/">reduce the risk of disaster</a> — but you can still say hello.
+    <h2 id="hello" class="kh-text-heading--2">Say hello</h2>
+    <p>
+      Open to strategic opportunities — let’s connect.
     </p>
-    <p class="kh-text-body--2">
-      <a href="https://toot.io/@khawkins98" class="kh-link">Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a> &nbsp; &nbsp;
-      <a href="https://www.linkedin.com/in/allaboutken" class="kh-link">LinkedIn</a> &nbsp; &nbsp;
-      <a href="mailto:khawkins98@gmail.com" class="kh-link">Email</a> &nbsp; &nbsp;
-      <a href="https://untappd.com/user/khawkins98" class="kh-link">Beer</a>
+    <p class="kh-cluster">
+      <a href="https://toot.io/@khawkins98" >Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
+      <a href="https://www.linkedin.com/in/allaboutken" >LinkedIn</a>
+      <a href="/cv/" >CV</a>
+      <a href="mailto:khawkins98@gmail.com" >Email</a>
+      <a href="https://untappd.com/user/khawkins98">Beer</a>
     </p>
   </section>
-</section>
-
-<section>
-  <p class="kh-text-body--3">
-    <a href="/rss.xml" class="kh-link">RSS</a> <span class="kh-text-body--5">(Instant updates with the hottest tech from 20 years ago)</span>
-  </p>
 </section>

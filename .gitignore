@@ -12,3 +12,6 @@ yarn-error.log
 # dist
 build
 temp
+.cache
+.wrangler
+worker/node_modules

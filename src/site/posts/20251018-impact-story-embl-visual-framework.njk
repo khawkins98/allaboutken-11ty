@@ -1,0 +1,162 @@
+---
+title: 'Building a component library adopted across 50+ scientific properties'
+layout: layouts/post.njk
+teaser: 'Dozens of teams across six countries were solving the same UI problems independently — duplicating effort and fragmenting user experience.'
+date: 2019-11-12
+tags:
+  - posts
+  - impact-stories
+topics:
+  - design systems
+  - component libraries
+  - pattern libraries
+  - cross-platform design
+org: EMBL
+permalink: /work/2019/impact-story-embl-visual-framework/
+kens_status: ready_for_publication
+image: '/blog/vf-home.png'
+image_meta:
+  text: 'Screenshot of the Visual Framework documentation site'
+  altext: 'Visual Framework homepage showing component library documentation and examples'
+---
+
+{% markdown %}
+{% from "partials/orgs.njk" import orgIntro %}
+
+**Adoption** | **Efficiency** | **Quality**
+
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+
+At EMBL, dozens of teams across six international sites shipped digital properties with different stacks (Drupal, WordPress, static sites, React apps), timelines, and constraints. Each team was solving the same UI problems independently: navigation, cards, grids, form patterns. The result was duplicated effort, fragmented brand experience, and slow delivery. A research group launching a new microsite would spend weeks rebuilding patterns that already existed elsewhere.
+
+My goal was to create a shared component library that worked across all those environments without forcing teams into a single technology stack or slowing them down with heavyweight tooling.
+
+I started small with patterns that respected accessibility, performance, and editorial realities. The framework spread because it reduced rework and shortened delivery time — not because it was mandated.
+
+## What was actually broken?
+
+Dozens of properties were duplicating UI effort, fragmenting brand and UX, and slowing delivery across a pan-European scientific organization spanning Heidelberg, Hinxton, Hamburg, Grenoble, Rome, and Barcelona.
+
+Specific pain points:
+- **Duplicated effort**: Every new site rebuilt navigation, cards, buttons, and layout grids from scratch
+- **Inconsistent UX**: Similar content types (events, news, people profiles) looked and behaved differently across properties
+- **Fragmented brand**: EMBL's visual identity was interpreted inconsistently without shared design tokens
+- **Slow delivery**: Teams spent weeks on UI fundamentals instead of content and features
+- **No shared knowledge**: Best practices for accessibility, performance, and responsive design weren't propagating across teams
+
+## How I built for adoption, not compliance?
+
+**Start with real patterns from production sites**
+
+I didn't design in a vacuum. I audited existing EMBL properties, identified common patterns (mastheads, navigation, content cards, page grids), and codified the best versions. This gave teams confidence that the framework solved their actual problems.
+
+**Choose tooling for flexibility, not lock-in**
+
+- **Fractal**: Component development environment with live documentation
+- **Nunjucks templates**: Framework-agnostic markup that could be adapted to Drupal (Twig), WordPress (PHP), static sites, or React
+- **Sass with design tokens**: Shared color, typography, and spacing variables that could be imported into any project
+- **Eleventy for static demos**: Fast, dependency-light static site generator for documentation and examples
+- **npm for versioning**: Semantic versioning with clear changelogs; teams could upgrade at their own pace
+
+**Make adoption easy, not mandatory**
+
+I provided multiple integration paths:
+- **Full adoption**: Install via npm, import components and styles, use the full design system
+- **Partial adoption**: Cherry-pick individual components (just the grid, just the navigation)
+- **Visual-only**: Just import design tokens and rebuild components in your own stack
+- **Inspiration mode**: View documentation and implement patterns in your own way
+
+This flexibility was critical. A team with a mature Drupal site wouldn't rebuild everything, but they might adopt the navigation component and design tokens. A new static site could use the full framework.
+
+**Build trust through quality**
+
+Every component was:
+- **Accessible by default**: WCAG AA compliance, keyboard navigation, ARIA labels, semantic HTML
+- **Performance-tested**: Minimal CSS and JS, lazy-loading where appropriate, no framework dependencies
+- **Responsive**: Mobile-first design with tested breakpoints
+- **Documented**: Live examples, code snippets, integration guides, and design rationale
+
+I demonstrated that using the framework made teams' work better, not just "more standardized."
+
+**Governance without gatekeeping**
+
+I established light governance:
+- **Contribution process**: Teams could propose new components or improvements via GitHub
+- **Versioning discipline**: Semantic versioning, clear changelogs, deprecation warnings before breaking changes
+- **Quarterly sync**: Cross-team meetings to share usage patterns and discuss priorities
+- **Support channel**: Slack workspace where teams could ask questions and share solutions
+
+This kept the framework evolving without creating bottlenecks.
+
+## How the framework spread?
+
+**Early adopters (first 6 months)**
+
+I started with two friendly teams: EMBL.org (the flagship site) and EMBL-EBI (the bioinformatics institute). These were high-visibility properties with committed partners. By working closely with them, I ensured the framework solved real problems, not theoretical ones.
+
+Seeing the framework work on major sites gave other teams confidence to try it.
+
+**The tipping point (months 6-18)**
+
+Adoption accelerated when teams saw concrete benefits:
+- A research group launching a new microsite used the framework and delivered in 3 weeks instead of 8
+- The careers site redesign adopted the navigation and card components, cutting development time by 40%
+- Multiple teams reported improved accessibility audit results after switching to framework components
+
+Word spread organically through EMBL's communications network. I didn't need to sell it — teams asked to use it.
+
+**Scale (18+ months)**
+
+By 18 months, the framework was adopted across:
+- **50+ properties**: From major sites (EMBL.org, EMBL-EBI) to project microsites and event pages
+- **Multiple stacks**: Drupal, WordPress, static sites, React applications
+- **Distributed teams**: Six international sites, multiple languages, varying technical skill levels
+
+**Key adoption accelerators**:
+- **Reducing maintenance burden**: Teams using the framework got accessibility, performance, and responsive improvements "for free" through version updates
+- **Faster delivery**: New sites launched in weeks instead of months
+- **Consistent UX**: Users moving between EMBL properties encountered familiar patterns
+- **Shared problem-solving**: Teams contributed improvements back to the framework, benefiting everyone
+
+## What changed across EMBL's digital ecosystem?
+
+**Adoption and reach**:
+- **50+ properties** using the framework across EMBL's international network
+- **Multiple technology stacks** supported (Drupal, WordPress, static sites, React)
+- **Ongoing contributions** from distributed teams improving components and documentation
+
+**Development efficiency**:
+- **40% reduction in implementation time** for sites using full framework adoption (based on reported delivery timelines)
+- **Reusable patterns** eliminated duplicated UI work across teams
+- **Faster iteration** through shared component updates
+
+**Quality improvements**:
+- **Improved accessibility** through framework defaults (WCAG AA compliance)
+- **Better performance** via optimized, tested components
+- **Consistent UX** across EMBL's digital ecosystem
+
+**Knowledge sharing**:
+- **Cross-team collaboration** through contribution process and quarterly syncs
+- **Best practices propagation** via documented components and rationale
+- **Reduced tribal knowledge** by codifying design and development decisions
+
+## Why did this approach actually work?
+
+The framework succeeded because I optimized for adoption, not perfection. I didn't try to force teams into a single stack or workflow. Instead, I made it easier to do the right thing by providing high-quality, flexible components that solved real problems.
+
+Key factors:
+- **Starting with real patterns** from production sites, not theoretical ideals
+- **Flexible integration** that met teams where they were
+- **Quality defaults** that made teams' work better, not just standardized
+- **Light governance** that encouraged contribution without creating bottlenecks
+- **Patience**: letting teams adopt at their own pace rather than mandating compliance
+
+The result was organic adoption that sustained itself through demonstrated value rather than institutional mandate.
+
+## Links and related writing
+
+- [Fractal and Eleventy: closer to the design system](/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html)
+- [Faster scientific websites through reusability](https://blogs.embl.org/communications/2018/09/12/faster-scientific-websites-through-reusability/)
+- [Unshackling content, and their authors](https://blogs.embl.org/communications/2018/08/21/unshackling-content-and-their-authors/)
+
+{% endmarkdown %}

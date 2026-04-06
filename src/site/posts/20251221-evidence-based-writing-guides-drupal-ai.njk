@@ -1,0 +1,363 @@
+---
+title: 'Improving AI chatbots with an editorial handbook from your best content'
+layout: layouts/post.njk
+teaser: "Editorial guidelines are often too vague for humans — and useless for AI. Extract patterns from your best content to create actionable standards for both."
+date: 2025-12-21
+tags: posts
+permalink: /posts/evidence-based-content-guidelines-drupal-ai/
+topics:
+  - Drupal
+  - AI
+  - content strategy
+  - Claude
+image: /blog/palm_trees_holding_on.jpg
+image_meta:
+  alt: Silhouetted palm trees standing resilient against a blue sky with ocean behind, debris scattered at their base
+  text: Palm trees holding on after a storm.
+  credit: '<a href="https://www.flickr.com/photos/khawkins04/2087787321/">Own work</a>.'
+---
+
+{% markdown %}
+
+> **tl;dr**: Export your best content from your CMS, use AI to extract quantitative patterns (word counts, title formats, tag usage), and deploy those patterns as guidance for an AI assistant. The same documentation works for human editors too.
+
+The examples here use Drupal, but the approach works with any CMS — WordPress, a headless setup, or even Word documents.
+
+Here's what we're aiming for — an AI assistant producing content aligned with patterns extracted from our best work:
+
+> **User**:
+>
+> Summarize this publication: [uploads 24-page academic paper on disaster memorial parks in Japan]
+
+> **Copilot response**:
+>
+> **Title**: Place Governance and Citizen-Driven Placemaking: Lessons from Disaster Memorial Parks after the 2011 Japan Tsunami (108 chars)
+>
+> **Body** (181 words): This publication examines the transformation of lost places through government-led planning and citizen-driven placemaking in disaster memorial parks following the 2011 Great East Japan Earthquake and Tsunami...
+>
+> **Themes**: Urban risk and planning, Recovery planning, Community-based DRR, Governance
+>
+> **Hazard**: Tsunami
+>
+> **Countries**: Japan, Asia
+
+Or reviewing a draft:
+
+> **User**:
+>
+> Here is my draft news update. What do you think? What tags should I use?
+>
+> [pastes 400-word draft about a new early warning system partnership]
+
+> **Copilot response**:
+>
+> **Assessment**: Your draft is 412 words — slightly above our 350-word target for news updates. Consider trimming the background section.
+>
+> **Structure**: Good use of H2 subheadings (matches 69% of our high-performing news articles). The lead paragraph effectively answers who/what/when.
+>
+> **Suggested themes**:
+> - Early warning (primary — directly relevant)
+> - Governance (partnership announcement)
+> - Science and technology (system implementation)
+>
+> **Suggested hazards**: Multi-hazard (the system covers multiple hazard types)
+>
+> **Style note**: "Aims to" appears twice — consider varying. Also, "utilize" → "use" per our plain language guidelines.
+
+This can then be easily copy-pasted or used in an API to seed corrections or new content as drafts.
+
+But simply uploading your PDF into ChatGPT will give you a response far from your editorial needs and CMS architecture.
+
+Here's how to get there.
+
+## Good guidelines in, good content out
+
+"Keep it concise." "Use clear language." "Tag appropriately." Terse guidance spread over assorted documents in different systems. Editorial guidelines are rarely suited for humans and even worse for AI.
+
+When guidelines are clear and in one place, they help humans — and they're what AI needs too.
+
+The good news is we can get there by extracting rules from our existing good content.
+
+Your best content contains what we need: patterns — word counts, title structures, tagging conventions. AI is exceptionally good at finding these patterns across hundreds of examples — something that would take humans weeks to analyze manually.
+
+But how can we get that data to the LLM for analysis?
+
+## Step 1: Extract the best examples
+
+You don't want the latest 50 published items — you want the *best* 50. Automated queries give you recent content; curation gives you exemplary content.
+
+We had an advantage: our Drupal instance already had `longevity` and `interestingness` fields that editors used to flag content quality. These aren't standard fields — they were added years ago for homepage curation — but they gave us a procedural way to isolate high-quality examples.
+
+```php
+<?php
+// Custom Drush command (simplified)
+public function exportExamples($content_type, $limit = 50) {
+    $nids = \Drupal::entityQuery('node')
+      ->condition('type', $content_type)
+      ->condition('status', 1)
+      ->condition('field_longevity', 'evergreen')  // Premier content
+      ->condition('field_interestingness', ['high', 'featured'], 'IN')
+      ->sort('created', 'DESC')
+      ->range(0, $limit)
+      ->execute();
+
+    foreach ($nids as $nid) {
+      $node = Node::load($nid);
+      $output = "# " . $node->getTitle() . "\n\n";
+      $output .= $node->get('body')->value . "\n\n";
+      $output .= "Word count: " . str_word_count(strip_tags($node->get('body')->value)) . "\n";
+      $output .= "Tags: " . implode(', ', $this->getTermNames($node, 'field_themes')) . "\n";
+      file_put_contents("export/{$nid}.md", $output);
+    }
+}
+```
+
+If you don't have curation fields, you can filter by engagement metrics, editor picks, or manual review. The point: be intentional about what counts as "exemplary."
+
+## Step 2: Analyze with AI
+
+_Note: This is a somewhat simplified how-to, but you can enhance as needed._
+
+For me the above yielded 122 examples exported to Markdown. I asked an LLM (in my case Claude Code) to extract quantitative patterns and generate agent guidance:
+
+```
+You are designing system-level agent guidance for a domain-specific AI assistant.
+
+You are provided with a file named EXAMPLE_CONTENTS.md containing approximately 100 high-quality Markdown examples that represent "correct" and production-ready output for our website.
+
+Your task is to ANALYSE EXAMPLE_CONTENTS.md and INFER:
+- Structural patterns and recurring sections
+- Length and formatting norms
+- Title and summary conventions
+- Metadata usage and controlled vocabularies
+- Implicit rules (what always appears, what is optional, what never appears)
+
+... truncated, see full version in foldout below
+```
+
+<br>
+
+<details>
+<summary>Full prompt (click to expand)</summary>
+
+```
+You are designing system-level agent guidance for a domain-specific AI assistant.
+
+You are provided with a file named EXAMPLE_CONTENTS.md containing approximately 100 high-quality Markdown examples that represent "correct" and production-ready output for our website.
+
+Your task is to ANALYSE EXAMPLE_CONTENTS.md and INFER:
+- Structural patterns and recurring sections
+- Length and formatting norms
+- Title and summary conventions
+- Metadata usage and controlled vocabularies
+- Implicit rules (what always appears, what is optional, what never appears)
+
+Treat EXAMPLE_CONTENTS.md as the highest authority. Do not introduce rules, terms, or structures that are not clearly supported by the examples.
+
+Using ONLY what can be justified from the example corpus (and any explicitly supplied style or schema files), generate authoritative agent guidance with the following sections, in this exact order:
+
+---
+
+### 1. Role declaration
+- Define who the agent is, who it serves, and the publishing or operational context.
+- Base this on audience, tone, and intent evident in the examples.
+
+---
+
+### 2. Knowledge base
+- Describe EXAMPLE_CONTENTS.md as the primary source of truth.
+- Summarize empirically observed patterns (e.g. average word counts, section frequency, title structure).
+- Do NOT invent statistics—only report what can reasonably be inferred.
+
+---
+
+### 3. Operating procedure
+- Provide a numbered decision process the agent must follow before responding.
+- Derive this workflow from how the examples are consistently structured and completed.
+
+---
+
+### 4. Critical constraints
+- Identify non-negotiable rules implied by the examples.
+- Use explicit language such as MUST, ALWAYS, NEVER.
+- These constraints must override all other instructions.
+
+---
+
+### 5. Mandatory response template
+- Define the fixed output schema that the agent MUST use for every response.
+- The template must match the structure observed in the examples.
+- Include the following template verbatim, unless the examples clearly justify modifications:
+
+        ## Title
+
+        [Title following documented pattern]
+        Character count: [X]
+
+        ## Summary / Teaser
+
+        [Concise summary for listings or previews]
+        Character count: [X]
+
+        ## Main Content
+
+        [Structured body text following guide rules]
+        Word count: [X]
+
+        ## Metadata
+
+        ### Topics / Themes (REQUIRED)
+
+        * [Term 1]
+        * [Term 2]
+        * [Term 3]
+
+        ### Categories / Tags (OPTIONAL)
+
+        * [If applicable]
+
+        ### Geography / Audience (CONDITIONAL)
+
+        * [As required by schema]
+
+        ### Source / Reference Info (CONDITIONAL)
+
+        * Author / organisation
+        * Year
+        * Page count / URL / ID (as relevant)
+
+        ## Style & Compliance Check
+
+        ✓ Language and spelling rules applied
+        ✓ Length targets respected
+        ✓ Mandatory fields completed
+        ✓ No unsupported claims
+
+---
+
+### 6. Field-level requirements
+- Specify character limits, word count ranges, formatting expectations, and conditional logic.
+- Mark fields as REQUIRED, OPTIONAL, or CONDITIONAL only when supported by the examples.
+
+---
+
+### 7. Controlled vocabularies and metadata rules
+- Extract recurring terms, categories, or taxonomies from the examples.
+- Describe selection logic where patterns are visible.
+- Do not introduce new vocabulary not evidenced in the corpus.
+
+---
+
+### 8. Style and compliance rules
+- Infer language variant, spelling conventions, punctuation, tone, and formatting
+  from consistent usage across examples.
+
+---
+
+### 9. Prohibited behaviors
+- Explicitly list behaviors that violate observed patterns, such as:
+  - Skipping mandatory sections
+  - Inventing metadata or sources
+  - Deviating from the response template
+  - Ignoring length or structure norms
+
+---
+
+IMPORTANT:
+- Do not include explanations, commentary, or examples in the final output.
+- The result must read as authoritative operational guidance for an AI agent.
+- The guidance should be directly usable as a system prompt.
+```
+
+</details>
+
+<br>
+
+This gives you a solid start, but you'll want to feed in additional data and manually curate the agent's guidance.
+
+### Recommended: extract and feed in statistic patterns
+
+In my case I also ran a separate analysis on the statistics of the content that helped the LLM know how much to favor certain items.
+
+
+```
+Analyze these 50 publication examples. Extract: average word count (with range), title length and patterns, paragraph structure, heading usage frequency, taxonomy tag counts, and common tag combinations. Report percentages where applicable.
+```
+
+Example patterns identified:
+
+**Publications** (50 examples):
+- Average word count: 169 words (range: 95-287)
+- Title pattern: 56% use colons ("Topic: Subtitle" format)
+- Theme tags: All 50 had 2-4 themes
+- Hazard tags: Only 16% — most publications are cross-cutting
+
+**News articles** (50 examples):
+- Average word count: 782 words
+- Heading usage: 69% use H2/H3 subheadings
+- Internal links: Average 4.2 per article
+
+**Theme co-occurrence**:
+- "Governance + Risk identification" appears together in 26% of publications
+- "Urban risk + Climate change" in 18%
+- "Early warning + Science and technology" in 14%
+
+
+## Step 3: Gather your existing editorial guides
+
+Your organization likely has domain knowledge that won't appear in the content examples: house style rules, terminology preferences, audience definitions, legal disclaimers.
+
+Gather what you have:
+- Style guides (even if scattered across wikis and emails)
+- Taxonomy documentation
+- Content type definitions from your CMS
+- Any PDF or HTML standards documents
+
+The key is making them AI-readable: consolidate scattered guidance into coherent documents, remove contradictions, and be specific. "Use British English" is clear. "Follow standard editorial conventions" is not.
+
+
+## Step 4: Combine and deploy
+
+You now have two knowledge sources:
+1. **Pattern-based guidance** from Step 2 (extracted from your best examples)
+2. **Institutional knowledge** from Step 3 (your existing style rules and standards)
+
+Convert both to your AI assistant's preferred format. For Microsoft 365 Copilot, that means Word documents — I used Pandoc to batch-convert Markdown. For Claude or ChatGPT, Markdown or PDF works fine.
+
+Upload everything to your agent. In my case, I created a custom Copilot agent (the standard one, not Copilot Studio) with a SharePoint folder containing all the documents.
+
+This is optional, but it adds meaningful nuance — especially when drafting content that falls outside the main patterns.
+
+
+
+## Implementation notes
+
+1. We chose a static knowledge base over RAG. Why?
+
+- **Stable**: Guidelines shouldn't shift with recent content
+- **Curated**: Best examples, not just latest
+- **Auditable**: Bad suggestion? Check the source document
+
+The same docs work for AI and human training.
+
+2. The Pandoc batch conversion command for Step 4:
+
+```bash
+for file in *.md; do pandoc "$file" -o "${file%.md}.docx"; done
+```
+
+3. This is a meaningful gateway step toward having an AI agent fit into our publishing workflow and auto-draft new content or review newly made content. It won't replace senior editor review, but it will greatly ease their lives.
+
+## Conclusion
+
+LLMs need specificity. "Publications average 169 words" is actionable. "Keep it concise" is not.
+
+The approach is straightforward: export your best examples, analyze them for quantitative patterns, codify those patterns as guidelines, and deploy via an AI assistant. The same documentation works for both AI and human training.
+
+This outperformed our previous human-edited metadata — and gives editors something they can actually apply.
+
+---
+
+For the full story of how this fit into UNDRR's broader content operations, see [Turning vague content guidelines into measurable AI-ready standards](/work/2025/impact-story-evidence-based-content-guidelines/).
+
+{% endmarkdown %}

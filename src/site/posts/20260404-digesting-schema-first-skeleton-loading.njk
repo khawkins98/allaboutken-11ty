@@ -1,0 +1,36 @@
+---
+title: "Go schema-first and skeleton loading stops being a problem"
+layout: layouts/digesting.njk
+teaser: "The skeleton loading problem is a contract problem in disguise; explicit content schemas dissolve it."
+date: 2026-04-04
+digest_link: https://neciudan.dev/lets-build-dynamic-shimmer-skeletons
+tags: digesting
+topics:
+  - content architecture
+  - design systems
+  - component design
+  - skeleton loading
+kens_status: draft
+---
+
+{% markdown %}
+
+[Dan Neciu's walkthrough](https://neciudan.dev/lets-build-dynamic-shimmer-skeletons) of dynamic shimmer skeletons is worth reading for the diagnosis as much as the solution. He identifies why most skeleton implementations are painful to maintain: the content contract is implicit. Nobody wrote down what a card carries, so when the card changes, the skeleton drifts.
+
+The proposed fix is clever: render the real component with mock data, measure leaf element positions via `getBoundingClientRect()`, overlay shimmer blocks at those exact coordinates. It mostly sidesteps the synchronization problem.
+
+But the article is honest that it doesn't fully solve it:
+
+> "This is the one piece of manual work you can't avoid."
+
+You still need `templateProps`: mock data representative enough to make the component render its actual structure for measurement. Without an explicit content contract, that's guesswork. Wrong title length, wrong number of list items, and the shimmer blocks are sized off.
+
+This is exactly what [content schemas](https://github.com/unisdr/undrr-mangrove/issues/881) solve. If you've defined that a `card` requires a title and link, optionally carries an image with alt text and a summary, and you've included example values, `templateProps` isn't guesswork. It falls out of the schema. The same template object covers every component that implements the card contract: `ContentCard`, `ContentCardWithoutImage`, `IconCard`.
+
+I keep running into this pattern in content architecture work: what looks like an implementation problem is usually a contract problem. The skeleton approach the article advocates is still worth using for the DOM measurement and animation; those parts are genuinely good. But the hard part, the part the article calls unavoidable, disappears if you do the structural work first.
+
+Schema with examples → `templateProps` → DOM measurement → done. In that order, the workaround barely registers.
+
+Grateful for Dan's piece. It gave me another angle on why going schema-first pays off, in a context I wouldn't have thought to look.
+
+{% endmarkdown %}

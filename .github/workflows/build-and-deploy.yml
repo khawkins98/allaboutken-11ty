@@ -37,6 +37,9 @@ jobs:
           cache: 'yarn'
       - name: Install dependencies 📦
         run: yarn install --frozen-lockfile
+      - name: Lint CSS 🧹
+        run: yarn lint:css
+        continue-on-error: true
       - name: Build site 🔧
         run: yarn build
       - name: Configure Pages

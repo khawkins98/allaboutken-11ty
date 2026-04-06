@@ -1,0 +1,26 @@
+---
+title: All writing
+teaser: "Everything in one place — blog posts, digesting bookmarks, and project notes."
+layout: layouts/base.njk
+pagination:
+  data: collections.allContent
+  size: 15
+  alias: pagedPosts
+permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 }}/{% endif %}"
+---
+{%- set siteConfig = siteConfig.siteInformation -%}
+<div class="kh-grid-stylized">
+  <div>
+  </div>
+  <section>
+    <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
+    {% include "partials/search-box.njk" %}
+
+  {%- for post in pagedPosts -%}
+    {% include "partials/post-summary.njk" %}
+  {%- endfor -%}
+
+  {% include "partials/pager.njk" %}
+
+  </section>
+</div>

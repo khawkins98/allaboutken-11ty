@@ -1,0 +1,1462 @@
+---
+permalink: /image-generator/index.html
+noindex: true
+eleventyExcludeFromCollections: true
+---
+<!--
+  image-generator.njk — standalone SPA dev tool
+  -----------------------------------------------
+  This page lives intentionally outside the site's main design system:
+  - No shared layout, no Eleventy base template
+  - Inline CSS and JS, no external dependencies
+  - Links /css/styles.css and activates it via a hidden #kh-css-toggle checkbox
+    so it inherits the site font and base colors. Overrides body max-width and
+    padding since this page has its own layout constraints.
+  - Excluded from collections, noindex'd, safe to ship to production
+    (requires a Together AI API key to do anything)
+
+  See the blog post this supports:
+  /posts/20260303-generating-blog-art/ ("Blog art that belongs")
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f5f0e8">
+  <title>Image Generator — dev tool</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    :root {
+      --cream: #f5f0e8;
+      --ink: #1a1a1a;
+      --amber: #c8860a;
+      --mid: #6b6b6b;
+      --border: #d0c8b8;
+      --code-bg: #eee8d8;
+      --mono: 'Courier New', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    header {
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .site-name a {
+      text-decoration: none;
+    }
+    .header-sep { color: var(--cream); opacity: 0.35; font-size: 0.85rem; }
+    header h1 { font-size: 1rem; font-weight: 600; }
+    .badge {
+      font-size: 0.68rem;
+      background: var(--amber);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .container { max-width: 1000px; margin: 0 auto; padding: 28px 24px; }
+    .section { margin-bottom: 20px; }
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--mid);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    input[type=text], input[type=password], textarea, select {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.95rem;
+      background: white;
+      color: var(--ink);
+    }
+    input[type=text]:focus, input[type=password]:focus, textarea:focus, select:focus {
+      outline: 2px solid var(--amber);
+      outline-offset: 1px;
+    }
+    textarea { min-height: 72px; resize: vertical; }
+    input[type=password] { font-family: var(--mono); letter-spacing: 0.1em; }
+
+    .row { display: flex; gap: 12px; align-items: flex-end; }
+    .row > * { flex: 1; }
+    .row > .shrink { flex: 0 0 auto; }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      padding: 9px 18px;
+      font-size: 0.9rem;
+      transition: opacity 0.15s;
+    }
+    .btn-primary { background: var(--ink); color: var(--cream); }
+    .btn-primary:hover:not(:disabled) { background: #333; }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-secondary {
+      background: white;
+      color: var(--ink);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: var(--code-bg); }
+    .btn-sm { padding: 5px 12px; font-size: 0.8rem; }
+
+    .style-pill {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      color: var(--mid);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 6px;
+    }
+    .tool-desc { font-size: 0.85rem; color: var(--mid); margin-bottom: 20px; }
+    .tool-desc a { color: var(--amber); }
+    .hint { font-size: 0.78rem; color: var(--mid); margin-top: 5px; }
+    .hint a { color: var(--amber); }
+
+    /* Advanced options */
+    .advanced-details {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px 14px;
+      background: white;
+    }
+    .advanced-details summary {
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--mid);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      user-select: none;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .advanced-details summary::before { content: '▶ '; font-size: 0.65rem; }
+    .advanced-details[open] summary::before { content: '▼ '; }
+    .advanced-details summary::-webkit-details-marker { display: none; }
+
+    .advanced-body { margin-top: 14px; }
+    .label-hint { font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 0.72rem; }
+
+    /* Range sliders (crop adjustments) */
+    .slider-wrap { display: flex; align-items: center; gap: 8px; }
+    .slider-wrap input[type=range] {
+      flex: 1; width: auto; padding: 0; border: none;
+      accent-color: var(--amber);
+    }
+    .slider-val { font-family: var(--mono); font-size: 0.82rem; color: var(--ink); min-width: 2.2ch; }
+
+    /* Count radio buttons */
+    .count-radio { display: flex; gap: 6px; }
+    .count-radio label {
+      display: flex; align-items: center; justify-content: center;
+      width: 44px; height: 36px;
+      border: 1px solid var(--border); border-radius: 4px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      background: white; color: var(--ink);
+      text-transform: none; letter-spacing: 0; margin-bottom: 0;
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .count-radio input[type=radio] { display: none; }
+    .count-radio input[type=radio]:checked + label {
+      background: var(--ink); color: var(--cream); border-color: var(--ink);
+    }
+    .count-radio label:hover { background: var(--code-bg); }
+    .count-radio input[type=radio]:checked + label:hover { background: #333; }
+
+    /* Dimension presets */
+    .preset-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .preset-btn { font-family: var(--mono); font-size: 0.75rem; }
+    .preset-btn.is-active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+    /* Seed row */
+    .seed-header { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+    .seed-header label { margin-bottom: 0; }
+    .seed-row { display: flex; gap: 8px; }
+    .seed-row input { flex: 1; min-width: 0; }
+
+    /* Status bar */
+    .status-bar {
+      background: var(--code-bg);
+      border-left: 3px solid var(--amber);
+      padding: 9px 14px;
+      font-size: 0.85rem;
+      border-radius: 0 4px 4px 0;
+      margin: 12px 0 0;
+    }
+    .status-bar.is-error { border-color: #c00; background: #fff0f0; color: #900; }
+    .status-bar.is-success { border-color: #2a7a2a; background: #f0fff0; }
+
+    /* Request log */
+    .req-details {
+      margin: 8px 0 0;
+      font-size: 0.78rem;
+      color: var(--mid);
+    }
+    .req-details summary { cursor: pointer; user-select: none; }
+    .req-body {
+      margin-top: 6px;
+      background: var(--ink);
+      color: #aef;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      padding: 10px 14px;
+      border-radius: 4px;
+      white-space: pre;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    /* Image grid — each .img-wrap is one grid item containing cell + meta */
+    .img-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .img-grid-1 { grid-template-columns: 1fr; max-width: 480px; }
+    .img-grid-5 { grid-template-columns: repeat(3, 1fr); }
+    .img-wrap { display: flex; flex-direction: column; gap: 3px; }
+
+    .img-cell {
+      position: relative;
+      cursor: pointer;
+      border-radius: 5px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      background: var(--border);
+      aspect-ratio: 1280/832;
+      transition: border-color 0.15s;
+    }
+    .img-cell img { width: 100%; height: 100%; object-fit: cover; display: block; user-select: none; }
+    .img-cell.is-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .spinner {
+      width: 28px; height: 28px;
+      border: 3px solid var(--border);
+      border-top-color: var(--amber);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    .img-cell.is-selected { border-color: var(--amber); }
+    .img-cell.is-selected::after {
+      content: '✓';
+      position: absolute;
+      top: 6px; right: 8px;
+      background: var(--amber);
+      color: white;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .img-cell.is-error {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      text-align: center;
+      color: #900;
+      font-size: 0.78rem;
+    }
+    .img-meta { font-size: 0.7rem; color: var(--mid); margin-top: 3px; font-family: var(--mono); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    /* Crop area */
+    .crop-wrap {
+      background: #111;
+      border-radius: 6px;
+      padding: 16px;
+      position: relative;
+    }
+    #crop-canvas {
+      display: block;
+      width: 100%;
+      border-radius: 3px;
+      cursor: crosshair;
+    }
+    .crop-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .crop-info { font-size: 0.78rem; color: #888; font-family: var(--mono); flex: 1; }
+    .adjust-row {
+      display: grid;
+      grid-template-columns: max-content 1fr max-content 1fr;
+      align-items: center;
+      gap: 6px 10px;
+      margin-top: 10px;
+    }
+    .adjust-label { font-size: 0.72rem; font-weight: 700; color: var(--mid); white-space: nowrap; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* Snippet */
+    .snippet-wrap { margin-top: 16px; }
+    .snippet-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+    .snippet {
+      background: var(--ink);
+      color: #aef;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      padding: 14px 16px;
+      border-radius: 5px;
+      white-space: pre;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    /* Key row */
+    .key-row { display: flex; gap: 10px; align-items: center; }
+    .key-row input { flex: 1; }
+    .key-remember { display: flex; align-items: center; gap: 5px; font-size: 0.82rem; color: var(--mid); white-space: nowrap; cursor: pointer; }
+    .key-remember input[type=checkbox] { width: auto; cursor: pointer; }
+
+    /* Reference images */
+    .ref-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .ref-row input { flex: 1; min-width: 0; }
+    .ref-thumb {
+      width: 48px; height: 48px; object-fit: cover;
+      border: 1px solid var(--border); border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .ref-thumb-err {
+      width: 48px; height: 48px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px dashed var(--border); border-radius: 3px;
+      font-size: 0.75rem; color: var(--mid); background: var(--code-bg);
+    }
+    .ref-remove {
+      background: none; border: none; cursor: pointer;
+      font-size: 1.1rem; color: var(--mid); padding: 4px 6px; line-height: 1;
+    }
+    .ref-remove:hover { color: #c44; }
+
+    /* Tips & FAQ footer */
+    .faq { max-width: 820px; margin: 48px auto 32px; padding: 0 24px; font-size: 0.78rem; color: var(--mid); line-height: 1.6; }
+    .faq h2 { font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.72rem; margin: 0 0 12px; color: var(--mid); }
+    .faq dt { font-weight: 600; margin-top: 10px; }
+    .faq dd { margin: 2px 0 0; }
+    .faq a { color: var(--amber); }
+  </style>
+</head>
+<body>
+  <!-- Activates body:has(#kh-css-toggle:checked) scope in /css/styles.css -->
+  <input type="checkbox" id="kh-css-toggle" checked hidden>
+  <header>
+    <a href="/" class="site-name">AllAboutKen.com</a>
+    <span class="header-sep">/</span>
+    <h1>Image Generator</h1>
+    <span class="badge">Dev tool</span>
+  </header>
+
+  <div class="container">
+
+    <p class="tool-desc">
+      Generate blockprint-style hero images for blog posts via Together AI.
+      Part of the workflow described in
+      <a href="/posts/20260303-generating-blog-art/">Blog art that belongs</a>.
+    </p>
+
+    <!-- API Key -->
+    <div class="section">
+      <label for="api-key">Together AI API Key</label>
+      <div class="key-row">
+        <input type="password" id="api-key" placeholder="tog_..." autocomplete="off" spellcheck="false">
+        <label class="key-remember">
+          <input type="checkbox" id="save-key"> Remember in this browser
+        </label>
+      </div>
+      <p class="hint">Stored in localStorage.
+        <a href="https://api.together.ai/settings/api-keys" target="_blank" rel="noopener">Forgot your key?</a>
+        · <a href="https://api.together.ai/settings/billing" target="_blank" rel="noopener">Check balance →</a>
+      </p>
+    </div>
+
+    <div id="tool-body" hidden>
+
+    <!-- Prompt + style -->
+    <div class="section">
+      <label for="prompt">Subject prompt</label>
+      <textarea id="prompt" placeholder="e.g. a bird's nest cradled in the fork of a bare branch&#10;&#10;Go abstract and evocative — not literal. One subject. No text or faces."></textarea>
+      <p class="hint">Model: <a href="https://huggingface.co/black-forest-labs/FLUX.2-dev" target="_blank" rel="noopener">FLUX.2-dev</a> via Together AI.</p>
+    </div>
+
+    <!-- Reference images (optional) -->
+    <div class="section" id="ref-section">
+      <label>Reference images <span class="label-hint">(optional)</span></label>
+      <p class="hint">Guide the output with existing images — match a color palette, borrow a composition, or combine elements from multiple sources. No extra cost.</p>
+      <div id="ref-list"></div>
+      <button class="btn-secondary btn-sm" id="ref-add-btn" type="button">+ Add reference image</button>
+      <p class="hint" id="ref-hint" hidden>
+        Use "image 1", "image 2" in your prompt, or describe content naturally. Min 400×400px each, up to 8.
+      </p>
+    </div>
+
+    <!-- Options -->
+    <div class="row section">
+      <div style="flex: 0 0 auto;">
+        <label>Images</label>
+        <div class="count-radio">
+          <input type="radio" name="count" id="count-1" value="1"><label for="count-1">1</label>
+          <input type="radio" name="count" id="count-3" value="3" checked><label for="count-3">3</label>
+          <input type="radio" name="count" id="count-5" value="5"><label for="count-5">5</label>
+        </div>
+      </div>
+      <div style="flex: 0 0 120px">
+        <label for="guidance">Guidance</label>
+        <select id="guidance">
+          <option value="1.5" selected>1.5 — very loose | default</option>
+          <option value="2">2 — loose</option>
+          <option value="2.5">2.5</option>
+          <option value="3">3</option>
+          <option value="3.5">3.5 — normal</option>
+          <option value="4">4</option>
+          <option value="5">5 — strict</option>
+          <option value="6">6 — very strict</option>
+          <option value="7">7 — rigid</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Advanced options -->
+    <details class="advanced-details section">
+      <summary>Advanced options</summary>
+      <div class="advanced-body">
+        <div class="section">
+          <label for="style-prefix">Style prefix <span class="label-hint">(prepended to every prompt)</span></label>
+          <textarea id="style-prefix" rows="3"></textarea>
+        </div>
+        <div class="section">
+          <label for="neg-prompt">Negative prompt</label>
+          <textarea id="neg-prompt" rows="2"></textarea>
+        </div>
+        <div class="row section">
+          <div>
+            <label for="steps">Steps</label>
+            <input type="number" id="steps" min="10" max="50" value="20">
+            <p class="hint">~20 is the sweet spot. Higher = slower with diminishing returns.</p>
+          </div>
+          <div>
+            <label for="img-width">Width (px)</label>
+            <input type="number" id="img-width" min="128" max="2048" step="32" value="1280">
+          </div>
+          <div>
+            <label for="img-height">Height (px)</label>
+            <input type="number" id="img-height" min="128" max="2048" step="32" value="832">
+            <p class="hint">Must be multiples of 32, 128–2048.</p>
+          </div>
+        </div>
+        <div class="section">
+          <label>Presets</label>
+          <div class="preset-row" id="dim-presets"></div>
+        </div>
+        <div class="section">
+          <div class="seed-header">
+            <label>Seeds <span class="label-hint">(blank = random)</span></label>
+            <button class="btn-secondary btn-sm" id="randomize-seeds" type="button">Randomize</button>
+          </div>
+          <div id="seed-fields" class="seed-row"></div>
+          <p class="hint">Fix a seed to reproduce an earlier result. Leave blank for random.</p>
+        </div>
+      </div>
+    </details>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 8px;">
+      <button class="btn-secondary btn-sm" id="reset-all" type="button">Reset all to defaults</button>
+      <button class="btn-primary" id="gen-btn">Generate <span id="cost-est" style="opacity:0.65;font-weight:400;font-size:0.8em"></span></button>
+    </div>
+    <p class="hint" style="text-align:right"><span id="cost-text"></span><a href="https://api.together.ai/settings/billing" target="_blank" rel="noopener">check actual usage →</a></p>
+
+    <div id="status" hidden class="status-bar"></div>
+
+    <!-- Last API request (debug) -->
+    <details id="req-details" hidden class="req-details">
+      <summary>Last API request</summary>
+      <pre id="req-body" class="req-body"></pre>
+    </details>
+
+    <!-- Image results -->
+    <div id="results" hidden class="section">
+      <label>Click an image to select it</label>
+      <div id="img-grid" class="img-grid"></div>
+    </div>
+
+    <hr class="divider" id="edit-divider" hidden>
+
+    <!-- Crop + save -->
+    <div id="edit-section" hidden>
+      <div class="section">
+        <label>Crop — drag corners to resize</label>
+        <div class="crop-wrap">
+          <canvas id="crop-canvas"></canvas>
+        </div>
+        <div class="crop-controls">
+          <span class="crop-info" id="crop-info">No image selected</span>
+          <button class="btn-secondary btn-sm" id="reset-crop-btn">Reset crop</button>
+        </div>
+        <div class="adjust-row">
+          <label class="adjust-label">Sat <span id="sat-val" class="slider-val">100%</span></label>
+          <div class="slider-wrap"><input type="range" id="saturation" min="0" max="200" step="5" value="100"></div>
+          <label class="adjust-label">Con <span id="con-val" class="slider-val">100%</span></label>
+          <div class="slider-wrap"><input type="range" id="contrast" min="50" max="150" step="5" value="100"></div>
+          <label class="adjust-label">Hue <span id="hue-val" class="slider-val">0°</span></label>
+          <div class="slider-wrap"><input type="range" id="hue" min="-180" max="180" step="5" value="0"></div>
+          <label class="adjust-label">Black pt <span id="bp-val" class="slider-val">0</span></label>
+          <div class="slider-wrap"><input type="range" id="black-point" min="0" max="127" step="1" value="0"></div>
+          <label class="adjust-label">White pt <span id="wp-val" class="slider-val">255</span></label>
+          <div class="slider-wrap" style="grid-column: span 3"><input type="range" id="white-point" min="128" max="255" step="1" value="255"></div>
+        </div>
+        <div style="text-align:right; margin-top:4px;">
+          <button class="btn-secondary btn-sm" id="reset-adjust-btn">Reset adjustments</button>
+        </div>
+      </div>
+
+      <div class="section row">
+        <div>
+          <label for="filename">Filename (no .jpg)</label>
+          <input type="text" id="filename" placeholder="e.g. blog-art-nest-branch">
+        </div>
+        <div class="shrink" style="display: flex; gap: 8px; align-items: flex-end;">
+          <button class="btn-primary" id="save-btn">Save image</button>
+        </div>
+      </div>
+      <p class="hint" id="save-hint">
+        Saves via <code>showSaveFilePicker</code> — navigate to <code>src/site/images/blog/</code>.
+        Falls back to browser download on unsupported browsers.
+      </p>
+
+      <div id="snippet-area" hidden class="snippet-wrap">
+        <div class="snippet-header">
+          <label style="margin:0">Frontmatter — update text/altext after seeing the saved image</label>
+          <button class="btn-secondary btn-sm" id="copy-btn">Copy</button>
+        </div>
+        <pre class="snippet" id="snippet"></pre>
+      </div>
+
+      <div id="save-status" hidden class="status-bar" style="margin-top: 12px;"></div>
+    </div>
+
+    </div><!-- /tool-body -->
+
+  </div>
+
+  <footer class="faq">
+    <h2>Tips &amp; FAQ</h2>
+    <dl>
+      <dt>How is the cost estimate calculated?</dt>
+      <dd>Together AI charges per megapixel of output. The estimate is <code>count × $/MP × megapixels × (steps ÷ default&nbsp;steps)</code>. Larger dimensions or more steps cost proportionally more. Reference images don't add extra cost. The per-MP rate for FLUX.2-dev isn't published yet, so the estimate is approximate — <a href="https://api.together.ai/settings/billing" target="_blank" rel="noopener">check billing</a> for actual charges.</dd>
+      <dt>What do reference images actually do?</dt>
+      <dd>They lock in visual elements — color palette, composition, character identity — while your text prompt controls the subject. One reference works like style transfer. Multiple references let you composite elements ("the character from image 1 in the setting from image 2"). The model understands content, so you can reference by index or describe what you want naturally.</dd>
+      <dt>Why do my images look different at higher step counts?</dt>
+      <dd>~20 steps is the sweet spot for FLUX.2-dev. Going higher gives diminishing returns and takes longer. Below 15, quality drops off. The style prefix does most of the visual heavy lifting — editing it will change results more than tweaking steps.</dd>
+      <dt>Can the model render text or faces?</dt>
+      <dd>No. FLUX.2-dev can't render readable text, and the blockprint style doesn't suit portraits. The style prefix already includes "no text, no words." Don't prompt for named people or brands.</dd>
+      <dt>How do I reproduce an exact image?</dt>
+      <dd>Each result shows a seed in the metadata strip below it. Paste it into the Seed field under Advanced options, or add <code>?seed=123</code> to the URL. Same seed + same prompt + same settings = same image.</dd>
+    </dl>
+  </footer>
+
+{% raw %}
+<script>
+const CONFIG = {
+  model: 'black-forest-labs/FLUX.2-dev',
+  style: {
+    prefix: 'blockprint style, japaneseblockprint style, bold black ink woodcut, linocut carved texture, two-color print, deep black and cream with sparse warm amber accent, flat areas of color, no gradients, high contrast graphic, cream paper background, no text, no words,',
+    negativePrompt: 'smooth shading, photoreal, complex lighting, 3d render, gradient, blurry, soft focus'
+  },
+  // ~20 steps is the sweet spot: good quality, half the time of 28+
+  defaults: { width: 1280, height: 832, steps: 20 },
+  attribution: "Image made with <a href='https://huggingface.co/black-forest-labs/FLUX.2-dev'>FLUX.2-dev</a>.",
+  // Cost estimate: Together AI charges per megapixel; steps beyond the default
+  // cost proportionally more.  The per-MP rate for FLUX.2-dev isn't published
+  // yet, so this is back-calculated from observed billing (~$0.01 per 1280×832
+  // image at 20 steps).  Update when Together AI publishes the rate.
+  cost: { perMegapixel: 0.0094 }
+};
+
+// --- DOM refs ---
+const apiKeyEl    = document.getElementById('api-key');
+const saveKeyEl   = document.getElementById('save-key');
+const promptEl    = document.getElementById('prompt');
+// Shim: presents the same .value / .addEventListener interface as the old <select>
+// so all downstream code (URL_FIELDS, seed rebuild, generate) works unchanged.
+const countEl = {
+  get value() { return (document.querySelector('input[name=count]:checked') || document.getElementById('count-3')).value; },
+  set value(v) { const r = document.querySelector('input[name=count][value="' + v + '"]'); if (r) r.checked = true; },
+  addEventListener(ev, fn) { document.querySelectorAll('input[name=count]').forEach(r => r.addEventListener(ev, fn)); }
+};
+const genBtn      = document.getElementById('gen-btn');
+const statusEl    = document.getElementById('status');
+const resultsEl   = document.getElementById('results');
+const imgGridEl   = document.getElementById('img-grid');
+const editDivider = document.getElementById('edit-divider');
+const editSection = document.getElementById('edit-section');
+const cropCanvas  = document.getElementById('crop-canvas');
+const cropInfo    = document.getElementById('crop-info');
+const resetCropBtn  = document.getElementById('reset-crop-btn');
+const satEl         = document.getElementById('saturation');
+const conEl         = document.getElementById('contrast');
+const hueEl         = document.getElementById('hue');
+const bpEl          = document.getElementById('black-point');
+const wpEl          = document.getElementById('white-point');
+const satVal        = document.getElementById('sat-val');
+const conVal        = document.getElementById('con-val');
+const hueVal        = document.getElementById('hue-val');
+const bpVal         = document.getElementById('bp-val');
+const wpVal         = document.getElementById('wp-val');
+const resetAdjustBtn= document.getElementById('reset-adjust-btn');
+const filenameEl  = document.getElementById('filename');
+const saveBtn     = document.getElementById('save-btn');
+const snippetArea = document.getElementById('snippet-area');
+const snippetEl   = document.getElementById('snippet');
+const copyBtn     = document.getElementById('copy-btn');
+const guidanceEl  = document.getElementById('guidance');
+const stylePrefixEl = document.getElementById('style-prefix');
+const negPromptEl   = document.getElementById('neg-prompt');
+const stepsEl       = document.getElementById('steps');
+const imgWidthEl    = document.getElementById('img-width');
+const imgHeightEl   = document.getElementById('img-height');
+const seedFieldsEl  = document.getElementById('seed-fields');
+
+// --- Init ---
+// 1. Set defaults
+stylePrefixEl.value = CONFIG.style.prefix;
+negPromptEl.value   = CONFIG.style.negativePrompt;
+
+// 2. URL state — restore any saved params on load, then keep URL in sync
+const URL_FIELDS = [
+  { key: 'q',        el: promptEl,       def: '',                              ev: 'input'  },
+  { key: 'prefix',   el: stylePrefixEl,  def: CONFIG.style.prefix,             ev: 'input'  },
+  { key: 'neg',      el: negPromptEl,    def: CONFIG.style.negativePrompt,     ev: 'input'  },
+  { key: 'guidance', el: guidanceEl,     def: '1.5',                           ev: 'change' },
+  { key: 'steps',    el: stepsEl,        def: String(CONFIG.defaults.steps),   ev: 'input'  },
+  { key: 'w',        el: imgWidthEl,     def: String(CONFIG.defaults.width),   ev: 'input'  },
+  { key: 'h',        el: imgHeightEl,    def: String(CONFIG.defaults.height),  ev: 'input'  },
+  { key: 'count',    el: countEl,        def: '3',                             ev: 'change' },
+];
+
+const urlP = new URLSearchParams(location.search);
+for (const { key, el } of URL_FIELDS) {
+  if (urlP.has(key)) el.value = urlP.get(key);
+}
+
+function syncUrl() {
+  const p = new URLSearchParams();
+  for (const { key, el, def } of URL_FIELDS) {
+    if (el.value !== def) p.set(key, el.value);
+  }
+  // Reference image URL state: numbered params ref0, ref1, ...
+  const refUrls = getRefUrls();
+  refUrls.forEach((url, i) => p.set('ref' + i, url));
+  // Seed URL state: comma-separated, omit if all blank
+  const seedVals = getSeedInputs().map(el => el.value.trim());
+  if (seedVals.some(v => v)) p.set('seed', seedVals.join(','));
+  const qs = p.toString();
+  history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+  updateCostEstimate();
+}
+
+for (const { el, ev } of URL_FIELDS) {
+  el.addEventListener(ev, syncUrl);
+}
+
+// --- Dimension presets ---
+// All dimensions must be multiples of 32 (Together AI FLUX.2-dev requirement;
+// error message says 16 but 16-only values are rejected in practice)
+const DIM_PRESETS = [
+  { label: CONFIG.defaults.width + '×' + CONFIG.defaults.height, w: CONFIG.defaults.width, h: CONFIG.defaults.height, note: 'default' },
+  { label: '1024×576',  w: 1024, h: 576,  note: '16:9' },
+  { label: '1152×768',  w: 1152, h: 768,  note: '3:2' },
+  { label: '1024×768',  w: 1024, h: 768,  note: '4:3' },
+  { label: '1536×864',  w: 1536, h: 864,  note: '16:9 large' },
+];
+
+const dimPresetsEl = document.getElementById('dim-presets');
+let presetBtns = []; // cached after build
+
+function updatePresetHighlight() {
+  const w = imgWidthEl.value, h = imgHeightEl.value;
+  presetBtns.forEach(btn => {
+    btn.classList.toggle('is-active', btn.dataset.w === w && btn.dataset.h === h);
+  });
+}
+
+DIM_PRESETS.forEach(({ label, w, h, note }) => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'btn-secondary btn-sm preset-btn';
+  btn.dataset.w = w; btn.dataset.h = h;
+  btn.title = note;
+  btn.textContent = label;
+  btn.addEventListener('click', () => {
+    imgWidthEl.value = w; imgHeightEl.value = h;
+    updatePresetHighlight();
+    syncUrl();
+  });
+  dimPresetsEl.appendChild(btn);
+  presetBtns.push(btn);
+});
+
+imgWidthEl.addEventListener('input', updatePresetHighlight);
+imgHeightEl.addEventListener('input', updatePresetHighlight);
+updatePresetHighlight();
+
+// Snap width/height to nearest multiple of 32, clamp to API limits.
+// (Together AI requires multiples of 32 despite the error message saying 16.)
+function snapDim(el) {
+  const v = parseInt(el.value, 10);
+  if (isNaN(v)) return;
+  const snapped = Math.round(Math.max(128, Math.min(2048, v)) / 32) * 32;
+  if (String(snapped) === el.value) return; // already valid — skip extra syncUrl
+  el.value = snapped;
+  syncUrl();
+}
+imgWidthEl.addEventListener('blur', () => snapDim(imgWidthEl));
+imgHeightEl.addEventListener('blur', () => snapDim(imgHeightEl));
+
+// --- Seed fields (one per image, dynamic with count) ---
+function getSeedInputs() { return [...seedFieldsEl.querySelectorAll('input')]; }
+function randSeed() { return Math.floor(Math.random() * 2147483647); }
+
+function buildSeedFields(count, values) {
+  seedFieldsEl.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const inp = document.createElement('input');
+    inp.type = 'number'; inp.min = '0'; inp.max = '2147483647';
+    inp.placeholder = 'random';
+    if (values && values[i]) inp.value = values[i];
+    inp.addEventListener('input', syncUrl);
+    seedFieldsEl.appendChild(inp);
+  }
+}
+
+// Build initial seed fields from count + URL
+const initSeedVals = urlP.has('seed') ? urlP.get('seed').split(',') : [];
+buildSeedFields(parseInt(countEl.value, 10), initSeedVals);
+
+// Rebuild when count changes; syncUrl must come after buildSeedFields so seed
+// fields exist before their values are written to the URL.
+countEl.addEventListener('change', () => {
+  const cur = getSeedInputs().map(el => el.value);
+  buildSeedFields(parseInt(countEl.value, 10), cur);
+  syncUrl();
+});
+
+// Randomize button
+document.getElementById('randomize-seeds').addEventListener('click', () => {
+  getSeedInputs().forEach(el => el.value = randSeed());
+  syncUrl();
+});
+
+// Reset everything to defaults (API key preserved)
+document.getElementById('reset-all').addEventListener('click', () => {
+  URL_FIELDS.forEach(({ el, def }) => el.value = def);
+  buildSeedFields(parseInt(countEl.value, 10), []);
+  refListEl.innerHTML = '';
+  updateRefHint();
+  updatePresetHighlight();
+  syncUrl();
+});
+
+const savedKey = localStorage.getItem('together_api_key');
+if (savedKey) { apiKeyEl.value = savedKey; saveKeyEl.checked = true; }
+
+const toolBodyEl = document.getElementById('tool-body');
+function syncKey() {
+  if (saveKeyEl.checked) localStorage.setItem('together_api_key', apiKeyEl.value);
+  else localStorage.removeItem('together_api_key');
+  toolBodyEl.hidden = !apiKeyEl.value.trim();
+}
+saveKeyEl.addEventListener('change', syncKey);
+apiKeyEl.addEventListener('input', syncKey);
+syncKey(); // set initial visibility
+
+// --- Reference images ---
+const refListEl  = document.getElementById('ref-list');
+const refAddBtn  = document.getElementById('ref-add-btn');
+const refHintEl  = document.getElementById('ref-hint');
+
+function getRefUrls() {
+  return Array.from(refListEl.querySelectorAll('input[type=text]'))
+    .map(el => el.value.trim())
+    .filter(v => v);
+}
+
+function updateRefHint() {
+  const count = refListEl.children.length;
+  refHintEl.hidden = count === 0;
+  refAddBtn.hidden = count >= 8;
+}
+
+function makeThumbPlaceholder(text) {
+  const el = document.createElement('div');
+  el.className = 'ref-thumb-err';
+  el.textContent = text || '';
+  return el;
+}
+
+function addRefRow(value) {
+  const row = document.createElement('div');
+  row.className = 'ref-row';
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'https://...';
+  input.value = value || '';
+
+  let preview = makeThumbPlaceholder();
+  let thumbGen = 0;
+
+  function loadThumb() {
+    const gen = ++thumbGen;
+    const url = input.value.trim();
+    if (!url) {
+      if (preview.tagName === 'IMG') {
+        const ph = makeThumbPlaceholder();
+        row.replaceChild(ph, preview);
+        preview = ph;
+      }
+      return;
+    }
+    const img = document.createElement('img');
+    img.className = 'ref-thumb';
+    img.src = url;
+    img.onload = () => {
+      if (gen !== thumbGen) return;
+      row.replaceChild(img, preview); preview = img;
+    };
+    img.onerror = () => {
+      if (gen !== thumbGen) return;
+      const err = makeThumbPlaceholder('!');
+      row.replaceChild(err, preview);
+      preview = err;
+    };
+  }
+
+  input.addEventListener('blur', () => { loadThumb(); syncUrl(); });
+  input.addEventListener('paste', () => setTimeout(() => { loadThumb(); syncUrl(); }, 0));
+  input.addEventListener('input', syncUrl);
+
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'ref-remove';
+  removeBtn.textContent = '×';
+  removeBtn.title = 'Remove';
+  removeBtn.setAttribute('aria-label', 'Remove reference image');
+  removeBtn.addEventListener('click', () => {
+    row.remove();
+    updateRefHint();
+    syncUrl();
+  });
+
+  row.appendChild(input);
+  row.appendChild(preview);
+  row.appendChild(removeBtn);
+  refListEl.appendChild(row);
+  updateRefHint();
+
+  if (value) loadThumb();
+}
+
+refAddBtn.addEventListener('click', () => {
+  addRefRow('');
+  refListEl.lastElementChild.querySelector('input').focus();
+});
+
+// Restore reference images from URL
+{
+  let i = 0;
+  while (i < 8 && urlP.has('ref' + i)) { addRefRow(urlP.get('ref' + i)); i++; }
+}
+
+// --- Cost estimate ---
+// Together AI charges per megapixel; steps beyond the default cost proportionally
+// more.  Reference images don't appear to add per-image cost (they condition the
+// generation, not multiply it).  Formula: count × perMP × MP × stepMultiplier.
+const costEstEl  = document.getElementById('cost-est');
+const costTextEl = document.getElementById('cost-text');
+
+let _costKey = '';
+function updateCostEstimate() {
+  const count = parseInt(countEl.value, 10) || 3;
+  const steps = parseInt(stepsEl.value, 10) || CONFIG.defaults.steps;
+  const w = parseInt(imgWidthEl.value, 10) || CONFIG.defaults.width;
+  const h = parseInt(imgHeightEl.value, 10) || CONFIG.defaults.height;
+  const refs = getRefUrls().length; // doesn't affect cost, but shown in the hint text
+  const key = count + '|' + steps + '|' + w + '|' + h + '|' + refs;
+  if (key === _costKey) return;
+  _costKey = key;
+  const mp = (w * h) / 1e6;
+  const stepMult = Math.max(1, steps / CONFIG.defaults.steps);
+  const total = count * CONFIG.cost.perMegapixel * mp * stepMult;
+  costEstEl.textContent = total < 0.005 ? '(< $0.01)' : '(~$' + total.toFixed(2) + ')';
+  const parts = [count + ' image' + (count > 1 ? 's' : '')];
+  if (steps !== CONFIG.defaults.steps) parts.push(steps + ' steps');
+  if (w !== CONFIG.defaults.width || h !== CONFIG.defaults.height) parts.push(w + '×' + h);
+  if (refs > 0) parts.push(refs + ' ref' + (refs > 1 ? 's' : ''));
+  costTextEl.textContent = parts.join(' \u00b7 ') + ' \u00b7 ';
+}
+
+updateCostEstimate();
+
+// --- Status helpers ---
+function setStatus(msg, type) {
+  statusEl.hidden = false;
+  statusEl.className = 'status-bar' + (type ? ' is-' + type : '');
+  statusEl.textContent = msg;
+}
+function clearStatus() { statusEl.hidden = true; }
+
+const saveStatusEl = document.getElementById('save-status');
+function setSaveStatus(msg, type) {
+  saveStatusEl.hidden = false;
+  saveStatusEl.className = 'status-bar' + (type ? ' is-' + type : '');
+  saveStatusEl.textContent = msg;
+  saveStatusEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// --- Generate ---
+let cells = []; // module-scope so selectImage can iterate them
+
+genBtn.addEventListener('click', async () => {
+  const key     = apiKeyEl.value.trim();
+  const subject = promptEl.value.trim();
+  if (!key)     { setStatus('Paste your Together AI API key first.', 'error'); return; }
+  if (!subject) { setStatus('Enter a subject prompt.', 'error'); return; }
+
+  const count = parseInt(countEl.value, 10);
+  genBtn.disabled = true;
+  playCaching();
+  setStatus('Generating ' + count + ' image' + (count > 1 ? 's in parallel' : '') + '…');
+
+  editDivider.hidden = true;
+  editSection.hidden = true;
+  snippetArea.hidden = true;
+  resultsEl.hidden = false;
+  imgGridEl.className = 'img-grid' + (count === 1 ? ' img-grid-1' : count === 5 ? ' img-grid-5' : '');
+  imgGridEl.innerHTML = '';
+
+  cells = [];
+  const metas = [];
+  for (let i = 0; i < count; i++) {
+    const wrap = document.createElement('div');
+    wrap.className = 'img-wrap';
+    const cell = document.createElement('div');
+    cell.className = 'img-cell is-loading';
+    cell.innerHTML = '<div class="spinner"></div>';
+    const meta = document.createElement('div');
+    meta.className = 'img-meta';
+    wrap.appendChild(cell);
+    wrap.appendChild(meta);
+    imgGridEl.appendChild(wrap);
+    cells.push(cell);
+    metas.push(meta);
+  }
+
+  const stylePrefix = stylePrefixEl.value.trim();
+  const fullPrompt  = stylePrefix + ' ' + subject;
+  const guidance    = parseFloat(guidanceEl.value);
+  const steps       = parseInt(stepsEl.value, 10);
+  // Snap dimensions to multiples of 32 in case blur handler hasn't fired yet
+  const imgWidth    = Math.round(parseInt(imgWidthEl.value,  10) / 32) * 32;
+  const imgHeight   = Math.round(parseInt(imgHeightEl.value, 10) / 32) * 32;
+  imgWidthEl.value  = String(imgWidth);
+  imgHeightEl.value = String(imgHeight);
+  const negPrompt   = negPromptEl.value.trim();
+
+  // Read per-image seeds; blank fields get a random seed
+  const seedInputs = getSeedInputs();
+  const seeds = Array.from({ length: count }, (_, i) => {
+    const v = seedInputs[i] && seedInputs[i].value.trim();
+    return v ? parseInt(v, 10) : randSeed();
+  });
+
+  const ENDPOINT = 'https://api.together.xyz/v1/images/generations';
+
+  // Reference images (if any)
+  const refUrls = getRefUrls();
+
+  const buildPayload = (seed) => ({
+    model: CONFIG.model,
+    prompt: fullPrompt,
+    width: imgWidth,
+    height: imgHeight,
+    steps: steps,
+    guidance_scale: guidance,
+    seed: seed,
+    response_format: 'base64',
+    output_format: 'jpeg',
+    negative_prompt: negPrompt,
+    ...(refUrls.length > 0 && { reference_images: refUrls.slice(0, 8) })
+  });
+
+  // Show the request in the debug panel (seed shown as first value; others vary only by seed)
+  const reqDetailsEl = document.getElementById('req-details');
+  const reqBodyEl = document.getElementById('req-body');
+  reqBodyEl.textContent =
+    'POST ' + ENDPOINT + '\n' +
+    'Authorization: Bearer [redacted]\n\n' +
+    JSON.stringify(buildPayload(seeds[0]), null, 2) +
+    (count > 1 ? '\n\n// ' + count + ' requests sent in parallel; seed varies per image' : '');
+  reqDetailsEl.hidden = false;
+
+  const generateOne = async (seed) => {
+    const resp = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + key,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(buildPayload(seed))
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error((err.error && err.error.message) || ('HTTP ' + resp.status));
+    }
+    const data = await resp.json();
+    return { b64: data.data[0].b64_json, seed: data.data[0].seed };
+  };
+
+  let successCount = 0;
+  const promises = Array.from({ length: count }, (_, i) =>
+    generateOne(seeds[i]).then(result => {
+      cells[i].className = 'img-cell';
+      cells[i].innerHTML = '';
+      const img = document.createElement('img');
+      img.src = 'data:image/jpeg;base64,' + result.b64;
+      img.draggable = false;
+      cells[i].appendChild(img);
+      metas[i].textContent = 'seed: ' + (result.seed || seeds[i]);
+      cells[i].addEventListener('click', () => selectImage(cells[i]));
+      successCount++;
+    }).catch(err => {
+      cells[i].className = 'img-cell is-error';
+      cells[i].textContent = 'Error: ' + err.message;
+    })
+  );
+
+  await Promise.allSettled(promises);
+  genBtn.disabled = false;
+  if (successCount > 0) clearStatus();
+  else setStatus('All generations failed. Check your API key or prompt.', 'error');
+});
+
+// --- Select ---
+let sourceImg = null;
+
+function suggestFilename() {
+  const STOP = new Set(['a','an','the','of','in','on','at','to','for','and','or',
+                        'with','from','by','into','over','through','no','not','just']);
+  const words = promptEl.value.trim().toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .split(/\s+/)
+    .filter(w => w.length > 2 && !STOP.has(w));
+  return words.slice(0, 3).join('-') || 'generated';
+}
+
+function selectImage(cell) {
+  cells.forEach(c => c.classList.remove('is-selected'));
+  cell.classList.add('is-selected');
+
+  // Reuse the already-decoded <img> from the grid — no re-decode needed
+  const img = cell.querySelector('img');
+  if (!img) return;
+  sourceImg = img;
+  initCrop(img);
+  editDivider.hidden = false;
+  editSection.hidden = false;
+  // Suggest a filename from the prompt if the field is blank or was auto-suggested
+  if (!filenameEl.dataset.userEdited) filenameEl.value = suggestFilename();
+  editSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// --- Crop ---
+// Aspect ratio is live — reads the current width/height inputs so changing
+// dimensions in Advanced options is reflected in the crop handles.
+
+let cropState = null; // { x, y, w, h } in source pixels
+let cropCtx   = null; // cached 2D context
+let drag      = null;
+const HIT     = 14;   // handle hit size in canvas pixels
+
+// Which edges move for each corner handle
+const CORNER_CFG = {
+  tl: { left: true,  top: true  },
+  tr: { left: false, top: true  },
+  bl: { left: true,  top: false },
+  br: { left: false, top: false }
+};
+
+// Returns new { x, y, w, h } for a corner drag, or null if constraints prevent it
+function applyCornerDrag(handle, dx, dy, sc, W, H) {
+  const { left, top } = CORNER_CFG[handle];
+  let { x, y, w, h } = sc;
+
+  if (left) {
+    const nx = Math.max(0, Math.min(sc.x + sc.w - 40, sc.x + dx));
+    w = sc.x + sc.w - nx;
+    x = nx;
+  } else {
+    w = Math.max(40, Math.min(W - sc.x, sc.w + dx));
+  }
+
+  if (top) {
+    const ny = Math.max(0, Math.min(sc.y + sc.h - 40, sc.y + dy));
+    h = sc.y + sc.h - ny;
+    y = ny;
+  } else {
+    h = Math.max(40, Math.min(H - sc.y, sc.h + dy));
+  }
+
+  return { x, y, w, h };
+}
+
+function initCrop(img) {
+  const displayW = cropCanvas.parentElement.clientWidth - 32;
+  cropCanvas.width  = img.naturalWidth;
+  cropCanvas.height = img.naturalHeight;
+  cropCanvas.style.width  = displayW + 'px';
+  cropCanvas.style.height = Math.round(img.naturalHeight * displayW / img.naturalWidth) + 'px';
+  cropCtx   = cropCanvas.getContext('2d'); // cache once per image
+  cropState = { x: 0, y: 0, w: img.naturalWidth, h: img.naturalHeight };
+  processedCanvas = null; // force rebuild for new image
+  applyAdjustments();
+}
+
+function drawCrop() {
+  if (!processedCanvas || !cropState || !cropCtx) return;
+  const W = cropCanvas.width, H = cropCanvas.height;
+  const { x, y, w, h } = cropState;
+  cropCtx.clearRect(0, 0, W, H);
+  cropCtx.drawImage(processedCanvas, 0, 0);
+
+  // Dim outside crop region
+  cropCtx.fillStyle = 'rgba(0,0,0,0.55)';
+  cropCtx.fillRect(0,   0,   W,     y);
+  cropCtx.fillRect(0,   y,   x,     h);
+  cropCtx.fillRect(x+w, y,   W-x-w, h);
+  cropCtx.fillRect(0,   y+h, W,     H-y-h);
+
+  // Crop border + corner handles
+  cropCtx.strokeStyle = '#c8860a';
+  cropCtx.lineWidth   = 2;
+  cropCtx.strokeRect(x, y, w, h);
+  cropCtx.fillStyle = '#c8860a';
+  [[x, y], [x+w, y], [x, y+h], [x+w, y+h]].forEach(([hx, hy]) => {
+    cropCtx.fillRect(hx - 5, hy - 5, 10, 10);
+  });
+
+  cropInfo.textContent = Math.round(w) + ' × ' + Math.round(h) + ' px';
+}
+
+function canvasCoords(e, rect) {
+  const scale = cropCanvas.width / cropCanvas.offsetWidth;
+  return {
+    cx: (e.clientX - rect.left) * scale,
+    cy: (e.clientY - rect.top)  * scale
+  };
+}
+
+function hitTest(cx, cy) {
+  if (!cropState) return null;
+  const { x, y, w, h } = cropState;
+  const corners = [
+    { id: 'tl', px: x,   py: y   },
+    { id: 'tr', px: x+w, py: y   },
+    { id: 'bl', px: x,   py: y+h },
+    { id: 'br', px: x+w, py: y+h }
+  ];
+  for (const c of corners) {
+    if (Math.abs(cx - c.px) < HIT && Math.abs(cy - c.py) < HIT) return c.id;
+  }
+  if (cx > x && cx < x+w && cy > y && cy < y+h) return 'move';
+  return null;
+}
+
+cropCanvas.addEventListener('mousedown', e => {
+  const rect   = cropCanvas.getBoundingClientRect(); // cache for drag duration
+  const { cx, cy } = canvasCoords(e, rect);
+  const handle = hitTest(cx, cy);
+  if (!handle) return;
+  drag = { handle, startCx: cx, startCy: cy, startCrop: { ...cropState }, rect };
+  e.preventDefault();
+});
+
+window.addEventListener('mousemove', e => {
+  if (!drag || !cropState) return;
+  const { cx, cy } = canvasCoords(e, drag.rect); // reuse rect cached at mousedown
+  const dx = cx - drag.startCx;
+  const dy = cy - drag.startCy;
+  const sc = drag.startCrop;
+  const W  = cropCanvas.width, H = cropCanvas.height;
+
+  if (drag.handle === 'move') {
+    cropState = {
+      x: Math.max(0, Math.min(W - sc.w, sc.x + dx)),
+      y: Math.max(0, Math.min(H - sc.h, sc.y + dy)),
+      w: sc.w, h: sc.h
+    };
+  } else {
+    const result = applyCornerDrag(drag.handle, dx, dy, sc, W, H);
+    if (result) cropState = result;
+  }
+  drawCrop();
+});
+
+window.addEventListener('mouseup', () => { drag = null; });
+
+// Cursor feedback
+cropCanvas.addEventListener('mousemove', e => {
+  if (drag) return;
+  const rect   = cropCanvas.getBoundingClientRect();
+  const { cx, cy } = canvasCoords(e, rect);
+  const h = hitTest(cx, cy);
+  cropCanvas.style.cursor =
+    h === 'tl' || h === 'br' ? 'nwse-resize' :
+    h === 'tr' || h === 'bl' ? 'nesw-resize' :
+    h === 'move'             ? 'move'         : 'crosshair';
+});
+
+resetCropBtn.addEventListener('click', () => { if (sourceImg) initCrop(sourceImg); });
+
+// --- Adjustments (hue / saturation / contrast / black point / white point) ---
+// CSS filters handle hue-rotate, saturation, contrast.
+// Black/white point (input levels) require pixel manipulation and are applied to
+// an offscreen processedCanvas, which drawCrop() reads instead of sourceImg directly.
+// applyAdjustments() is called when any slider changes; drawCrop() just reads the result.
+
+let processedCanvas = null;
+
+function adjustFilter() {
+  const hue = parseInt(hueEl.value, 10);
+  return (hue ? 'hue-rotate(' + hue + 'deg) ' : '') +
+    'saturate(' + (satEl.value / 100) + ') contrast(' + (conEl.value / 100) + ')';
+}
+
+function applyAdjustments() {
+  if (!sourceImg) return;
+  if (!processedCanvas) processedCanvas = document.createElement('canvas');
+  processedCanvas.width  = sourceImg.naturalWidth;
+  processedCanvas.height = sourceImg.naturalHeight;
+  const ctx = processedCanvas.getContext('2d');
+
+  // Step 1: CSS filters (hue-rotate, saturation, contrast)
+  ctx.filter = adjustFilter();
+  ctx.drawImage(sourceImg, 0, 0);
+  ctx.filter = 'none';
+
+  // Step 2: Black/white point — remap input range [bp, wp] → [0, 255]
+  const bp = parseInt(bpEl.value, 10);
+  const wp = parseInt(wpEl.value, 10);
+  if (bp > 0 || wp < 255) {
+    const id = ctx.getImageData(0, 0, processedCanvas.width, processedCanvas.height);
+    const d  = id.data;
+    const range = Math.max(1, wp - bp);
+    for (let i = 0; i < d.length; i += 4) {
+      d[i]   = Math.min(255, Math.max(0, (d[i]   - bp) / range * 255 + 0.5)) | 0;
+      d[i+1] = Math.min(255, Math.max(0, (d[i+1] - bp) / range * 255 + 0.5)) | 0;
+      d[i+2] = Math.min(255, Math.max(0, (d[i+2] - bp) / range * 255 + 0.5)) | 0;
+    }
+    ctx.putImageData(id, 0, 0);
+  }
+
+  drawCrop();
+}
+
+satEl.addEventListener('input', () => { satVal.textContent = satEl.value + '%'; applyAdjustments(); });
+conEl.addEventListener('input', () => { conVal.textContent = conEl.value + '%'; applyAdjustments(); });
+hueEl.addEventListener('input', () => { hueVal.textContent = hueEl.value + '°'; applyAdjustments(); });
+bpEl.addEventListener('input',  () => { bpVal.textContent  = bpEl.value;        applyAdjustments(); });
+wpEl.addEventListener('input',  () => { wpVal.textContent  = wpEl.value;        applyAdjustments(); });
+filenameEl.addEventListener('input', () => { filenameEl.dataset.userEdited = 'true'; });
+resetAdjustBtn.addEventListener('click', () => {
+  satEl.value = '100'; satVal.textContent = '100%';
+  conEl.value = '100'; conVal.textContent = '100%';
+  hueEl.value = '0';   hueVal.textContent = '0°';
+  bpEl.value  = '0';   bpVal.textContent  = '0';
+  wpEl.value  = '255'; wpVal.textContent  = '255';
+  applyAdjustments();
+});
+
+// --- Save ---
+saveBtn.addEventListener('click', async () => {
+  if (!sourceImg || !cropState) return;
+
+  const rawName  = filenameEl.value.trim() || 'generated';
+  const filename = rawName.replace(/\.jpe?g$/i, '') + '.jpg';
+
+  try {
+    // Render crop to blob
+    const out = document.createElement('canvas');
+    out.width  = Math.round(cropState.w);
+    out.height = Math.round(cropState.h);
+    const outCtx = out.getContext('2d');
+    outCtx.drawImage(
+      processedCanvas,
+      cropState.x, cropState.y, cropState.w, cropState.h,
+      0, 0, out.width, out.height
+    );
+    const blob = await new Promise((res, rej) =>
+      out.toBlob(b => b ? res(b) : rej(new Error('toBlob failed')), 'image/jpeg', 0.92)
+    );
+
+    // Try File System Access API (Chrome 86+, Firefox 111+)
+    if ('showSaveFilePicker' in window) {
+      try {
+        const fh = await window.showSaveFilePicker({
+          suggestedName: filename,
+          startIn: 'documents',
+          types: [{ description: 'JPEG Image', accept: { 'image/jpeg': ['.jpg'] } }]
+        });
+        const writable = await fh.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        showSnippet(fh.name.replace(/\.jpe?g$/i, ''));
+        setSaveStatus('Saved as ' + fh.name + ' — add to src/site/images/blog/ if not already there.', 'success');
+        return;
+      } catch (e) {
+        if (e.name === 'AbortError') return;
+        // Fall through to download
+      }
+    }
+
+    // Fallback: browser download
+    const url = URL.createObjectURL(blob);
+    const a   = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+    showSnippet(rawName);
+    setSaveStatus('Downloaded as ' + filename + ' — move to src/site/images/blog/.', 'success');
+
+  } catch (err) {
+    setSaveStatus('Save failed: ' + err.message, 'error');
+  }
+});
+
+function showSnippet(baseName) {
+  snippetArea.hidden = false;
+  snippetEl.textContent =
+    'image: /blog/' + baseName + '.jpg\n' +
+    'image_meta:\n' +
+    '  text: "[DRAFT — describe what you see]"\n' +
+    '  credit: "' + CONFIG.attribution + '"\n' +
+    '  altext: \'[DRAFT — describe image for screen readers]\'';
+}
+
+
+// --- Money sounds (Web Audio API, no external files) ---
+// One AudioContext reused across calls (browsers limit simultaneous contexts)
+let _ac = null;
+function ac() {
+  if (!_ac || _ac.state === 'closed') _ac = new (window.AudioContext || window.webkitAudioContext)();
+  return _ac;
+}
+function osc(ctx, type, freq, start, stop, gainStart, gainEnd) {
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(freq, start);
+  g.gain.setValueAtTime(gainStart, start);
+  g.gain.exponentialRampToValueAtTime(gainEnd || 0.001, stop);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(start); o.stop(stop + 0.01);
+  return { o, g };
+}
+
+// Ka-ching — classic cash register thunk + bright bell
+function soundKaChing() {
+  const ctx = ac(), t = ctx.currentTime;
+  const thunk = ctx.createOscillator(), tg = ctx.createGain();
+  thunk.type = 'square';
+  thunk.frequency.setValueAtTime(900, t);
+  thunk.frequency.exponentialRampToValueAtTime(180, t + 0.06);
+  tg.gain.setValueAtTime(0.28, t);
+  tg.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+  thunk.connect(tg); tg.connect(ctx.destination);
+  thunk.start(t); thunk.stop(t + 0.09);
+  osc(ctx, 'sine', 2400, t + 0.07, t + 0.65, 0.32, 0.001);
+}
+
+// Tink — light metallic ping
+function soundTink() {
+  const ctx = ac(), t = ctx.currentTime;
+  osc(ctx, 'sine', 3400, t, t + 0.22, 0.35, 0.001);
+  osc(ctx, 'sine', 5100, t, t + 0.1,  0.12, 0.001);
+}
+
+// Badoink — springy cartoon boing
+function soundBadoink() {
+  const ctx = ac(), t = ctx.currentTime;
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(120, t);
+  o.frequency.exponentialRampToValueAtTime(1100, t + 0.07);
+  o.frequency.exponentialRampToValueAtTime(90,   t + 0.55);
+  g.gain.setValueAtTime(0.38, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(t); o.stop(t + 0.65);
+}
+
+// Coins — three quick coin tinks tumbling down
+function soundCoins() {
+  const ctx = ac(), t = ctx.currentTime;
+  [[0,    2200, 0.28],
+   [0.09, 1900, 0.22],
+   [0.17, 2500, 0.18],
+   [0.24, 1700, 0.14]].forEach(([dt, freq, vol]) => {
+    osc(ctx, 'triangle', freq, t + dt, t + dt + 0.18, vol, 0.001);
+  });
+}
+
+// Jackpot — ascending three-note slot-machine arpeggio
+function soundJackpot() {
+  const ctx = ac(), t = ctx.currentTime;
+  [[0,    880,  0.25],
+   [0.12, 1100, 0.25],
+   [0.24, 1760, 0.30]].forEach(([dt, freq, vol]) => {
+    osc(ctx, 'sine', freq, t + dt, t + dt + 0.35, vol, 0.001);
+  });
+}
+
+const SOUNDS = [soundKaChing, soundTink, soundBadoink, soundCoins, soundJackpot];
+
+function playCaching() {
+  try { SOUNDS[Math.floor(Math.random() * SOUNDS.length)](); }
+  catch (_) { /* AudioContext unavailable — silent fail */ }
+}
+
+copyBtn.addEventListener('click', () => {
+  navigator.clipboard.writeText(snippetEl.textContent).then(() => {
+    copyBtn.textContent = 'Copied!';
+    setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+  });
+});
+</script>
+{% endraw %}
+</body>
+</html>

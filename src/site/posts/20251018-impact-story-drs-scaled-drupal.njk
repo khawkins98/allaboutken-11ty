@@ -1,0 +1,135 @@
+---
+title: 'Scaling Drupal e-commerce for 150,000 satellite-connected customers'
+layout: layouts/post.njk
+teaser: 'Every timeout during checkout cost revenue. Every slow page load over satellite eroded trust.'
+date: 2014-06-30
+tags:
+  - posts
+  - impact-stories
+topics:
+  - Drupal
+  - performance optimization
+  - database tuning
+  - caching strategies
+org: DRS Technical Solutions
+permalink: /work/2014/impact-story-drs-scaled-drupal/
+kens_status: ready_for_publication
+---
+
+{% markdown %}
+{% from "partials/orgs.njk" import orgIntro %}
+
+**Performance** | **Scale** | **Reliability**
+
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+
+Running a high-traffic Drupal platform with 150,000+ registered users and integrated e‑commerce meant operating with near-zero tolerance for latency. The business couldn't afford checkout failures.
+
+The platform supported both public content (browsable by millions) and authenticated workflows (user accounts, purchase history, active shopping carts). Anonymous browsing needed aggressive caching, but authenticated sessions with personalized content and cart state couldn't rely on the same approach.
+
+These competing demands created performance challenges that couldn't be solved with a single strategy.
+
+Users primarily accessed the site from satellite internet cafés with limited bandwidth, high latency, and time‑boxed sessions. Pages needed to be small, load predictably, and degrade gracefully when connectivity faltered.
+
+The platform needed to deliver fast experiences for both anonymous and authenticated users while maintaining operational reliability during traffic spikes and code deployments.
+
+## What were the performance constraints?
+
+High traffic and commerce workflows required reliable performance and operational predictability across different user contexts:
+
+**Anonymous users** (public content):
+
+- Millions of monthly visits
+- Cacheable pages but with personalized elements (regional pricing, currency)
+- SEO-critical performance
+- Needed lightweight pages with minimal requests for satellite connections
+
+**Authenticated users** (logged-in workflows):
+
+- 150,000+ registered accounts
+- Shopping carts with real-time inventory
+- Account dashboards with purchase history and order tracking
+- Personalized recommendations and saved preferences
+- Required minimal round trips to prevent timeouts on slow connections
+
+**Operational constraints**:
+
+- Daily content updates requiring cache invalidation
+- Code deployments without downtime
+- Traffic spikes during promotional campaigns
+- Database growth requiring ongoing query optimization
+
+## How I built a multi-layered performance strategy?
+
+**Edge-first architecture for satellite connectivity**
+
+Satellite connections have fundamental constraints: high latency (500-800ms round trips), limited bandwidth, and unpredictable packet loss. Every request back to origin added seconds to page loads. My solution: push static assets to the edge and minimize origin round trips.
+
+Strategy:
+
+- **CDN/edge caching for static assets**: Cached CSS, JS, images, and fonts at geographically distributed edge nodes via CDN. Users on satellite connections fetched these locally (20-50ms) instead of from origin (500-800ms per asset)
+- **Aggressive asset consolidation**: Bundled CSS/JS to reduce request count; inlined critical CSS to eliminate render-blocking requests
+- **Long-lived cache headers**: Set far-future expires on versioned assets (1 year) so repeat visits required zero static asset requests
+- **Optimized images**: Compressed and right-sized images; used progressive JPEGs so partial loads showed content quickly
+- **Lightweight HTML**: Kept HTML payloads small and fast to parse, since only HTML required origin round trips for dynamic/authenticated content
+
+Static asset delivery moved from 500-800ms per asset (satellite to origin) to 20-50ms (cafe to regional edge). Typical page loads dropped from 10-15 origin requests to 1-3 (HTML + dynamic data only).
+
+**Reverse proxy caching (Varnish)**
+
+Implemented Varnish in front of the application layer to serve anonymous HTML traffic without hitting PHP or the database. Combined with edge-first static assets, this meant most anonymous users never touched the origin application servers.
+
+Key decisions:
+
+- **Smart cache keys**: Included currency and region in cache variations to support personalized pricing
+- **Selective bypassing**: Authenticated requests bypassed Varnish entirely to avoid serving stale cart or account data
+- **Cache warming**: Pre-cached high-traffic pages after deployments or content updates
+- **Geo-aware warming**: Prioritized warming for top regions to reduce first-byte wait over high‑latency links
+- **TTL tuning**: Balanced freshness vs performance (30-minute Time to Live (TTL) for most pages, 5 minutes for time-sensitive content like inventory)
+- **Compression**: Gzip for HTML to minimize bytes over satellite links
+
+This meant 80%+ of anonymous traffic served from Varnish cache. Combined with edge-static architecture, anonymous page loads required minimal origin contact.
+
+## What changed for users and operations?
+
+**Performance**:
+- **Edge-first wins**: Static asset delivery dropped from 500-800ms (satellite to origin) to 20-50ms (satellite to regional edge). Reduced typical page loads from 10-15 origin requests to 1-2
+- **Anonymous traffic**: 80%+ served from Varnish cache, sub-second page loads for public content
+- **Authenticated workflows**: Optimized database queries reduced cart and account page load times by 40%
+- **Eliminated timeouts**: Zero timeout failures during peak traffic — critical for time-boxed satellite café sessions
+- **Better conversion**: Faster, more predictable checkout flow correlated with improved conversion rates (detailed in [User Experience (UX) success: Doubling conversion rates](/posts/20140407-ux-success-double-conversion.html))
+
+**Operational reliability**:
+- **Confident deployments**: Multiple deployments per week with instant rollback capability
+- **Proactive monitoring**: APM and slow query logs caught issues before they affected users
+- **Graceful scaling**: Platform handled traffic spikes during promotional campaigns without degradation
+- **Smooth editorial operations**: Content editors experienced fast admin interfaces through render cache optimization
+
+**Platform sustainability**:
+- **Growing user base**: Scaled from initial launch to 150,000+ registered users without major infrastructure changes
+- **Cost efficiency**: Varnish cache reduced application server load, allowing horizontal scaling when needed
+- **Knowledge capture**: Documented optimization patterns that informed later work at UNDRR (see [From performance failures to trusted delivery](/work/2025/impact-story-platform-recovery-optimization/))
+
+## Why did this approach actually work?
+
+E-commerce platforms demand a different performance mindset than public content sites. You can't just throw caching at the problem — you need layered strategies that balance anonymous and authenticated experiences, especially when serving users on high-latency satellite connections.
+
+The hardest part wasn't any single optimization — it was the constant tension between caching aggressively (for speed) and serving fresh data (for accuracy). Early attempts at caching authenticated pages led to users seeing stale cart contents. I had to accept that some requests would always hit origin, and focus on making those paths as fast as possible.
+
+Key factors:
+
+- **Respecting physics**: Satellite latency (500-800ms) is unavoidable, so I eliminated unnecessary round trips. Edge-first architecture meant static assets never touched origin — critical for usable page loads
+- **Understanding the user contexts**: Anonymous browsers needed speed (edge + Varnish), authenticated users needed accuracy (optimized database + minimal round trips) — different strategies for each
+- **Measuring the right things**: Conversion funnel metrics and time-to-interactive on slow connections, not just synthetic page load times
+- **Proactive optimization**: Profiling and fixing slow queries before they became incidents; simulating high-latency conditions to validate flows
+- **Deployment discipline**: Blue-green deployments and automated testing enabled confident iteration without risking revenue during traffic spikes
+- **Patience with scale**: Incremental optimization across edge architecture, caching, database, and application layers rather than hoping for a single heroic fix
+
+The result was a platform that handled 150,000+ users and millions of monthly visitors — including customers on satellite connections with time-boxed sessions — while maintaining fast, reliable experiences across both public and authenticated contexts.
+
+## Links and related writing
+
+- Related impact story: [From performance failures to trusted delivery](/work/2025/impact-story-platform-recovery-optimization/) - Similar database optimization and platform recovery work
+- Related writing: [UX success: Doubling conversion rates](/posts/20140407-ux-success-double-conversion.html) - Drupal e-commerce from same period
+
+{% endmarkdown %}

@@ -1,0 +1,551 @@
+---
+title: Editorial style guide
+layout: layouts/base.njk
+teaser: 'Voice, tone, and structure standards for AllAboutKen.com content.'
+date: 2026-02-07
+templateEngineOverride: njk
+permalink: /style-guide/editorial/
+---
+
+<article class="kh-grid-stylized kh-u-margin__top--1200">
+  <div></div>
+  <div class="kh-content">
+    <p class="kh-breadcrumb"><a href="/style-guide/components/">Component reference</a> ·  Editorial style guide</p>
+    <h1 class="kh-font-headline kh-text-heading--1">{{ title }}</h1>
+    <p class="kh-text-body--3">A public reference for the voice, structure, and editorial standards used across this site. Useful for contributors, AI assistants, and future me.</p>
+
+{% markdown %}
+
+## Author context
+
+- **Role**: Ken Hawkins — web design architect and product-minded editorial lead.
+- **Focus**: information architecture, content architecture, design systems, context engineering, AI practice, Eleventy/Drupal, and pragmatic content tooling.
+- **Unique value**: translating between communications and engineering; show-first, evidence-led writing; reusable, production-ready patterns.
+- **Style anchors**: approachable, specific, generous with links and examples.
+
+---
+
+## Voice and tone
+
+This site writes like a practitioner talking to other practitioners — friendly, specific, and generous with examples.
+
+**Core principles:**
+
+- **Approachable but confident** — conversational without being performative. Contractions are fine. Hedging ("sort of", "basically") is not.
+- **Show first, tell second** — lead with code, visuals, or examples before explaining. The reader should see the thing before reading about it. The same applies to arguments: build the case before stating the conclusion.
+- **Evidence over hype** — be concrete. Avoid superlatives ("best", "always", "never") unless backed by evidence. Prefer specific numbers and named tools.
+- **Authority through specificity** — demonstrate expertise by naming specific tools, code, and organizational dynamics, not by citing your title or years of experience. "You were always one bad PostScript ad placement away from a system lock" is more convincing than "In my twenty years of experience."
+- **Generous with links** — link to sources, related posts, and external references using descriptive anchor text. Never "click here."
+- **Lightly self-deprecating** — humor is welcome, but sparingly (0 – 1 per post). Never as a substitute for clarity.
+
+**Perspective and tense:**
+
+- First-person singular ("I") for personal experience. "We" only when describing genuinely collaborative work.
+- Impact stories always use "I" — they're portfolio pieces showcasing personal contribution.
+- Default to present tense. Past tense for specific events or chronology.
+
+### What this voice is not
+
+To clarify boundaries — if output sounds like any of these, revise:
+
+- **Not academic or formal** — no hedging for politeness ("It could be argued that…"), no passive constructions to sound objective, no jargon without explanation.
+- **Not marketing or promotional** — no superlatives about own work ("revolutionary," "game-changing"), no hiding tradeoffs to make an approach look perfect.
+- **Not tech swagger** — no dismissive certainty ("Obviously," "Clearly," "It's simple"), no gatekeeping ("Any competent dev knows…").
+- **Not bureaucratic or evasive** — no euphemisms ("rightsizing," "unlocking synergies"), no hiding problems in neutral language.
+- **Not personal when diagnosing problems** — frame problems as structural, systemic, or environmental, never as individual failures. This applies in every register, not just opinion pieces. Even when critiquing a tool's limitations, acknowledge that the developers "did their best to fill the gaps."
+- **Not soulless documentation** — not just "what" and "how" without "why." Not reference material without narrative or motivation.
+- **Not AI-boosterism** — avoid "AI-ready", "transformation", and vague readiness language. Use specific vocabulary: context engineering, comprehension debt, the four gears of AI-assisted development. Write about what actually changes and what doesn't — not about AI as an incoming wave to prepare for.
+
+### Tone by content mode
+
+The core voice stays consistent, but tone shifts by purpose:
+
+| Mode | Tone | Markers |
+|------|------|---------|
+| **Instructional** | Direct, procedural | Second-person imperative, numbered steps, code snippets, minimal commentary |
+| **Conceptual** | Reflective, explanatory | Metaphors as structural frames (not decoration), rhetorical questions, longer sentences, diagrams |
+| **Impact story** | Results-focused, evidence-backed | Problem → fix → outcome structure, metrics and comparisons, credits collaborators |
+| **Digesting** | Crisp, curatorial | Source attribution up front, 3 – 5 key points, minimal editorializing, brief connection to own work |
+| **Analysis/opinion** | Analytical, candid | Opens with a provocative claim, builds argument across sections, balances critique with alternatives |
+
+---
+
+## Content types
+
+### Blog posts
+
+Focused technical or observational writing. Tutorials, implementation guides, discoveries, opinions.
+
+- **Length:** 800 – 1,500 words. Deep dives (series posts, architecture walkthroughs) can run to 2,500, but past 2,000 words ask whether it should be split into parts. Length should serve the argument, not pad it.
+- **Title:** Concise, no trailing punctuation, sentence case
+- **Teaser:** One sentence, persuasive, 25 words or fewer
+- **Opening:** Crisp value statement — what the reader gets or why it matters
+- **tl;dr block:** Add one near the top for posts over 700 words
+- **Structure:** H2/H3 sections, bullets and steps over dense paragraphs, code before explanation
+- **Closing:** Restate the main point, invite feedback, link to related content
+
+### Impact stories
+
+Portfolio case studies demonstrating measurable outcomes through narrative.
+
+- **Length:** 600 – 1,200 words (shorter and scannable beats exhaustive — resist the temptation to expand these)
+- **Title format:** Gerund phrase preferred ("Reclaiming three weeks of editorial time every month")
+- **Teaser:** Sets up challenge/tension, not metrics
+- **Result themes:** Three bold phrases near the top (`**Efficiency** | **Reliability** | **Consistency**`)
+- **Section headers:** Use questions for narrative momentum ("What was actually breaking?")
+- **Perspective:** Always "I" — even for collaborative work, use "I led the team to..." not "we." Reserve "we" only when the team's collective action is genuinely the point
+- **Metrics:** Specific numbers with baselines ("0.88s → 0.45s", not "50% faster"), plus human-impact framing ("equivalent to 3 full work weeks")
+- **Tone:** Show process, tradeoffs, and strategic vulnerability. Acknowledge what almost didn't work.
+
+### Digesting posts
+
+Short-form commentary on things I've read or discovered. The key principle: never reuse the source article's title. Rewrite in your own voice to reflect what you found valuable.
+
+**Title patterns:**
+
+- Focus on what you learned: "Why I should have been using the output tag all along"
+- Make it specific: "Engineers need 45 minutes to hit peak focus"
+- State a clear takeaway: "Context engineering beats prompt tricks for AI agents"
+- Use conversational language: "Thoughtful AI integration beats bolted-on Clippy"
+
+**Bad titles** (just restating the source):
+
+- "HTML's Best-Kept Secret: the output tag"
+- "Distracting software engineers is way more harmful than most managers think"
+
+**Guidelines:**
+
+- **Length:** 200 – 500 words
+- Link back to the source prominently (via `digest_link` in frontmatter)
+- Keep commentary brief — this is a reaction, not a rewrite
+- No trailing punctuation on titles
+- Use first-person perspective when natural
+
+---
+
+## Structure templates
+
+### Blog post skeleton
+
+```text
+Opening value statement (1 – 2 sentences)
+tl;dr or "You'll learn" block (if > 700 words)
+---
+## Section heading
+Body content with bullets, code, visuals
+## Section heading
+More content
+---
+Closing: restate main point, invite feedback, related links
+```
+
+### Impact story skeleton
+
+```text
+**Result theme 1** | **Result theme 2** | **Result theme 3**
+Organization context box (orgIntro macro)
+---
+Opening (2 – 3 short paragraphs: stakes, challenge, your role)
+## What was the problem? (question header)
+Challenge details
+## How did you approach it? (question header)
+Solution with constraints and tradeoffs
+## What were the outcomes? (question header)
+Metrics with human-impact framing
+## Why did this work? (question header)
+Reflection — specific factors, not generic lessons
+---
+Related links
+```
+
+---
+
+## Formatting rules
+
+### Headlines
+
+- Sentence case unless a proper noun is involved
+- No trailing punctuation
+- Heading hierarchy must be sequential: H2 → H3 → H4 (never skip levels)
+- Be informative — avoid cleverness that hides meaning ("The plot thickens" → "Why migrations break silently")
+
+### Teasers
+
+- One sentence, 25 words or fewer
+- Persuasive — sell the value, not the topic
+- Avoid links unless essential
+
+### Em dashes
+
+Use spaced em dashes for readability: `word — word` (space, em dash, space). In source, write `--` and the build converts to `—`.
+
+**Default to other punctuation.** Em dashes are easy to overuse, especially in AI-assisted drafts. Before reaching for one, try a comma, semicolon, colon, period, or parentheses first. Most of the time, one of those is the better choice:
+
+- **Comma** for light pauses and appositives: "Steve Krouse, who tipped me off to the comic, makes the same argument"
+- **Semicolon** for balanced clauses: "the value was never in the syntax; it was in holding enough context"
+- **Colon** to introduce a list or explanation: "the failure mode is always the same: someone technically competent but missing context"
+- **Period** when two thoughts are strong enough to stand alone
+- **Parentheses** for truly parenthetical detail
+
+Reserve em dashes for genuine rhetorical pivots, deliberate interruptions, or anaphoric patterns ("not overhead, not a side effect, not something that accumulates naturally"). Target 0--1 per digest post, 1--2 per full blog post. If you find more, replace them.
+
+### Links
+
+- Embed on descriptive nouns or phrases — describe where the link goes
+- Use absolute URLs for external links, relative for internal (`/work/2025/slug/`)
+- Verify all links resolve before publishing
+
+### Images
+
+- Place files in `src/site/images/blog/`
+- Reference in frontmatter as `/blog/filename.jpg` (the build adds `/images/` automatically)
+- Always include `image_meta.altext` (screen readers) and `image_meta.text` (visible caption)
+- For your own photos: use "Own work." as attribution, not "Photo by Ken Hawkins"
+- If you have a relevant photo or screenshot, use it. If not, generate a hero image at [`/image-generator/`](/image-generator/) -- see the [Image Generation guide](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/IMAGE_GENERATION.md) for setup, prompts, and post-processing
+- Generated images use a Japanese blockprint style: high-contrast woodcut on cream with sparse warm amber accent. Prompts should be abstract and evocative (a sailboat, paths through grass) rather than literal depictions of the topic
+- Generated images must not include people, text, brand logos, or screenshots of interfaces
+
+### Code blocks
+
+- Use fenced code blocks with language identifiers inside {%raw%}`{% markdown %}`{%endraw%} sections
+- Show code or visuals before explaining them in prose
+- Keep inline comments minimal — let the code speak
+- For Nunjucks templates in code fences, wrap in {%raw%}`{% raw %}…{% endraw %}`{%endraw%} to prevent the template engine from evaluating your example code
+- Use standard `figure/figcaption` for images that carry meaning
+
+### Lists
+
+- Convert dense prose into bullets or numbered steps
+- Prefer bullets for unordered information, numbers for sequential steps
+- Keep list items parallel in structure
+
+### Paragraphs
+
+- Blog posts: 2 – 4 sentences
+- Impact stories: 2 – 3 sentences (tighter for scannability)
+- Single-sentence paragraphs are fine for emphasis
+
+### Terminology
+
+Consistent casing and formatting for proper nouns and technical terms:
+
+- **Product names as published**: Drupal (not drupal), JavaScript (not Javascript), GitHub (not Github), Eleventy (not 11ty in prose)
+- **Compound modifiers**: hyphenate when used as adjectives ("front-end development"), not as nouns ("the front end")
+- **Acronyms**: spell out on first use, then abbreviate ("Content Management System (CMS)")
+
+### Rhythm and pacing
+
+Good writing has varied rhythm. A few principles:
+
+- **Vary sentence length** — alternate short declarative (5 – 10 words), medium explanatory (15 – 25 words), and occasional longer sentences. Never write three sentences of similar length in a row.
+- **Fragments for emphasis** — sentence fragments create pauses ("Exactly as you manage any capable collaborator."). Use sparingly — once every 2 – 3 paragraphs at most. They work because they're rare.
+- **Lists as breathing room** — after 2 – 3 dense paragraphs, introduce a list, table, or code block. Let the reader's eye rest before continuing.
+- **Em dashes as layering devices** — use them to add a second layer of meaning, not just to insert an aside. "We give ourselves — and our successors — clarity" asks the reader to hold two thoughts at once. Omit them when you want urgency or directness.
+- **Colloquial restatement** — after a formal or technical statement, restate the point in plain language via a parenthetical or em-dash aside: "clarity on how things have taken shape, what problems have been solved and what is in the pipeline (where the bodies are buried, essentially)." The drop in register creates trust without sacrificing precision.
+- **The distilled aphorism** — a short standalone sentence that crystallises a longer argument into a portable claim: "Left unquestioned, technically better can be a distraction from really better." Works as a section closer or a pivot. Earns its weight from the argument that precedes it.
+- **Section transitions should feel inevitable** — avoid explicit transitions ("Now let's move on to…"). Structure sections so each one naturally prompts the question answered by the next. Test by removing all transition sentences — the headers alone should create flow.
+
+---
+
+## Frontmatter reference
+
+### Blog post
+
+```yaml
+---
+title: 'Concise, clear headline'
+layout: layouts/post.njk
+teaser: 'One-sentence persuasive summary (≤ 25 words).'
+image: '/blog/example.jpg'
+image_meta:
+  text: 'Attribution or context.'
+  altext: 'Accurate alt text for screen readers.'
+date: YYYY-MM-DD
+tags:
+  - posts
+topics:
+  - keyword one
+  - keyword two
+via: 'https://example.com/source'  # optional: source attribution
+kens_status: draft  # draft | final_draft | ready_for_publication
+---
+```
+
+### Impact story
+
+```yaml
+---
+title: '[Gerund phrase describing the work]'
+layout: layouts/post.njk
+teaser: 'Narrative hook — tension/challenge, not metrics.'
+date: YYYY-MM-DD
+tags:
+  - posts
+  - impact-stories
+topics:
+  - keyword one
+  - keyword two
+org: Organization Name
+permalink: /work/YYYY/impact-story-slug/
+image: '/blog/example.jpg'
+image_meta:
+  altext: 'Descriptive alt text.'
+  text: 'Attribution or context.'
+kens_status: draft
+---
+```
+
+### Digesting post
+
+```yaml
+---
+title: 'Your rewritten title in your voice'
+layout: layouts/digesting.njk
+teaser: 'Brief description of what the source covers.'
+date: YYYY-MM-DD
+digest_link: 'https://example.com/source-article'
+tags:
+  - digesting
+topics:
+  - keyword one
+  - keyword two
+---
+```
+
+### Status tracking (`kens_status`)
+
+Track content readiness with the `kens_status` frontmatter field:
+
+- `draft` — initial draft, work in progress
+- `final_draft` — content complete, ready for final review
+- `ready_for_publication` — reviewed and approved, ready to publish
+
+### OpenGraph overrides
+
+All pages get auto-generated social cards by default. Override individual fields when needed:
+
+```yaml
+og_title: 'Custom OG Title'
+og_description: 'Custom OG description'
+og_image: 'https://example.com/custom-image.jpg'  # full URL required
+```
+
+---
+
+## Note boxes
+
+Use the `kh-note-box` pattern for asides, updates, or contextual callouts:
+
+```html
+<aside class="kh-note-box">
+  <span class="kh-note-box__label">Update</span>
+  Your short note content goes here.
+</aside>
+```
+
+Keep the label short: "Update", "Sidebar", "Related", "Context". Place a blank line before and after the aside. Prefer `aside` in post bodies; `div` is acceptable in layout templates.
+
+---
+
+## Margin notes
+
+Use `kh-marginnote` for supplementary citations, supporting evidence, and secondary references that enrich the argument without interrupting the main flow. On desktop they float into the right margin (Tufte-style); on mobile they render as block-level asides.
+
+```html
+<aside class="kh-marginnote">Gergely Orosz <a href="https://example.com">reports</a> practitioners saying AI now writes the majority of their production code.</aside>
+```
+
+**When to use:**
+
+- Supporting citations that back up an inline claim but aren't central to the argument
+- Additional context or definitions that help the interested reader without slowing the main reader
+- Attribution for quotes or data points already summarised in the body text
+
+**When not to use:**
+
+- Core arguments or evidence the reader needs to follow the post (keep these inline)
+- Lengthy asides over ~2 sentences (use a note box instead)
+- Decorative commentary or tangential opinions
+
+**Guidelines:**
+
+- Use raw HTML (`<aside class="kh-marginnote">`) inside {%raw%}`{% markdown %}`{%endraw%} blocks. Links must use `<a href="">` tags, not markdown link syntax.
+- Place a blank line before and after the aside
+- Keep margin notes to 1--2 sentences
+- In citation-heavy sections (3+ references in a paragraph), move the supplementary ones to margin notes and keep only the strongest evidence inline
+
+---
+
+## Code and demo shortcode
+
+Use the `codeAndDemo` paired shortcode to show a snippet as both an escaped code block and a live rendered demo from the same source. Place it **outside** {%raw%}`{% markdown %}`{%endraw%} blocks (Markdown will double-escape otherwise).
+
+```njk
+{%raw%}{% codeAndDemo 'html' %}
+<button class="kh-button">Click me</button>
+{% endcodeAndDemo %}{%endraw%}
+```
+
+**Guidelines:**
+
+- The first argument (e.g., `'html'`) sets the language class for syntax highlighting
+- Best for runnable HTML/JS examples — avoid using it for Nunjucks template code
+- Don't duplicate the same example in both a fenced code block and the shortcode — let it handle both
+- Keep demos minimal and self-contained
+
+---
+
+## Reasoning and evidence
+
+Claims should be sound, scoped, and supported. Run these checks before publishing:
+
+- **Quantifiers**: soften absolutes unless supported — avoid "always", "never", "best" without evidence
+- **Causality**: prefer "correlates with" or "contributed to" over causal claims unless you can show mechanism or cite evidence
+- **Generality**: don't overgeneralize from specific contexts — state the task, model, audience, or constraints
+- **Dichotomies**: replace false either/or framing with both/and where the reality is a spectrum
+- **Scope**: keep claims within the post's stated audience and sources
+- **Evidence**: every non-obvious claim needs a citation or internal justification
+
+---
+
+## Arguing a position
+
+When writing analysis, opinion, or recommendation pieces — posts where you're diagnosing a problem, critiquing an approach, or advocating for a change — these patterns strengthen the argument:
+
+- **Diplomatic candor** — be direct about what's broken without making it personal. Separate the problem from the people. "Not because anyone is incapable, but because the team's orientation is toward X rather than Y" is more persuasive than either softening the diagnosis or naming names. Critique the structure, not the individual.
+- **Preemptive fairness** — acknowledge the strongest counterargument before the reader raises it. "To be fair, it may not have been articulated clearly enough" or "I'm somewhat unfairly calling out one example." This disarms defensiveness and signals that you've considered other perspectives. It strengthens your position rather than weakening it. A lighter version works in blog posts too: qualifying assertions with built-in limits — "(this is harder than it looks)" or "I hope Eleventy's maintainers can take some inspiration from this."
+- **Anaphoric buildup** — repetition with a pivot. "It's not that X. It's not that Y. It's not that Z. It's that..." builds momentum toward the real point. Use sparingly — once per post at most. It works because it systematically eliminates alternative explanations before landing on yours.
+- **Distill to a single intervention** — after building a complex diagnosis, collapse it into one actionable recommendation. "If I were to reduce this to a single intervention, it would be this:" This gives the reader something concrete to act on. Place it *after* the evidence, not before — it earns its weight from the argument that precedes it.
+- **Register shifts** — alternate between precise language ("high entropy stakeholder relationship") and plain-spoken phrasing ("things are discussed, agreed, and then lost"). The contrast creates texture and keeps the reader engaged. Technical vocabulary establishes authority; plain language creates trust. Neither alone is enough.
+
+---
+
+## Dos and don'ts
+
+**Do:**
+
+- Open with value — one crisp sentence that sets context and benefit
+- Use a tl;dr or "You'll learn" box near the top for posts over 700 words
+- Prefer bullets/steps over long paragraphs for procedures
+- Show first, then tell — place code/visuals before deep explanation
+- Write descriptive links and include image alt text + attribution
+- Close warmly with a brief summary and invitation for feedback
+- Always include a blank line after headings before the next paragraph
+
+**Don't:**
+
+- Ship walls of text without headings and lists
+- Over-optimize for wit — keep humor subtle and sparse
+- Omit alt text or captions when images convey meaning
+- Embed "click here" — link meaningful phrases instead
+- Leave trailing whitespace or inconsistent heading levels
+- Use emojis as replacements for clear writing
+- Repeat the same point in different words across sections — state it once, clearly
+
+---
+
+## Examples: good vs bad
+
+### Titles
+
+**Impact stories:**
+
+- Good: "Reclaiming three weeks of editorial time every month"
+- Bad: "Impact story: Editorial efficiency"
+
+**Section headers:**
+
+- Good: "What was actually breaking?" (question for momentum)
+- Bad: "Problem description" (generic label)
+
+### Outcomes formatting
+
+Good:
+
+> **Efficiency**: 120 hours/month reclaimed — equivalent to 3 full work weeks.
+> **Reliability**: Timeout failures reduced 85%. Editors stopped losing work.
+
+Bad:
+
+> - Saved time
+> - Fewer errors
+
+### Showing vulnerability
+
+Good: "The first migration attempt failed silently. We discovered the database schema had drifted from what we assumed, which forced a two-week detour to reconcile field mappings."
+
+Bad: "We successfully completed the migration on schedule."
+
+### tl;dr blocks
+
+Good:
+
+> **tl;dr**
+> - We forked 11ty's cmd.js to better integrate with gulp.
+> - Demo at khawkins98/gulp-eleventy-example.
+
+Bad: "In this post I'm going to tell you about a lot of things. Let's get started."
+
+---
+
+## Cross-linking
+
+- **Impact story → impact story:** Link to stories covering related domains or time periods
+- **Impact story → blog post:** Link to tutorials explaining techniques used
+- **Blog post → impact story:** Reference portfolio context where techniques were applied at scale
+- Use descriptive link text explaining *why* the link is relevant
+- Add brief parenthetical context when helpful: "(similar caching approach)"
+- Prefer relative URLs for internal content
+
+---
+
+## When to break these rules
+
+These guidelines are defaults, not laws. Legitimate exceptions:
+
+- **Longer paragraphs for narrative** — when telling a story (how a project unfolded, how an idea evolved), sustained paragraphs of 6 – 8 sentences create momentum. Break for lists when enumerating parallel points.
+- **Scene-setting in opinion pieces** — the "open with value" rule applies to instructional content. Analysis and opinion pieces sometimes need one paragraph of shared-experience context before the provocative claim.
+- **Genuine enthusiasm** — the "no hype" rule discourages empty superlatives, but authentic excitement about a discovery or someone else's work is welcome. Avoid using it to hype your own contributions.
+- **Rhetorical questions as pivots** — use them to shift between major sections or challenge an assumption. Avoid as filler or to open every section.
+- **Passive voice for de-emphasis** — acceptable when the actor is irrelevant or you're emphasising inevitability ("Content *will* be consumed"). Never use it out of habit or to sound formal.
+- **Single-line sections for drama** — occasionally a section can be just one sentence for emphasis. It works because it violates the expected rhythm.
+
+---
+
+## Quality checklist
+
+Before publishing any content, verify:
+
+- [ ] Headline is concise with no trailing punctuation
+- [ ] Teaser is one sentence, 25 words or fewer, and persuasive
+- [ ] Opening includes a crisp value statement
+- [ ] tl;dr or "You'll learn" block added for posts over 700 words
+- [ ] Dense prose converted to bullets or steps
+- [ ] Code and visuals shown before deep explanation
+- [ ] All images have alt text and attribution
+- [ ] Internal and external links verified
+- [ ] Heading hierarchy is sequential (H2 → H3 → H4)
+- [ ] No trailing whitespace or inconsistent spacing
+- [ ] Blank line after every heading before the next paragraph
+- [ ] Warm closing restating main point and inviting feedback
+- [ ] Frontmatter complete: title, teaser, date, layout, tags, topics
+- [ ] Markdown polished: correct heading levels, fenced code, consistent formatting
+- [ ] Length is within target for content type (blog 800 – 1,500; impact 600 – 1,200; digesting 200 – 500)
+- [ ] If over 2,000 words: is it earning that length, or should it split into parts?
+- [ ] Claims are scoped, supported, and free of unsupported absolutes
+
+### Impact story additions
+
+- [ ] Title uses gerund format
+- [ ] Result themes (3 short phrases) appear near the top
+- [ ] Section headers are questions
+- [ ] Uses "I" perspective throughout (not "we") — portfolio pieces showcase personal contribution
+- [ ] Shows constraints, tradeoffs, and vulnerability
+- [ ] Paragraphs are 2 – 3 sentences with bold lead-ins
+- [ ] Metrics include human-impact framing
+- [ ] 600 – 1,200 words
+
+{% endmarkdown %}
+
+  </div>
+</article>

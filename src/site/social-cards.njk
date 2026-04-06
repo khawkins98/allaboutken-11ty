@@ -1,0 +1,13 @@
+---
+pagination:
+  data: collections.all
+  size: 1
+  alias: cardPage
+layout: layouts/social-card.njk
+permalink: "social{{ cardPage.url }}"
+eleventyExcludeFromCollections: true
+eleventyComputed:
+  title: "{{ cardPage.data.title }}"
+  teaser: "{{ cardPage.data.teaser }}"
+  image: "{{ cardPage.data.image }}"
+---

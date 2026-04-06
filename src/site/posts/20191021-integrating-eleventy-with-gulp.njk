@@ -4,7 +4,8 @@ layout: layouts/post.njk
 teaser: "Eleventy <a href='https://www.11ty.io/docs'>notes that</a> it, \"works great with data — use both front matter and external data files\" but the static site generator stops short of working well with upstream in-memory data objects for local development."
 image: "/blog/dripping-faucet.jpg"
 image_meta:
-  text: Drip. Drop. Drip. Opening the tap of of upstream data objects for Eleventy. Thanks to Flickr user Paul B for the image [<a href="https://www.flickr.com/photos/eastbeach/24818842988/in/photolist-DPa4m1-4eQ9W-4bPwdN-APyyy-eXwGJg-4JZhcq-6wASuN-6wwH86-6wASy7-7zwzso-wGnk7F-8HPAJt-66a7wt-4fPSa-tzkuC-tMM3hb-5njkrD-5C83sD-tzkqk-5oynfL-4pnkBU-6ZfA9m-6iZaMo-7ECykH-9sAPMe-TcFhPs-6zJcWE-4eQ9Y-5styJG-9Tshp1-nu54P-6iUT2t-xZYcY-7DbDxo-6aVvan-gsyhW8-95sAwV-gsyhHn-2cL3sdx-unNuB-gxE7Hm-3fArXA-xxCk6-6iUYaX-gsxDY2-unNiy-67GWCn-xxCsQ-gsy2m3-4Cnf2b">CC License</a>].
+  text: Drip. Drop. Drip. Opening the tap of upstream data objects for Eleventy.
+  credit: 'Flickr user Paul B [<a href="https://www.flickr.com/photos/eastbeach/24818842988/">CC License</a>].'
   altext: A leaky tap
 date: 2019-10-21
 url: /posts/20191021-integrating-eleventy-with-gulp.html
@@ -27,7 +28,7 @@ We wanted to:
 
 There are methods to achieve part 1 but not with part 2 and 3. But we made a solution.
 
-> #### tl;dr
+> ## tl;dr
 > - We forked 11ty’s cmd.js to better integrate with gulp and other Node JS.
 > - I made [a demo at khawkins98/gulp-eleventy-example](https://github.com/khawkins98/gulp-eleventy-example).
 > - I hope Eleventy’s maintainers can take some inspiration from this. <br/><br/>
@@ -140,11 +141,11 @@ gulp.task('eleventy:reload', function(done) {
 ```
 <br/>
 
-Recap: we want to do some local development, let a parent process update a variable and and then ask  Eleventy to trigger a rebuild, pulling in the new data by the Eleventy JS data file.
+Recap: we want to do some local development, let a parent process update a variable and then ask  Eleventy to trigger a rebuild, pulling in the new data by the Eleventy JS data file.
 
 {% endmarkdown %}
 
-<div class="kh-u-padding__bottom--400 kh-u-padding__bottom--500 kh-u-padding__top--500">
+<div class="kh-u-padding__bottom--400 kh-u-padding__bottom--400 kh-u-padding__top--500">
   <div class="cell large-1 medium-2"></div>
   <figure class="cell large-10 medium-8">
   <hr/>
@@ -215,7 +216,7 @@ const elev = require('./eleventy-cmd.js');
 ```
 <br/>
 
-2. We aks eleventy to do its initial build.
+2. We ask Eleventy to do its initial build.
 
 ```js
 gulp.task('eleventy:build', function(done) {

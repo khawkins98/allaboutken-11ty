@@ -4,7 +4,8 @@ layout: layouts/post.njk
 teaser: "Managed Azure Database for MySQL cost us 50%–80% slow down. After six months of pain, we moved our Drupal 10 site back to a classic VM and halved our page‑load times."
 image: "/blog/train-delays.jpg"
 image_meta:
-  text: 'A train station display board full of delays: sometimes, the signs are right in front of you. Own image.'
+  text: 'A train station display board full of delays: sometimes, the signs are right in front of you.'
+  credit: 'Own work.'
   altext: "Train delays and database metrics: both can leave you waiting."
 date: 2025-07-10
 active_path: blog
@@ -31,7 +32,7 @@ As seasoned Drupal folk we blamed everything except the new database: contrib mo
 
 ### Non‑cached pages: the early smoke signal
 
-Early in the migration process there were large warning signs—anything not already in cache felt like mud when we profiled 20 top‑traffic URLs plus 10 admin paths using [JMeter](https://jmeter.apache.org/) scripts (50 concurrent users, 5‑minute ramp‑up):
+Early in the migration process there were large warning signs — anything not already in cache felt like mud when we profiled 20 top‑traffic URLs plus 10 admin paths using [JMeter](https://jmeter.apache.org/) scripts (50 concurrent users, 5‑minute ramp‑up):
 
 * **/news view filter** – searching for *"disaster risk"* on Azure took **5.8 s server response** versus **1.68 s on prod** (same code, same data).
 * Editor paths like `/admin/content?type=conference` routinely doubled in <abbr title="Time To First Byte">TTFB</abbr>, `/node/add` page went past 13 seconds to load, and the media modal didn't.
@@ -51,7 +52,7 @@ The numbers were grim: aggregate query time was **51% slower** on Azure DB for M
 
 At this point, we could prove that the production environment's database was too slow, but we could point out why.
 
-To isolate this we took our Drupal configuration out of the equation and ran a number of queries to calculate performance between the **Azure Database for MySQL** with two alternatives: **MySQL** and **MariaDB** running on dedicated Azure virtual machines. Across every database-heavy test—including admin pages, content listings, and background operations—the **VM-based databases crushed the baseline**, slashing load times by up to 60%.
+To isolate this we took our Drupal configuration out of the equation and ran a number of queries to calculate performance between the **Azure Database for MySQL** with two alternatives: **MySQL** and **MariaDB** running on dedicated Azure virtual machines. Across every database-heavy test — including admin pages, content listings, and background operations — the **VM-based databases crushed the baseline**, slashing load times by up to 60%.
 
 > A massive hat thanks to Johan for orchestrating the load tests, crunching the stats, and getting us the raw data we needed to conclusively move away from what was billed as best practice.
 
@@ -93,7 +94,7 @@ Even end‑user stats told the same story: daily 503s dropped 77%, and anonymous
 
 As to why Azure Database for MySQL is so slow it's hard to say, it just seems not designed to work well for sprawling databases with thousands of transactions. If there's a secret lever we've missed, we'd love to hear it, as no ones been able to tell us nor have we researched one.
 
-Bonus: [MariaDB is now the RDBMS recommended by Drupal 11, so](https://www.drupal.org/docs/getting-started/system-requirements/database-server-requirements#s-drupal-11) our pivot wasn't just pragmatic—it aligned us with core guidance.
+Bonus: [MariaDB is now the RDBMS recommended by Drupal 11, so](https://www.drupal.org/docs/getting-started/system-requirements/database-server-requirements#s-drupal-11) our pivot wasn't just pragmatic — it aligned us with core guidance.
 
 ### A diversion in the quest: Admin Menu
 
@@ -121,7 +122,7 @@ We still want to improve this, but for now it's not as crippling as the DB issue
 1. **Benchmark first, migrate later.** Never agree to complete a migration when you have strong indicators of slow non-primed paths.
 2. If you're planning on using Azure DB for MySQL, take extra care to benchmark thoroughly
 3. For all the wins, there are trade offs: don't forget you'll need to do more on your backups and continuity planning.
-4. Always compare against vanilla installs and raw performance. Before drawing conclusions, benchmark your stack against a clean, out-of-the-box install—sometimes custom modules, config, or cloud quirks hide the real culprit.
+4. Always compare against vanilla installs and raw performance. Before drawing conclusions, benchmark your stack against a clean, out-of-the-box install — sometimes custom modules, config, or cloud quirks hide the real culprit.
 5. Avoid monoliths, separate concerns. Where possible, resist the urge to build everything into a single, sprawling backend. Instead, consider mixing client-side rendering (for dynamic or interactive elements) with slimmer, purpose-built backend pages. This not only lightens the load on your database and server, but also makes it easier to optimize, debug, and scale each part independently.
 
 ---
@@ -131,5 +132,10 @@ Chow Azure DB for MySql, now you’re just ...
 <aside class="kh-video">
 <iframe width="560" height="315" src="https://www.youtube.com/embed/8UVNT4wvIGY?si=SgB26hAd89GIm-u7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </aside>
+
+
+### Related case study
+
+For a summarized, outcome‑focused companion piece, see: [Impact story: UNDRR platform transformation](/work/2025/impact-story-undrr-platform-transformation/) (includes the database migration as part of the broader platform recovery story).
 
 {% endmarkdown %}
