@@ -1,112 +1,85 @@
 ---
-title: "Linking maintenance and mission: a case study on communicating value of in house Drupal work"
+title: "Communicating the value of platform work to leadership"
 layout: layouts/post.njk
-teaser: "How a single Drupal update, framed strategically, reclaimed 58 hours a month for the editorial team and shifted the conversation from IT costs to mission-critical investment."
+teaser: "The better your platform works, the less anyone notices it. Here's how I translate technical wins into something leadership actually cares about."
 image: "/blog/street-lamp.jpg"
 image_meta:
-  text: 'Tools that don’t make headlines still shape the work. Illustration: Own work.'
-  alttext: "A stylized picture of an old lamppost."
+  text: 'Tools that don''t make headlines still shape the work.'
+  altext: "A stylized illustration of an old lamppost."
+  credit: "Own work."
 date: 2025-08-17
-active_path: blog
 tags: posts
 topics:
   - drupal
-  - internal tools
-  - communication
+  - platform governance
+  - stakeholder communication
 ---
 
 {% markdown %}
 
-## Summary: Making Invisible Work Visible
+The better your internal platform works, the less anyone notices. There's no meeting agenda item for "nothing broke today." No applause for the nine-step workflow that became three. The value of good platform maintenance lives in pain that never happens — which makes it nearly impossible to explain to leadership who only see the cost line.
 
-Internal platform updates—like those to a Drupal content management system (CMS)—rarely make the staff meeting. But their impact on an organization can be profound. This case study details how I transformed a routine Drupal update into a compelling story of organizational value.
+This is how I approach it.
 
-By shifting the conversation from technical "maintenance" to strategic "mission," I demonstrated that our team's work wasn't just about keeping the lights on. It was about **reclaiming an estimated 58 hours per month** for the editorial team, empowering them to focus on content strategy instead of manual, time-consuming tasks.
+> tl;dr
+>
+> - Measure actual time saved before and after, not just technical improvements
+> - Express the saving in editorial capacity, not efficiency percentages
+> - The before/after steps list is your best tool — steps removed are universally understood
+> - Lead with the human metric in every communication; leave technical details for whoever asks
 
-This is a repeatable framework I use to turn invisible wins into a tangible investments in the company's core mission.
+## Find the friction, then count it
 
----
+The most useful thing I can do before a platform improvement ships is document the current pain precisely. Not "editors find the image workflow cumbersome" — but "creating a PDF cover image currently requires nine discrete steps, roughly 8 minutes per document."
 
-## The Challenge: The Paradox of Internal Tools
+That precision is what makes the after meaningful. When I replaced UNDRR's nine-step PDF cover workflow with an automated three-step process, I could calculate the saving per editor per month across the full team: 58 hours — roughly 1.5 work weeks — returned to editorial work every month.
 
-The value of a well-functioning internal tool or CMS is often invisible. The better it works, the less anyone notices it. This creates a paradox:
+The number matters less than the translation: this is **capacity**, not cost reduction. Leadership understood "58 hours back to the editorial team" immediately. "We optimized the ImageMagick pipeline" landed with nobody.
 
-* The work is vital, yet it goes unseen.
-* Its value lies in avoided pain and increased efficiency, not flashy new features.
-* Leadership often sees the cost of the platform but not the daily friction it removes.
+## The email that worked
 
-To overcome this, I recognized the need to actively tell the story of how my technical work benefited the entire organization, not just the development team. My goal was to translate a technical stat—a faster menu load time—into a strategic win: **58 hours of reclaimed staff time.**
-
----
-
-## The Framework: From Technical Task to Strategic Story
-
-I used a simple, three-part framework to communicate the value of the teams recent Drupal update. This approach can be applied to nearly any internal technical project.
-
-### 1. Quantify the Pain to Amplify the Gain
-
-Before writing a single line of code, I identified a key point of user friction. For the editorial team, a clunky, nine-step process was required to create a cover image for a PDF. This "Photoshop shuffle" was a significant time sink.
-
-I documented the "before" state and used it to calculate the potential "after." The team didn’t just fix a bug; we saved a specific amount of time per task, which added up to a massive aggregate win: **58 hours a month.**
-
-### 2. Connect the Win to the Mission
-
-A number alone isn't enough. The most critical step was tying my technical work back to the organization’s core purpose. The organization’s mission is to create high-quality content that serves its audience. Less time spent on manual image crops meant more time for editors to create, refine, and strategize content.
-
-The Drupal update wasn't a cost center; it was a **capacity multiplier** that directly invested in the organization's ability to execute its mission.
-
-### 3. Share the Story Widely and Simply
-
-The aim is to communicate this value in a clear, accessible way to key stakeholders, avoiding technical jargon and led with the most important message: the time savings.
-
-Here is a condensed, anonymized version of the email I sent to leadership:
+Here's a condensed version of what I sent after the release:
 
 > **Subject:** Latest platform release reclaims 1.5 work weeks per month for editors
 >
-> Hi Team,
+> The recent platform release reduced friction for editors in measurable ways.
 >
-> The recent platform release delivered tangible improvements that reduce friction for editors and elevate content quality.
+> The headline: these changes reclaim an estimated **58 hours per month** — 1.5 work weeks the editorial team can reinvest in content work instead of manual image processing.
 >
-> The headline: These changes reclaim an estimated **58 hours per month.** This effectively gifts the organization 1.5 extra work weeks each month to reinvest in strategic initiatives. That’s the power of platform standardization: less friction, more time for mission-critical work.
+> **Key example: document processing**
 >
-> **Key Example: Document Processing**
->
-> **Before: 9 steps** – often inconsistent and error-prone
->
-> 1.  Create entry for PDF
-> 2.  Open Photoshop
-> 3.  Crop PDF cover
-> 4.  Save file
-> 5.  Create media entry for PDF cover
-> 6.  Upload image of PDF cover
-> 7.  Name entry
-> 8.  Specify 6 different image crops
-> 9.  Select image for PDF cover
+> **Before: 9 steps** (inconsistent, error-prone)
+> 1. Create entry for PDF
+> 2. Open Photoshop
+> 3. Crop PDF cover
+> 4. Save file
+> 5. Create media entry for PDF cover
+> 6. Upload image of PDF cover
+> 7. Name entry
+> 8. Specify 6 different image crops
+> 9. Select image for PDF cover
 >
 > **After: 3 steps**
->
-> 1.  Create entry for PDF
-> 2.  System automatically generates an image of the PDF cover
-> 3.  Select image, overriding if desired
+> 1. Create entry for PDF
+> 2. System automatically generates PDF cover image
+> 3. Select image, overriding if desired
 
-This simple before-and-after example made the relief and value tangible for everyone, regardless of their technical expertise.
+Steps removed are universally understood. You don't need to explain ImageMagick or module architecture. Showing that something which took nine actions now takes three does the work.
+
+## What makes this repeatable
+
+The pattern holds across releases because it stays concrete at every step.
+
+**Measure the friction before you fix it.** Estimate minutes per task, tasks per week, editors affected. "Significant time sink" is useless. "8 minutes × 3 PDFs/day × 48 editors" gives you something to calculate from.
+
+**Express the saving in capacity, not efficiency.** "20% faster" is abstract. "Equivalent to 1.5 extra work weeks per month" lands with someone managing headcount.
+
+**Lead with the human metric, leave technical details for whoever asks.** The subject line is for the saving. The technical specifics belong at the end — or in a separate message to the people who want them.
+
+The work doesn't get more visible by itself. Making it visible is a deliberate, recurring practice — not a one-time announcement.
 
 ---
 
-## Technical Details
-
-For those interested in the specifics of the Drupal 10.x update, the primary gains were achieved through:
-
-* **A custom admin menu:** We replaced a heavy, query-intensive contributed module with a lean custom menu focused exclusively on our editors’ needs.
-* **Auto-generated PDF cover images:** A new custom module, leveraging ImageMagick, now automatically creates a media image entry when a PDF is uploaded. This single feature eliminated the nine-step "Photoshop shuffle."
-* **Simplified image cropping:** We switched from the complex `image_widget_crop` module to the simpler `focal_point` module, streamlining the cropping process for 99% of use cases.
-
----
-
-## Conclusion: A Repeatable Strategy for Value Communication
-
-This case study demonstrates that the true value of technical work isn't in the code itself, but in how we communicate its impact. By documenting the pain, quantifying the gain, and connecting it to the mission, I transformed a routine Drupal update into a compelling story of strategic investment.
-
-This approach helps leadership view internal platform work not as a sunk cost, but as an indispensable part of the company's story—one that frees up time, reduces friction, and empowers teams to do their best work.
+*The Drupal specifics: replaced a query-intensive contributed admin menu with a lean custom one; added a module using ImageMagick to auto-generate PDF cover images on upload; switched from `image_widget_crop` to `focal_point` for simplified image handling. Full impact story in [Reclaiming three weeks of editorial time every month](/work/2025/impact-story-editorial-efficiency/).*
 
 {% endmarkdown %}
