@@ -54,6 +54,7 @@ module.exports = function(config) {
         const name = dirSafe ? `${dirSafe}-${safe}` : safe;
         return `${name}-${width}.${format}`;
       } catch (e) {
+        console.warn(`[filenameFormat] Could not generate image filename for src="${src}":`, e);
         return `${id}-${width}.${format}`;
       }
     },
@@ -97,6 +98,7 @@ module.exports = function(config) {
       if (!outputPath || !outputPath.endsWith('.html')) return content;
       return content.replace(/src="(?:\.\.\/)*src\/site\/images\//g, 'src="/images/');
     } catch (e) {
+      console.warn('[fixImageSrcToAbsolute] Transform failed for', outputPath + ':', e);
       return content;
     }
   });
@@ -184,6 +186,7 @@ module.exports = function(config) {
       if (!cleaned) return 0;
       return cleaned.split(/\s+/).filter(Boolean).length;
     } catch (e) {
+      console.warn('[wordCount] Could not compute word count:', e);
       return 0;
     }
   });
@@ -195,6 +198,7 @@ module.exports = function(config) {
       if (!isFinite(n)) return String(value ?? '');
       return n.toLocaleString(locale);
     } catch (e) {
+      console.warn('[formatNumber] Could not format value', JSON.stringify(value) + ':', e);
       return String(value ?? '');
     }
   });
@@ -263,7 +267,7 @@ module.exports = function(config) {
 
         inlineToken.children.push(linkOpen, textToken, linkClose);
       } catch (e) {
-        // no-op
+        console.warn('[markdown-it-anchor] Could not add permalink for heading slug "' + slug + '":', e);
       }
     }
   }).use(emdashPlugin);
@@ -382,7 +386,7 @@ module.exports = function(config) {
       // Run in background so dev rebuilds aren't blocked
       pagefindChild = exec(cmd, (err) => {
         pagefindChild = null;
-        if (err && !err.killed) console.error('Pagefind index build failed');
+        if (err && !err.killed) console.error(`Pagefind index build failed (${cmd}):`, err.message || err);
       });
       pagefindChild.stdout?.pipe(process.stdout);
       pagefindChild.stderr?.pipe(process.stderr);
@@ -390,7 +394,7 @@ module.exports = function(config) {
       try {
         execSync(cmd, { stdio: 'inherit' });
       } catch (e) {
-        console.error('Pagefind index build failed');
+        console.error(`Pagefind index build failed (${cmd}):`, e.message || e);
       }
     }
   });
@@ -407,6 +411,7 @@ module.exports = function(config) {
         .filter((item) => getTagArray(item).includes('impact-stories'))
         .sort((a, b) => b.date - a.date);
     } catch (e) {
+      console.warn('[collection:impactStories] Failed to build collection:', e);
       return [];
     }
   });
@@ -422,6 +427,7 @@ module.exports = function(config) {
         })
         .sort((a, b) => b.date - a.date);
     } catch (e) {
+      console.warn('[collection:blogPosts] Failed to build collection:', e);
       return [];
     }
   });
@@ -435,6 +441,7 @@ module.exports = function(config) {
         })
         .sort((a, b) => b.date - a.date);
     } catch (e) {
+      console.warn('[collection:allContent] Failed to build collection:', e);
       return [];
     }
   });

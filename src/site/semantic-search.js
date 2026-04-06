@@ -83,9 +83,9 @@ export function initSemanticSearch({ esc, setMode }) {
       fetch(VECTORS_URL),
       import(TRANSFORMERS_URL),
     ]);
-    if (!vectorResp.ok) throw new Error(`Failed to load vectors: ${vectorResp.status}`);
+    if (!vectorResp.ok) throw new Error(`Failed to fetch ${VECTORS_URL} (HTTP ${vectorResp.status}). Run "yarn build" to generate it.`);
     vectorData = await vectorResp.json();
-    if (vectorData.version !== 2) throw new Error('Stale vectors.json — run yarn build to regenerate');
+    if (vectorData.version !== 2) throw new Error(`vectors.json version mismatch (expected 2, got ${vectorData.version}). Run "yarn build" to regenerate.`);
 
     extractor = await tfPipeline('feature-extraction', MODEL_ID, {
       dtype: 'q8',
@@ -142,8 +142,8 @@ export function initSemanticSearch({ esc, setMode }) {
       thinkingMsg.remove();
       addMessage('system', renderResults(results, query));
     } catch (err) {
-      console.error('Semantic search error:', err);
-      addMessage('system', `<p>Something went wrong loading the search model. Switch to <a href="#" onclick="setMode('keyword'); return false;">keyword search</a> instead.</p>`);
+      console.error('Semantic search error:', err.message || err);
+      addMessage('system', `<p>Something went wrong with semantic search. Try refreshing the page, or switch to <a href="#" onclick="setMode('keyword'); return false;">keyword search</a> instead.</p>`);
     }
 
     isLoading = false;

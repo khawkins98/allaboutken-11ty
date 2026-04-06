@@ -298,5 +298,6 @@ async function main() {
 
 main().catch(err => {
   console.error('Embedding generation failed:', err);
+  console.error(`Check that the "${BUILD_DIR}/" directory exists and that "yarn eleventy" completed successfully.`);
   process.exit(1);
 });
