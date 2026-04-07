@@ -25,7 +25,7 @@ kens_status: draft
 
 1. Eric Evans, Explore DDD 2024 keynote (Denver, March 2024)
    https://www.infoq.com/news/2024/03/Evans-ddd-experiment-llm/
-   Evans argued that a fine-tuned language model is essentially a bounded context.
+   Evans explored the analogy that a fine-tuned language model is essentially a bounded context.
    Breaking instructions into smaller chunks (mirroring DDD decomposition) produced
    better results than monolithic prompts. Vaughn Vernon endorsed exploring LLM
    applications beyond chatbots.
@@ -107,7 +107,9 @@ Before the engineering traditions, a deeper observation. Alessandro Duranti and 
 
 <aside class="kh-marginnote">Paul Dourish <a href="https://www.dourish.com/publications/2004/PUC2004-context.pdf">translated this thesis for computing in 2004</a>, arguing context is an "interactional problem" not a "representational problem." But the work landed in human-computer interaction (HCI), not in DDD, content strategy, or AI. Even when a bridge gets built, it stays within its own field.</aside>
 
-This is a philosophical observation about how meaning works between humans, not an engineering method. But it describes *why* the engineering traditions below keep arriving at similar solutions: if context has to be actively produced, then every system that crosses a boundary between different groups, platforms, or agents needs a deliberate mechanism to produce it. The engineering traditions are the *how*. Duranti and Goodwin are the *why*.
+For decades this was a philosophical observation about how meaning works between humans — interesting but not directly applicable to engineering. Large language models changed that. LLMs are the first engineering artifact where meaning is produced through interaction in something close to the way Duranti and Goodwin described. When you prompt an agent, you're co-constructing context through dialogue: what you say shapes what the model treats as relevant, which shapes your next input, which reshapes the model's understanding. The context isn't static input; it's built turn by turn, exactly as in human conversation.
+
+That makes their observation newly practical. If context is always produced through interaction, not inherited from some fixed background, then every system that crosses a boundary between different groups, platforms, or agents needs a deliberate mechanism to produce it. The engineering traditions below are the *how*. Duranti and Goodwin describe the *why* — and LLMs are why it matters to engineering now in a way it didn't before.
 
 ## The engineering threads
 
@@ -129,11 +131,11 @@ The specific problems are different: DDD is about modelling business domains to 
 
 **Context is produced, not inherited.** This is where Duranti and Goodwin started, and every tradition landed somewhere close. Evans' domain modelling is collaborative and iterative. McGrane's content schemas don't exist until someone defines them. AI context windows don't fill themselves. In every case, context is something you build on purpose or it doesn't exist.
 
-**Context must be formalised to cross a boundary.** Evans' bounded contexts need explicit translation layers. McGrane's structured content needs schemas to travel between platforms. AI agents need structured context documents to work across sessions and tasks. Informal, tacit understanding works within a team. It breaks the moment you need to share across one. And the failure mode scales with speed: in software, [comprehension debt](/posts/20260328-digesting-comprehension-debt/) accumulates silently; in content, [syndication breaks](/posts/20260327-content-architecture-shipping-container/) compound slowly; in AI, hallucination is instant.
+**Context must be formalised to cross a boundary.** Evans' bounded contexts need explicit translation layers. McGrane's structured content needs schemas to travel between platforms. AI agents need structured context documents to work across sessions and tasks. Informal, tacit understanding works within a team. It breaks the moment you need to share across one. And the failure mode scales with speed: in software, what I've been calling [comprehension debt](/posts/20260328-digesting-comprehension-debt/) accumulates silently; in content, [syndication breaks](/posts/20260327-content-architecture-shipping-container/) compound slowly; in AI, hallucination is instant.
 
 ## The weaving has started, but it hasn't gone mainstream
 
-<aside class="kh-marginnote">At <a href="https://www.infoq.com/news/2024/03/Evans-ddd-experiment-llm/">Explore DDD 2024</a>, Evans argued that a fine-tuned language model is essentially a bounded context. The DDD community is aware of AI, but mostly asking "how can AI help us do DDD?" rather than the reverse.</aside>
+<aside class="kh-marginnote">At <a href="https://www.infoq.com/news/2024/03/Evans-ddd-experiment-llm/">Explore DDD 2024</a>, Evans explored the analogy that a fine-tuned language model is essentially a bounded context. The DDD community is aware of AI, but mostly asking "how can AI help us do DDD?" rather than the reverse.</aside>
 
 Different conferences, different journals, different vocabularies. Linguistic anthropologists don't attend DDD Europe. Content strategists don't read *Patterns of Enterprise Application Architecture*. AI engineers building agent architectures aren't, for the most part, reading Karen McGrane.
 
@@ -153,15 +155,17 @@ What the speed does is compress the cycle. You hit the consequences of missing c
 
 ## What a transferred lesson looks like
 
-The post would be incomplete if it argued for weaving without actually weaving. Here's a concrete example.
+The post would be incomplete if it argued for weaving without actually weaving. Here's a non-trivial example from my own work.
 
-A common AI context engineering problem: you give an agent a task that spans two domains in your organisation, and it confuses terminology. Your CMS calls something a "teaser"; your design system calls the same field a "summary"; your API calls it "description." The agent doesn't know these are the same thing, or worse, treats them as different things and produces inconsistent output. This is a real problem that teams hit regularly when building AI-assisted publishing workflows.
+At UNDRR, we syndicate content from Drupal across multiple downstream platforms through API feeds. Over the years, a recurring problem: a developer misspells a field name in the CMS, say `summray` instead of `summary`. A downstream JavaScript platform consumes that API and builds around the typo. Months later, someone fixes the typo in Drupal. Now the downstream platform breaks, because it was built against the misspelled field. So we add a translation layer to preserve the old typo alongside the fix. This happens again. And again. Each time, the downstream system absorbs more of the upstream system's historical mistakes, and the mapping between them gets more fragile.
 
-DDD solved this twenty years ago with ubiquitous language: agree on one term per concept within a bounded context, write it down, and enforce it. Content strategy solved a version of it with structured content modelling: name fields by what they *are* ("short description"), not by where they *appear* ("homepage card text"). Both traditions learned the hard way that ambiguous vocabulary at boundaries is where systems break.
+DDD has a name for the solution: the [anticorruption layer](https://learn.microsoft.com/en-us/azure/architecture/patterns/anti-corruption-layer). It's a deliberate translation boundary between two systems that prevents one system's model from leaking into another's. Instead of each downstream consumer adapting to whatever the upstream happens to expose (typos and all), you build an explicit layer that translates between the external model and your clean internal model. The upstream can change; your internal model stays coherent.
 
-The AI context engineering solution is the same structural move: define your project vocabulary in a CLAUDE.md or rules file, map synonyms explicitly, and scope those definitions to specific parts of the codebase. This is what Evans called ubiquitous language and what McGrane called naming by meaning. The lesson transfers directly. The teams building these files just don't know they're reinventing a solved problem.
+I didn't know this pattern had a name until I started reading Evans. I'd been solving the same problem with ad hoc translation scripts and field-mapping spreadsheets for years. Knowing the pattern wouldn't have just saved time; it would have changed how I structured the integration from the start. An anticorruption layer is a design decision you make at the boundary, not a patch you apply after the damage compounds. Content architecture teams hit this problem constantly and solve it with duct tape because the formalised solution lives in a tradition they've never read.
 
-That's one example. I suspect there are dozens. But the weaving won't happen unless people in these fields start reading across the aisle.
+The same pattern applies directly to AI context engineering. When an agent consumes data from multiple systems with different vocabularies, you need an explicit translation layer, not a prompt that says "figure it out." The anticorruption layer pattern gives you a name for this, a place to put it in your architecture, and twenty years of lessons about what goes wrong when you skip it.
+
+That's one transferred lesson. I suspect there are dozens. But they won't transfer unless people in these fields start reading across the aisle.
 
 ## From where I sit
 
