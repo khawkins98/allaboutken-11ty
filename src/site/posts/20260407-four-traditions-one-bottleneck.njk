@@ -1,7 +1,7 @@
 ---
 title: "Four traditions keep discovering that context is the bottleneck"
 layout: layouts/post.njk
-teaser: "Software engineering, linguistics, content strategy, and AI all arrived at the same insight independently. Nobody pulled the threads together."
+teaser: "Software engineering, linguistics, content strategy, and AI hit structurally analogous problems. The cross-pollination is only just starting."
 date: 2026-04-07
 tags:
   - posts
@@ -84,14 +84,14 @@ kens_status: draft
    cross-disciplinary lens.
 -->
 
-I work at an unusual intersection. My career has moved through journalism, content strategy, information architecture, design systems, and software engineering. I now spend most of my time on AI integration and context engineering. I'm not an expert in all of these fields, but I've spent enough time in each to notice something: at least four independent traditions have arrived at the same conclusion about what makes complex work succeed or fail. Each one spent years working through the hard parts. And they're barely leveraging each other's lessons.
+I work at an unusual intersection. My career has moved through journalism, content strategy, information architecture, design systems, and software engineering. I now spend most of my time on AI integration and context engineering. I'm not an expert in all of these fields, but I've spent enough time in each to notice something: at least four traditions have landed on structurally analogous problems around shared understanding — different problems in detail, but with striking family resemblance. Each one spent years working through the hard parts. And they're barely leveraging each other's lessons.
 
 > **tl;dr**
 >
-> - At least four independent traditions have concluded that shared context is the primary bottleneck in complex work
-> - They arrived there from completely different starting points and are barely leveraging each other's lessons
+> - At least four traditions have landed on structurally analogous problems around shared understanding — different in detail, but with striking family resemblance
+> - They share intellectual ancestry in places but developed their solutions largely in parallel, and are barely leveraging each other's lessons
 > - AI is making the convergence visible because context failures with LLMs are instant and obvious
-> - If you're treating context as a domain-specific concern, you're solving the same problem four times without knowing it
+> - If you're treating context as a domain-specific concern, you're missing transferable solutions from adjacent fields
 
 ## The threads
 
@@ -103,21 +103,21 @@ I work at an unusual intersection. My career has moved through journalism, conte
 
 **Content strategy (2009--2012).** Daniel Jacobson at NPR built [COPE](https://www.programmableweb.com/news/cope-create-once-publish-everywhere/2009/10/13) (Create Once, Publish Everywhere): content modelled as structured data with standardised interfaces, not as presentation-specific blobs. Karen McGrane's [*Content Strategy for Mobile*](https://abookapart.com/products/content-strategy-for-mobile) sharpened the point: content that's trapped in a specific visual format ("blobs") can't travel across channels. You have to break it into meaningful "chunks" named by what they are, not how they look. "News item" survives a redesign; "featured card with sidebar layout" doesn't.
 
-<aside class="kh-marginnote">McGrane's "blobs vs. chunks" and Evans' entities and value objects are the same distinction, arrived at independently. Content strategists could have saved time with Evans' formalisms; DDD practitioners could have learned from McGrane's work on cross-channel portability.</aside>
+<aside class="kh-marginnote">McGrane's "blobs vs. chunks" and Evans' entities and value objects aren't the same problem — one is about content portability, the other about identity and lifecycle in domain models. But the structural move is the same: decompose opaque bundles into meaningful, named units. Content strategists could have borrowed Evans' formalisms; DDD practitioners could have learned from McGrane's portability patterns.</aside>
 
 **AI context engineering (2025--2026).** The current wave. An LLM has general knowledge of the universe but not your project's constraints, your team's vocabulary, or why the module is shaped the way it is. The bottleneck isn't the model; it's [the context you provide](/posts/20251003-effective-context-engineering-for-ai-agents/). Practitioners are building CLAUDE.md files, project briefs, scoped rules, and [structured documentation for AI consumption](/posts/20250929-ai-must-rtfm-context-curators/). The discipline is new. The problem it's solving is not.
 
+I should be honest about the limits of this list. These aren't the only traditions working on how shared understanding crosses boundaries — knowledge management (Nonaka & Takeuchi's tacit-to-explicit conversion, 1995) and library/information science have deep roots here too. And the traditions I am covering aren't fully independent: content strategy grew out of computing and information architecture, AI context engineering is practiced almost entirely by software engineers, and DDD drew on earlier modelling traditions. Duranti and Goodwin are the genuinely independent thread. The others are parallel but adjacent, sharing intellectual ancestry while developing their solutions separately.
+
 ## What they share
 
-These traditions developed different vocabularies for the same three observations:
+The specific problems are different: DDD is about modelling business domains to reduce software complexity, content strategy is about portability across channels, linguistic anthropology is about how meaning emerges in interaction, and AI context engineering is about feeding the right information into a stateless model. But the structural patterns that emerged are strikingly similar:
 
-**Context is produced, not inherited.** This is where Duranti and Goodwin started, and every tradition landed in the same place. Evans' domain modelling is collaborative and iterative. McGrane's content schemas don't exist until someone defines them. AI context windows don't fill themselves. In every tradition, context is something you build on purpose or it doesn't exist.
+**Context is produced, not inherited.** This is where Duranti and Goodwin started, and every tradition landed somewhere close. Evans' domain modelling is collaborative and iterative. McGrane's content schemas don't exist until someone defines them. AI context windows don't fill themselves. In every case, context is something you build on purpose or it doesn't exist.
 
-**Context must be formalised to cross a boundary.** Evans' bounded contexts need explicit translation layers. McGrane's structured content needs schemas to travel between platforms. AI agents need structured context documents to work across sessions and tasks. Informal, tacit understanding works within a team. It breaks the moment you need to share across one.
+**Context must be formalised to cross a boundary.** Evans' bounded contexts need explicit translation layers. McGrane's structured content needs schemas to travel between platforms. AI agents need structured context documents to work across sessions and tasks. Informal, tacit understanding works within a team. It breaks the moment you need to share across one. And the failure mode scales with speed: in software, [comprehension debt](/posts/20260328-digesting-comprehension-debt/) accumulates silently; in content, [syndication breaks](/posts/20260327-content-architecture-shipping-container/) compound slowly; in AI, hallucination is instant.
 
-**When context is missing, the system fails.** In software, you get comprehension debt: the code works until [nobody can explain what it does](/posts/20260328-digesting-comprehension-debt/). In content, you get immovable blobs that [can't syndicate across properties](/posts/20260327-content-architecture-shipping-container/). In AI, you get hallucination and misalignment, instantly and visibly. The speed of failure varies. The cause is the same.
-
-## Why nobody's borrowing from each other
+## Cross-pollination has started but hasn't gone mainstream
 
 <aside class="kh-marginnote">At <a href="https://www.infoq.com/news/2024/03/Evans-ddd-experiment-llm/">Explore DDD 2024</a>, Evans argued that a fine-tuned language model is essentially a bounded context. The DDD community is aware of AI, but mostly asking "how can AI help us do DDD?" rather than the reverse.</aside>
 
@@ -135,7 +135,7 @@ Before AI, context failures were slow. A misaligned contractor takes weeks to de
 
 AI made the failure instant. Bad context in, bad output out, in seconds. The feedback loop that used to take weeks now takes a single prompt. That speed is what's making the bottleneck impossible to miss.
 
-It's also why the discourse is converging now. When the cost of missing context was diffuse and slow, each tradition could afford to treat it as a domain-specific problem and solve it with domain-specific tools. When the failure is instant, the pattern becomes hard to ignore: it's the same problem, and the solutions are transferable.
+It's also why the discourse is converging now. When the cost of missing context was diffuse and slow, each tradition could afford to treat it as a domain-specific problem and solve it with domain-specific tools. When the failure is instant, the structural resemblance becomes hard to ignore, and the solutions start to look transferable.
 
 ## From where I sit
 
@@ -147,7 +147,7 @@ If you're working on context engineering for AI and you haven't read Evans on ub
 
 And if you're in any of these fields, Duranti and Goodwin is worth your time. That's where the deepest version of the argument lives.
 
-The way I've come to see it: context is a verb, not a noun. It's something you actively build so that the pieces — people, systems, content, agents — can work together. None of these traditions own that insight. All of them arrived at it. The traditions have plenty to offer each other. They just haven't started borrowing yet.
+The way I've come to see it: context is a verb, not a noun. It's something you actively build so that the pieces — people, systems, content, agents — can work together. None of these traditions own that insight. All of them arrived at it. The cross-pollination is starting — but it hasn't reached mainstream practice in any of these fields yet. There's plenty left to borrow.
 
 ## Related writing
 
