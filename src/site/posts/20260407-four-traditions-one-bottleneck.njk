@@ -84,12 +84,12 @@ kens_status: draft
    cross-disciplinary lens.
 -->
 
-I work at an unusual intersection. My career has moved through journalism, content strategy, information architecture, design systems, and software engineering. I now spend most of my time on AI integration and context engineering. I'm not an expert in all of these fields, but I've spent enough time in each to notice something: at least four independent traditions have arrived at the same conclusion about what makes complex work succeed or fail. And they largely haven't cited each other.
+I work at an unusual intersection. My career has moved through journalism, content strategy, information architecture, design systems, and software engineering. I now spend most of my time on AI integration and context engineering. I'm not an expert in all of these fields, but I've spent enough time in each to notice something: at least four independent traditions have arrived at the same conclusion about what makes complex work succeed or fail. Each one spent years working through the hard parts. And they're barely leveraging each other's lessons.
 
 > **tl;dr**
 >
 > - At least four independent traditions have concluded that shared context is the primary bottleneck in complex work
-> - They arrived there from completely different starting points and mostly haven't compared notes
+> - They arrived there from completely different starting points and are barely leveraging each other's lessons
 > - AI is making the convergence visible because context failures with LLMs are instant and obvious
 > - If you're treating context as a domain-specific concern, you're solving the same problem four times without knowing it
 
@@ -101,7 +101,7 @@ I work at an unusual intersection. My career has moved through journalism, conte
 
 **Content strategy (2009--2012).** Daniel Jacobson at NPR built [COPE](https://www.programmableweb.com/news/cope-create-once-publish-everywhere/2009/10/13) (Create Once, Publish Everywhere): content modelled as structured data with standardised interfaces, not as presentation-specific blobs. Karen McGrane's [*Content Strategy for Mobile*](https://abookapart.com/products/content-strategy-for-mobile) sharpened the point: content that's trapped in a specific visual format ("blobs") can't travel across channels. You have to break it into meaningful "chunks" named by what they are, not how they look. "News item" survives a redesign; "featured card with sidebar layout" doesn't.
 
-<aside class="kh-marginnote">McGrane's "blobs vs. chunks" and Evans' entities and value objects are the same distinction. Neither tradition cites the other.</aside>
+<aside class="kh-marginnote">McGrane's "blobs vs. chunks" and Evans' entities and value objects are the same distinction, arrived at independently. Content strategists could have saved time with Evans' formalisms; DDD practitioners could have learned from McGrane's work on cross-channel portability.</aside>
 
 **AI context engineering (2025--2026).** The current wave. An LLM has general knowledge of the universe but not your project's constraints, your team's vocabulary, or why the module is shaped the way it is. The bottleneck isn't the model; it's [the context you provide](/posts/20251003-effective-context-engineering-for-ai-agents/). Practitioners are building CLAUDE.md files, project briefs, scoped rules, and [structured documentation for AI consumption](/posts/20250929-ai-must-rtfm-context-curators/). The discipline is new. The problem it's solving is not.
 
@@ -115,7 +115,7 @@ These traditions developed different vocabularies for the same three observation
 
 **When context is missing, the system fails.** In software, you get comprehension debt: the code works until [nobody can explain what it does](/posts/20260328-digesting-comprehension-debt/). In content, you get immovable blobs that [can't syndicate across properties](/posts/20260327-content-architecture-shipping-container/). In AI, you get hallucination and misalignment, instantly and visibly. The speed of failure varies. The cause is the same.
 
-## Why nobody compared notes
+## Why nobody's borrowing from each other
 
 <aside class="kh-marginnote">At <a href="https://www.infoq.com/news/2024/03/Evans-ddd-experiment-llm/">Explore DDD 2024</a>, Evans argued that a fine-tuned language model is essentially a bounded context. The DDD community is aware of AI, but mostly asking "how can AI help us do DDD?" rather than the reverse.</aside>
 
@@ -123,7 +123,7 @@ Different conferences, different journals, different vocabularies. Linguistic an
 
 Which is ironic, given that most of these fields argue for shared language as a core practice.
 
-Birgitta Bockeler's [context engineering article](https://martinfowler.com/articles/exploring-gen-ai/context-engineering-coding-agents.html) on martinfowler.com is the most widely-read piece in this space right now. It describes practices that are essentially informal bounded contexts and ubiquitous language documents: scoped files that define vocabulary, rules that constrain agent behaviour within a domain, skills as lazy-loaded context modules. It doesn't reference DDD once. Not because Bockeler doesn't know DDD, but because the AI context engineering conversation developed its own frame and didn't need to look back.
+Birgitta Bockeler's [context engineering article](https://martinfowler.com/articles/exploring-gen-ai/context-engineering-coding-agents.html) on martinfowler.com is the most widely-read piece in this space right now. It describes practices that are essentially informal bounded contexts and ubiquitous language documents: scoped files that define vocabulary, rules that constrain agent behaviour within a domain, skills as lazy-loaded context modules. It doesn't reference DDD once. Not because Bockeler doesn't know DDD, but because the AI context engineering conversation developed its own frame and didn't think to look sideways. The cost isn't a missing footnote; it's that twenty years of hard lessons about formalising shared understanding sit unused next door.
 
 Meanwhile, Rod Johnson (creator of the Spring Framework) has been [arguing](https://medium.com/@springrod/context-engineering-needs-domain-understanding-b4387e8e4bf8) that context engineering is incomplete without domain modelling. His DICE framework treats domain objects as the primary units loaded into context windows. He's one of the few people explicitly bridging DDD and AI. But his audience is enterprise Java developers, not content strategists or linguists.
 
@@ -133,7 +133,7 @@ Before AI, context failures were slow. A misaligned contractor takes weeks to de
 
 AI made the failure instant. Bad context in, bad output out, in seconds. The feedback loop that used to take weeks now takes a single prompt. That speed is what's making the bottleneck impossible to miss.
 
-It's also why the discourse is converging now. When the cost of missing context was diffuse and slow, each tradition could treat it as a domain-specific problem. When it's instant and measurable, the pattern becomes hard to ignore: it's the same problem everywhere.
+It's also why the discourse is converging now. When the cost of missing context was diffuse and slow, each tradition could afford to treat it as a domain-specific problem and solve it with domain-specific tools. When the failure is instant, the pattern becomes hard to ignore: it's the same problem, and the solutions are transferable.
 
 ## From where I sit
 
@@ -145,7 +145,7 @@ If you're working on context engineering for AI and you haven't read Evans on ub
 
 And if you're in any of these fields, Duranti and Goodwin is worth your time. Context isn't a thing you have. It's a thing you make. That's the version of the argument that sits underneath all the others.
 
-The traditions just haven't compared notes yet.
+The traditions have plenty to offer each other. They just haven't started borrowing yet.
 
 ## Related writing
 
