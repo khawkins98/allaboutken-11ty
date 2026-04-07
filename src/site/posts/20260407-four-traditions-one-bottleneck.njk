@@ -92,20 +92,24 @@ I [wrote recently](/posts/20260330-context-was-always-the-job/) about how contex
 
 The right course of action always depends on what you're trying to do. Build a car, and you need to know whether it should be fast or fuel-efficient or cheap. Write a news article, and you need to know who it's for and what they already understand. Give an AI agent a task, and you need to give it enough context to know what "good" looks like in your situation. This is obvious. But we keep acting as if the right answer is always the right answer — as if solutions are universal and context is a detail you fill in later.
 
-My career has moved through journalism, content strategy, information architecture, design systems, and software engineering. I now spend most of my time on AI integration. I'm not an expert in all of these fields, but I've spent enough time in each to notice something: linguistic anthropology, software engineering, content strategy, and AI context engineering have all landed on structurally analogous problems around shared understanding. Different problems in detail, but with a striking family resemblance. Each one spent years working through the hard parts. And they're barely leveraging each other's lessons.
+My career has moved through journalism, content strategy, information architecture, design systems, and software engineering. I now spend most of my time on AI integration. These are the fields I can see from where I sit, and from here I've noticed something: software engineering, content strategy, and AI context engineering have all landed on structurally analogous problems around how shared understanding crosses boundaries. Different problems in detail, but with a striking family resemblance. Underneath all three sits a deeper insight from linguistic anthropology about why context has to be actively built in the first place. Each tradition spent years working through the hard parts. They haven't been leveraging each other's lessons nearly enough.
 
 > **tl;dr**
 >
-> - At least four traditions have landed on structurally analogous problems around shared understanding — different in detail, but with striking family resemblance
-> - They share intellectual ancestry in places but developed their solutions largely in parallel, and are barely leveraging each other's lessons
-> - AI is making the convergence visible because context failures with LLMs are instant and obvious
+> - Software engineering (DDD), content strategy, and AI context engineering have landed on structurally analogous problems around shared understanding — with a deeper theoretical foundation in linguistic anthropology
+> - They share intellectual ancestry but developed their solutions largely in parallel, and haven't been leveraging each other's lessons nearly enough
+> - AI is making the resemblance visible because context failures with LLMs are instant — though often dangerously subtle
 > - If you're treating context as a domain-specific concern, you're missing transferable solutions from adjacent fields
 
-## The threads
+## The theoretical layer
 
-**Linguistic anthropology (1992).** Alessandro Duranti and Charles Goodwin published [*Rethinking Context*](https://web.archive.org/web/20030312200748/http://www.sscnet.ucla.edu/anthro/faculty/duranti/reprints/rethco.pdf), which changed how linguists think about context. Their argument: context isn't static background to communication. It's actively produced through interaction. People don't just operate within a context; they build it together as they talk, gesture, and respond.
+Before the engineering traditions, a deeper observation. Alessandro Duranti and Charles Goodwin published [*Rethinking Context*](https://web.archive.org/web/20030312200748/http://www.sscnet.ucla.edu/anthro/faculty/duranti/reprints/rethco.pdf) in 1992, which changed how linguists think about context. Their argument: context isn't static background to communication. It's actively produced through interaction. People don't just operate within a context; they build it together as they talk, gesture, and respond.
 
 <aside class="kh-marginnote">Paul Dourish <a href="https://www.dourish.com/publications/2004/PUC2004-context.pdf">translated this thesis for computing in 2004</a>, arguing context is an "interactional problem" not a "representational problem." But the work landed in human-computer interaction (HCI), not in DDD, content strategy, or AI. Even when a bridge gets built, it stays within its own field.</aside>
+
+This is a philosophical observation about how meaning works between humans, not an engineering method. But it describes *why* the engineering traditions below keep arriving at similar solutions: if context has to be actively produced, then every system that crosses a boundary between different groups, platforms, or agents needs a deliberate mechanism to produce it. The engineering traditions are the *how*. Duranti and Goodwin are the *why*.
+
+## The engineering threads
 
 **Software engineering (2003).** Eric Evans published [*Domain-Driven Design*](https://www.domainlanguage.com/ddd/), arguing that the hard problem of software is shared understanding of the domain, not the code. His prescription: build a "ubiquitous language" that domain experts and developers both use. Formalise it. Draw explicit boundaries ("bounded contexts") around different models so they don't corrupt each other. The primary artifact of engineering, in Evans' framing, is the shared model, not the running system. I didn't encounter Evans until years after I'd been doing content modelling, and the overlap is striking.
 
@@ -115,7 +119,9 @@ My career has moved through journalism, content strategy, information architectu
 
 **AI context engineering (2025--2026).** The current wave. An LLM has general knowledge of the universe but not your project's constraints, your team's vocabulary, or why the module is shaped the way it is. The bottleneck isn't the model; it's [the context you provide](/posts/20251003-effective-context-engineering-for-ai-agents/). Practitioners are building CLAUDE.md files, project briefs, scoped rules, and [structured documentation for AI consumption](/posts/20250929-ai-must-rtfm-context-curators/). The discipline is new. The problem it's solving is not.
 
-I should be honest about the limits of this list. These aren't the only traditions working on how shared understanding crosses boundaries — knowledge management (Nonaka & Takeuchi's tacit-to-explicit conversion, 1995) and library/information science have deep roots here too. And the traditions I am covering aren't fully independent: content strategy grew out of computing and information architecture, AI context engineering is practiced almost entirely by software engineers, and DDD drew on earlier modelling traditions. Duranti and Goodwin are the genuinely independent thread. The others are parallel but adjacent, sharing intellectual ancestry while developing their solutions separately.
+I should be honest about the limits of this framing. These are the traditions I can see from where I sit — they're shaped by my career, not by a natural taxonomy. Knowledge management (Nonaka & Takeuchi's tacit-to-explicit conversion, 1995), library science, systems thinking, and organisational theory all have deep roots in similar territory. And the traditions I am covering aren't fully independent: content strategy grew out of computing and information architecture, AI context engineering is practiced almost entirely by software engineers, and DDD drew on earlier modelling traditions. They share intellectual ancestry even where they developed solutions separately.
+
+There's also a fair counterargument: maybe these traditions haven't cross-pollinated because the problems are different enough in practice that the parallels don't cash out. A DDD practitioner reading McGrane might find it interesting but not actionable. I don't think that's the full story — but I should show rather than assert.
 
 ## What they share
 
@@ -133,7 +139,7 @@ Different conferences, different journals, different vocabularies. Linguistic an
 
 Which is ironic, given that most of these fields argue for shared language as a core practice.
 
-Birgitta Bockeler's [context engineering article](https://martinfowler.com/articles/exploring-gen-ai/context-engineering-coding-agents.html) on martinfowler.com is the most widely-read piece in this space right now. It describes practices that echo DDD without naming it: scoped rules tied to file types, project-specific conventions, skills as lazy-loaded context modules. It doesn't reference DDD once. Not because Bockeler doesn't know DDD, but because the AI context engineering conversation developed its own frame and didn't think to look sideways. The cost isn't a missing footnote; it's that twenty years of hard lessons about formalising shared understanding sit unused next door.
+Birgitta Bockeler's [context engineering article](https://martinfowler.com/articles/exploring-gen-ai/context-engineering-coding-agents.html) on martinfowler.com is the most widely-read piece in this space right now. It describes practices that echo DDD: scoped rules tied to file types, project-specific conventions, skills as lazy-loaded context modules. It doesn't reference DDD, but that's a scope decision, not an oversight — it's a practical guide to coding agent context, not a theoretical treatise. The interesting question isn't why Bockeler didn't cite Evans. It's whether twenty years of lessons about formalising shared understanding in DDD could make practices like hers more systematic.
 
 Meanwhile, Rod Johnson (creator of the Spring Framework) has been [arguing](https://medium.com/@springrod/context-engineering-needs-domain-understanding-b4387e8e4bf8) that context engineering is incomplete without domain modelling. His DICE framework argues that domain models should structure how context gets selected and organised, rather than treating the context window as an ever-growing string. A small but growing group is making this connection — Evans himself, [James Croft](https://www.jamescroft.co.uk/applying-domain-driven-design-principles-to-multi-agent-ai-systems/) at Microsoft, a handful of academic papers — but it hasn't penetrated the mainstream AI tooling ecosystem yet. And almost none of these voices are looking further afield to content strategy or linguistics.
 
@@ -141,9 +147,21 @@ Meanwhile, Rod Johnson (creator of the Spring Framework) has been [arguing](http
 
 Before AI, context failures were slow. A misaligned contractor takes weeks to deliver the wrong thing. A content schema that doesn't match across properties causes a slow bleed of broken syndication that nobody notices until it compounds. Comprehension debt accumulates silently while metrics stay green.
 
-AI made the failure instant. Bad context in, bad output out, in seconds. The feedback loop that used to take weeks now takes a single prompt. That speed is what's making the bottleneck impossible to miss.
+AI made the failure instant — but not necessarily obvious. A missing bounded context in software produces a runtime error or visibly wrong behaviour. A missing bounded context in AI produces a plausible-sounding wrong answer. Hallucination looks like correct output. That's what makes it dangerous, and it's why the speed argument is more complicated than "bad in, bad out." The feedback loop is faster, yes, but the failures are subtler, and the cost of catching them late is higher because they look like they worked.
 
-It's also why the discourse is converging now. When the cost of missing context was diffuse and slow, each tradition could afford to treat it as a domain-specific problem and solve it with domain-specific tools. When the failure is instant, the structural resemblance becomes hard to ignore, and the solutions start to look transferable.
+What the speed does is compress the cycle. You hit the consequences of missing context in seconds rather than weeks, so the pattern becomes harder to ignore even if the individual failures are harder to spot. That compression is why the discourse is converging now. When context failures were slow, each tradition could afford to treat them as a domain-specific problem. When they're fast, the structural resemblance becomes harder to miss, and the solutions start to look transferable.
+
+## What a transferred lesson looks like
+
+The post would be incomplete if it argued for weaving without actually weaving. Here's a concrete example.
+
+A common AI context engineering problem: you give an agent a task that spans two domains in your organisation, and it confuses terminology. Your CMS calls something a "teaser"; your design system calls the same field a "summary"; your API calls it "description." The agent doesn't know these are the same thing, or worse, treats them as different things and produces inconsistent output. This is a real problem that teams hit regularly when building AI-assisted publishing workflows.
+
+DDD solved this twenty years ago with ubiquitous language: agree on one term per concept within a bounded context, write it down, and enforce it. Content strategy solved a version of it with structured content modelling: name fields by what they *are* ("short description"), not by where they *appear* ("homepage card text"). Both traditions learned the hard way that ambiguous vocabulary at boundaries is where systems break.
+
+The AI context engineering solution is the same structural move: define your project vocabulary in a CLAUDE.md or rules file, map synonyms explicitly, and scope those definitions to specific parts of the codebase. This is what Evans called ubiquitous language and what McGrane called naming by meaning. The lesson transfers directly. The teams building these files just don't know they're reinventing a solved problem.
+
+That's one example. I suspect there are dozens. But the weaving won't happen unless people in these fields start reading across the aisle.
 
 ## From where I sit
 
@@ -153,7 +171,7 @@ My recent posts on [context as infrastructure](/posts/20260330-context-was-alway
 
 If you're working on context engineering for AI and you haven't read Evans on ubiquitous language, there are twenty years of lessons on formalising shared understanding that you're rediscovering from scratch. If you're doing DDD and haven't looked at how content strategists model structured content across platforms, you're missing a parallel tradition that solved the "how does this travel across boundaries" problem for editorial organisations.
 
-And if you're in any of these fields, Duranti and Goodwin is worth your time. That's where the deepest version of the argument lives.
+And underneath all of it, Duranti and Goodwin is worth your time. Not as another engineering method, but as the theoretical foundation for why the engineering methods keep converging: context has to be produced, or it doesn't exist.
 
 The way I've come to see it: context is a verb, not a noun. It's something you actively build so that the pieces — people, systems, content, agents — can work together. None of these traditions own that insight. All of them arrived at it. The weaving is starting — but it hasn't reached mainstream practice in any of these fields yet. There's plenty left to pull together.
 
