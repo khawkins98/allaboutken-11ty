@@ -33,9 +33,9 @@ kens_status: draft
    https://medium.com/@springrod/context-engineering-needs-domain-understanding-b4387e8e4bf8
    Creator of the Spring Framework. His DICE (Domain-Integrated Context Engineering)
    framework argues that context engineering is incomplete without domain modeling.
-   Domain objects -- not raw text -- should be the primary units loaded into context
-   windows. Bounded contexts from DDD bring "structure that is intuitive to humans
-   and helpful to interacting with machines."
+   Domain models should structure how context gets selected and organised, not left
+   as an ever-growing string. Bounded contexts from DDD bring "structure that is
+   intuitive to humans and helpful to interacting with machines."
    >> Angle: the strongest single bridge piece between DDD and AI context engineering.
    Johnson comes from enterprise Java, not content strategy, yet arrives at the same
    place: without domain modeling, context engineering is just information management.
@@ -97,6 +97,8 @@ I work at an unusual intersection. My career has moved through journalism, conte
 
 **Linguistic anthropology (1992).** Alessandro Duranti and Charles Goodwin published [*Rethinking Context*](https://web.archive.org/web/20030312200748/http://www.sscnet.ucla.edu/anthro/faculty/duranti/reprints/rethco.pdf), which changed how linguists think about context. Their argument: context isn't static background to communication. It's actively produced through interaction. People don't just operate within a context; they build it together as they talk, gesture, and respond. Context is a verb, not a noun.
 
+<aside class="kh-marginnote">Paul Dourish <a href="https://www.dourish.com/publications/2004/PUC2004-context.pdf">translated this thesis for computing in 2004</a>, arguing context is an "interactional problem" not a "representational problem." But the work landed in HCI, not in DDD, content strategy, or AI. Even when a bridge gets built, it stays within its own field.</aside>
+
 **Software engineering (2003).** Eric Evans published [*Domain-Driven Design*](https://www.domainlanguage.com/ddd/), arguing that the hard problem of software is shared understanding of the domain, not the code. His prescription: build a "ubiquitous language" that domain experts and developers both use. Formalise it. Draw explicit boundaries ("bounded contexts") around different models so they don't corrupt each other. The primary artifact of engineering, in Evans' framing, is the shared model, not the running system. I didn't encounter Evans until years after I'd been doing content modelling, and the overlap is striking.
 
 **Content strategy (2009--2012).** Daniel Jacobson at NPR built [COPE](https://www.programmableweb.com/news/cope-create-once-publish-everywhere/2009/10/13) (Create Once, Publish Everywhere): content modelled as structured data with standardised interfaces, not as presentation-specific blobs. Karen McGrane's [*Content Strategy for Mobile*](https://abookapart.com/products/content-strategy-for-mobile) sharpened the point: content that's trapped in a specific visual format ("blobs") can't travel across channels. You have to break it into meaningful "chunks" named by what they are, not how they look. "News item" survives a redesign; "featured card with sidebar layout" doesn't.
@@ -123,9 +125,9 @@ Different conferences, different journals, different vocabularies. Linguistic an
 
 Which is ironic, given that most of these fields argue for shared language as a core practice.
 
-Birgitta Bockeler's [context engineering article](https://martinfowler.com/articles/exploring-gen-ai/context-engineering-coding-agents.html) on martinfowler.com is the most widely-read piece in this space right now. It describes practices that are essentially informal bounded contexts and ubiquitous language documents: scoped files that define vocabulary, rules that constrain agent behaviour within a domain, skills as lazy-loaded context modules. It doesn't reference DDD once. Not because Bockeler doesn't know DDD, but because the AI context engineering conversation developed its own frame and didn't think to look sideways. The cost isn't a missing footnote; it's that twenty years of hard lessons about formalising shared understanding sit unused next door.
+Birgitta Bockeler's [context engineering article](https://martinfowler.com/articles/exploring-gen-ai/context-engineering-coding-agents.html) on martinfowler.com is the most widely-read piece in this space right now. It describes practices that echo DDD without naming it: scoped rules tied to file types, project-specific conventions, skills as lazy-loaded context modules. It doesn't reference DDD once. Not because Bockeler doesn't know DDD, but because the AI context engineering conversation developed its own frame and didn't think to look sideways. The cost isn't a missing footnote; it's that twenty years of hard lessons about formalising shared understanding sit unused next door.
 
-Meanwhile, Rod Johnson (creator of the Spring Framework) has been [arguing](https://medium.com/@springrod/context-engineering-needs-domain-understanding-b4387e8e4bf8) that context engineering is incomplete without domain modelling. His DICE framework treats domain objects as the primary units loaded into context windows. He's one of the few people explicitly bridging DDD and AI. But his audience is enterprise Java developers, not content strategists or linguists.
+Meanwhile, Rod Johnson (creator of the Spring Framework) has been [arguing](https://medium.com/@springrod/context-engineering-needs-domain-understanding-b4387e8e4bf8) that context engineering is incomplete without domain modelling. His DICE framework argues that domain models should structure how context gets selected and organised, rather than treating the context window as an ever-growing string. A small but growing group is making this connection — Evans himself, [James Croft](https://www.jamescroft.co.uk/applying-domain-driven-design-principles-to-multi-agent-ai-systems/) at Microsoft, a handful of academic papers — but it hasn't penetrated the mainstream AI tooling ecosystem yet. And almost none of these voices are looking further afield to content strategy or linguistics.
 
 ## The AI moment as forcing function
 
@@ -161,5 +163,7 @@ The traditions have plenty to offer each other. They just haven't started borrow
 - Karen McGrane, [*Content Strategy for Mobile*](https://abookapart.com/products/content-strategy-for-mobile) (2012). Blobs vs. chunks, and why content must be structured by meaning to travel across channels.
 - Rod Johnson, [Context Engineering Needs Domain Understanding](https://medium.com/@springrod/context-engineering-needs-domain-understanding-b4387e8e4bf8) (2025). The strongest bridge between DDD and AI context engineering.
 - Russ Miles, [Domain Driven Agent Design](https://engineeringagents.substack.com/p/domain-driven-agent-design) (2025). What happens when agents cross bounded contexts without translation layers.
+- Paul Dourish, [What We Talk About When We Talk About Context](https://www.dourish.com/publications/2004/PUC2004-context.pdf) (2004). The closest existing bridge between linguistic anthropology and computing — argues context is interactional, not representational.
+- Lucy Suchman, *Plans and Situated Actions* (1987; [2nd ed. 2007](https://www.cambridge.org/core/books/humanmachine-reconfigurations/2DF52E4AA3A95914E464A93AFEE2B0C9)). An anthropologist at Xerox PARC brought situated-context critiques into computing 35 years ago. The modern AI agent community is rediscovering her arguments.
 
 {% endmarkdown %}
