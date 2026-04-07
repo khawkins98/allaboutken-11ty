@@ -1,7 +1,7 @@
 ---
 title: "The right answer has to be woven"
 layout: layouts/post.njk
-teaser: "Three traditions solved the shared-understanding problem in parallel. LLMs are dissolving the boundary that kept them apart."
+teaser: "Several traditions solved the shared-understanding problem in parallel. LLMs are dissolving the boundary that kept them apart."
 date: 2026-04-07
 tags:
   - posts
@@ -98,12 +98,12 @@ The loose threads, don't need to stay so.
 
 > **tl;dr**
 >
-> - Software engineering (DDD), content strategy, and AI context engineering each solved the problem of shared understanding across system boundaries
+> - Several traditions -- among them software engineering (DDD), content strategy, and AI context engineering -- each solved the problem of shared understanding across system boundaries
 > - They developed in parallel partly because they operated on different substrates: human-readable meaning vs. machine-executable contracts
 > - LLMs are dissolving that boundary; natural language is now a functional input to software
 > - Specific patterns now transfer concretely, and the cross-pollination has barely started
 
-## Three traditions, one problem
+## Several traditions, one problem
 
 I [wrote recently](/posts/20260330-context-was-always-the-job/) about how context was always the job. The more I've sat with that idea, the more I've noticed the same boundary-crossing problems showing up across fields, with solutions developed in parallel.
 
@@ -127,7 +127,9 @@ LLMs are collapsing that gap. A CLAUDE.md file is simultaneously human documenta
 
 I don't want to overstate the collapse. CLAUDE.md is natural language, but a very specific kind: structured, imperative, rule-based. It's closer to a config file written in English than to a conversation. Content strategy's insights about editorial governance transfer well to this new substrate; its insights about reader comprehension transfer less cleanly, because the "reader" (an LLM) has very different failure modes than a human. The boundary is thinning, not gone.
 
-But even a partial collapse changes what's practical. And AI is making the payoff visible through sheer volume. Before AI, context failures were slow: a misaligned contractor takes weeks to deliver the wrong thing; a content schema mismatch causes a slow bleed of broken syndication. An LLM with bad context produces dozens of plausible-sounding wrong outputs in an afternoon. Any single failure might pass review (hallucination looks like correct output). But the ones that get caught accumulate into a recognisable pattern. When a team notices the agent keeps confusing two domain concepts, or generating content that doesn't match the schema, the problem stops looking like a one-off and starts looking structural. Whether volume actually drives cross-tradition insight or just faster finger-pointing probably depends on the team. But the speed creates the *possibility* of noticing the common shape in a way that slow, rare failures didn't.
+But even a partial collapse changes what's practical. And AI has changed the cost of iteration enough to make context a designable variable. Before AI, context failures were slow and expensive to learn from: a misaligned contractor takes weeks to deliver the wrong thing; a content schema mismatch causes a slow bleed of broken syndication. You're not going to tear down a two-week pull request and rebuild it with a different briefing just to test whether the briefing was the problem.
+
+With an LLM, you do exactly that. You give the agent one framing, watch it fail, adjust the context, and try again -- and the cost of that cycle is minutes, not days. Because the iteration is cheap, you start to notice *which* context changes produce better outputs, which is how you discover that the problem was structural (missing bounded context, ambiguous vocabulary, no schema) rather than a one-off misunderstanding. Content strategists have always wanted to test whether restructuring content improves outcomes, but the feedback loop was too slow. Now it isn't.
 
 ## Patterns that now transfer
 
