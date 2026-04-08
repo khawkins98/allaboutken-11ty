@@ -1,0 +1,42 @@
+---
+title: "EmDash won't beat WordPress. Drupal just needs to wait."
+layout: layouts/digesting.njk
+teaser: "EmDash doesn't need to win to matter, and Drupal's quiet modernization work means it doesn't either."
+date: 2026-04-08
+digest_link: 'https://blog.cloudflare.com/emdash-wordpress/'
+tags: digesting
+topics:
+  - CMS
+  - WordPress
+  - open source
+  - web architecture
+  - Cloudflare
+  - Drupal
+kens_status: final_draft
+---
+
+{% markdown %}
+
+Cloudflare announced a "WordPress killer" called [EmDash](https://blog.cloudflare.com/emdash-wordpress/). It's a TypeScript rebuild of WordPress: Astro under the hood, serverless-first, AI agents doing most of the construction over two months.
+
+Headline architectural decision: the plugin sandbox. Plugins run in an isolated Worker with explicitly declared capabilities, like OAuth scopes. No more plugins silently owning the database and filesystem. Cloudflare claims this prevents 96% of WordPress vulnerabilities. It probably also prevents a lot of what made WordPress flexible.
+
+Matt Mullenweg [responded quickly](https://ma.tt/2026/04/emdash-feedback/): "You can come after our users, but please don't claim to be our spiritual successor without understanding our spirit." The spirit he's defending (run it anywhere, democratize publishing, genuine openness). It's also a defense that's gotten harder to make while he's been [pulling the WordPress governance structure toward himself](https://blogherald.com/blogging-news/wordpress-governance-is-broken-and-the-mullenweg-wp-engine-war-proved-it/) over the past year.
+
+What makes EmDash interesting even for those of us not building with it: It doesn't need to win. It just needs WordPress' community cohesion to keep eroding enough that developer energy stops routing into the plugin and theme ecosystem. Some of that energy is already moving toward Ghost, Payload, Astro-native setups. The moat narrows.
+
+EmDash doesn't yet ship a visual block editor, and [that's a gap](https://kraut.press/2026/emdash-cms-shows-gutenberg-limits/). It's both an intended and unintended one. Gutenberg stores content as serialized HTML in a single database field rather than structured data: [a problem with a long history](/posts/20260327-content-architecture-shipping-container/). EmDash gets the storage right with structured JSON content schemas but ships without the editor. Gutenberg has the editor, not the architecture. Neither has both yet.
+
+Drupal quietly did the unglamorous modernization work. Composer, Drupal 10 and 11, decoupled architecture, rebuilt credibility in enterprise. [Drupal CMS 2.0](https://www.drupal.org/blog/drupal-cms-20-is-here-visual-building-ai-and-site-templates-transform-drupal), just out this January, adds visual building, AI integration, and site templates. Everyone wrote it off as too hard for normal people. That was always right.
+
+There's a parallel worth watching: Drupal CMS orbits Acquia the way WordPress.org orbits Automattic. The same structural tension. But Drupal's ecosystem modernized alongside its commercial layer; WordPress's plugin economy didn't. One alliance produced a fracture. The other hasn't yet.
+
+Drupal doesn't need a fork to work with modern stacks.
+
+I started using Drupal in 2008, took a long hiatus, and coming back it's interesting to see how it's made itself a core part of the CMS world -- but not the whole thing.
+
+I had no idea [Movable Type](https://en.wikipedia.org/wiki/Movable_Type) was still around!
+
+[Try the Emdash playground](https://emdashcms.com/playground).
+
+{% endmarkdown %}
