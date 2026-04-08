@@ -1,0 +1,190 @@
+---
+title: "How to write one skills for both Claude Code and GitHub Copilot CLI"
+layout: layouts/post.njk
+teaser: "Tips on where the shared appproach doesn't share, and plugin.json gotchas that break Claude Code silently."
+date: 2026-04-08
+tags:
+  - posts
+topics:
+  - AI tools
+  - Claude Code
+  - GitHub Copilot
+  - developer tools
+kens_status: published
+---
+
+{% markdown %}
+
+Both Claude Code and GitHub Copilot CLI support skills (instruction files that load into the agent's context when you need them). The two tools share the same core file formats, so a single set of files can serve both. This guide covers how that works, the divergences, and the gotchas.
+
+> **tl;dr**
+>
+> - Write skills as `SKILL.md` files with `name` and `description` frontmatter -- both tools require exactly this.
+> - The `description` field is the auto-detection trigger. Write it as a trigger condition: *"Use when the user asks to…"*
+> - Omit the `skills` field from `plugin.json` entirely -- Claude Code will reject the file if it's present.
+> - Copilot CLI supports agents, hooks, and MCP server config; Claude Code does not yet. These are safe to add for Copilot users without affecting Claude Code.
+> - If you just want a single skill without a plugin wrapper, you can drop the folder into `.github/skills/`, `.claude/skills/`, or `.agents/skills/` (project) or the equivalent under `~/` (personal) and Copilot CLI will find it without any manifest.
+
+The specifics below reflect the state of things as of April 2026. The [canonical references](#canonical-references) at the bottom are the authoritative source -- if anything here conflicts with official docs, trust them, though even those can lag behind actual behavior.
+
+## Two ways to distribute skills
+
+<aside class="kh-marginnote">The pattern is spreading -- Cursor, Gemini CLI, Windsurf, and Codex CLI have all adopted variations of the SKILL.md format. I haven't tested compatibility with any of them directly, but portability across the ecosystem looks like the direction of travel.</aside>
+
+Before getting into file structure, it helps to understand the two distribution models, because they look different even though the underlying `SKILL.md` format is the same.
+
+**Standalone skills** are just a folder with a `SKILL.md` inside, dropped into a location the tool already watches. No manifest, no plugin wrapper. For Copilot CLI, the watched locations are:
+
+- `.github/skills/`, `.claude/skills/`, or `.agents/skills/` inside the current repository (project skills)
+- `~/.copilot/skills/`, `~/.claude/skills/`, or `~/.agents/skills/` in your home directory (personal skills)
+
+This is the lightest-weight approach and the one GitHub's own docs emphasize. It works well when you have one or two skills and don't need to bundle them for distribution.
+
+**Plugin-bundled skills** wrap one or more skills inside a structured plugin directory. This is the model you want when you're packaging skills for a team or publishing them for others to install. Both tools discover skills from the `skills/` subdirectory inside the plugin root automatically.
+
+## The file structure both tools understand
+
+A plugin that works in both Claude Code and Copilot CLI looks like this:
+
+```
+my-plugin/
+├── .claude-plugin/
+│   ├── plugin.json
+│   └── marketplace.json    # optional, for marketplace listing
+├── skills/
+│   ├── my-first-skill/
+│   │   ├── SKILL.md
+│   │   └── supplementary.md  # optional; both tools inject these into context
+│   └── my-second-skill/
+│       └── SKILL.md
+└── CLAUDE.md               # both tools read this; write it for both audiences
+```
+
+The `.claude-plugin/plugin.json` path is Claude Code's default manifest location, and Copilot CLI also searches there, so if your manifest is already at `.claude-plugin/plugin.json`, no move is needed. Note that Copilot CLI checks this path last (after `.plugin/plugin.json`, `plugin.json`, and `.github/plugin/plugin.json`), so it's the right choice when you want Claude Code's default to work without restructuring, not for a Copilot-primary plugin.
+
+## The `plugin.json` gotcha
+
+This one will burn you. Do **not** add a `skills` field to `plugin.json`:
+
+```json
+{
+  "name": "my-plugin",
+  "description": "What this plugin does",
+  "version": "1.0.0"
+}
+```
+
+Why: Copilot CLI defaults to the `skills/` directory automatically when the field is absent. Claude Code, on the other hand, rejects `plugin.json` with a validation error if a `skills` field is present. Omit it and both tools work; add it and Claude Code breaks.
+
+## Writing `SKILL.md` frontmatter
+
+Both tools require `name` and `description`. The `version` field is Claude Code-specific but harmless to leave in:
+
+```yaml
+---
+name: my-skill           # required by both; lowercase, hyphens only
+description: >           # required by both -- this is the auto-detection trigger
+  Use when the user asks to convert SVG files to PNG.
+version: 1.0.0           # Claude Code only; Copilot CLI ignores it safely
+allowed-tools:           # optional; tool names are platform-specific
+  - Read                 # Claude Code name; Copilot CLI equivalents differ (e.g. read_file, bash)
+  - Edit
+---
+```
+
+### The description field is everything
+
+Both tools use the `description` to decide whether to load the skill at all: the agent scans the list of installed skills, finds any whose description matches the current request, and injects those into context. The instructions in the `SKILL.md` body only matter after the skill loads.
+
+Write it as a trigger condition, not a label. Compare these two:
+
+| Weak | Strong |
+|---|---|
+| `"Code review skill"` | `"Use when the user asks to review, audit, or check code for issues"` |
+| `"Commit messages"` | `"Use when the user asks to write, generate, or improve a git commit message"` |
+
+Vague descriptions mean the skill won't auto-load when you need it. Narrow descriptions miss variations. Cover the vocabulary someone might actually use when asking for the task.
+
+### A note on `allowed-tools`
+
+The `allowed-tools` field limits which tools the agent can invoke while the skill is active. This matters especially if you're distributing skills publicly: a `shell` or `bash` pre-approval in a skill from an untrusted source can allow it to run arbitrary commands without prompting you. GitHub's docs are explicit about this:
+
+> Only pre-approve the `shell` or `bash` tools if you have reviewed this skill and any referenced scripts, and you fully trust their source.
+
+When in doubt, omit `shell` and `bash` from `allowed-tools`. The agent will still prompt for confirmation before running terminal commands.
+
+## Features specific to GitHub Copilot CLI
+
+These features are Copilot CLI-specific. They have no Claude Code equivalent, so you can safely add them for Copilot users without affecting Claude Code behavior:
+
+| Feature | How it works |
+|---|---|
+| Custom agents | `<name>.agent.md` files in an `agents/` directory; the filename prefix becomes the agent ID (e.g. `reviewer.agent.md`) |
+| Hooks | `hooks.json`; event handlers that fire on lifecycle events like `PostToolUse` or `SessionStart` |
+| MCP server config | `.mcp.json`; connects the plugin to external APIs or databases via MCP |
+
+## What `CLAUDE.md` does in each context
+
+Both tools read `CLAUDE.md`, but with slightly different scope. Claude Code treats it as plugin-level instructions loaded alongside the skill. Copilot CLI treats it as project-level custom instructions, the equivalent of what you'd put in a `.github/copilot-instructions.md`. Write content that makes sense in both contexts: conventions, constraints, what the tool should and shouldn't do. Avoid content that's only meaningful in one tool.
+
+## Testing the install
+
+For Copilot CLI, install from a local directory and confirm in an interactive session:
+
+```bash
+# Install (re-run after each edit to refresh the cache)
+copilot plugin install /path/to/your-plugin
+
+# Confirm it loaded
+copilot plugin list
+
+# In an interactive session
+/skills list
+```
+
+For Claude Code, pass `--plugin-dir /path/to/your-plugin` when launching, or install permanently with `claude plugins install /path/to/your-plugin`.
+
+## Key things to keep in sync
+
+If you change either of these, test both tools:
+
+- **`SKILL.md` -- `description`**: The auto-detection trigger for both. If you update the skill's purpose, update the description to match or it won't load.
+- **`SKILL.md` -- `name`**: Must be unique across installed plugins. Renaming is breaking: users of the old name will lose auto-detection silently.
+- **`plugin.json` -- `name`**: Changing this is a breaking rename for anyone who has the plugin installed.
+
+## Using this as LLM context
+
+This post lives on GitHub as a Nunjucks file -- syntactically close enough to Markdown that an LLM reads it fine. If you want an LLM to work from this guidance directly, here's a ready-to-paste prompt pointing at the raw source:
+
+```
+Please fetch https://raw.githubusercontent.com/khawkins98/allaboutken-11ty/main/src/site/posts/20260408-mini-guide-claude-copilot-skills.njk and use its guidance when helping me author skills compatible with both Claude Code and GitHub Copilot CLI.
+```
+
+I'll update this post as the tools evolve.
+
+<h2 id="canonical-references">Canonical references</h2>
+
+These are the authoritative sources. This post documents my own experience and cross-tool learnings; for the full specification, read these:
+
+**GitHub Copilot CLI**
+
+- [Creating skills for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-skills) -- official how-to, covers standalone skills, scripts, and `allowed-tools`
+- [Creating a plugin for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-creating) -- plugin manifest, distribution, and install
+- [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference) -- complete technical specification
+
+**Claude Code**
+
+- [Claude Code plugins overview](https://code.claude.com/docs/en/plugins) -- getting started with the plugin system
+- [Claude Code plugins reference](https://code.claude.com/docs/en/plugins-reference) -- complete specification for skills, agents, hooks, MCP, and LSP components
+- [Claude Code plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) -- distribution and discovery
+
+**Community guides worth reading**
+
+- [How to Build Your Own Claude Code Skill](https://www.freecodecamp.org/news/how-to-build-your-own-claude-code-skill) -- freeCodeCamp walkthrough, excellent on the description field and skill design heuristics
+- [Claude Code Skills vs MCP vs Plugins: Complete Guide 2026](https://www.morphllm.com/claude-code-skills-mcp-plugins) -- good overview of when to use each extensibility type
+
+The overlap between the two ecosystems is real and growing. Know the three divergences, omit the `skills` field from `plugin.json`, and a single set of files will serve you in both tools. If you run into a case this guide doesn't cover, I'd like to hear about it.
+
+If this sparked broader questions about how AI-assisted development actually works, [my post on the four gears of AI-assisted development](/posts/20260405-four-phases-of-ai-adoption/) talks through the layers above and below this one -- and [why context engineering was always the job](/posts/20260330-context-was-always-the-job/) has more on why the description field matters so much.
+
+{% endmarkdown %}
