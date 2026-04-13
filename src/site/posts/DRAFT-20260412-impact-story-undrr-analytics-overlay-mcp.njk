@@ -1,0 +1,79 @@
+---
+title: 'Putting GA4 where the work happens: an in-browser analytics overlay and its MCP bridge'
+layout: layouts/post.njk
+teaser: "Content teams shouldn't have to leave the page to learn how it performs. Agents shouldn't need their own credentials to ask."
+date: 2026-04-12
+tags:
+  - posts
+  - impact-stories
+topics:
+  - analytics
+  - developer tools
+  - AI / MCP
+org: UNDRR
+permalink: /work/2026/impact-story-undrr-analytics-overlay-mcp/
+kens_status: draft
+_internal_refs:
+  repo: /Users/khawkins/Documents/git/undrr-analytics-browser-extension
+  last_merge: 7554a5f
+image: /blog/placeholder.jpg
+image_meta:
+  altext: 'Placeholder'
+  text: 'Placeholder'
+---
+
+{% from "partials/orgs.njk" import orgIntro %}
+
+{% markdown %}
+
+**Context** | **Self-service** | **Agent-ready**
+
+<p class="kh-text-body--3">{{ orgIntro(org) }}</p>
+
+Web analytics are most useful when you see them inside the page you are reasoning about, not inside a dashboard two tabs away. I built a Chromium extension that puts GA4 metrics on UNDRR pages as an overlay, and then extended it with a local MCP server so AI agents can query the same data through the same authenticated session. This is the story of both pieces and why they belong together.
+
+## What was the actual problem?
+
+**UNDRR's analytics model is not generic.** Twenty-two hostnames feed into a single GA4 property. Download events are derived from URL patterns that include `/media/`. Engagement is tagged by page region (main, header, footer, feedback widget), and referrers are classified into eighteen strategic buckets before anything is asked of them. Off-the-shelf analytics tools either ignore that model or flatten it.
+
+**Context switching to Looker Studio is where curiosity dies.** For editors wondering whether the policy page they just updated is getting traction, a five-step dashboard drill is slow enough that most of the time they skip it. The question gets answered only when the quarterly report lands, which is the wrong feedback loop for editorial decisions.
+
+**Agents are in the workflow now, but not in the data.** I use Claude Code and Cursor daily for analysis tasks. Hooking either of them to GA4 in the usual way means a second set of credentials, a service account, and a bespoke query layer for every property. For a small team, that is both annoying and risky.
+
+## How did I approach this?
+
+**Overlay first, where the work happens.** The extension is a Manifest V3 Chromium extension. It authenticates through the Chrome Identity API, so there are no API keys and no extra credentials. On any UNDRR page it surfaces views, sessions, engagement rate, average duration, and a year-over-year comparison with an interactive daily chart. Tracked links and downloads get color-coded badges on the page itself; regions get rollups so editors can see which part of a page is actually doing the work.
+
+**Bridge second, on an auth boundary that already existed.** The MCP server runs on `localhost:18765` and talks to an offscreen document inside the extension over a persistent WebSocket. That offscreen document owns the OAuth session, so the MCP server never sees or stores a token. From the agent's side, fourteen tools are exposed: tactical ones (`query_top_content`, `query_downloads`, `query_traffic_sources`, `query_geographic_reach`, `query_region_events`), strategic composites (`domain_overview`, `annual_report_extract`), and a raw GA4 escape hatch (`run_raw_ga4_query`) for questions the composites do not anticipate.
+
+**One source of truth, shared three ways.** `domains.json` holds the twenty-two hostnames, their measurement IDs, and the referrer bucket classifiers. The extension's content script, its popup, and the MCP server all read the same file, so there is no config drift between what editors see in the overlay and what an agent sees through MCP.
+
+**Safety designed into the boundaries, not bolted on.**
+
+- The MCP server is locked to UNDRR's GA4 property `331822428`. Even if an operator has access to other properties, this client cannot query them.
+- Only the extension's offscreen document can invoke `mcpQuery`. A hostile page that injects script into a UNDRR site cannot pivot into GA4 exfiltration.
+- OAuth refresh is silent. A `chrome.alarms` job attempts refresh five minutes before expiry; if it fails, a passive red badge appears on the extension icon. No modal interrupts the session, which matters when the session is an agent mid-task.
+
+The piece I almost lost a day to was tool schema validation. An upstream change to Zod broke `tools/list` responses silently, which in an agent context surfaces as "the tool just does not exist anymore." I added a `smoke-test.js` step to the build that registers every tool, calls `tools/list`, and fails the build on a schema regression. Thirty lines of test code; worth it.
+
+## What were the outcomes?
+
+**Context at the point of editing.** Editors can now see how a page is performing while they are editing it. The question "is this working?" has a three-second answer instead of a five-step Looker Studio drill; editorial decisions close the loop on the same day rather than the next quarter.
+
+**Agent-speed analysis.** "Extract the annual report for 2025" is a single agent turn instead of roughly a forty-click dashboard walk. Parallel GA4 query batching inside `annual_report_extract` roughly halves the wall-clock time on multi-section reports, which matters when a report spans a dozen sections.
+
+**One credential, not two.** The agent reuses the overlay's OAuth session, so nobody is maintaining a second service account or rotating a separate key. For a small team inside a UN organisation, that is the difference between a tool that gets adopted and one that quietly stops being used.
+
+## Why did this work?
+
+**Tailored beat generic because the measurement model was non-generic.** A general-purpose analytics MCP would expose GA4 as GA4. What editors and analysts actually need is GA4 shaped like UNDRR's referrer buckets, regions, and content types. Keeping the domain logic in `domains.json` rather than in prompts means every agent gets the same context for free.
+
+**The MCP was not a rewrite.** It was a thin wrapper on an auth boundary that already existed. The extension already had an OAuth session, an offscreen document, and a query layer; MCP just made them addressable from outside the browser. Most of the hard decisions were security decisions: single-property lock, sender validation, passive failure modes.
+
+**Small safety nets saved real time.** The smoke test is the clearest example. A silent schema regression inside an agent session is harder to debug than a loud one inside a build; moving the failure mode earlier paid for itself the first week.
+
+## What's next, and why this matters beyond UNDRR
+
+Self-service analytics inside the page is a familiar idea. Agent-queryable analytics that reuses an existing auth session is newer, and it is part of a larger shift I think is worth taking seriously: knowledge workers building small, opinionated tools for the systems they already use. I wrote about that shift separately, in [*Skills are the new Word macros*](/posts/20260412-skills-are-the-new-word-macros/), using this extension as one of the concrete examples.
+
+{% endmarkdown %}
