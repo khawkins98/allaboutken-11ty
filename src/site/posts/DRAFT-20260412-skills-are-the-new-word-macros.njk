@@ -1,7 +1,7 @@
 ---
 title: 'Skills are the new Word macros'
 layout: layouts/post.njk
-teaser: "Every twenty years, knowledge work gets a new scripting layer. VBA was the last one. LLM skills and MCP are the next."
+teaser: "Every fifteen years, knowledge work gets a new scripting layer inside the tool people already use. VBA, then userscripts, now LLM skills and MCP."
 date: 2026-04-12
 tags:
   - posts
@@ -14,16 +14,16 @@ kens_status: draft
 
 {% markdown %}
 
-Every twenty years or so, knowledge work gets a new scripting layer. Each time, the people who pick it up early stop being "the ones who know how to use the software" and become "the ones who quietly run circles around everyone else." In the 1990s that layer was Visual Basic for Applications, sitting inside Word and Excel. In 2026 it is LLM skills, MCP servers, and CLI agents, sitting inside whatever tool you already use to do the job.
+Roughly every fifteen years, knowledge work gets a new scripting layer that sits *inside* the tool the work already happens in. Each time, the people who pick it up early stop being "the ones who know how to use the software" and become "the ones who quietly run circles around everyone else." In the 1990s that layer was Visual Basic for Applications, sitting inside Word and Excel. In the 2000s and early 2010s it was JavaScript, sitting inside the browser tab where more and more of the work had migrated. In 2026 it is LLM skills, MCP servers, and CLI agents, sitting inside whatever tool or shell you already use.
 
 The continuity is worth naming, because most of the commentary on AI tooling reads as if none of this has happened before. It has, several times, and the historical pattern is more useful than the hype.
 
 > **tl;dr**
 >
-> - Every couple of decades, knowledge work gets a new scripting layer that lives *inside* the tools people already use.
-> - VBA was the last one; LLM skills, MCP servers, and CLI agents are the next.
-> - The literacy floor is lower than it was for VBA, and still dropping, but it is not zero.
-> - The people who cross it early will compound their productivity the same way the macro writers did in 1995.
+> - Roughly every fifteen years, knowledge work gets a new scripting layer that lives *inside* the tool people already use.
+> - VBA (1990s, inside Office), userscripts and browser extensions (2000s–early 2010s, inside the browser), and now LLM skills, MCP servers, and CLI agents (2020s).
+> - Each layer's literacy floor has been lower than the last, and still not zero.
+> - The people who cross the floor early compound their productivity the same way macro writers did in 1995 and bookmarklet authors did in 2005.
 
 ## What VBA actually was
 
@@ -33,15 +33,17 @@ The gate was real but low. You needed enough Basic to copy an example, rename a 
 
 The pattern is worth stating plainly. When automation lives inside the tool the work already happens in, the literacy floor to benefit from it drops sharply, and the asymmetry between those who cross it and those who do not widens sharply.
 
-## The long gap
+## The browser era: JavaScript inside the tab
 
-The web era produced plenty of scripting layers, but none of them sat where VBA sat. Spreadsheet formulas kept their grip, which is not an accident; they live inside the tool. Zapier and its peers were powerful but lived *next to* the work, in a separate tab with a separate login. IFTTT and Shortcuts were closer in spirit but narrower in scope. No-code platforms promised the replacement but mostly moved the gate, from "learn a little Basic" to "learn this vendor's abstraction of the month."
+As knowledge work moved out of Office and into the browser, the scripting layer followed. Bookmarklets let you paste a snippet of JavaScript onto a toolbar and run it against whatever page you happened to be on. Greasemonkey (and later Tampermonkey) made that pattern persistent: a userscript would reshape a given site every time you visited it, quietly removing a column, rewriting a form, or auto-filling a field that the vendor refused to auto-fill. Chrome extensions, once they arrived in 2009, gave this ecosystem a proper distribution channel and an actual permissions model.
 
-For about two decades, the automation layer was adjacent to the work, not inside it. That is part of why "digital transformation" so often felt like new dashboards rather than new leverage.
+The literacy floor was a bit higher than VBA's. You needed to understand the DOM, async callbacks, and eventually the same-origin policy. But the payoff was often larger, because the "tool you already use" was now every web app at once. A well-written userscript could fix a thing your CRM had been doing wrong for years, without any involvement from the vendor or from IT.
+
+There was an interregnum after this. Zapier, IFTTT, and the no-code generation were powerful but lived *next to* the work, in a separate tab with a separate login and a separate vendor abstraction. They moved the gate from "learn a little syntax" to "learn this platform's model of the week." They were useful; they were not the same shape as VBA or userscripts. That is part of why "digital transformation" so often felt like new dashboards rather than new leverage.
 
 ## What is replacing it now
 
-The interesting thing about LLM skills, MCP servers, and CLI agents is not that they are AI. It is that they put automation back inside the tool the work happens in. A Claude Code skill is a short file, in the project you are already working in, that the agent picks up when the work calls for it. An MCP server exposes whatever system you care about (a database, an analytics property, a ticketing queue) to whatever agent you are already using. A CLI agent runs in the shell where you already live.
+The interesting thing about LLM skills, MCP servers, and CLI agents is not that they are AI. It is that they put automation back inside the tool the work happens in, the way VBA and userscripts did. A Claude Code skill is a short file, in the project you are already working in, that the agent picks up when the work calls for it. An MCP server exposes whatever system you care about (a database, an analytics property, a ticketing queue) to whatever agent you are already using. A CLI agent runs in the shell where you already live.
 
 My own clearest example is an internal tool I built at UNDRR. We have a Chromium extension that overlays Google Analytics data directly on our web properties, shaped to our specific multi-domain setup. I recently extended it with a local MCP server so that Claude Code and Cursor can query the same data through the same authenticated session. The full write-up is [here](/work/2026/impact-story-undrr-analytics-overlay-mcp/). The relevant point for this essay is the shape of it: the automation does not live in a separate dashboard or a separate credential set. It lives inside the browser session the editor is already in, and inside the agent the analyst is already talking to.
 
@@ -49,13 +51,13 @@ That is the shape VBA had. The substrate is different; the geometry is the same.
 
 ## The literacy floor still exists, and still moves
 
-VBA required a little Basic. Today's equivalent requires enough JavaScript, Node, or shell to wire pieces together, plus enough prompt and context fluency to know what to tell the agent and what to leave out. The floor is lower than VBA was. It will keep dropping. It will probably never reach zero.
+VBA required a little Basic. Userscripts required a little JavaScript and a willingness to inspect the DOM. Today's equivalent requires enough shell, Node, or JavaScript to wire pieces together, plus enough prompt and context fluency to know what to tell the agent and what to leave out. The floor has dropped with each generation. It will keep dropping. It will probably never reach zero.
 
-People who insist the bar is now at zero are selling something. People who insist the bar is still at "real engineer" are selling something else. The honest answer is that the bar is at roughly the level VBA was in 1998: approachable in a weekend for someone motivated, invisible to someone who is not looking for it, and moving downward year by year.
+People who insist the bar is now at zero are selling something. People who insist the bar is still at "real engineer" are selling something else. The honest answer is that the bar is at roughly the level VBA was in 1998, or userscripts were in 2008: approachable in a weekend for someone motivated, invisible to someone who is not looking for it, and moving downward year by year.
 
 ## Who benefits, who gets left behind
 
-The asymmetry is the same as it was in 1995. People who build their own small tools compound their productivity, because every tool they build accelerates the next one. People who wait for IT or for a vendor compound more slowly, because they are always downstream of someone else's roadmap.
+The asymmetry is the same as it was in 1995 and in 2008. People who build their own small tools compound their productivity, because every tool they build accelerates the next one. People who wait for IT or for a vendor compound more slowly, because they are always downstream of someone else's roadmap.
 
 Organizations face a version of the same choice. The ones that make this literacy a baseline expectation for knowledge workers, rather than a specialist skill, get a structurally different productivity curve. The ones that treat it as something the engineering team handles on behalf of everyone else will find that the interesting automations happen elsewhere.
 
