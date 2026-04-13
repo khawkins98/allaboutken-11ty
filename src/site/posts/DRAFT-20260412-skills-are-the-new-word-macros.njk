@@ -1,0 +1,70 @@
+---
+title: 'Skills are the new Word macros'
+layout: layouts/post.njk
+teaser: "Every twenty years, knowledge work gets a new scripting layer. VBA was the last one. LLM skills and MCP are the next."
+date: 2026-04-12
+tags:
+  - posts
+topics:
+  - AI
+  - developer tools
+  - knowledge work
+kens_status: draft
+---
+
+{% markdown %}
+
+Every twenty years or so, knowledge work gets a new scripting layer. Each time, the people who pick it up early stop being "the ones who know how to use the software" and become "the ones who quietly run circles around everyone else." In the 1990s that layer was Visual Basic for Applications, sitting inside Word and Excel. In 2026 it is LLM skills, MCP servers, and CLI agents, sitting inside whatever tool you already use to do the job.
+
+The continuity is worth naming, because most of the commentary on AI tooling reads as if none of this has happened before. It has, several times, and the historical pattern is more useful than the hype.
+
+> **tl;dr**
+>
+> - Every couple of decades, knowledge work gets a new scripting layer that lives *inside* the tools people already use.
+> - VBA was the last one; LLM skills, MCP servers, and CLI agents are the next.
+> - The literacy floor is lower than it was for VBA, and still dropping, but it is not zero.
+> - The people who cross it early will compound their productivity the same way the macro writers did in 1995.
+
+## What VBA actually was
+
+VBA was not really a language. It was a productivity rearrangement. The important fact about a Word macro was not that it ran Basic; it was that an accountant, a legal secretary, or a librarian could automate inside the tool they already used, without asking anyone for permission. The macro lived next to the work, in the work's own file format, run by the work's own shortcut key.
+
+The gate was real but low. You needed enough Basic to copy an example, rename a variable, and not be scared of the word "module." That was enough to compress a recurring afternoon into a shortcut. Most people did not cross that gate. The ones who did became the office utility players everyone else relied on.
+
+The pattern is worth stating plainly. When automation lives inside the tool the work already happens in, the literacy floor to benefit from it drops sharply, and the asymmetry between those who cross it and those who do not widens sharply.
+
+## The long gap
+
+The web era produced plenty of scripting layers, but none of them sat where VBA sat. Spreadsheet formulas kept their grip, which is not an accident; they live inside the tool. Zapier and its peers were powerful but lived *next to* the work, in a separate tab with a separate login. IFTTT and Shortcuts were closer in spirit but narrower in scope. No-code platforms promised the replacement but mostly moved the gate, from "learn a little Basic" to "learn this vendor's abstraction of the month."
+
+For about two decades, the automation layer was adjacent to the work, not inside it. That is part of why "digital transformation" so often felt like new dashboards rather than new leverage.
+
+## What is replacing it now
+
+The interesting thing about LLM skills, MCP servers, and CLI agents is not that they are AI. It is that they put automation back inside the tool the work happens in. A Claude Code skill is a short file, in the project you are already working in, that the agent picks up when the work calls for it. An MCP server exposes whatever system you care about (a database, an analytics property, a ticketing queue) to whatever agent you are already using. A CLI agent runs in the shell where you already live.
+
+My own clearest example is an internal tool I built at UNDRR. We have a Chromium extension that overlays Google Analytics data directly on our web properties, shaped to our specific multi-domain setup. I recently extended it with a local MCP server so that Claude Code and Cursor can query the same data through the same authenticated session. The full write-up is [here](/work/2026/impact-story-undrr-analytics-overlay-mcp/). The relevant point for this essay is the shape of it: the automation does not live in a separate dashboard or a separate credential set. It lives inside the browser session the editor is already in, and inside the agent the analyst is already talking to.
+
+That is the shape VBA had. The substrate is different; the geometry is the same.
+
+## The literacy floor still exists, and still moves
+
+VBA required a little Basic. Today's equivalent requires enough JavaScript, Node, or shell to wire pieces together, plus enough prompt and context fluency to know what to tell the agent and what to leave out. The floor is lower than VBA was. It will keep dropping. It will probably never reach zero.
+
+People who insist the bar is now at zero are selling something. People who insist the bar is still at "real engineer" are selling something else. The honest answer is that the bar is at roughly the level VBA was in 1998: approachable in a weekend for someone motivated, invisible to someone who is not looking for it, and moving downward year by year.
+
+## Who benefits, who gets left behind
+
+The asymmetry is the same as it was in 1995. People who build their own small tools compound their productivity, because every tool they build accelerates the next one. People who wait for IT or for a vendor compound more slowly, because they are always downstream of someone else's roadmap.
+
+Organizations face a version of the same choice. The ones that make this literacy a baseline expectation for knowledge workers, rather than a specialist skill, get a structurally different productivity curve. The ones that treat it as something the engineering team handles on behalf of everyone else will find that the interesting automations happen elsewhere.
+
+## What to do in 2026 if you are a knowledge worker
+
+Pick one repetitive thing you do inside a tool you already use. Spend a weekend automating it, badly, with a skill or a small MCP server or a shell script that an agent helps you write. The first version will be worse than the manual process, and that is fine. The second version will be better, and the third will surprise you. Compounding starts immediately; the specific tools you build will outlast any specific vendor.
+
+The macro line has always moved. It is moving again. Stand where it is going.
+
+If you are already doing this — building small skills or MCP servers inside the tools you use every day — I would like to hear what you have automated and what surprised you. Drop me a note; I am collecting examples for a follow-up. For a longer walkthrough of one of mine, see the [UNDRR analytics overlay and its MCP bridge](/work/2026/impact-story-undrr-analytics-overlay-mcp/).
+
+{% endmarkdown %}
