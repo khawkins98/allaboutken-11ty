@@ -1,7 +1,7 @@
 ---
 title: 'Let AI worry about the code, you worry about the work'
 layout: layouts/post.njk
-teaser: "Summiting LLM productivity requires comfort with the vernacular of code, not the writing of it."
+teaser: "Cultivating LLM productivity requires comfort with the vernacular of code, not the writing of it."
 date: 2026-04-13
 tags:
   - posts
@@ -10,72 +10,67 @@ topics:
   - developer tools
   - knowledge work
 kens_status: draft
+image: /blog/movable-type-letterpress.jpg
+image_meta:
+  text: "Roots branch underground; the plant above grows from a context you set up below."
+  credit: "Image made with <a href='https://huggingface.co/black-forest-labs/FLUX.2-dev'>FLUX.2-dev</a>."
+  altext: "Blockprint-style illustration of a young plant with unfolding leaves above ground and a branching root system visible below in a dark band of soil, with amber accents on the leaves and roots."
 ---
 
 {% markdown %}
 
-Early in 2026 I had a moment where this all clicked. The progression to it was gradual. I had been using ChatGPT for coding help, then Cursor with the AI in the IDE sidebar (both useful, both essentially "AI helps me code"). I was the one writing; the model was filling in the gaps. Then I started using Claude Code, and the shift happened.
+Early in 2026 I was in a hotel room during a team retreat, trying to work through a problem with all the context from our planning conversations still circling in my head. I had been using ChatGPT for coding help, then Cursor with the AI in the IDE sidebar — both useful, both essentially "AI helps me code." I was the one writing; the model filled in the gaps. What I realized in that hotel room was that holding the context in my head and passing it to the machine one chat turn at a time was not enough. I needed to put it somewhere the agent could read directly.
 
-What changed was not the model. It was the level of abstraction I was operating at. I stopped asking an AI to help me code; I started managing a project. The first time it really hit me, I was building a small data-driven dashboard. Instead of pasting fragments back and forth, I made a fresh git repository, dropped in a short PRD of what I wanted, the architecture of the data points it would consume, and the business-intelligence context behind the whole thing. I pointed Claude Code at the repo, described the goal, and let it stand up a local server. From there I worked through it the way you work through any project: branch, change, diff, commit, revise. My attention moved from the line and the function up to the project: context, goals, what we needed to understand before the next change. The implementation work, which had been mine, became the agent's.
+So I stopped asking an AI to help me code and started managing a project. I opened a fresh git repository, dropped in a short PRD of what I wanted, technical documents on the architecture of the data it would consume, and a folder of the business context behind it. I pointed Claude Code at the repo, described a bit how to begin, and let it stand up a local server. From there I worked through it the way you work through any project: branch, change, diff, commit, revise. My attention moved from the line and the function up to the project. The implementation work, which had been mine, became the agent's. 
 
-That, I think, is what this post is about: focusing on the project over the code, on the goal over the task. It is hard to reach that level of abstraction inside a singular chat thread, because the chat shape rewards turn-by-turn completion of small asks and quietly fights "step back and tell me what we are actually trying to build." What helps is using tools that are still text-based but no longer single-thread. Claude Code, GitHub Copilot CLI, and similar agent CLIs are still typed into a window, yes, but they support multiple concurrent sessions for different parts of the work and sub-agents that handle subtasks in parallel. The texture of the interaction shifts from "I have an assistant" to "I am directing a small team." That is a different job. App-builder tools such as Lovable sit at the other extreme: slick in a demo, quickly opaque the moment you ask for something they did not anticipate. Sitting in a real project, with version control as the spine and Markdown as the brief, leaves the steering with you.
+What changed was not the language model, it was the level of abstraction I was operating at.
 
-The biggest productivity jump I have had in 2026 is not from writing more code, and it is not from prompting a chatbot. It is the fusion of the two: a coding agent acting on a real project, with me operating one level of abstraction up from the code itself. (Related: this is the higher-gear behaviour I described in [*Four gears of AI-assisted development*](/posts/20260405-four-phases-of-ai-adoption/): orchestration, not hand-feeding.)
-
-If you have comfort with the *vernacular* of code (reading a diff, trusting a commit, knowing what a repo looks like, noticing which file an MCP server is reaching into and why), the leverage is real and it compounds quickly. You do not need to write the code yourself; the agent is writing most of it now. If you do not have that comfort, most of the efficiency gains happening right now will pass you by, because they live where code lives: in a project folder, behind a git remote, wired to a handful of MCP servers you need to trust.
 
 > **tl;dr**
 >
-> - The productive pattern is using a coding agent as an intermediary: prime it with your business context (via skill files, local MCP servers, data on disk) and let it answer questions that cross systems.
-> - This takes AI tooling *and* enough code-comfort to set it up on a real project.
-> - "Code-comfort" does not mean "I write JavaScript from scratch." It means reading diffs, driving git, editing configs, registering MCP servers, and judging what the agent produced.
-> - A skill file inside a coding agent with filesystem, repo, and MCP access is a different tool from the same file pasted into a chat window.
-> - Claude Desktop, ChatGPT's agent mode, and tools like OpenClaw are moving in this direction but are not there yet. Until they are, "do you work on a real project with a coding agent?" is the dividing line.
+> - **The productive pattern**: a coding agent working on a real project, primed with your business context via skill files, local MCP servers, and data on disk.
+> - **The literacy that matters**: reading diffs, driving git, editing configs, judging what the agent produced — not writing code from scratch.
+> - **The dividing line**: "do you work on a real project with a coding agent?" Chat windows and app-builders do not clear the bar yet.
+
+Another thing I started doing in that session: dictating instructions instead of typing them. Speaking is looser and more narrative; when I type, I try to be concise, and concision turns out to be the wrong register for this. LLMs read people well — a messy paragraph of what you actually mean beats a tight sentence that asks the model to infer the rest.
+
+<aside class="kh-marginnote">This is the higher-gear behaviour I described in <a href="/posts/20260405-four-phases-of-ai-adoption/"><em>Four gears of AI-assisted development</em></a> — orchestration, not hand-feeding.</aside>
+
+That change in productivity is not from writing more code, and it is not from prompting a chatbot. It is the fusion of the two: a coding agent acting on a real project, with me operating one level of abstraction up from the code itself. A chat thread rewards turn-by-turn completion and quietly fights "step back and tell me what we are actually trying to build"; a project folder does not.
+
+
+If you have comfort with the *vernacular* of code (reading a diff, trusting a commit, knowing what a repo looks like, noticing which file an MCP server is reaching into and why), the leverage is real and it compounds quickly. You do not need to write the code yourself; the agent is writing most of it now. If you do not have that comfort, most of the efficiency gains happening right now will pass you by, because they live where code lives: in a project folder, behind a git remote, wired to a handful of MCP servers you need to trust.
 
 ## What this looks like in practice
 
-At UNDRR, our Google Analytics is, like many places, not generic. Twenty-two hostnames funnel into a single property, download events are derived from URL patterns rather than clicks, engagement is tagged by page region, and referrers are bucketed by strategic category. I encoded that business context in a local MCP server, so that a coding agent could reach GA4 already knowing what our data means. The full write-up is in the [UNDRR analytics overlay and MCP bridge](/work/2026/impact-story-undrr-analytics-overlay-mcp/) piece.
+At UNDRR, our Google Analytics is, like many places, not generic. Twenty-two hostnames funnel into a property, download events are derived from URL patterns rather than clicks, engagement is tagged by page region, and referrers are bucketed by strategic category. I asked Copilot CLI to encode that business context in a local MCP server, so that a coding agent could reach GA4 already knowing what our data means. (The full write-up is in the [UNDRR analytics overlay and MCP bridge](/work/2026/impact-story-undrr-analytics-overlay-mcp/) piece.)
 
-I also keep a local copy of our Drupal content database on the same machine. When the analytics are ambiguous about what a given URL is, the agent can cross-reference the content itself (taxonomy, body text, publication date) and resolve the question without asking me.
+I also keep a local copy of our Drupal content database funning on the same virtual machine. When the analytics are ambiguous about what a given URL is, the agent can cross-reference the content itself (taxonomy, body text, publication date) and resolve the question without asking me.
 
 With that setup I can ask: 
 
-> *tell me about the last ten news items we published on tropical cyclones and how they performed compared to a year ago.* 
+> *Tell me about the last ten news items we published on tropical cyclones and how they performed compared to a year ago.* 
 
-Normally that is an incredibly tedious cross-tool query: pull a filtered content list from Drupal, map each URL to its analytics row, compute year-on-year deltas by custom event, assemble the results into a table. The agent does all of it in one pass, because each of the pieces is reachable and each is already annotated with the context the agent needs to use them.
+In months past that investigation is an incredibly tedious cross-tool query: pull a filtered content list from Drupal, map each URL to its analytics row, compute year-on-year deltas by custom event, assemble the results into a table. The agent does all of it in one pass, because each of the pieces is reachable and each is already annotated with the context the agent needs to use them.
 
-There is no off-the-shelf tool that answers that question, and there probably never will be. The thing that makes the query answerable is the specific marriage of *our* content structure, *our* analytics configuration, and a coding agent fluent in both. The off-the-shelf option would only ever be one of the three. This is what [priming an agent with business context](/posts/20260330-context-was-always-the-job/) looks like when it actually pays off.
+There is no off-the-shelf commercial tool that answers that question, and there probably never will be. The thing that makes the query answerable is the specific marriage of *our* content structure, *our* analytics configuration, and a coding agent fluent in both. The off-the-shelf option would only ever be one of the three. This is what [priming an agent with business context](/posts/20260330-context-was-always-the-job/) looks like when it actually pays off.
 
 ## Comfort with code, not fluency in it
 
-The people who benefit most from this moment are those comfortable *around* code, not necessarily those who write a lot of it. The distinction matters. The agent is writing most of the JavaScript or Python now. What you need is enough fluency to read what it produced, point it at the right place, trust or push back on a proposed change, and know what is happening on your own machine.
+The people who benefit most from this moment are those comfortable *around* code, not necessarily those who write a lot of it. The agent is writing most of the JavaScript or Python now. What you need is enough fluency to read what it produced, point it at the right place, trust or push back on a proposed change, and know what is happening on your own machine. In practice that looks like: comfort with a filesystem and a project structure, comfort with git (commits, branches, diffs, PRs), comfort with a terminal, comfort editing a config file, comfort registering an MCP server. You may never stand one up from scratch yourself; you can ask the agent to, read what it did, and decide whether to keep it.
 
-In practice that looks like: comfort with a filesystem and a project structure, comfort with git (commits, branches, diffs, PRs), comfort with a terminal, comfort editing a config file, comfort registering an MCP server. You may never stand one up from scratch yourself. But you can ask the agent to, read what it did, and decide whether to keep it. That is a very different posture from "I do not work with code."
+The floor used to be "can you create this code?" and is now closer to "can you direct what the agent writes?" That is a lower bar than before, and still not zero. The people on the wrong side of it will miss most of the leverage in this cycle, not because they cannot code, but because they will not open the terminal.
 
-The floor has shifted. It used to be "can you create this code?" and is now closer to "can you direct what the agent writes?" That is a lower bar than before, and still not zero. The people on the wrong side of it will miss most of the leverage in this cycle, not because they cannot code, but because they will not open the terminal.
+## How to get there
 
-## Building for others is not the same as handing them the tool
+If you are already comfortable with code, build one project-attached workflow for something you do every week. Often that is just a folder with the right context files — a PRD, a few technical docs, a sample of your data — and a coding agent pointed at it with access to the tools you already use. A skill file or a tiny MCP server can help, but they are one path, not the only one. The first version will underperform the manual process; the second will surprise you.
 
-A meaningful part of what people with this literacy do is build tools for colleagues who do not have it. I built a local MCP server that lets our editors and analysts query UNDRR's analytics from whichever coding agent they already use; most of them will never write one themselves, and they do not need to. The full write-up is [here](/work/2026/impact-story-undrr-analytics-overlay-mcp/).
+If you are not comfortable with these tools yet, the investment is not "learn to code" — it is vocabulary. [GitHub's introductory docs](https://docs.github.com/en/get-started/start-your-journey) walk through commits, branches, and pull requests in plain language; [GitHub Skills](https://skills.github.com/) turns the same material into guided exercises. A week of either gives you enough to read what an agent is doing on your behalf.
 
-But "I built you a tool" is not the end of the story. The person on the receiving end still needs enough integration literacy to install it, configure it, know which questions it is actually good for, and notice when it has drifted from the system it wraps. That is a lower floor than building the tool — but it is not the floor everyone is at today, and pretending otherwise is how good internal tools quietly go unused.
-
-## What to do in 2026
-
-If you are already comfortable with code, the highest-leverage move is to build one project-attached tool for something you do every week. A skill file plus a tiny MCP server is often enough, and the agent will write most of it for you. The first version will be worse than the manual process and the second will surprise you; compounding starts there.
-
-If you are not there yet, the single most valuable investment is not "learn to code." It is to get comfortable *around* code, and there are well-worn paths in. Start with what a repository actually is: [GitHub's introductory docs](https://docs.github.com/en/get-started/start-your-journey) walk through commits, branches, and pull requests in plain language, and [GitHub Skills](https://skills.github.com/) turns the same material into guided courses. Even a week of this gives you the vocabulary to read what an agent is doing on your behalf.
+<aside class="kh-marginnote">A bigger thought I want to come back to: we are in a pre-GUI moment for LLM interfaces, and the text-based ones (terminals, Markdown briefs, git histories) are winning so far — not because text is the final answer, but because text is honest about what is happening. More in a future post.</aside>
 
 From there, install a coding agent (Claude Code, Cursor, or GitHub Copilot CLI), point it at a real repo of yours or one you forked, and let it work. Watch the diffs. Register one MCP server. Edit one config file. You do not need to produce code yourself for any of this to pay off; you need to be a credible reader, director, and reviewer of what the agent produces.
 
-## We are still pre-GUI
-
-Pull back for a second. What this whole pattern actually is, I think, is a reset on how knowledge workers interact with computers, and we have not had one of those in a long time. The last big one was the move from command lines to graphical interfaces in the 1980s and 90s, and even that took a decade of false starts before anyone agreed what a windowed interface was supposed to feel like.
-
-LLM interactions are at a similar stage now. Nobody yet knows what the right interface for working with an agent looks like: a chat window, a terminal, an IDE with the agent grafted in, a document with margins where the agent comments, a vendor-built environment like Lovable that hides the project, or some shape we have not designed yet. The people who claim to have the answer are mostly selling a particular implementation.
-
-What is striking, sitting in early 2026, is that text-based interfaces (terminals, editors, plain Markdown briefs, git histories) are working better than the GUI attempts. Not because text is the final answer, but because text is honest about what is happening. The chat window pretends to be doing more than it is. The app-builder pretends to be doing less than it is. The terminal shows you the work. Until a better shape arrives, the productive move is to stand where that work actually happens.
-
-If you are already building skills and MCP servers against real projects, I would like to hear what you have automated and what surprised you. Drop me a note; I am collecting examples for a follow-up.
+If you are already running coding agents against real projects — with or without custom skills or MCP servers — I would like to hear what you have automated and what surprised you. Drop me a note; I am collecting examples for a follow-up.
 
 {% endmarkdown %}
