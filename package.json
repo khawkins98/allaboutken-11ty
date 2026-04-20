@@ -33,7 +33,7 @@
     "@huggingface/transformers": "^3.8.1",
     "@stylistic/stylelint-plugin": "^4.0.0",
     "concurrently": "^9.2.1",
-    "pagefind": "^1.4.0",
+    "pagefind": "^1.5.2",
     "sass": "^1.93.2",
     "stylelint": "^16.25.0",
     "stylelint-config-prettier": "^9.0.5",
