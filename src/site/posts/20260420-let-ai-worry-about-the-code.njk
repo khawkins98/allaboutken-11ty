@@ -2,7 +2,7 @@
 title: 'Let AI worry about the code, you worry about the work'
 layout: layouts/post.njk
 teaser: "Cultivating LLM productivity requires comfort with the vernacular of code, not the writing of it."
-date: 2026-04-14
+date: 2026-04-20
 tags:
   - posts
 topics:
@@ -19,20 +19,20 @@ image_meta:
 
 {% markdown %}
 
-Early in 2026 I was in a hotel room during a team retreat, trying to work through a problem with all the context from our planning conversations still circling in my head. I had been using ChatGPT for coding help, then Cursor with the AI in the IDE sidebar — both useful, both essentially "AI helps me code." I was the one writing; the model filled in the gaps. What I realized in that hotel room was that holding the context in my head and passing it to the machine one chat turn at a time was not enough. I needed to put it somewhere the agent could read directly.
+Early in 2026 I was in a hotel room during a team retreat, trying to work through a problem with all the context from our planning conversations still circling in my head. I had been using ChatGPT for coding help, then Cursor with the AI in the IDE sidebar; both useful, both essentially "AI helps me code." I was the one writing; the model filled in the gaps. What I realized in that hotel room was that holding the context in my head and passing it to the machine one chat turn at a time was not enough. I needed to put it somewhere the agent could read directly.
 
 So I stopped asking an AI to help me code and started managing a project. I opened a fresh git repository, dropped in a short PRD of what I wanted, technical documents on the architecture of the data it would consume, and a folder of the business context behind it. I pointed Claude Code at the repo, described a bit how to begin, and let it stand up a local server. From there I worked through it the way you work through any project: branch, change, diff, commit, revise. My attention moved from the line and the function up to the project. The implementation work, which had been mine, became the agent's. 
 
-What changed was not the language model, it was the level of abstraction I was operating at.
+What changed was not the language model; it was the level of abstraction I was operating at.
 
 
 > **tl;dr**
 >
 > - **The productive pattern**: a coding agent working on a real project, primed with your business context via skill files, local MCP servers, and data on disk.
-> - **The literacy that matters**: reading diffs, driving git, editing configs, judging what the agent produced — not writing code from scratch.
+> - **The literacy that matters**: reading diffs, driving git, editing configs, judging what the agent produced, not writing code from scratch.
 > - **The dividing line**: "do you work on a real project with a coding agent?" Chat windows and app-builders do not clear the bar yet.
 
-Another thing I started doing in that session: dictating instructions instead of typing them. Speaking is looser and more narrative; when I type, I try to be concise, and concision turns out to be the wrong register for this. LLMs read people well — a messy paragraph of what you actually mean beats a tight sentence that asks the model to infer the rest.
+Another thing I started doing in that session: dictating instructions instead of typing them. Speaking is looser and more narrative; when I type, I try to be concise, and concision turns out to be the wrong register for this. LLMs read people well: a messy paragraph of what you actually mean beats a tight sentence that asks the model to infer the rest.
 
 <aside class="kh-marginnote">This is the higher-gear behaviour I described in <a href="/posts/20260405-four-phases-of-ai-adoption/"><em>Four gears of AI-assisted development</em></a> — orchestration, not hand-feeding.</aside>
 
@@ -45,13 +45,13 @@ If you have comfort with the *vernacular* of code (reading a diff, trusting a co
 
 At UNDRR, our Google Analytics is, like many places, not generic. Twenty-two hostnames funnel into a property, download events are derived from URL patterns rather than clicks, engagement is tagged by page region, and referrers are bucketed by strategic category. I asked Copilot CLI to encode that business context in a local MCP server, so that a coding agent could reach GA4 already knowing what our data means. (The full write-up is in the [UNDRR analytics overlay and MCP bridge](/work/2026/impact-story-undrr-analytics-overlay-mcp/) piece.)
 
-I also keep a local copy of our Drupal content database funning on the same virtual machine. When the analytics are ambiguous about what a given URL is, the agent can cross-reference the content itself (taxonomy, body text, publication date) and resolve the question without asking me.
+I also keep a local copy of our Drupal content database running on the same virtual machine. When the analytics are ambiguous about what a given URL is, the agent can cross-reference the content itself (taxonomy, body text, publication date) and resolve the question without asking me.
 
 With that setup I can ask: 
 
 > *Tell me about the last ten news items we published on tropical cyclones and how they performed compared to a year ago.* 
 
-In months past that investigation is an incredibly tedious cross-tool query: pull a filtered content list from Drupal, map each URL to its analytics row, compute year-on-year deltas by custom event, assemble the results into a table. The agent does all of it in one pass, because each of the pieces is reachable and each is already annotated with the context the agent needs to use them.
+In months past that investigation was an incredibly tedious cross-tool query: pull a filtered content list from Drupal, map each URL to its analytics row, compute year-on-year deltas by custom event, assemble the results into a table. The agent does all of it in one pass, because each of the pieces is reachable and each is already annotated with the context the agent needs to use them.
 
 There is no off-the-shelf commercial tool that answers that question, and there probably never will be. The thing that makes the query answerable is the specific marriage of *our* content structure, *our* analytics configuration, and a coding agent fluent in both. The off-the-shelf option would only ever be one of the three. This is what [priming an agent with business context](/posts/20260330-context-was-always-the-job/) looks like when it actually pays off.
 
@@ -63,14 +63,14 @@ The floor used to be "can you create this code?" and is now closer to "can you d
 
 ## How to get there
 
-If you are already comfortable with code, build one project-attached workflow for something you do every week. Often that is just a folder with the right context files — a PRD, a few technical docs, a sample of your data — and a coding agent pointed at it with access to the tools you already use. A skill file or a tiny MCP server can help, but they are one path, not the only one. The first version will underperform the manual process; the second will surprise you.
+If you are already comfortable with code, build one project-attached workflow for something you do every week. Often that is just a folder with the right context files (a PRD, a few technical docs, a sample of your data) and a coding agent pointed at it with access to the tools you already use. A skill file or a tiny MCP server can help, but they are one path, not the only one. The first version will underperform the manual process; the second will surprise you.
 
-If you are not comfortable with these tools yet, the investment is not "learn to code" — it is vocabulary. [GitHub's introductory docs](https://docs.github.com/en/get-started/start-your-journey) walk through commits, branches, and pull requests in plain language; [GitHub Skills](https://skills.github.com/) turns the same material into guided exercises. A week of either gives you enough to read what an agent is doing on your behalf.
+If you are not comfortable with these tools yet, the investment is not "learn to code"; it is vocabulary. [GitHub's introductory docs](https://docs.github.com/en/get-started/start-your-journey) walk through commits, branches, and pull requests in plain language; [GitHub Skills](https://skills.github.com/) turns the same material into guided exercises. A week of either gives you enough to read what an agent is doing on your behalf.
 
 <aside class="kh-marginnote">A bigger thought I want to come back to: we are in a pre-GUI moment for LLM interfaces, and the text-based ones (terminals, Markdown briefs, git histories) are winning so far — not because text is the final answer, but because text is honest about what is happening. More in a future post.</aside>
 
 From there, install a coding agent (Claude Code, Cursor, or GitHub Copilot CLI), point it at a real repo of yours or one you forked, and let it work. Watch the diffs. Register one MCP server. Edit one config file. You do not need to produce code yourself for any of this to pay off; you need to be a credible reader, director, and reviewer of what the agent produces.
 
-If you are already running coding agents against real projects — with or without custom skills or MCP servers — I would like to hear what you have automated and what surprised you. Drop me a note; I am collecting examples for a follow-up.
+If you are already running coding agents against real projects (with or without custom skills or MCP servers), I would like to hear what you have automated and what surprised you. Drop me a note; I am collecting examples for a follow-up.
 
 {% endmarkdown %}

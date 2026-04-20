@@ -2,7 +2,7 @@
 title: 'Putting GA4 where the work happens: an in-browser analytics overlay and its MCP bridge'
 layout: layouts/post.njk
 teaser: "Content teams shouldn't have to leave the page to learn how it performs, and neither should AI agents."
-date: 2026-04-14
+date: 2026-04-20
 tags:
   - posts
   - impact-stories
@@ -27,7 +27,7 @@ image_meta:
 
 {% markdown %}
 
-**Context** | **Self-service** | **Agent-ready**
+**Context** | **Self-service** | **Agent-queryable**
 
 <p class="kh-text-body--3">{{ orgIntro(org) }}</p>
 
@@ -35,7 +35,7 @@ Web analytics are most useful alongside the context of the pages you are reasoni
 
 To help myself and the team, I built a Chromium extension that puts GA4 metrics on UNDRR pages as an overlay, and extended it with a local MCP server so humans can have agents query the same data through the Chromium extension's same authenticated session. 
 
-The overlay and the MCP bridge are the same tool wearing two faces — same auth, same config file, same measurement model — which is why neither had to be rebuilt to serve the other. This is the story of both pieces and why they belong together.
+The overlay and the MCP bridge are the same tool wearing two faces: same auth, same config file, same measurement model. That is why neither had to be rebuilt to serve the other. This is the story of both pieces and why they belong together.
 
 > These are the three web pages I am responsible for. Can you tell me what links people are not clicking on? 
 
@@ -71,6 +71,6 @@ Those sorts of questions used to take an age to answer, but now we have quicker,
 
 ## What's next, and why this matters beyond UNDRR
 
-Self-service analytics inside the page is a familiar idea. Agent-queryable analytics that reuses an existing auth session is newer. This extension is one instance of the pattern I described in [*Let AI worry about the code, you worry about the work*](/posts/20260414-let-ai-worry-about-the-code/) — a coding agent on a real project, primed with your business context. The MCP server is the specific shape that worked here; the shape that works for you might be simpler.
+Self-service analytics inside the page is a familiar idea. Agent-queryable analytics that reuses an existing auth session is newer. This extension is one instance of the pattern I described in [*Let AI worry about the code, you worry about the work*](/posts/20260420-let-ai-worry-about-the-code/): a coding agent on a real project, primed with your business context. The MCP server is the specific shape that worked here; the shape that works for you might be simpler.
 
 {% endmarkdown %}
