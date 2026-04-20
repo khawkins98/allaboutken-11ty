@@ -12,7 +12,7 @@ topics:
   - AI / MCP
 org: UNDRR
 permalink: /work/2026/impact-story-undrr-analytics-overlay-mcp/
-kens_status: draft
+kens_status: ready_for_publication
 _internal_refs:
   repo: /Users/khawkins/Documents/git/undrr-analytics-browser-extension
   last_merge: 7554a5f
@@ -65,9 +65,11 @@ Those sorts of questions used to take an age to answer, but now we have quicker,
 
 ## Why did this work?
 
-**A tailored solution won as the measurement model was non-generic.** A general-purpose analytics MCP would expose GA4 as GA4. What editors and analysts actually need is GA4 shaped like UNDRR's referrer buckets, regions, and content types. Keeping the domain logic in `domains.json` rather than in prompts means every agent gets the same context for free.
+**A tailored solution made sense because the measurement model is non-generic.** A general-purpose analytics MCP would expose GA4 as GA4. What editors and analysts actually need is GA4 shaped like UNDRR's referrer buckets, regions, and content types. Keeping the domain logic in `domains.json` rather than in prompts means every agent gets the same context for free.
 
 **The MCP was not a rewrite.** It was a thin wrapper on an auth boundary that already existed. The extension already had an OAuth session, an offscreen document, and a query layer; MCP just made them addressable from outside the browser. Most of the hard decisions were security decisions: single-property lock, sender validation, passive failure modes.
+
+**The one thing that nearly broke it.** A single bad Zod schema (valid in v3, rejected in v4) made `tools/list` throw at registration, and that error is global: all fourteen tools disappeared from the agent at once. A stdio smoke test calling `tools/list` as the first build step now catches this class of failure; without it, the MCP server would have shipped advertising capabilities it could not deliver.
 
 ## What's next, and why this matters beyond UNDRR
 
