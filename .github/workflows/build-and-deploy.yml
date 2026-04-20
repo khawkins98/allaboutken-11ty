@@ -37,6 +37,8 @@ jobs:
           cache: 'yarn'
       - name: Install dependencies 📦
         run: yarn install --frozen-lockfile
+      - name: Verify contracts
+        run: yarn test
       - name: Lint CSS 🧹
         run: yarn lint:css
         continue-on-error: true
