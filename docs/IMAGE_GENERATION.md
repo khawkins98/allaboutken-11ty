@@ -52,7 +52,8 @@ Scene description (written after seeing the result, not the prompt verbatim) + p
 
 ```yaml
 image_meta:
-  text: "Glowing points in a dark field -- vectors finding each other by meaning, not by name. Image made with <a href='https://huggingface.co/black-forest-labs/FLUX.2-dev'>FLUX.2-dev</a>."
+  text: "Glowing points in a dark field -- vectors finding each other by meaning, not by name."
+  credit: "Image made with <a href='https://huggingface.co/black-forest-labs/FLUX.2-dev'>FLUX.2-dev</a>."
   altext: 'Woodcut-style print of glowing amber and white orbs scattered across a dark background with rough white hatching marks'
 ```
 
