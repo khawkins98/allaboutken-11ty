@@ -39,7 +39,7 @@
     "stylelint-config-prettier": "^9.0.5",
     "stylelint-config-recommended-scss": "^16.0.2",
     "stylelint-config-standard-scss": "^16.0.0",
-    "stylelint-scss": "^6.12.1"
+    "stylelint-scss": "^7.0.0"
   },
   "bugs": {
     "url": "https://github.com/khawkins98/allaboutken-11ty/issues"
