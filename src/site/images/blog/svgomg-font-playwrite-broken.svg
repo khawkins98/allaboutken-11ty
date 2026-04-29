@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 240" role="img" aria-labelledby="t">
+  <title id="t">A stylized note reading 'Thank you for shipping Q3', set in Playwrite DE SAS but without the font embedded.</title>
+  <style>
+    .kh-eyebrow  { font-family: "Playwrite DE SAS", serif; font-size: 18px; }
+    .kh-headline { font-family: "Playwrite DE SAS", serif; font-size: 36px; }
+    .kh-sig      { font-family: "Playwrite DE SAS", serif; font-size: 18px; }
+  </style>
+  <rect x="0" y="0" width="600" height="240" fill="#fef3c7" rx="6" />
+  <text class="kh-eyebrow" x="40" y="60" fill="#a16207">A note from the team</text>
+  <text class="kh-headline" x="40" y="135" fill="#1c1917">Thank you for shipping Q3.</text>
+  <text class="kh-sig" x="40" y="195" fill="#57534e">— with appreciation, the design crew</text>
+</svg>
