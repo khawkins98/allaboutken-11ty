@@ -10,6 +10,11 @@ topics:
   - SVG
   - typography
   - open source
+image: /blog/svgomg-font-comparison.svg
+image_meta:
+  text: "Three panels: text as outlines (paths, no text nodes), missing font (Times New Roman fallback), and font embedded with SVGOMG-Font (Futura, correct rendering)."
+  credit: "Own work."
+  altext: "Side-by-side comparison of three SVG infographic states: converted to outlines (inaccessible path data), missing font showing Times New Roman fallback, and font embedded correctly using SVGOMG-Font showing Futura."
 kens_status: draft
 ---
 
@@ -42,9 +47,16 @@ When you tell Illustrator or Figma to "create outlines," it replaces every chara
 
 There's also a file size argument. For text-heavy SVGs, outline conversion can be surprisingly costly. A few hundred characters of outlined text easily adds tens of kilobytes of path data. Font subsetting -- keeping only the glyphs you actually use -- often produces a smaller file than the outlined equivalent.
 
+{% endmarkdown %}
+<p>
+  <a href="/images/blog/svgomg-font-demo.html" class="kh-button">See the live comparison</a>
+  <a href="https://khawkins98.github.io/svgomg-font/" class="kh-button kh-button--sm">Try SVGOMG-Font</a>
+</p>
+{% markdown %}
+
 ## What SVGOMG-Font does
 
-The tool finds every `@font-face` reference in your SVG, fetches the font (from Google Fonts, Fontsource, or a local file you provide), subsets it to only the glyphs that appear in the SVG's text nodes, and embeds the result as a base64 `data:` URI in the SVG's `@font-face` rule.
+The tool finds every `@font-face` reference in your SVG, fetches the font
 
 The output is a standard SVG file with real text -- selectable, searchable, translatable -- that renders identically everywhere because the font travels with the file.
 
