@@ -1,9 +1,21 @@
 name: Deploy Feedback Worker
+# NOTE: This workflow has never successfully run (all 3 attempts failed since Feb 2026).
+# The worker at feedback.allaboutken.com has always been deployed manually from local:
+#
+#   cd worker && npx wrangler deploy
+#
+# To re-enable auto-deploy, two things are needed:
+#   1. Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID to repo secrets
+#      (Settings → Secrets and variables → Actions)
+#   2. Verify the token is still active in the Cloudflare dashboard
+#      (My Profile → API Tokens)
+#
+# Auto-deploy on push is disabled below until those are in place.
 on:
-  push:
-    branches: [main]
-    paths: ['worker/**']
   workflow_dispatch:
+  # push:
+  #   branches: [main]
+  #   paths: ['worker/**']
 
 jobs:
   deploy:
