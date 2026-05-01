@@ -1,0 +1,85 @@
+---
+title: 'Predicted attention heatmaps in your browser, no lab needed'
+layout: layouts/post.njk
+teaser: 'Drop a screenshot of a UI and see where users are likely to look: entirely in your browser, nothing uploaded, no account needed.'
+date: 2026-05-01
+tags:
+  - posts
+topics:
+  - open source
+  - browser tools
+  - machine learning
+  - UX
+  - design
+kens_status: draft
+---
+
+{% markdown %}
+
+At some point in most design or content reviews you find yourself trying to answer a question you can't answer cleanly: not "is it pretty?" but "will users actually notice the call to action, or are they going to get distracted by the hero image first?"
+
+The honest answer is usually "I think so." Which is fine as far as it goes, but hard to act on when a stakeholder who disagrees also says "I think so."
+
+[Foveacast](https://khawkins98.github.io/Foveacast/) gives both of you something to look at instead. Drop a screenshot of a UI -- a web page, an app screen, a mockup -- and it produces a predicted attention heatmap: a color overlay showing where a typical user is likely to look, and how that attention evolves over time. Nothing leaves your machine; the model runs entirely in your browser.
+
+I mentioned it briefly at the end of the [SVGOMG-Font post](/posts/20260429-svgomg-font/). Here's the longer version.
+
+> **tl;dr**
+>
+> - Drop a UI screenshot, get a predicted attention heatmap with fixation sequence, attention zones, and centroid trajectory.
+> - Three viewing durations: first glance (1 s), quick scan (3 s), full viewing (7 s) -- modeled separately, so you can see how attention evolves as users spend more time on the page.
+> - Runs entirely in your browser. The model (~57 MB per duration) downloads and caches on first use; nothing is ever uploaded.
+> - Built on MSI-Net fine-tuned on real UI eye-tracking data. Not a natural-scene model that doesn't know what a button is.
+> - It's a probabilistic estimate, not a user study. The [reading your results guide](https://khawkins98.github.io/Foveacast/reading-your-results.html) covers what it can and can't tell you.
+
+## What it actually shows you
+
+The output is a scrollable analysis report. The heatmap overlay uses the inferno colormap -- warm colors where attention is predicted to concentrate. There are three viewing durations (first glance, quick scan, full viewing), each backed by a separate model, so you can see how the attention pattern develops as users spend more time on the page.
+
+Below the heatmap: a rule-of-thirds grid with attention shares per region, a fixation sequence showing the predicted scan path as numbered dots, attention zones with contour rings at 10%, 25%, and 50% attention mass, and a centroid trajectory tracking where the attention center moves from first glance to sustained viewing.
+
+In a design review, "the CTA doesn't appear until fixation 5, and 42% of initial attention lands on the hero image" is a different kind of conversation than "I think users will miss it." It's not proof. But it's a concrete starting point, and it gets you past the stage where everyone is arguing from intuition.
+
+It's also useful as a self-check before publishing. Before you ship a redesigned landing page and find out three weeks later that the primary action was invisible.
+
+## Why this model actually understands UI layouts
+
+Most open-source saliency models are trained on the SALICON dataset -- natural photographs scraped from Flickr. Those models have learned to predict attention on photos of mountains and faces and street scenes. Put a web page in front of them and they produce a diffuse centrality blob. They don't know that "Start free trial" is the most important element on the screen; they see a rectangular region with text and mild contrast and model it accordingly.
+
+The [foveacast-training](https://github.com/khawkins98/foveacast-training) pipeline fine-tuned [MSI-Net](https://github.com/alexanderkroner/saliency) (Kroner et al. 2020) on [UEyes](https://doi.org/10.1145/3544548.3581096) (Jiang et al. 2023) -- 1,980 UI screenshots with real eye-tracking data from 62 participants looking at desktop and mobile UIs. Fixations were recorded at 1, 3, and 7 seconds of viewing time, which is why there are three separate models rather than one. The gaze pattern at one second ("where do my eyes go first?") and at seven seconds ("where does sustained attention end up?") are genuinely different questions with different answers.
+
+Fine-tuning on UI content closes the gap. On a held-out test split, the fine-tuned model improves by +43% on correlation coefficient and cuts KL divergence by 44% compared to the stock SALICON-only baseline. The stock model produces diffuse blobs. The fine-tuned model picks up navigation elements, content headings, and interactive controls -- matching where real users actually looked.
+
+## What it isn't
+
+Foveacast shows a non-dismissible note in the UI that says this is a probabilistic estimate based on population-average gaze patterns. A few things worth keeping in mind:
+
+- **It's not measured data.** The heatmap is model output, not fixations from real users looking at your specific design.
+- **Training distribution.** UEyes is primarily Western-language desktop and mobile UI from 2020--2022. Right-to-left layouts, dark-mode UIs, and design patterns that weren't common then may produce less reliable estimates.
+- **Not a click predictor.** High predicted attention on an element doesn't mean users will interact with it.
+- **Desktop Chromium and Firefox only.** Many mobile browsers don't have the working memory for this kind of inference.
+
+If you need real eye-tracking data -- measured fixations from real participants -- there are commercial services: [Attention Insight](https://attentioninsight.com), [expoze.io](https://expoze.io), [Clueify](https://clueify.com). They're paid, and they send your screenshots to a third party.
+
+Foveacast sits in the space before you get there: faster than a study, more specific than the F-pattern heuristic, and more honest than "I think."
+
+## The browser-only shape
+
+Like [SVGOMG-Font](/posts/20260429-svgomg-font/) and [PDF-A-go-slim](/posts/20260216-introducing-pdf-a-go-slim/), everything processes locally. Design screenshots often contain unreleased client work or internal materials. Uploading them to a third-party service to get a heatmap is a friction many organisations can't accept.
+
+Running ONNX inference in the browser at this scale had some practical problems. WASM threading needs cross-origin isolation, which requires a service worker injecting the right headers. ORT Web's WASM paths have to be pinned when the app serves from a GitHub Pages subpath. The model weights are gitignored and fetched from a GitHub Release at deploy time rather than committed to the repo (57 MB each across three duration variants -- they'd bloat every clone). The full engineering log is in [LEARNINGS.md](https://github.com/khawkins98/Foveacast/blob/main/LEARNINGS.md) if you want the details.
+
+## Try it
+
+[Foveacast is on GitHub Pages](https://khawkins98.github.io/Foveacast/). The source is [on GitHub](https://github.com/khawkins98/Foveacast), with the training pipeline in a [companion repository](https://github.com/khawkins98/foveacast-training).
+
+---
+
+**Related posts:**
+
+- [Stop converting SVG text to outlines](/posts/20260429-svgomg-font/) -- another browser-only utility from the same build season
+- [Your browser utility wants to be a floating palette](/posts/20260216-90s-desktop-paradigm-browser-utilities/) -- the "do one thing, entirely in the browser" design philosophy
+- [Semantic search on a static site, no API keys required](/posts/20260302-semantic-search-browser-embeddings/) -- the same pattern of ML inference running locally in the browser
+- [Let AI worry about the code, you worry about the work](/posts/20260420-let-ai-worry-about-the-code/) -- how much of Foveacast's implementation happened
+
+{% endmarkdown %}
