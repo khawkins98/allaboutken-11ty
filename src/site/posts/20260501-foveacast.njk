@@ -71,7 +71,7 @@ Fine-tuning on UI content closes the gap. On a held-out test split, the fine-tun
 Foveacast shows a non-dismissible note in the UI that says this is a probabilistic estimate based on population-average gaze patterns. A few things worth keeping in mind:
 
 - **It's not measured data.** The heatmap is model output, not fixations from real users looking at your specific design.
-- **Training distribution.** UEyes is primarily Western-language desktop and mobile UI from 2020–2022. Right-to-left layouts, dark-mode UIs, and design patterns that weren't common then may produce less reliable estimates.
+- **Training distribution.** UEyes is primarily Western-language desktop and mobile UI, collected prior to the 2023 publication. Right-to-left layouts, dark-mode UIs, and design patterns that weren't common then may produce less reliable estimates.
 - **Not a click predictor.** High predicted attention on an element doesn't mean users will interact with it.
 - **Desktop Chromium and Firefox only.** Many mobile browsers don't have the working memory for this kind of inference.
 
