@@ -45,7 +45,7 @@ The output is a scrollable analysis report.
   <figcaption>Warm colors show where a typical user's attention is predicted to concentrate. Cool tones indicate lower predicted attention density.</figcaption>
 </figure>
 
-The heatmap overlay uses the inferno colormap -- warm colors where attention is predicted to concentrate. Three viewing durations (first glance, quick scan, full viewing) are each backed by a separate model.
+The heatmap overlay uses the inferno colormap: warm colors where attention is predicted to concentrate. Three viewing durations (first glance, quick scan, full viewing) are each backed by a separate model.
 
 Below the heatmap: a rule-of-thirds grid with attention shares per region, a fixation sequence showing the predicted scan path as numbered dots, attention zones with contour rings at 10%, 25%, and 50% attention mass, and a centroid trajectory tracking where the attention center moves from first glance to sustained viewing.
 
@@ -60,11 +60,11 @@ It's also useful as a self-check before publishing. Before you ship a redesigned
 
 ## Trained on real UI gaze data, not natural scenes
 
-Most open-source saliency models are trained on the SALICON dataset -- natural photographs scraped from Flickr. Those models have learned to predict attention on photos of mountains and faces and street scenes. Put a web page in front of them and they produce a diffuse centrality blob. They don't know that "Start free trial" is the most important element on the screen; they see a rectangular region with text and mild contrast and model it accordingly.
+Most open-source saliency models are trained on the SALICON dataset: natural photographs scraped from Flickr. Those models have learned to predict attention on photos of mountains and faces and street scenes. Put a web page in front of them and they produce a diffuse centrality blob. They don't know that "Start free trial" is the most important element on the screen; they see a rectangular region with text and mild contrast and model it accordingly.
 
-The [foveacast-training](https://github.com/khawkins98/foveacast-training) pipeline fine-tuned [MSI-Net](https://github.com/alexanderkroner/saliency) (Kroner et al. 2020) on [UEyes](https://doi.org/10.1145/3544548.3581096) (Jiang et al. 2023) -- 1,980 UI screenshots with real eye-tracking data from 62 participants looking at desktop and mobile UIs. Fixations were recorded at 1, 3, and 7 seconds of viewing time, which is why there are three separate models rather than one. The gaze pattern at one second ("where do my eyes go first?") and at seven seconds ("where does sustained attention end up?") are genuinely different questions with different answers.
+The [foveacast-training](https://github.com/khawkins98/foveacast-training) pipeline fine-tuned [MSI-Net](https://github.com/alexanderkroner/saliency) (Kroner et al. 2020) on [UEyes](https://doi.org/10.1145/3544548.3581096) (Jiang et al. 2023), 1,980 UI screenshots with real eye-tracking data from 62 participants looking at desktop and mobile UIs. Fixations were recorded at 1, 3, and 7 seconds of viewing time, which is why there are three separate models rather than one. The gaze pattern at one second ("where do my eyes go first?") and at seven seconds ("where does sustained attention end up?") are genuinely different questions with different answers.
 
-Fine-tuning on UI content closes the gap. On a held-out test split, the fine-tuned model improves by +43% on correlation coefficient and cuts KL divergence by 44% compared to the stock SALICON-only baseline. The stock model produces diffuse blobs. The fine-tuned model picks up navigation elements, content headings, and interactive controls -- matching where real users actually looked.
+Fine-tuning on UI content closes the gap. On a held-out test split, the fine-tuned model improves by +43% on correlation coefficient and cuts KL divergence by 44% compared to the stock SALICON-only baseline. The stock model produces diffuse blobs. The fine-tuned model picks up navigation elements, content headings, and interactive controls, matching where real users actually looked.
 
 ## Limitations: what predicted attention can't tell you
 
@@ -83,7 +83,7 @@ Foveacast sits in the space before you get there: faster than a study, more spec
 
 Like [SVGOMG-Font](/posts/20260429-svgomg-font/) and [PDF-A-go-slim](/posts/20260216-introducing-pdf-a-go-slim/), everything processes locally. Design screenshots often contain unreleased client work or internal materials. Uploading them to a third-party service to get a heatmap is friction many organisations can't accept.
 
-Running ONNX inference in the browser at this scale had some practical problems. WASM threading needs cross-origin isolation, which requires a service worker injecting the right headers. ORT Web's WASM paths have to be pinned when the app serves from a GitHub Pages subpath. The model weights are gitignored and fetched from a GitHub Release at deploy time rather than committed to the repo (57 MB each across three duration variants -- they'd bloat every clone). The full engineering log is in [LEARNINGS.md](https://github.com/khawkins98/Foveacast/blob/main/LEARNINGS.md) if you want the details.
+Running ONNX inference in the browser at this scale had some practical problems. WASM threading needs cross-origin isolation, which requires a service worker injecting the right headers. ORT Web's WASM paths have to be pinned when the app serves from a GitHub Pages subpath. The model weights are gitignored and fetched from a GitHub Release at deploy time rather than committed to the repo (57 MB each across three duration variants; they'd bloat every clone). The full engineering log is in [LEARNINGS.md](https://github.com/khawkins98/Foveacast/blob/main/LEARNINGS.md) if you want the details.
 
 ## Try Foveacast on your own UI
 
