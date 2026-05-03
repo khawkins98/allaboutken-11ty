@@ -65,11 +65,11 @@ Most open-source saliency models are trained on the [SALICON dataset](http://sal
 {% endmarkdown %}
 <figure class="kh-bleed-out">
   <img src="/images/blog/foveacast-comparison-nytimes.jpg" alt="Three-panel comparison using a New York Times page: the original screenshot, a SALICON heatmap showing a diffuse central blob with no meaningful structure, and the Foveacast heatmap concentrating attention on the masthead, primary headline, and article bylines.">
-  <figcaption>Same page, two models. SALICON — trained on natural photographs — produces a diffuse central blob that tells you almost nothing about the layout. Foveacast, fine-tuned on real UI eye-tracking data, concentrates predicted attention on the headline, navigation, and key text elements.</figcaption>
+  <figcaption>Same page, two models. SALICON — trained on natural photographs — produces a diffuse central blob that poorly "understands" content. Foveacast, fine-tuned on real UI eye-tracking data, concentrates predicted attention on the headline, navigation, and key text elements.</figcaption>
 </figure>
 {% markdown %}
 
-The [foveacast-training](https://github.com/khawkins98/foveacast-training) pipeline fine-tuned [MSI-Net](https://github.com/alexanderkroner/saliency) (Kroner et al. 2020) on [UEyes](https://doi.org/10.1145/3544548.3581096) (Jiang et al. 2023). That citation does a lot of work: Jiang et al. collected 1,980 UI screenshots with real eye-tracking data from 62 participants across desktop, mobile, web, and poster UIs, then published the full dataset on [Zenodo](https://zenodo.org/records/8010312) under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Without that open release, Foveacast wouldn't have been viable to build. Fixations were recorded at 1, 3, and 7 seconds of viewing time, which is why there are three separate models rather than one. The gaze pattern at one second ("where do my eyes go first?") and at seven seconds ("where does sustained attention end up?") are genuinely different questions with different answers.
+The [foveacast-training](https://github.com/khawkins98/foveacast-training) pipeline fine-tuned [MSI-Net](https://github.com/alexanderkroner/saliency) (Kroner et al. 2020) on [UEyes](https://doi.org/10.1145/3544548.3581096) (Jiang et al. 2023). Much credit is due there: Jiang et al. collected 1,980 UI screenshots with real eye-tracking data from 62 participants across desktop, mobile, web, and poster UIs, then published the full dataset on [Zenodo](https://zenodo.org/records/8010312) under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Without that open release, Foveacast wouldn't have been viable to build. Fixations were recorded at 1, 3, and 7 seconds of viewing time, which is why there are three separate models rather than one. The gaze pattern at one second ("where do my eyes go first?") and at seven seconds ("where does sustained attention end up?") are genuinely different questions with different answers.
 
 Fine-tuning on UI content closes the gap. On a held-out test split, the fine-tuned model improves by +43% on correlation coefficient and cuts KL divergence by 44% compared to the stock SALICON-only baseline. The stock model produces diffuse blobs. The fine-tuned model picks up navigation elements, content headings, and interactive controls, matching where real users actually looked.
 
@@ -80,11 +80,10 @@ Foveacast shows a non-dismissible note in the UI that says this is a probabilist
 - **It's not measured data.** The heatmap is model output, not fixations from real users looking at your specific design.
 - **Training distribution.** UEyes is primarily Western-language desktop and mobile UI, collected prior to the 2023 publication. Right-to-left layouts, dark-mode UIs, and design patterns that weren't common then may produce less reliable estimates.
 - **Not a click predictor.** High predicted attention on an element doesn't mean users will interact with it.
-- **Desktop Chromium and Firefox only.** Many mobile browsers don't have the working memory for this kind of inference.
 
 If you need real eye-tracking data -- measured fixations from real participants -- there are commercial services: [Attention Insight](https://attentioninsight.com), [Alpha.one (formerly expoze.io)](https://www.alpha.one/products/expoze-io), [Clueify](https://clueify.com). They're paid, and they send your screenshots to a third party.
 
-Foveacast sits in the space before you get there: faster than a study, more specific than the F-pattern heuristic, and more honest than "I think."
+Foveacast is greate to quickly, freely and securely close the gap: faster than a study, more specific than the [F-pattern heuristic](https://www.nngroup.com/articles/f-shaped-pattern-reading-web-content/), and more honest than "I think."
 
 ## How it runs entirely in your browser
 
