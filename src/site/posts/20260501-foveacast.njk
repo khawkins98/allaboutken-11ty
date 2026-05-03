@@ -24,7 +24,7 @@ image_meta:
 
 At some point in most design or content reviews you find yourself trying to answer a question you can't answer cleanly: not "is it pretty?" but "will users actually notice the call to action, or are they going to get distracted by the hero image first?"
 
-The honest answer is usually "I think so." That only holds until a stakeholder who disagrees says the same thing.
+The honest answer is usually "Based off my knowledge and experience: I think so." That only holds until a stakeholder who disagrees says the same thing.
 
 [Foveacast](https://khawkins98.github.io/Foveacast/) gives both of you something to look at instead. Drop a screenshot of a UI -- a web page, an app screen, a mockup -- and it produces a predicted attention heatmap: a color overlay showing where a typical user is likely to look, and how that attention evolves over time. Nothing leaves your machine; the model runs entirely in your browser.
 
@@ -60,7 +60,7 @@ It's also useful as a self-check before publishing. Before you ship a redesigned
 
 ## Trained on real UI gaze data, not natural scenes
 
-Most open-source saliency models are trained on the SALICON dataset: natural photographs scraped from Flickr. Those models have learned to predict attention on photos of mountains and faces and street scenes. Put a web page in front of them and they produce a diffuse centrality blob. They don't know that "Start free trial" is the most important element on the screen; they see a rectangular region with text and mild contrast and model it accordingly.
+Most open-source saliency models are trained on the [SALICON dataset](http://salicon.net/): natural photographs scraped from Flickr. Those models have learned to predict attention on photos of mountains and faces and street scenes. Put a web page in front of them and they produce a diffuse centrality blob. They don't know that "Start free trial" is the most important element on the screen; they see a rectangular region with text and mild contrast and model it accordingly.
 
 The [foveacast-training](https://github.com/khawkins98/foveacast-training) pipeline fine-tuned [MSI-Net](https://github.com/alexanderkroner/saliency) (Kroner et al. 2020) on [UEyes](https://doi.org/10.1145/3544548.3581096) (Jiang et al. 2023), 1,980 UI screenshots with real eye-tracking data from 62 participants looking at desktop and mobile UIs. Fixations were recorded at 1, 3, and 7 seconds of viewing time, which is why there are three separate models rather than one. The gaze pattern at one second ("where do my eyes go first?") and at seven seconds ("where does sustained attention end up?") are genuinely different questions with different answers.
 
