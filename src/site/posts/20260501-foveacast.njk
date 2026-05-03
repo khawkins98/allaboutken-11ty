@@ -83,13 +83,23 @@ Foveacast shows a non-dismissible note in the UI that says this is a probabilist
 
 If you need real eye-tracking data -- measured fixations from real participants -- there are commercial services: [Attention Insight](https://attentioninsight.com), [Alpha.one (formerly expoze.io)](https://www.alpha.one/products/expoze-io), [Clueify](https://clueify.com). They're paid, and they send your screenshots to a third party.
 
-Foveacast is greate to quickly, freely and securely close the gap: faster than a study, more specific than the [F-pattern heuristic](https://www.nngroup.com/articles/f-shaped-pattern-reading-web-content/), and more honest than "I think."
+Foveacast is great to quickly, freely and securely close the gap: faster than a study, more specific than the [F-pattern heuristic](https://www.nngroup.com/articles/f-shaped-pattern-reading-web-content/), and more honest than "I think."
 
 ## How it runs entirely in your browser
 
 Like [SVGOMG-Font](/posts/20260429-svgomg-font/) and [PDF-A-go-slim](/posts/20260216-introducing-pdf-a-go-slim/), everything processes locally. Design screenshots often contain unreleased client work or internal materials. Uploading them to a third-party service to get a heatmap is friction many organisations can't accept.
 
 Running ONNX inference in the browser at this scale had some practical problems. WASM threading needs cross-origin isolation, which requires a service worker injecting the right headers. ORT Web's WASM paths have to be pinned when the app serves from a GitHub Pages subpath. The model weights are gitignored and fetched from a GitHub Release at deploy time rather than committed to the repo (57 MB each across three duration variants; they'd bloat every clone). The full engineering log is in [LEARNINGS.md](https://github.com/khawkins98/Foveacast/blob/main/LEARNINGS.md) if you want the details.
+
+## Training on consumer hardware: a personal note
+
+This was my first proper model training exercise. I'd worked with embeddings before, but never fine-tuned a vision model. A few things made it more approachable than expected.
+
+The training ran entirely on a MacBook Air M4 -- no cloud GPU, no cluster. About three hours per model, so roughly nine hours of compute total across the three duration variants. Slow in absolute terms, but not the data-centre job I'd assumed fine-tuning required.
+
+The other difference was AI-assisted development. What I'd expected to be a multi-week slog -- working through PyTorch docs, debugging ONNX export paths, figuring out why the WASM runtime was choking on FP16 weights -- turned into a genuinely enjoyable weekend project. Claude and Copilot handled a lot of the "read the error and suggest a fix" loop that normally drains the fun out of this kind of work.
+
+I learned a lot and I'd do it again. If you want to fine-tune a saliency model on your own domain-specific data, the [training pipeline is open](https://github.com/khawkins98/foveacast-training) and the README documents what worked and what didn't.
 
 ## Try Foveacast on your own UI
 
