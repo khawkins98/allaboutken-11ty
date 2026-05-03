@@ -63,7 +63,7 @@ It's also useful as a self-check before publishing. Before you ship a redesigned
 Most open-source saliency models are trained on the [SALICON dataset](http://salicon.net/): natural photographs scraped from Flickr. Those models have learned to predict attention on photos of mountains and faces and street scenes. Put a web page in front of them and they produce a diffuse centrality blob. They don't know that "Start free trial" is the most important element on the screen; they see a rectangular region with text and mild contrast and model it accordingly.
 
 {% endmarkdown %}
-<figure>
+<figure class="kh-bleed-out">
   <img src="/images/blog/foveacast-comparison-nytimes.jpg" alt="Three-panel comparison using a New York Times page: the original screenshot, a SALICON heatmap showing a diffuse central blob with no meaningful structure, and the Foveacast heatmap concentrating attention on the masthead, primary headline, and article bylines.">
   <figcaption>Same page, two models. SALICON — trained on natural photographs — produces a diffuse central blob that tells you almost nothing about the layout. Foveacast, fine-tuned on real UI eye-tracking data, concentrates predicted attention on the headline, navigation, and key text elements.</figcaption>
 </figure>
