@@ -1315,6 +1315,248 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
+  // Inline thanks-link inside the feedback toast — small follow-up CTA
+  .kh-feedback-thanks__link {
+    margin-left: 0.5rem;
+    font-weight: 500;
+    text-decoration: underline;
+    color: inherit;
+  }
+
+  // Floating "was this helpful?" thumb — bottom-right, no JS, no count.
+  // Composition: a promotional text card + a starburst badge with 👍.
+  // Same href as the footer button (.../up/{page}); Worker redirects back to
+  // #thanks, which triggers the kh-feedback-thanks toast and hides this widget.
+  // Wrapper stacks the upvote card on top and the secondary "learn" link
+  // below it, so the link reads as a separate action and can't be confused
+  // with the upvote click target.
+  .kh-floating-thumb {
+    position: fixed;
+    z-index: 900;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+    color: inherit;
+    max-width: min(360px, calc(100vw - 2rem));
+  }
+
+  // The upvote action — burst + text laid out horizontally inside one anchor.
+  .kh-floating-thumb__action {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  // Secondary link below the card. Visually quieter (smaller, plain text) so
+  // it doesn't compete with the upvote CTA, but with a clear underlined hover
+  // state so it's discoverable as a separate action.
+  .kh-floating-thumb__learn {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--kh-color--blue);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: text-decoration-color 0.15s ease, color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--kh-color--blue--dark);
+      text-decoration-color: var(--kh-color--orange);
+      background-color: rgba(#fff, 0.7);
+    }
+  }
+
+  // Default (desktop): show the long text, hide the icon.
+  .kh-floating-thumb__learn-icon {
+    display: none;
+  }
+
+  .kh-floating-thumb__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    background: var(--kh-color--blue);
+    border-radius: 14px;
+    padding: 0.7rem 1rem 0.7rem 1.8rem; // left padding leaves room for burst overlap
+    box-shadow: 0 4px 0 var(--kh-color--orange);
+  }
+
+  .kh-floating-thumb__lead {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+    line-height: 1.15;
+  }
+
+  .kh-floating-thumb__sub {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba(#fff, 0.92);
+    line-height: 1.35;
+  }
+
+  // CSS-only 12-point starburst, flat orange fill with a dark-blue stroke.
+  // The stroke is faked by stacking two clipped layers: the burst element
+  // is filled in the stroke colour, and ::before is inset by the stroke
+  // width and re-clipped with the same polygon to reveal the inner fill.
+  // clip-path polygon points alternate outer (50%) and inner (35%) radius.
+  $kh-burst-clip: polygon(
+    50% 0%, 59.06% 16.19%,
+    75% 6.7%, 74.75% 25.25%,
+    93.3% 25%, 83.81% 40.94%,
+    100% 50%, 83.81% 59.06%,
+    93.3% 75%, 74.75% 74.75%,
+    75% 93.3%, 59.06% 83.81%,
+    50% 100%, 40.94% 83.81%,
+    25% 93.3%, 25.25% 74.75%,
+    6.7% 75%, 16.19% 59.06%,
+    0% 50%, 16.19% 40.94%,
+    6.7% 25%, 25.25% 25.25%,
+    25% 6.7%, 40.94% 16.19%
+  );
+
+  .kh-floating-thumb__burst {
+    position: relative;
+    z-index: 1; // sit above text card so the star edges poke over the border
+    flex: 0 0 auto;
+    width: 84px;
+    height: 84px;
+    margin-right: -1.4rem; // overlap into the text card
+    background: var(--kh-color--orange); // stroke colour
+    clip-path: $kh-burst-clip;
+    display: grid;
+    place-items: center;
+    transform: rotate(-8deg);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.12));
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 3px; // stroke thickness
+      background: var(--kh-color--yellow--dark, #ffb81c);
+      clip-path: $kh-burst-clip;
+    }
+  }
+
+  .kh-floating-thumb__icon {
+    position: relative;
+    z-index: 1; // above the ::before inner fill
+    width: 36px;
+    height: 36px;
+    color: #fff;
+    stroke-width: 2.2;
+    transform: rotate(8deg); // counter-rotate so icon stays upright vs. tilted burst
+  }
+
+  // Scope the wobble to the action anchor only — moving onto the learn link
+  // unhovers the action, which lets the existing transition revert the burst.
+  .kh-floating-thumb__action:hover .kh-floating-thumb__burst,
+  .kh-floating-thumb__action:focus-visible .kh-floating-thumb__burst {
+    transform: rotate(8deg) scale(1.08);
+  }
+
+  .kh-floating-thumb__action:hover .kh-floating-thumb__icon,
+  .kh-floating-thumb__action:focus-visible .kh-floating-thumb__icon {
+    transform: rotate(-8deg);
+  }
+
+  // While the user is clicking and the browser is round-tripping to the
+  // Cloudflare worker, spin the burst. Pure CSS: :active is held by browsers
+  // during a link's navigation phase; :focus:not(:focus-visible) extends the
+  // spin through mouse-induced focus on browsers that drop :active early.
+  // The page navigates away on click, so the state naturally clears on return.
+  .kh-floating-thumb__action:active .kh-floating-thumb__burst,
+  .kh-floating-thumb__action:focus:not(:focus-visible) .kh-floating-thumb__burst {
+    animation: kh-floating-thumb-spin 0.7s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  }
+
+  @keyframes kh-floating-thumb-spin {
+    from {
+      transform: rotate(0deg) scale(1.05);
+    }
+
+    to {
+      transform: rotate(360deg) scale(1.05);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kh-floating-thumb__action:active .kh-floating-thumb__burst,
+    .kh-floating-thumb__action:focus:not(:focus-visible) .kh-floating-thumb__burst {
+      animation: none;
+      transform: rotate(-8deg) scale(0.96);
+    }
+  }
+
+  // Mobile: drop the text card; the starburst is the playful, tappable bit.
+  // The "Learn about..." link collapses to a small circular "?" badge so it
+  // doesn't dominate the bottom-right corner. Keeps a11y via aria-label.
+  @media (max-width: 600px) {
+    .kh-floating-thumb__text {
+      display: none;
+    }
+
+    .kh-floating-thumb__burst {
+      margin-right: 0;
+      width: 72px;
+      height: 72px;
+    }
+
+    .kh-floating-thumb__icon {
+      width: 30px;
+      height: 30px;
+    }
+
+    .kh-floating-thumb__learn-text {
+      display: none;
+    }
+
+    .kh-floating-thumb__learn {
+      position: relative;
+      z-index: 2; // sit above the burst's drop shadow + clipped fill
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      margin-top: -2.15rem; // tuck up so it overlaps the burst's lower-right spike
+      padding: 0;
+      border: 2px solid var(--kh-color--blue);
+      border-radius: 999px;
+      background: #fafafa;
+      text-decoration: none;
+      font-weight: 700;
+      line-height: 1;
+
+      &:hover,
+      &:focus-visible {
+        background: var(--kh-color--blue);
+        color: #fff;
+        text-decoration: none;
+      }
+    }
+
+    .kh-floating-thumb__learn-icon {
+      display: inline-block;
+      font-size: 0.95rem;
+    }
+  }
+
+  // Once the user has clicked (URL has #thanks), hide the floating widget so
+  // it doesn't pester them. The kh-feedback-thanks toast covers the confirmation.
+  &:has(#thanks:target) .kh-floating-thumb {
+    display: none;
+  }
+
   .kh-details {
     border: 4px solid var(--kh-color--blue);
     border-radius: 4px;
