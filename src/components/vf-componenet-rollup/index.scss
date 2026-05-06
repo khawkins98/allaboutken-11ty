@@ -1327,49 +1327,75 @@ body:has(#kh-css-toggle:checked) {
   // Composition: a promotional text card + a starburst badge with 👍.
   // Same href as the footer button (.../up/{page}); Worker redirects back to
   // #thanks, which triggers the kh-feedback-thanks toast and hides this widget.
+  // Wrapper stacks the upvote card on top and the secondary "learn" link
+  // below it, so the link reads as a separate action and can't be confused
+  // with the upvote click target.
   .kh-floating-thumb {
     position: fixed;
     z-index: 900;
     right: max(1rem, env(safe-area-inset-right));
     bottom: max(1rem, env(safe-area-inset-bottom));
     display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+    color: inherit;
+    max-width: min(360px, calc(100vw - 2rem));
+  }
+
+  // The upvote action — burst + text laid out horizontally inside one anchor.
+  .kh-floating-thumb__action {
+    display: inline-flex;
     align-items: center;
     text-decoration: none;
     color: inherit;
-    max-width: min(360px, calc(100vw - 2rem));
+  }
+
+  // Secondary link below the card. Visually quieter (smaller, plain text) so
+  // it doesn't compete with the upvote CTA, but with a clear underlined hover
+  // state so it's discoverable as a separate action.
+  .kh-floating-thumb__learn {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--kh-color--blue);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: text-decoration-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--kh-color--blue--dark);
+      text-decoration-color: var(--kh-color--orange);
+      background-color: rgba(#fff, 0.7);
+    }
   }
 
   .kh-floating-thumb__text {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
-    background: #fafafa;
-    border: 2px solid var(--kh-color--blue);
-    border-left: none;
-    border-radius: 0 12px 12px 0;
-    padding: 0.65rem 0.95rem 0.65rem 2.6rem; // left padding leaves room for burst overlap
-    box-shadow: 3px 3px 0 var(--kh-color--blue--dark);
+    background: var(--kh-color--blue);
+    border-radius: 14px;
+    padding: 0.7rem 1rem 0.7rem 1.8rem; // left padding leaves room for burst overlap
+    box-shadow: 0 4px 0 var(--kh-color--orange);
   }
 
   .kh-floating-thumb__lead {
     font-weight: 700;
     font-size: 1rem;
-    color: var(--kh-color--blue);
+    color: #fff;
     line-height: 1.15;
   }
 
   .kh-floating-thumb__sub {
     font-size: 0.78rem;
     font-weight: 500;
-    color: var(--kh-color--grey--darkest);
+    color: rgba(#fff, 0.92);
     line-height: 1.35;
-  }
-
-  .kh-floating-thumb__sub-strong {
-    text-decoration: underline;
-    text-decoration-color: var(--kh-color--orange);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 2px;
   }
 
   // CSS-only 12-point starburst, flat orange fill with a dark-blue stroke.
@@ -1399,19 +1425,19 @@ body:has(#kh-css-toggle:checked) {
     width: 84px;
     height: 84px;
     margin-right: -1.4rem; // overlap into the text card
-    background: var(--kh-color--blue--dark); // stroke colour
+    background: var(--kh-color--orange); // stroke colour
     clip-path: $kh-burst-clip;
     display: grid;
     place-items: center;
     transform: rotate(-8deg);
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    filter: drop-shadow(2px 3px 0 var(--kh-color--blue--dark));
+    filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.12));
 
     &::before {
       content: "";
       position: absolute;
       inset: 3px; // stroke thickness
-      background: var(--kh-color--orange);
+      background: var(--kh-color--yellow--dark, #ffb81c);
       clip-path: $kh-burst-clip;
     }
   }
@@ -1421,22 +1447,49 @@ body:has(#kh-css-toggle:checked) {
     z-index: 1; // above the ::before inner fill
     width: 36px;
     height: 36px;
-    color: var(--kh-color--blue--dark);
+    color: #fff;
+    stroke-width: 2.2;
     transform: rotate(8deg); // counter-rotate so icon stays upright vs. tilted burst
   }
 
-  .kh-floating-thumb:hover .kh-floating-thumb__burst,
-  .kh-floating-thumb:focus-visible .kh-floating-thumb__burst {
+  // Scope the wobble to the action anchor only — moving onto the learn link
+  // unhovers the action, which lets the existing transition revert the burst.
+  .kh-floating-thumb__action:hover .kh-floating-thumb__burst,
+  .kh-floating-thumb__action:focus-visible .kh-floating-thumb__burst {
     transform: rotate(8deg) scale(1.08);
   }
 
-  .kh-floating-thumb:hover .kh-floating-thumb__icon,
-  .kh-floating-thumb:focus-visible .kh-floating-thumb__icon {
+  .kh-floating-thumb__action:hover .kh-floating-thumb__icon,
+  .kh-floating-thumb__action:focus-visible .kh-floating-thumb__icon {
     transform: rotate(-8deg);
   }
 
-  .kh-floating-thumb:active .kh-floating-thumb__burst {
-    transform: rotate(0deg) scale(0.96);
+  // While the user is clicking and the browser is round-tripping to the
+  // Cloudflare worker, spin the burst. Pure CSS: :active is held by browsers
+  // during a link's navigation phase; :focus:not(:focus-visible) extends the
+  // spin through mouse-induced focus on browsers that drop :active early.
+  // The page navigates away on click, so the state naturally clears on return.
+  .kh-floating-thumb__action:active .kh-floating-thumb__burst,
+  .kh-floating-thumb__action:focus:not(:focus-visible) .kh-floating-thumb__burst {
+    animation: kh-floating-thumb-spin 0.7s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  }
+
+  @keyframes kh-floating-thumb-spin {
+    from {
+      transform: rotate(0deg) scale(1.05);
+    }
+
+    to {
+      transform: rotate(360deg) scale(1.05);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kh-floating-thumb__action:active .kh-floating-thumb__burst,
+    .kh-floating-thumb__action:focus:not(:focus-visible) .kh-floating-thumb__burst {
+      animation: none;
+      transform: rotate(-8deg) scale(0.96);
+    }
   }
 
   // Mobile: drop the text card; the starburst is the playful, tappable bit.
