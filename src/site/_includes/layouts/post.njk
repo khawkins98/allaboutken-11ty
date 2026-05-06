@@ -104,7 +104,7 @@ templateEngineOverride: njk
           <a href="https://feedback.allaboutken.com/up{{ page.url }}"
             rel="nofollow" class="kh-button kh-button--sm">👍 This was useful</a>
         <!-- Feedback toast: see /posts/20260220-feedback-buttons-cgi-pattern/ -->
-        <span id="thanks" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback!</span>
+        <span id="thanks" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback! <a href="/posts/20260220-feedback-buttons-cgi-pattern/" class="kh-feedback-thanks__link">Curious how this was built?</a></span>
         <span><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"> people found this useful</span>
         </p>
       </div>
@@ -135,3 +135,20 @@ templateEngineOverride: njk
   </article>
   {%- endif %}
 </div>
+
+{%- if comment != false %}
+<a href="https://feedback.allaboutken.com/up{{ page.url }}"
+   rel="nofollow"
+   class="kh-floating-thumb kh-u-do-not-print"
+   aria-label="This was helpful — give a thumbs up.">
+  <span class="kh-floating-thumb__burst" aria-hidden="true">
+    {# Thumbs-up icon from Lucide — https://lucide.dev/icons/thumbs-up #}
+    <!-- Thumbs-up icon: Lucide (https://lucide.dev/icons/thumbs-up) -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="kh-floating-thumb__icon" aria-hidden="true" focusable="false"><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/><path d="M7 10v12"/></svg>
+  </span>
+  <span class="kh-floating-thumb__text">
+    <span class="kh-floating-thumb__lead">This was helpful</span>
+    <span class="kh-floating-thumb__sub">Let me know if this was helpful. <span class="kh-floating-thumb__sub-strong">Learn more about this JS-free technique.</span></span>
+  </span>
+</a>
+{%- endif %}
