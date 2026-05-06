@@ -1364,7 +1364,7 @@ body:has(#kh-css-toggle:checked) {
     text-underline-offset: 3px;
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
-    transition: text-decoration-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+    transition: text-decoration-color 0.15s ease, color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
 
     &:hover,
     &:focus-visible {
@@ -1372,6 +1372,11 @@ body:has(#kh-css-toggle:checked) {
       text-decoration-color: var(--kh-color--orange);
       background-color: rgba(#fff, 0.7);
     }
+  }
+
+  // Default (desktop): show the long text, hide the icon.
+  .kh-floating-thumb__learn-icon {
+    display: none;
   }
 
   .kh-floating-thumb__text {
@@ -1493,7 +1498,8 @@ body:has(#kh-css-toggle:checked) {
   }
 
   // Mobile: drop the text card; the starburst is the playful, tappable bit.
-  // Keeps the bottom-right corner uncluttered on phones; aria-label covers a11y.
+  // The "Learn about..." link collapses to a small circular "?" badge so it
+  // doesn't dominate the bottom-right corner. Keeps a11y via aria-label.
   @media (max-width: 600px) {
     .kh-floating-thumb__text {
       display: none;
@@ -1508,6 +1514,40 @@ body:has(#kh-css-toggle:checked) {
     .kh-floating-thumb__icon {
       width: 30px;
       height: 30px;
+    }
+
+    .kh-floating-thumb__learn-text {
+      display: none;
+    }
+
+    .kh-floating-thumb__learn {
+      position: relative;
+      z-index: 2; // sit above the burst's drop shadow + clipped fill
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      margin-top: -2.15rem; // tuck up so it overlaps the burst's lower-right spike
+      padding: 0;
+      border: 2px solid var(--kh-color--blue);
+      border-radius: 999px;
+      background: #fafafa;
+      text-decoration: none;
+      font-weight: 700;
+      line-height: 1;
+
+      &:hover,
+      &:focus-visible {
+        background: var(--kh-color--blue);
+        color: #fff;
+        text-decoration: none;
+      }
+    }
+
+    .kh-floating-thumb__learn-icon {
+      display: inline-block;
+      font-size: 0.95rem;
     }
   }
 
