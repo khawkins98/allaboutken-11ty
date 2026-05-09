@@ -71,7 +71,15 @@ Current DNS records for the main site:
 
 ## Rewrites (proxied hobby projects)
 
-Defined in `vercel.json`. Each entry maps an `allaboutken.com` path prefix to the corresponding GitHub Pages URL. The project's own repo and build pipeline are unchanged.
+Defined in `vercel.json`. Trailing-slash and no-slash root requests are redirected to the explicit `/index.html` path (which fires before Vercel's filesystem check), then the rewrite proxies all sub-paths to GitHub Pages. The project's own repo and build pipeline are unchanged.
+
+**Routing for each project works as follows:**
+- `allaboutken.com/project-name/` → 307 redirect → `allaboutken.com/project-name/index.html`
+- `allaboutken.com/project-name` → 307 redirect → `allaboutken.com/project-name/index.html`
+- `allaboutken.com/project-name/index.html` → rewrite → `https://khawkins98.github.io/project-name/index.html`
+- `allaboutken.com/project-name/anything` → rewrite → `https://khawkins98.github.io/project-name/anything`
+
+The redirect-to-index-html approach is necessary because Vercel's directory-index check intercepts trailing-slash requests before any rewrite rule can run.
 
 | Path prefix | GitHub Pages origin | Repo |
 |-------------|---------------------|------|
@@ -83,18 +91,23 @@ Defined in `vercel.json`. Each entry maps an `allaboutken.com` path prefix to th
 
 1. **Confirm GitHub Pages is live in the hobby project repo.** Go to the repo Settings → Pages and verify it's enabled and serving at `khawkins98.github.io/repo-name/`. Vercel proxies to GitHub Pages as the origin — if GH Pages is off, the proxied path will 404. **Never disable GitHub Pages in a hobby project repo** once it's been added as a rewrite.
 
-2. **Check the project's asset paths.** All assets must use relative paths (e.g. `./foo.css`, `../bar.js`) or paths prefixed with the repo name (e.g. `/my-project/foo.css`). Bare root-relative paths like `/foo.css` will break because Vercel will try to serve them from the main site. Fix these in the hobby project's repo first.
+2. **Check the project's asset paths.** Assets must use either relative `./` paths or paths prefixed with the repo name (e.g. `/my-project/foo.css`). Bare root-relative paths like `/foo.css` will break — Vercel serves them from the main site root. `./`-style relative paths work fine: because the browser URL ends with `/project-name/index.html`, `./` resolves to `/project-name/` as expected.
 
 2. **Check if it's a SPA.** Single-page apps that use client-side routing need a `404.html` that loads `index.html` on GitHub Pages, so that deep links work through the proxy. If the project has a `404.html` already that redirects to `index.html`, you're good.
 
-3. **Add the rewrite to `vercel.json`:**
+3. **Add redirects and a rewrite to `vercel.json`:**
 
    ```json
-   {
-     "source": "/my-project/:path*",
-     "destination": "https://khawkins98.github.io/my-project/:path*"
-   }
+   "redirects": [
+     { "source": "/my-project",  "destination": "/my-project/index.html", "permanent": false },
+     { "source": "/my-project/", "destination": "/my-project/index.html", "permanent": false }
+   ],
+   "rewrites": [
+     { "source": "/my-project/:path*", "destination": "https://khawkins98.github.io/my-project/:path*" }
+   ]
    ```
+
+   The two redirects are required because Vercel's directory-index check intercepts trailing-slash requests before any rewrite rule can fire. Redirects run before that check, so redirecting to the explicit `index.html` file lets the rewrite pick it up normally.
 
 4. **Add a row to the Rewrites table** in this file.
 
