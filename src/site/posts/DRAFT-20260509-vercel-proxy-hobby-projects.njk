@@ -1,7 +1,7 @@
 ---
 title: "Building a garage for hobby projects on your personal site"
 layout: layouts/post.njk
-teaser: "Years of hobby projects on GitHub Pages, scattered across a subdomain I don't own. Vercel rewrites brought them home without touching a single deploy pipeline."
+teaser: "Years of GitHub Pages hobby projects scattered across a subdomain I don't own; Vercel rewrites brought them home without touching a deploy pipeline."
 date: 2026-05-09
 tags:
   - posts
@@ -15,9 +15,9 @@ kens_status: draft
 
 {% markdown %}
 
-I've been building hobby projects for years. Small tools, experiments, things that scratch an itch. Each one lives in its own repo, deploys to GitHub Pages via CI, and gets a write-up here -- and then sits at `khawkins98.github.io/project-name/`. Someone else's domain. Superficially connected to my work via blog posts and cross-links, but not really living with it.
+I've been building hobby projects for years: small tools, experiments, things that scratch an itch. Each one lives in its own repo, deploys to GitHub Pages via CI, and gets a write-up here -- and then sits at `khawkins98.github.io/project-name/`. Someone else's domain. The cross-links keep things loosely connected, but the projects aren't really living with my work.
 
-I wanted a garage. A place on my own domain where this stuff could live together: `allaboutken.com/PDF-A-go-go/`, `allaboutken.com/pinment/`, whatever comes next. Not a portfolio -- more like a workshop wall where the tools are visible and reachable from one address. And I didn't want to change how any of them deploy.
+I wanted a garage, a place on my own domain where this stuff could live together: `allaboutken.com/PDF-A-go-go/`, `allaboutken.com/pinment/`, whatever comes next. It's not a portfolio: more like a workshop wall where the tools are visible and reachable from one address. And I didn't want to change how any of them deploy.
 
 > ## tl;dr
 >
@@ -29,9 +29,9 @@ I wanted a garage. A place on my own domain where this stuff could live together
 
 ## What I didn't want to do
 
-The obvious path is a merge: monorepo, or move each project to Vercel as a separate deployment. Both mean real work per project -- consolidated CI, shared dependency trees, combined issue trackers. Hobby projects earn their independence precisely because they're free to be messy and self-contained. The right fix is a smarter routing layer in front, not a restructuring underneath.
+The obvious path is a merge: monorepo, or move each project to Vercel as a separate deployment. Both mean real work per project: consolidated CI, shared dependency trees, combined issue trackers. Hobby projects earn their independence precisely because they're free to be messy and self-contained. The right fix is a smarter routing layer in front, not a restructuring underneath.
 
-## The approach
+## How the proxy works
 
 This assumes the main site is already on Vercel and each project already serves from `https://khawkins98.github.io/repo-name/`.
 
@@ -67,7 +67,7 @@ Two `redirects` entries fix it. Redirects run before filesystem matching:
 }
 ```
 
-Visiting `/PDF-A-go-go/` now redirects (302) to `/PDF-A-go-go/index.html`. No directory-index ambiguity; the rewrite fires and proxies to GitHub Pages. The browser ends up at `/PDF-A-go-go/index.html`, where relative asset paths like `./app.js` resolve correctly to `/PDF-A-go-go/app.js`. Bare root-relative paths like `/styles.css` would serve from the main site root instead -- fix those in the hobby project before proxying.
+Visiting `/PDF-A-go-go/` now redirects (302) to `/PDF-A-go-go/index.html`. No directory-index ambiguity; the rewrite fires and proxies to GitHub Pages. The browser ends up at `/PDF-A-go-go/index.html`, where relative asset paths like `./app.js` resolve correctly to `/PDF-A-go-go/app.js`. Bare root-relative paths like `/styles.css` would serve from the main site root instead. Fix those in the hobby project before proxying.
 
 I couldn't find this behavior documented anywhere. If you hit 404s on the project root, that's the fix.
 
@@ -133,7 +133,7 @@ Worth adding for any project that exposes public JS assets loaded programmatical
 
 For SPAs with client-side routing: the project needs a `404.html` on GitHub Pages that loads `index.html`. The proxy can't route to paths the GH Pages deploy doesn't know about.
 
-The full configuration and checklist live in [`vercel.json`](https://github.com/khawkins98/allaboutken-11ty/blob/main/vercel.json) and [`docs/DEPLOYMENT.md`](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/DEPLOYMENT.md). Nothing about the project deploys has to change: GitHub Pages stays the origin, Vercel becomes the routing layer. The projects just get to live at home.
+The full configuration and checklist live in [`vercel.json`](https://github.com/khawkins98/allaboutken-11ty/blob/main/vercel.json) and [`docs/DEPLOYMENT.md`](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/DEPLOYMENT.md). Nothing about the project deploys has to change: GitHub Pages stays the origin, Vercel becomes the routing layer. See what it looks like in practice at the [garage](/garage/). If you've proxied projects this way — or found a cleaner approach — I'd be glad to hear about it. The projects just get to live at home.
 
 ## Related posts
 
