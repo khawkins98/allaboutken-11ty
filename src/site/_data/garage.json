@@ -1,0 +1,18 @@
+[
+  {
+    "name": "PDF-A-go-go",
+    "path": "/PDF-A-go-go/",
+    "repo": "https://github.com/khawkins98/PDF-A-go-go",
+    "post": "/posts/20250811-pdf-a-go-go/",
+    "status": "stable",
+    "description": "A lightweight embeddable PDF viewer for the web. Drop it into any static site without a server or a third-party service."
+  },
+  {
+    "name": "pinment",
+    "path": "/pinment/",
+    "repo": "https://github.com/khawkins98/pinment",
+    "post": "/posts/20260225-introducing-pinment/",
+    "status": "active",
+    "description": "A browser bookmarklet for pinning comments to a live webpage and sharing the annotations as a single URL. No backend, no accounts."
+  }
+]

@@ -1,0 +1,143 @@
+---
+title: "Building a garage for hobby projects on your personal site"
+layout: layouts/post.njk
+teaser: "Years of hobby projects on GitHub Pages, scattered across a subdomain I don't own. Vercel rewrites brought them home without touching a single deploy pipeline."
+date: 2026-05-09
+tags:
+  - posts
+topics:
+  - web development
+  - vercel
+  - static sites
+  - GitHub Pages
+kens_status: draft
+---
+
+{% markdown %}
+
+I've been building hobby projects for years. Small tools, experiments, things that scratch an itch. Each one lives in its own repo, deploys to GitHub Pages via CI, and gets a write-up here -- and then sits at `khawkins98.github.io/project-name/`. Someone else's domain. Superficially connected to my work via blog posts and cross-links, but not really living with it.
+
+I wanted a garage. A place on my own domain where this stuff could live together: `allaboutken.com/PDF-A-go-go/`, `allaboutken.com/pinment/`, whatever comes next. Not a portfolio -- more like a workshop wall where the tools are visible and reachable from one address. And I didn't want to change how any of them deploy.
+
+> ## tl;dr
+>
+> - Vercel `rewrites` proxy `/project-name/:path*` to the GitHub Pages origin -- no deploy changes required
+> - A naive rewrite 404s on the project root; two `redirects` entries (bare path and trailing slash → `/project-name/index.html`) fix it
+> - Each project keeps its GitHub Pages URL; a hostname-check script redirects those visitors to the canonical URL
+> - CORS headers on proxied paths cover shared JS assets loaded via `fetch()`
+> - A `/garage/` index page on the main site ties all the projects together
+
+## What I didn't want to do
+
+The obvious path is a merge: monorepo, or move each project to Vercel as a separate deployment. Both mean real work per project -- consolidated CI, shared dependency trees, combined issue trackers. Hobby projects earn their independence precisely because they're free to be messy and self-contained. The right fix is a smarter routing layer in front, not a restructuring underneath.
+
+## The approach
+
+This assumes the main site is already on Vercel and each project already serves from `https://khawkins98.github.io/repo-name/`.
+
+A Vercel `rewrite` proxies a path prefix to any external origin. Minimum viable `vercel.json`:
+
+```json
+{
+  "rewrites": [
+    { "source": "/PDF-A-go-go/:path*", "destination": "https://khawkins98.github.io/PDF-A-go-go/:path*" }
+  ]
+}
+```
+
+Requests to `allaboutken.com/PDF-A-go-go/anything` forward to `khawkins98.github.io/PDF-A-go-go/anything`. The GitHub Pages deploy keeps working at its original URL unchanged.
+
+This works for every path except the project root.
+
+## The trailing-slash problem
+
+Go to `allaboutken.com/PDF-A-go-go/` and you get a 404, even with the rewrite in place. The reason is Vercel's processing order: filesystem matching (including a directory-index check for `build/PDF-A-go-go/index.html`) runs before rewrites. That file doesn't exist in the main site's build, so Vercel 404s before the rewrite ever fires.
+
+Two `redirects` entries fix it. Redirects run before filesystem matching:
+
+```json
+{
+  "redirects": [
+    { "source": "/PDF-A-go-go",  "destination": "/PDF-A-go-go/index.html", "permanent": false },
+    { "source": "/PDF-A-go-go/", "destination": "/PDF-A-go-go/index.html", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/PDF-A-go-go/:path*", "destination": "https://khawkins98.github.io/PDF-A-go-go/:path*" }
+  ]
+}
+```
+
+Visiting `/PDF-A-go-go/` now redirects (302) to `/PDF-A-go-go/index.html`. No directory-index ambiguity; the rewrite fires and proxies to GitHub Pages. The browser ends up at `/PDF-A-go-go/index.html`, where relative asset paths like `./app.js` resolve correctly to `/PDF-A-go-go/app.js`. Bare root-relative paths like `/styles.css` would serve from the main site root instead -- fix those in the hobby project before proxying.
+
+I couldn't find this behavior documented anywhere. If you hit 404s on the project root, that's the fix.
+
+## Not burning the old address
+
+GitHub Pages keeps serving at `khawkins98.github.io/project-name/`. The Vercel setup is additive: the personal domain gains a route, the original URL stays live. Rolling back is two deleted lines in `vercel.json`.
+
+But visitors arriving at the old URL should reach the canonical one. A small script at the top of each project's `<head>`:
+
+```html
+<script>if(window.location.hostname==='khawkins98.github.io'){window.location.replace('https://www.allaboutken.com/PDF-A-go-go/')}</script>
+<link rel="canonical" href="https://www.allaboutken.com/PDF-A-go-go/">
+```
+
+The hostname check is essential. Without it, the redirect fires on the proxied page too: allaboutken.com proxies to github.io, github.io redirects back to allaboutken.com, repeat. The check breaks the loop.
+
+## One wrinkle: CORS for shared JS assets
+
+[pinment](/posts/20260225-introducing-pinment/) is a bookmarklet tool. Its install snippet builds a script URL from `window.location.origin` at runtime, so it always points to whichever domain the user is visiting from. Through the Vercel proxy, that becomes `allaboutken.com/pinment/pinment-bookmarklet.js`, which the rewrite proxies correctly to GitHub Pages.
+
+`<script src>` tags don't trigger CORS, but `fetch()` does. A `headers` block in `vercel.json` covers it:
+
+```json
+{
+  "headers": [
+    { "source": "/pinment/:path*", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] }
+  ]
+}
+```
+
+Worth adding for any project that exposes public JS assets loaded programmatically from other pages.
+
+## The full configuration
+
+```json
+{
+  "buildCommand": "yarn build",
+  "outputDirectory": "build",
+  "headers": [
+    { "source": "/PDF-A-go-go/:path*", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] },
+    { "source": "/pinment/:path*", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] }
+  ],
+  "redirects": [
+    { "source": "/PDF-A-go-go",  "destination": "/PDF-A-go-go/index.html", "permanent": false },
+    { "source": "/PDF-A-go-go/", "destination": "/PDF-A-go-go/index.html", "permanent": false },
+    { "source": "/pinment",  "destination": "/pinment/index.html", "permanent": false },
+    { "source": "/pinment/", "destination": "/pinment/index.html", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/PDF-A-go-go/:path*", "destination": "https://khawkins98.github.io/PDF-A-go-go/:path*" },
+    { "source": "/pinment/:path*", "destination": "https://khawkins98.github.io/pinment/:path*" }
+  ]
+}
+```
+
+## Adding another project
+
+1. Confirm GitHub Pages is enabled and serving at `khawkins98.github.io/repo-name/`.
+2. Check asset paths: `./`-relative or prefixed with the repo name. Bare `/styles.css` will break.
+3. Add two `redirects` entries and one `rewrite` to `vercel.json`.
+4. Add the hostname-check script and `<link rel="canonical">` to the project's `index.html`.
+5. Add the project to the [garage page](/garage/).
+
+For SPAs with client-side routing: the project needs a `404.html` on GitHub Pages that loads `index.html`. The proxy can't route to paths the GH Pages deploy doesn't know about.
+
+The full configuration and checklist live in [`vercel.json`](https://github.com/khawkins98/allaboutken-11ty/blob/main/vercel.json) and [`docs/DEPLOYMENT.md`](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/DEPLOYMENT.md). Nothing about the project deploys has to change: GitHub Pages stays the origin, Vercel becomes the routing layer. The projects just get to live at home.
+
+## Related posts
+
+- [Introducing pinment](/posts/20260225-introducing-pinment/)
+- [PDF-A-go-go: an embeddable PDF viewer](/posts/20250811-pdf-a-go-go/)
+
+{% endmarkdown %}
