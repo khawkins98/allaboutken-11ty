@@ -3,6 +3,7 @@
   "outputDirectory": "build",
   "routes": [
     { "src": "/PDF-A-go-go", "dest": "https://khawkins98.github.io/PDF-A-go-go/" },
+    { "src": "/PDF-A-go-go/", "dest": "https://khawkins98.github.io/PDF-A-go-go/" },
     { "src": "/PDF-A-go-go/(.*)", "dest": "https://khawkins98.github.io/PDF-A-go-go/$1" },
     { "handle": "filesystem" }
   ]
