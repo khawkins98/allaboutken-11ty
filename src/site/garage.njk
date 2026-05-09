@@ -7,34 +7,47 @@ templateEngineOverride: njk
 permalink: /garage/
 ---
 
+<div class="kh-u-background-color--yellow--dark kh-u-fullbleed">
+  <section class="kh-grid-stylized kh-u-padding__top--500 kh-u-padding__bottom--500">
+    <div></div>
+    <div class="kh-content">
+      <h1 class="kh-font-headline kh-text-heading--1">
+        <div class="kh-font-headline--display">The garage.</div>
+      </h1>
+      <p class="kh-text-heading--2">Side projects, utilities, and experiments worth sharing.</p>
+    </div>
+  </section>
+</div>
+
 <article class="kh-grid-stylized kh-u-margin__top--1200">
   <div></div>
   <div class="kh-content">
-    <h1 class="kh-font-headline kh-text-heading--1">{{ title }}</h1>
 
 {% markdown %}
-I'm Ken -- I build things professionally for a living, and I build things for fun in whatever time is left. This is the garage: a place to collect the hobby projects worth showing off, all under one roof.
+I'm Ken. Most of my work involves [helping complex organisations turn their digital presence into systems that actually do something](/) -- the kind of work that lives in pull requests, architecture documents, and other people's repos. But I've increasingly found myself building things on the side: small programs, widgets, utilities, experiments. Things that scratch a professional itch, help me and colleagues get something done, or just exist because the idea was interesting enough to build.
 
-Not every experiment makes it here. Some repos stay quietly on [GitHub](https://github.com/khawkins98) because they're unfinished or only interesting to me. The ones below are the projects I want to point people at -- things that actually work, that I might still tinker with, and that I'm happy to explain if you ask.
+This is the garage. A place to collect the ones I can share and that are worth pointing people at. Not everything makes it here -- some projects are tied to paid work and can't be made public, others are too rough or too personal to be useful to anyone else. The ones below are the ones that are at least dog-fooded to my own use case: things I actually reach for, or did at some point, because they solved a real problem for me.
 
-These projects aren't necessarily on GitHub forever either. The garage is the canonical home; GitHub is just where the code lives right now.
+They won't always be stable, polished, or pretty. That's the nature of tinkering. But they're genuine -- and if any of them turn out to be useful to you too, that's a bonus.
+
+All of these are on [GitHub](https://github.com/khawkins98) for now, but that's not a permanent requirement. The garage is the canonical home.
 {% endmarkdown %}
 
-<ul class="kh-u-list-plain kh-u-margin__top--800">
+<section class="kh-u-margin__top--800">
 {% for project in garage %}
-<li class="kh-u-margin__bottom--900" style="border-top: 1px solid var(--kh-color--grey-light, #e0e0e0); padding-top: 1.5rem;">
-  <h2 class="kh-text-heading--2 kh-u-margin__bottom--300">
-    <a href="{{ project.path }}">{{ project.name }}</a>
-    <span class="kh-label kh-u-margin__left--200">{{ project.status }}</span>
+<article class="kh-summary kh-summary--news kh-u-margin__bottom--600">
+  <div class="kh-summary__date"><span class="kh-label">{{ project.status }}</span></div>
+  <h2 class="kh-summary__title kh-font-headline">
+    <a href="{{ project.path }}" class="kh-summary__link">{{ project.name }}</a>
   </h2>
-  <p>{{ project.description }}</p>
-  <p class="kh-u-text--small">
-    <a href="{{ project.post }}">Read the post</a> &middot;
+  <p class="kh-summary__text">{{ project.description }}</p>
+  <p class="kh-cluster">
+    <a href="{{ project.post }}">Read the post</a>
     <a href="{{ project.repo }}">Source on GitHub</a>
   </p>
-</li>
+</article>
 {% endfor %}
-</ul>
+</section>
 
 {% markdown %}
 ---
