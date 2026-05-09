@@ -18,31 +18,24 @@ One branch per unit of work. If a content post and an unrelated refactor ship to
 
 ## Commit messages
 
-A hybrid convention: sentence-case verb-first for content and features; conventional-commits prefixes for deps, fixes, and infra.
+Format: `prefix: sentence-case description`
 
-### Content
+| Prefix | Use for |
+|--------|---------|
+| `content:` | Posts, pages, editorial copy, images |
+| `feature:` | New site functionality or pages |
+| `fix:` | Bug fixes, broken builds, broken links |
+| `ci:` | GitHub Actions, Vercel config, deployment |
+| `chore:` | Deps, tooling, refactoring, procedural docs |
 
-- `Add post: <title>`
-- `Add digest post: <title>` (for `/digesting` entries)
-- `Update post: <title>`
-- `Draft: <title>` (for WIP commits on a draft branch)
+Examples:
 
-### Features and structural changes
-
-Verb-first imperative, sentence case. Examples from the log:
-
-- `Paginate blog index, add search boxes`
-- `Extract post-summary and pager partials`
-- `Unify search form layout with inline icon button`
-
-### Dependencies, tooling, infra
-
-Conventional-commits prefix:
-
-- `chore: upgrade pagefind 1.4.0 → 1.5.2`
-- `chore(deps): bump sass in the minor-and-patch group`
-- `chore: add CONTRIBUTING.md and PR template` (procedural docs)
-- `fix: add z-index to margin notes for stacking context`
+- `content: Add garage page intro and how-it-works section`
+- `content: Draft post on Vercel proxy for hobby projects`
+- `feature: Add /garage/ index page and data file`
+- `fix: Correct trailing-slash redirect for proxied paths`
+- `ci: Add pinment rewrite and CORS headers to vercel.json`
+- `chore: Upgrade pagefind 1.4.0 → 1.5.2`
 
 ### General rules
 
