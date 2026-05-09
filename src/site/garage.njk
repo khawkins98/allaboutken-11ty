@@ -1,0 +1,50 @@
+---
+title: The garage
+layout: layouts/base.njk
+date: 2026-05-09
+lastUpdated: 2026-05-09
+templateEngineOverride: njk
+permalink: /garage/
+---
+
+<article class="kh-grid-stylized kh-u-margin__top--1200">
+  <div></div>
+  <div class="kh-content">
+    <h1 class="kh-font-headline kh-text-heading--1">{{ title }}</h1>
+
+{% markdown %}
+I'm Ken -- I build things professionally for a living, and I build things for fun in whatever time is left. This is the garage: a place to collect the hobby projects worth showing off, all under one roof.
+
+Not every experiment makes it here. Some repos stay quietly on [GitHub](https://github.com/khawkins98) because they're unfinished or only interesting to me. The ones below are the projects I want to point people at -- things that actually work, that I might still tinker with, and that I'm happy to explain if you ask.
+
+These projects aren't necessarily on GitHub forever either. The garage is the canonical home; GitHub is just where the code lives right now.
+{% endmarkdown %}
+
+<ul class="kh-u-list-plain kh-u-margin__top--800">
+{% for project in garage %}
+<li class="kh-u-margin__bottom--900" style="border-top: 1px solid var(--kh-color--grey-light, #e0e0e0); padding-top: 1.5rem;">
+  <h2 class="kh-text-heading--2 kh-u-margin__bottom--300">
+    <a href="{{ project.path }}">{{ project.name }}</a>
+    <span class="kh-label kh-u-margin__left--200">{{ project.status }}</span>
+  </h2>
+  <p>{{ project.description }}</p>
+  <p class="kh-u-text--small">
+    <a href="{{ project.post }}">Read the post</a> &middot;
+    <a href="{{ project.repo }}">Source on GitHub</a>
+  </p>
+</li>
+{% endfor %}
+</ul>
+
+{% markdown %}
+---
+
+### How this works
+
+Each project lives in its own GitHub repository and deploys independently to [GitHub Pages](https://pages.github.com/). On the allaboutken.com side, a [Vercel rewrites](https://vercel.com/docs/edge-network/rewrites) block in `vercel.json` reverse-proxies each path prefix to its corresponding GitHub Pages URL -- so `/PDF-A-go-go/` here is actually serving `khawkins98.github.io/PDF-A-go-go/` behind the scenes.
+
+The garage page itself is data-driven: a JSON file lists the projects, Eleventy renders this page from it, and adding a new project means one entry in that file plus one line in `vercel.json`. The full story is in [the blog post](/posts/20260509-vercel-proxy-hobby-projects/).
+{% endmarkdown %}
+
+  </div>
+</article>
