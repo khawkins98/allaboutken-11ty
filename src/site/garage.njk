@@ -24,7 +24,7 @@ permalink: /garage/
   <div class="kh-content">
 
 {% markdown %}
-I'm Ken. Most of my work involves [helping complex organisations turn their digital presence into systems that actually do something](/) -- the kind of work that lives in pull requests, architecture documents, and other people's repos. But I've increasingly found myself building things on the side: small programs, widgets, utilities, experiments. Things that scratch a professional itch, help me and colleagues get something done, or just exist because the idea was interesting enough to build.
+I'm Ken. Most of my work involves [helping complex organisations turn their digital presence into systems that actually do something](/), and a lot of that work is coordination: meetings, decisions, aligning people, and some code that makes the pieces real. I often find myself building little tools on the side when an idea appears or a small problem keeps repeating: programs, widgets, utilities, experiments. Things that scratch a professional itch, help me and colleagues get something done, or just exist because the idea was interesting enough to build.
 
 This is the garage. A place to collect the ones I can share and that are worth pointing people at. Not everything makes it here -- some projects are tied to paid work and can't be made public, others are too rough or too personal to be useful to anyone else. The ones below are the ones that are at least dog-fooded to my own use case: things I actually reach for, or did at some point, because they solved a real problem for me.
 
@@ -33,9 +33,9 @@ They won't always be stable, polished, or pretty. That's the nature of tinkering
 All of these are on [GitHub](https://github.com/khawkins98) for now, but that's not a permanent requirement. The garage is the canonical home.
 {% endmarkdown %}
 
-<section class="kh-u-margin__top--800">
+<section class="kh-card-container kh-u-margin__top--800">
 {% for project in garage %}
-<article class="kh-summary kh-summary--news kh-u-margin__bottom--600">
+<article class="kh-summary kh-summary--news kh-summary--highlight kh-u-margin__bottom--600">
   <div class="kh-summary__date"><span class="kh-label">{{ project.status }}</span></div>
   <h2 class="kh-summary__title kh-font-headline">
     <a href="{{ project.path }}" class="kh-summary__link">{{ project.name }}</a>
@@ -48,6 +48,10 @@ All of these are on [GitHub](https://github.com/khawkins98) for now, but that's 
 </article>
 {% endfor %}
 </section>
+
+{% markdown %}
+Only two projects are here so far -- I'm bringing them across carefully to make sure existing embed links don't break in the process. For the full list of what I've built, [GitHub has everything](https://github.com/khawkins98?tab=repositories).
+{% endmarkdown %}
 
 {% markdown %}
 ---

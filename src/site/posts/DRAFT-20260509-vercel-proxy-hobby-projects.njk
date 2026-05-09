@@ -15,9 +15,11 @@ kens_status: draft
 
 {% markdown %}
 
-I've been building hobby projects for years: small tools, experiments, things that scratch an itch. Each one lives in its own repo, deploys to GitHub Pages via CI, and gets a write-up here -- and then sits at `khawkins98.github.io/project-name/`. Someone else's domain. The cross-links keep things loosely connected, but the projects aren't really living with my work.
+I've been building hobby projects for years. Each one gets a write-up here and a link to GitHub Pages, but the project itself lives at `khawkins98.github.io/project-name/`: someone else's domain. You can read about PDF-A-go-go or pinment on this site, but you can't actually reach either project from here. They're linked, not present.
 
-I wanted a garage, a place on my own domain where this stuff could live together: `allaboutken.com/PDF-A-go-go/`, `allaboutken.com/pinment/`, whatever comes next. It's not a portfolio: more like a workshop wall where the tools are visible and reachable from one address. And I didn't want to change how any of them deploy.
+I wanted to bring them on-domain without the obvious headaches: dozens of subdomains is more infrastructure than any of these deserve, and copying build output into the main repo defeats the point of keeping them separate.
+
+GitHub Pages already solved the mapping problem -- one repo, one directory path. Could I just have my own domain do the same: proxy `/repo-name/` to whatever GitHub Pages is already serving?
 
 > ## tl;dr
 >
@@ -74,6 +76,8 @@ I couldn't find this behavior documented anywhere. If you hit 404s on the projec
 ## Not burning the old address
 
 GitHub Pages keeps serving at `khawkins98.github.io/project-name/`. The Vercel setup is additive: the personal domain gains a route, the original URL stays live. Rolling back is two deleted lines in `vercel.json`.
+
+For now I've only moved two projects across -- PDF-A-go-go and pinment -- while I confirm that existing embed links aren't affected. The redirect from `khawkins98.github.io` to the proxied URL could in theory break things for anyone who has embedded the old URL directly. Once it's clear nothing is breaking, adding the rest is a few lines in `vercel.json`.
 
 But visitors arriving at the old URL should reach the canonical one. A small script at the top of each project's `<head>`:
 
