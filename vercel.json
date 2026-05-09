@@ -1,10 +1,11 @@
 {
   "buildCommand": "yarn build",
   "outputDirectory": "build",
-  "routes": [
-    { "src": "/PDF-A-go-go", "dest": "https://khawkins98.github.io/PDF-A-go-go/" },
-    { "src": "/PDF-A-go-go/", "dest": "https://khawkins98.github.io/PDF-A-go-go/" },
-    { "src": "/PDF-A-go-go/(.*)", "dest": "https://khawkins98.github.io/PDF-A-go-go/$1" },
-    { "handle": "filesystem" }
+  "redirects": [
+    { "source": "/PDF-A-go-go", "destination": "/PDF-A-go-go/index.html", "permanent": false },
+    { "source": "/PDF-A-go-go/", "destination": "/PDF-A-go-go/index.html", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/PDF-A-go-go/:path*", "destination": "https://khawkins98.github.io/PDF-A-go-go/:path*" }
   ]
 }
