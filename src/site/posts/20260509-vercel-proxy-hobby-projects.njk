@@ -1,7 +1,7 @@
 ---
-title: "Building a garage for hobby projects on your personal site"
+title: "Building a virtual garage for hobby projects"
 layout: layouts/post.njk
-teaser: "Years of GitHub Pages hobby projects scattered across a subdomain I don't own; Vercel rewrites brought them home without touching a deploy pipeline."
+teaser: "I wanted to bring my GitHub Pages hobby projects onto this site witout a complicated workflow, Vercel rewrites to the rescue."
 date: 2026-05-09
 tags:
   - posts
@@ -10,16 +10,16 @@ topics:
   - vercel
   - static sites
   - GitHub Pages
-kens_status: draft
+kens_status: published
 ---
 
 {% markdown %}
 
-I've been building hobby projects for years. Each one gets a write-up here and a link to GitHub Pages, but the project itself lives at `khawkins98.github.io/project-name/`: someone else's domain. You can read about PDF-A-go-go or pinment on this site, but you can't actually reach either project from here. They're linked, not present.
+I've been building hobby projects for years. Normally I'll give the better ones a write-up here and a link to GitHub Pages, but the project itself lives at `khawkins98.github.io/project-name/`.
 
-I wanted to bring them on-domain without the obvious headaches: dozens of subdomains is more infrastructure than any of these deserve, and copying build output into the main repo defeats the point of keeping them separate.
+I wanted to bring them on-domain without the obvious headaches: dozens of subdomains is more infrastructure than any of these deserve, subdomains stillconfuse many people, and copying build output into the main repo defeats the point of keeping them separate.
 
-GitHub Pages already solved the mapping problem -- one repo, one directory path. Could I just have my own domain do the same: proxy `/repo-name/` to whatever GitHub Pages is already serving?
+Could I just have my site do it like GitHub Pages? ... proxy `/repo-name/` to whatever GitHub is already serving?
 
 > ## tl;dr
 >
@@ -35,14 +35,17 @@ The obvious path is a merge: monorepo, or move each project to Vercel as a separ
 
 ## How the proxy works
 
-This assumes the main site is already on Vercel and each project already serves from `https://khawkins98.github.io/repo-name/`.
+My site was already on Vercel and each project already served from a `https://khawkins98.github.io/repo-name/`.
 
-A Vercel `rewrite` proxies a path prefix to any external origin. Minimum viable `vercel.json`:
+Then I used Vercel `rewrite` proxies a path prefix to any external origin. Minimum viable `vercel.json`:
 
 ```json
 {
   "rewrites": [
-    { "source": "/PDF-A-go-go/:path*", "destination": "https://khawkins98.github.io/PDF-A-go-go/:path*" }
+    {
+      "source": "/PDF-A-go-go/:path*",
+      "destination": "https://khawkins98.github.io/PDF-A-go-go/:path*"
+    }
   ]
 }
 ```
@@ -53,7 +56,7 @@ This works for every path except the project root.
 
 ## The trailing-slash problem
 
-Go to `allaboutken.com/PDF-A-go-go/` and you get a 404, even with the rewrite in place. The reason is Vercel's processing order: filesystem matching (including a directory-index check for `build/PDF-A-go-go/index.html`) runs before rewrites. That file doesn't exist in the main site's build, so Vercel 404s before the rewrite ever fires.
+Going to `allaboutken.com/PDF-A-go-go/` still gave a 404, even with the rewrite in place. The reason is Vercel's processing order: filesystem matching (including a directory-index check for `build/PDF-A-go-go/index.html`) runs before rewrites. That file doesn't exist in the main site's build, so Vercel 404s before the rewrite ever fires.
 
 Two `redirects` entries fix it. Redirects run before filesystem matching:
 
@@ -64,14 +67,15 @@ Two `redirects` entries fix it. Redirects run before filesystem matching:
     { "source": "/PDF-A-go-go/", "destination": "/PDF-A-go-go/index.html", "permanent": false }
   ],
   "rewrites": [
-    { "source": "/PDF-A-go-go/:path*", "destination": "https://khawkins98.github.io/PDF-A-go-go/:path*" }
+    {
+        "source": "/PDF-A-go-go/:path*",
+        "destination": "https://khawkins98.github.io/PDF-A-go-go/:path*"
+    }
   ]
 }
 ```
 
-Visiting `/PDF-A-go-go/` now redirects (302) to `/PDF-A-go-go/index.html`. No directory-index ambiguity; the rewrite fires and proxies to GitHub Pages. The browser ends up at `/PDF-A-go-go/index.html`, where relative asset paths like `./app.js` resolve correctly to `/PDF-A-go-go/app.js`. Bare root-relative paths like `/styles.css` would serve from the main site root instead. Fix those in the hobby project before proxying.
-
-I couldn't find this behavior documented anywhere. If you hit 404s on the project root, that's the fix.
+Visiting `/PDF-A-go-go/` now redirects (302) to `/PDF-A-go-go/index.html`. No directory-index ambiguity; the rewrite fires and proxies to GitHub Pages. The browser ends up at `/PDF-A-go-go/index.html`, where relative asset paths like `./app.js` resolve correctly to `/PDF-A-go-go/app.js`.
 
 ## Not burning the old address
 
@@ -88,9 +92,9 @@ But visitors arriving at the old URL should reach the canonical one. A small scr
 
 The hostname check is essential. Without it, the redirect fires on the proxied page too: allaboutken.com proxies to github.io, github.io redirects back to allaboutken.com, repeat. The check breaks the loop.
 
-## One wrinkle: CORS for shared JS assets
+## Don't forget: CORS for shared JS assets
 
-[pinment](/posts/20260225-introducing-pinment/) is a bookmarklet tool. Its install snippet builds a script URL from `window.location.origin` at runtime, so it always points to whichever domain the user is visiting from. Through the Vercel proxy, that becomes `allaboutken.com/pinment/pinment-bookmarklet.js`, which the rewrite proxies correctly to GitHub Pages.
+[Pinment](/posts/20260225-introducing-pinment/) is a bookmarklet tool. Its install snippet builds a script URL from `window.location.origin` at runtime, so it always points to whichever domain the user is visiting from. Through the Vercel proxy, that becomes `allaboutken.com/pinment/pinment-bookmarklet.js`, which the rewrite proxies correctly to GitHub Pages.
 
 `<script src>` tags don't trigger CORS, but `fetch()` does. A `headers` block in `vercel.json` covers it:
 
@@ -129,7 +133,7 @@ Worth adding for any project that exposes public JS assets loaded programmatical
 
 ## Adding another project
 
-1. Confirm GitHub Pages is enabled and serving at `khawkins98.github.io/repo-name/`.
+1. Confirm GitHub Pages is enabled and serving at `USERNAME.github.io/repo-name/`.
 2. Check asset paths: `./`-relative or prefixed with the repo name. Bare `/styles.css` will break.
 3. Add two `redirects` entries and one `rewrite` to `vercel.json`.
 4. Add the hostname-check script and `<link rel="canonical">` to the project's `index.html`.
@@ -139,9 +143,6 @@ For SPAs with client-side routing: the project needs a `404.html` on GitHub Page
 
 The full configuration and checklist live in [`vercel.json`](https://github.com/khawkins98/allaboutken-11ty/blob/main/vercel.json) and [`docs/DEPLOYMENT.md`](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/DEPLOYMENT.md). Nothing about the project deploys has to change: GitHub Pages stays the origin, Vercel becomes the routing layer. See what it looks like in practice at the [garage](/garage/). If you've proxied projects this way — or found a cleaner approach — I'd be glad to hear about it. The projects just get to live at home.
 
-## Related posts
-
-- [Introducing pinment](/posts/20260225-introducing-pinment/)
-- [PDF-A-go-go: an embeddable PDF viewer](/posts/20250811-pdf-a-go-go/)
+I think this is a fairly clean way to bring my web projects back "home" without the server compexities.
 
 {% endmarkdown %}
