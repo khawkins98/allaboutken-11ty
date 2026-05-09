@@ -1,10 +1,9 @@
 {
   "buildCommand": "yarn build",
   "outputDirectory": "build",
-  "rewrites": [
-    {
-      "source": "/PDF-A-go-go/:path*",
-      "destination": "https://khawkins98.github.io/PDF-A-go-go/:path*"
-    }
+  "routes": [
+    { "src": "/PDF-A-go-go", "dest": "https://khawkins98.github.io/PDF-A-go-go/" },
+    { "src": "/PDF-A-go-go/(.*)", "dest": "https://khawkins98.github.io/PDF-A-go-go/$1" },
+    { "handle": "filesystem" }
   ]
 }
