@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Enforces the commit message convention: <prefix>: <description>
+# See CONTRIBUTING.md for the full list of prefixes.
+
+commit_msg=$(cat "$1")
+
+# Skip merge, revert, and fixup commits — they're machine-generated
+if echo "$commit_msg" | grep -qE "^(Merge |Revert |fixup! |squash! )"; then
+  exit 0
+fi
+
+pattern="^(content|feature|fix|ci|chore): .+"
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo ""
+  echo "  ❌  Commit message format error"
+  echo ""
+  echo "  Expected:  <prefix>: <description>"
+  echo "  Prefixes:  content | feature | fix | ci | chore"
+  echo ""
+  echo "  Got:  $commit_msg"
+  echo ""
+  exit 1
+fi

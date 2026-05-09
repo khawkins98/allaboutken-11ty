@@ -44,6 +44,8 @@ Examples:
 - One logical change per commit
 - Never use `--no-verify` or `--no-gpg-sign` to bypass hooks
 
+The format is enforced locally by `.githooks/commit-msg` (activated on `yarn install` via the `prepare` script) and on PRs by the `pr-title-check` GitHub Actions workflow.
+
 ## Pull requests
 
 One PR per unit of work. Keep noisy refactors out of content PRs.
