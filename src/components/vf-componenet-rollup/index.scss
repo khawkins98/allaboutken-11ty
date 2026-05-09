@@ -1229,22 +1229,22 @@ body:has(#kh-css-toggle:checked) {
   }
 
   // Feedback toast banner (.kh-feedback-thanks)
-  //
+  // -
   // A fixed bottom banner triggered by CSS :target. Used after the feedback
   // Worker redirects back with a #thanks fragment. No JavaScript required.
-  //
+  // -
   // Markup:
   //   <span id="thanks" class="kh-feedback-thanks" aria-live="polite">
   //     Thanks for the feedback!
   //   </span>
-  //
+  // -
   // Behaviour:
   //   1. Hidden by default (display: none).
   //   2. When #thanks is in the URL, :target activates — banner slides up
   //      from the bottom with a spring easing.
   //   3. A blue timer bar (::after) shrinks across the top border over 15s.
   //   4. After 15s the banner slides back down and hides via visibility:hidden.
-  //
+  // -
   // Animations:
   //   - kh-banner-in   : slide up from below (0.6s, spring easing)
   //   - kh-banner-out  : slide down + hide (0.4s, starts at 15s)

@@ -203,7 +203,7 @@
 
   small:not([class*='kh-']) {
     color: #373a36;
-    display: block;
+    display: inline;
     font-size: 13px;
     font-weight: 400;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -244,14 +244,8 @@
     margin: 0;
     padding-left: 20px;
   }
-}
 
-.kh-content small:not([class*='kh-']) {
-  display: inline;
-}
-
-/* Dedicated '#' permalink using SCSS nesting */
-.kh-content {
+  /* Dedicated '#' permalink using SCSS nesting */
   h2:not([class*='kh-']),
   h3:not([class*='kh-']),
   h4:not([class*='kh-']),
