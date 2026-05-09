@@ -20,6 +20,7 @@
     "dev": "concurrently -k \"sass --load-path src/components --watch src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\"",
     "start": "yarn dev",
     "test": "echo \"Error: no test specified\" && exit 0",
+    "prepare": "git config core.hooksPath .githooks",
     "update-components": "yarn upgrade-interactive --latest"
   },
   "dependencies": {
