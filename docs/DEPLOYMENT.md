@@ -59,11 +59,13 @@ Current DNS records for the main site:
 - **Deploy:** manually via `cd worker && npx wrangler deploy` (auto-deploy CI is currently broken — see `.github/workflows/deploy-feedback-worker.yml` for details)
 - Completely independent of the main site serving. Not affected by Vercel or DNS changes to the apex domain.
 
-### GitHub Pages — legacy / hobby project host
+### GitHub Pages — main site (warm spare) and hobby project origins
 
 - **URL:** `khawkins98.github.io`
-- GitHub Actions (`.github/workflows/build-and-deploy.yml`) still builds and deploys the main site to GitHub Pages on every push to `main`. This is currently a warm spare — `allaboutken.com` DNS now points to Vercel, so GitHub Pages is not receiving production traffic.
-- Each hobby project has its own repo and its own GitHub Pages deployment. Vercel proxies to these via rewrites (see below).
+
+**Main site:** GitHub Actions (`.github/workflows/build-and-deploy.yml`) still builds and deploys the main site to GitHub Pages on every push to `main`. This is currently a warm spare — `allaboutken.com` DNS now points to Vercel, so GitHub Pages is not receiving production traffic. See issue #62 for the planned cleanup.
+
+**Hobby projects: do not disable GitHub Pages in these repos.** Each hobby project has its own repo with its own GitHub Pages deployment, and Vercel proxies to `khawkins98.github.io/project-name/` as the origin. If GitHub Pages is turned off in a hobby project repo, the proxied path on `allaboutken.com` will immediately 404. When adding a new hobby project, confirm GitHub Pages is enabled and the site is live at `khawkins98.github.io/repo-name/` *before* adding the rewrite to `vercel.json`.
 
 ---
 
@@ -79,7 +81,9 @@ Defined in `vercel.json`. Each entry maps an `allaboutken.com` path prefix to th
 
 ## How to add a new proxied project
 
-1. **Check the project's asset paths.** All assets must use relative paths (e.g. `./foo.css`, `../bar.js`) or paths prefixed with the repo name (e.g. `/my-project/foo.css`). Bare root-relative paths like `/foo.css` will break because Vercel will try to serve them from the main site. Fix these in the hobby project's repo first.
+1. **Confirm GitHub Pages is live in the hobby project repo.** Go to the repo Settings → Pages and verify it's enabled and serving at `khawkins98.github.io/repo-name/`. Vercel proxies to GitHub Pages as the origin — if GH Pages is off, the proxied path will 404. **Never disable GitHub Pages in a hobby project repo** once it's been added as a rewrite.
+
+2. **Check the project's asset paths.** All assets must use relative paths (e.g. `./foo.css`, `../bar.js`) or paths prefixed with the repo name (e.g. `/my-project/foo.css`). Bare root-relative paths like `/foo.css` will break because Vercel will try to serve them from the main site. Fix these in the hobby project's repo first.
 
 2. **Check if it's a SPA.** Single-page apps that use client-side routing need a `404.html` that loads `index.html` on GitHub Pages, so that deep links work through the proxy. If the project has a `404.html` already that redirects to `index.html`, you're good.
 
