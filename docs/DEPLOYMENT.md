@@ -84,6 +84,7 @@ The redirect-to-index-html approach is necessary because Vercel's directory-inde
 | Path prefix | GitHub Pages origin | Repo |
 |-------------|---------------------|------|
 | `/PDF-A-go-go/` | `https://khawkins98.github.io/PDF-A-go-go/` | [khawkins98/PDF-A-go-go](https://github.com/khawkins98/PDF-A-go-go) |
+| `/pinment/` | `https://khawkins98.github.io/pinment/` | [khawkins98/pinment](https://github.com/khawkins98/pinment) |
 
 ---
 
