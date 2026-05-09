@@ -1,7 +1,7 @@
 ---
 title: "Building a virtual garage for hobby projects"
 layout: layouts/post.njk
-teaser: "I wanted to bring my GitHub Pages hobby projects onto this site witout a complicated workflow, Vercel rewrites to the rescue."
+teaser: "I wanted my GitHub Pages hobby projects on-domain without a complicated workflow; Vercel rewrites turned out to be the cleanest path."
 date: 2026-05-09
 tags:
   - posts
@@ -17,9 +17,20 @@ kens_status: published
 
 I've been building hobby projects for years. Normally I'll give the better ones a write-up here and a link to GitHub Pages, but the project itself lives at `khawkins98.github.io/project-name/`.
 
-I wanted to bring them on-domain without the obvious headaches: dozens of subdomains is more infrastructure than any of these deserve, subdomains stillconfuse many people, and copying build output into the main repo defeats the point of keeping them separate.
+I wanted to bring them on-domain without the obvious headaches: dozens of subdomains is more infrastructure than any of these deserve, subdomains still confuse people, and copying build output into the main repo defeats the point of keeping them separate.
 
-Could I just have my site do it like GitHub Pages? ... proxy `/repo-name/` to whatever GitHub is already serving?
+Could I just have my site do what GitHub Pages already does: proxy `/repo-name/` to whatever GitHub is already serving?
+
+- Before: `khawkins98.github.io/PDF-A-go-go`
+- After: `AllAboutKen.com/PDF-A-go-go`
+
+Same project, same deploy pipeline, better home.
+
+<p>
+  <a href="/garage/" class="kh-button">See the garage</a>
+</p>
+
+Keep reading if you want to see exactly how I wired it up.
 
 > ## tl;dr
 >
@@ -35,9 +46,9 @@ The obvious path is a merge: monorepo, or move each project to Vercel as a separ
 
 ## How the proxy works
 
-My site was already on Vercel and each project already served from a `https://khawkins98.github.io/repo-name/`.
+My site was already on Vercel and each project already served from `https://khawkins98.github.io/repo-name/`.
 
-Then I used Vercel `rewrite` proxies a path prefix to any external origin. Minimum viable `vercel.json`:
+Vercel `rewrite` rules can proxy a path prefix to an external origin. Minimum viable `vercel.json`:
 
 ```json
 {
@@ -143,6 +154,6 @@ For SPAs with client-side routing: the project needs a `404.html` on GitHub Page
 
 The full configuration and checklist live in [`vercel.json`](https://github.com/khawkins98/allaboutken-11ty/blob/main/vercel.json) and [`docs/DEPLOYMENT.md`](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/DEPLOYMENT.md). Nothing about the project deploys has to change: GitHub Pages stays the origin, Vercel becomes the routing layer. See what it looks like in practice at the [garage](/garage/). If you've proxied projects this way — or found a cleaner approach — I'd be glad to hear about it. The projects just get to live at home.
 
-I think this is a fairly clean way to bring my web projects back "home" without the server compexities.
+I think this is a clean way to bring web projects back home without adding server complexity.
 
 {% endmarkdown %}
