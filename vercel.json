@@ -1,0 +1,10 @@
+{
+  "buildCommand": "yarn build",
+  "outputDirectory": "build",
+  "rewrites": [
+    {
+      "source": "/PDF-A-go-go/:path*",
+      "destination": "https://khawkins98.github.io/PDF-A-go-go/:path*"
+    }
+  ]
+}
