@@ -324,22 +324,65 @@
     }
   }
 
-  /* Code + live demo container (codeAndDemo shortcode) */
+  /* Code + live demo container (codeAndDemo shortcode).
+     Two stacked panes: source on top, rendered result below.
+     Each pane has an uppercase pseudo-label so the relationship reads at a glance. */
   .kh-demo {
-    margin-bottom: 2rem;
+    display: grid;
+    margin: 1.5rem 0 2rem;
+    border: 1px solid #d0d0ce;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
 
-    pre {
-      margin-bottom: 0;
-      border-radius: 1rem 1rem 0 0;
-    }
+  .kh-demo > pre {
+    margin: 0;
+    padding: 1.25rem 1.5rem 1.5rem;
+    background: #fbfaf6;
+    border: none;
+    border-bottom: 1px solid #d0d0ce;
+    border-radius: 0;
+    box-shadow: none;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  /* Override the site default .kh-content code background so the source
+     reads as one continuous block instead of per-line white rectangles. */
+  .kh-demo > pre code,
+  .kh-demo > pre code[class] {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+  }
+  .kh-demo > pre::before {
+    content: "Source";
+    display: block;
+    margin-bottom: 0.6rem;
+    font-family: "Recursive", system-ui, sans-serif;
+    font-variation-settings: "MONO" 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.55;
   }
 
   .kh-demo__live {
     background: #fff;
-    border: 1px solid #d0d0ce;
-    border-top: none;
-    border-radius: 0 0 1rem 1rem;
-    padding: 1.5rem;
+    padding: 1.25rem 1.5rem 1.5rem;
+    border: none;
+    border-radius: 0;
+  }
+  .kh-demo__live::before {
+    content: "Result";
+    display: block;
+    margin-bottom: 0.6rem;
+    font-family: "Recursive", system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.55;
   }
 }
 }
