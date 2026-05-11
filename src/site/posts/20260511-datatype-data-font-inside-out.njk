@@ -87,6 +87,13 @@ kens_status: draft
       font-feature-settings: 'liga' 1, 'calt' 1;
       font-size: 1.4em;
     }
+    /* Inline chart usage inside prose. */
+    .kh-content .chart {
+      font-family: 'Datatype', ui-monospace, monospace;
+      font-feature-settings: 'liga' 1, 'calt' 1;
+      font-size: 1.3em;
+      vertical-align: -0.1em;
+    }
   }
 </style>
 
@@ -118,8 +125,8 @@ The interface really is just text: load the font, apply it to an element, write 
 <div class="kh-datatype">
   <div class="kh-datatype-row">
     <span class="kh-datatype-row__label">Posts per year, 2017–2026 (bar)</span>
-    <pre class="kh-datatype-row__code"><code>&lt;span class="chart"&gt;{b:18,21,12,12,15,0,0,0,100,94}&lt;/span&gt;</code></pre>
     <span class="kh-datatype-row__chart" aria-hidden="true">{b:18,21,12,12,15,0,0,0,100,94}</span>
+    <pre class="kh-datatype-row__code"><code>&lt;span class="chart"&gt;{b:18,21,12,12,15,0,0,0,100,94}&lt;/span&gt;</code></pre>
   </div>
   <div class="kh-u-sr-only">
     <table>
@@ -141,8 +148,8 @@ The interface really is just text: load the font, apply it to an element, write 
   </div>
   <div class="kh-datatype-row">
     <span class="kh-datatype-row__label">Digesting cadence by month, Nov 2025 – May 2026 (sparkline)</span>
-    <pre class="kh-datatype-row__code"><code>&lt;span class="chart"&gt;{l:25,50,0,25,100,75,50}&lt;/span&gt;</code></pre>
     <span class="kh-datatype-row__chart" aria-hidden="true">{l:25,50,0,25,100,75,50}</span>
+    <pre class="kh-datatype-row__code"><code>&lt;span class="chart"&gt;{l:25,50,0,25,100,75,50}&lt;/span&gt;</code></pre>
   </div>
   <div class="kh-u-sr-only">
     <table>
@@ -161,8 +168,8 @@ The interface really is just text: load the font, apply it to an element, write 
   </div>
   <div class="kh-datatype-row">
     <span class="kh-datatype-row__label">Share of all posts that are digesting entries (pie)</span>
-    <pre class="kh-datatype-row__code"><code>&lt;span class="chart"&gt;{p:13}&lt;/span&gt;</code></pre>
     <span class="kh-datatype-row__chart" aria-hidden="true">{p:13}</span>
+    <pre class="kh-datatype-row__code"><code>&lt;span class="chart"&gt;{p:13}&lt;/span&gt;</code></pre>
   </div>
   <p class="kh-u-sr-only">13 percent of posts are digesting entries: 13 of 97.</p>
 </div>
@@ -223,6 +230,10 @@ That last one is the one I keep landing on. Datatype is genuinely cool, and the 
 
 So why am I still circling it? Partly because it [rhymes with Miriam Suzanne's argument about combining CSS units](/posts/20250927-the-best-css-unit-might-be-a-combination/): the platform usually has a primitive already, and the trick is recognising it. Variable fonts are quietly turning into a fairly expressive runtime, and Datatype is one of the more playful demonstrations of that.
 
-And partly because it's a nice thing to look at an old idea of your own and see someone else carry the same name down the opposite road, and do it well. If you find a real use for it, [let me know](mailto:khawkins98@gmail.com). I'd like to see where it lands.
+And partly because it's a nice thing to look at an old idea of your own and see someone else carry the same name down the opposite road, and do it well.
+
+If I had to put a number on it: my enthusiasm for variable fonts as an expressive runtime is sitting at about <span class="chart" aria-hidden="true">{p:85}</span><span class="kh-u-sr-only">(roughly 85 percent)</span>, while my likelihood of actually reaching for Datatype on the next chart I ship is somewhere around <span class="chart" aria-hidden="true">{p:25}</span><span class="kh-u-sr-only">(roughly 25 percent)</span>. The gap between those two pies is basically the whole post.
+
+If you find a real use for it, [let me know](mailto:khawkins98@gmail.com). I'd like to see where it lands.
 
 {% endmarkdown %}
