@@ -45,6 +45,30 @@ kens_status: draft
     .kh-datatype-row:last-child { border-bottom: none; }
     .kh-datatype-row__label { font-size: 0.95em; }
     .kh-datatype-row__chart { font-feature-settings: 'liga' 1, 'calt' 1; }
+    /* Demo block styling for the codeAndDemo shortcode. */
+    .kh-demo {
+      display: grid;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .kh-demo pre {
+      background: color-mix(in srgb, currentColor 6%, transparent);
+      border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+      border-radius: .5rem;
+      padding: 1rem;
+      overflow: auto;
+      font-size: 0.95em;
+    }
+    .kh-demo__live {
+      border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+      border-radius: .5rem;
+      padding: 1rem 1.25rem;
+    }
+    .kh-demo__live .chart {
+      font-family: 'Datatype', ui-monospace, monospace;
+      font-feature-settings: 'liga' 1, 'calt' 1;
+      font-size: 1.4em;
+    }
   }
 </style>
 
@@ -56,9 +80,34 @@ It caught my eye partly because of the name. Back in 2018, at EMBL-EBI, I wrote 
 
 Datatype is also a data font, but it's inside out. The text isn't there to be read in the normal sense; it's there to be drawn. The font carries the chart, the chart is the typesetting, and what you write in the HTML is essentially the data itself. My old framing asked how a font could help us *see through* data; Datatype asks how a font can *be* the data.
 
+## How you use it
+
+Here's what that looks like in code: load the font, apply it to an element, write the chart syntax as content.
+
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<style>
+  /* Grab the font from https://fonts.google.com/specimen/Datatype, then: */
+  .chart {
+    font-family: 'Datatype', sans-serif;
+    font-feature-settings: 'liga' 1, 'calt' 1;
+    font-size: 1.4em;
+  }
+</style>
+
+<p>Quarterly sales: <span class="chart">{b:40,75,60,90}</span></p>
+<p>Pageviews this week: <span class="chart">{l:30,45,40,60,55,80,70}</span></p>
+<p>Disk used: <span class="chart">{p:62}</span></p>
+{% endcodeAndDemo %}
+
+{% markdown %}
+
+The text in the curly braces really is just text in the DOM. The browser's text engine handles the rest; nothing else has to initialise.
+
 ## Datatype on real data: my own blog cadence
 
-To see how it feels in practice, here's some data about this blog rendered through Datatype. The values in curly braces are literal text in the HTML; the font does the drawing. If the font fails to load, you'll see the raw expressions instead, which is itself a useful preview of the fallback behavior.
+For real numbers, here's the cadence of this blog rendered through Datatype. If the font fails to load, you'll see the raw expressions instead, which is itself a useful preview of the fallback behavior.
 
 {% endmarkdown %}
 
