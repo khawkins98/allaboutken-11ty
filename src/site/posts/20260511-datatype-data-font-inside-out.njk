@@ -109,34 +109,9 @@ My old framing asked how a font could help us *see through* data more clearly. D
 
 There's a third coincidence I couldn't resist noting. Datatype's [OFL license](https://github.com/franktisellano/datatype/blob/main/OFL.txt) credits IBM Plex Mono as the source of its underlying glyphs, and IBM Plex was the typeface I [wrote about back in 2017](/posts/20171112-ibm-plex-font-and-fira.html) when we were evaluating it for EMBL-EBI's scientific data work. The same letterforms that anchored my early thinking about how a typeface should serve data show up, nine years later, as the substrate of a font that *is* the data.
 
-## How you use it
-
-The interface really is just text. Load the font, apply it to an element, write the chart syntax as content:
-
-{% endmarkdown %}
-
-{% codeAndDemo 'html' %}
-<style>
-  /* Grab the font from https://fonts.google.com/specimen/Datatype, then: */
-  .chart {
-    font-family: 'Datatype', sans-serif;
-    font-feature-settings: 'liga' 1, 'calt' 1;
-    font-size: 1.4em;
-  }
-</style>
-
-<p>Quarterly sales: <span class="chart">{b:40,75,60,90}</span></p>
-<p>Pageviews this week: <span class="chart">{l:30,45,40,60,55,80,70}</span></p>
-<p>Disk used: <span class="chart">{p:62}</span></p>
-{% endcodeAndDemo %}
-
-{% markdown %}
-
-Three chart kinds: `{b:…}` for bars, `{l:…}` for sparklines, `{p:…}` for a single pie. Bars and sparklines accept up to 20 comma-separated values, each in the 0–100 range. The variable axes (`wdth` and `wght`) let you adjust density and visual weight without swapping files.
-
 ## Datatype on real data: my own blog cadence
 
-To see how it feels with real numbers, here's the cadence of this blog rendered through Datatype. If the font fails to load, you'll see the raw expressions instead, which is itself a useful preview of the fallback behaviour.
+The interface really is just text: load the font, apply it to an element, write the chart syntax as content. There are three chart kinds, all with values in the 0–100 range: `{b:…}` for bars, `{l:…}` for sparklines, and `{p:…}` for a single pie. To see how it feels with real numbers, here's the cadence of this blog rendered through Datatype, with the literal markup shown next to each rendered chart. If the font fails to load, you'll see the raw expressions instead, which is itself a useful preview of the fallback behaviour.
 
 {% endmarkdown %}
 
