@@ -1,0 +1,98 @@
+---
+title: "A data font, from the inside out"
+layout: layouts/digesting.njk
+teaser: "Datatype shares a name with a 2018 thought experiment of mine about data fonts, but goes in the exact opposite direction."
+date: 2026-05-11
+digest_link: https://franktisellano.github.io/datatype/
+tags: digesting
+topics:
+  - typography
+  - variable fonts
+  - data visualization
+  - design systems
+  - OpenType ligatures
+kens_status: draft
+---
+
+<style>
+  /* @font-face stays at top level; @font-face inside a selector is non-standard. */
+  @font-face {
+    font-family: 'Datatype';
+    src: url('/assets/kh-font/Datatype.woff2') format('woff2-variations'),
+         url('/assets/kh-font/Datatype.woff2') format('woff2');
+    font-weight: 100 900;
+    font-stretch: 50% 200%;
+    font-display: swap;
+  }
+  /* Scoped to match the site's CSS toggle pattern (see index.scss) so naked-mode renders raw text. */
+  body:has(#kh-css-toggle:checked) {
+    .kh-datatype {
+      font-family: 'Datatype', ui-monospace, monospace;
+      font-feature-settings: 'liga' 1, 'calt' 1;
+      font-size: 1.4em;
+      line-height: 1.4;
+      letter-spacing: 0;
+      margin: 1.5rem 0;
+    }
+    .kh-datatype-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      align-items: baseline;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+    }
+    .kh-datatype-row:last-child { border-bottom: none; }
+    .kh-datatype-row__label { font-size: 0.95em; }
+    .kh-datatype-row__chart { font-feature-settings: 'liga' 1, 'calt' 1; }
+  }
+</style>
+
+{% markdown %}
+
+[Datatype](https://franktisellano.github.io/datatype/), by Frank Tisellano, is a variable font that turns text into charts. Write `{b:30,70,50,90}` in any element and it renders an inline bar chart through OpenType ligature substitution. There are also sparklines (`{l:...}`) and pie charts (`{p:...}`), with weight and width axes adjusting density and visual weight.
+
+It caught my eye partly because of the name. Back in 2018, at EMBL-EBI, I wrote [What if: A web font for data](/posts/20180319-data-font-for-life-sciences.html). My version of a "data font" was the opposite of this one: a font designed for *reading* dense scientific data, where rows of identifiers like `ENSMUST00000032717` are the daily work. I was sketching monospace shapes, ligature treatments for repeated zeros, alternates for ambiguous characters: a font as a better tool for the data's *reader*.
+
+Datatype is also a data font, but it's inside out. The text isn't there to be read in the normal sense; it's there to be drawn. The font carries the chart, the chart is the typesetting, and what you write in the HTML is essentially the data itself. My old framing asked how a font could help us *see through* data; Datatype asks how a font can *be* the data.
+
+## Datatype on real data: my own blog cadence
+
+To see how it feels in practice, here's some data about this blog rendered through Datatype. The values in curly braces are literal text in the HTML; the font does the drawing. If the font fails to load, you'll see the raw expressions instead, which is itself a useful preview of the fallback behavior.
+
+{% endmarkdown %}
+
+<div class="kh-datatype">
+  <div class="kh-datatype-row">
+    <span class="kh-datatype-row__label" id="kh-chart-bar-label">Posts per year, 2017–2026 (bar)</span>
+    <span class="kh-datatype-row__chart" role="img" aria-labelledby="kh-chart-bar-label" aria-description="2017: 6 posts, 2018: 7, 2019: 4, 2020: 4, 2021: 5, 2022 through 2024: zero, 2025: 34, 2026 to date: 32">
+      <span aria-hidden="true">{b:18,21,12,12,15,0,0,0,100,94}</span>
+    </span>
+  </div>
+  <div class="kh-datatype-row">
+    <span class="kh-datatype-row__label" id="kh-chart-line-label">Digesting cadence by month, Nov 2025 – May 2026 (sparkline)</span>
+    <span class="kh-datatype-row__chart" role="img" aria-labelledby="kh-chart-line-label" aria-description="Monthly digesting posts: 1, 2, 0, 1, 4, 3, 2">
+      <span aria-hidden="true">{l:25,50,0,25,100,75,50}</span>
+    </span>
+  </div>
+  <div class="kh-datatype-row">
+    <span class="kh-datatype-row__label" id="kh-chart-pie-label">Share of all posts that are digesting entries (pie)</span>
+    <span class="kh-datatype-row__chart" role="img" aria-labelledby="kh-chart-pie-label" aria-description="13 percent of posts are digesting entries (13 of 97)">
+      <span aria-hidden="true">{p:13}</span>
+    </span>
+  </div>
+</div>
+
+{% markdown %}
+
+The bars show a steady trickle through the late 2010s, silence in 2022 to 2024, and a sharp return in 2025. The sparkline puts digesting entries at roughly two a month since I started them. The pie says these short-form notes are still a small slice of what I publish.
+
+## Where it gets fragile
+
+Cool as it is, I'd think hard before reaching for this in production. Screen readers will read the raw `{b:...}` text aloud unless you give each chart a real text alternative; the markup above uses `role="img"` with `aria-description` on the container and `aria-hidden` on the inner expression, but that's belt-and-braces work the font itself can't do. Copy-paste through editors that normalize curly braces or strip ligatures will silently break the syntax. And if the font fails to load, the raw expressions show through, which rhymes with [Miriam Suzanne's argument about combining CSS units](/posts/20250927-the-best-css-unit-might-be-a-combination/): the platform usually has a primitive already, and the trick is giving it room to degrade.
+
+Honestly, for most real charts I'd reach for, a small SVG or a tiny helper would probably be simpler and more reliable than a font with a custom syntax. But that's not really the point. It's a nice thing to look at an idea you spent time on years ago and see someone walking the same name down the opposite road, and do it well.
+
+If you've found a real use for it, [send me a note](mailto:khawkins98@gmail.com). I'd like to see where it lands.
+
+{% endmarkdown %}
