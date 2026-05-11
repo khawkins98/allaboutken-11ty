@@ -27,12 +27,8 @@ kens_status: draft
   /* Scoped to match the site's CSS toggle pattern (see index.scss) so naked-mode renders raw text. */
   body:has(#kh-css-toggle:checked) {
     .kh-datatype {
-      font-family: 'Datatype', ui-monospace, monospace;
-      font-feature-settings: 'liga' 1, 'calt' 1;
-      font-size: 1.4em;
-      line-height: 1.4;
-      letter-spacing: 0;
       margin: 1.5rem 0;
+      line-height: 1.4;
     }
     .kh-datatype-row {
       display: grid;
@@ -44,7 +40,13 @@ kens_status: draft
     }
     .kh-datatype-row:last-child { border-bottom: none; }
     .kh-datatype-row__label { font-size: 0.95em; }
-    .kh-datatype-row__chart { font-feature-settings: 'liga' 1, 'calt' 1; }
+    /* Only the chart span gets the Datatype font; labels stay in the site font. */
+    .kh-datatype-row__chart {
+      font-family: 'Datatype', ui-monospace, monospace;
+      font-feature-settings: 'liga' 1, 'calt' 1;
+      font-size: 1.4em;
+      letter-spacing: 0;
+    }
     /* Demo block styling for the codeAndDemo shortcode. */
     .kh-demo {
       display: grid;
