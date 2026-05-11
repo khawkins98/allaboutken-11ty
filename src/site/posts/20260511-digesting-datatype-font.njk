@@ -113,22 +113,46 @@ For real numbers, here's the cadence of this blog rendered through Datatype. If 
 
 <div class="kh-datatype">
   <div class="kh-datatype-row">
-    <span class="kh-datatype-row__label" id="kh-chart-bar-label">Posts per year, 2017–2026 (bar)</span>
-    <span class="kh-datatype-row__chart" role="img" aria-labelledby="kh-chart-bar-label" aria-description="2017: 6 posts, 2018: 7, 2019: 4, 2020: 4, 2021: 5, 2022 through 2024: zero, 2025: 34, 2026 to date: 32">
-      <span aria-hidden="true">{b:18,21,12,12,15,0,0,0,100,94}</span>
-    </span>
+    <span class="kh-datatype-row__label">Posts per year, 2017–2026 (bar)</span>
+    <span class="kh-datatype-row__chart" aria-hidden="true">{b:18,21,12,12,15,0,0,0,100,94}</span>
+    <table class="kh-u-sr-only">
+      <caption>Posts per year, 2017–2026</caption>
+      <thead><tr><th scope="col">Year</th><th scope="col">Posts</th></tr></thead>
+      <tbody>
+        <tr><td>2017</td><td>6</td></tr>
+        <tr><td>2018</td><td>7</td></tr>
+        <tr><td>2019</td><td>4</td></tr>
+        <tr><td>2020</td><td>4</td></tr>
+        <tr><td>2021</td><td>5</td></tr>
+        <tr><td>2022</td><td>0</td></tr>
+        <tr><td>2023</td><td>0</td></tr>
+        <tr><td>2024</td><td>0</td></tr>
+        <tr><td>2025</td><td>34</td></tr>
+        <tr><td>2026 (to date)</td><td>32</td></tr>
+      </tbody>
+    </table>
   </div>
   <div class="kh-datatype-row">
-    <span class="kh-datatype-row__label" id="kh-chart-line-label">Digesting cadence by month, Nov 2025 – May 2026 (sparkline)</span>
-    <span class="kh-datatype-row__chart" role="img" aria-labelledby="kh-chart-line-label" aria-description="Monthly digesting posts: 1, 2, 0, 1, 4, 3, 2">
-      <span aria-hidden="true">{l:25,50,0,25,100,75,50}</span>
-    </span>
+    <span class="kh-datatype-row__label">Digesting cadence by month, Nov 2025 – May 2026 (sparkline)</span>
+    <span class="kh-datatype-row__chart" aria-hidden="true">{l:25,50,0,25,100,75,50}</span>
+    <table class="kh-u-sr-only">
+      <caption>Digesting posts per month, Nov 2025 – May 2026</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Posts</th></tr></thead>
+      <tbody>
+        <tr><td>Nov 2025</td><td>1</td></tr>
+        <tr><td>Dec 2025</td><td>2</td></tr>
+        <tr><td>Jan 2026</td><td>0</td></tr>
+        <tr><td>Feb 2026</td><td>1</td></tr>
+        <tr><td>Mar 2026</td><td>4</td></tr>
+        <tr><td>Apr 2026</td><td>3</td></tr>
+        <tr><td>May 2026</td><td>2</td></tr>
+      </tbody>
+    </table>
   </div>
   <div class="kh-datatype-row">
-    <span class="kh-datatype-row__label" id="kh-chart-pie-label">Share of all posts that are digesting entries (pie)</span>
-    <span class="kh-datatype-row__chart" role="img" aria-labelledby="kh-chart-pie-label" aria-description="13 percent of posts are digesting entries (13 of 97)">
-      <span aria-hidden="true">{p:13}</span>
-    </span>
+    <span class="kh-datatype-row__label">Share of all posts that are digesting entries (pie)</span>
+    <span class="kh-datatype-row__chart" aria-hidden="true">{p:13}</span>
+    <span class="kh-u-sr-only">13 percent of posts are digesting entries: 13 of 97.</span>
   </div>
 </div>
 
@@ -138,7 +162,9 @@ The bars show a steady trickle through the late 2010s, silence in 2022 to 2024, 
 
 ## Where it gets fragile
 
-Cool as it is, I'd think hard before reaching for this in production. Screen readers will read the raw `{b:...}` text aloud unless you give each chart a real text alternative; the markup above uses `role="img"` with `aria-description` on the container and `aria-hidden` on the inner expression, but that's belt-and-braces work the font itself can't do. Copy-paste through editors that normalize curly braces or strip ligatures will silently break the syntax. And if the font fails to load, the raw expressions show through, which rhymes with [Miriam Suzanne's argument about combining CSS units](/posts/20250927-the-best-css-unit-might-be-a-combination/): the platform usually has a primitive already, and the trick is giving it room to degrade.
+Cool as it is, I'd think hard before reaching for this in production. The biggest gap is accessibility: the font has no built-in handling for it, and the project's README and integration guide say nothing about it either. Left alone, screen readers will read the literal `{b:18,21,12...}` text aloud, character by character — worse than no alternative at all. The pattern I'm using above is the one [WAI suggests for complex graphics](https://www.w3.org/WAI/tutorials/images/complex/): mark the glyph span `aria-hidden`, then pair each chart with a visually-hidden data table so screen reader users can navigate the values as rows and cells. It works, but it's entirely on the consumer to remember to do it. Anyone using Datatype for real would want to wrap that pattern in a component or a helper so it can't be forgotten.
+
+The rest of the failure surface is smaller but worth knowing about. Copy-paste through editors that normalize curly braces or strip ligatures will silently break the syntax. And if the font fails to load, the raw expressions show through, which rhymes with [Miriam Suzanne's argument about combining CSS units](/posts/20250927-the-best-css-unit-might-be-a-combination/): the platform usually has a primitive already, and the trick is giving it room to degrade.
 
 Honestly, for most real charts I'd reach for, a small SVG or a tiny helper would probably be simpler and more reliable than a font with a custom syntax. But that's not really the point. It's a nice thing to look at an idea you spent time on years ago and see someone walking the same name down the opposite road, and do it well.
 
