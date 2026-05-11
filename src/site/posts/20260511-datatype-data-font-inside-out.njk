@@ -33,15 +33,39 @@ kens_status: draft
     .kh-datatype-row {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 1.5rem;
-      align-items: baseline;
-      padding: 0.5rem 0;
+      grid-template-areas:
+        "label label"
+        "code  chart";
+      gap: 0.4rem 1.5rem;
+      align-items: center;
+      padding: 0.85rem 0;
       border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
     }
     .kh-datatype-row:last-child { border-bottom: none; }
-    .kh-datatype-row__label { font-size: 0.95em; }
+    .kh-datatype-row__label {
+      grid-area: label;
+      font-size: 0.95em;
+      font-weight: 600;
+    }
+    .kh-datatype-row__code {
+      grid-area: code;
+      margin: 0;
+      padding: 0.35rem 0.6rem;
+      background: color-mix(in srgb, currentColor 6%, transparent);
+      border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+      border-radius: 0.35rem;
+      font-size: 0.8em;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .kh-datatype-row__code code {
+      background: none;
+      padding: 0;
+    }
     /* Only the chart span gets the Datatype font; labels stay in the site font. */
     .kh-datatype-row__chart {
+      grid-area: chart;
+      justify-self: end;
       font-family: 'Datatype', ui-monospace, monospace;
       font-feature-settings: 'liga' 1, 'calt' 1;
       font-size: 1.4em;
@@ -127,43 +151,50 @@ To see how it feels with real numbers, here's the cadence of this blog rendered 
 <div class="kh-datatype">
   <div class="kh-datatype-row">
     <span class="kh-datatype-row__label">Posts per year, 2017–2026 (bar)</span>
+    <pre class="kh-datatype-row__code"><code>&lt;span class="chart"&gt;{b:18,21,12,12,15,0,0,0,100,94}&lt;/span&gt;</code></pre>
     <span class="kh-datatype-row__chart" aria-hidden="true">{b:18,21,12,12,15,0,0,0,100,94}</span>
   </div>
-  <table class="kh-u-sr-only">
-    <caption>Posts per year, 2017–2026</caption>
-    <thead><tr><th scope="col">Year</th><th scope="col">Posts</th></tr></thead>
-    <tbody>
-      <tr><td>2017</td><td>6</td></tr>
-      <tr><td>2018</td><td>7</td></tr>
-      <tr><td>2019</td><td>4</td></tr>
-      <tr><td>2020</td><td>4</td></tr>
-      <tr><td>2021</td><td>5</td></tr>
-      <tr><td>2022</td><td>0</td></tr>
-      <tr><td>2023</td><td>0</td></tr>
-      <tr><td>2024</td><td>0</td></tr>
-      <tr><td>2025</td><td>34</td></tr>
-      <tr><td>2026 (to date)</td><td>32</td></tr>
-    </tbody>
-  </table>
+  <div class="kh-u-sr-only">
+    <table>
+      <caption>Posts per year, 2017–2026</caption>
+      <thead><tr><th scope="col">Year</th><th scope="col">Posts</th></tr></thead>
+      <tbody>
+        <tr><td>2017</td><td>6</td></tr>
+        <tr><td>2018</td><td>7</td></tr>
+        <tr><td>2019</td><td>4</td></tr>
+        <tr><td>2020</td><td>4</td></tr>
+        <tr><td>2021</td><td>5</td></tr>
+        <tr><td>2022</td><td>0</td></tr>
+        <tr><td>2023</td><td>0</td></tr>
+        <tr><td>2024</td><td>0</td></tr>
+        <tr><td>2025</td><td>34</td></tr>
+        <tr><td>2026 (to date)</td><td>32</td></tr>
+      </tbody>
+    </table>
+  </div>
   <div class="kh-datatype-row">
     <span class="kh-datatype-row__label">Digesting cadence by month, Nov 2025 – May 2026 (sparkline)</span>
+    <pre class="kh-datatype-row__code"><code>&lt;span class="chart"&gt;{l:25,50,0,25,100,75,50}&lt;/span&gt;</code></pre>
     <span class="kh-datatype-row__chart" aria-hidden="true">{l:25,50,0,25,100,75,50}</span>
   </div>
-  <table class="kh-u-sr-only">
-    <caption>Digesting posts per month, Nov 2025 – May 2026</caption>
-    <thead><tr><th scope="col">Month</th><th scope="col">Posts</th></tr></thead>
-    <tbody>
-      <tr><td>Nov 2025</td><td>1</td></tr>
-      <tr><td>Dec 2025</td><td>2</td></tr>
-      <tr><td>Jan 2026</td><td>0</td></tr>
-      <tr><td>Feb 2026</td><td>1</td></tr>
-      <tr><td>Mar 2026</td><td>4</td></tr>
-      <tr><td>Apr 2026</td><td>3</td></tr>
-      <tr><td>May 2026</td><td>2</td></tr>
-    </tbody>
-  </table>
+  <div class="kh-u-sr-only">
+    <table>
+      <caption>Digesting posts per month, Nov 2025 – May 2026</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Posts</th></tr></thead>
+      <tbody>
+        <tr><td>Nov 2025</td><td>1</td></tr>
+        <tr><td>Dec 2025</td><td>2</td></tr>
+        <tr><td>Jan 2026</td><td>0</td></tr>
+        <tr><td>Feb 2026</td><td>1</td></tr>
+        <tr><td>Mar 2026</td><td>4</td></tr>
+        <tr><td>Apr 2026</td><td>3</td></tr>
+        <tr><td>May 2026</td><td>2</td></tr>
+      </tbody>
+    </table>
+  </div>
   <div class="kh-datatype-row">
     <span class="kh-datatype-row__label">Share of all posts that are digesting entries (pie)</span>
+    <pre class="kh-datatype-row__code"><code>&lt;span class="chart"&gt;{p:13}&lt;/span&gt;</code></pre>
     <span class="kh-datatype-row__chart" aria-hidden="true">{p:13}</span>
   </div>
   <p class="kh-u-sr-only">13 percent of posts are digesting entries: 13 of 97.</p>
