@@ -32,29 +32,22 @@ kens_status: draft
     }
     .kh-datatype-row {
       display: grid;
-      grid-template-columns: 1fr auto;
-      grid-template-areas:
-        "label label"
-        "code  chart";
-      gap: 0.4rem 1.5rem;
-      align-items: center;
-      padding: 0.85rem 0;
+      gap: 0.5rem;
+      padding: 1rem 0;
       border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
     }
     .kh-datatype-row:last-child { border-bottom: none; }
     .kh-datatype-row__label {
-      grid-area: label;
       font-size: 0.95em;
       font-weight: 600;
     }
     .kh-datatype-row__code {
-      grid-area: code;
       margin: 0;
-      padding: 0.35rem 0.6rem;
+      padding: 0.5rem 0.75rem;
       background: color-mix(in srgb, currentColor 6%, transparent);
       border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
       border-radius: 0.35rem;
-      font-size: 0.8em;
+      font-size: 0.85em;
       overflow-x: auto;
       white-space: pre;
     }
@@ -62,14 +55,13 @@ kens_status: draft
       background: none;
       padding: 0;
     }
-    /* Only the chart span gets the Datatype font; labels stay in the site font. */
+    /* The rendered chart gets the Datatype font; the label and code stay in the site font. */
     .kh-datatype-row__chart {
-      grid-area: chart;
-      justify-self: end;
       font-family: 'Datatype', ui-monospace, monospace;
       font-feature-settings: 'liga' 1, 'calt' 1;
-      font-size: 1.4em;
+      font-size: 2em;
       letter-spacing: 0;
+      padding: 0.15rem 0;
     }
     /* Demo block styling for the codeAndDemo shortcode. */
     .kh-demo {
