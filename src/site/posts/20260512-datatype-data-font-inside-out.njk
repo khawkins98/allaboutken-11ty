@@ -1,8 +1,8 @@
 ---
 title: "A data font, from the inside out"
 layout: layouts/post.njk
-teaser: "Datatype is a variable font that turns text into sparkline like charts."
-date: 2026-05-11
+teaser: "Datatype turns plain text into inline charts via OpenType ligatures, and inverts an old idea of mine about what a data font should be."
+date: 2026-05-12
 tags: posts
 topics:
   - typography
@@ -59,9 +59,9 @@ Datatype also credits IBM Plex Mono as the source of some underlying glyphs, and
 
 ## Accessibility gap
 
-Data viz accesibility is always a challenge. Left alone, a string like `{b:18,21,12,12,15,0,0,0,100,94}` gets read aloud verbatim, brace by digit by comma. That's worse than no alternative at all.
+Data viz accessibility is always a challenge. Left alone, a string like `{b:18,21,12,12,15,0,0,0,100,94}` gets read aloud verbatim, brace by digit by comma. That's worse than no alternative at all.
 
-The is made a bit better by the [WAI pattern for complex graphics](https://www.w3.org/WAI/tutorials/images/complex/). Mark the glyph span `aria-hidden`, and pair each chart with a visually-hidden data table that assistive technology can navigate as proper rows and cells:
+This is made a bit better by the [WAI pattern for complex graphics](https://www.w3.org/WAI/tutorials/images/complex/). Mark the glyph span `aria-hidden`, and pair each chart with a visually-hidden data table that assistive technology can navigate as proper rows and cells:
 
 {% endmarkdown %}
 
