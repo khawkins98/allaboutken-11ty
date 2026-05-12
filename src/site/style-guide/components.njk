@@ -14,6 +14,11 @@ permalink: /style-guide/components/
     <h1 class="kh-font-headline kh-text-heading--1">{{ title }}</h1>
     <p class="kh-text-body--3">A living reference of every visual pattern on this site. All examples below are rendered live — if something looks wrong here, it looks wrong everywhere.</p>
 
+    <aside class="kh-note-box">
+      <span class="kh-note-box__label">Related</span>
+      This page documents the <em>visual</em> side of each pattern. For voice, tone, and <em>when</em> to use a pattern in a post (note boxes, margin notes, the code + demo shortcode), see the <a href="/style-guide/editorial/">Editorial style guide</a>.
+    </aside>
+
     <nav>
       <p><strong>Jump to:</strong>
         <a href="#colors">Colors</a> ·
@@ -21,6 +26,7 @@ permalink: /style-guide/components/
         <a href="#buttons">Buttons</a> ·
         <a href="#badges-labels">Badges &amp; labels</a> ·
         <a href="#note-boxes">Note boxes</a> ·
+        <a href="#margin-notes">Margin notes</a> ·
         <a href="#content-boxes">Content boxes</a> ·
         <a href="#details">Collapsible details</a> ·
         <a href="#blockquotes">Blockquotes</a> ·
@@ -29,13 +35,17 @@ permalink: /style-guide/components/
         <a href="#tables">Tables</a> ·
         <a href="#forms">Forms</a> ·
         <a href="#search-mode-toggle">Search mode toggle</a> ·
+        <a href="#semantic-search">Semantic search</a> ·
         <a href="#summary-cards">Summary cards</a> ·
         <a href="#metrics">Metrics</a> ·
         <a href="#layout">Layout</a> ·
+        <a href="#pager">Pager</a> ·
         <a href="#spacing">Spacing</a> ·
         <a href="#font-variations">Font variations</a> ·
         <a href="#video">Video embed</a> ·
         <a href="#feedback-toast">Feedback toast</a> ·
+        <a href="#floating-feedback">Floating feedback</a> ·
+        <a href="#dappled-light">Dappled light</a> ·
         <a href="#accessibility">Accessibility</a> ·
         <a href="#utilities">Utilities</a>
       </p>
@@ -162,6 +172,17 @@ Inside `.kh-content`, bare heading tags inherit proportional sizing:
 <p>An <abbr title="Abbreviation with tooltip">ABBR</abbr> gets a dotted underline and help cursor.</p>
 {% endcodeAndDemo %}
 
+{% markdown %}
+### Intro pair (hero heading + lead text)
+
+A pair of typography classes for hero / landing-style introductions: `kh-intro__heading` (42px, weight 700) for the headline and `kh-intro__text` (22px, weight 300) for the lead paragraph beneath it. Distinct from the standard `kh-text-body--*` scale — bigger headline, lighter lead, designed to set up the page rather than carry body content. In use on the homepage, the 404 page, and the work index.
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<h2 class="kh-intro__heading">A clear, confident statement of what this page is about.</h2>
+<p class="kh-intro__text">One paragraph of supporting context, set in a lighter weight at a slightly larger size, so the eye lands here before working into the body.</p>
+{% endcodeAndDemo %}
+
   </div>
 </section>
 
@@ -238,6 +259,27 @@ Orange-bordered callout boxes for asides, updates, and contextual information. T
   <span class="kh-note-box__label">Context</span>
   The label uses a bold monospace casual variant. Keep labels short: "Update", "Sidebar", "Related", "Context".
 </aside>
+{% endcodeAndDemo %}
+
+  </div>
+</section>
+
+{# ── MARGIN NOTES ── #}
+<section class="kh-grid-stylized kh-u-padding__top--800" id="margin-notes">
+  <div></div>
+  <div class="kh-content kh-content--wide">
+{% markdown %}
+## Margin notes
+
+Tufte-inspired supplementary asides. On desktop (≥ 1024px) they float into the right margin past the main content column; on mobile they fall back to a block-level aside with a left orange border. Use for supporting citations, secondary references, and context that enriches the argument without interrupting the main flow.
+
+Use raw HTML (`<aside class="kh-marginnote">`) inside `{%raw%}{% markdown %}{%endraw%}` blocks. Links inside must use `<a href="">` rather than markdown link syntax. Keep margin notes to 1–2 sentences; for anything longer, use a note box instead.
+
+See the [editorial style guide](/style-guide/editorial/#margin-notes) for when to reach for margin notes versus inline citations.
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<p>This paragraph has a margin note attached. On a wide screen the aside floats off to the right, in the gutter past the main column; on a narrow screen it falls back into the flow as a left-bordered aside, indistinguishable from a small callout. Either way, it's a Tufte-style sidebar without taking interaction weight.<aside class="kh-marginnote">Edward Tufte's <a href="https://www.edwardtufte.com/tufte/books_vdqi">Visual Display</a> popularised the side-margin annotation as a way to keep references close to the argument they support.</aside></p>
 {% endcodeAndDemo %}
 
   </div>
@@ -381,6 +423,46 @@ Fenced code blocks inside `.kh-content` get a white background, rounded corners,
 ```
 
 Code blocks use `pre-wrap` for wrapping and `overflow: auto` for horizontal scroll when needed.
+
+### Code + live demo (`codeAndDemo` shortcode)
+
+Use the paired `codeAndDemo` shortcode when you want to show a snippet as both an escaped code block and a live rendered demo from the same source. The shortcode renders a single bordered card with two labelled panes — **Source** on top, **Result** below — so the relationship reads at a glance.
+
+Usage (place **outside** `{%raw%}{% markdown %}{%endraw%}` blocks; markdown will double-escape otherwise):
+
+```njk
+{%raw%}{% codeAndDemo 'html' %}
+<button class="kh-button">Click me</button>
+{% endcodeAndDemo %}{%endraw%}
+```
+
+The first argument sets the language class for syntax highlighting. Best suited to runnable HTML/JS examples; avoid for Nunjucks template code (which the shortcode would re-evaluate).
+
+Example output:
+
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<p>Status: <span class="kh-badge">Draft</span></p>
+<button class="kh-button">Click me</button>
+{% endcodeAndDemo %}
+
+{% markdown %}
+
+**Structure:**
+
+- `.kh-demo` — the outer bordered card
+- `.kh-demo > pre` — the source pane (off-white background, gets the "Source" label via `::before`)
+- `.kh-demo__live` — the result pane (white background, gets the "Result" label via `::before`)
+- The `code` inside `.kh-demo > pre` has its background overridden to transparent so the source reads as one continuous block instead of per-line rectangles bleeding out of inline `<code>` styling
+
+**Guidelines:**
+
+- Use it once or twice per page where seeing the source next to the rendered output adds value. For pure reference code or where there's no useful "live" component, prefer a plain fenced code block.
+- Keep the snippet self-contained where possible. If it depends on a site-wide utility class (for example `kh-u-sr-only`), call that out in surrounding prose.
+- Do not duplicate the same example in both a fenced code block and the shortcode — let the shortcode handle both halves.
+
+Defined in: `src/components/vf-componenet-rollup/_kh-content.scss` (look for `.kh-demo`). Shortcode in: `eleventy.js` (`config.addPairedShortcode('codeAndDemo', …)`).
 {% endmarkdown %}
 
   </div>
@@ -569,6 +651,32 @@ A tabbed radio control used on the [search page](/search/) to switch between key
 - `.kh-button__label` and `.kh-button__icon` both carry `aria-hidden="true"` — the `aria-label` is the accessible name
 - Resize to a narrow viewport to see the icon-inside-input behaviour
 {% endmarkdown %}
+
+  </div>
+</section>
+
+{# ── SEMANTIC SEARCH ── #}
+<section class="kh-grid-stylized kh-u-padding__top--800" id="semantic-search">
+  <div></div>
+  <div class="kh-content kh-content--wide">
+{% markdown %}
+## Semantic search interface
+
+A chat-bubble conversation pattern used by the semantic search page (`/search/`). User messages are blue and right-aligned; system responses are white and left-aligned. The container `.kh-ask` wraps the conversation; `.kh-ask__conversation` holds the message list; `.kh-ask__results` holds the result links. Defined in `src/components/vf-componenet-rollup/_semantic-search.scss`.
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<div class="kh-ask">
+  <div class="kh-ask__conversation">
+    <p class="kh-ask__message kh-ask__message--user">How does the data-font idea relate to charts?</p>
+    <p class="kh-ask__message kh-ask__message--system">A few posts cover this. The 2018 sketch was about a font that helps read dense data; Datatype inverts that into a font that is the data.</p>
+  </div>
+  <ul class="kh-ask__results">
+    <li><a href="#">A data font, from the inside out</a></li>
+    <li><a href="#">What if: A web font for data</a></li>
+  </ul>
+</div>
+{% endcodeAndDemo %}
 
   </div>
 </section>
@@ -782,6 +890,31 @@ Makes a section's background extend to the full viewport width while keeping con
   </div>
 </section>
 
+{# ── PAGER ── #}
+<section class="kh-grid-stylized kh-u-padding__top--800" id="pager">
+  <div></div>
+  <div class="kh-content kh-content--wide">
+{% markdown %}
+## Pager
+
+Navigation between paginated lists (blog index, work archive). Wrap in `<nav class="kh-pager" aria-label="…">` with a list of `.kh-pager__link` items. The currently active page gets the `.kh-pager__link--current` modifier and `aria-current="page"`. Used by `src/site/_includes/partials/pager.njk`; the layout templates wire it up automatically when pagination is in play.
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<nav class="kh-pager" aria-label="Blog pagination (example)">
+  <ul class="kh-pager__list">
+    <li><a href="#" class="kh-pager__link">&larr; Newer</a></li>
+    <li><a href="#" class="kh-pager__link">1</a></li>
+    <li><a href="#" class="kh-pager__link kh-pager__link--current" aria-current="page">2</a></li>
+    <li><a href="#" class="kh-pager__link">3</a></li>
+    <li><a href="#" class="kh-pager__link">Older &rarr;</a></li>
+  </ul>
+</nav>
+{% endcodeAndDemo %}
+
+  </div>
+</section>
+
 {# ── SPACING ── #}
 <section class="kh-grid-stylized kh-u-padding__top--800" id="spacing">
   <div></div>
@@ -922,6 +1055,63 @@ The Worker returns `302 Location: https://example.com/posts/my-post/#thanks`, wh
   <a href="#feedback-toast-demo" class="kh-button kh-button--sm">Trigger toast demo</a>
 </p>
 <span id="feedback-toast-demo" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback!</span>
+
+  </div>
+</section>
+
+{# ── FLOATING FEEDBACK WIDGET ── #}
+<section class="kh-grid-stylized kh-u-padding__top--800" id="floating-feedback">
+  <div></div>
+  <div class="kh-content kh-content--wide">
+{% markdown %}
+## Floating feedback widget
+
+The fixed-position upvote prompt that appears in the corner of post pages. Combines an upvote action with a quieter "learn more" link beneath it, so the link reads as a separate action and can't be confused with the upvote click target. The starburst icon is a CSS-only 12-point polygon (no SVG dependency).
+
+Position is `fixed` to the viewport's bottom-right corner, with `env(safe-area-inset-*)` so it respects mobile notch safe areas. Hidden on print via `.kh-u-do-not-print`.
+
+The live page already has one of these in the corner — the markup below is shown as a reference rather than re-rendered.
+
+```html
+<div class="kh-floating-thumb kh-u-do-not-print">
+  <a href="…upvote endpoint…" class="kh-floating-thumb__action">
+    <span class="kh-floating-thumb__burst" aria-hidden="true">
+      <svg class="kh-floating-thumb__icon" aria-hidden="true" focusable="false">…thumb-up path…</svg>
+    </span>
+    <span class="kh-floating-thumb__text">
+      <span class="kh-floating-thumb__lead">Useful?</span>
+      <span class="kh-floating-thumb__sub">One-tap upvote.</span>
+    </span>
+  </a>
+  <a href="/colophon/#feedback" class="kh-floating-thumb__learn">Why this widget?</a>
+</div>
+```
+
+Structure: outer wrapper stacks the upvote card on top and the secondary "learn" link below it. Card uses blue background with orange drop shadow; the burst sits behind the text using negative-margin overlap inside the action anchor.
+{% endmarkdown %}
+
+  </div>
+</section>
+
+{# ── ATMOSPHERIC BACKGROUND ── #}
+<section class="kh-grid-stylized kh-u-padding__top--800" id="dappled-light">
+  <div></div>
+  <div class="kh-content kh-content--wide">
+{% markdown %}
+## Atmospheric background (dappled light)
+
+The site's ambient background effect: scroll-driven dappled leaf shadows and shifting venetian-blind highlights that animate as the page scrolls. CSS-only, using scroll-driven animations and CSS custom properties. Defined in `src/components/kh-ambience/_kh-ambience.scss` and injected once via the base layout — you do not need to add it manually to individual pages.
+
+Markup is a single absolutely-positioned div near the top of `<body>`:
+
+```html
+<div id="kh-dappled-light" aria-hidden="true"></div>
+```
+
+It is decorative and `aria-hidden`, so it does not appear in the accessibility tree. The effect is documented in more depth in the post [Sunlit dappled-light effect](/posts/20251108-sunlit-dappled-light-effect/) if you want to see how it works.
+
+Do not add a second `#kh-dappled-light` to a page; the ID is referenced by the global styles and CSS expects exactly one.
+{% endmarkdown %}
 
   </div>
 </section>
