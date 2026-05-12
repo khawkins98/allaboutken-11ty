@@ -1,0 +1,95 @@
+---
+title: "A data font, from the inside out"
+layout: layouts/post.njk
+teaser: "Datatype is a variable font that turns text into tiny inline charts."
+date: 2026-05-12
+tags: posts
+topics:
+  - typography
+  - variable fonts
+  - data visualization
+  - design systems
+  - OpenType ligatures
+  - accessibility
+kens_status: published
+---
+
+<style>
+  /* @font-face stays at top level; @font-face inside a selector is non-standard. */
+  @font-face {
+    font-family: 'Datatype';
+    src: url('/assets/kh-font/Datatype.woff2') format('woff2-variations'),
+         url('/assets/kh-font/Datatype.woff2') format('woff2');
+    font-weight: 100 900;
+    font-stretch: 50% 200%;
+    font-display: swap;
+  }
+  /* Scoped to match the site's CSS toggle pattern (see index.scss) so naked-mode renders raw text.
+     The .kh-demo Source/Result panes are now site-wide (see _kh-content.scss). */
+  body:has(#kh-css-toggle:checked) {
+    /* Inline chart usage inside prose and inside the live demo. */
+    .kh-content .chart,
+    .kh-demo__live .chart {
+      font-family: 'Datatype', ui-monospace, monospace;
+      font-feature-settings: 'liga' 1, 'calt' 1;
+      font-size: 1.3em;
+      vertical-align: -0.1em;
+    }
+  }
+</style>
+
+{% markdown %}
+
+[Datatype](https://franktisellano.github.io/datatype/), by Frank Tisellano, is a variable font that renders inline bar charts, sparklines, and pie charts straight out of OpenType ligatures. Write `{b:30,70,50,90}` and get <span class="chart" aria-hidden="true">{b:30,70,50,90}</span>; no JavaScript, no SVG, no charting library involved. It's also a total inversion of a 2018 piece of mine, [A web font for data](/posts/20180319-data-font-for-life-sciences.html).
+
+> **tl;dr**
+> - Datatype turns text like `{b:30,70,50,90}` into inline charts via OpenType ligatures: bar, sparkline, and pie, with weight and width axes.
+> - It rhymes with a 2018 piece of mine, [What if: A web font for data](/posts/20180319-data-font-for-life-sciences.html), but inverts it: my version was a font for *reading* dense data, this is a font that *is* the data.
+> - The upstream project ships zero accessibility guidance; for any serious use, pair each chart with `aria-hidden` on the glyph span and a visually-hidden data table. There's a copyable pattern below.
+
+## A data font and font for data
+
+Back in 2018, while at EMBL-EBI, I wrote a long piece called [What if: A web font for data](/posts/20180319-data-font-for-life-sciences.html). My problem was that life-sciences researchers stare at strings like `ENSMUST00000032717` all day, and the tools they were using rendered those strings in fonts that had not been designed with that kind of work in mind. Sequential zeros were ambiguous (is `20000001` six zeros or seven?). Lowercase `l`, uppercase `I`, and numeric `1` could be hard to tell apart in body widths. `BuMpy caPitiLiSation` patterns were brittle to read at a glance. My sketch was a font where the ligature feature did the same kind of work [Fira Code](https://github.com/tonsky/FiraCode) does for code, but pointed at scientific identifiers: chunking long zero runs, disambiguating glyphs, giving the *reader's eye* better handles.
+
+Datatype is also a data font, and it's also built on the OpenType ligature feature. But it inverts every part of the goal. The text isn't there to be read in the normal sense; it's there to be drawn. The ligature substitution doesn't help you decode the characters — it replaces them entirely with a chart. The font isn't a better tool for the reader. The font *is* the data.
+
+Clearly the aims are different, but the mirror universe aspect tickles my brain.
+
+Datatype also credits IBM Plex Mono as the source of some underlying glyphs, and IBM Plex was the typeface I [wrote about back in 2017](/posts/20171112-ibm-plex-font-and-fira.html) when we were evaluating it for EMBL-EBI's scientific data work. Neat.
+
+## Accessibility gap
+
+Data viz accessibility is always a challenge. Left alone, a string like `{b:18,21,12,12,15,0,0,0,100,94}` gets read aloud verbatim, brace by digit by comma. That's worse than no alternative at all.
+
+This is made a bit better by the [WAI pattern for complex graphics](https://www.w3.org/WAI/tutorials/images/complex/). Mark the glyph span `aria-hidden`, and pair each chart with a visually-hidden data table that assistive technology can navigate as proper rows and cells:
+
+{% endmarkdown %}
+
+{% codeAndDemo 'html' -%}
+<p>
+  Posts per year, 2017–2020:
+  <span class="chart" aria-hidden="true">{b:60,70,40,40}</span>
+</p>
+<table class="kh-u-sr-only">
+  <caption class="kh-u-sr-only">Posts per year, 2017–2020</caption>
+  <thead><tr><th scope="col">Year</th><th scope="col">Posts</th></tr></thead>
+  <tbody>
+    <tr><td>2017</td><td>6</td></tr>
+    <tr><td>2018</td><td>7</td></tr>
+    <tr><td>2019</td><td>4</td></tr>
+    <tr><td>2020</td><td>4</td></tr>
+  </tbody>
+</table>
+{%- endcodeAndDemo %}
+
+{% markdown %}
+
+## I want an excuse to use it
+
+My enthusiasm for variable fonts as an expressive runtime is sitting at about <span class="chart" aria-hidden="true">{p:85}</span><span class="kh-u-sr-only">(roughly 85 percent)</span>, while my likelihood of actually reaching for Datatype on the next chart I ship is somewhere around <span class="chart" aria-hidden="true">{p:25}</span><span class="kh-u-sr-only">(roughly 25 percent)</span>. The gap between those two pies is basically the whole post.
+
+Frank's [specimen site](https://franktisellano.github.io/datatype/) is worth a visit on its own; the variable-axis sliders and live examples are a small showcase of typographic care.
+
+<p><a href="https://franktisellano.github.io/datatype/" class="kh-button">Try Datatype on the project site &rarr;</a></p>
+
+{% endmarkdown %}
