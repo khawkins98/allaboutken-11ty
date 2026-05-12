@@ -59,7 +59,7 @@ Datatype also credits IBM Plex Mono as the source of some underlying glyphs, and
 
 ## Accessibility gap
 
-Built to encode information, but hard on accessibility. Left alone, a string like `{b:18,21,12,12,15,0,0,0,100,94}` gets read aloud verbatim, brace by digit by comma. That's worse than no alternative at all.
+Data viz accesibility is always a challenge. Left alone, a string like `{b:18,21,12,12,15,0,0,0,100,94}` gets read aloud verbatim, brace by digit by comma. That's worse than no alternative at all.
 
 The is made a bit better by the [WAI pattern for complex graphics](https://www.w3.org/WAI/tutorials/images/complex/). Mark the glyph span `aria-hidden`, and pair each chart with a visually-hidden data table that assistive technology can navigate as proper rows and cells:
 
@@ -86,10 +86,6 @@ The is made a bit better by the [WAI pattern for complex graphics](https://www.w
 
 ## I want an excuse to use it
 
-Why am I still circling it? Partly because it [rhymes with Miriam Suzanne's argument about combining CSS units](/posts/20250927-the-best-css-unit-might-be-a-combination/): the platform usually has a primitive already, and the trick is recognising it. Variable fonts are quietly turning into a fairly expressive runtime, and Datatype is one of the more playful demonstrations of that.
-
-And partly because it's a nice thing to look at an old idea of your own and see someone else carry the same name down the opposite road, and do it well.
-
-If I had to put a number on it: my enthusiasm for variable fonts as an expressive runtime is sitting at about <span class="chart" aria-hidden="true">{p:85}</span><span class="kh-u-sr-only">(roughly 85 percent)</span>, while my likelihood of actually reaching for Datatype on the next chart I ship is somewhere around <span class="chart" aria-hidden="true">{p:25}</span><span class="kh-u-sr-only">(roughly 25 percent)</span>. The gap between those two pies is basically the whole post.
+My enthusiasm for variable fonts as an expressive runtime is sitting at about <span class="chart" aria-hidden="true">{p:85}</span><span class="kh-u-sr-only">(roughly 85 percent)</span>, while my likelihood of actually reaching for Datatype on the next chart I ship is somewhere around <span class="chart" aria-hidden="true">{p:25}</span><span class="kh-u-sr-only">(roughly 25 percent)</span>. The gap between those two pies is basically the whole post.
 
 {% endmarkdown %}
