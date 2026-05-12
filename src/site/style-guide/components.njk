@@ -381,6 +381,46 @@ Fenced code blocks inside `.kh-content` get a white background, rounded corners,
 ```
 
 Code blocks use `pre-wrap` for wrapping and `overflow: auto` for horizontal scroll when needed.
+
+### Code + live demo (`codeAndDemo` shortcode)
+
+Use the paired `codeAndDemo` shortcode when you want to show a snippet as both an escaped code block and a live rendered demo from the same source. The shortcode renders a single bordered card with two labelled panes — **Source** on top, **Result** below — so the relationship reads at a glance.
+
+Usage (place **outside** `{%raw%}{% markdown %}{%endraw%}` blocks; markdown will double-escape otherwise):
+
+```njk
+{%raw%}{% codeAndDemo 'html' %}
+<button class="kh-button">Click me</button>
+{% endcodeAndDemo %}{%endraw%}
+```
+
+The first argument sets the language class for syntax highlighting. Best suited to runnable HTML/JS examples; avoid for Nunjucks template code (which the shortcode would re-evaluate).
+
+Example output:
+
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<p>Status: <span class="kh-badge">Draft</span></p>
+<button class="kh-button">Click me</button>
+{% endcodeAndDemo %}
+
+{% markdown %}
+
+**Structure:**
+
+- `.kh-demo` — the outer bordered card
+- `.kh-demo > pre` — the source pane (off-white background, gets the "Source" label via `::before`)
+- `.kh-demo__live` — the result pane (white background, gets the "Result" label via `::before`)
+- The `code` inside `.kh-demo > pre` has its background overridden to transparent so the source reads as one continuous block instead of per-line rectangles bleeding out of inline `<code>` styling
+
+**Guidelines:**
+
+- Use it once or twice per page where seeing the source next to the rendered output adds value. For pure reference code or where there's no useful "live" component, prefer a plain fenced code block.
+- Keep the snippet self-contained where possible. If it depends on a site-wide utility class (for example `kh-u-sr-only`), call that out in surrounding prose.
+- Do not duplicate the same example in both a fenced code block and the shortcode — let the shortcode handle both halves.
+
+Defined in: `src/components/vf-componenet-rollup/_kh-content.scss` (look for `.kh-demo`). Shortcode in: `eleventy.js` (`config.addPairedShortcode('codeAndDemo', …)`).
 {% endmarkdown %}
 
   </div>
