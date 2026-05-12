@@ -14,6 +14,11 @@ permalink: /style-guide/editorial/
     <h1 class="kh-font-headline kh-text-heading--1">{{ title }}</h1>
     <p class="kh-text-body--3">A public reference for the voice, structure, and editorial standards used across this site. Useful for contributors, AI assistants, and future me.</p>
 
+    <aside class="kh-note-box">
+      <span class="kh-note-box__label">Related</span>
+      This page covers <em>voice, tone, and when</em> to reach for a pattern. For the live visual reference (what each pattern looks like, all class names, and live demos), see the <a href="/style-guide/components/">Component reference</a>.
+    </aside>
+
 {% markdown %}
 
 ## Author context
@@ -345,11 +350,13 @@ Use the `kh-note-box` pattern for asides, updates, or contextual callouts:
 
 Keep the label short: "Update", "Sidebar", "Related", "Context". Place a blank line before and after the aside. Prefer `aside` in post bodies; `div` is acceptable in layout templates.
 
+See the [live note-box example](/style-guide/components/#note-boxes) in the component reference.
+
 ---
 
 ## Margin notes
 
-Use `kh-marginnote` for supplementary citations, supporting evidence, and secondary references that enrich the argument without interrupting the main flow. On desktop they float into the right margin (Tufte-style); on mobile they render as block-level asides.
+Use `kh-marginnote` for supplementary citations, supporting evidence, and secondary references that enrich the argument without interrupting the main flow. On desktop they float into the right margin (Tufte-style); on mobile they render as block-level asides. See the [live margin-note example](/style-guide/components/#margin-notes) in the component reference.
 
 ```html
 <aside class="kh-marginnote">Gergely Orosz <a href="https://example.com">reports</a> practitioners saying AI now writes the majority of their production code.</aside>
@@ -378,7 +385,7 @@ Use `kh-marginnote` for supplementary citations, supporting evidence, and second
 
 ## Code and demo shortcode
 
-Use the `codeAndDemo` paired shortcode to show a snippet as both an escaped code block and a live rendered demo from the same source. Place it **outside** {%raw%}`{% markdown %}`{%endraw%} blocks (Markdown will double-escape otherwise).
+Use the `codeAndDemo` paired shortcode to show a snippet as both an escaped code block and a live rendered demo from the same source. The shortcode renders a single bordered card with **Source** and **Result** panes; full visual reference and the SCSS source path are at [Code + live demo in the component reference](/style-guide/components/#code-live-demo-codeanddemo-shortcode). Place it **outside** {%raw%}`{% markdown %}`{%endraw%} blocks (Markdown will double-escape otherwise).
 
 ```njk
 {%raw%}{% codeAndDemo 'html' %}
