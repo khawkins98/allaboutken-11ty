@@ -47,6 +47,13 @@ eleventy.js       All config: filters, shortcodes, collections, image transform
 
 For the full stack breakdown and design principles, see the [colophon](https://www.allaboutken.com/colophon/).
 
+## Working on the site
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — build pipeline, Eleventy config, search architecture.
+- [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) — local setup, branching, image and CSS rules.
+- [docs/SCRIPTS.md](docs/SCRIPTS.md) — what each script in `scripts/` does.
+- [CLAUDE.md](CLAUDE.md) — non-obvious gotchas (image paths, CSS toggle scope, embeddings).
+
 ## Social cards
 
 All pages auto-generate OpenGraph/Twitter card images via [Eleventy's Screenshot Service](https://www.11ty.dev/docs/services/opengraph/):
