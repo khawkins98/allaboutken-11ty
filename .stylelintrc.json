@@ -12,7 +12,7 @@
     "no-descending-specificity": null,
     "number-max-precision": 4,
     "@stylistic/block-closing-brace-newline-after": "always",
-    "max-nesting-depth": [1, { "ignore": ["blockless-at-rules"] }],
+    "max-nesting-depth": [3, { "ignore": ["blockless-at-rules"] }],
     "selector-max-compound-selectors": 3
   },
   "ignoreFiles": [
