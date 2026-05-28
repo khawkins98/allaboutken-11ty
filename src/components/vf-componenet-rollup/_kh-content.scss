@@ -244,11 +244,18 @@
   }
 }
 
+// Deliberate override of the nested `.kh-content small` rule above to restore
+// inline display; depends on source order, so keep it as its own rule.
+// stylelint-disable-next-line no-duplicate-selectors
 .kh-content small:not([class*='kh-']) {
   display: inline;
 }
 
 /* Dedicated '#' permalink using SCSS nesting */
+// Second `.kh-content` block: intentionally re-opens the selector to group
+// the heading-permalink, margin-note and demo styles apart from the base
+// typography above. Deliberate duplicate; keep as a separate block.
+// stylelint-disable-next-line no-duplicate-selectors
 .kh-content {
   h2:not([class*='kh-']),
   h3:not([class*='kh-']),
