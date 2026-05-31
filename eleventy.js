@@ -1,3 +1,22 @@
+/**
+ * Eleventy configuration — allaboutken-11ty
+ *
+ * Sections (in order):
+ *   1. Plugins        — eleventyImageTransformPlugin (responsive image transforms)
+ *   2. Server options — dev-server live-reload and HTTPS stubs
+ *   3. Transforms     — fixImageSrcToAbsolute (rewrite build-time img paths)
+ *   4. Filters        — dateDisplay, limitItems, ensureTrailingSlash, rssDate,
+ *                       rssLastUpdatedDate, emdash, htmlToAbsoluteUrls,
+ *                       sanitizeFeedHtml, wordCount, formatNumber
+ *   5. Markdown       — markdown-it with heading anchors + emdash plugin;
+ *                       `markdown` paired shortcode
+ *   6. Shortcodes     — codeAndDemo (paired), ogImageUrl
+ *   7. Passthrough    — JS files, favicon assets, images, fonts, legacy HTML
+ *   8. Pagefind hook  — post-build keyword-search index (async in dev, sync in prod)
+ *   9. Collections    — impactStories, blogPosts, allContent
+ *  10. Return config  — dir, templateFormats, template engine overrides
+ */
+
 const { DateTime } = require('luxon');
 const Path         = require('path');
 const { execSync, exec } = require('child_process');
