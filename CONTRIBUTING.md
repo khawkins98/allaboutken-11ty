@@ -39,7 +39,8 @@ Examples:
 
 ### General rules
 
-- First line ≤ 72 characters when practical
+- First line ≤ 72 characters (enforced by the hook)
+- No trailing period on the subject (enforced by the hook)
 - Body optional; when present, focus on the *why* (the diff already shows the *what*)
 - One logical change per commit
 - Never use `--no-verify` or `--no-gpg-sign` to bypass hooks
