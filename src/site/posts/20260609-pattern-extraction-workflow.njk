@@ -1,0 +1,389 @@
+---
+title: "Pattern extraction workflow: A step-by-step guide for editorial teams"
+layout: layouts/post.njk
+teaser: "Ready-to-follow process for collecting examples, extracting patterns, and deploying AI-friendly guidance. No PhD required."
+date: 2026-06-09
+tags:
+  - posts
+topics:
+  - AI
+  - editorial-standards
+  - iterative-improvement
+  - workflow-automation
+  - Drupal
+image: /blog/workflow-template.jpg
+image_meta:
+  text: "Four phases of evidence-based editorial guidance."
+  credit: "Conceptual illustration."
+  alt: "Flowchart showing Collection, Analysis, Deployment, and Iteration phases."
+permalink: /posts/pattern-extraction-workflow/
+---
+
+{% markdown %}
+
+This is a **ready-to-use workflow** for extracting patterns from your best content and deploying them to AI. It's designed for editorial teams—no advanced data science needed.
+
+The process takes 4–6 weeks, involves 2–3 person-weeks of work, and produces a reusable guidance document your AI assistants can follow.
+
+---
+
+## Quick decision tree
+
+```
+Do you have a CMS with 50+ high-quality published items?
+├─ YES → Proceed to Phase 1 (Collection)
+└─ NO  → Collect 3–6 months of content, return here
+
+Is your team large (5+ editors)?
+├─ YES → Use Git + Markdown; upgrade documentation later
+└─ NO  → Spreadsheet works fine; migrate when you scale
+```
+
+---
+
+## Phase 1: Collection (1–2 weeks)
+
+### Step 1a: Define what "best" means
+
+Choose one or combine multiple signals:
+
+| Signal | Pros | Cons |
+|--------|------|------|
+| **Engagement metrics** (views, shares, time-on-page) | Objective, data-driven | Can favor clickbait |
+| **Evergreen/longevity tags** | Editor-curated, repeatable | Requires prior tagging |
+| **Editor picks** | Highest quality signal | Labor-intensive |
+| **Combination: engagement + evergreen + recent** | Best overall signal | Needs good CMS setup |
+
+**Decision**: Use **engagement metrics** as starting signal, then have an editor manually spot-check top 50 to remove outliers.
+
+**Document your choice** (create `EXEMPLAR_SELECTION_CRITERIA.md`):
+
+```
+Signal used: engagement + evergreen tag + last 24 months
+Date range: Jan 2024–Dec 2025
+Content types: news articles, publications, resources
+Target count: 50 exemplars
+Quality gates: engagement > 100 views + evergreen tag
+Exclusions: Q1 2024 (staff turnover); items with 0 comments
+```
+
+### Step 1b: Export examples
+
+**If using Drupal:**
+
+```php
+<?php
+// Custom Drush command (simplified)
+public function exportExamples($content_type, $limit = 50) {
+    $nids = \Drupal::entityQuery('node')
+      ->condition('type', $content_type)
+      ->condition('status', 1)
+      ->condition('field_longevity', 'evergreen')
+      ->condition('field_interestingness', ['high', 'featured'], 'IN')
+      ->sort('created', 'DESC')
+      ->range(0, $limit)
+      ->execute();
+
+    foreach ($nids as $nid) {
+      $node = Node::load($nid);
+      $output = "# " . $node->getTitle() . "\n\n";
+      $output .= $node->get('body')->value . "\n\n";
+      $output .= "Word count: " . str_word_count(strip_tags($node->get('body')->value)) . "\n";
+      $output .= "Tags: " . implode(', ', $this->getTermNames($node, 'field_themes')) . "\n";
+      file_put_contents("export/{$nid}.md", $output);
+    }
+}
+```
+
+**If using WordPress:**
+
+```sql
+SELECT ID, post_title, post_content, post_date,
+  (SELECT COUNT(*) FROM wp_comments WHERE comment_post_ID = p.ID) AS engagement
+FROM wp_posts p
+WHERE post_type = 'post' AND post_status = 'publish'
+  AND post_date > '2024-01-01'
+ORDER BY engagement DESC LIMIT 50;
+```
+
+**If manual:**
+1. Filter your CMS by date + engagement
+2. Export as CSV or Markdown
+3. Spot-check for quality
+
+### Step 1c: Combine into one file
+
+```bash
+# Bash: Combine all examples
+cat export/*.md | grep -v "^EXEMPLAR" > EXAMPLE_CONTENTS.md
+```
+
+**Check output:**
+- File size: 1–5 MB for 50–100 examples
+- Structure: Examples separated by `---` markers
+- Verify: `head -50 EXAMPLE_CONTENTS.md`
+
+---
+
+## Phase 2: Analysis (1 week)
+
+### Step 2a: Run pattern extraction
+
+Use this structured prompt with Claude, GPT-4, or Gemini:
+
+```
+You are designing system-level agent guidance for a domain-specific AI assistant.
+
+You are provided with a file named EXAMPLE_CONTENTS.md containing approximately 100 
+high-quality Markdown examples that represent "correct" and production-ready output.
+
+Your task is to ANALYSE EXAMPLE_CONTENTS.md and INFER:
+- Structural patterns and recurring sections
+- Length and formatting norms
+- Title and summary conventions
+- Metadata usage and controlled vocabularies
+- Implicit rules (what always appears, what is optional, what never appears)
+
+Treat EXAMPLE_CONTENTS.md as the highest authority. Do not introduce rules not 
+clearly supported by the examples.
+
+Generate authoritative agent guidance with these sections:
+
+1. **Role declaration** — Who is this agent? Who does it serve?
+2. **Knowledge base** — Summarize empirically observed patterns (e.g., average word counts)
+3. **Operating procedure** — Numbered decision process before responding
+4. **Critical constraints** — Non-negotiable rules (MUST, ALWAYS, NEVER)
+5. **Mandatory response template** — Fixed output schema the agent must use
+6. **Field-level requirements** — Character limits, word count ranges, conditional logic
+7. **Controlled vocabularies** — Recurring terms, categories, taxonomies
+8. **Style and compliance rules** — Language, spelling, tone, formatting
+9. **Prohibited behaviors** — What violates observed patterns
+
+IMPORTANT:
+- Do not include explanations, commentary, or examples
+- Result must be direct operational guidance for an AI agent
+- Guidance should be directly usable as a system prompt
+```
+
+Save output as `PATTERN_EXTRACTION_OUTPUT.md`.
+
+### Step 2b: Extract quantitative patterns (optional but recommended)
+
+```
+Analyze these [50-100] [content type] examples.
+
+Extract quantitative patterns:
+- Average word count (with min/max range)
+- Title length and patterns (% using colons, questions, etc.)
+- Paragraph structure (avg sentences per paragraph)
+- Heading usage frequency (% of articles with H2/H3)
+- Taxonomy/tag counts (average, min, max)
+- Common tag co-occurrence (% of items with tag pair A + B)
+- Sentence length (avg words per sentence)
+
+Report percentages where applicable. Format as a table.
+
+Example output:
+| Metric | Value | Notes |
+| Avg word count | 782 | Range: 400–1,200 |
+| % using H2/H3 | 69% | 35/50 articles |
+```
+
+Save as `QUANTITATIVE_PATTERNS.md`.
+
+### Step 2c: Audit patterns for bias
+
+Checklist:
+- [ ] Are patterns representative? (Or just narrow?)
+- [ ] Do patterns reflect outdated practices?
+- [ ] Are there demographic/cultural blind spots?
+- [ ] Do patterns exclude accessibility or compliance?
+- [ ] Do patterns favor one content type?
+
+Document limitations: "Patterns apply to internal articles; may not suit external thought leadership."
+
+---
+
+## Phase 3: Deployment (1–2 weeks)
+
+### Step 3a: Gather institutional knowledge
+
+Collect what you already have:
+- Style guide
+- Brand/voice guidelines
+- CMS content type definitions
+- Taxonomy/tag documentation
+- Accessibility requirements
+- Domain terminology glossary
+- SEO guidelines
+- Audience definitions
+
+Convert to AI-readable format (PDFs → Markdown via Pandoc):
+
+```bash
+pandoc file.pdf -o file.md
+```
+
+### Step 3b: Synthesize guidance
+
+Combine:
+1. Patterns from Step 2
+2. Institutional knowledge from Step 3a
+3. Domain constraints
+
+Create `AGENT_GUIDANCE.md` with these sections:
+
+```markdown
+# Agent Guidance: [Content Type]
+
+## Role
+[2–3 paragraphs defining who the agent is and what it does]
+
+## Quantitative Baseline
+[From your pattern analysis: average word counts, title formats, tag usage]
+
+## Mandatory Response Template
+[Fixed output structure agent must use for every response]
+
+## Critical Constraints
+- MUST [requirement]
+- ALWAYS [requirement]
+- NEVER [prohibition]
+
+## Field-level Requirements
+[Character limits, word ranges, conditional logic]
+
+## Controlled Vocabularies
+[Allowed terms, categories, selection logic]
+
+## Style and Compliance Rules
+[Voice, tone, formatting, language]
+
+## Prohibited Behaviors
+[Things that violate patterns]
+```
+
+### Step 3c: Deploy to your AI tool
+
+**Option 1: Microsoft 365 Copilot**
+```bash
+pandoc AGENT_GUIDANCE.md -o AGENT_GUIDANCE.docx
+# Upload to SharePoint → Create Copilot agent pointing at folder
+```
+
+**Option 2: Claude/ChatGPT**
+- Create custom GPT
+- Paste AGENT_GUIDANCE.md into Instructions field
+- Upload EXAMPLE_CONTENTS.md as supporting document
+
+**Option 3: API integration**
+```python
+with open('AGENT_GUIDANCE.md') as f:
+    system_prompt = f.read()
+
+response = client.messages.create(
+    model="claude-3-sonnet",
+    max_tokens=1000,
+    system=system_prompt,
+    messages=[{"role": "user", "content": user_input}]
+)
+```
+
+---
+
+## Phase 4: Iteration & Measurement (Ongoing)
+
+### Step 4a: Create test cases
+
+```
+TEST_CASE_1: Publication from new source
+Input: 24-page academic paper
+Expected: Title 50–80 chars, summary 150–180 words, 2–4 themes
+
+TEST_CASE_2: Edge case
+Input: Cross-cutting topic (not hazard-specific)
+Expected: Hazard tag OMITTED, themes from vocabulary
+```
+
+### Step 4b: Measure success
+
+| Metric | Target | How |
+|--------|--------|-----|
+| First-attempt accuracy | 80%+ | % of AI outputs passing review without revision |
+| Time savings | 50%+ | Before vs. after editor time per article |
+| Consistency | 95%+ | % of metadata matching vocabulary |
+
+Track in spreadsheet:
+```
+Date | Content | Matches Guidance? | Editor Changes | Time Saved
+2026-01-15 | Publication 1 | Yes | None | 20 min
+2026-01-15 | Publication 2 | Partial | 2 corrections | 10 min
+```
+
+### Step 4c: Quarterly audits
+
+Every 3 months:
+1. Export last 25 published items (new content)
+2. Measure against guidance (accuracy %)
+3. Collect editor feedback
+4. Update AGENT_GUIDANCE.md with refinements
+5. Log changes in DECISIONS.md
+
+**Example DECISIONS.md entry:**
+```
+2026-04-01 | Expanded theme limit from 3–4 to 2–5
+Reason: Found 5 high-performing articles with 5 themes
+Change: Updated AGENT_GUIDANCE.md
+Source: Quarterly audit (March 2026)
+```
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| Examples include low-quality content | Define curation signal upfront (engagement + longevity + editor pick) |
+| Guidance is too specific; AI refuses valid edge cases | Expand exemplar set; invite cross-functional review; separate MUST from RECOMMENDED rules |
+| Guidance becomes massive (50+ pages) | Keep core guidance under 10 pages; move edge cases to FAQ |
+| Knowledge is siloed (one person owns it) | Assign backup owner; quarterly refresh meeting with team |
+| Iteration without measurement | Log failures in FAILURE_LOG.md; run A/B tests; document what worked and why |
+
+---
+
+## Time & effort estimate
+
+| Phase | Time | Effort |
+|-------|------|--------|
+| Collection | 1–2 weeks | 1 person (part-time) |
+| Analysis | 1 week | 0.5 person (mostly waiting on LLM) |
+| Deployment | 1–2 weeks | 1 person (tech setup) |
+| First iteration | Ongoing | 1–2 hours/week for 1–2 months |
+| **Total** | **4–6 weeks** | **~2–3 person-weeks** |
+
+---
+
+## Template checklist
+
+Use this to track progress:
+
+- [ ] EXEMPLAR_SELECTION_CRITERIA.md (defined "best")
+- [ ] export/ folder (50–100 exemplar files)
+- [ ] EXAMPLE_CONTENTS.md (combined exemplars)
+- [ ] PATTERN_EXTRACTION_OUTPUT.md (LLM analysis)
+- [ ] QUANTITATIVE_PATTERNS.md (statistics)
+- [ ] AGENT_GUIDANCE.md (synthesized guidance)
+- [ ] Test cases (5–10 examples + expected output)
+- [ ] Measurement spreadsheet (track accuracy over time)
+- [ ] DECISIONS.md (change log + rationale)
+- [ ] Quarterly audit process (documented, scheduled)
+
+---
+
+## Next: Testing whether your guidance works
+
+Once deployed, the real work begins: **measuring whether this actually improves outcomes.**
+
+For that, see the companion framework on the scientific method for editorial AI. Forms hypotheses, run A/B tests, measure statistically, iterate with rigor.
+
+{% endmarkdown %}
