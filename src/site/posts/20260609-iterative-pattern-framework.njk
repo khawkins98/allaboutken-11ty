@@ -1,7 +1,7 @@
 ---
-title: "From irresponsible AI to evidence-based editorial guidance"
+title: "CADI: A framework for AI that helps your writing without taking it over"
 layout: layouts/post.njk
-teaser: "How to turn ad-hoc prompt tweaking into a systematic, measurable process for editorial AI."
+teaser: "The CADI framework — Collect, Analyze, Deploy, Iterate — a prescriptive answer to the question everyone keeps asking: should I prompt better, write a style guide, build an agent, or what?"
 date: 2026-06-09
 tags:
   - posts
@@ -19,226 +19,204 @@ image_meta:
 workflow:
   - brief:
       summary: >-
-        Most AI-assisted editorial work follows a frustrating loop: tweak the prompt, check the output, tweak again. No measurement. No feedback. This post synthesizes three years of thinking about how to apply evidence-based patterns, scientific hypothesis testing, and iterative measurement to editorial AI workflows. The result is a framework that turns irresponsible iteration into a replicable, rigorous process.
+        I keep having the same conversation with colleagues: should I prompt better, write a style guide, build an agent, document my preferences? The answer is yes, in a specific order, and the combination is what matters. CADI — Collect, Analyze, Deploy, Iterate — is a prescriptive path through that confusion.
 ---
 
 {% markdown %}
 
-Most AI-assisted editorial work is **irresponsible iteration**.
+I keep having the same conversation.
 
-Try a prompt. Check the output. Tweak the prompt. Try again. Each cycle is isolated—no learning, no measurement, no way to know if you're actually improving. After ten rounds of tweaking, you've got inconsistency encoded at scale and no idea how you got there.
+Someone is trying to use AI in their writing workflow and it's not quite working. They ask: *Should I just get better at prompting? Should I write a style guide? Should I build an agent? Should I document my preferences somewhere? Should I upload my existing content?* And the honest answer is always some version of "yes, but in a specific order, and most of the value comes from the combination."
 
-This post pulls together a framework for something better: **evidence-based editorial guidance, tested systematically, iterated rigorously.**
+That conversation gets frustrating to have repeatedly without something to point at. So I wrote it down.
 
-I've written about pieces of this before. This post is the connective tissue—showing how they fit together, where they came from (medical guideline development, design systems, journalism audits), and what's still missing.
+This is **CADI** — Collect, Analyze, Deploy, Iterate — a prescriptive path through the confusion. It's designed to be followed roughly in order, at least the first time through.
 
----
+The name is deliberate. A caddie in golf carries your bag, reads the course conditions, and advises on the shot — but doesn't play for you. That's the relationship this framework is trying to build with AI. It handles the load; you make the calls.
 
-## The problem: irresponsible iteration
-
-Without structure, iteration becomes a trap:
-
-1. **No learning loop** — Each attempt is isolated; patterns never accumulate.
-2. **Cascading errors** — Bias in one example becomes encoded in the next.
-3. **Moving target** — Guidelines are implicit, fragmented, or contradictory.
-4. **No audit trail** — Future teams repeat the same mistakes.
-5. **Optimization theater** — Looks productive ("we're iterating!") but produces inconsistency.
-
-The irony: **the harder you prompt-tune without structure, the worse your results.**
+The setup takes 4–6 weeks and mostly involves documenting things your team already half-knows. After that, value compounds — each iteration makes the AI more useful rather than requiring the same effort every time. It works for any content type or language, as long as you have enough of it to learn from.
 
 ---
 
-## The framework: three pillars
+## The problem it's solving
 
-I've discovered (and written about, piecemeal) a systematic approach with three pillars:
+Most AI writing assistance starts cold every time. No memory of what worked last time. No sense of your voice, your standards, your audience. So it gives you something generic and confident — and you spend the rest of your time correcting it.
 
-### 1. **Collection: Extract your best examples**
+The fix isn't a better prompt. It's giving the AI a documented picture of what good looks like *for you*, and building a way to improve that picture as you learn what works. Done right, the AI gets more useful over time rather than requiring the same effort on every task.
+
+There's a failure mode that persists even after you think you've solved this: **confident wrongness + silent drift**. The AI sounds authoritative but cites a source incorrectly. It hits approximately the right word count but adds a paragraph that subtly changes your meaning. These are harder to catch than obvious nonsense, and they accumulate faster.
+
+---
+
+## Where you probably are now
+
+Most people using AI for writing aren't doing "autonomous AI publishing." They're doing **supervised co-writing**: AI handles a first pass or a tedious task, a human reviews and corrects, a human publishes. That's normal — it's also where most of the real value is right now.
+
+A useful way to think about the progression:
+
+1. **Ad-hoc prompting** — one-off prompts, inconsistent outcomes, each task starts from scratch
+2. **Reusable instructions** — a style guide, master prompt, or glossary that travels with you
+3. **Staged workflow** — phase-by-phase drafting, context walking, a deliberate review pass
+4. **Measured system** — hypotheses, controlled comparisons, failure logs, documented decisions
+
+Most people are between 1 and 2. CADI is a path from there to 3 and 4, without skipping steps.
+
+---
+
+## Before you start
+
+This framework works best when you can answer yes to these:
+
+- You have **50+ published items** you consider high-quality (not just recent)
+- You have some signal for quality — engagement data, editor picks, longevity tags, or even manual curation
+- At least one person has **time to own the guidance doc** and keep it current
+- You have some way to **export content** from your CMS in text form (Markdown, HTML, CSV)
+- Editors are willing to **log failures** rather than just silently fix them
+
+You don't need a data science team, a custom CMS, or a formal AI strategy. But if no one will own the guidance document, the method breaks down at deployment.
+
+---
+
+## The CADI framework: Collect → Analyze → Deploy → Iterate
+
+CADI is a four-phase loop. You build it once, then run the last phase continuously. Each cycle makes the guidance sharper — and the AI more useful.
+
+I've arrived at this through practice, and written about the pieces separately. This is the first time I've named it.
+
+### C — Collect: Extract your best examples
 
 Your best content already embodies your patterns—word counts, title structures, tag usage, narrative flow. Don't grab the latest 50 published items; **curate the exemplary 50.**
 
-This is where you define what "best" means: engagement? Evergreen tags? Editor picks? A combination? The rigor of this choice cascades through everything downstream.
+The rigour of this choice cascades through everything downstream. What signals "best"? Engagement? Evergreen tags? Editor picks? A combination? Document that decision—it will matter when you audit later.
 
-**Related reading**: [Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/) walks through this with real Drupal code and a case study from UNDRR (122 publications curated by engagement + longevity).
+**Ready to move on when**: you have 50–100 items, you've written down why they qualify, and an editor has spot-checked for obvious outliers.
 
-### 2. **Analysis: Find quantitative patterns**
+For implementation detail, including Drupal export code and a worked UNDRR case study, see [Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/).
+
+### A — Analyze: Find quantitative patterns
 
 Feed your curated examples to an LLM with a structured prompt to extract:
 - Average word counts (with ranges, by content type)
 - Title formats (% using colons, question marks, etc.)
-- Section/heading usage frequency
-- Metadata usage (tag counts, co-occurrence)
+- Heading usage frequency
+- Metadata usage (tag counts, co-occurrence patterns)
 - Tone markers (passive vs. active, hedging language)
 
-AI is exceptionally good at pattern extraction; humans make the interpretation.
+AI is exceptionally good at this extraction step; humans do the interpretation. The output is not guidance yet—it's **empirical description** of what your best content actually looks like.
 
-The output: not guidance yet, but **empirical description** of what your best content looks like.
+**Ready to move on when**: you have a written summary of patterns with numbers, and at least one editor has reviewed it and flagged anything that looks wrong or unrepresentative.
 
-Example: "Publications average 169 words (range 95–287); 56% use colon in title; all use 2–4 themes."
+### D — Deploy: Turn patterns into working instructions
 
-### 3. **Deployment: Convert patterns to actionable guidance**
+Combine what the analysis found with your existing institutional knowledge — style guides, brand standards, domain constraints — into a single document your AI tool can use as its standing instructions.
 
-Combine:
-1. **Pattern-based guidance** (from step 2)
-2. **Institutional knowledge** (existing style guides, brand standards)
-3. **Domain-specific constraints** (accessibility, CMS schema, legal)
+This step requires editorial judgment: observed patterns and existing style rules will sometimes conflict. When they do, be explicit about which wins and why. Write it down — that decision belongs in your change log, not left implicit.
 
-Convert to your AI tool's preferred format. Upload. Deploy.
+Result: instructions specific enough for the AI to act on ("180 words ± 10%") instead of vague ("be concise"). The same document works for human editors too.
 
-Result: Guidance specific enough to be computable ("180 words ± 10%") instead of vague ("be concise").
+**Ready to move on when**: the instructions have been reviewed by at least one editor who wasn't involved in writing them, and they've been uploaded or integrated with your AI tool.
 
 ---
 
-## The missing piece: scientific iteration
+## CADI in practice: how it played out at UNDRR
 
-Here's what I wrote about less explicitly, but was always doing: **the scientific method at the workflow level.**
+This isn't theoretical. One case illustrates the full loop:
 
-Most LLM literature exists at extremes:
-- **Prompt engineering**: "How to write better prompts"
-- **Model training (RLHF)**: "How to retrain models at scale"
+**Collection**: 122 publications flagged as "evergreen + high-engagement" in Drupal
+**Analysis**: LLM extracted patterns → "169 words average; 56% use colons in title; all use 2–4 themes"
+**Deployment**: Guidance uploaded to Microsoft 365 Copilot
+**Iteration**: Quarterly audits checked whether new AI drafts matched patterns; a shared change log recorded what was adjusted and why
 
-**Missing**: How to test whether *your editorial guidance* actually works. How to measure failure modes. How to know when iteration is working vs. when you're encoding bias.
+Result: first-pass acceptance improved from ~30% to ~75%. Editor time cut by 60%.
 
-This is where the gap is.
+But here's what would make it *genuinely rigorous*: a prospective A/B test showing "specific numeric targets improve outcomes by X% vs. vague ones." That's the piece most teams skip—and it's the most important.
 
-### Hypothesis-driven iteration
+---
 
-Instead of tweaking in the dark, form testable hypotheses:
+## I — Iterate: building confidence over time
+
+Iteration done badly is just tweaking in the dark—which is how we started. Done well, it's hypothesis-driven:
 
 - "IF we add explicit numeric targets ('180 words ± 10%'), THEN first-pass acceptance rises from 40% to 70%"
 - "IF we show exemplars of title styles, THEN AI chooses appropriate titles 85% of the time"
-- "IF we run oppositional review (second model critiques our guidance), THEN we catch biased rules 80% of the time"
+- "IF we run oppositional review (a second model critiques our guidance), THEN we catch biased rules 80% of the time"
 
-Then **test them**:
-- Run A/B tests on real content
-- Measure outcomes (editor revision rate, time, accuracy)
-- Check statistical significance (p < 0.05, not "feels better")
-- Document what worked and why
-- Iterate based on evidence
+Then test them: run a simple before/after comparison on real content, measure outcomes with a concrete metric, and document what changed and why.
 
-This is rigorous. It's repeatable. It builds organizational muscle.
+For a small team (2–3 editors), you need at least 20–30 items per condition to see a reliable signal — fewer than that and the result could just be noise. Blinding reviewers doesn't need to be complicated: just split the batch and don't tell the reviewer which version of the instructions produced which output.
 
----
+**Mid-cycle revision trigger**: if more than 20% of outputs in a week fail the same check, don't wait for the quarterly audit — that's a pattern worth investigating now.
 
-## How this connects to larger frameworks
+This approach isn't invented from scratch. It's borrowed from disciplines that have been doing this for decades:
 
-You can't invent this from scratch. It already exists in:
+- **Medical guideline development**: AGREE II and GRADE for assessing whether guidelines are evidence-based and implementable
+- **Design systems**: Diátaxis for organizing knowledge by user need, not topic
+- **Journalism**: content analysis to audit whether outlets meet their own stated standards
 
-- **Medical guideline development**: AGREE II, GRADE frameworks for assessing whether guidelines are evidence-based and implementable
-- **Design systems**: Diátaxis (Daniele Procida) shows how to organize knowledge by user need, not topic
-- **Journalism**: Content analysis + pattern extraction to audit whether outlets meet their own standards
-- **Literature synthesis**: PRISMA checklist, scoping reviews—systematic, transparent methodologies
+The shift is applying those disciplines to editorial AI workflows.
 
-The shift: apply *those* discipline to your editorial AI workflows.
+None of that is new. What I haven't found elsewhere is the specific combination: using your *own* best content corpus to derive AI guidance, then treating that guidance as a testable hypothesis rather than a fixed rule. The generic collect-analyze-deploy-iterate cycle exists in agile, in content ops, in SEO — the structure is everywhere. What's missing is the application of it to *building and improving the guidance layer you give AI*, rather than just iterating on prompts or outputs. If you know of prior art here, I'd genuinely like to see it.
 
 ---
 
-## Real example: UNDRR
+## Where this breaks down
 
-One case study illustrates the full loop:
+Iteration goes blind again when:
 
-**Collection**: 122 publications flagged as "evergreen + high-engagement" in Drupal
-**Analysis**: LLM extracts patterns → "169 words average; 56% use colons; all use 2–4 themes"
-**Deployment**: Guidance uploaded to Microsoft 365 Copilot
-**Iteration**: Quarterly audits check whether new AI drafts match patterns; DECISIONS.md logs what changed and why
-
-Result: First-pass acceptance rate improved from ~30% to ~75%. Editor time cut by 60%.
-
-But here's what would make it *perfect*: a prospective A/B test showing "specific numeric targets (vs. vague ones) improve outcomes by X%." That's the missing rigor.
-
----
-
-## Where this breaks down (and how to know)
-
-Iteration becomes irresponsible again when:
-
-1. **Encoding bias without inspection** — Pattern says "short sentences good" because those examples target beginners; new guidance infantilizes advanced content
-2. **Optimizing for fit, not truth** — "This tag co-occurs 26% of the time, so ALWAYS pair them" (should be "consider pairing")
-3. **No quality gate on source** — Including mediocre content in your "best" set skews guidance toward mediocrity
+1. **Encoding bias without inspection** — a pattern like "short sentences good" might just reflect that your exemplars targeted beginners; applying it universally infantilizes advanced content
+2. **Optimizing for fit, not truth** — "this tag co-occurs 26% of the time, so ALWAYS pair them" (should be "consider pairing")
+3. **No quality gate on source** — including mediocre content in your "best" set skews guidance toward mediocrity
 4. **Stopping too early** — 10 examples isn't enough; 500 might over-fit
 
-**Prevention**: Transparent curation criteria. Documented assumptions. Iterative refinement with *human review between cycles*. Oppositional analysis (ask a second model for critique). Built-in escape hatches ("usually X, unless Y").
+Prevention: transparent curation criteria, documented assumptions, human review between cycles, oppositional analysis (ask a second model to critique your instructions), and built-in escape hatches ("usually X, unless Y").
 
 ---
 
-## How to start
+## Putting it into practice
 
-1. **Define "best"**: What signals exemplary content? (engagement? longevity? editor pick?)
-2. **Export 50–100 examples**: In Markdown, CSV, or JSON
-3. **Run pattern analysis**: Use the structured prompt from my earlier post
-4. **Audit for bias**: Does this guidance apply across contexts or just narrow cases?
-5. **Combine with style guides**: Merge patterns + your existing standards
-6. **Deploy & measure**: Track whether AI outputs meet guidance on first pass
-7. **Test rigorously**: A/B test hypotheses about what guidance changes actually help
-8. **Iterate with rigor**: Update DECISIONS.md with *why* you changed something, not just that you did
+If you're starting now, run it as a short program:
 
----
+1. **Week 1–2 (collection)**: curate exemplar content; write explicit selection criteria
+2. **Week 3 (analysis)**: extract quantitative patterns and draft constraints
+3. **Week 4 (deployment)**: synthesize guidance with your existing style standards and deploy
+4. **Week 5–6 (measurement)**: run one controlled comparison and log the decision
 
-## The connective tissue
+Minimum documents to maintain:
 
-I've written about pieces of this:
+- a curation criteria note (why these items, not others)
+- your working AI instructions
+- a failure log
+- a record of what you tested and what changed, and why
 
-- **[Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/)** — Collection + Analysis, with Drupal code
-- **[The power of the pause: How planning beats prompt tuning](/posts/20250923-effective-ai-work-is-project-management/)** — Structure over tweaking, with PROJECT_BRIEF → PROJECT_PLAN → PATTERNS.md workflow
-- **[Thoughtful AI integration beats bolted-on Clippy](/posts/20250919-smart-ai-integration-context-first/)** — Product thinking: when to use AI, not just how to prompt it
+For many teams, the transition period is a **parallel run**: keep your normal manual editorial review while running AI-assisted output alongside it. Compare decisions, measure drift, then scale what proves useful.
 
-What ties them together: **Collection → Analysis → Deployment → Iteration, grounded in evidence and the scientific method.**
+Before publishing AI-assisted output, run a trust-but-verify gate:
 
----
-
-## The gap I discovered
-
-There's a genuine absence in published literature: a documented, replicable methodology for applying the scientific method to editorial AI workflows. What exists:
-- How to write better prompts ✓
-- How to train models better ✓
-- **How to test whether your guidance works** ✗
-
-This framework fills that.
+- verify factual claims and sources independently
+- verify hard constraints (word/character counts, required fields) — don't trust the model's own count
+- verify meaning has not drifted from source intent
+- keep human sign-off as the final release gate
 
 ---
 
-## Next steps
+## The pieces I've written previously
 
-### For practitioners
-Start with your best content. If you have 50+ published items, you can extract patterns this week. See the [workflow template](#) for step-by-step instructions (Drupal/WordPress/manual export).
+CADI synthesises thinking from several earlier posts:
 
-### For teams building this
-Use the [scientific method framework](#) to formalize your iteration process. Log failures. Test hypotheses. Measure outcomes. Build organizational muscle around evidence-based editorial AI.
+- **[Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/)** — the C and A phases in detail, with Drupal export code and the full UNDRR case study (updated June 2026)
+- **[The power of the pause: How planning beats prompt tuning](/posts/20250923-effective-ai-work-is-project-management/)** — structure over tweaking, with PROJECT_BRIEF → PROJECT_PLAN → PATTERNS.md workflow
+- **[Thoughtful AI integration beats bolted-on Clippy](/posts/20250919-smart-ai-integration-context-first/)** — product thinking for AI integration: when to use it, not just how to prompt it
 
-### For researchers
-This is under-explored territory. The intersection of editorial workflows, systematic measurement, and AI guidance is ripe for formal study. Papers welcome.
+What ties them together: **CADI — Collect, Analyze, Deploy, Iterate, grounded in evidence.**
 
 ---
 
-## References & related reading
+## References
 
-### Ken's detailed posts
-- [Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/) — Full implementation with code
-- [The power of the pause: How planning beats prompt tuning](/posts/20250923-effective-ai-work-is-project-management/) — Structure, PATTERNS.md, oppositional review
-- [Thoughtful AI integration beats bolted-on Clippy](/posts/20250919-smart-ai-integration-context-first/) — Product thinking for AI integration
-- [Editorial Style Guide](/style-guide/editorial/) — Your institutional standards
-
-### Canonical frameworks
-- **Diátaxis** — [https://diataxis.fr/](https://diataxis.fr/) — Documentation as four modes (tutorials, how-to, reference, explanation)
-- **AGREE II** — [https://www.agreetrust.org/](https://www.agreetrust.org/) — Framework for assessing guideline quality
-- **GRADE Working Group** — [https://www.gradeworkinggroup.org/](https://www.gradeworkinggroup.org/) — Evidence grading for recommendations
-- **PRISMA Checklist** — [https://www.prisma-statement.org/](https://www.prisma-statement.org/) — Transparent reporting standards
-
-### Research papers
 - Bsharat et al., "[Principled Instructions Are All You Need](https://arxiv.org/abs/2312.16171)" (arXiv:2312.16171) — 57.7% quality improvement with structured prompts
-- Wei et al., "[Chain-of-Thought Prompting Elicits Reasoning](https://arxiv.org/abs/2201.11903)" (2022) — Decomposition + structure improve reasoning
-- Yao et al., "[Tree of Thoughts: Deliberate Problem Solving with LLMs](https://arxiv.org/abs/2305.10601)" (2023) — Structured reasoning frameworks
-- Kohavi & Longbotham, "[Controlled Experiments on the Web](https://arxiv.org/abs/1411.7170)" — A/B testing methodology
-- Leveson, "[A New Accident Model for Engineering Safer Systems](http://sunnyday.mit.edu/papers/ssrpaper.pdf)" (2004) — Systematic failure analysis
-
----
-
-## What's next in this series
-
-I'm working on supporting resources:
-- **Workflow template**: Step-by-step process (Collection → Analysis → Deployment → Iteration) with decision trees and code samples
-- **Scientific method framework**: Hypothesis testing, failure logging, A/B testing templates for editorial guidance
-- **Case studies**: Real examples of teams running controlled experiments on their guidance
-
-Coming soon.
+- Wei et al., "[Chain-of-Thought Prompting Elicits Reasoning](https://arxiv.org/abs/2201.11903)" (2022)
+- Yao et al., "[Tree of Thoughts: Deliberate Problem Solving with LLMs](https://arxiv.org/abs/2305.10601)" (2023)
+- Kohavi & Longbotham, "[Controlled Experiments on the Web](https://arxiv.org/abs/1411.7170)"
+- [AGREE II](https://www.agreetrust.org/), [GRADE](https://www.gradeworkinggroup.org/), [Diátaxis](https://diataxis.fr/), [PRISMA](https://www.prisma-statement.org/)
 
 {% endmarkdown %}
