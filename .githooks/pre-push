@@ -1,6 +1,6 @@
 #!/bin/bash
-# Pre-push hook: Remind about PR title format
-# Validates that PR title will match the workflow check regex
+# Pre-push hook: remind about PR title format requirements.
+# Advisory only; CI remains the enforcement source of truth.
 
 set -e
 
@@ -15,7 +15,7 @@ echo "  ✓ content: New blog post on editorial AI"
 echo "  ✓ feature: Add semantic search to posts"
 echo "  ✓ fix: Correct image paths in 2025 posts"
 echo ""
-echo "Examples of INVALID PR titles (like PR #77):"
+echo "Examples of INVALID PR titles:"
 echo "  ✗ Editorial AI Framework: Three interconnected posts"
 echo "  ✗ Add verify-contracts script and wire into CI"
 echo "  ✗ Posts (tandem): governance delivery impact"
