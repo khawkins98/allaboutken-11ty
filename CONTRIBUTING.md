@@ -68,6 +68,7 @@ Track readiness via the `kens_status` frontmatter field:
 
 ## Before pushing
 
+- Use [`docs/SCRIPTS.md`](docs/SCRIPTS.md) as the source of truth for command behavior and expected outputs.
 - `yarn build` runs clean
 - `yarn lint:css` runs clean (for SCSS changes)
 - Visually confirm new or edited pages render locally via `yarn dev`
@@ -84,3 +85,4 @@ Always merge through a PR, even for solo work. Don't push directly to `main`. Re
 - [`docs/PUBLISHING_WORKFLOW.md`](docs/PUBLISHING_WORKFLOW.md): editorial review stages and roles
 - [`src/site/style-guide/editorial.njk`](src/site/style-guide/editorial.njk): voice, tone, structure
 - [`docs/IMAGE_GENERATION.md`](docs/IMAGE_GENERATION.md): hero image pipeline
+- [`docs/SCRIPTS.md`](docs/SCRIPTS.md): local commands and script behavior

@@ -59,6 +59,8 @@ Current DNS records for the main site:
 - **Deploy:** manually via `cd worker && npx wrangler deploy` (auto-deploy CI is currently broken — see `.github/workflows/deploy-feedback-worker.yml` for details)
 - Completely independent of the main site serving. Not affected by Vercel or DNS changes to the apex domain.
 
+Operational details for routes, local development, and wrangler usage are documented in [`worker/README.md`](../worker/README.md).
+
 ### GitHub Pages — main site (warm spare) and hobby project origins
 
 - **URL:** `khawkins98.github.io`
@@ -94,9 +96,9 @@ The redirect-to-index-html approach is necessary because Vercel's directory-inde
 
 2. **Check the project's asset paths.** Assets must use either relative `./` paths or paths prefixed with the repo name (e.g. `/my-project/foo.css`). Bare root-relative paths like `/foo.css` will break — Vercel serves them from the main site root. `./`-style relative paths work fine: because the browser URL ends with `/project-name/index.html`, `./` resolves to `/project-name/` as expected.
 
-2. **Check if it's a SPA.** Single-page apps that use client-side routing need a `404.html` that loads `index.html` on GitHub Pages, so that deep links work through the proxy. If the project has a `404.html` already that redirects to `index.html`, you're good.
+3. **Check if it's a SPA.** Single-page apps that use client-side routing need a `404.html` that loads `index.html` on GitHub Pages, so that deep links work through the proxy. If the project has a `404.html` already that redirects to `index.html`, you're good.
 
-3. **Add redirects and a rewrite to `vercel.json`:**
+4. **Add redirects and a rewrite to `vercel.json`:**
 
    ```json
    "redirects": [
@@ -110,11 +112,11 @@ The redirect-to-index-html approach is necessary because Vercel's directory-inde
 
    The two redirects are required because Vercel's directory-index check intercepts trailing-slash requests before any rewrite rule can fire. Redirects run before that check, so redirecting to the explicit `index.html` file lets the rewrite pick it up normally.
 
-4. **Add a row to the Rewrites table** in this file.
+5. **Add a row to the Rewrites table** in this file.
 
-5. **Commit and push.** Vercel will deploy automatically. Smoke-test `allaboutken.com/my-project/` once the deployment completes.
+6. **Commit and push.** Vercel will deploy automatically. Smoke-test `allaboutken.com/my-project/` once the deployment completes.
 
-6. **Optionally update the project's README** to note the canonical URL is now `allaboutken.com/my-project/`.
+7. **Optionally update the project's README** to note the canonical URL is now `allaboutken.com/my-project/`.
 
 ---
 
@@ -149,3 +151,9 @@ If Vercel needs to be removed:
 | Manual `workflow_dispatch` | Can trigger either workflow manually from the Actions tab |
 
 The GitHub Pages deploy in CI is currently a warm spare. Consider removing the `deploy` job from `.github/workflows/build-and-deploy.yml` once confidence in Vercel is established.
+
+## Operational runbooks
+
+- Main site + routing architecture: this file (`docs/DEPLOYMENT.md`)
+- Feedback worker implementation/runbook: [`worker/README.md`](../worker/README.md)
+- Local script and lifecycle behavior: [`docs/SCRIPTS.md`](SCRIPTS.md)
