@@ -24,6 +24,10 @@ workflow:
 
 {% markdown %}
 
+<aside class="kh-note-box">
+<span class="kh-note-box__label">TL;DR</span> CADI — Collect, Analyze, Deploy, Iterate — is a method for building AI writing assistance that improves as you use it. The piece that's missing from most AI-writing advice: treat the guidance document you give your AI as a *testable hypothesis*, not a fixed rule. An experienced editor with access to your content can produce a first usable version in a few hours; the value comes from iterating on it like any other editorial process. Starter kit (prompt template, guidance doc skeleton, failure log): [cadi-starter-kit.txt](/resources/cadi-starter-kit.txt).
+</aside>
+
 I keep having the same conversation.
 
 Someone is trying to use AI in their writing workflow and it's not quite working. They ask: *Should I just get better at prompting? Should I write a style guide? Should I build an agent? Should I document my preferences somewhere? Should I upload my existing content?* And the honest answer is always some version of "yes, but in a specific order, and most of the value comes from the combination."
@@ -32,9 +36,9 @@ That conversation gets frustrating to have repeatedly without something to point
 
 This is **CADI** — Collect, Analyze, Deploy, Iterate — a prescriptive path through the confusion. It's designed to be followed roughly in order, at least the first time through.
 
-The name is deliberate. A caddie in golf carries your bag, reads the course conditions, and advises on the shot, but doesn't play for you. That's the relationship this framework is trying to build with AI. It handles the load; you make the calls.
+The name is deliberate. A caddie in golf walks the course with you. They carry your bag, read the conditions, advise the shot — but they don't take the swing. (For non-golfers: a caddie is the expert assistant who's paid to know more than you do about the conditions, but the swing is still yours.) That's the relationship this framework is trying to build with AI. It handles the load; you make the calls.
 
-The setup takes 4–6 weeks and mostly involves documenting things your team already half-knows. After that, value compounds. Each iteration makes the AI more useful rather than requiring the same effort every time. It works for any content type or language, as long as you have enough of it to learn from.
+An experienced editor with access to your content can produce a first usable version of the guidance in a few hours by feeding curated examples to a language model and shaping what comes back. Then it's an editorial process: share it with colleagues, use it for a few days, fold their reactions in. Value compounds because each round sharpens the guidance, not because the work gets harder. It works for any content type or language, as long as you have enough of it to learn from.
 
 ---
 
@@ -80,6 +84,8 @@ You don't need a data science team, a custom CMS, or a formal AI strategy. But i
 ## The CADI framework: Collect → Analyze → Deploy → Iterate
 
 CADI is a four-phase loop. You build it once, then run the last phase continuously. Each cycle makes the guidance sharper, and the AI more useful.
+
+The piece that makes it work, and that's missing from most AI-writing advice, is treating the guidance document itself as something you test and revise, not a one-time setup. C/A/D get you to a first version. I is where the value comes from.
 
 I've arrived at this through practice, and written about the pieces separately. This is the first time I've named it.
 
@@ -153,9 +159,9 @@ One case illustrates the full loop:
 **Deployment**: Guidance uploaded to Microsoft 365 Copilot
 **Iteration**: Quarterly audits checked whether new AI drafts matched patterns; a shared change log recorded what was adjusted and why
 
-Result: first-pass acceptance improved from ~30% to ~75%, with editor time cut by 60%. (Internal measurement via Drupal analytics and editor self-report; methodology in the [evidence-based guidelines post](/posts/evidence-based-content-guidelines-drupal-ai/).)
+The honest version of the result: before CADI, none of these pieces (curation, pattern extraction, guidance docs, iteration) reliably produced anything usable on its own. They were ad-hoc, inconsistent, and each task started over. Running them as a connected loop turned a set of one-off attempts into a process that ran continuously and got better — and cut roughly 80% of the manual effort it had taken to get a usable AI draft. The framework's value wasn't a single big number. It was making something repeatable that hadn't been.
 
-What would make this *genuinely rigorous*: a prospective A/B test showing "specific numeric targets improve outcomes by X% vs. vague ones." That's the piece most teams skip; it's the most important.
+What would make the next version *genuinely rigorous*: a prospective A/B test that quantifies which guidance changes move which outcomes by how much. That's the piece most teams skip; it's also the most important.
 
 ---
 
@@ -183,18 +189,24 @@ Iteration goes blind again when:
 
 Prevention: transparent curation criteria, documented assumptions, human review between cycles, oppositional analysis (ask a second model to critique your instructions), and built-in escape hatches ("usually X, unless Y").
 
-Minimum documents to maintain alongside the loop:
+---
 
-- a curation criteria note (why these items, not others)
-- your working AI instructions
-- a failure log
-- a record of what you tested and what changed, and why
+## What you maintain alongside the loop
+
+These four documents are what CADI actually leaves you with. The starter kit has templates for each: [cadi-starter-kit.txt](/resources/cadi-starter-kit.txt).
+
+- **A curation criteria note** — why these items qualified as exemplary, and not others
+- **Your working AI instructions** — the guidance doc the AI uses as its standing context
+- **A failure log** — the one document that's more valuable than the guidance doc itself; it's where the next iteration starts
+- **A test record** — what you tested, what changed, and why
+
+If no one is keeping at least the failure log current, you're not iterating; you're just running C/A/D once and hoping.
 
 ---
 
-## The pieces I've written previously
+## After your first cycle, go deeper
 
-CADI synthesises thinking from several earlier posts:
+These earlier posts go deeper on individual phases. You don't need to read them to start.
 
 - **[Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/)**: the C and A phases in detail, with Drupal export code and the full UNDRR case study (updated June 2026)
 - **[The power of the pause: How planning beats prompt tuning](/posts/20250923-effective-ai-work-is-project-management/)**: structure over tweaking, with PROJECT_BRIEF → PROJECT_PLAN → PATTERNS.md workflow

@@ -384,6 +384,8 @@ module.exports = function(config) {
   config.addPassthroughCopy({ "./src/components/kh-font": "assets/kh-font" });
   // mostly needed for redirecting from old drupal urls
   config.addPassthroughCopy("./src/site/**/*.html");
+  // downloadable text resources (starter kits, templates)
+  config.addPassthroughCopy("./src/site/**/*.txt");
 
   // Watch source images for changes
   config.addWatchTarget("./src/site/images");
