@@ -1,0 +1,98 @@
+---
+title: "What people actually automate with coding agents"
+layout: layouts/post.njk
+teaser: "The follow-up I promised: real project-attached agent workflows, what they automate, and what surprised the people running them."
+date: 2026-06-24
+tags:
+  - posts
+topics:
+  - AI
+  - developer tools
+  - knowledge work
+kens_status: draft
+# TODO before publishing:
+#   - image + image_meta (see docs/IMAGE_GENERATION.md; woodcut style to match the series)
+#   - replace the [READER EXAMPLE] placeholders with collected submissions, or cut
+#     those sections and reframe as "my own field notes" if too few arrive
+#   - confirm date; this is a scheduled placeholder counted two weeks from drafting (10 June 2026)
+---
+
+{% markdown %}
+
+<!--
+== DRAFT SPEC ==
+
+Fulfills the promise made in 20260420-let-ai-worry-about-the-code.njk:
+"I would like to hear what you have automated and what surprised you.
+Drop me a note; I am collecting examples for a follow-up."
+
+Angle: not another "agents are great" piece. The previous post argued the
+productive pattern is a coding agent attached to a real project, primed with
+business context. This one is the evidence: concrete workflows, who runs them,
+and the recurring surprises. Audit context: five posts (four gears, four
+traditions, context-was-always-the-job, comprehension-debt, software-splits)
+establish the philosophy; none deliver the implementation layer. This post is
+the first step toward that playbook.
+
+Structure plan:
+1. Recap the question and why I asked it (2 short paragraphs)
+2. The patterns: 3-4 categories of automation that kept recurring
+3. The surprises: what people did not expect (the most shareable section)
+4. What this suggests about the playbook (bridge to a possible team-focused follow-up)
+5. Close: restate, invite more examples, related links
+
+Voice notes: zero em dashes (use colons, semicolons, commas). One-sentence
+teaser. Confident, evidence-led, no AI-boosterism. Keep under 1,500 words.
+-->
+
+In April I [asked what you had automated](/posts/20260420-let-ai-worry-about-the-code/) with coding agents attached to real projects, and what surprised you along the way. This post collects the answers, mine included.
+
+The short version: almost nobody automated the thing they set out to automate. The workflows that stuck were the ones discovered mid-project, where the agent was already primed with context for a different task and the automation fell out as a side effect.
+
+> **tl;dr**
+>
+> - **The recurring pattern**: automations that survive are project-attached, not task-attached; the context folder matters more than the prompt.
+> - **The common surprise**: the second version surprises you, not the first; first versions reliably underperform the manual process.
+> - **The dividing line holds**: every working example came from someone comfortable reading diffs, even when they wrote none of the code.
+
+## What I asked
+
+[TODO: brief recap of the original framing: comfort with the vernacular of code, the project folder as the unit of work, the GA4 MCP server example. Two paragraphs maximum; link back rather than re-explain.]
+
+## The patterns
+
+[READER EXAMPLE placeholders below; replace with real submissions. Keep 3-4 categories, one concrete example each, named or anonymized per submitter preference.]
+
+### Reporting that crosses tool boundaries
+
+My own canonical example: the [UNDRR analytics setup](/work/2026/impact-story-undrr-analytics-overlay-mcp/), where a local MCP server encodes what our GA4 data means and a local Drupal database lets the agent resolve ambiguous URLs itself. The investigation that used to be a tedious cross-tool query now runs in one pass.
+
+[READER EXAMPLE: similar cross-system reporting story from a different stack.]
+
+### Maintenance chores with judgment in the loop
+
+[READER EXAMPLE: dependency updates, content migrations, link checking; the interesting part is where people kept the human checkpoint.]
+
+### Context capture as automation
+
+[READER EXAMPLE: people who automated the writing-down, not the doing: changelogs, decision records, runbooks generated from the work itself. Connects to the comprehension-debt thread.]
+
+## What surprised people
+
+[TODO: this is the heart of the post. Candidate surprises from my own notes, to validate against submissions:]
+
+- First versions underperform; the payoff arrives on iteration two or three, after the context files improve. People who quit after one attempt concluded the whole approach fails.
+- Dictation beats typing for instructions. Looser, narrative input outperforms concise prompts.
+- The agent surfaces organizational ambiguity. When it asks "which of these three definitions of engagement do you mean?", that question was always there; nobody had to answer it before.
+
+## Toward a playbook
+
+[TODO: short bridge section. The examples suggest the implementation layer the earlier posts skipped: what a team's context folder should contain, who maintains it, how skills and MCP servers get reviewed. Decide whether that becomes its own post; if so, name it here as the next follow-up and keep this section to one paragraph.]
+
+## Keep them coming
+
+The pattern from the first post holds: the leverage lives where code lives, and the people getting it are credible readers and directors of what the agent produces, not necessarily writers of it. If your example is missing here, [drop me a note](/about/); I will keep adding to this collection.
+
+Related writing: [Let AI worry about the code, you worry about the work](/posts/20260420-let-ai-worry-about-the-code/), [Four gears of AI-assisted development](/posts/20260405-four-phases-of-ai-adoption/), and [why context engineering was always the job](/posts/20260330-context-was-always-the-job/).
+
+{% endmarkdown %}
