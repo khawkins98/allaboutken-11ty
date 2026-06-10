@@ -43,21 +43,26 @@ Target: 50-100 items per subtype.
 1. PRE-PROCESSING PROMPT (HTML to standardized Markdown)
 ==============================================================================
 
-Use this before the Analyze prompt if your content is in HTML -- typical
-for WordPress, Drupal, and most CMS exports.
+This pre-processing prompt is the fallback for the manual pipeline only.
+Use it only if you're working with HTML and a browser-based tool that
+can't read files or fetch URLs in bulk.
 
-If you're using NotebookLM, you can skip this section entirely (and skip
-section 3 too). NotebookLM accepts source URLs and PDFs directly. Add the
-URLs of your best items as sources, or save each as a PDF and upload.
-Then run the Analyze prompt in section 2 against those sources.
+Recommended path (skip this section entirely):
 
-If your content is already in clean Markdown (static site generators like
-Eleventy / Astro / Hugo, MDX blogs, Markdown-based CMSes), skip this step.
-Strip the frontmatter wrappers, concatenate the files with "===" delimiters
-between items, and feed the result to the Analyze prompt below.
+  - NotebookLM (or similar): drop URLs or PDFs of your best items as
+    sources. Run the Analyze prompt in section 2 against them.
 
-For HTML content, use the prompt below to convert each file into the
-clean Markdown format the analyzing model can read.
+  - Local agent (Claude Code, GitHub Copilot CLI, or similar): point the
+    agent at a directory of exported content and ask it to run the
+    Analyze prompt. The agent handles file iteration, cleanup, and
+    consolidation in one shot.
+
+  - Already in clean Markdown (static site generators, MDX, Markdown
+    CMSes): concatenate with "===" delimiters between items and feed
+    to the Analyze prompt.
+
+If none of the above fit your setup, use the prompt below to convert
+each HTML file into a clean Markdown format the analyzing model can read.
 
 
 --- begin prompt ---

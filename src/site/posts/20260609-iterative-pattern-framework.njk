@@ -116,11 +116,12 @@ Your best content already embodies your patterns: word counts, title structures,
 
 Document the criteria you used. It will matter when you audit later.
 
-**Getting the files into the model.** Two paths, depending on your tool.
+**Getting the files into the model.** Use a tool that handles the file work for you. Two options that cut out almost all of the manual prep:
 
-**The short way (NotebookLM).** [NotebookLM](https://notebooklm.google.com/) accepts source URLs and PDFs directly. Add the URLs of your 50–100 best items as sources, or save each as a PDF and upload. Skip the preprocessing entirely. Then run the Analyze prompt (in the [starter kit](/resources/cadi-starter-kit.txt)) against the sources.
+- **[NotebookLM](https://notebooklm.google.com/) or similar.** Add the URLs of your 50–100 best items as sources, or save each as a PDF and upload. Then run the [Analyze prompt](/resources/cadi-starter-kit.txt) in the chat. Zero preprocessing.
+- **A local agent (Claude Code, GitHub Copilot CLI, or similar).** Point the agent at a directory of your exported content and ask it to run the Analyze prompt. The agent handles file iteration, cleanup, and consolidation in one shot.
 
-**The portable way (Claude Projects, ChatGPT, anything else):**
+If neither is available (you're working only with browser-based tools that can't read files or fetch URLs in bulk), the manual pipeline is the fallback:
 
 1. Export each item as HTML from your CMS (WordPress, Drupal, and most custom systems support this).
 2. Feed the HTML to an agent with a preprocessing prompt that strips chrome (navigation, ads, related-content modules) and converts each file into a standardized Markdown structure with a metadata header. The starter kit includes the preprocessing prompt.
