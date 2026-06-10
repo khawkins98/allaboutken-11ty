@@ -30,11 +30,11 @@ image_meta:
 
 Traditional web analytics answers "how many people visited?" For a UN organization producing policy guidance, technical resources, and knowledge products, that's the wrong question. The right question: did the people who need this content actually find it?
 
-I led the design and implementation of analytics infrastructure across UNDRR's web ecosystem -- 24+ domains spanning Drupal sites, Java applications, and static microsites -- to answer that. The challenge wasn't primarily technical. It was conceptual: what does success mean for content where impact happens outside your analytics?
+I led the design and implementation of analytics infrastructure across UNDRR's web ecosystem (24+ domains spanning Drupal sites, Java applications, and static microsites) to answer that. The challenge wasn't primarily technical. It was conceptual: what does success mean for content where impact happens outside your analytics?
 
 ## What was the actual problem?
 
-No analytics benchmarks exist for organizations like UNDRR. The widely-cited "16% social traffic" figure comes from fundraising nonprofits running emotional campaigns. For a technical policy organization where audiences search for "Sendai Framework implementation guidance," that benchmark steers you wrong. I needed to figure out what actually applied -- and write down what didn't.
+No analytics benchmarks exist for organizations like UNDRR. The widely-cited "16% social traffic" figure comes from fundraising nonprofits running emotional campaigns. For a technical policy organization where audiences search for "Sendai Framework implementation guidance," that benchmark steers you wrong. I needed to figure out what actually applied, and write down what didn't.
 
 The measurement model was broken in a different way. A 50% bounce rate on a terminology definition often means the user found their answer. The same rate on a landing page means something failed. Without classifying content by type, aggregate metrics obscure more than they reveal.
 
@@ -44,23 +44,23 @@ Some of the most important impact never touches analytics at all. A researcher d
 
 ## How did I approach this?
 
-I started with benchmarks -- or rather, with finding out they didn't exist for our context. I synthesized data from M+R Benchmarks, RKD Group studies (2,000+ nonprofits), First Page Sage, and Similarweb, then worked out which findings actually applied. One thing that came up: only 8% of nonprofit websites pass Core Web Vitals on mobile. I documented confidence levels for each benchmark category and noted the gaps -- no UN-system analytics data exists anywhere.
+I started with benchmarks -- or rather, with finding out they didn't exist for our context. I synthesized data from M+R Benchmarks, RKD Group studies (2,000+ nonprofits), First Page Sage, and Similarweb, then worked out which findings actually applied. One thing that came up: only 8% of nonprofit websites pass Core Web Vitals on mobile. I documented confidence levels for each benchmark category and noted the gaps: no UN-system analytics data exists anywhere.
 
 Content-type classification underpins everything else. I established metatag conventions (`vf:page-type`) that tag every page by type. The tracking script reads these on page load and sends them to GA4 as a custom dimension, so you can apply different success criteria to different content. Reference pages get different expectations than landing pages, which get different expectations than event pages.
 
-For audience quality, I built an ASN lookup: a server-side endpoint converts IP addresses to network categories (government, academic, intergovernmental, NGO, commercial) and sends the category to GA4. Not the specific organization -- just the type, which keeps it GDPR-friendly while still answering the real question: are the visitors we're getting the visitors we're trying to reach?
+For audience quality, I built an ASN lookup: a server-side endpoint converts IP addresses to network categories (government, academic, intergovernmental, NGO, commercial) and sends the category to GA4. Not the specific organization, just the type, which keeps it GDPR-friendly while still answering the real question: are the visitors we're getting the visitors we're trying to reach?
 
-I also classified 200+ referrer domain patterns into 14 strategic buckets -- UN System, Government, Academic, DRR Community, Traditional Media, AI Chatbots, and others -- each carrying a weight reflecting how much that traffic matters to the mission. An "impact score" multiplies sessions by weight. 100 government visits (5×) ranks higher than 400 unclassified visits (0.5×). Raw session counts stop being the main signal.
+I also classified 200+ referrer domain patterns into 14 strategic buckets (UN System, Government, Academic, DRR Community, Traditional Media, AI Chatbots, and others), each carrying a weight reflecting how much that traffic matters to the mission. An "impact score" multiplies sessions by weight. 100 government visits (5×) ranks higher than 400 unclassified visits (0.5×). Raw session counts stop being the main signal.
 
-Topic-level analysis came from taxonomy metatags (`vf:page-terms`) covering hazards, themes, SDGs, and Sendai Framework priorities. The backend aggregates by topic, so you can ask "which hazards drive the most search demand?" rather than "which pages were popular last month?" A lightweight "Was this page helpful?" widget sends clicks to GA4 with page container context -- most useful for low-traffic content where engagement metrics are too thin to read.
+Topic-level analysis came from taxonomy metatags (`vf:page-terms`) covering hazards, themes, SDGs, and Sendai Framework priorities. The backend aggregates by topic, so you can ask "which hazards drive the most search demand?" rather than "which pages were popular last month?" A lightweight "Was this page helpful?" widget sends clicks to GA4 with page container context; it's most useful for low-traffic content where engagement metrics are too thin to read.
 
-The architecture follows a three-layer model. Content layer: Drupal, Java apps, and static microsites all emit the same metatag conventions. Tracking layer: one shared script, one GA4 property, per-domain data streams. Consumption layer: dashboard, browser extension, Looker Studio -- all reading the same source. Adding a new site means implementing metatags. The infrastructure doesn't change.
+The architecture follows a three-layer model. Content layer: Drupal, Java apps, and static microsites all emit the same metatag conventions. Tracking layer: one shared script, one GA4 property, per-domain data streams. Consumption layer: dashboard, browser extension, and Looker Studio, all reading the same source. Adding a new site means implementing metatags. The infrastructure doesn't change.
 
 The single-property decision took some defending. Separate GA4 properties per site would have been simpler to manage, but would have fragmented the data. With one property and hostname filtering, the same query answers "how's PreventionWeb doing?" or "how's the whole ecosystem doing?" Cross-site user journeys become visible for the first time.
 
 ## What can we now answer?
 
-58% of traffic comes from identifiable institutions -- government, academic, UN system, research networks. That answers "are the right people finding policy guidance?" in a way raw page views can't.
+58% of traffic comes from identifiable institutions: government, academic, UN system, research networks. That answers "are the right people finding policy guidance?" in a way raw page views can't.
 
 Topic aggregation surfaces patterns that page-level data hides. Flood content dominates hazard interest; Early Warning leads on themes. That feeds content planning decisions, not just retrospective reporting.
 
@@ -74,23 +74,23 @@ On direct feedback: terminology pages run 78% helpful, publications 65%. Pages t
 
 **We also set targets before documenting baselines.** Now we're establishing them retroactively. The order should have been: observe, then set expectations.
 
-**Some impact just isn't measurable through analytics.** Download clicks don't tell you whether anyone read the PDF. Policy influence doesn't generate a GA4 event. I documented these gaps explicitly -- better to set that expectation early than have people treat the dashboard as a universal answer.
+**Some impact just isn't measurable through analytics.** Download clicks don't tell you whether anyone read the PDF. Policy influence doesn't generate a GA4 event. I documented these gaps explicitly; better to set that expectation early than have people treat the dashboard as a universal answer.
 
-**I underestimated the research.** Deciding which benchmarks apply, which don't, and writing down the reasoning -- that became as useful as the tracking implementation itself. Without it, you're measuring against whatever number was easiest to find. That number is usually wrong for your context.
+**I underestimated the research.** Deciding which benchmarks apply, which don't, and writing down the reasoning became as useful as the tracking implementation itself. Without it, you're measuring against whatever number was easiest to find. That number is usually wrong for your context.
 
 {% endmarkdown %}
 
 <aside class="kh-note-box">
   <span class="kh-note-box__label">Related:</span>
-  <a href="/posts/20260115-how-to-measure-impact-when-analytics-lie/">How to measure impact when analytics lie</a> — the practitioner's guide: implementing benchmarks, content-type classification, and audience quality detection in your own stack.
+  <a href="/posts/20260115-how-to-measure-impact-when-analytics-lie/">How to measure impact when analytics lie</a>, the practitioner's guide: implementing benchmarks, content-type classification, and audience quality detection in your own stack.
 </aside>
 
 {% markdown %}
 
 ## Links and resources
 
-- [Measuring success beyond the page view](/posts/20251203-measuring-success-beyond-page-view/) — the philosophy behind this approach
-- [How to measure impact when analytics lie](/posts/20260115-how-to-measure-impact-when-analytics-lie/) — implementing benchmarks, audience detection, and content-type classification for your own stack
-- [UNDRR analytics overlay and MCP bridge](/work/2026/impact-story-undrr-analytics-overlay-mcp/) — the next chapter: putting this data where the work happens, and making it queryable by AI agents
+- [Measuring success beyond the page view](/posts/20251203-measuring-success-beyond-page-view/): the philosophy behind this approach
+- [How to measure impact when analytics lie](/posts/20260115-how-to-measure-impact-when-analytics-lie/): implementing benchmarks, audience detection, and content-type classification for your own stack
+- [UNDRR analytics overlay and MCP bridge](/work/2026/impact-story-undrr-analytics-overlay-mcp/), the next chapter: putting this data where the work happens, and making it queryable by AI agents
 
 {% endmarkdown %}
