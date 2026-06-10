@@ -128,6 +128,8 @@ Your best content already embodies your patterns: word counts, title structures,
 
 Document the criteria you used. It will matter when you audit later.
 
+**Bring your existing reference materials too.** Your best content shows the agent *what good looks like* by example. Your existing editorial handbook, brand guidelines, glossary, terminology and spelling lists, institutional style memos — these tell it the *rules* you want enforced. Add them as sources alongside the corpus. The agent should be able to *cite them* when producing drafts ("per our spelling guide, we use 'organisation' with an s") and *link to them* when justifying its choices. If your handbook says "no Oxford comma," the corpus pattern alone might not surface that as a hard rule.
+
 **Getting the files to your tool.** With NotebookLM, add the URLs or PDFs of your 50–100 best items as sources. With a local agent, export your content as HTML to a directory and point the agent there. With the manual pipeline, follow the four steps in the [starter kit](/resources/cadi-starter-kit.txt). One-time setup per content subtype.
 
 **Ready to move on when**: you have 50–100 items in a single consolidated, cleaned document; you've written down why they qualify; and an editor has spot-checked for obvious outliers.
@@ -155,7 +157,7 @@ LLMs handle this extraction well; the interpretation is still yours. The output 
 
 ### D — Document: Turn patterns into working instructions
 
-Combine what the analysis found with your existing institutional knowledge (style guides, brand standards, domain constraints) into a single document your AI tool can use as its standing instructions.
+Combine what the analysis found with your existing institutional knowledge (style guides, brand standards, domain constraints) into a single document your AI tool can use as its standing instructions. Link or embed any existing reference docs your team already maintains; the guidance doc should point at them rather than restate them, so editors and the agent can both trace any rule back to its source.
 
 If your existing style guide already addresses this subtype, the Document step isn't to re-derive from scratch. It's to tighten the existing guidance with the numbers the Analyze step produced, and override only where you have evidence the guidance was wrong.
 
@@ -203,6 +205,30 @@ One case illustrates the full loop:
 The honest version of the result: before CADI, none of these pieces (curation, pattern extraction, guidance docs, iteration) reliably produced anything usable on its own. They were ad-hoc, inconsistent, and each task started over. Running them as a connected loop turned a set of one-off attempts into a process that ran continuously and got better. The framework's value wasn't a single big number; it was making something repeatable that hadn't been. The longer case file (the original methodology, plus what the guidance doc looked like in practice) is in the [UNDRR impact story](/work/2025/impact-story-evidence-based-content-guidelines/).
 
 And we're not pretending what we have is rigorous yet. What would make the next version *genuinely rigorous* is a prospective A/B test that quantifies which guidance changes move which outcomes by how much. That's the piece most teams skip; writing this down, sharing it, and letting it be challenged is part of how we keep tightening the loop.
+
+---
+
+## Using CADI in the writing workflow
+
+CADI gives you the guidance layer. The day-to-day writing that uses it has a shape of its own:
+
+1. **Ideation** — what are we writing, for whom, why now? AI helps brainstorm; the editorial decision is yours.
+2. **Scaffolding** — outline, key points, source material. CADI's guidance doc steers tone and structure; the agent helps assemble.
+3. **Drafting** — produce the first pass with the guidance doc as the agent's standing context.
+4. **Review** — apply role-based passes for the checks this piece needs.
+
+The review step is where you pick agent roles that match the piece's risk and shape. The ones I've found useful:
+
+- **Copy editor** — grammar, flow, voice consistency against the guidance doc
+- **Adversarial reviewer** — does the argument hold? What's the strongest counter?
+- **Legal / compliance check** — for content with regulatory exposure
+- **Copyright check** — for content with quotation, imagery, or external sourcing
+- **Technical reviewer** — for content making claims about systems, code, or data
+- **Sanity check** — final read for "does this make sense, end to end?"
+
+Not every piece needs every role; pick what fits the content type and its risk profile. The CADI guidance doc gets stronger when failure-log entries name *which role* would have caught the failure — that's how you learn which checks belong in which subtype's workflow.
+
+A deeper walk-through, with prompts and examples for each role, is coming in a follow-up post.
 
 ---
 
