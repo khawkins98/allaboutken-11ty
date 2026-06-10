@@ -43,9 +43,16 @@ Target: 50-100 items per subtype.
 1. PRE-PROCESSING PROMPT (HTML to standardized Markdown)
 ==============================================================================
 
-Use this before the Analyze prompt. It takes raw HTML files exported from
-your CMS and converts each into a clean Markdown format the analyzing
-model can read.
+Use this before the Analyze prompt if your content is in HTML -- typical
+for WordPress, Drupal, and most CMS exports.
+
+If your content is already in clean Markdown (static site generators like
+Eleventy / Astro / Hugo, MDX blogs, Markdown-based CMSes), skip this step.
+Strip the frontmatter wrappers, concatenate the files with "===" delimiters
+between items, and feed the result to the Analyze prompt below.
+
+For HTML content, use the prompt below to convert each file into the
+clean Markdown format the analyzing model can read.
 
 
 --- begin prompt ---

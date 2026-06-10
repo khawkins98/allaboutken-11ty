@@ -71,7 +71,7 @@ CADI is for teams who want to move from "AI is something we sometimes use" to "A
 
 This framework works best when you can answer yes to these:
 
-- You have **50+ published items** you consider high-quality (not just recent)
+- You have **ideally 50+ published items** you consider high-quality (not just recent). 10–20 from a tight, high-quality domain still works; you'll overfit a little, but the discipline of running the loop is what compounds
 - You have some signal for quality: engagement data, editor picks, longevity tags, or even manual curation
 - At least one person has **time to own the guidance doc** and keep it current
 - You have some way to **export content** from your CMS in text form (Markdown, HTML, CSV)
@@ -132,6 +132,8 @@ LLMs handle this extraction well; the interpretation is still yours. The output 
 ### D — Deploy: Turn patterns into working instructions
 
 Combine what the analysis found with your existing institutional knowledge (style guides, brand standards, domain constraints) into a single document your AI tool can use as its standing instructions.
+
+If your existing style guide already addresses this subtype, the Deploy step isn't to re-derive from scratch. It's to tighten the existing guidance with the numbers the Analyze step produced, and override only where you have evidence the guidance was wrong.
 
 This step requires editorial judgment: observed patterns and existing style rules will sometimes conflict. If the analysis says your best titles average 8 words but house style caps them at 6, decide which wins and log why. Write it down; that decision belongs in your change log, not left implicit.
 
@@ -235,7 +237,9 @@ These earlier posts go deeper on individual phases. You don't need to read them 
 - **[Why context engineering was always the job](/posts/20260330-context-was-always-the-job/)**: where CADI sits in the broader move toward context as the work
 - **[The four phases of AI adoption](/posts/20260405-four-phases-of-ai-adoption/)**: the Complement / Integrate / Delegate / Orchestrate taxonomy; CADI lives around Integrate and Delegate
 
-CADI is the loop we run at UNDRR. It works for us; it might work for you; or it might need reshaping for the volume, content type, or constraints you're in. I'd be curious how it lands once you try it: what you change, what breaks, what surprises.
+CADI is the loop we run at UNDRR. Think of it as a forcing function more than a magic generator: most of the work is still you reading your own content carefully. The framework just makes sure you do it, and write down what you learn.
+
+It works for us; it might work for you; or it might need reshaping for the volume, content type, or constraints you're in. I'd be curious how it lands once you try it: what you change, what breaks, what surprises.
 
 ---
 
