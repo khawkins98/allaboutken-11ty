@@ -13,8 +13,14 @@
      The measure is set in ch so it tracks the font size --
      ~62ch at 18px lands near the NYT-style 600px column. */
   .kh-post-body {
+    display: flow-root; // contain floated margin notes at the article's end
     font-size: 1.125rem;
     max-width: 62ch;
+
+    pre,
+    code {
+      font-size: 0.875em; // keep code subordinate to the 18px prose
+    }
 
     /* When margin notes share the row, trade a little measure
        for a comfortable note column (see .kh-marginnote below --
@@ -301,7 +307,7 @@
      Usage in markdown: <aside class="kh-marginnote">…</aside> */
   .kh-marginnote {
     color: var(--kh-color--grey--darkest);
-    font-size: 0.8rem;
+    font-size: 0.8em; // track the surrounding text size, not the root
     line-height: 1.5;
     display: block;
     margin: 0.5rem 0 1rem;
