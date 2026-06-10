@@ -15,11 +15,76 @@ draft with colleagues. Use it for a few days. Update.
 
 
 ==============================================================================
-1. ANALYZE PROMPT
+CURATION CHECKLIST (before you start anything else)
+==============================================================================
+
+Pick the items you'll feed the model. Three things to get right first:
+
+1. ONE CONTENT SUBTYPE AT A TIME.
+   Don't mix press releases, news briefs, features, and donor updates in
+   one batch. They follow different patterns. Pick the subtype that
+   matters most right now. Repeat for others later.
+
+2. DON'T DEFAULT TO TOP-TRAFFIC ITEMS.
+   Traffic correlates with timing and reach, not with the qualities
+   you'd want to reproduce. Combine three signals instead:
+     - Editorial investment: items your team spent the most time on
+     - Aspirational fit: items you'd want more of your output to look like
+     - Performance for type: a press release that did 5x the median
+       for press releases, not a feature that hit Hacker News
+
+3. WRITE DOWN WHY YOU PICKED EACH ITEM.
+   A short note per item is enough. You'll need this when you audit later.
+
+Target: 50-100 items per subtype.
+
+
+==============================================================================
+1. PRE-PROCESSING PROMPT (HTML to standardized Markdown)
+==============================================================================
+
+Use this before the Analyze prompt. It takes raw HTML files exported from
+your CMS and converts each into a clean Markdown format the analyzing
+model can read.
+
+
+--- begin prompt ---
+
+I'm going to share HTML files of [content subtype -- e.g., press releases].
+For each file, convert it into this standardized Markdown format:
+
+---
+title: [extract from the page H1 or article title]
+date: [publish date in YYYY-MM-DD]
+type: [content subtype -- e.g., press release]
+tags: [comma-separated, from the page's metadata if present]
+word_count: [approximate]
+---
+
+[Body of the article, cleaned of navigation chrome, ads, related-content
+modules, social-share widgets, and comments. Keep headings, lists, links,
+quotes, and image captions. Strip everything else.]
+
+Return one Markdown document per HTML input. If a field can't be extracted,
+write "[unknown]" rather than guessing.
+
+If you find an HTML file that doesn't actually contain the content subtype
+I asked for (e.g., a category landing page rather than a press release),
+flag it separately so I can remove it from the corpus.
+
+--- end prompt ---
+
+Once you have all the cleaned Markdown files, concatenate them into a
+single document separated by "===" between items. That single document is
+what you feed to the Analyze prompt below.
+
+
+==============================================================================
+2. ANALYZE PROMPT
 ==============================================================================
 
 Paste this into ChatGPT, Claude, Copilot, NotebookLM, or whichever tool
-will let you share a batch of documents.
+will let you share the consolidated Markdown document from step 1.
 
 
 --- begin prompt ---
@@ -66,7 +131,7 @@ If you find a pattern that surprises you, call it out separately at the end.
 
 
 ==============================================================================
-2. GUIDANCE DOC SKELETON
+3. GUIDANCE DOC SKELETON
 ==============================================================================
 
 These are your standing instructions for the AI tool. Replace the bracketed
@@ -119,7 +184,7 @@ Recent changes
 
 
 ==============================================================================
-3. FAILURE LOG
+4. FAILURE LOG
 ==============================================================================
 
 One row per failure. Keep current. The log is more valuable than the
@@ -132,7 +197,7 @@ guidance doc -- it's where the next iteration starts.
 
 
 ==============================================================================
-4. HYPOTHESIS TEST TEMPLATE
+5. HYPOTHESIS TEST TEMPLATE
 ==============================================================================
 
 Use one of these per Iterate cycle. The point isn't statistical rigour;

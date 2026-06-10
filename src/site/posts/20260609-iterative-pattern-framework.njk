@@ -25,7 +25,12 @@ workflow:
 {% markdown %}
 
 <aside class="kh-note-box">
-<span class="kh-note-box__label">TL;DR</span> CADI — Collect, Analyze, Deploy, Iterate — is a method for building AI writing assistance that improves as you use it. The piece that's missing from most AI-writing advice: treat the guidance document you give your AI as a *testable hypothesis*, not a fixed rule. An experienced editor with access to your content can produce a first usable version in a few hours; the value comes from iterating on it like any other editorial process. Starter kit (prompt template, guidance doc skeleton, failure log): [cadi-starter-kit.txt](/resources/cadi-starter-kit.txt).
+<span class="kh-note-box__label">TL;DR</span>
+
+CADI — Collect, Analyze, Deploy, Iterate — is a method for building AI writing assistance that improves as you use it. The piece that's missing from most AI-writing advice: treat the guidance document you give your AI as a *testable hypothesis*, not a fixed rule. An experienced editor with access to your content can produce a first usable version in a few hours; the value comes from iterating on it like any other editorial process.
+
+Starter kit (prompts, guidance doc skeleton, failure log): [cadi-starter-kit.txt](/resources/cadi-starter-kit.txt).
+
 </aside>
 
 I keep having the same conversation.
@@ -56,14 +61,7 @@ There's a failure mode that persists even after you think you've solved this: **
 
 Most people using AI for writing aren't doing "autonomous AI publishing." They're doing **supervised co-writing**: AI handles a first pass or a tedious task, a human reviews and corrects, a human publishes. That's normal; it's also where most of the real value is right now.
 
-A useful way to think about the progression:
-
-1. **Ad-hoc prompting**: one-off prompts, inconsistent outcomes, each task starts from scratch
-2. **Reusable instructions**: a style guide, master prompt, or glossary that travels with you
-3. **Staged workflow**: phase-by-phase drafting, context walking, a deliberate review pass
-4. **Measured system**: hypotheses, controlled comparisons, failure logs, documented decisions
-
-Most people are between 1 and 2. CADI is a path from there to 3 and 4, without skipping steps.
+CADI is for teams who want to move from "AI is something we sometimes use" to "AI is something our editorial standards reliably shape." That transition doesn't happen through better prompting alone.
 
 ---
 
@@ -93,9 +91,26 @@ I've arrived at this through practice, and written about the pieces separately. 
 
 Your best content already embodies your patterns: word counts, title structures, tag usage, narrative flow. Don't grab the latest 50 published items; **curate the exemplary 50.**
 
-The rigour of this choice cascades through everything downstream. What signals "best"? Engagement? Evergreen tags? Editor picks? A combination? Document that decision; it will matter when you audit later.
+**Start with one content subtype, not a mix.** Most organisations publish several things that look similar but follow different patterns: press releases, news briefs, feature reports, donor updates, blog posts. Each has its own voice and structure. Mixing them gives you average patterns that fit none of them. Pick the subtype that matters most to you right now and run CADI on that. Repeat for other subtypes later.
 
-**Ready to move on when**: you have 50–100 items, you've written down why they qualify, and an editor has spot-checked for obvious outliers.
+**Don't default to top-traffic items.** That's the obvious choice and the most common mistake. High traffic often correlates with topic timeliness, social-share luck, or audience reach, not with the qualities you'd want to reproduce. Three signals to combine instead:
+
+- **Editorial investment** — items your team spent the most time on. Effort is a quality signal even when the numbers aren't there.
+- **Aspirational fit** — items you'd want more of your output to look like.
+- **Performance *for type*** — a press release that did 5× the median for press releases tells you more than a feature that hit Hacker News.
+
+Document the criteria you used. It will matter when you audit later.
+
+**Getting the files into the model.** Once you have your 50–100 items, the most practical path:
+
+1. Export each item as HTML from your CMS (WordPress, Drupal, and most custom systems support this).
+2. Feed the HTML to an agent with a preprocessing prompt that strips chrome (navigation, ads, related-content modules) and converts each file into a standardized Markdown structure with a metadata header. The [starter kit](/resources/cadi-starter-kit.txt) includes the preprocessing prompt.
+3. Concatenate the cleaned Markdown into a single file with clear delimiters between items.
+4. Feed that consolidated document to the analyzing model. [NotebookLM](https://notebooklm.google.com/) handles this step particularly well; Claude Projects and ChatGPT also work.
+
+This is one-time setup per content subtype.
+
+**Ready to move on when**: you have 50–100 items in a single consolidated, cleaned document; you've written down why they qualify; and an editor has spot-checked for obvious outliers.
 
 For implementation detail, including Drupal export code and a worked UNDRR case study, see [Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/).
 
@@ -159,7 +174,7 @@ One case illustrates the full loop:
 **Deployment**: Guidance uploaded to Microsoft 365 Copilot
 **Iteration**: Quarterly audits checked whether new AI drafts matched patterns; a shared change log recorded what was adjusted and why
 
-The honest version of the result: before CADI, none of these pieces (curation, pattern extraction, guidance docs, iteration) reliably produced anything usable on its own. They were ad-hoc, inconsistent, and each task started over. Running them as a connected loop turned a set of one-off attempts into a process that ran continuously and got better — and cut roughly 80% of the manual effort it had taken to get a usable AI draft. The framework's value wasn't a single big number. It was making something repeatable that hadn't been.
+The honest version of the result: before CADI, none of these pieces (curation, pattern extraction, guidance docs, iteration) reliably produced anything usable on its own. They were ad-hoc, inconsistent, and each task started over. Running them as a connected loop turned a set of one-off attempts into a process that ran continuously and got better. It also cut roughly 80% of the manual effort it had taken to get a usable AI draft. The framework's value wasn't a single big number. It was making something repeatable that hadn't been.
 
 What would make the next version *genuinely rigorous*: a prospective A/B test that quantifies which guidance changes move which outcomes by how much. That's the piece most teams skip; it's also the most important.
 
@@ -188,6 +203,8 @@ Iteration goes blind again when:
 4. **Stopping too early**: 10 examples isn't enough; 500 might over-fit
 
 Prevention: transparent curation criteria, documented assumptions, human review between cycles, oppositional analysis (ask a second model to critique your instructions), and built-in escape hatches ("usually X, unless Y").
+
+**Where CADI doesn't fit cleanly:** high-volume newsrooms shipping dozens of pieces per week across many content subtypes. CADI assumes one primary subtype at a time and a corpus you can read in full. Sampling methodology and per-subtype parallel runs are needed there. Out of scope for this post, but the same loop applies once you've made those decisions.
 
 ---
 
