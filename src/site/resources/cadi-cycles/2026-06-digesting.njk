@@ -1,0 +1,110 @@
+---
+title: "CADI cycle 1: Digesting posts (June 2026)"
+layout: layouts/base.njk
+permalink: /resources/cadi-cycles/2026-06-digesting/
+date: 2026-06-10
+eleventyExcludeFromCollections: true
+---
+
+{% markdown %}
+
+# CADI cycle 1: Digesting posts (June 2026)
+
+The first run of the [CADI framework](/posts/20260609-iterative-pattern-framework/) on this site, targeting the **digesting** subtype. The Analyze step was run as a structured pass over the corpus on 2026-06-10. The Deploy output fed back into the [editorial style guide](/style-guide/editorial/) (Digesting subsection).
+
+This artifact exists so the next cycle has a starting point. If you're reading it as a model for your own CADI run: this is what one looks like.
+
+---
+
+## C — Collection
+
+**Subtype picked:** Digesting posts (filename pattern `*digesting*.njk`, frontmatter `tags: digesting`, layout `layouts/digesting.njk`).
+
+**Why this subtype:** clean editorial boundary (three signals — tag, layout, filename — agree); high-effort-per-word format where AI assistance has the largest payoff; the existing style guide already had a "Digesting" row to compare derived patterns against.
+
+**Corpus size:** 12 items (the full population at time of cycle). Below the framework's ideal 50+, but the post explicitly allows small high-quality corpora; expect mild overfitting.
+
+**Curation assumptions** (made explicit because they substituted for missing infrastructure):
+
+- No timestamps for drafting effort; `kens_status: published` was a partial proxy (5 of 12) and unusable on its own.
+- No analytics access; inbound cross-link count from later posts was used as a weak performance-for-type proxy.
+- For a 12-item single-author corpus, treated all 12 as exemplary by definition. This is the right move for a personal blog; would be wrong for a multi-author publication.
+
+---
+
+## A — Empirical patterns
+
+**Length.** Body word counts (frontmatter stripped): 130–490 words. Mean ~310, median ~320. Existing style guide range is 200–500; 10 of 12 (83%) fall inside. Outliers are the two longest posts (`comprehension-debt`, `software-engineering-splits-three`) which push toward 500 and read more like short essays.
+
+**Titles.** Mean ~7 words (range 4–11). 0% use colons. 0% use trailing punctuation. 0% restate the source headline. Four title shapes, distributed:
+
+| Shape | Count | Example |
+| --- | --- | --- |
+| Declarative claim | 6 of 12 | "Large projects need large communicating" |
+| First-person observation | 3 of 12 | "I AIn't known what's in my code anymore" |
+| "Why X" / "Go X" | 2 of 12 | "Why 'reviewed' should be a protected verb" |
+| X beats Y / two-clause witty pivot | 1 of 12 | "11ty is dead, long live Build Awesome" |
+
+**All twelve titles assert a takeaway, not a topic.**
+
+**Structure.** H2 use is bimodal: 7 of 12 have zero H2s (pure prose flow); 4 use 2–3 H2s; 1 uses 1. H2-using posts are the longer ones (>350 words). H2s are statement-form, not question-form.
+
+**Source treatment.** 100% link the source in the body (in addition to `digest_link` frontmatter). 4 of 12 use a blockquote pulling a key sentence. Source named in the first paragraph in 11 of 12.
+
+**Voice markers.** First-person in 11 of 12. Contractions throughout. Zero hedging-for-politeness. Em dash use: 9 of 12 stay at 0–2 em dashes; 3 push higher (the two longest, plus `hidden-danger`). Matches the stated 0–1 target but is consistently violated by longer posts.
+
+**Closing pattern.** 10 of 12 end with a forward-looking sentence connecting the source to either related writing on this site or to a broader pattern. 8 of 12 include at least one internal cross-link.
+
+**Surprise pattern (flagged):** the two posts breaking the 500-word ceiling are both H2-structured and both come from a tight March 2026 window. Possible scope drift in the format toward mini-essay.
+
+---
+
+## D — Guidance changes
+
+The Deploy step folded these findings back into [editorial.njk](/style-guide/editorial/) under the Digesting subsection. Three rules were added that weren't there:
+
+1. **Title shapes by syntax**, alongside the existing intent-based patterns (declarative claim / first-person observation / "Why X" / "X beats Y").
+2. **H2 threshold at 350 words**: H2s only when body exceeds 350 words; shorter digests read better as prose flow.
+3. **Closing pattern**: end with a forward-looking sentence linking to related writing or naming a broader pattern.
+
+The 200–500 word range survived the empirical check (83% inside). The 130-word floor observed in one post was not codified into a lowered floor; the post worked but is not the model.
+
+---
+
+## I — Hypotheses for the next cycle
+
+1. **IF** we enforce the title-shape menu in the guidance, **THEN** the rate of AI drafts whose titles need a from-scratch human rewrite drops from "most" to under 30%.
+2. **IF** we add a hard 450-word ceiling and instruct the AI to flag drafts that want to exceed it, **THEN** the two-per-quarter drift into mini-essays stops, or those drafts get correctly re-classed as blog posts before publish.
+3. **IF** we require the closing sentence to include either an internal cross-link or a named pattern, **THEN** the back-reference rate (later digests linking earlier digests), currently roughly 2 of 12, at least doubles.
+
+Test next cycle. Track results in the failure log (TBD location; for now, inline notes here).
+
+---
+
+## Friction notes
+
+What the framework left underspecified for a small personal-blog corpus:
+
+- **Curation criteria for n < 30** collapse to "did I publish it?". The framework's three signals (editorial investment, aspirational fit, performance for type) assume infrastructure that solo bloggers and small comms teams don't have. The post has since been updated to acknowledge "ideally 50+ items… 10–20 from a tight, high-quality domain still works."
+- **Pre-processing prompt** in the starter kit originally assumed HTML exports (WordPress/Drupal). For static-site-generator content already in Markdown, the step is skippable. The starter kit has since been updated to include this branch.
+- **Deploy step** was silent on what to do when the existing style guide already addresses the subtype. The post has since been updated: tighten existing guidance with the new numbers; override only where there's evidence.
+
+What worked:
+
+- The "one subtype at a time" instruction was the single most useful piece of advice. Without it, results would have averaged across mixed formats.
+- The C → A → D → I sequence as a forcing function caught two patterns (bimodal H2 distribution, March length-creep cluster) that intuition would have missed.
+- The "guidance is a hypothesis, not a rule" framing made it easier to ship a Deploy doc as a *draft* rather than over-engineering it.
+
+---
+
+## Lifecycle
+
+- **Cycle:** 1
+- **Subtype:** Digesting
+- **Date:** 2026-06-10
+- **Corpus size:** 12
+- **Pre-analysis method:** structured pass by Claude subagent (Sonnet 4.6), prompt derived from the [CADI starter kit](/resources/cadi-starter-kit.txt)
+- **Outputs applied:** [editorial.njk Digesting subsection](/style-guide/editorial/) updated; no failure log entries yet (this is cycle 1)
+- **Next cycle:** test the three hypotheses above against new digests published since 2026-06-10; revisit after 5 new digests
+
+{% endmarkdown %}
