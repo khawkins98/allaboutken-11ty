@@ -10,7 +10,7 @@ eleventyExcludeFromCollections: true
 
 # CADI cycle 1: Digesting posts (June 2026)
 
-The first run of the [CADI framework](/posts/20260609-iterative-pattern-framework/) on this site, targeting the **digesting** subtype. The Analyze step was run as a structured pass over the corpus on 2026-06-10. The Deploy output fed back into the [editorial style guide](/style-guide/editorial/) (Digesting subsection).
+The first run of the [CADI framework](/posts/20260609-iterative-pattern-framework/) on this site, targeting the **digesting** subtype. The Analyze step was run as a structured pass over the corpus on 2026-06-10. The Document output fed back into the [editorial style guide](/style-guide/editorial/) (Digesting subsection).
 
 This artifact exists so the next cycle has a starting point. If you're reading it as a model for your own CADI run: this is what one looks like.
 
@@ -61,7 +61,7 @@ This artifact exists so the next cycle has a starting point. If you're reading i
 
 ## D — Guidance changes
 
-The Deploy step folded these findings back into [editorial.njk](/style-guide/editorial/) under the Digesting subsection. Three rules were added that weren't there:
+The Document step folded these findings back into [editorial.njk](/style-guide/editorial/) under the Digesting subsection. Three rules were added that weren't there:
 
 1. **Title shapes by syntax**, alongside the existing intent-based patterns (declarative claim / first-person observation / "Why X" / "X beats Y").
 2. **H2 threshold at 350 words**: H2s only when body exceeds 350 words; shorter digests read better as prose flow.
@@ -87,13 +87,13 @@ What the framework left underspecified for a small personal-blog corpus:
 
 - **Curation criteria for n < 30** collapse to "did I publish it?". The framework's three signals (editorial investment, aspirational fit, performance for type) assume infrastructure that solo bloggers and small comms teams don't have. The post has since been updated to acknowledge "ideally 50+ items… 10–20 from a tight, high-quality domain still works."
 - **Pre-processing prompt** in the starter kit originally assumed HTML exports (WordPress/Drupal). For static-site-generator content already in Markdown, the step is skippable. The starter kit has since been updated to include this branch.
-- **Deploy step** was silent on what to do when the existing style guide already addresses the subtype. The post has since been updated: tighten existing guidance with the new numbers; override only where there's evidence.
+- **Document step** was silent on what to do when the existing style guide already addresses the subtype. The post has since been updated: tighten existing guidance with the new numbers; override only where there's evidence.
 
 What worked:
 
 - The "one subtype at a time" instruction was the single most useful piece of advice. Without it, results would have averaged across mixed formats.
 - The C → A → D → I sequence as a forcing function caught two patterns (bimodal H2 distribution, March length-creep cluster) that intuition would have missed.
-- The "guidance is a hypothesis, not a rule" framing made it easier to ship a Deploy doc as a *draft* rather than over-engineering it.
+- The "guidance is a hypothesis, not a rule" framing made it easier to ship guidance documents as *drafts* rather than over-engineering them.
 
 ---
 

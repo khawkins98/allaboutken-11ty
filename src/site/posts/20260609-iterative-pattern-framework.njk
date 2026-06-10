@@ -1,7 +1,7 @@
 ---
 title: "CADI: a prescriptive path for slop-free AI in content work"
 layout: layouts/post.njk
-teaser: "A framework to collect, analyze, deploy, iterate (CADI, for short) is a prescriptive answer to the question everyone keeps asking: should I prompt better, write a style guide, build an agent, or what?"
+teaser: "A framework to collect, analyze, document, iterate (CADI, for short) is a prescriptive answer to the question everyone keeps asking: should I prompt better, write a style guide, build an agent, or what?"
 date: 2026-06-09
 tags:
   - posts
@@ -19,7 +19,7 @@ image_meta:
 workflow:
   - brief:
       summary: >-
-        I keep having the same conversation with colleagues: should I prompt better, write a style guide, build an agent, document my preferences? The answer is yes, in a specific order, and the combination is what matters. CADI — Collect, Analyze, Deploy, Iterate — is a prescriptive path through that confusion.
+        I keep having the same conversation with colleagues: should I prompt better, write a style guide, build an agent, document my preferences? The answer is yes, in a specific order, and the combination is what matters. CADI — Collect, Analyze, Document, Iterate — is a prescriptive path through that confusion.
 ---
 
 {% markdown %}
@@ -41,7 +41,7 @@ Someone is always trying to use AI in their writing workflow and it's not quite 
 
 That conversation gets frustrating to have repeatedly without something to point at. So I wrote it down.
 
-This is **CADI** — Collect, Analyze, Deploy, Iterate — a prescriptive path through the confusion. The name nods to a caddie in golf: carries the load, doesn't take the swing. It's designed to be followed roughly in order, at least the first time through.
+This is **CADI** — Collect, Analyze, Document, Iterate — a prescriptive path through the confusion. The name nods to a caddie in golf: carries the load, doesn't take the swing. It's designed to be followed roughly in order, at least the first time through.
 
 An experienced editor with access to your content can produce a first usable version of the guidance in a few hours by feeding curated examples to a language model and shaping what comes back. Then it's an editorial process: share it with colleagues, use it for a few days, fold their reactions in. Each round sharpens the guidance; the work doesn't get heavier, the picture gets clearer. It works for any content type or language, as long as you have enough of it to learn from.
 
@@ -75,11 +75,11 @@ This framework works best when you can answer yes to these:
 - You have some way to **export content** from your CMS in text form (Markdown, HTML, CSV)
 - Editors are willing to **log failures** rather than just silently fix them
 
-You don't need a data science team, a custom CMS, or a formal AI strategy. But if no one will own the guidance document, the method breaks down at deployment.
+You don't need a data science team, a custom CMS, or a formal AI strategy. But if no one will own the guidance document, the method breaks down.
 
 ---
 
-## The CADI framework: Collect → Analyze → Deploy → Iterate
+## The CADI framework: Collect → Analyze → Document → Iterate
 
 CADI is a four-phase loop. You build it once, then run the last phase continuously. Each cycle makes the guidance sharper, and the AI more useful.
 
@@ -127,11 +127,11 @@ LLMs handle this extraction well; the interpretation is still yours. The output 
 
 **Ready to move on when**: you have a written summary of patterns with numbers, and at least one editor has reviewed it and flagged anything that looks wrong or unrepresentative.
 
-### D — Deploy: Turn patterns into working instructions
+### D — Document: Turn patterns into working instructions
 
 Combine what the analysis found with your existing institutional knowledge (style guides, brand standards, domain constraints) into a single document your AI tool can use as its standing instructions.
 
-If your existing style guide already addresses this subtype, the Deploy step isn't to re-derive from scratch. It's to tighten the existing guidance with the numbers the Analyze step produced, and override only where you have evidence the guidance was wrong.
+If your existing style guide already addresses this subtype, the Document step isn't to re-derive from scratch. It's to tighten the existing guidance with the numbers the Analyze step produced, and override only where you have evidence the guidance was wrong.
 
 This step requires editorial judgment: observed patterns and existing style rules will sometimes conflict. If the analysis says your best titles average 8 words but house style caps them at 6, decide which wins and log why. Write it down; that decision belongs in your change log, not left implicit.
 
@@ -171,7 +171,7 @@ One case illustrates the full loop:
 
 **Collection**: 122 publications flagged as "evergreen + high-engagement" in Drupal
 **Analysis**: LLM extracted patterns. "169 words average; 56% use colons in title; all use 2–4 themes"
-**Deployment**: Guidance uploaded to Microsoft 365 Copilot
+**Documentation**: Guidance doc drafted and uploaded as standing instructions in Microsoft 365 Copilot
 **Iteration**: Quarterly audits checked whether new AI drafts matched patterns; a shared change log recorded what was adjusted and why
 
 The honest version of the result: before CADI, none of these pieces (curation, pattern extraction, guidance docs, iteration) reliably produced anything usable on its own. They were ad-hoc, inconsistent, and each task started over. Running them as a connected loop turned a set of one-off attempts into a process that ran continuously and got better. The framework's value wasn't a single big number; it was making something repeatable that hadn't been. The longer case file (the original methodology, plus what the guidance doc looked like in practice) is in the [UNDRR impact story](/work/2025/impact-story-evidence-based-content-guidelines/).
@@ -237,7 +237,7 @@ CADI is the loop we run at UNDRR. Think of it as a forcing function more than a 
 
 It works for us; it might work for you; or it might need reshaping for the volume, content type, or constraints you're in. I'd be curious how it lands once you try it: what you change, what breaks, what surprises.
 
-One direction I'm exploring: packaging CADI as a guided Claude skill (or similar) that asks where your content lives, walks you through the curation criteria, runs the Analyze prompt for you, and hands you a draft Deploy doc ready for editorial review. If that'd be useful, drop me a note.
+One direction I'm exploring: packaging CADI as a guided Claude skill (or similar) that asks where your content lives, walks you through the curation criteria, runs the Analyze prompt for you, and hands you a draft guidance document ready for editorial review. If that'd be useful, drop me a note.
 
 The first run of this framework on this site is preserved as a worked artifact: [CADI cycle 1 — digesting posts (June 2026)](/resources/cadi-cycles/2026-06-digesting/). Future cycles will build on it.
 
