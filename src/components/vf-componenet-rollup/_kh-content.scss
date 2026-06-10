@@ -1,3 +1,5 @@
+@use './settings' as *;
+
 @mixin kh-vf-content() {
 .kh-content {
   max-width: 70ch;
@@ -15,8 +17,9 @@
     max-width: 62ch;
 
     /* When margin notes share the row, trade a little measure
-       for a comfortable note column (see .kh-marginnote below). */
-    @media (min-width: 1300px) {
+       for a comfortable note column (see .kh-marginnote below --
+       its breakpoint and gutter math must match this block). */
+    @media (min-width: $kh-breakpoint--xl) {
       &:has(.kh-marginnote) {
         max-width: 58ch;
       }
@@ -293,8 +296,8 @@
   }
 
   /* Tufte-inspired margin notes.
-     Mobile: block-level aside within the flow.
-     Desktop (lg+): floated into the right margin past the 70ch content column.
+     Below xl: block-level aside within the flow.
+     Desktop (xl+): floated into the right gutter beside the 58ch post body.
      Usage in markdown: <aside class="kh-marginnote">…</aside> */
   .kh-marginnote {
     color: var(--kh-color--grey--darkest);
@@ -309,8 +312,10 @@
     /* Float into the right gutter only when the post body leaves room.
        The post body narrows to 58ch when notes are present (see
        .kh-post-body above), opening a ~230px gutter for a 200px note.
-       Below this breakpoint, the in-flow boxed treatment above applies. */
-    @media (min-width: 1300px) {
+       Invariant: margin-right must equal -(width + margin-left) so the
+       float's net horizontal footprint is zero and pre blocks, images,
+       and line boxes inside the body are never shortened. */
+    @media (min-width: $kh-breakpoint--xl) {
       float: right;
       clear: right;
       width: 200px;
