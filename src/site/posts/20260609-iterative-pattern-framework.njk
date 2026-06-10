@@ -1,5 +1,5 @@
 ---
-title: "Stop wrestling with AI. Build a content system it complements."
+title: "CADI: a prescriptive path through the AI-writing confusion."
 layout: layouts/post.njk
 teaser: "The CADI framework — Collect, Analyze, Deploy, Iterate — a prescriptive answer to the question everyone keeps asking: should I prompt better, write a style guide, build an agent, or what?"
 date: 2026-06-09
@@ -27,7 +27,7 @@ workflow:
 <aside class="kh-note-box">
 <span class="kh-note-box__label">TL;DR</span>
 
-The piece that's missing from most AI-writing advice: treat the guidance you give your AI as a *testable hypothesis*, not a fixed rule. An experienced editor with access to your content can build a first usable version in a few hours; the value comes from iterating on it like any other editorial process.
+Most AI-writing advice skips the bit that matters: the guidance itself is a *hypothesis you test*, not a rule you write once. An experienced editor with access to your content can build a first usable version in a few hours. The gains come from running it the way you'd run any other editorial review cycle.
 
 Starter kit (prompts, guidance doc skeleton, failure log): [cadi-starter-kit.txt](/resources/cadi-starter-kit.txt).
 
@@ -35,15 +35,17 @@ Starter kit (prompts, guidance doc skeleton, failure log): [cadi-starter-kit.txt
 
 I keep having the same conversation.
 
-Someone is trying to use AI in their writing workflow and it's not quite working. They ask: *Should I just get better at prompting? Should I write a style guide? Should I build an agent? Should I document my preferences somewhere? Should I upload my existing content?* And the honest answer is always some version of "yes, but in a specific order, and most of the value comes from the combination."
+Recently I was in a meeting with colleagues talking about how people across the organisation are using AI in their writing. Some are one-shot prompting and shipping the result. Some are using it to iterate on creative ideas. Some are generating full drafts and quietly rewriting them line by line. Some are finding it infuriating. Some are noticing that other teams or other organisations are using it and feeling the pressure to catch up. And in some of the published output, you can see the same repetitive AI tells bleeding through.
+
+Someone is always trying to use AI in their writing workflow and it's not quite working. They ask: *Should I just get better at prompting? Should I write a style guide? Should I build an agent? Should I document my preferences somewhere? Should I upload my existing content?* And the honest answer is always some version of "yes, but in a specific order, and most of the value comes from the combination."
 
 That conversation gets frustrating to have repeatedly without something to point at. So I wrote it down.
 
 This is **CADI** — Collect, Analyze, Deploy, Iterate — a prescriptive path through the confusion. It's designed to be followed roughly in order, at least the first time through.
 
-The name is deliberate. A caddie in golf walks the course with you. They carry your bag, read the conditions, advise the shot — but they don't take the swing. (For non-golfers: a caddie is the expert assistant who's paid to know more than you do about the conditions, but the swing is still yours.) That's the relationship this framework is trying to build with AI. It handles the load; you make the calls.
+The name is deliberate. A caddie in golf walks the course with you. They carry your bag, read the conditions, advise the shot, but they don't take the swing. (For non-golfers: a caddie is the expert assistant who's paid to know more than you do about the conditions, but the swing is still yours.) That's the relationship this framework is trying to build with AI. It handles the load; you make the calls.
 
-An experienced editor with access to your content can produce a first usable version of the guidance in a few hours by feeding curated examples to a language model and shaping what comes back. Then it's an editorial process: share it with colleagues, use it for a few days, fold their reactions in. Value compounds because each round sharpens the guidance, not because the work gets harder. It works for any content type or language, as long as you have enough of it to learn from.
+An experienced editor with access to your content can produce a first usable version of the guidance in a few hours by feeding curated examples to a language model and shaping what comes back. Then it's an editorial process: share it with colleagues, use it for a few days, fold their reactions in. Each round sharpens the guidance; the work doesn't get heavier, the picture gets clearer. It works for any content type or language, as long as you have enough of it to learn from.
 
 ---
 
@@ -83,7 +85,7 @@ You don't need a data science team, a custom CMS, or a formal AI strategy. But i
 
 CADI is a four-phase loop. You build it once, then run the last phase continuously. Each cycle makes the guidance sharper, and the AI more useful.
 
-The piece that makes it work, and that's missing from most AI-writing advice, is treating the guidance document itself as something you test and revise, not a one-time setup. C/A/D get you to a first version. I is where the value comes from.
+The bit most AI-writing advice misses: the guidance document is something you test and revise. C, A, and D get you a first version. I is where it earns its keep.
 
 I've arrived at this through practice, and written about the pieces separately. This is the first time I've named it.
 
@@ -123,7 +125,7 @@ Feed your curated examples to an LLM with a structured prompt to extract:
 - Metadata usage (tag counts, co-occurrence patterns)
 - Tone markers (passive vs. active, hedging language)
 
-AI is exceptionally good at this extraction step; humans do the interpretation. The output is not guidance yet; it's **empirical description** of what your best content actually looks like.
+LLMs handle this extraction well; the interpretation is still yours. The output is not guidance yet; it's **empirical description** of what your best content actually looks like.
 
 **Ready to move on when**: you have a written summary of patterns with numbers, and at least one editor has reviewed it and flagged anything that looks wrong or unrepresentative.
 
@@ -133,7 +135,7 @@ Combine what the analysis found with your existing institutional knowledge (styl
 
 This step requires editorial judgment: observed patterns and existing style rules will sometimes conflict. If the analysis says your best titles average 8 words but house style caps them at 6, decide which wins and log why. Write it down; that decision belongs in your change log, not left implicit.
 
-Result: instructions specific enough for the AI to act on ("180 words ± 10%") instead of vague ("be concise"). The same document works for human editors too.
+You end up with instructions concrete enough to act on ("180 words ± 10%") rather than vague ("be concise"). Bonus: the same document works for human editors too.
 
 **Ready to move on when**: the instructions have been reviewed by at least one editor who wasn't involved in writing them, and they've been uploaded or integrated with your AI tool.
 
@@ -147,11 +149,11 @@ Iteration done badly is just tweaking in the dark, which is how we started. Done
 
 Then test them: run a simple before/after comparison on real content, measure outcomes with a concrete metric, and document what changed and why.
 
-For a small team (2–3 editors), you need at least 20–30 items per condition to see a reliable signal; fewer than that, the result could just be noise. Blinding reviewers doesn't need to be complicated: just split the batch and don't tell the reviewer which version of the instructions produced which output.
+For a small team (2–3 editors), 20–30 items per condition is enough for an honest qualitative comparison: better than tweaking blind, not a statistical signal. Anything closer to statistical rigour needs much larger samples and blinded review; most editorial teams won't reach that, and that's fine. The bar is qualitative honesty: what changed, and why.
 
 **Mid-cycle revision trigger**: if more than 20% of outputs in a week fail the same check, don't wait for the quarterly audit. That's a pattern worth investigating now.
 
-This approach isn't invented from scratch. It's borrowed from disciplines that have been doing this for decades:
+None of this is invented from scratch. Other disciplines have been at versions of this for decades:
 
 - **Medical guideline development**: AGREE II and GRADE for assessing whether guidelines are evidence-based and implementable
 - **Design systems**: Diátaxis for organizing knowledge by user need, not topic
@@ -174,9 +176,9 @@ One case illustrates the full loop:
 **Deployment**: Guidance uploaded to Microsoft 365 Copilot
 **Iteration**: Quarterly audits checked whether new AI drafts matched patterns; a shared change log recorded what was adjusted and why
 
-The honest version of the result: before CADI, none of these pieces (curation, pattern extraction, guidance docs, iteration) reliably produced anything usable on its own. They were ad-hoc, inconsistent, and each task started over. Running them as a connected loop turned a set of one-off attempts into a process that ran continuously and got better. It also cut roughly 80% of the manual effort it had taken to get a usable AI draft. The framework's value wasn't a single big number. It was making something repeatable that hadn't been.
+The honest version of the result: before CADI, none of these pieces (curation, pattern extraction, guidance docs, iteration) reliably produced anything usable on its own. They were ad-hoc, inconsistent, and each task started over. Running them as a connected loop turned a set of one-off attempts into a process that ran continuously and got better. The framework's value wasn't a single big number; it was making something repeatable that hadn't been. The longer case file (the original methodology, plus what the guidance doc looked like in practice) is in the [UNDRR impact story](/work/2025/impact-story-evidence-based-content-guidelines/).
 
-What would make the next version *genuinely rigorous*: a prospective A/B test that quantifies which guidance changes move which outcomes by how much. That's the piece most teams skip; it's also the most important.
+What would make the next version *genuinely rigorous*: a prospective A/B test that quantifies which guidance changes move which outcomes by how much. That's the piece most teams skip. We're not at that bar either yet. Writing this down, sharing it, and letting it be challenged is part of how we keep tightening the loop.
 
 ---
 
@@ -190,6 +192,8 @@ The trust-but-verify gate sits between any CADI-assisted draft and publication. 
 - Keep human sign-off as the final release gate
 
 For many teams, a **parallel run** is the safest transition: keep your normal manual editorial review while running AI-assisted output alongside it. Compare decisions, measure drift, then scale what proves useful.
+
+This is also the spirit of the editorial AI policies emerging in newsrooms, where [Ars Technica and Fedora make "reviewed" a protected verb](/posts/20260423-digesting-ars-technica-ai-newsroom-policy/) with the human review step explicit and named. CADI takes the same position: the loop doesn't replace the gate; it makes the gate cheaper to operate.
 
 ---
 
@@ -227,9 +231,11 @@ These earlier posts go deeper on individual phases. You don't need to read them 
 
 - **[Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/)**: the C and A phases in detail, with Drupal export code and the full UNDRR case study (updated June 2026)
 - **[The power of the pause: How planning beats prompt tuning](/posts/20250923-effective-ai-work-is-project-management/)**: structure over tweaking, with PROJECT_BRIEF → PROJECT_PLAN → PATTERNS.md workflow
-- **[Thoughtful AI integration beats bolted-on Clippy](/posts/20250919-smart-ai-integration-context-first/)**: product thinking for AI integration: when to use it, not just how to prompt it
+- **[Thoughtful AI integration beats bolted-on Clippy](/posts/20250919-smart-ai-integration-context-first/)**: product thinking for AI integration, when to use it, not just how to prompt it
+- **[Why context engineering was always the job](/posts/20260330-context-was-always-the-job/)**: where CADI sits in the broader move toward context as the work
+- **[The four phases of AI adoption](/posts/20260405-four-phases-of-ai-adoption/)**: the Complement / Integrate / Delegate / Orchestrate taxonomy; CADI lives around Integrate and Delegate
 
-What ties them together: **CADI — Collect, Analyze, Deploy, Iterate, grounded in evidence.**
+CADI is the loop we run at UNDRR. It works for us; it might work for you; or it might need reshaping for the volume, content type, or constraints you're in. I'd be curious how it lands once you try it: what you change, what breaks, what surprises.
 
 ---
 
