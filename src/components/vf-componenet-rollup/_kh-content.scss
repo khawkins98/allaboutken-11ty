@@ -7,6 +7,22 @@
     max-width: unset;
   }
 
+  /* Post body copy: larger reading size for long form.
+     The measure is set in ch so it tracks the font size --
+     ~62ch at 18px lands near the NYT-style 600px column. */
+  .kh-post-body {
+    font-size: 1.125rem;
+    max-width: 62ch;
+
+    /* When margin notes share the row, trade a little measure
+       for a comfortable note column (see .kh-marginnote below). */
+    @media (min-width: 1300px) {
+      &:has(.kh-marginnote) {
+        max-width: 58ch;
+      }
+    }
+  }
+
   pre,
   code {
     background: #fff;
@@ -290,11 +306,15 @@
     border-left: 3px solid var(--kh-color--orange);
     background: rgba(255, 255, 255, 0.6);
 
-    @media (min-width: 1024px) {
+    /* Float into the right gutter only when the post body leaves room.
+       The post body narrows to 58ch when notes are present (see
+       .kh-post-body above), opening a ~230px gutter for a 200px note.
+       Below this breakpoint, the in-flow boxed treatment above applies. */
+    @media (min-width: 1300px) {
       float: right;
       clear: right;
       width: 200px;
-      margin-right: -240px;
+      margin-right: -224px;
       margin-left: 1.5rem;
       margin-top: 0.15rem;
       margin-bottom: 0.75rem;
@@ -302,13 +322,6 @@
       border-left: 2px solid var(--kh-color--orange);
       padding-left: 0.75rem;
       background: none;
-      z-index: 1;
-      position: relative;
-    }
-
-    @media (min-width: 1300px) {
-      width: 240px;
-      margin-right: -280px;
       z-index: 1;
       position: relative;
     }
@@ -380,3 +393,4 @@
   }
 }
 }
+

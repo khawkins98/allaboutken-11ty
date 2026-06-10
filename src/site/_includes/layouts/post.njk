@@ -40,22 +40,18 @@ templateEngineOverride: njk
     </figure>
     {% endif %}
 
-    <section class="kh-grid kh-grid__col-3">
-      <div class="kh-grid__col--span-2">
-        {% if tags and ('note' in tags) %}
-        <div class="kh-note-box">
-          <span class="kh-note-box__label">Note:</span>
-          I'm getting more active by writing shorter form, more informal updates like this one.
-        </div>
-        {% endif %}
-        {% if teaser -%}
-        <p class="kh-text-body--1">{{ teaser | emdash | safe }}</p>
-        {%- endif %}
-        {{ content | safe }}
+    <div class="kh-post-body">
+      {% if tags and ('note' in tags) %}
+      <div class="kh-note-box">
+        <span class="kh-note-box__label">Note:</span>
+        I'm getting more active by writing shorter form, more informal updates like this one.
       </div>
-      <div class="kh-grid__col--span-1">
-      </div>
-    </section>
+      {% endif %}
+      {% if teaser -%}
+      <p class="kh-text-body--1">{{ teaser | emdash | safe }}</p>
+      {%- endif %}
+      {{ content | safe }}
+    </div>
   </div>
 </article>
 
