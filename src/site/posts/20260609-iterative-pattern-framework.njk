@@ -94,6 +94,18 @@ You don't need a data science team, a custom CMS, or a formal AI strategy. But i
 
 ---
 
+## Pick your tool
+
+Before you start, decide how you'll feed your content to an LLM. The choice shapes every step that follows.
+
+- **[NotebookLM](https://notebooklm.google.com/) or similar.** Best if your content is web-accessible. Drop URLs or PDFs as sources; run prompts in the chat. Zero file handling.
+- **A local agent (Claude Code, GitHub Copilot CLI, or similar).** Best if you've exported your content as files. Point the agent at the directory and ask it to run the prompts. Handles iteration and cleanup for you.
+- **Manual pipeline (browser-only).** Fallback when the other two aren't options. You'll preprocess HTML, concatenate, and paste into a browser tool. The [starter kit](/resources/cadi-starter-kit.txt) has the prompts.
+
+The rest of the post assumes you've picked one. When a step says "run the Analyze prompt" or "feed the corpus to your model," substitute your chosen tool's mechanics.
+
+---
+
 ## The CADI framework: Collect → Analyze → Document → Iterate
 
 CADI is a four-phase loop. You build it once, then run the last phase continuously. Each cycle makes the guidance sharper, and the AI more useful.
@@ -116,19 +128,7 @@ Your best content already embodies your patterns: word counts, title structures,
 
 Document the criteria you used. It will matter when you audit later.
 
-**Getting the files into the model.** Use a tool that handles the file work for you. Two options that cut out almost all of the manual prep:
-
-- **[NotebookLM](https://notebooklm.google.com/) or similar.** Add the URLs of your 50–100 best items as sources, or save each as a PDF and upload. Then run the [Analyze prompt](/resources/cadi-starter-kit.txt) in the chat. Zero preprocessing.
-- **A local agent (Claude Code, GitHub Copilot CLI, or similar).** Point the agent at a directory of your exported content and ask it to run the Analyze prompt. The agent handles file iteration, cleanup, and consolidation in one shot.
-
-If neither is available (you're working only with browser-based tools that can't read files or fetch URLs in bulk), the manual pipeline is the fallback:
-
-1. Export each item as HTML from your CMS (WordPress, Drupal, and most custom systems support this).
-2. Feed the HTML to an agent with a preprocessing prompt that strips chrome (navigation, ads, related-content modules) and converts each file into a standardized Markdown structure with a metadata header. The starter kit includes the preprocessing prompt.
-3. Concatenate the cleaned Markdown into a single file with clear delimiters between items.
-4. Feed that consolidated document to the analyzing model.
-
-This is one-time setup per content subtype.
+**Getting the files to your tool.** With NotebookLM, add the URLs or PDFs of your 50–100 best items as sources. With a local agent, export your content as HTML to a directory and point the agent there. With the manual pipeline, follow the four steps in the [starter kit](/resources/cadi-starter-kit.txt). One-time setup per content subtype.
 
 **Ready to move on when**: you have 50–100 items in a single consolidated, cleaned document; you've written down why they qualify; and an editor has spot-checked for obvious outliers.
 
