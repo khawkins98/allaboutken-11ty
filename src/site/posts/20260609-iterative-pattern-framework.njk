@@ -183,11 +183,13 @@ For a small team (2–3 editors), 20–30 items per condition is enough for an h
 
 None of this is invented from scratch. Other disciplines have been at versions of this for decades:
 
-- **Medical guideline development**: AGREE II and GRADE for assessing whether guidelines are evidence-based and implementable
+- **Medical guideline development**: AGREE II and GRADE for assessing whether guidelines are evidence-based and implementable. The [Australian COVID-19 living guidelines](https://pmc.ncbi.nlm.nih.gov/articles/PMC7657075/) went further: revised and republished weekly for 24 weeks as new evidence arrived, a continuously iterated guidance document running in production
 - **Design systems**: Diátaxis for organizing knowledge by user need, not topic
 - **Journalism**: content analysis to audit whether outlets meet their own stated standards
 
-The shift is applying those disciplines to editorial AI workflows. What I haven't seen elsewhere is the specific combination: deriving guidance from your own best content corpus, then treating that guidance as a testable hypothesis rather than a fixed rule. Prior art welcome.
+Closer to home, pieces of CADI already exist as products and research. [Writer](https://support.writer.com/article/250-how-to-calibrate-voice-for-your-content) and [Jasper](https://help.jasper.ai/hc/en-us/articles/18618693085339-Brand-Voice) will both reverse-engineer a voice profile from examples of your own content; worth knowing about, and worth using if they fit your stack. On the research side, [ChainForge](https://arxiv.org/abs/2309.09128) (CHI 2024) formalized treating prompts, and the evaluation criteria themselves, as testable hypotheses.
+
+But a software subscription isn't a method, and a research paper isn't a guide. What I haven't seen elsewhere is the connected discipline: deriving guidance from your own curated corpus, then keeping the failure log and test record that make that guidance revisable on evidence rather than vibes. That combination is what CADI names. If reading this sends you off to subscribe to one of those tools or build your own loop from the research, good; that's the point. Prior art still welcome.
 
 **Ready to move on when**: you have at least one completed hypothesis test, a documented decision (kept or rejected), and a failure log that someone is actually adding to.
 
@@ -255,6 +257,7 @@ Iteration goes blind again when:
 2. **Optimizing for fit, not truth**: "this tag co-occurs 26% of the time, so ALWAYS pair them" (should be "consider pairing")
 3. **No quality gate on source**: including mediocre content in your "best" set skews guidance toward mediocrity
 4. **Stopping too early**: 10 examples isn't enough; 500 might over-fit
+5. **Expecting voice cloning in informal genres**: the style-imitation research is encouraging for structured formats like news and email, and [much weaker for informal, personal writing](https://arxiv.org/abs/2509.14543) like blogs and forum posts. Corpus-derived guidance reliably reproduces structure and conventions; a distinctive personal voice still needs the human pass
 
 Prevention: transparent curation criteria, documented assumptions, human review between cycles, oppositional analysis (ask a second model to critique your instructions), and built-in escape hatches ("usually X, unless Y").
 
@@ -297,7 +300,11 @@ The first run of this framework on this site is preserved as a worked artifact: 
 
 ## References
 
-- Bsharat et al., "[Principled Instructions Are All You Need](https://arxiv.org/abs/2312.16171)" (arXiv:2312.16171): 57.7% quality improvement with structured prompts
+- Bsharat et al., "[Principled Instructions Are All You Need](https://arxiv.org/abs/2312.16171)" (arXiv:2312.16171): a preprint reporting an average 57.7% quality boost from 26 generic prompting principles on GPT-4. Small, author-judged benchmark; read it as directional support for structured prompts, not as evidence for corpus-derived guidance specifically
+- "[Catch Me If You Can? Not Yet: LLMs Still Struggle to Imitate the Implicit Writing Styles of Everyday Authors](https://arxiv.org/abs/2509.14543)" (EMNLP 2025 Findings): exemplar-based prompting consistently beats instruction-only prompting for style matching; strong in structured genres, weak in informal ones
+- Wu et al., "[ScatterShot: Interactive In-context Example Curation for Text Transformation](https://arxiv.org/abs/2302.07346)" (ACM IUI 2023): systematic example curation beats ad-hoc hand-picking, which tends to capture only the most obvious patterns
+- Arawjo et al., "[ChainForge: A Visual Toolkit for Prompt Engineering and LLM Hypothesis Testing](https://arxiv.org/abs/2309.09128)" (CHI 2024)
+- Tendal et al., "[Weekly updates of national living evidence-based guidelines: methods for the Australian living guidelines for care of people with COVID-19](https://pmc.ncbi.nlm.nih.gov/articles/PMC7657075/)" (J Clin Epidemiol 2020)
 - Wei et al., "[Chain-of-Thought Prompting Elicits Reasoning](https://arxiv.org/abs/2201.11903)" (2022)
 - Yao et al., "[Tree of Thoughts: Deliberate Problem Solving with LLMs](https://arxiv.org/abs/2305.10601)" (2023)
 - Kohavi & Longbotham, "[Controlled Experiments on the Web](https://arxiv.org/abs/1411.7170)"
