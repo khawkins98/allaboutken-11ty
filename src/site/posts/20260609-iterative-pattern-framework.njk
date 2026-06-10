@@ -32,15 +32,15 @@ That conversation gets frustrating to have repeatedly without something to point
 
 This is **CADI** — Collect, Analyze, Deploy, Iterate — a prescriptive path through the confusion. It's designed to be followed roughly in order, at least the first time through.
 
-The name is deliberate. A caddie in golf carries your bag, reads the course conditions, and advises on the shot — but doesn't play for you. That's the relationship this framework is trying to build with AI. It handles the load; you make the calls.
+The name is deliberate. A caddie in golf carries your bag, reads the course conditions, and advises on the shot, but doesn't play for you. That's the relationship this framework is trying to build with AI. It handles the load; you make the calls.
 
-The setup takes 4–6 weeks and mostly involves documenting things your team already half-knows. After that, value compounds — each iteration makes the AI more useful rather than requiring the same effort every time. It works for any content type or language, as long as you have enough of it to learn from.
+The setup takes 4–6 weeks and mostly involves documenting things your team already half-knows. After that, value compounds. Each iteration makes the AI more useful rather than requiring the same effort every time. It works for any content type or language, as long as you have enough of it to learn from.
 
 ---
 
-## The problem: AI writing assistance starts cold
+## The problem: every prompt starts from zero
 
-Most AI writing assistance starts cold every time. No memory of what worked last time. No sense of your voice, your standards, your audience. So it gives you something generic and confident — and you spend the rest of your time correcting it.
+Most AI writing assistance starts cold every time. No memory of what worked last time. No sense of your voice, your standards, your audience. So it gives you something generic and confident, and you spend the rest of your time correcting it.
 
 The fix isn't a better prompt. It's giving the AI a documented picture of what good looks like *for you*, and building a way to improve that picture as you learn what works. Done right, the AI gets more useful over time rather than requiring the same effort on every task.
 
@@ -50,14 +50,14 @@ There's a failure mode that persists even after you think you've solved this: **
 
 ## Where you probably are: supervised co-writing
 
-Most people using AI for writing aren't doing "autonomous AI publishing." They're doing **supervised co-writing**: AI handles a first pass or a tedious task, a human reviews and corrects, a human publishes. That's normal — it's also where most of the real value is right now.
+Most people using AI for writing aren't doing "autonomous AI publishing." They're doing **supervised co-writing**: AI handles a first pass or a tedious task, a human reviews and corrects, a human publishes. That's normal; it's also where most of the real value is right now.
 
 A useful way to think about the progression:
 
-1. **Ad-hoc prompting** — one-off prompts, inconsistent outcomes, each task starts from scratch
-2. **Reusable instructions** — a style guide, master prompt, or glossary that travels with you
-3. **Staged workflow** — phase-by-phase drafting, context walking, a deliberate review pass
-4. **Measured system** — hypotheses, controlled comparisons, failure logs, documented decisions
+1. **Ad-hoc prompting**: one-off prompts, inconsistent outcomes, each task starts from scratch
+2. **Reusable instructions**: a style guide, master prompt, or glossary that travels with you
+3. **Staged workflow**: phase-by-phase drafting, context walking, a deliberate review pass
+4. **Measured system**: hypotheses, controlled comparisons, failure logs, documented decisions
 
 Most people are between 1 and 2. CADI is a path from there to 3 and 4, without skipping steps.
 
@@ -68,7 +68,7 @@ Most people are between 1 and 2. CADI is a path from there to 3 and 4, without s
 This framework works best when you can answer yes to these:
 
 - You have **50+ published items** you consider high-quality (not just recent)
-- You have some signal for quality — engagement data, editor picks, longevity tags, or even manual curation
+- You have some signal for quality: engagement data, editor picks, longevity tags, or even manual curation
 - At least one person has **time to own the guidance doc** and keep it current
 - You have some way to **export content** from your CMS in text form (Markdown, HTML, CSV)
 - Editors are willing to **log failures** rather than just silently fix them
@@ -79,15 +79,15 @@ You don't need a data science team, a custom CMS, or a formal AI strategy. But i
 
 ## The CADI framework: Collect → Analyze → Deploy → Iterate
 
-CADI is a four-phase loop. You build it once, then run the last phase continuously. Each cycle makes the guidance sharper — and the AI more useful.
+CADI is a four-phase loop. You build it once, then run the last phase continuously. Each cycle makes the guidance sharper, and the AI more useful.
 
 I've arrived at this through practice, and written about the pieces separately. This is the first time I've named it.
 
 ### C — Collect: Extract your best examples
 
-Your best content already embodies your patterns—word counts, title structures, tag usage, narrative flow. Don't grab the latest 50 published items; **curate the exemplary 50.**
+Your best content already embodies your patterns: word counts, title structures, tag usage, narrative flow. Don't grab the latest 50 published items; **curate the exemplary 50.**
 
-The rigour of this choice cascades through everything downstream. What signals "best"? Engagement? Evergreen tags? Editor picks? A combination? Document that decision—it will matter when you audit later.
+The rigour of this choice cascades through everything downstream. What signals "best"? Engagement? Evergreen tags? Editor picks? A combination? Document that decision; it will matter when you audit later.
 
 **Ready to move on when**: you have 50–100 items, you've written down why they qualify, and an editor has spot-checked for obvious outliers.
 
@@ -102,40 +102,23 @@ Feed your curated examples to an LLM with a structured prompt to extract:
 - Metadata usage (tag counts, co-occurrence patterns)
 - Tone markers (passive vs. active, hedging language)
 
-AI is exceptionally good at this extraction step; humans do the interpretation. The output is not guidance yet—it's **empirical description** of what your best content actually looks like.
+AI is exceptionally good at this extraction step; humans do the interpretation. The output is not guidance yet; it's **empirical description** of what your best content actually looks like.
 
 **Ready to move on when**: you have a written summary of patterns with numbers, and at least one editor has reviewed it and flagged anything that looks wrong or unrepresentative.
 
 ### D — Deploy: Turn patterns into working instructions
 
-Combine what the analysis found with your existing institutional knowledge — style guides, brand standards, domain constraints — into a single document your AI tool can use as its standing instructions.
+Combine what the analysis found with your existing institutional knowledge (style guides, brand standards, domain constraints) into a single document your AI tool can use as its standing instructions.
 
-This step requires editorial judgment: observed patterns and existing style rules will sometimes conflict. When they do, be explicit about which wins and why. Write it down — that decision belongs in your change log, not left implicit.
+This step requires editorial judgment: observed patterns and existing style rules will sometimes conflict. If the analysis says your best titles average 8 words but house style caps them at 6, decide which wins and log why. Write it down; that decision belongs in your change log, not left implicit.
 
 Result: instructions specific enough for the AI to act on ("180 words ± 10%") instead of vague ("be concise"). The same document works for human editors too.
 
 **Ready to move on when**: the instructions have been reviewed by at least one editor who wasn't involved in writing them, and they've been uploaded or integrated with your AI tool.
 
----
+### I — Iterate: Build confidence over time
 
-## CADI in practice: how it played out at UNDRR
-
-This isn't theoretical. One case illustrates the full loop:
-
-**Collection**: 122 publications flagged as "evergreen + high-engagement" in Drupal
-**Analysis**: LLM extracted patterns → "169 words average; 56% use colons in title; all use 2–4 themes"
-**Deployment**: Guidance uploaded to Microsoft 365 Copilot
-**Iteration**: Quarterly audits checked whether new AI drafts matched patterns; a shared change log recorded what was adjusted and why
-
-Result: first-pass acceptance improved from ~30% to ~75%. Editor time cut by 60%.
-
-But here's what would make it *genuinely rigorous*: a prospective A/B test showing "specific numeric targets improve outcomes by X% vs. vague ones." That's the piece most teams skip—and it's the most important.
-
----
-
-## I — Iterate: building confidence over time
-
-Iteration done badly is just tweaking in the dark—which is how we started. Done well, it's hypothesis-driven:
+Iteration done badly is just tweaking in the dark, which is how we started. Done well, it's hypothesis-driven:
 
 - "IF we add explicit numeric targets ('180 words ± 10%'), THEN first-pass acceptance rises from 40% to 70%"
 - "IF we show exemplars of title styles, THEN AI chooses appropriate titles 85% of the time"
@@ -143,9 +126,9 @@ Iteration done badly is just tweaking in the dark—which is how we started. Don
 
 Then test them: run a simple before/after comparison on real content, measure outcomes with a concrete metric, and document what changed and why.
 
-For a small team (2–3 editors), you need at least 20–30 items per condition to see a reliable signal — fewer than that and the result could just be noise. Blinding reviewers doesn't need to be complicated: just split the batch and don't tell the reviewer which version of the instructions produced which output.
+For a small team (2–3 editors), you need at least 20–30 items per condition to see a reliable signal; fewer than that, the result could just be noise. Blinding reviewers doesn't need to be complicated: just split the batch and don't tell the reviewer which version of the instructions produced which output.
 
-**Mid-cycle revision trigger**: if more than 20% of outputs in a week fail the same check, don't wait for the quarterly audit — that's a pattern worth investigating now.
+**Mid-cycle revision trigger**: if more than 20% of outputs in a week fail the same check, don't wait for the quarterly audit. That's a pattern worth investigating now.
 
 This approach isn't invented from scratch. It's borrowed from disciplines that have been doing this for decades:
 
@@ -155,7 +138,37 @@ This approach isn't invented from scratch. It's borrowed from disciplines that h
 
 The shift is applying those disciplines to editorial AI workflows.
 
-None of that is new. What I haven't found elsewhere is the specific combination: using your *own* best content corpus to derive AI guidance, then treating that guidance as a testable hypothesis rather than a fixed rule. The generic collect-analyze-deploy-iterate cycle exists in agile, in content ops, in SEO — the structure is everywhere. What's missing is the application of it to *building and improving the guidance layer you give AI*, rather than just iterating on prompts or outputs. If you know of prior art here, I'd genuinely like to see it.
+None of that is new. What I haven't seen elsewhere is the specific combination: deriving guidance from your own best content corpus, then treating that guidance as a testable hypothesis rather than a fixed rule. Prior art welcome.
+
+**Ready to move on when**: you have at least one completed hypothesis test, a documented decision (kept or rejected), and a failure log that someone is actually adding to.
+
+---
+
+## CADI in practice: how it played out at UNDRR
+
+One case illustrates the full loop:
+
+**Collection**: 122 publications flagged as "evergreen + high-engagement" in Drupal
+**Analysis**: LLM extracted patterns. "169 words average; 56% use colons in title; all use 2–4 themes"
+**Deployment**: Guidance uploaded to Microsoft 365 Copilot
+**Iteration**: Quarterly audits checked whether new AI drafts matched patterns; a shared change log recorded what was adjusted and why
+
+Result: first-pass acceptance improved from ~30% to ~75%, with editor time cut by 60%. (Internal measurement via Drupal analytics and editor self-report; methodology in the [evidence-based guidelines post](/posts/evidence-based-content-guidelines-drupal-ai/).)
+
+What would make this *genuinely rigorous*: a prospective A/B test showing "specific numeric targets improve outcomes by X% vs. vague ones." That's the piece most teams skip; it's the most important.
+
+---
+
+## Trust but verify: the publication gate
+
+The trust-but-verify gate sits between any CADI-assisted draft and publication. Don't skip it, even once you trust the system:
+
+- Verify factual claims and sources independently
+- Verify hard constraints (word/character counts, required fields). Don't trust the model's own count
+- Verify meaning hasn't drifted from source intent
+- Keep human sign-off as the final release gate
+
+For many teams, a **parallel run** is the safest transition: keep your normal manual editorial review while running AI-assisted output alongside it. Compare decisions, measure drift, then scale what proves useful.
 
 ---
 
@@ -163,39 +176,19 @@ None of that is new. What I haven't found elsewhere is the specific combination:
 
 Iteration goes blind again when:
 
-1. **Encoding bias without inspection** — a pattern like "short sentences good" might just reflect that your exemplars targeted beginners; applying it universally infantilizes advanced content
-2. **Optimizing for fit, not truth** — "this tag co-occurs 26% of the time, so ALWAYS pair them" (should be "consider pairing")
-3. **No quality gate on source** — including mediocre content in your "best" set skews guidance toward mediocrity
-4. **Stopping too early** — 10 examples isn't enough; 500 might over-fit
+1. **Encoding bias without inspection**: a pattern like "short sentences good" might just reflect that your exemplars targeted beginners; applying it universally infantilizes advanced content
+2. **Optimizing for fit, not truth**: "this tag co-occurs 26% of the time, so ALWAYS pair them" (should be "consider pairing")
+3. **No quality gate on source**: including mediocre content in your "best" set skews guidance toward mediocrity
+4. **Stopping too early**: 10 examples isn't enough; 500 might over-fit
 
 Prevention: transparent curation criteria, documented assumptions, human review between cycles, oppositional analysis (ask a second model to critique your instructions), and built-in escape hatches ("usually X, unless Y").
 
----
-
-## Putting it into practice
-
-If you're starting now, run it as a short program:
-
-1. **Week 1–2 (collection)**: curate exemplar content; write explicit selection criteria
-2. **Week 3 (analysis)**: extract quantitative patterns and draft constraints
-3. **Week 4 (deployment)**: synthesize guidance with your existing style standards and deploy
-4. **Week 5–6 (measurement)**: run one controlled comparison and log the decision
-
-Minimum documents to maintain:
+Minimum documents to maintain alongside the loop:
 
 - a curation criteria note (why these items, not others)
 - your working AI instructions
 - a failure log
 - a record of what you tested and what changed, and why
-
-For many teams, the transition period is a **parallel run**: keep your normal manual editorial review while running AI-assisted output alongside it. Compare decisions, measure drift, then scale what proves useful.
-
-Before publishing AI-assisted output, run a trust-but-verify gate:
-
-- verify factual claims and sources independently
-- verify hard constraints (word/character counts, required fields) — don't trust the model's own count
-- verify meaning has not drifted from source intent
-- keep human sign-off as the final release gate
 
 ---
 
@@ -203,9 +196,9 @@ Before publishing AI-assisted output, run a trust-but-verify gate:
 
 CADI synthesises thinking from several earlier posts:
 
-- **[Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/)** — the C and A phases in detail, with Drupal export code and the full UNDRR case study (updated June 2026)
-- **[The power of the pause: How planning beats prompt tuning](/posts/20250923-effective-ai-work-is-project-management/)** — structure over tweaking, with PROJECT_BRIEF → PROJECT_PLAN → PATTERNS.md workflow
-- **[Thoughtful AI integration beats bolted-on Clippy](/posts/20250919-smart-ai-integration-context-first/)** — product thinking for AI integration: when to use it, not just how to prompt it
+- **[Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/)**: the C and A phases in detail, with Drupal export code and the full UNDRR case study (updated June 2026)
+- **[The power of the pause: How planning beats prompt tuning](/posts/20250923-effective-ai-work-is-project-management/)**: structure over tweaking, with PROJECT_BRIEF → PROJECT_PLAN → PATTERNS.md workflow
+- **[Thoughtful AI integration beats bolted-on Clippy](/posts/20250919-smart-ai-integration-context-first/)**: product thinking for AI integration: when to use it, not just how to prompt it
 
 What ties them together: **CADI — Collect, Analyze, Deploy, Iterate, grounded in evidence.**
 
@@ -213,7 +206,7 @@ What ties them together: **CADI — Collect, Analyze, Deploy, Iterate, grounded 
 
 ## References
 
-- Bsharat et al., "[Principled Instructions Are All You Need](https://arxiv.org/abs/2312.16171)" (arXiv:2312.16171) — 57.7% quality improvement with structured prompts
+- Bsharat et al., "[Principled Instructions Are All You Need](https://arxiv.org/abs/2312.16171)" (arXiv:2312.16171): 57.7% quality improvement with structured prompts
 - Wei et al., "[Chain-of-Thought Prompting Elicits Reasoning](https://arxiv.org/abs/2201.11903)" (2022)
 - Yao et al., "[Tree of Thoughts: Deliberate Problem Solving with LLMs](https://arxiv.org/abs/2305.10601)" (2023)
 - Kohavi & Longbotham, "[Controlled Experiments on the Web](https://arxiv.org/abs/1411.7170)"
