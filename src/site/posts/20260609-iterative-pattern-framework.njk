@@ -116,12 +116,16 @@ Your best content already embodies your patterns: word counts, title structures,
 
 Document the criteria you used. It will matter when you audit later.
 
-**Getting the files into the model.** Once you have your 50–100 items, the most practical path:
+**Getting the files into the model.** Two paths, depending on your tool.
+
+**The short way (NotebookLM).** [NotebookLM](https://notebooklm.google.com/) accepts source URLs and PDFs directly. Add the URLs of your 50–100 best items as sources, or save each as a PDF and upload. Skip the preprocessing entirely. Then run the Analyze prompt (in the [starter kit](/resources/cadi-starter-kit.txt)) against the sources.
+
+**The portable way (Claude Projects, ChatGPT, anything else):**
 
 1. Export each item as HTML from your CMS (WordPress, Drupal, and most custom systems support this).
-2. Feed the HTML to an agent with a preprocessing prompt that strips chrome (navigation, ads, related-content modules) and converts each file into a standardized Markdown structure with a metadata header. The [starter kit](/resources/cadi-starter-kit.txt) includes the preprocessing prompt.
+2. Feed the HTML to an agent with a preprocessing prompt that strips chrome (navigation, ads, related-content modules) and converts each file into a standardized Markdown structure with a metadata header. The starter kit includes the preprocessing prompt.
 3. Concatenate the cleaned Markdown into a single file with clear delimiters between items.
-4. Feed that consolidated document to the analyzing model. [NotebookLM](https://notebooklm.google.com/) handles this step particularly well; Claude Projects and ChatGPT also work.
+4. Feed that consolidated document to the analyzing model.
 
 This is one-time setup per content subtype.
 
@@ -132,11 +136,17 @@ For implementation detail, including Drupal export code and a worked UNDRR case 
 ### A — Analyze: Find quantitative patterns
 
 Feed your curated examples to an LLM with a structured prompt to extract:
+
 - Average word counts (with ranges, by content type)
-- Title formats (% using colons, question marks, etc.)
-- Heading usage frequency
+- Title formats and syntactic shapes (% using colons or question marks; whether titles assert claims, ask questions, restate the source headline, or use first-person observation)
+- Heading and structural patterns (do longer pieces get H2s? At what word-count threshold? Lists vs. prose?)
+- Voice markers (first vs. third person, contractions, hedging language, sentence-length variance)
+- Source treatment (% linking sources inline, % using blockquotes from the source, whether the source is named in the first paragraph)
+- Opening and closing patterns (does the first paragraph name a topic, a scene, a source? Does the last forward-link or name a broader pattern?)
+- Cross-linking density (internal links per piece; what fraction connect to other content on the site)
 - Metadata usage (tag counts, co-occurrence patterns)
-- Tone markers (passive vs. active, hedging language)
+
+**This list isn't exhaustive.** Your subtype will have its own tells — repeated structural moves, signature phrasing, specific rhetorical positioning. Add the signals that matter for your content; document what you watched for. It'll be the first thing you revisit on the next cycle.
 
 LLMs handle this extraction well; the interpretation is still yours. The output is not guidance yet; it's **empirical description** of what your best content actually looks like.
 

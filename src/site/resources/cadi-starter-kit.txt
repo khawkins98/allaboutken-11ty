@@ -46,6 +46,11 @@ Target: 50-100 items per subtype.
 Use this before the Analyze prompt if your content is in HTML -- typical
 for WordPress, Drupal, and most CMS exports.
 
+If you're using NotebookLM, you can skip this section entirely (and skip
+section 3 too). NotebookLM accepts source URLs and PDFs directly. Add the
+URLs of your best items as sources, or save each as a PDF and upload.
+Then run the Analyze prompt in section 2 against those sources.
+
 If your content is already in clean Markdown (static site generators like
 Eleventy / Astro / Hugo, MDX blogs, Markdown-based CMSes), skip this step.
 Strip the frontmatter wrappers, concatenate the files with "===" delimiters
@@ -105,29 +110,53 @@ Extract:
 1. Length
    - Average word count, with the typical range (e.g., "1,200 words +/- 300")
    - Differences by content type if I share more than one
+   - Sentence-length distribution (rough estimate of variance)
 
 2. Titles
    - Average word count
    - % using a colon
    - % using a question mark
    - Common opening patterns ("How to...", "Why...", "[Number] ways to...")
+   - Syntactic shapes: do titles assert a claim, ask a question, restate
+     the source headline, or use first-person observation? Report a rough
+     distribution.
 
 3. Structure
    - Average number of H2 headings
    - Whether H2s tend to be statements, questions, or noun phrases
    - Use of bullet lists vs. numbered lists vs. prose
+   - At what word-count threshold do pieces start using H2s?
 
-4. Tone markers
+4. Voice and tone
    - First person vs. third person
    - Active vs. passive voice frequency (rough estimate)
    - Hedging language frequency ("might", "could", "tends to")
    - Use of contractions
    - Anything else stylistically distinctive
 
-5. Metadata
+5. Source treatment (if items reference external sources)
+   - % that link the source inline
+   - % that include a blockquote from the source
+   - Whether the source is named in the first paragraph
+
+6. Opening and closing patterns
+   - Common opening moves (does the first paragraph name a topic, a
+     source, a scene, a question?)
+   - Common closing moves (forward-looking sentence? internal cross-link?
+     named pattern? call to action?)
+
+7. Cross-linking
+   - Average internal links per piece
+   - % of items that link to at least one other piece on the site
+
+8. Metadata
    - If items have tags or categories, average count per item and most
      common combinations
    - Any patterns in how authors describe themselves
+
+This list isn't exhaustive. If you notice a structural move, rhetorical
+positioning, or signature phrasing that appears repeatedly across the
+corpus and isn't covered above, call it out as an additional pattern.
 
 Format the output as a written summary I can paste into a working document.
 Use numbers wherever possible. Flag anything you're uncertain about.
