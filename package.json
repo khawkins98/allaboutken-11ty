@@ -9,6 +9,9 @@
   "license": "Apache-2.0",
   "author": "Ken Hawkins <khawkins98@gmail.com> (https://www.allaboutken.com/)",
   "main": "eleventy.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "clean": "rm -rf build",
     "sass": "sass --load-path src/components --no-source-map src/components/vf-componenet-rollup/index.scss:build/css/styles.css",
