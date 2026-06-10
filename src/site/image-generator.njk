@@ -1022,10 +1022,13 @@ genBtn.addEventListener('click', async () => {
     'POST ' + ENDPOINT + '\n' +
     'Authorization: Bearer [redacted]\n\n' +
     JSON.stringify(buildPayload(seeds[0]), null, 2) +
-    (count > 1 ? '\n\n// ' + count + ' requests sent in parallel; seed varies per image' : '');
+    (count > 1 ? '\n\n// ' + count + ' requests sent sequentially; seed varies per image' : '');
   reqDetailsEl.hidden = false;
 
-  const generateOne = async (seed) => {
+  // Sequential generation with a small retry-on-429 safety net.
+  // Together's rate limits are dynamic; bursting 3 parallel requests trips them.
+  // Sequential sidesteps that entirely; the retry handles mid-batch capacity dips.
+  const generateOne = async (seed, attempt = 0) => {
     const resp = await fetch(ENDPOINT, {
       method: 'POST',
       headers: {
@@ -1034,6 +1037,12 @@ genBtn.addEventListener('click', async () => {
       },
       body: JSON.stringify(buildPayload(seed))
     });
+    if (resp.status === 429 && attempt < 2) {
+      const retryAfter = parseFloat(resp.headers.get('Retry-After')) || (2 * Math.pow(2, attempt));
+      const waitSec = retryAfter + Math.random() * 0.5;
+      await new Promise(r => setTimeout(r, waitSec * 1000));
+      return generateOne(seed, attempt + 1);
+    }
     if (!resp.ok) {
       const err = await resp.json().catch(() => ({}));
       throw new Error((err.error && err.error.message) || ('HTTP ' + resp.status));
@@ -1043,8 +1052,9 @@ genBtn.addEventListener('click', async () => {
   };
 
   let successCount = 0;
-  const promises = Array.from({ length: count }, (_, i) =>
-    generateOne(seeds[i]).then(result => {
+  for (let i = 0; i < count; i++) {
+    try {
+      const result = await generateOne(seeds[i]);
       cells[i].className = 'img-cell';
       cells[i].innerHTML = '';
       const img = document.createElement('img');
@@ -1054,13 +1064,11 @@ genBtn.addEventListener('click', async () => {
       metas[i].textContent = 'seed: ' + (result.seed || seeds[i]);
       cells[i].addEventListener('click', () => selectImage(cells[i]));
       successCount++;
-    }).catch(err => {
+    } catch (err) {
       cells[i].className = 'img-cell is-error';
       cells[i].textContent = 'Error: ' + err.message;
-    })
-  );
-
-  await Promise.allSettled(promises);
+    }
+  }
   genBtn.disabled = false;
   if (successCount > 0) clearStatus();
   else setStatus('All generations failed. Check your API key or prompt.', 'error');
