@@ -132,7 +132,7 @@ Document the criteria you used. It will matter when you audit later.
 
 **Getting the files to your tool.** With NotebookLM, add the URLs or PDFs of your 50–100 best items as sources. With a local agent, export your content as HTML to a directory and point the agent there. With the manual pipeline, follow the four steps in the [starter kit](/resources/cadi-starter-kit.txt). One-time setup per content subtype.
 
-**Ready to move on when**: you have 50–100 items in a single consolidated, cleaned document; you've written down why they qualify; and an editor has spot-checked for obvious outliers.
+👉 **Ready to move on when**: you have 50–100 items in a single consolidated, cleaned document; you've written down why they qualify; and an editor has spot-checked for obvious outliers.
 
 For implementation detail, including Drupal export code and a worked UNDRR case study, see [Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/).
 
@@ -153,7 +153,7 @@ Feed your curated examples to an LLM with a structured prompt to extract:
 
 LLMs handle this extraction well; the interpretation is still yours. The output is not guidance yet; it's **empirical description** of what your best content actually looks like.
 
-**Ready to move on when**: you have a written summary of patterns with numbers, and at least one editor has reviewed it and flagged anything that looks wrong or unrepresentative.
+👉 **Ready to move on when**: you have a written summary of patterns with numbers, and at least one editor has reviewed it and flagged anything that looks wrong or unrepresentative.
 
 ### D — Document: Turn patterns into working instructions
 
@@ -165,7 +165,7 @@ This step requires editorial judgment: observed patterns and existing style rule
 
 You end up with instructions concrete enough to act on ("180 words ± 10%") rather than vague ("be concise"). Bonus: the same document works for human editors too.
 
-**Ready to move on when**: the instructions have been reviewed by at least one editor who wasn't involved in writing them, and they've been uploaded or integrated with your AI tool.
+👉 **Ready to move on when**: the instructions have been reviewed by at least one editor who wasn't involved in writing them, and they've been uploaded or integrated with your AI tool.
 
 ### I — Iterate: Build confidence over time
 
@@ -183,15 +183,13 @@ For a small team (2–3 editors), 20–30 items per condition is enough for an h
 
 None of this is invented from scratch. Other disciplines have been at versions of this for decades:
 
-- **Medical guideline development**: AGREE II and GRADE for assessing whether guidelines are evidence-based and implementable. The [Australian COVID-19 living guidelines](https://pmc.ncbi.nlm.nih.gov/articles/PMC7657075/) went further: revised and republished weekly for 24 weeks as new evidence arrived, a continuously iterated guidance document running in production
-- **Design systems**: Diátaxis for organizing knowledge by user need, not topic
-- **Journalism**: content analysis to audit whether outlets meet their own stated standards
-
-Closer to home, pieces of CADI already exist as products and research. [Writer](https://support.writer.com/article/250-how-to-calibrate-voice-for-your-content) and [Jasper](https://help.jasper.ai/hc/en-us/articles/18618693085339-Brand-Voice) will both reverse-engineer a voice profile from examples of your own content; worth knowing about, and worth using if they fit your stack. On the research side, [ChainForge](https://arxiv.org/abs/2309.09128) (CHI 2024) formalized treating prompts, and the evaluation criteria themselves, as testable hypotheses.
+- [Writer](https://support.writer.com/article/250-how-to-calibrate-voice-for-your-content) and [Jasper](https://help.jasper.ai/hc/en-us/articles/18618693085339-Brand-Voice) will both reverse-engineer a voice profile from examples of your own content; worth knowing about, and worth using if they fit your stack.
+- [ChainForge](https://arxiv.org/abs/2309.09128) (CHI 2024) formalized treating prompts, and the evaluation criteria themselves, as testable hypotheses.
+- Medical guideline development (AGREE II and GRADE) assess whether guidelines are evidence-based and implementable. The [Australian COVID-19 living guidelines](https://pmc.ncbi.nlm.nih.gov/articles/PMC7657075/) went further: revised and republished weekly for 24 weeks as new evidence arrived, a continuously iterated guidance document running in production
 
 But a software subscription isn't a method, and a research paper isn't a guide. What I haven't seen elsewhere is the connected discipline: deriving guidance from your own curated corpus, then keeping the failure log and test record that make that guidance revisable on evidence rather than vibes. That combination is what CADI names. If reading this sends you off to subscribe to one of those tools or build your own loop from the research, good; that's the point. Prior art still welcome.
 
-**Ready to move on when**: you have at least one completed hypothesis test, a documented decision (kept or rejected), and a failure log that someone is actually adding to.
+👉 **Ready to move on when**: you have at least one completed hypothesis test, a documented decision (kept or rejected), and a failure log that someone is actually adding to.
 
 ---
 
