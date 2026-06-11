@@ -1,0 +1,297 @@
+CADI STARTER KIT
+================
+
+If you're starting CADI for the first time, this is the minimum you need.
+Plain text. Copy and adapt for your team.
+
+Reference post:
+https://allaboutken.com/posts/20260609-iterative-pattern-framework/
+
+Pick a tool first. NotebookLM (drop in sources), a local agent (Claude
+Code, GitHub Copilot CLI, or similar pointed at a directory of your
+content), or as a fallback, the manual pipeline in section 1.
+
+You don't have to complete each section before moving to the next. With
+your tool ready and access to your content, an experienced editor can
+produce a first usable draft of the guidance doc (section 3) in a few
+hours by adapting the Analyze prompt (section 2). Share that draft with
+colleagues. Use it for a few days. Update.
+
+
+==============================================================================
+CURATION CHECKLIST (before you start anything else)
+==============================================================================
+
+Pick the items you'll feed the model. Three things to get right first:
+
+1. ONE CONTENT SUBTYPE AT A TIME.
+   Don't mix press releases, news briefs, features, and donor updates in
+   one batch. They follow different patterns. Pick the subtype that
+   matters most right now. Repeat for others later.
+
+2. DON'T DEFAULT TO TOP-TRAFFIC ITEMS.
+   Traffic correlates with timing and reach, not with the qualities
+   you'd want to reproduce. Combine three signals instead:
+     - Editorial investment: items your team spent the most time on
+     - Aspirational fit: items you'd want more of your output to look like
+     - Performance for type: a press release that did 5x the median
+       for press releases, not a feature that hit Hacker News
+
+3. WRITE DOWN WHY YOU PICKED EACH ITEM.
+   A short note per item is enough. You'll need this when you audit later.
+
+Target: 50-100 items per subtype.
+
+
+==============================================================================
+1. PRE-PROCESSING PROMPT (HTML to standardized Markdown)
+==============================================================================
+
+This pre-processing prompt is the fallback for the manual pipeline only.
+Use it only if you're working with HTML and a browser-based tool that
+can't read files or fetch URLs in bulk.
+
+Recommended path (skip this section entirely):
+
+  - NotebookLM (or similar): drop URLs or PDFs of your best items as
+    sources. Run the Analyze prompt in section 2 against them.
+
+  - Local agent (Claude Code, GitHub Copilot CLI, or similar): point the
+    agent at a directory of exported content and ask it to run the
+    Analyze prompt. The agent handles file iteration, cleanup, and
+    consolidation in one shot.
+
+  - Already in clean Markdown (static site generators, MDX, Markdown
+    CMSes): concatenate with "===" delimiters between items and feed
+    to the Analyze prompt.
+
+If none of the above fit your setup, use the prompt below to convert
+each HTML file into a clean Markdown format the analyzing model can read.
+
+
+--- begin prompt ---
+
+I'm going to share HTML files of [content subtype -- e.g., press releases].
+For each file, convert it into this standardized Markdown format:
+
+---
+title: [extract from the page H1 or article title]
+date: [publish date in YYYY-MM-DD]
+type: [content subtype -- e.g., press release]
+tags: [comma-separated, from the page's metadata if present]
+word_count: [approximate]
+---
+
+[Body of the article, cleaned of navigation chrome, ads, related-content
+modules, social-share widgets, and comments. Keep headings, lists, links,
+quotes, and image captions. Strip everything else.]
+
+Return one Markdown document per HTML input. If a field can't be extracted,
+write "[unknown]" rather than guessing.
+
+If you find an HTML file that doesn't actually contain the content subtype
+I asked for (e.g., a category landing page rather than a press release),
+flag it separately so I can remove it from the corpus.
+
+--- end prompt ---
+
+Once you have all the cleaned Markdown files, concatenate them into a
+single document separated by "===" between items. That single document is
+what you feed to the Analyze prompt below.
+
+
+==============================================================================
+2. ANALYZE PROMPT
+==============================================================================
+
+Run this against your corpus in whichever tool you've chosen --
+NotebookLM, a local agent, ChatGPT, Claude, Copilot, wherever your
+content lives.
+
+
+--- begin prompt ---
+
+I'm going to share examples of our best content. After I do, I want you to
+extract empirical patterns -- not advice, not guidance, just description.
+Be specific with numbers and percentages.
+
+Extract:
+
+1. Length
+   - Average word count, with the typical range (e.g., "1,200 words +/- 300")
+   - Differences by content type if I share more than one
+   - Sentence-length distribution (rough estimate of variance)
+
+2. Titles
+   - Average word count
+   - % using a colon
+   - % using a question mark
+   - Common opening patterns ("How to...", "Why...", "[Number] ways to...")
+   - Syntactic shapes: do titles assert a claim, ask a question, restate
+     the source headline, or use first-person observation? Report a rough
+     distribution.
+
+3. Structure
+   - Average number of H2 headings
+   - Whether H2s tend to be statements, questions, or noun phrases
+   - Use of bullet lists vs. numbered lists vs. prose
+   - At what word-count threshold do pieces start using H2s?
+
+4. Voice and tone
+   - First person vs. third person
+   - Active vs. passive voice frequency (rough estimate)
+   - Hedging language frequency ("might", "could", "tends to")
+   - Use of contractions
+   - Anything else stylistically distinctive
+
+5. Source treatment (if items reference external sources)
+   - % that link the source inline
+   - % that include a blockquote from the source
+   - Whether the source is named in the first paragraph
+
+6. Opening and closing patterns
+   - Common opening moves (does the first paragraph name a topic, a
+     source, a scene, a question?)
+   - Common closing moves (forward-looking sentence? internal cross-link?
+     named pattern? call to action?)
+
+7. Cross-linking
+   - Average internal links per piece
+   - % of items that link to at least one other piece on the site
+
+8. Metadata
+   - If items have tags or categories, average count per item and most
+     common combinations
+   - Any patterns in how authors describe themselves
+
+This list isn't exhaustive. If you notice a structural move, rhetorical
+positioning, or signature phrasing that appears repeatedly across the
+corpus and isn't covered above, call it out as an additional pattern.
+
+Format the output as a written summary I can paste into a working document.
+Use numbers wherever possible. Flag anything you're uncertain about.
+
+If you find a pattern that surprises you, call it out separately at the end.
+
+--- end prompt ---
+
+
+==============================================================================
+3. GUIDANCE DOC SKELETON
+==============================================================================
+
+These are your standing instructions for the AI tool. Replace the bracketed
+sections with what the Analyze step found and what you already know.
+
+
+[Org name] AI writing guidance
+==============================
+
+Last updated: [date]
+Owner: [name]
+Source of truth: [link to corpus or curation criteria note]
+
+What we publish
+---------------
+
+[2-3 sentences on what kind of content this org produces and for whom]
+
+Voice
+-----
+
+- Person: [first person plural / third person / etc.]
+- Tone: [authoritative / conversational / neutral / etc.]
+- Things we never do: [list of don'ts]
+
+Hard constraints
+----------------
+
+- Word count: [X words +/- Y%]
+- Title format: [pattern, with examples]
+- Required fields: [list]
+
+Soft constraints (preferred, not required)
+------------------------------------------
+
+- [list]
+
+Conflict resolution
+-------------------
+
+When observed patterns and house style disagree:
+- [decision, with reasoning]
+
+Recent changes
+--------------
+
+| Date | Change | Why | Decided by |
+| ---- | ------ | --- | ---------- |
+|      |        |     |            |
+
+
+==============================================================================
+4. FAILURE LOG
+==============================================================================
+
+One row per failure. Keep current. The log is more valuable than the
+guidance doc -- it's where the next iteration starts.
+
+
+| Date | What went wrong | Hypothesis why | Action taken |
+| ---- | --------------- | -------------- | ------------ |
+|      |                 |                |              |
+
+
+==============================================================================
+5. HYPOTHESIS TEST TEMPLATE
+==============================================================================
+
+Use one of these per Iterate cycle. The point isn't statistical rigour;
+it's writing down what you tested and what you decided so the next person
+(or the next quarter's you) knows why.
+
+
+Hypothesis:
+  IF we [change to guidance],
+  THEN [observable outcome] will [change in measurable way].
+
+Tested against:
+  [N items]
+
+Method:
+  [How will you compare? Same writer, different instructions?
+   Two writers? Blinded review?]
+
+Result:
+  [What happened]
+
+Decision:
+  [Keep / reject / revise]
+
+Why:
+  [One paragraph]
+
+Date:
+  [YYYY-MM-DD]
+
+
+==============================================================================
+NOTES
+==============================================================================
+
+- CADI is iterative. You don't have to do all of Collect before Analyze.
+  An experienced editor can rough out a first version in a few hours.
+- Then share that first version with colleagues. Use it for a few days.
+  Collect their reactions. Update.
+- This is how editorial process has always worked. CADI just makes the
+  guidance layer for the AI part of that process.
+- Tool-specific notes:
+    * Microsoft Copilot: paste the guidance doc into the "Prompts" or
+      "Pages" feature, or include it as a SharePoint reference the
+      assistant has access to.
+    * Claude Projects: add the guidance doc as a Project file. It will
+      be available in every conversation in that project.
+    * ChatGPT: paste into Custom Instructions, or attach as a file
+      reference in a Custom GPT.
+    * Local-only setups: keep the guidance doc as a single markdown file
+      that gets pasted at the start of each session.

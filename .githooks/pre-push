@@ -1,0 +1,25 @@
+#!/bin/bash
+# Pre-push hook: remind about PR title format requirements.
+# Advisory only; CI remains the enforcement source of truth.
+
+set -e
+
+echo "📋 Checking PR title format requirements..."
+echo ""
+echo "Your PR title must match the commit convention:"
+echo "  Pattern:   <prefix>: <description>"
+echo "  Prefixes:  content | feature | fix | ci | chore"
+echo ""
+echo "Examples of valid PR titles:"
+echo "  ✓ content: New blog post on editorial AI"
+echo "  ✓ feature: Add semantic search to posts"
+echo "  ✓ fix: Correct image paths in 2025 posts"
+echo ""
+echo "Examples of INVALID PR titles:"
+echo "  ✗ Editorial AI Framework: Three interconnected posts"
+echo "  ✗ Add verify-contracts script and wire into CI"
+echo "  ✗ Posts (tandem): governance delivery impact"
+echo ""
+echo "When you create the PR on GitHub, the title must match the pattern above"
+echo "or the pr-title-check workflow will fail."
+echo ""

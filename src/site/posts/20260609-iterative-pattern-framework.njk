@@ -1,0 +1,314 @@
+---
+title: "CADI: a prescriptive path for slop-free AI in content work"
+layout: layouts/post.njk
+teaser: "A framework to collect, analyze, document, iterate (CADI, for short) is a prescriptive answer to the question everyone keeps asking: should I prompt better, write a style guide, build an agent, or what?"
+date: 2026-06-09
+tags:
+  - posts
+topics:
+  - AI
+  - editorial-standards
+  - evidence-based-practice
+  - iterative-improvement
+  - workflow-automation
+image: /blog/cadi-shack.jpg
+image_meta:
+  text: "A pavilion of light poles and stretched sailcloth scaffolded amongst the trees — synthetic structure brought into the chaos, ideally in harmony with it."
+  credit: "Image made with <a href='https://huggingface.co/black-forest-labs/FLUX.2-dev'>FLUX.2-dev</a>."
+  altext: 'Woodcut-style print of a wide pavilion in a forest clearing. Many slender wooden poles cross at angles to support a curved pale sailcloth canopy stretched between them. Dark trees frame both sides; an amber sky glows behind.'
+workflow:
+  - brief:
+      summary: >-
+        I keep having the same conversation with colleagues: should I prompt better, write a style guide, build an agent, document my preferences? The answer is yes, in a specific order, and the combination is what matters. CADI — Collect, Analyze, Document, Iterate — is a prescriptive path through that confusion.
+---
+
+{% markdown %}
+
+Recently I was in a meeting with colleagues talking about how people across the organisation are using AI in their writing. What I heard:
+
+> *"I just prompt it and ship. We don't have time to fuss."*
+>
+> *"I use it for ideas, but I still write the piece myself."*
+>
+> *"I rewrite every line. I'm honestly not sure I'm saving any time."*
+>
+> *"It's infuriating."*
+>
+> *"I see other people using it and I see the same repetitive AI tells bleeding through."*
+>
+> *"I'm not convinced any of this is worth it. The old way was quieter and probably better."*
+>
+> *"Other organisations are using it. We can't be the only ones not."*
+>
+> --
+>
+> *"Should I just get better at prompting?"*
+>
+> *"Should I write a style guide?"*
+>
+> *"Should I build an agent?"*
+>
+> *"Should I document my preferences somewhere?"*
+>
+> *"Should I upload my existing content?"*
+
+The honest answer is always some version of "yes, but in a specific order, and most of the value comes from the combination." Helping colleagues do better is frustrating as it's a repetitive conversation and it's far too conceptual for many to put in practice.
+
+So I documented it. This is **CADI** — Collect, Analyze, Document, Iterate — a prescriptive path through the confusion.
+
+The name nods to a caddie in golf: carries the load, doesn't take the swing. It's designed to be followed roughly in order, at least the first time through.
+
+An experienced editor with access to your content can produce a first usable version of the guidance in a few hours by feeding curated examples to a language model and shaping what comes back. Then it's an editorial process: share it with colleagues, use it for a few days, fold their reactions in. Each round sharpens the guidance; the work doesn't get heavier, the picture gets clearer. It works for any content type or language, as long as you have enough of it to learn from.
+
+---
+
+## The problem: every prompt starts from zero
+
+Most AI writing assistance starts cold every time. No memory of what worked last time. No sense of your voice, your standards, your audience. So it gives you something generic and confident, and you spend the rest of your time correcting it.
+
+The fix isn't a better prompt. It's giving the AI a documented picture of what good looks like *for you*, and building a way to improve that picture as you learn what works. Done right, the AI gets more useful over time rather than requiring the same effort on every task.
+
+There's a failure mode that persists even after you think you've solved this: **confident wrongness + silent drift**. The AI sounds authoritative but cites a source incorrectly. It hits approximately the right word count but adds a paragraph that subtly changes your meaning. These are harder to catch than obvious nonsense, and they accumulate faster.
+
+---
+
+## Where you probably are: supervised co-writing
+
+Most people using AI for writing aren't doing "autonomous AI publishing." They're doing **supervised co-writing**: AI handles a first pass or a tedious task, a human reviews and corrects, a human publishes. That's normal; it's also where most of the real value is right now.
+
+CADI is for teams who want to move from "AI is something we sometimes use" to "AI is something our editorial standards reliably shape." That transition doesn't happen through better prompting alone.
+
+---
+
+## Before you start: five things to check
+
+This framework works best when you can answer yes to these:
+
+- You have **ideally 50+ published items** you consider high-quality (not just recent). 10–20 from a tight, high-quality domain still works; you'll overfit a little, but the discipline of running the loop is what compounds
+- You have some signal for quality: engagement data, editor picks, longevity tags, or even manual curation
+- At least one person has **time to own the guidance doc** and keep it current
+- You have some way to **export content** from your CMS in text form (Markdown, HTML, CSV)
+- Editors are willing to **log failures** rather than just silently fix them
+
+You don't need a data science team, a custom CMS, or a formal AI strategy. But if no one will own the guidance document, the method breaks down.
+
+---
+
+## Pick your tool
+
+Before you start, decide how you'll feed your content to an LLM. The choice shapes every step that follows.
+
+- **[NotebookLM](https://notebooklm.google.com/) or similar.** Best if your content is web-accessible. Drop URLs or PDFs as sources; run prompts in the chat. Zero file handling.
+- **A local agent (Claude Code, GitHub Copilot CLI, or similar).** Best if you've exported your content as files. Point the agent at the directory and ask it to run the prompts. Handles iteration and cleanup for you.
+- **Manual pipeline (browser-only).** Fallback when the other two aren't options. You'll preprocess HTML, concatenate, and paste into a browser tool. The [starter kit](/resources/cadi-starter-kit.txt) has the prompts.
+
+The rest of the post assumes you've picked one. When a step says "run the Analyze prompt" or "feed the corpus to your model," substitute your chosen tool's mechanics.
+
+---
+
+## The CADI framework: Collect → Analyze → Document → Iterate
+
+CADI is a four-phase loop. You build it once, then run the last phase continuously. Each cycle makes the guidance sharper, and the AI more useful.
+
+The bit most AI-writing advice misses: the guidance document is something you test and revise. C, A, and D get you a first version. I is where it earns its keep.
+
+I've arrived at this through practice, and written about the pieces separately. This is the first time I've named it.
+
+### C — Collect: Extract your best examples
+
+Your best content already embodies your patterns: word counts, title structures, tag usage, narrative flow. Don't grab the latest 50 published items; **curate the exemplary 50.**
+
+**Start with one content subtype, not a mix.** Most organisations publish several things that look similar but follow different patterns: press releases, news briefs, feature reports, donor updates, blog posts. Each has its own voice and structure. Mixing them gives you average patterns that fit none of them. Pick the subtype that matters most to you right now and run CADI on that. Repeat for other subtypes later.
+
+**Don't default to top-traffic items.** That's the obvious choice and the most common mistake. High traffic often correlates with topic timeliness, social-share luck, or audience reach, not with the qualities you'd want to reproduce. Three signals to combine instead:
+
+- **Editorial investment** — items your team spent the most time on. Effort is a quality signal even when the numbers aren't there.
+- **Aspirational fit** — items you'd want more of your output to look like.
+- **Performance *for type*** — a press release that did 5× the median for press releases tells you more than a feature that hit Hacker News.
+
+Document the criteria you used. It will matter when you audit later.
+
+**Bring your existing reference materials too.** Your best content shows the agent *what good looks like* by example. Your existing editorial handbook, brand guidelines, glossary, terminology and spelling lists, institutional style memos — these tell it the *rules* you want enforced. Add them as sources alongside the corpus. The agent should be able to *cite them* when producing drafts ("per our spelling guide, we use 'organization' with a z") and *link to them* when justifying its choices. If your handbook says "no Oxford comma," the corpus pattern alone might not surface that as a hard rule.
+
+**Getting the files to your tool.** With NotebookLM, add the URLs or PDFs of your 50–100 best items as sources. With a local agent, export your content as HTML to a directory and point the agent there. With the manual pipeline, follow the four steps in the [starter kit](/resources/cadi-starter-kit.txt). One-time setup per content subtype.
+
+👉 **Ready to move on when**: you have 50–100 items in a single consolidated, cleaned document; you've written down why they qualify; and an editor has spot-checked for obvious outliers.
+
+For implementation detail, including Drupal export code and a worked UNDRR case study, see [Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/).
+
+### A — Analyze: Find quantitative patterns
+
+Feed your curated examples to an LLM with a structured prompt to extract:
+
+- Average word counts (with ranges, by content type)
+- Title formats and syntactic shapes (% using colons or question marks; whether titles assert claims, ask questions, restate the source headline, or use first-person observation)
+- Heading and structural patterns (do longer pieces get H2s? At what word-count threshold? Lists vs. prose?)
+- Voice markers (first vs. third person, contractions, hedging language, sentence-length variance)
+- Source treatment (% linking sources inline, % using blockquotes from the source, whether the source is named in the first paragraph)
+- Opening and closing patterns (does the first paragraph name a topic, a scene, a source? Does the last forward-link or name a broader pattern?)
+- Cross-linking density (internal links per piece; what fraction connect to other content on the site)
+- Metadata usage (tag counts, co-occurrence patterns)
+
+**This list isn't exhaustive.** Your subtype will have its own tells — repeated structural moves, signature phrasing, specific rhetorical positioning. Add the signals that matter for your content; document what you watched for. It'll be the first thing you revisit on the next cycle.
+
+LLMs handle this extraction well; the interpretation is still yours. The output is not guidance yet; it's **empirical description** of what your best content actually looks like.
+
+👉 **Ready to move on when**: you have a written summary of patterns with numbers, and at least one editor has reviewed it and flagged anything that looks wrong or unrepresentative.
+
+### D — Document: Turn patterns into working instructions
+
+Combine what the analysis found with your existing institutional knowledge (style guides, brand standards, domain constraints) into a single document your AI tool can use as its standing instructions. Link or embed any existing reference docs your team already maintains; the guidance doc should point at them rather than restate them, so editors and the agent can both trace any rule back to its source.
+
+If your existing style guide already addresses this subtype, the Document step isn't to re-derive from scratch. It's to tighten the existing guidance with the numbers the Analyze step produced, and override only where you have evidence the guidance was wrong.
+
+This step requires editorial judgment: observed patterns and existing style rules will sometimes conflict. If the analysis says your best titles average 8 words but house style caps them at 6, decide which wins and log why. Write it down; that decision belongs in your change log, not left implicit.
+
+You end up with instructions concrete enough to act on ("180 words ± 10%") rather than vague ("be concise"). Bonus: the same document works for human editors too.
+
+👉 **Ready to move on when**: the instructions have been reviewed by at least one editor who wasn't involved in writing them, and they've been uploaded or integrated with your AI tool.
+
+### I — Iterate: Build confidence over time
+
+Iteration done badly is just tweaking in the dark, which is how we started. Done well, it's hypothesis-driven:
+
+- "IF we add explicit numeric targets ('180 words ± 10%'), THEN first-pass acceptance rises from 40% to 70%" *(illustrative)*
+- "IF we show exemplars of title styles, THEN AI chooses appropriate titles 85% of the time" *(illustrative)*
+- "IF we run oppositional review (a second model critiques our guidance), THEN we catch biased rules 80% of the time" *(illustrative)*
+
+Then test them: run a simple before/after comparison on real content, measure outcomes with a concrete metric, and document what changed and why.
+
+For a small team (2–3 editors), 20–30 items per condition is enough for an honest qualitative comparison: better than tweaking blind, not a statistical signal. Anything closer to statistical rigour needs much larger samples and blinded review; most editorial teams won't reach that, and that's fine. The bar is qualitative honesty: what changed, and why.
+
+**Mid-cycle revision trigger**: if more than 20% of outputs in a week fail the same check, don't wait for the quarterly audit. That's a pattern worth investigating now.
+
+None of this is invented from scratch. Other disciplines have been at versions of this for decades:
+
+- [Writer](https://support.writer.com/article/250-how-to-calibrate-voice-for-your-content) and [Jasper](https://help.jasper.ai/hc/en-us/articles/18618693085339-Brand-Voice) will both reverse-engineer a voice profile from examples of your own content; worth knowing about, and worth using if they fit your stack.
+- [ChainForge](https://arxiv.org/abs/2309.09128) (CHI 2024) formalized treating prompts, and the evaluation criteria themselves, as testable hypotheses.
+- Medical guideline development (AGREE II and GRADE) assess whether guidelines are evidence-based and implementable. The [Australian COVID-19 living guidelines](https://pmc.ncbi.nlm.nih.gov/articles/PMC7657075/) went further: revised and republished weekly for 24 weeks as new evidence arrived, a continuously iterated guidance document running in production
+
+But a software subscription isn't a method, and a research paper isn't a guide. What I haven't seen elsewhere is the connected discipline: deriving guidance from your own curated corpus, then keeping the failure log and test record that make that guidance revisable on evidence rather than vibes. That combination is what CADI names. If reading this sends you off to subscribe to one of those tools or build your own loop from the research, good; that's the point. Prior art still welcome.
+
+👉 **Ready to move on when**: you have at least one completed hypothesis test, a documented decision (kept or rejected), and a failure log that someone is actually adding to.
+
+---
+
+## CADI in practice: how it played out at UNDRR
+
+One case illustrates the full loop:
+
+- **Collection**: 122 publications flagged as "evergreen + high-engagement" in Drupal
+- **Analysis**: LLM extracted patterns. "169 words average; 56% use colons in title; all use 2–4 themes"
+- **Documentation**: Guidance doc drafted and uploaded as standing instructions in Microsoft 365 Copilot
+- **Iteration**: Quarterly audits checked whether new AI drafts matched patterns; a shared change log recorded what was adjusted and why
+
+The honest version of the result: before CADI, none of these pieces (curation, pattern extraction, guidance docs, iteration) reliably produced anything usable on its own. They were ad-hoc, inconsistent, and each task started over. Running them as a connected loop turned a set of one-off attempts into a process that ran continuously and got better. The framework's value wasn't a single big number; it was making something repeatable that hadn't been. The longer case file (the original methodology, plus what the guidance doc looked like in practice) is in the [UNDRR impact story](/work/2025/impact-story-evidence-based-content-guidelines/).
+
+And I'm not pretending what I have is rigorous yet. What would make the next version *genuinely rigorous* is a prospective A/B test that quantifies which guidance changes move which outcomes by how much. That's the piece most teams skip; writing this down, sharing it, and letting it be challenged is part of how I keep tightening the loop.
+
+---
+
+## Using CADI in the writing workflow
+
+CADI gives you the guidance layer. The day-to-day writing that uses it has a shape of its own:
+
+1. **Ideation** — what are we writing, for whom, why now? AI helps brainstorm; the editorial decision is yours.
+2. **Scaffolding** — outline, key points, source material. CADI's guidance doc steers tone and structure; the agent helps assemble.
+3. **Drafting** — produce the first pass with the guidance doc as the agent's standing context.
+4. **Review** — apply role-based passes for the checks this piece needs.
+
+The review step is where you pick agent roles that match the piece's risk and shape. The ones I've found useful:
+
+- **Copy editor** — grammar, flow, voice consistency against the guidance doc
+- **Adversarial reviewer** — does the argument hold? What's the strongest counter?
+- **Legal / compliance check** — for content with regulatory exposure
+- **Copyright check** — for content with quotation, imagery, or external sourcing
+- **Technical reviewer** — for content making claims about systems, code, or data
+- **Sanity check** — final read for "does this make sense, end to end?"
+
+Not every piece needs every role; pick what fits the content type and its risk profile. The CADI guidance doc gets stronger when failure-log entries name *which role* would have caught the failure — that's how you learn which checks belong in which subtype's workflow.
+
+A deeper walk-through, with prompts and examples for each role, is coming in a follow-up post.
+
+---
+
+## Trust but verify: the publication gate
+
+The trust-but-verify gate sits between any CADI-assisted draft and publication. Don't skip it, even once you trust the system:
+
+- Verify factual claims and sources independently
+- Verify hard constraints (word/character counts, required fields). Don't trust the model's own count
+- Verify meaning hasn't drifted from source intent
+- Keep human sign-off as the final release gate
+
+For many teams, a **parallel run** is the safest transition: keep your normal manual editorial review while running AI-assisted output alongside it. Compare decisions, measure drift, then scale what proves useful.
+
+This is also the spirit of the editorial AI policies emerging in newsrooms, where [Ars Technica and Fedora make "reviewed" a protected verb](/posts/20260423-digesting-ars-technica-ai-newsroom-policy/) with the human review step explicit and named. CADI takes the same position: the loop doesn't replace the gate; it makes the gate cheaper to operate.
+
+---
+
+## Where this breaks down
+
+Iteration goes blind again when:
+
+1. **Encoding bias without inspection**: a pattern like "short sentences good" might just reflect that your exemplars targeted beginners; applying it universally infantilizes advanced content
+2. **Optimizing for fit, not truth**: "this tag co-occurs 26% of the time, so ALWAYS pair them" (should be "consider pairing")
+3. **No quality gate on source**: including mediocre content in your "best" set skews guidance toward mediocrity
+4. **Stopping too early**: 10 examples isn't enough; 500 might over-fit
+5. **Expecting voice cloning in informal genres**: the style-imitation research is encouraging for structured formats like news and email, and [much weaker for informal, personal writing](https://arxiv.org/abs/2509.14543) like blogs and forum posts. Corpus-derived guidance reliably reproduces structure and conventions; a distinctive personal voice still needs the human pass
+
+Prevention: transparent curation criteria, documented assumptions, human review between cycles, oppositional analysis (ask a second model to critique your instructions), and built-in escape hatches ("usually X, unless Y").
+
+**Where CADI doesn't fit cleanly:** high-volume newsrooms shipping dozens of pieces per week across many content subtypes. CADI assumes one primary subtype at a time and a corpus you can read in full. Sampling methodology and per-subtype parallel runs are needed there. Out of scope for this post, but the same loop applies once you've made those decisions.
+
+---
+
+## What you maintain alongside the loop
+
+These four documents are what CADI actually leaves you with. The starter kit has templates for each: [cadi-starter-kit.txt](/resources/cadi-starter-kit.txt).
+
+- **A curation criteria note** — why these items qualified as exemplary, and not others
+- **Your working AI instructions** — the guidance doc the AI uses as its standing context
+- **A failure log** — the one document that's more valuable than the guidance doc itself; it's where the next iteration starts
+- **A test record** — what you tested, what changed, and why
+
+If no one is keeping at least the failure log current, you're not iterating; you're just running C/A/D once and hoping.
+
+---
+
+## After your first cycle, go deeper
+
+These earlier posts go deeper on individual phases. You don't need to read them to start.
+
+- **[Improving AI chatbots with an editorial handbook from your best content](/posts/evidence-based-content-guidelines-drupal-ai/)**: the C and A phases in detail, with Drupal export code and the full UNDRR case study (updated June 2026)
+- **[The power of the pause: How planning beats prompt tuning](/posts/20250923-effective-ai-work-is-project-management/)**: structure over tweaking, with PROJECT_BRIEF → PROJECT_PLAN → PATTERNS workflow
+- **[Thoughtful AI integration beats bolted-on Clippy](/posts/20250919-smart-ai-integration-context-first/)**: product thinking for AI integration, when to use it, not just how to prompt it
+- **[Why context engineering was always the job](/posts/20260330-context-was-always-the-job/)**: where CADI sits in the broader move toward context as the work
+- **[The four phases of AI adoption](/posts/20260405-four-phases-of-ai-adoption/)**: the Complement / Integrate / Delegate / Orchestrate taxonomy; CADI lives around Integrate and Delegate
+
+CADI is the loop we run at UNDRR. Think of it as a forcing function more than a magic generator: most of the work is still you reading your own content carefully. The framework just makes sure you do it, and write down what you learn.
+
+It works for us; it might work for you; or it might need reshaping for the volume, content type, or constraints you're in. I'd be curious how it lands once you try it: what you change, what breaks, what surprises.
+
+One direction I'm exploring: packaging CADI as a guided Claude skill (or similar) that asks where your content lives, walks you through the curation criteria, runs the Analyze prompt for you, and hands you a draft guidance document ready for editorial review. If that'd be useful, drop me a note.
+
+The first run of this framework on this site is preserved as a worked artifact: [CADI cycle 1 — digesting posts (June 2026)](/resources/cadi-cycles/2026-06-digesting/). Future cycles will build on it.
+
+---
+
+## References
+
+- Bsharat et al., "[Principled Instructions Are All You Need](https://arxiv.org/abs/2312.16171)" (arXiv:2312.16171): a preprint reporting an average 57.7% quality boost from 26 generic prompting principles on GPT-4. Small, author-judged benchmark; read it as directional support for structured prompts, not as evidence for corpus-derived guidance specifically
+- "[Catch Me If You Can? Not Yet: LLMs Still Struggle to Imitate the Implicit Writing Styles of Everyday Authors](https://arxiv.org/abs/2509.14543)" (EMNLP 2025 Findings): exemplar-based prompting consistently beats instruction-only prompting for style matching; strong in structured genres, weak in informal ones
+- Wu et al., "[ScatterShot: Interactive In-context Example Curation for Text Transformation](https://arxiv.org/abs/2302.07346)" (ACM IUI 2023): systematic example curation beats ad-hoc hand-picking, which tends to capture only the most obvious patterns
+- Arawjo et al., "[ChainForge: A Visual Toolkit for Prompt Engineering and LLM Hypothesis Testing](https://arxiv.org/abs/2309.09128)" (CHI 2024)
+- Tendal et al., "[Weekly updates of national living evidence-based guidelines: methods for the Australian living guidelines for care of people with COVID-19](https://pmc.ncbi.nlm.nih.gov/articles/PMC7657075/)" (J Clin Epidemiol 2020)
+- Wei et al., "[Chain-of-Thought Prompting Elicits Reasoning](https://arxiv.org/abs/2201.11903)" (2022)
+- Yao et al., "[Tree of Thoughts: Deliberate Problem Solving with LLMs](https://arxiv.org/abs/2305.10601)" (2023)
+- Kohavi, Longbotham et al., "[Controlled experiments on the web: survey and practical guide](https://doi.org/10.1007/s10618-008-0114-1)" (2009, *Data Mining and Knowledge Discovery*)
+- [AGREE II](https://www.agreetrust.org/) — instrument for appraising the quality of clinical practice guidelines (the discipline of judging whether your guidance itself is sound)
+- [GRADE](https://www.gradeworkinggroup.org/) — framework for grading the certainty of evidence and the strength of recommendations (separating "we're sure" from "we think")
+- [Diátaxis](https://diataxis.fr/) — documentation framework organising knowledge by user need (tutorials, how-tos, reference, explanation) rather than by topic
+- [PRISMA](https://www.prisma-statement.org/) — reporting standard for systematic reviews (a checklist for how to describe what you did, so others can trust or replicate it)
+
+{% endmarkdown %}

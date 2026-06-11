@@ -1,7 +1,7 @@
 ---
-title: "How to write one skills for both Claude Code and GitHub Copilot CLI"
+title: "How to write one skill for both Claude Code and GitHub Copilot CLI"
 layout: layouts/post.njk
-teaser: "Tips on where the shared appproach doesn't share, and plugin.json gotchas that break Claude Code silently."
+teaser: "Tips on where the shared approach doesn't share, and plugin.json gotchas that break Claude Code silently."
 date: 2026-04-08
 tags:
   - posts
@@ -19,9 +19,9 @@ Both Claude Code and GitHub Copilot CLI support skills (instruction files that l
 
 > **tl;dr**
 >
-> - Write skills as `SKILL.md` files with `name` and `description` frontmatter -- both tools require exactly this.
+> - Write skills as `SKILL.md` files with `name` and `description` frontmatter; both tools require exactly this.
 > - The `description` field is the auto-detection trigger. Write it as a trigger condition: *"Use when the user asks to…"*
-> - Omit the `skills` field from `plugin.json` entirely -- Claude Code will reject the file if it's present.
+> - Omit the `skills` field from `plugin.json` entirely: Claude Code will reject the file if it's present.
 > - Copilot CLI supports agents, hooks, and MCP server config; Claude Code does not yet. These are safe to add for Copilot users without affecting Claude Code.
 > - If you just want a single skill without a plugin wrapper, you can drop the folder into `.github/skills/`, `.claude/skills/`, or `.agents/skills/` (project) or the equivalent under `~/` (personal) and Copilot CLI will find it without any manifest.
 
@@ -29,7 +29,7 @@ The specifics below reflect the state of things as of April 2026. The [canonical
 
 ## Two ways to distribute skills
 
-<aside class="kh-marginnote">The pattern is spreading -- Cursor, Gemini CLI, Windsurf, and Codex CLI have all adopted variations of the SKILL.md format. I haven't tested compatibility with any of them directly, but portability across the ecosystem looks like the direction of travel.</aside>
+<aside class="kh-marginnote">The pattern is spreading: Cursor, Gemini CLI, Windsurf, and Codex CLI have all adopted variations of the SKILL.md format. I haven't tested compatibility with any of them directly, but portability across the ecosystem looks like the direction of travel.</aside>
 
 Before getting into file structure, it helps to understand the two distribution models, because they look different even though the underlying `SKILL.md` format is the same.
 
@@ -148,13 +148,13 @@ For Claude Code, pass `--plugin-dir /path/to/your-plugin` when launching, or ins
 
 If you change either of these, test both tools:
 
-- **`SKILL.md` -- `description`**: The auto-detection trigger for both. If you update the skill's purpose, update the description to match or it won't load.
-- **`SKILL.md` -- `name`**: Must be unique across installed plugins. Renaming is breaking: users of the old name will lose auto-detection silently.
-- **`plugin.json` -- `name`**: Changing this is a breaking rename for anyone who has the plugin installed.
+- **`description` in `SKILL.md`**: The auto-detection trigger for both. If you update the skill's purpose, update the description to match or it won't load.
+- **`name` in `SKILL.md`**: Must be unique across installed plugins. Renaming is breaking: users of the old name will lose auto-detection silently.
+- **`name` in `plugin.json`**: Changing this is a breaking rename for anyone who has the plugin installed.
 
 ## Using this as LLM context
 
-This post lives on GitHub as a Nunjucks file -- syntactically close enough to Markdown that an LLM reads it fine. If you want an LLM to work from this guidance directly, here's a ready-to-paste prompt pointing at the raw source:
+This post lives on GitHub as a Nunjucks file, syntactically close enough to Markdown that an LLM reads it fine. If you want an LLM to work from this guidance directly, here's a ready-to-paste prompt pointing at the raw source:
 
 ```
 Please fetch https://raw.githubusercontent.com/khawkins98/allaboutken-11ty/main/src/site/posts/20260408-mini-guide-claude-copilot-skills.njk and use its guidance when helping me author skills compatible with both Claude Code and GitHub Copilot CLI.
@@ -168,20 +168,20 @@ These are the authoritative sources. This post documents my own experience and c
 
 **GitHub Copilot CLI**
 
-- [Creating skills for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-skills) -- official how-to, covers standalone skills, scripts, and `allowed-tools`
-- [Creating a plugin for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-creating) -- plugin manifest, distribution, and install
-- [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference) -- complete technical specification
+- [Creating skills for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-skills): official how-to, covers standalone skills, scripts, and `allowed-tools`
+- [Creating a plugin for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-creating): plugin manifest, distribution, and install
+- [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference): complete technical specification
 
 **Claude Code**
 
-- [Claude Code plugins overview](https://code.claude.com/docs/en/plugins) -- getting started with the plugin system
-- [Claude Code plugins reference](https://code.claude.com/docs/en/plugins-reference) -- complete specification for skills, agents, hooks, MCP, and LSP components
-- [Claude Code plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) -- distribution and discovery
+- [Claude Code plugins overview](https://code.claude.com/docs/en/plugins): getting started with the plugin system
+- [Claude Code plugins reference](https://code.claude.com/docs/en/plugins-reference): complete specification for skills, agents, hooks, MCP, and LSP components
+- [Claude Code plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces): distribution and discovery
 
 **Community guides worth reading**
 
-- [How to Build Your Own Claude Code Skill](https://www.freecodecamp.org/news/how-to-build-your-own-claude-code-skill) -- freeCodeCamp walkthrough, excellent on the description field and skill design heuristics
-- [Claude Code Skills vs MCP vs Plugins: Complete Guide 2026](https://www.morphllm.com/claude-code-skills-mcp-plugins) -- good overview of when to use each extensibility type
+- [How to Build Your Own Claude Code Skill](https://www.freecodecamp.org/news/how-to-build-your-own-claude-code-skill): freeCodeCamp walkthrough, excellent on the description field and skill design heuristics
+- [Claude Code Skills vs MCP vs Plugins: Complete Guide 2026](https://www.morphllm.com/claude-code-skills-mcp-plugins): good overview of when to use each extensibility type
 
 The overlap between the two ecosystems is real and growing. Know the three divergences, omit the `skills` field from `plugin.json`, and a single set of files will serve you in both tools. If you run into a case this guide doesn't cover, I'd like to hear about it.
 

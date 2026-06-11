@@ -1,0 +1,108 @@
+# Scripts reference
+
+Source of truth for local commands and script behavior in this repository.
+
+## At a glance
+
+| Command | Purpose | Typical use |
+| --- | --- | --- |
+| `yarn dev` | Run local development server | Day-to-day authoring and preview |
+| `yarn build` | Run full production build | Pre-push validation and CI parity |
+| `yarn embeddings` | Regenerate semantic-search vectors | After content/model changes that affect embeddings |
+| `yarn lint:css` | Lint SCSS/CSS files | Before committing style changes |
+
+## Script details
+
+### `yarn clean`
+
+- Runs `rm -rf build`.
+- Deletes generated output so the next build starts from a clean state.
+
+### `yarn sass`
+
+- Compiles `src/components/vf-componenet-rollup/index.scss` to `build/css/styles.css`.
+- Uses `--no-source-map`.
+- Run directly when you only need stylesheet compilation without a full site build.
+
+### `yarn eleventy`
+
+- Runs `ELEVENTY_ENV=production eleventy --config=eleventy.js`.
+- Produces static site output in `build/`.
+- Uses production mode behavior (different from `yarn dev`).
+
+### `yarn lint:css`
+
+- Runs stylelint on all `src/**/*.scss` and `src/**/*.css`.
+- Non-mutating check for CSS/SCSS quality.
+
+### `yarn lint:css:fix`
+
+- Same scope as `yarn lint:css`, but with `--fix` for auto-fixable issues.
+
+### `yarn embeddings`
+
+- Runs `node scripts/generate-embeddings.mjs`.
+- Reads generated HTML in `build/`, extracts searchable content, and writes `build/semantic-search/vectors.json`.
+- Intended to run after Eleventy has produced the site output.
+
+### `yarn build`
+
+- Runs: `yarn clean && yarn sass && yarn eleventy && yarn embeddings`.
+- This is the production build path used for full validation.
+- Expected outputs include:
+  - compiled CSS in `build/css/`
+  - site HTML/assets in `build/`
+  - semantic search vectors in `build/semantic-search/vectors.json`
+
+### `yarn dev`
+
+- Runs Sass in watch mode and Eleventy with `--serve` concurrently.
+- Uses `ELEVENTY_ENV=development`.
+- Optimized for local iteration.
+- Does **not** run `yarn embeddings` as part of the dev command.
+
+### `yarn start`
+
+- Alias for `yarn dev`.
+
+### `yarn test`
+
+- Placeholder script; currently prints an informational message and exits successfully.
+- There is no automated test suite wired via this command today.
+
+### `yarn prepare`
+
+- Sets Git hooks path: `git config core.hooksPath .githooks`.
+- Normally runs as part of dependency installation lifecycle.
+- Enables local commit-message enforcement via `.githooks/commit-msg`.
+
+## Lifecycle and automation notes
+
+### Install lifecycle (`prepare`)
+
+- `yarn install` runs `yarn prepare` automatically.
+- This repository uses that hook to point Git at `.githooks/`, so local commits are validated before they are created.
+
+### Commit message hook (`.githooks/commit-msg`)
+
+- Enforces `<prefix>: <description>` on the commit subject.
+- Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`.
+- Enforces subject length <= 72 characters and disallows a trailing period.
+- Skips merge/revert/fixup/squash commit subjects.
+- Same convention is checked in CI for pull request titles by `.github/workflows/pr-title-check.yml`.
+
+### `yarn update-components`
+
+- Runs `yarn upgrade-interactive --latest` for dependency update workflow.
+
+## Scripts directory status
+
+### `scripts/generate-embeddings.mjs`
+
+- Active build script used by `yarn embeddings` and `yarn build`.
+
+### `scripts/process-images.js`
+
+- Planned helper script only; currently a documented placeholder.
+- It is **not** invoked by `yarn dev`, `yarn build`, or any npm/yarn script in `package.json`.
+- Eleventy image transforms are still handled at build time via the existing Eleventy image pipeline.

@@ -91,15 +91,15 @@ kens_status: published
 
 At a previous organisation, we syndicated content from Drupal across multiple downstream platforms through API feeds. Over the years, a recurring problem: a developer misspells a field name in the CMS, say `summray` instead of `summary`. A downstream JavaScript platform consumes that API and builds around the typo. Months later, someone fixes the typo in Drupal. Now the downstream platform breaks, because it was built against the misspelled field. So we add a translation layer to preserve the old typo alongside the fix. This happens again. And again. Each time, the downstream system absorbs more of the upstream system's historical mistakes, and the mapping between them gets more fragile.
 
-The team solved this problem for years with what I variously called a "translation protocol" or a "data dictionary" — ad hoc scripts and field-mapping spreadsheets, reinvented slightly differently each time. It wasn't until I started reading Eric Evans' [*Domain-Driven Design*](https://www.domainlanguage.com/ddd/) that I discovered the pattern had a name: the [anticorruption layer](https://learn.microsoft.com/en-us/azure/architecture/patterns/anti-corruption-layer). It's a deliberate translation boundary between two systems that prevents one system's model from leaking into another's. Instead of each downstream consumer adapting to whatever the upstream happens to expose (typos and all), you build an explicit layer that translates between the external model and your clean internal model. The upstream can change; your internal model stays coherent.
+The team solved this problem for years with what I variously called a "translation protocol" or a "data dictionary": ad hoc scripts and field-mapping spreadsheets, reinvented slightly differently each time. It wasn't until I started reading Eric Evans' [*Domain-Driven Design*](https://www.domainlanguage.com/ddd/) that I discovered the pattern had a name: the [anticorruption layer](https://learn.microsoft.com/en-us/azure/architecture/patterns/anti-corruption-layer). It's a deliberate translation boundary between two systems that prevents one system's model from leaking into another's. Instead of each downstream consumer adapting to whatever the upstream happens to expose (typos and all), you build an explicit layer that translates between the external model and your clean internal model. The upstream can change; your internal model stays coherent.
 
 Knowing the pattern wouldn't have just saved time; it would have changed how I structured the integration from the start. An anticorruption layer is a design decision you make at the boundary, not a patch you apply after the damage compounds. I'd been solving a named problem with duct tape because the formalised solution lived in a tradition I'd never read.
 
-The loose threads, don't need to stay so.
+The loose threads don't need to stay so.
 
 > **tl;dr**
 >
-> - Several traditions -- among them software engineering (DDD), content strategy, and AI context engineering -- each solved the problem of shared understanding across system boundaries
+> - Several traditions (among them software engineering's DDD, content strategy, and AI context engineering) each solved the problem of shared understanding across system boundaries
 > - They developed in parallel partly because they operated on different substrates: human-readable meaning vs. machine-executable contracts
 > - LLMs are dissolving that boundary; natural language is now a functional input to software
 > - Specific patterns now transfer concretely, and the cross-pollination has barely started
@@ -156,10 +156,10 @@ The stable artifacts matter: a well-governed schema, a maintained instruction fi
 
 ## Related writing
 
-- [Why context engineering was always the job](/posts/20260330-context-was-always-the-job/) (Mar 2026) -- the personal evolution version of this argument
-- [Content architecture: the delivery problem](/posts/20260327-content-architecture-shipping-container/) (Mar 2026) -- content structure as shared infrastructure
-- [Developers are becoming context technical writers for AI](/posts/20250929-ai-must-rtfm-context-curators/) (Sep 2025) -- the rise of context curation
-- [Context engineering beats prompt tricks for AI agents](/posts/20251003-effective-context-engineering-for-ai-agents/) (Oct 2025) -- framing the input is the real skill
+- [Why context engineering was always the job](/posts/20260330-context-was-always-the-job/) (Mar 2026): the personal evolution version of this argument
+- [Content architecture: the delivery problem](/posts/20260327-content-architecture-shipping-container/) (Mar 2026): content structure as shared infrastructure
+- [Developers are becoming context technical writers for AI](/posts/20250929-ai-must-rtfm-context-curators/) (Sep 2025): the rise of context curation
+- [Context engineering beats prompt tricks for AI agents](/posts/20251003-effective-context-engineering-for-ai-agents/) (Oct 2025): framing the input is the real skill
 
 ### Cross-tradition reading
 
@@ -168,7 +168,7 @@ The stable artifacts matter: a well-governed schema, a maintained instruction fi
 - Karen McGrane, [*Content Strategy for Mobile*](https://abookapart.com/products/content-strategy-for-mobile) (2012). Blobs vs. chunks, and why content must be structured by meaning to travel across channels.
 - Rod Johnson, [Context Engineering Needs Domain Understanding](https://medium.com/@springrod/context-engineering-needs-domain-understanding-b4387e8e4bf8) (2025). The strongest bridge between DDD and AI context engineering.
 - Russ Miles, [Domain Driven Agent Design](https://engineeringagents.substack.com/p/domain-driven-agent-design) (2025). What happens when agents cross bounded contexts without translation layers.
-- Paul Dourish, [What We Talk About When We Talk About Context](https://www.dourish.com/publications/2004/PUC2004-context.pdf) (2004). The closest existing bridge between linguistic anthropology and computing — argues context is interactional, not representational.
-- Lucy Suchman, *Plans and Situated Actions* (1987; [2nd ed. 2007](https://www.cambridge.org/core/books/humanmachine-reconfigurations/2DF52E4AA3A95914E464A93AFEE2B0C9)). Suchman showed that people don't follow plans the way AI planners assumed — they improvise based on situated context. The modern agent community's discovery that rigid task decomposition fails without runtime context is the same finding.
+- Paul Dourish, [What We Talk About When We Talk About Context](https://www.dourish.com/publications/2004/PUC2004-context.pdf) (2004). The closest existing bridge between linguistic anthropology and computing; argues that context is interactional, not representational.
+- Lucy Suchman, *Plans and Situated Actions* (1987; [2nd ed. 2007](https://www.cambridge.org/core/books/humanmachine-reconfigurations/2DF52E4AA3A95914E464A93AFEE2B0C9)). Suchman showed that people don't follow plans the way AI planners assumed -- they improvise based on situated context. The modern agent community's discovery that rigid task decomposition fails without runtime context is the same finding.
 
 {% endmarkdown %}

@@ -9,6 +9,9 @@
   "license": "Apache-2.0",
   "author": "Ken Hawkins <khawkins98@gmail.com> (https://www.allaboutken.com/)",
   "main": "eleventy.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "clean": "rm -rf build",
     "sass": "sass --load-path src/components --no-source-map src/components/vf-componenet-rollup/index.scss:build/css/styles.css",
@@ -17,7 +20,7 @@
     "lint:css:fix": "stylelint \"src/**/*.scss\" \"src/**/*.css\" --fix",
     "embeddings": "node scripts/generate-embeddings.mjs",
     "build": "yarn clean && yarn sass && yarn eleventy && yarn embeddings && echo '🏋 Build completed'",
-    "dev": "concurrently -k \"sass --load-path src/components --watch src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\"",
+    "dev": "concurrently -k \"sass --load-path src/components --watch --poll src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\"",
     "start": "yarn dev",
     "test": "echo \"Error: no test specified\" && exit 0",
     "prepare": "git config core.hooksPath .githooks",
@@ -33,7 +36,7 @@
     "@11ty/eleventy-img": "^6.0.0",
     "@huggingface/transformers": "^4.2.0",
     "@stylistic/stylelint-plugin": "^5.2.0",
-    "concurrently": "^9.2.1",
+    "concurrently": "^10.0.3",
     "pagefind": "^1.5.2",
     "sass": "^1.100.0",
     "stylelint": "^17.12.0",

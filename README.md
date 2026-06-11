@@ -46,6 +46,9 @@ eleventy.js       All config: filters, shortcodes, collections, image transform
 ```
 
 For the full stack breakdown and design principles, see the [colophon](https://www.allaboutken.com/colophon/).
+For contribution workflow and commit/PR conventions, see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+For the full documentation map, see [`docs/README.md`](docs/README.md).
+For command behavior and script lifecycle details, see [`docs/SCRIPTS.md`](docs/SCRIPTS.md).
 
 ## Social cards
 

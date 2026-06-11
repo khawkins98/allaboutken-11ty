@@ -14,7 +14,7 @@ Style is Japanese blockprint -- high-contrast black ink woodcut on cream with sp
 1. Write your subject prompt -- go abstract and evocative, not literal. One subject per image.
 2. Optionally add reference images to guide style, composition, or combine elements from multiple sources.
 3. Adjust guidance and steps if needed (defaults: guidance 1.5, steps 20)
-4. Click Generate -- three images run in parallel (~20--30s)
+4. Click Generate -- three images render sequentially (~60--90s; first image at ~25s so you can start judging the prompt while the rest generate)
 5. Click an image to select it, then drag the corner handles to crop
 6. Enter a descriptive filename (no `.jpg`), click Save -- the browser prompts you to save to `src/site/images/blog/`
 7. Copy the frontmatter snippet and paste it into your post
