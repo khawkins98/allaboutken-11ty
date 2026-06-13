@@ -1,0 +1,61 @@
+---
+title: 'Down the stack'
+layout: layouts/post.njk
+teaser: 'Classic Mac experiments from the web layer on down converged on needing an actual Apple Silicon emulator; here is where things stand.'
+date: 2026-06-13
+tags:
+  - posts
+topics:
+  - retro computing
+  - emulation
+  - Apple Silicon
+  - side projects
+kens_status: draft
+---
+
+{% markdown %}
+
+The moment I realised there was no Apple Silicon build of SheepShaver, I was already a few steps deep into a detour. I had been trying to run [macsurf](https://github.com/mplsllc/macsurf) on modern hardware, and it was slow enough that emulation seemed like the sensible next step. SheepShaver is what you reach for when you want Mac OS 8 or 9 on a current machine. There was just no native build for M-series Macs. I thought: that can't be too hard to sort out.
+
+It took a while to sort out.
+
+I have [a long history with classic Mac OS](/posts/20200208-its-been-20-years.html), and over the past year I have been approaching it from several directions at once. The first attempts were web-layer experiments: [classic-vibe-mac](https://github.com/khawkins98/classic-vibe-mac) compiles C source to a 68k Mac binary and runs it live in System 7.5.5 via WebAssembly Basilisk II. [Scriptoscope](https://github.com/khawkins98/scriptoscope) is a Mac OS-style window manager and Kaleidoscope theme engine for the browser. [PDF-A-go-slim](/posts/20260216-90s-desktop-paradigm-browser-utilities/) borrowed the floating palette paradigm from the 1995 Mac OS Human Interface Guidelines and applied it to a modern browser utility. All of that was aesthetics and runtime at arm's length from the actual software.
+
+Macsurf pushed it closer.
+
+> **tl;dr**
+>
+> - A trail of classic Mac experiments converged on needing an actual Apple Silicon emulator.
+> - SheepShaver now boots Mac OS 8.6/9 to the Finder desktop on M-series Macs with a native AArch64 JIT. Working; not yet distributed.
+> - The current frontier: Mac OS 9.2 requires New World ROM support. That is the active work.
+> - Repo: [github.com/khawkins98/macemu-jit](https://github.com/khawkins98/macemu-jit)
+
+## The detour
+
+SheepShaver has a four-link fork chain: the original [cebix/macemu](https://github.com/cebix/macemu), community-maintained by [kanjitalk755](https://github.com/kanjitalk755/macemu), then an ARM64 JIT backend by [rcarmo](https://github.com/rcarmo/macemu-jit) targeting Linux ARM boards. Nobody had taken it to macOS Apple Silicon. The JIT backend (the part that translates PowerPC instructions to native ARM64 at runtime) is what makes the difference between something pleasantly usable and something that feels like it is thinking.
+
+Porting it was not trivial. macOS has tighter security constraints than Linux: MAP_JIT for executable pages, Mach exception handling instead of POSIX signals, address space constraints that interact with SheepShaver's unusual architecture in specific ways. SheepShaver was designed in the late 1990s to run native PowerPC Mac code on native PowerPC Linux. There was originally nothing to emulate at all, just the Mac-specific hardware. That cooperative design is still baked in everywhere, and a lot of its assumptions about address space and memory layout needed rethinking for a modern macOS host.
+
+Much of this work was done in collaboration with an AI coding partner. I wrote about that pattern separately in [let the AI worry about the code, you worry about the work](/posts/20260420-let-ai-worry-about-the-code/). That is roughly how this went: real decisions, real debugging, real creativity applied. Not prompting and hoping.
+
+The result: SheepShaver boots Mac OS 8.6 and 9 to the Finder desktop on M-series Macs, with a native AArch64 JIT on by default. There is also preliminary AltiVec support, opt-in for now, because Mac OS 8.6/9 do not save vector registers across task switches.
+
+## What is next
+
+Mac OS 9.2 is what I actually wanted to reach. It requires a newer ROM (Mac OS ROM 9.0.1 rather than the 1998 v1.1 ROM) and that ROM needs a proper hardware emulation layer that SheepShaver never had: real device models for the SCC serial chip, VIA timer, ADB controller, and interrupt routing. That work is underway; it is what I expect to write more about as it develops.
+
+Running alongside it: Silicon Sheep, a native macOS launcher for SheepShaver that makes the day-to-day experience less of a configuration exercise.
+
+Neither is done. This post is less an announcement than a status note: here is what has been happening, here is what is in progress.
+
+## On the rabbit hole
+
+The README for the project opens with this:
+
+> After waiting a quarter of a century, it became obvious that nobody else was going to get New World ROMs running just-in-time on Apple Silicon either. So I thought maybe I would.
+
+I do not have formal domain expertise in emulator development. What I have is curiosity, some stubbornness, and an AI partner that turned out to be a good collaborator on gnarly low-level problems. How far this goes, I am not sure yet. But the Finder boots on my M-series Mac; that is further than it got in the preceding twenty-five years.
+
+If you have been down a similar road, or you want to look at the code, the [repo is here](https://github.com/khawkins98/macemu-jit). I would be glad to hear from you.
+
+{% endmarkdown %}
