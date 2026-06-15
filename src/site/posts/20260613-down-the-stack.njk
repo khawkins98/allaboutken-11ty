@@ -41,7 +41,9 @@ SheepShaver has a four-link fork chain: the original [cebix/macemu](https://gith
 
 SheepShaver was designed in the late 1990s to run native PowerPC Mac code on native PowerPC Linux. There was originally nothing to emulate at all, just the Mac-specific hardware. That cooperative design is still baked in everywhere, and a lot of its assumptions about address space and memory layout needed rethinking for a modern macOS host.
 
-Much of this work was done in collaboration with an AI coding partner. I wrote about that pattern separately in [let the AI worry about the code, you worry about the work](/posts/20260420-let-ai-worry-about-the-code/). That is roughly how this went: real decisions, real debugging, real creativity applied. Not prompting and hoping.
+Getting to 9.2 is a different layer of the problem. A lot of time has gone into understanding how the nanokernel interacts with the MMU, figuring out what needs to be properly modelled versus what can be safely sidestepped, and then circling back to do real implementations after those investigations proved the shortcuts would not hold. I had expected to draw more directly on existing work -- [dingusppc](https://github.com/dingusdev/dingusppc) and QEMU were both early references -- but QEMU turned out to be most valuable as a diagnostic tool rather than an architectural model. The biggest unexpected source of inspiration was [Dolphin](https://dolphin-emu.org/), the GameCube and Wii emulator: a completely different platform, but the same class of problem.
+
+Much of this has been done in collaboration with an AI coding partner. I wrote about that working pattern in [let the AI worry about the code, you worry about the work](/posts/20260420-let-ai-worry-about-the-code/). This project pushed it further than I expected: less about delegating implementation tasks, more about managing a technical investigation across sessions -- knowing when to go deep, when to step back, when a hypothesis had been falsified and it was time to try something else. Project management skills translate into this kind of work more directly than I would have guessed.
 
 The result: SheepShaver boots Mac OS 8.6 and 9 to the Finder desktop on M-series Macs, with a native AArch64 JIT on by default. There is also preliminary AltiVec support, opt-in for now, because Mac OS 8.6/9 do not save vector registers across task switches.
 
@@ -59,7 +61,9 @@ The README for the project opens with this:
 
 > After waiting a quarter of a century, it became obvious that nobody else was going to get New World ROMs running just-in-time on Apple Silicon either. So I thought maybe I would.
 
-I do not have formal domain expertise in emulator development. What I have is curiosity, some stubbornness, and an AI partner that turned out to be a good collaborator on gnarly low-level problems. How far this goes, I am not sure yet. But the Finder boots on my M-series Mac; that is further than it got in the preceding twenty-five years.
+I do not have formal domain expertise in emulator development. What I have is curiosity, some stubbornness, and an AI partner that turned out to be a good collaborator on gnarly low-level problems. A fair amount of that will not be to everyone's taste, and I understand that. It is a hobby project; I am sharing it back in case any of it is useful, not because anyone has to approve of the method.
+
+How far this goes, I am not sure yet. But the Finder boots on my M-series Mac; that is further than it got in the preceding twenty-five years.
 
 If you have been down a similar road, I would be glad to hear from you.
 
