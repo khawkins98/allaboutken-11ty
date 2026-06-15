@@ -1,7 +1,7 @@
 ---
 title: 'Field notes on Mac OS 9.2, New World ROMs, and Apple Silicon'
 layout: layouts/post.njk
-teaser: 'SheepShaver boots Mac OS 8.6 on Apple Silicon with a native JIT. Mac OS 9.2 is a different problem. Here is where things stand.'
+teaser: 'SheepShaver boots Mac OS up to 9.0 on Apple Silicon with a native JIT. 9.2 is a different problem. Here is where things stand.'
 date: 2026-06-13
 tags:
   - posts
@@ -32,7 +32,7 @@ Over the past year that has meant several experiments at once. [Classic-vibe-mac
 > **tl;dr**
 >
 > - A trail of classic Mac experiments converged on a specific problem: SheepShaver's JIT speed combined with Mac OS 9.2, done without hacks.
-> - SheepShaver now boots Mac OS 8.6/9 to the Finder desktop on M-series Macs with a native AArch64 JIT. Working; not yet distributed.
+> - SheepShaver now boots Mac OS up to 9.0 to the Finder desktop on M-series Macs with a native AArch64 JIT. Working; not yet distributed.
 > - The current frontier: Mac OS 9.2 requires proper New World ROM support. That is the active work.
 
 ## The detour
@@ -45,7 +45,7 @@ Getting to 9.2 is a different layer of the problem. A lot of time has gone into 
 
 Much of this has been done in collaboration with an AI coding partner. I wrote about that working pattern in [let the AI worry about the code, you worry about the work](/posts/20260420-let-ai-worry-about-the-code/). This project pushed it further than I expected: less about delegating implementation tasks, more about managing a technical investigation across sessions -- knowing when to go deep, when to step back, when a hypothesis had been falsified and it was time to try something else. Project management skills translate into this kind of work more directly than I would have guessed.
 
-The result: SheepShaver boots Mac OS 8.6 and 9 to the Finder desktop on M-series Macs, with a native AArch64 JIT on by default. There is also preliminary AltiVec support, opt-in for now, because Mac OS 8.6/9 do not save vector registers across task switches.
+The result: SheepShaver boots Mac OS up to 9.0 to the Finder desktop on M-series Macs, with a native AArch64 JIT on by default. There is also preliminary AltiVec support, opt-in for now, because Mac OS 8.6 and 9.0 do not save vector registers across task switches.
 
 ## What is next
 
