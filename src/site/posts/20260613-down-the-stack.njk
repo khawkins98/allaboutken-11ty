@@ -20,9 +20,17 @@ image_meta:
 
 {% markdown %}
 
-Twenty-five years after SheepShaver first shipped, you still cannot boot Mac OS 9.2 on it. In theory you can get there through workarounds -- [hacks](https://web.archive.org/web/20160311205107/http://www.xlr8yourmac.com/OS9/os_9_2_1_install_mods.html) that coax 9.2 into starting -- but not with full New World ROM support, not the way you would expect it to just work. That bothered me more than it probably should have.
+SheepShaver was a legend in classic Mac OS emulation but it cannot boot Mac OS 9.2. You can get there through [hacks](https://web.archive.org/web/20160311205107/http://www.xlr8yourmac.com/OS9/os_9_2_1_install_mods.html) that coax 9.2 into starting, but not with full New World ROM support, not the way you would expect it to just work. I really wanted this back in the early 2000s.
 
-What I wanted was SheepShaver's JIT compilation running Mac OS 9.2. The JIT is what makes it fast: it translates PowerPC instructions to native ARM64 at runtime, so emulated software actually feels like software rather than waiting. QEMU and UTM can get you to Mac OS 9 on Apple Silicon, but without a JIT for classic Mac workloads they are slow in a way that defeats the purpose. SheepShaver was the right tool. Mac OS 9.2 was the version I needed. Getting the two together, done properly, turned out to be a much harder problem than it looked.
+Twenty-five years on and it is still a no. You can use QEMU -- on Apple Silicon, [UTM](https://mac.getutm.app/) is the best practical option for 9.2.2 today, with a pre-built image in the UTM gallery that installs in minutes -- but that is not SheepShaver.
+
+What I wanted was SheepShaver's JIT running Mac OS 9.2. The JIT is what makes it fast: it translates PowerPC instructions to native ARM64 at runtime, so emulated software actually feels like software rather than waiting. QEMU has to do considerably more work: software TLB lookup on every memory access, C helper calls for system instructions, a fully emulated mac99 board with VIA chips, ADB controller, SCSI. Community benchmarks put SheepShaver at roughly 5× QEMU's overall score on comparable hardware, with the floating-point gap closer to 10×.
+
+<aside class="kh-marginnote"><a href="https://www.emaculation.com/forum/viewtopic.php?f=34&t=8998">E-Maculation MacBench 5.0 benchmarks</a>: SheepShaver Floating Point 1955 vs QEMU 204; overall SpeedRun score 1283 vs 263.</aside>
+
+In practice QEMU/UTM on classic Mac workloads feels like running on a ~300 MHz G3 -- usable and stable, but noticeably slower than SheepShaver at 9.0.4. SheepShaver avoids most of that overhead because it was never a full-system emulator: it patches the Mac ROM to redirect I/O to host services, runs guest threads as real host threads, and uses a JIT that skips supervisor-mode emulation entirely. That architecture is also why it tops out at 9.0.4 -- the New World ROM that 9.2 requires actually needs the hardware emulation layer SheepShaver has always refused to implement.
+
+Getting SheepShaver's speed and Mac OS 9.2 together, without hacks, turned out to be a much harder problem than it looked.
 
 The rabbit hole went deep.
 
@@ -33,6 +41,11 @@ There is a G4 in the basement that could theoretically address this. It is loud,
 Over the past year that has meant several experiments at once. [Classic-vibe-mac](https://github.com/khawkins98/classic-vibe-mac) compiles C source to a 68k Mac binary and runs it live in System 7.5.5 via WebAssembly Basilisk II; writing Mac programs without leaving the browser. [Scriptoscope](https://github.com/khawkins98/scriptoscope) is a Mac OS-style window manager and Kaleidoscope theme engine for the browser. [PDF-A-go-slim](/posts/20260216-90s-desktop-paradigm-browser-utilities/) borrowed the floating palette paradigm from the 1995 Mac OS Human Interface Guidelines and applied it to a modern browser utility. All of that was aesthetics and runtime at arm's length from the actual software.
 
 [Macsurf](https://github.com/mplsllc/macsurf) pushed it closer -- a classic Mac app I wanted to run natively, which led me back to SheepShaver, which led to the problem above.
+
+<aside class="kh-note-box">
+  <span class="kh-note-box__label">Practical verdict</span>
+  If you want to run the majority of classic Mac software, SheepShaver at 9.0.4 is faster. If you specifically need 9.2.x -- for Final Cut Pro 3, late-era OpenGL games, or completeness -- UTM/QEMU is the only real route today. Slower, but stable and perfectly functional for everyday use.
+</aside>
 
 > **tl;dr**
 >
