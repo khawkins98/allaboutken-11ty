@@ -15,7 +15,7 @@ kens_status: draft
 
 {% markdown %}
 
-Twenty-five years after SheepShaver first shipped, you still cannot properly boot Mac OS 9.2 on it. Technically you can get there through workarounds -- hacks that coax 9.2 into starting -- but not with full New World ROM support, not the way you would expect it to just work. That bothered me more than it probably should have.
+Twenty-five years after SheepShaver first shipped, you still cannot boot Mac OS 9.2 on it. In theory you can get there through workarounds -- [hacks](https://web.archive.org/web/20160311205107/http://www.xlr8yourmac.com/OS9/os_9_2_1_install_mods.html) that coax 9.2 into starting -- but not with full New World ROM support, not the way you would expect it to just work. That bothered me more than it probably should have.
 
 What I wanted was SheepShaver's JIT compilation running Mac OS 9.2. The JIT is what makes it fast: it translates PowerPC instructions to native ARM64 at runtime, so emulated software actually feels like software rather than waiting. QEMU and UTM can get you to Mac OS 9 on Apple Silicon, but without a JIT for classic Mac workloads they are slow in a way that defeats the purpose. SheepShaver was the right tool. Mac OS 9.2 was the version I needed. Getting the two together, done properly, turned out to be a much harder problem than it looked.
 
@@ -49,7 +49,9 @@ The result: SheepShaver boots Mac OS up to 9.0 to the Finder desktop on M-series
 
 ## What is next
 
-The Apple Silicon JIT work was the prerequisite. Mac OS 9.2 is the actual goal. It requires a newer ROM (Mac OS ROM 9.0.1 rather than the 1998 v1.1 ROM) and that ROM needs a proper hardware emulation layer that SheepShaver never had: real device models for the SCC serial chip, VIA timer, ADB controller, and interrupt routing. That work is underway; it is what I expect to write more about as it develops.
+The Apple Silicon JIT work was the prerequisite. Mac OS 9.2 is the actual goal. It is worth being honest about why 9.2 specifically: the features it adds over 9.0 -- preemptive multitasking, proper memory protection, 128-bit file encryption -- are not things I actually need. Nobody is running production workloads on a classic Mac. But most ambitious hobby projects do not have a compelling real-world justification; that is more or less what makes them hobby projects. The point is getting the thing right. That said, if this all comes together, Final Cut Pro 3 on SheepShaver becomes possible. Which is entirely unnecessary and, I think, quite cool.
+
+It requires a newer ROM (Mac OS ROM 9.0.1 rather than the 1998 v1.1 ROM) and that ROM needs a proper hardware emulation layer that SheepShaver never had: real device models for the SCC serial chip, VIA timer, ADB controller, and interrupt routing. That work is underway; it is what I expect to write more about as it develops.
 
 Running alongside it: Silicon Sheep, a native macOS launcher for SheepShaver that makes the day-to-day experience less of a configuration exercise.
 
