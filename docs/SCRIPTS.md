@@ -45,6 +45,7 @@ Source of truth for local commands and script behavior in this repository.
 - Runs `node scripts/check-links.mjs`.
 - Walks the `build/` output and verifies every **internal** link resolves to a real file (handling pretty URLs → `index.html`), and checks `#fragment` links against the target page's `id`/`name` attributes.
 - External links (`http(s)://`, protocol-relative, `mailto:`, `tel:`, `data:`) are skipped on purpose — they are non-deterministic in CI.
+- Vercel-proxied hobby-project prefixes (read from `vercel.json` rewrites, e.g. `/PDF-A-go-go/`, `/pinment/`) are skipped too — they resolve in production via proxy but are absent from the local build. `<script>`/`<style>` bodies are stripped before scanning so JS template strings aren't treated as links.
 - Requires a build first (run `yarn eleventy` or `yarn build`). Exits non-zero if any internal link is broken.
 - Runs in CI after the build (currently non-blocking; see `.github/workflows/build-and-deploy.yml`).
 
