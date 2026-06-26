@@ -8,6 +8,7 @@ Exceptions and gotchas that aren't obvious from reading the code or existing doc
 yarn dev          # Development server (Sass watch + Eleventy --serve)
 yarn build        # Full production build (clean → sass → eleventy → embeddings)
 yarn lint:css     # Lint SCSS files
+yarn lint:links   # Validate internal links/anchors in build/ (run after a build)
 ```
 
 ## Gotchas
@@ -35,7 +36,7 @@ The directory `src/components/vf-componenet-rollup/` is a legacy name. The typo 
 The markdown-it config converts `--` to `—` automatically. Write `--` in content, it renders as `—`.
 
 ### Embeddings don't run in dev
-`yarn embeddings` is too slow for iterative development. Run `yarn build` once to generate `vectors.json`, then `yarn dev` as usual. The `@huggingface/transformers` devDependency is ~476 MB in node_modules (ONNX runtime ships native binaries for every platform). It's needed to run the model at build time -- there's no lighter alternative.
+`yarn embeddings` is too slow for iterative development. Run `yarn build` once to generate `vectors.json`, then `yarn dev` as usual. The `@huggingface/transformers` devDependency is ~476 MB in node_modules (ONNX runtime ships native binaries for every platform). It's needed to run the model at build time -- there's no lighter alternative. At build time the model itself is cached under `.cache/transformers` (set via `env.cacheDir` in `generate-embeddings.mjs`); CI restores that directory so the model is not re-downloaded from HuggingFace every run.
 
 ### Semantic search model loading
 The browser fetches the model directly from HuggingFace at query time. Transformers.js caches it using the Cache API (keyed by model ID, not URL), so the ~23 MB download only happens once per browser. Transformers.js and ONNX Runtime WASM load from jsDelivr.

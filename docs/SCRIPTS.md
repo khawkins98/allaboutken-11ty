@@ -10,6 +10,7 @@ Source of truth for local commands and script behavior in this repository.
 | `yarn build` | Run full production build | Pre-push validation and CI parity |
 | `yarn embeddings` | Regenerate semantic-search vectors | After content/model changes that affect embeddings |
 | `yarn lint:css` | Lint SCSS/CSS files | Before committing style changes |
+| `yarn lint:links` | Validate internal links in `build/` | After a build, to catch broken internal links/anchors |
 
 ## Script details
 
@@ -39,11 +40,20 @@ Source of truth for local commands and script behavior in this repository.
 
 - Same scope as `yarn lint:css`, but with `--fix` for auto-fixable issues.
 
+### `yarn lint:links`
+
+- Runs `node scripts/check-links.mjs`.
+- Walks the `build/` output and verifies every **internal** link resolves to a real file (handling pretty URLs → `index.html`), and checks `#fragment` links against the target page's `id`/`name` attributes.
+- External links (`http(s)://`, protocol-relative, `mailto:`, `tel:`, `data:`) are skipped on purpose — they are non-deterministic in CI.
+- Requires a build first (run `yarn eleventy` or `yarn build`). Exits non-zero if any internal link is broken.
+- Runs in CI after the build (currently non-blocking; see `.github/workflows/build-and-deploy.yml`).
+
 ### `yarn embeddings`
 
 - Runs `node scripts/generate-embeddings.mjs`.
 - Reads generated HTML in `build/`, extracts searchable content, and writes `build/semantic-search/vectors.json`.
 - Intended to run after Eleventy has produced the site output.
+- Caches the downloaded MiniLM model under `.cache/transformers` (set via `env.cacheDir`). CI restores this directory between runs so the model is not re-downloaded from HuggingFace every build.
 
 ### `yarn build`
 
@@ -100,6 +110,11 @@ Source of truth for local commands and script behavior in this repository.
 ### `scripts/generate-embeddings.mjs`
 
 - Active build script used by `yarn embeddings` and `yarn build`.
+
+### `scripts/check-links.mjs`
+
+- Active script used by `yarn lint:links`.
+- Dependency-free internal-link and anchor validator for the `build/` output.
 
 ### `scripts/process-images.js`
 

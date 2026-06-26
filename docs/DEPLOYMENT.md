@@ -146,7 +146,7 @@ If Vercel needs to be removed:
 
 | Trigger | What happens |
 |---------|-------------|
-| Push to `main` (source files changed) | GitHub Actions runs a build check (lint + compile); Vercel GitHub App independently builds and deploys to Vercel production |
+| Push to `main` (source files changed) | GitHub Actions runs a build check (lint CSS, compile, validate internal links); Vercel GitHub App independently builds and deploys to Vercel production |
 | Pull request | GitHub Actions runs a build check; Vercel creates a preview deployment |
 | Manual `workflow_dispatch` | Can trigger the build workflow manually from the Actions tab |
 
