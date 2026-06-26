@@ -62,4 +62,4 @@ When working on blog posts or impact stories, read the docs:
 
 ## Deployment
 
-GitHub Pages via GitHub Actions. Deploys on push to `main` when source files change. PRs trigger build checks but don't deploy. See `.github/workflows/build-and-deploy.yml`.
+Vercel serves the production site (`allaboutken.com`); the Vercel GitHub App auto-deploys on push to `main` and creates preview deployments for PRs. GitHub Actions (`.github/workflows/build-and-deploy.yml`) only runs a build check (lint + compile) — it no longer deploys. See `docs/DEPLOYMENT.md` for the full architecture.

@@ -61,11 +61,11 @@ Current DNS records for the main site:
 
 Operational details for routes, local development, and wrangler usage are documented in [`worker/README.md`](../worker/README.md).
 
-### GitHub Pages — main site (warm spare) and hobby project origins
+### GitHub Pages — hobby project origins
 
 - **URL:** `khawkins98.github.io`
 
-**Main site:** GitHub Actions (`.github/workflows/build-and-deploy.yml`) still builds and deploys the main site to GitHub Pages on every push to `main`. This is currently a warm spare — `allaboutken.com` DNS now points to Vercel, so GitHub Pages is not receiving production traffic. See issue #62 for the planned cleanup.
+**Main site:** GitHub Pages is no longer used to serve the main site. `allaboutken.com` is served by Vercel, and the GitHub Actions workflow (`.github/workflows/build-and-deploy.yml`) now only runs a build check (lint + compile) on pushes and PRs — it no longer deploys to GitHub Pages. The `deploy` job was retired in issue #62. GitHub Pages can be left enabled in the repo Settings (harmless) or disabled; either way it receives no production traffic. If a rollback to GitHub Pages is ever needed, see "How to revert to GitHub Pages" below.
 
 **Hobby projects: do not disable GitHub Pages in these repos.** Each hobby project has its own repo with its own GitHub Pages deployment, and Vercel proxies to `khawkins98.github.io/project-name/` as the origin. If GitHub Pages is turned off in a hobby project repo, the proxied path on `allaboutken.com` will immediately 404. When adding a new hobby project, confirm GitHub Pages is enabled and the site is live at `khawkins98.github.io/repo-name/` *before* adding the rewrite to `vercel.json`.
 
@@ -146,11 +146,11 @@ If Vercel needs to be removed:
 
 | Trigger | What happens |
 |---------|-------------|
-| Push to `main` (source files changed) | GitHub Actions builds and deploys to GitHub Pages; Vercel GitHub App independently builds and deploys to Vercel production |
+| Push to `main` (source files changed) | GitHub Actions runs a build check (lint + compile); Vercel GitHub App independently builds and deploys to Vercel production |
 | Pull request | GitHub Actions runs a build check; Vercel creates a preview deployment |
-| Manual `workflow_dispatch` | Can trigger either workflow manually from the Actions tab |
+| Manual `workflow_dispatch` | Can trigger the build workflow manually from the Actions tab |
 
-The GitHub Pages deploy in CI is currently a warm spare. Consider removing the `deploy` job from `.github/workflows/build-and-deploy.yml` once confidence in Vercel is established.
+Production deploys are handled entirely by the Vercel GitHub App. The GitHub Actions workflow only validates the build; the GitHub Pages `deploy` job was retired in issue #62.
 
 ## Operational runbooks
 
