@@ -33,8 +33,24 @@ jobs:
           cache: 'yarn'
       - name: Install dependencies 📦
         run: yarn install --frozen-lockfile
+      # Cache the embedding model so it doesn't re-download from HuggingFace
+      # on every build. Keyed on the embeddings script (which holds MODEL_NAME),
+      # so the cache busts automatically when the model changes.
+      - name: Cache embedding model 🧠
+        uses: actions/cache@v4
+        with:
+          path: .cache/transformers
+          key: transformers-model-${{ hashFiles('scripts/generate-embeddings.mjs') }}
+          restore-keys: |
+            transformers-model-
       - name: Lint CSS 🧹
         run: yarn lint:css
         continue-on-error: true
       - name: Build site 🔧
         run: yarn build
+      # Reports broken internal links/anchors in the build output. Non-blocking
+      # for now (like lint:css) until the existing catalog is confirmed clean;
+      # drop continue-on-error to make it a hard gate.
+      - name: Validate internal links 🔗
+        run: yarn lint:links
+        continue-on-error: true

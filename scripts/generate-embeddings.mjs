@@ -18,9 +18,14 @@
  *      for compatible models (look for ONNX exports with sentence-transformers)
  */
 
-import { pipeline } from '@huggingface/transformers';
+import { pipeline, env } from '@huggingface/transformers';
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from 'fs';
 import { join, relative } from 'path';
+
+// Cache downloaded model files in a stable, repo-local directory so CI can
+// restore them between builds (see actions/cache in build-and-deploy.yml).
+// Without this, the model re-downloads from HuggingFace on every build.
+env.cacheDir = '.cache/transformers';
 
 const BUILD_DIR = 'build';
 const OUTPUT_DIR = join(BUILD_DIR, 'semantic-search');
