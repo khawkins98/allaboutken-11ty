@@ -12,12 +12,14 @@ jobs:
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
-          if echo "$PR_TITLE" | grep -qE "^(content|feature|fix|ci|chore): .+"; then
+          # Allow an optional conventional-commit scope, e.g. chore(deps):
+          # which is what Dependabot uses for all of its PR titles.
+          if echo "$PR_TITLE" | grep -qE "^(content|feature|fix|ci|chore)(\([a-z0-9 ._-]+\))?: .+"; then
             echo "✅ PR title OK: $PR_TITLE"
           else
             echo "❌ PR title must match the commit convention"
             echo ""
-            echo "   Expected:  <prefix>: <description>"
+            echo "   Expected:  <prefix>: <description>  (optional scope allowed, e.g. chore(deps):)"
             echo "   Prefixes:  content | feature | fix | ci | chore"
             echo ""
             echo "   Got:  $PR_TITLE"
