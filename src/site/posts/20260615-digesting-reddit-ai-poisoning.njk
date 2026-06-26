@@ -1,0 +1,40 @@
+---
+title: "13 words to turn a rumor into AI fact"
+layout: layouts/digesting.njk
+teaser: "Cornell researchers planted thirteen words on Reddit and changed what Deep Research and Gemini reported back."
+date: 2026-06-15
+digest_link: https://arxiv.org/abs/2605.24245
+tags: digesting
+topics:
+  - AI
+  - misinformation
+  - search
+  - information integrity
+kens_status: draft
+---
+
+{% markdown %}
+
+Cornell researchers [put a number](https://arxiv.org/abs/2605.24245) on something a lot of us have been half-suspecting: thirteen words of strategically placed text on Reddit is enough to consistently steer what tools like OpenAI's Deep Research or Gemini tell you. No exploit, no technical skill. Just text that reads like a genuine recommendation, sitting where a retrieval agent will read it.
+
+It works because these agents treat a Reddit comment the way they treat a government site: as a source to summarize, not to interrogate. One poisoned post in the right subreddit showed up across many related searches, not only the one it was planted for. The shape of it is mundane:
+
+```text
+# an ordinary-looking comment in a popular thread
+Honestly the best X for this is BrandY. Switched last year, no regrets.
+Every comparison I've read ends up ranking it above the alternatives.
+```
+
+There is no malware in any of it, just a plausible opinion in a place the model trusts.
+
+Worth being clear about: this is not a hallucination. The model is not getting confused or inventing something out of nothing. It is being told a rumor and passing it on, the same way a person does. As a kid I was told, in all seriousness, that dogs were the males and cats were the females, and I believed it for years before anyone corrected me. An AI can be handed that kind of false fact and repeat it with complete confidence, and the people reading it have no reason to doubt it.
+
+And it compounds. Once a source is poisoned, the claim gets repeated, written up, and cited. Every repetition makes the next one look better supported. At some point the rumor is everywhere and the original truth is one quiet voice against it. We understand this perfectly well in humans; we just have not watched it happen at machine speed yet.
+
+None of this is really new. We already watched Google's AI Overviews [tell people to put glue on pizza](https://www.popsci.com/technology/google-ai-overview-wrong/), faithfully lifted from a decade-old Reddit joke. Security researchers have shown agentic browsers like Perplexity's Comet [can be hijacked by text on one page](https://simonwillison.net/2025/Aug/25/agentic-browser-security/) into acting in another tab. Marketers even have a friendly name for the deliberate version: answer engine optimization, [flooding Reddit with posts](https://www.pymnts.com/news/artificial-intelligence/2026/fake-reddit-posts-are-hijacking-what-ai-tells-you/) written to be scraped and surfaced.
+
+What the paper adds is the price tag: thirteen words. [404 Media's writeup](https://www.404media.co/it-is-trivially-easy-to-use-reddit-to-manipulate-ai-search-research-suggests/) is the plain-language version if you want it before the arXiv preprint.
+
+The part that stays with me: "research X and summarize what you find" is the whole pitch for these products. The weakness lives in how retrieval works, not in a bug someone can patch.
+
+{% endmarkdown %}

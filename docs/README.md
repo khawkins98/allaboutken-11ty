@@ -19,9 +19,18 @@ Use this page as the entry point for repository documentation. It maps each doc 
 | [`ROLE_TEMPLATE.md`](ROLE_TEMPLATE.md) | Template for defining new reviewer roles | Maintainers adding roles | You are introducing a new role profile |
 | [`../worker/README.md`](../worker/README.md) | Feedback worker routes, local dev, and deploy commands | Maintainer/operators | You are operating or debugging `feedback.allaboutken.com` |
 | [`../src/site/style-guide/editorial.njk`](../src/site/style-guide/editorial.njk) | Canonical voice/tone/style guidance | Authors and editors | You need writing standards while drafting or editing |
+| [`FRONTMATTER.md`](FRONTMATTER.md) | Reference for every YAML frontmatter field used across post, page, and digest templates | Authors, editors, and contributors adding posts | You need to know what a field does, which templates use it, and whether it is required |
+| [`ELEVENTY_CONFIG.md`](ELEVENTY_CONFIG.md) | Reference for all plugins, filters, shortcodes, collections, and config options in `eleventy.js` | Contributors modifying build config or templates | You are adding a filter, shortcode, or collection, or need to understand how the build pipeline works |
+| [`DATA_FILES.md`](DATA_FILES.md) | Schema and template usage for `siteConfig.json` and `garage.json` | Contributors editing site-wide config or the garage project listing | You are adding a garage project, updating site metadata, or tracing where a global value comes from |
+| [`TEMPLATES.md`](TEMPLATES.md) | Layout hierarchy, partials, macros, and Nunjucks patterns used in site templates | Contributors changing page/layout templates | You are adding a page template, editing layouts, or tracing where markup is shared |
+| [`COMPONENTS.md`](COMPONENTS.md) | Component directory structure and Sass/asset build wiring | Contributors editing UI components and styles | You are adding/changing SCSS modules, assets, or component markup |
+| [`DEVELOPMENT_SETUP.md`](DEVELOPMENT_SETUP.md) | Local environment setup, Node/Yarn baseline, and troubleshooting | New contributors and maintainers | You need a reliable local dev environment or need to fix setup issues quickly |
 
 ## Suggested read paths
 
 - **New contributor:** `../README.md` -> `../CONTRIBUTING.md` -> `SCRIPTS.md`
+- **Template work:** `TEMPLATES.md` -> `FRONTMATTER.md` -> `ELEVENTY_CONFIG.md`
+- **Component work:** `COMPONENTS.md` -> `CSS_ARCHITECTURE.md` -> `ELEVENTY_CONFIG.md`
+- **Local setup/debugging:** `DEVELOPMENT_SETUP.md` -> `SCRIPTS.md`
 - **Content workflow:** `PUBLISHING_WORKFLOW.md` -> `../src/site/style-guide/editorial.njk` -> `IMAGE_GENERATION.md`
 - **Operations/deploy:** `DEPLOYMENT.md` -> `../worker/README.md`
