@@ -29,7 +29,7 @@ templateEngineOverride: njk
     {% if image %}
     <figure class="kh-figure">
       {% if href %}<a href="{{ href }}">{% endif %}
-      <img class="kh-figure__image kh-figure__image--lead" src="/images{{ image | url }}" alt="{{ image_meta.altext or image_meta.alt or '' }}">
+      <img class="kh-figure__image kh-figure__image--lead" src="/images{{ image | url }}" alt="{{ image_meta.altext or image_meta.alt or '' }}" decoding="async" fetchpriority="high">
       {% if href %}</a>{% endif %}
       {% if image_meta and image_meta.credit %}
       <small class="kh-figure__credit">{{ image_meta.credit | safe }}</small>
@@ -101,7 +101,7 @@ templateEngineOverride: njk
             rel="nofollow" class="kh-button kh-button--sm">👍 This was useful</a>
         <!-- Feedback toast: see /posts/20260220-feedback-buttons-cgi-pattern/ -->
         <span id="thanks" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback! <a href="/posts/20260220-feedback-buttons-cgi-pattern/" class="kh-feedback-thanks__link">Curious how this was built?</a></span>
-        <span><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"> people found this useful</span>
+        <span><img src="https://feedback.allaboutken.com/count{{ page.url }}.svg" alt="Feedback count" loading="lazy" decoding="async" style="display:inline;vertical-align:middle;height:1.5em;max-width:none"> people found this useful</span>
         </p>
       </div>
     </div>
