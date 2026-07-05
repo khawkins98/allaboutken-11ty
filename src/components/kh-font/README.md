@@ -1,16 +1,27 @@
 # Recursive webfont assets (self-hosted)
 
-https://github.com/arrowtype/recursive/tree/main/fonts
+Canonical setup and troubleshooting documentation lives in
+[`docs/FONTS.md`](../../../docs/FONTS.md).
 
-Place the variable WOFF2 file for Recursive here. Recommended:
+## Source of truth
 
-- Recursive_VF_1.085.woff2 (variable font with axes: wght, slnt, CASL, CRSV, MONO)
+- Upstream project: <https://github.com/arrowtype/recursive/tree/main/fonts>
+- This directory is the source path for local font assets:
+  `src/components/kh-font/`
 
-Download from the project releases or Google Fonts:
-- https://github.com/arrowtype/recursive/
+## Current active asset
 
-After placing the file, it will be copied to `build/kh-font/assets/` by Eleventy passthrough. Ensure CSS `@font-face` in `src/components/vf-componenet-rollup/index.scss` points to:
+- `Recursive_VF_1.085--subset-GF_latin_basic.woff2`
 
-```
-../kh-font/assets/Recursive_VF_1.085.woff2
+## Build + runtime paths
+
+Eleventy passthrough copies this directory to:
+
+- Output directory: `build/assets/kh-font/`
+
+The `@font-face` rule in
+`src/components/vf-componenet-rollup/index.scss` must reference:
+
+```css
+/assets/kh-font/Recursive_VF_1.085--subset-GF_latin_basic.woff2
 ```

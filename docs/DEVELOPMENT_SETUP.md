@@ -84,6 +84,16 @@ yarn build
 
 to refresh `build/semantic-search/vectors.json`.
 
+### Service worker changes do not appear immediately
+
+Service workers can continue serving cached responses until the updated worker takes control. After changing `src/site/sw.js` or registration in `src/site/scripts.js`:
+
+```bash
+yarn build
+```
+
+Then hard refresh the browser tab once so the latest worker is activated for that client session.
+
 ### Build feels slow on first full run
 
 Expected: `@huggingface/transformers` and ONNX runtime assets make first-time setup heavy.
@@ -92,4 +102,5 @@ Expected: `@huggingface/transformers` and ONNX runtime assets make first-time se
 
 - [`SCRIPTS.md`](SCRIPTS.md) — command behavior details
 - [`ELEVENTY_CONFIG.md`](ELEVENTY_CONFIG.md) — filters/shortcodes/collections/passthrough rules
+- [`OFFLINE_SERVICE_WORKER.md`](OFFLINE_SERVICE_WORKER.md) — offline/service-worker architecture and cache behavior
 - [`CONTRIBUTING.md`](../CONTRIBUTING.md) — branch, commit, and PR conventions

@@ -100,7 +100,7 @@ Source of truth for local commands and script behavior in this repository.
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`.
 - Enforces subject length <= 72 characters and disallows a trailing period.
 - Skips merge/revert/fixup/squash commit subjects.
-- Same convention is checked in CI for pull request titles by `.github/workflows/pr-title-check.yml`.
+- CI checks PR titles in `.github/workflows/pr-title-check.yml` for the same prefix/pattern (`<prefix>: <description>`, optional scope allowed), but does not enforce commit-subject length/punctuation rules.
 
 ### `yarn update-components`
 
