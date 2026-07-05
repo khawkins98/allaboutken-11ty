@@ -45,13 +45,13 @@ Examples:
 - One logical change per commit
 - Never use `--no-verify` or `--no-gpg-sign` to bypass hooks
 
-The format is enforced locally by `.githooks/commit-msg` (activated on `yarn install` via the `prepare` script) and on PRs by the `pr-title-check` GitHub Actions workflow.
+Commit subjects are enforced locally by `.githooks/commit-msg` (activated on `yarn install` via the `prepare` script). PR titles are enforced in CI by `pr-title-check` for prefix/pattern matching.
 
 ## Pull requests
 
 One PR per unit of work. Keep noisy refactors out of content PRs.
 
-**Title**: same conventions as commit messages. Under 70 characters.
+**Title**: must match CI's enforced pattern (`<prefix>: <description>`) using prefixes `content|feature|fix|ci|chore`. Optional scope is allowed (for example, `chore(deps): ...`).
 
 **Body**: use [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md). Two sections:
 
@@ -82,6 +82,8 @@ Always merge through a PR, even for solo work. Don't push directly to `main`. Re
 ## References
 
 - [`CLAUDE.md`](CLAUDE.md): project-specific gotchas (image paths, embeddings, CSS toggle scoping, the intentional typo in `vf-componenet-rollup`)
+- [`docs/GIT_HOOKS.md`](docs/GIT_HOOKS.md): hook setup, commit/PR title rules, and troubleshooting
+- [`docs/FONTS.md`](docs/FONTS.md): Recursive asset placement and `@font-face`/passthrough wiring
 - [`docs/PUBLISHING_WORKFLOW.md`](docs/PUBLISHING_WORKFLOW.md): editorial review stages and roles
 - [`src/site/style-guide/editorial.njk`](src/site/style-guide/editorial.njk): voice, tone, structure
 - [`docs/IMAGE_GENERATION.md`](docs/IMAGE_GENERATION.md): hero image pipeline

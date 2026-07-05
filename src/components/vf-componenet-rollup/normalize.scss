@@ -59,6 +59,7 @@
   }
 
   // Remove the inner border and padding in Firefox.
+  /* stylelint-disable selector-pseudo-element-no-unknown, selector-pseudo-class-no-unknown */
   button::-moz-focus-inner,
   [type='button']::-moz-focus-inner,
   [type='reset']::-moz-focus-inner,
@@ -117,6 +118,7 @@
     -webkit-appearance: button; // 1
     font: inherit; // 2
   }
+  /* stylelint-enable selector-pseudo-element-no-unknown, selector-pseudo-class-no-unknown */
 
   // Interactive
   // ==========================================================================

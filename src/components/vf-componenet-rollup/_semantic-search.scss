@@ -136,6 +136,7 @@
     appearance: none;
   }
 
+  /* stylelint-disable selector-pseudo-element-no-unknown */
   .kh-ask__message--status progress::-webkit-progress-bar {
     background: #e0ddd8;
     border-radius: 3px;
@@ -150,6 +151,7 @@
     background: var(--kh-color--blue);
     border-radius: 3px;
   }
+  /* stylelint-enable selector-pseudo-element-no-unknown */
 
   .kh-ask__results {
     display: flex;

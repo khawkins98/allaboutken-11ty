@@ -30,12 +30,14 @@ $kh-ambience-sway-speed: 11s; // Blinds sway animation duration
 // Only animating sun-angle and opacity (slat dimensions remain constant)
 // Initial values match the starting state (top of page) in @keyframes kh-ambience-scroll-shift
 // https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline
+/* stylelint-disable-next-line at-rule-no-unknown, scss/at-rule-no-unknown */
 @property --ambience-sun-angle {
   syntax: '<angle>';
   initial-value: #{$kh-ambience-start-sun-angle};
   inherits: true;
 }
 
+/* stylelint-disable-next-line at-rule-no-unknown, scss/at-rule-no-unknown */
 @property --ambience-blinds-opacity {
   syntax: '<number>';
   initial-value: #{$kh-ambience-start-blinds-opacity};
@@ -90,6 +92,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   // Disable expensive SVG filter in Firefox; keep cheap blur only (Firefox-only at-rule)
+  /* stylelint-disable-next-line at-rule-no-unknown, scss/at-rule-no-unknown */
   @-moz-document url-prefix() {
     .kh-ambience-leaves {
       filter: blur(9px);

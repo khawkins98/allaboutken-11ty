@@ -287,6 +287,8 @@ Used in `base.njk` to auto-generate `og:image` and `twitter:image` when no expli
 
 **Watch target:** `./src/site/images` — Eleventy watches this directory for changes in dev so image updates trigger rebuilds.
 
+**Service worker note:** because `./src/site/**/*.js` is passthrough-copied, `src/site/sw.js` is emitted as `/sw.js` (root URL), which matches registration in `src/site/scripts.js` (`navigator.serviceWorker.register('/sw.js', { scope: '/' })`). See [`OFFLINE_SERVICE_WORKER.md`](OFFLINE_SERVICE_WORKER.md) for runtime/offline behavior details.
+
 ---
 
 ## Section 8 — Pagefind hook
