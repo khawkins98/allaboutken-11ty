@@ -40,3 +40,11 @@ Each subdirectory is a standalone paper adaptation of a published post: restruct
 - The DOI is referenced back from the live CADI post.
 
 Everything past LaTeX-source-in-this-repo (the actual Zenodo upload, ORCID linking, cross-posting) is manual work done outside this repo's build — there's nothing here to automate yet.
+
+## Compiling: staying manual for now
+
+Building `.tex` -> PDF is a manual, occasional step (Overleaf, or local `pdflatex`/`latexmk` per `latex/README.md`), not wired into `yarn build`. At the current volume — a couple of proof-of-concept files, one pilot paper — a compile pipeline would be more machinery than the problem needs.
+
+**If this scales** (papers become a recurring habit rather than an occasional pilot), the realistic next step is [Tectonic](https://tectonic-typesetting.github.io/): a single self-contained binary, drop-in `pdflatex` replacement, fetches missing packages automatically, no TeX Live install required. At that point it's a small addition — `brew install tectonic` plus a `yarn compile:latex` script that shells out to it, same pattern this repo already uses for Sass/Eleventy — and could even run in CI to produce PDFs as build artifacts.
+
+Ruled out for this use case: pure-JS/WASM LaTeX engines (e.g. `latex.js`, SwiftLaTeX). They either only parse a subset of LaTeX (too risky for packages already in use like `hyperref`/`enumitem`) or are built for interactive browser editors, not a build-script invocation. Not worth the integration cost when Overleaf and, later, Tectonic cover the real need.
