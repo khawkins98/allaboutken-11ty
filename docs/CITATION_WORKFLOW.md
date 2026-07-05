@@ -21,7 +21,7 @@ Each subdirectory is a standalone paper adaptation of a published post: restruct
 ## Workflow
 
 1. **Pick a post.** Prioritize pieces with real original framing and reference lists — they read as papers with the least rework. The CADI framework post is the pilot.
-2. **Adapt to LaTeX** in `latex/<piece-name>/main.tex`. Keep the author block consistent: name, "Independent Researcher," ORCID link.
+2. **Adapt to LaTeX** in `latex/<piece-name>/main.tex`. Keep the author block consistent: name, "Independent Researcher," ORCID link. [Jenni.ai](https://jenni.ai/) is an optional aid for this step on future pieces — academic-style rewriting and citation lookup — for posts that need more restructuring than a straight condense. Not used for the CADI pilot, and not a substitute for any other step here (no LaTeX compiling, no Zenodo/ORCID integration).
 3. **Build the PDF** (Overleaf or local `pdflatex`/`latexmk`). Check it renders cleanly before depositing.
 4. **Deposit on Zenodo** under user `khawkins98`:
    - Upload the PDF (and optionally the `.tex` source).
