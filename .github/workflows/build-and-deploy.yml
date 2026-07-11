@@ -37,7 +37,7 @@ jobs:
       # on every build. Keyed on the embeddings script (which holds MODEL_NAME),
       # so the cache busts automatically when the model changes.
       - name: Cache embedding model 🧠
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .cache/transformers
           key: transformers-model-${{ hashFiles('scripts/generate-embeddings.mjs') }}
