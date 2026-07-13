@@ -19,7 +19,7 @@ jobs:
           else
             echo "❌ PR title must match the commit convention"
             echo ""
-            echo "   Expected:  <prefix>: <description>  (optional scope allowed, e.g. chore(deps):)"
+            echo "   Expected:  <prefix>(<scope>): <description>  (scope optional, e.g. chore(deps):)"
             echo "   Prefixes:  content | feature | fix | ci | chore"
             echo ""
             echo "   Got:  $PR_TITLE"
