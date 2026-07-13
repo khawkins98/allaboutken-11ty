@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Enforces the commit message convention: <prefix>: <description>
+# Enforces the commit message convention: <prefix>(scope optional): <description>
 # See CONTRIBUTING.md for the full list of prefixes.
 set -euo pipefail
 
@@ -14,13 +14,13 @@ case "$subject" in
 esac
 
 allowed_prefixes="content | feature | fix | ci | chore"
-prefix_pattern='^(content|feature|fix|ci|chore): .+'
+pattern='^(content|feature|fix|ci|chore)(\([a-z0-9 ._-]+\))?: .+'
 
 fail() {
   echo ""
   echo "  ❌  Commit message format error: $1"
   echo ""
-  echo "  Expected:  <prefix>: <description>"
+  echo "  Expected:  <prefix>(scope optional): <description>"
   echo "  Prefixes:  ${allowed_prefixes}"
   echo "  Rules:     subject ≤ 72 chars, no trailing period"
   echo ""
@@ -29,7 +29,7 @@ fail() {
   exit 1
 }
 
-if ! [[ "$subject" =~ $prefix_pattern ]]; then
+if ! [[ "$subject" =~ $pattern ]]; then
   fail "missing or unknown prefix"
 fi
 

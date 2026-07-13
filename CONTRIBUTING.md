@@ -18,7 +18,7 @@ One branch per unit of work. If a content post and an unrelated refactor ship to
 
 ## Commit messages
 
-Format: `prefix: sentence-case description`
+Format: `prefix(optional-scope): sentence-case description`
 
 | Prefix | Use for |
 |--------|---------|
@@ -32,10 +32,10 @@ Examples:
 
 - `content: Add garage page intro and how-it-works section`
 - `content: Draft post on Vercel proxy for hobby projects`
+- `chore(deps): Upgrade pagefind 1.4.0 → 1.5.2`
 - `feature: Add /garage/ index page and data file`
 - `fix: Correct trailing-slash redirect for proxied paths`
 - `ci: Add pinment rewrite and CORS headers to vercel.json`
-- `chore: Upgrade pagefind 1.4.0 → 1.5.2`
 
 ### General rules
 
@@ -45,13 +45,13 @@ Examples:
 - One logical change per commit
 - Never use `--no-verify` or `--no-gpg-sign` to bypass hooks
 
-Commit subjects are enforced locally by `.githooks/commit-msg` (activated on `yarn install` via the `prepare` script). PR titles are enforced in CI by `pr-title-check` for prefix/pattern matching.
+Commit subjects are enforced locally by `.githooks/commit-msg` (activated on `yarn install` via the `prepare` script). PR titles are enforced in CI by `pr-title-check` using the same prefix set and optional scope allowance.
 
 ## Pull requests
 
 One PR per unit of work. Keep noisy refactors out of content PRs.
 
-**Title**: must match CI's enforced pattern (`<prefix>: <description>`) using prefixes `content|feature|fix|ci|chore`. Optional scope is allowed (for example, `chore(deps): ...`).
+**Title**: must match CI's enforced pattern (`<prefix>(optional-scope): <description>`) using prefixes `content|feature|fix|ci|chore`. Optional scope is allowed (for example, `chore(deps): ...`).
 
 **Body**: use [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md). Two sections:
 

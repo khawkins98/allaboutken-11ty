@@ -19,7 +19,7 @@ git config core.hooksPath .githooks
 
 Checks the commit subject against:
 
-- Pattern: `<prefix>: <description>`
+- Pattern: `<prefix>(optional-scope): <description>`
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`
 - Subject length: `<= 72` characters
 - No trailing period
@@ -33,7 +33,7 @@ Prints pull request title format guidance before push. It does not block the pus
 
 GitHub Actions enforces PR titles in [`.github/workflows/pr-title-check.yml`](../.github/workflows/pr-title-check.yml):
 
-- Pattern: `<prefix>: <description>` (optional scope allowed, for example `chore(deps): ...`)
+- Pattern: `<prefix>(optional-scope): <description>` (for example `chore(deps): ...`)
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`
 
 The workflow does **not** enforce maximum title length or trailing punctuation.
@@ -66,4 +66,4 @@ The workflow does **not** enforce maximum title length or trailing punctuation.
 
 ### CI fails PR title check but local commits succeed
 
-The commit hook validates commit subjects; CI validates the **PR title** separately. Update the PR title in GitHub to match the same `<prefix>: <description>` convention.
+The commit hook validates commit subjects; CI validates the **PR title** separately. Update the PR title in GitHub to match the same `<prefix>(optional-scope): <description>` convention.
