@@ -96,11 +96,11 @@ Source of truth for local commands and script behavior in this repository.
 
 ### Commit message hook (`.githooks/commit-msg`)
 
-- Enforces `<prefix>: <description>` on the commit subject.
+- Enforces `<prefix>(<scope>): <description>` on the commit subject.
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`.
 - Enforces subject length <= 72 characters and disallows a trailing period.
 - Skips merge/revert/fixup/squash commit subjects.
-- CI checks PR titles in `.github/workflows/pr-title-check.yml` for the same prefix/pattern (`<prefix>: <description>`, optional scope allowed), but does not enforce commit-subject length/punctuation rules.
+- CI checks PR titles in `.github/workflows/pr-title-check.yml` for the same prefix/pattern (`<prefix>(<scope>): <description>`, scope optional), but does not enforce commit-subject length/punctuation rules.
 
 ### `yarn update-components`
 
