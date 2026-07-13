@@ -19,11 +19,19 @@ git config core.hooksPath .githooks
 
 Checks the commit subject against:
 
-- Pattern: `<prefix>: <description>`
+- Pattern: `<prefix>[(<scope>)]: <description>` (scope is optional)
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`
 - Subject length: `<= 72` characters
 - No trailing period
 - Merge/revert/fixup/squash subjects are skipped
+
+**Examples:**
+- ✓ `chore: update dependencies`
+- ✓ `chore(deps): upgrade pagefind to v1.3`
+- ✓ `fix(auth): correct token expiry check`
+- ✓ `feature(search): add semantic search results page`
+- ✗ `update deps` ← missing prefix
+- ✗ `chore: update deps.` ← trailing period
 
 ### `.githooks/pre-push` (advisory)
 
@@ -35,6 +43,8 @@ GitHub Actions enforces PR titles in [`.github/workflows/pr-title-check.yml`](..
 
 - Pattern: `<prefix>: <description>` (optional scope allowed, for example `chore(deps): ...`)
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`
+- Scope is optional and follows the same `(<scope>)` syntax as commit subjects
+- PR titles are not limited to 72 characters and may end with punctuation
 
 The workflow does **not** enforce maximum title length or trailing punctuation.
 
