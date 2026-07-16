@@ -21,6 +21,7 @@ Use this page as the entry point for repository documentation. It maps each doc 
 | [`ROLE_TEMPLATE.md`](ROLE_TEMPLATE.md) | Template for defining new reviewer roles | Maintainers adding roles | You are introducing a new role profile |
 | [`../worker/README.md`](../worker/README.md) | Feedback worker routes, local dev, and deploy commands | Maintainer/operators | You are operating or debugging `feedback.allaboutken.com` |
 | [`../src/site/style-guide/editorial.njk`](../src/site/style-guide/editorial.njk) | Canonical voice/tone/style guidance | Authors and editors | You need writing standards while drafting or editing |
+| [`STYLE_GUIDE_SURFACES.md`](STYLE_GUIDE_SURFACES.md) | Map of style-guide pages (`index.njk`, `components.njk`, `editorial.njk`), ownership, and usage boundaries | Contributors touching templates, CSS, or editorial standards | You need to choose the right style-guide source of truth, especially for component implementation references |
 | [`FRONTMATTER.md`](FRONTMATTER.md) | Reference for every YAML frontmatter field used across post, page, and digest templates | Authors, editors, and contributors adding posts | You need to know what a field does, which templates use it, and whether it is required |
 | [`ELEVENTY_CONFIG.md`](ELEVENTY_CONFIG.md) | Reference for all plugins, filters, shortcodes, collections, and config options in `eleventy.js` | Contributors modifying build config or templates | You are adding a filter, shortcode, or collection, or need to understand how the build pipeline works |
 | [`DATA_FILES.md`](DATA_FILES.md) | Schema and template usage for `siteConfig.json` and `garage.json` | Contributors editing site-wide config or the garage project listing | You are adding a garage project, updating site metadata, or tracing where a global value comes from |
@@ -34,6 +35,7 @@ Use this page as the entry point for repository documentation. It maps each doc 
 
 - **New contributor:** `../README.md` -> `../CONTRIBUTING.md` -> `GIT_HOOKS.md` -> `SCRIPTS.md`
 - **Template work:** `TEMPLATES.md` -> `FRONTMATTER.md` -> `ELEVENTY_CONFIG.md`
+- **Style-guide alignment:** `STYLE_GUIDE_SURFACES.md` -> `../src/site/style-guide/components.njk` -> `../src/site/style-guide/editorial.njk`
 - **Component work:** `COMPONENTS.md` -> `CSS_ARCHITECTURE.md` -> `FONTS.md` -> `ELEVENTY_CONFIG.md`
 - **Local setup/debugging:** `DEVELOPMENT_SETUP.md` -> `SCRIPTS.md`
 - **Offline behavior:** `OFFLINE_SERVICE_WORKER.md` -> `ELEVENTY_CONFIG.md` -> `DEVELOPMENT_SETUP.md`

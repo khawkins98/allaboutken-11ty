@@ -14,15 +14,18 @@ allaboutken.com is the canonical source for the writing, but posts here have no 
 
 ## Where the LaTeX source lives
 
-`latex/` at the repo root, one subdirectory per piece being adapted (e.g. `latex/cadi-framework/`). See `latex/README.md` for build instructions (Overleaf or a local TeX install — no LaTeX toolchain is assumed to exist in this repo's normal dev environment).
+`latex/` at the repo root, one subdirectory per piece being adapted (e.g. `latex/cadi-framework/`). See [`latex/README.md`](../latex/README.md) for shared build context and:
+
+- [`latex/poc-minimal/README.md`](../latex/poc-minimal/README.md) for the initial toolchain check artifact
+- [`latex/cadi-framework/README.md`](../latex/cadi-framework/README.md) for pilot-specific structure, build, and pre-deposit checks
 
 Each subdirectory is a standalone paper adaptation of a published post: restructured with an abstract and paper-style sections, not a raw copy of the site markdown. The post itself stays the canonical, human-readable version; the LaTeX version exists to produce a citable PDF.
 
 ## Workflow
 
 1. **Pick a post.** Prioritize pieces with real original framing and reference lists — they read as papers with the least rework. The CADI framework post is the pilot.
-2. **Adapt to LaTeX** in `latex/<piece-name>/main.tex`. Keep the author block consistent: name, "Independent Researcher," ORCID link. [Jenni.ai](https://jenni.ai/) is an optional aid for this step on future pieces — academic-style rewriting and citation lookup — for posts that need more restructuring than a straight condense. Not used for the CADI pilot, and not a substitute for any other step here (no LaTeX compiling, no Zenodo/ORCID integration).
-3. **Build the PDF** (Overleaf or local `pdflatex`/`latexmk`). Check it renders cleanly before depositing.
+2. **Adapt to LaTeX** in `latex/<piece-name>/main.tex` (or the artifact's primary `.tex` file). Keep the author block consistent: name, "Independent Researcher," ORCID link. [Jenni.ai](https://jenni.ai/) is an optional aid for this step on future pieces — academic-style rewriting and citation lookup — for posts that need more restructuring than a straight condense. Not used for the CADI pilot, and not a substitute for any other step here (no LaTeX compiling, no Zenodo/ORCID integration).
+3. **Build the PDF** (Overleaf or local `pdflatex`/`latexmk`) using the artifact-specific README: run `pdflatex minimal.tex` in `latex/poc-minimal/` or `pdflatex main.tex` in `latex/cadi-framework/`. Check the resulting `minimal.pdf` or `main.pdf` renders cleanly before depositing.
 4. **Deposit on Zenodo** under user `khawkins98`:
    - Upload the PDF (and optionally the `.tex` source).
    - Link ORCID `0009-0009-6728-2237` as the author identifier during submission.
@@ -43,7 +46,7 @@ Everything past LaTeX-source-in-this-repo (the actual Zenodo upload, ORCID linki
 
 ## Compiling: staying manual for now
 
-Building `.tex` -> PDF is a manual, occasional step (Overleaf, or local `pdflatex`/`latexmk` per `latex/README.md`), not wired into `yarn build`. At the current volume — a couple of proof-of-concept files, one pilot paper — a compile pipeline would be more machinery than the problem needs.
+Building `.tex` -> PDF is a manual, occasional step (Overleaf, or local `pdflatex`/`latexmk` per `latex/README.md` and each artifact README), not wired into `yarn build`. At the current volume — a couple of proof-of-concept files, one pilot paper — a compile pipeline would be more machinery than the problem needs.
 
 **If this scales** (papers become a recurring habit rather than an occasional pilot), the realistic next step is [Tectonic](https://tectonic-typesetting.github.io/): a single self-contained binary, drop-in `pdflatex` replacement, fetches missing packages automatically, no TeX Live install required. At that point it's a small addition — `brew install tectonic` plus a `yarn compile:latex` script that shells out to it, same pattern this repo already uses for Sass/Eleventy — and could even run in CI to produce PDFs as build artifacts.
 

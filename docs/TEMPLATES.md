@@ -76,6 +76,14 @@ Paragraph in markdown.
 
 For field semantics, use [`FRONTMATTER.md`](FRONTMATTER.md). For filters/shortcodes/collections, use [`ELEVENTY_CONFIG.md`](ELEVENTY_CONFIG.md). For global JSON data files, use [`DATA_FILES.md`](DATA_FILES.md).
 
+## Mapping templates to style-guide pages
+
+When template work changes rendered output, check style-guide surfaces in this order:
+
+1. [`../src/site/style-guide/components.njk`](../src/site/style-guide/components.njk) for visual patterns, class names, and live component examples.
+2. [`../src/site/style-guide/editorial.njk`](../src/site/style-guide/editorial.njk) for voice/structure rules and when to use specific content patterns.
+3. [`STYLE_GUIDE_SURFACES.md`](STYLE_GUIDE_SURFACES.md) for ownership and boundaries between the style-guide pages.
+
 ## Modifying existing layouts safely
 
 1. Update the layout/partial in `src/site/_includes/`.
