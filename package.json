@@ -19,6 +19,7 @@
     "lint:css": "stylelint \"src/**/*.scss\" \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.scss\" \"src/**/*.css\" --fix",
     "lint:links": "node scripts/check-links.mjs",
+    "test:commit-subject": "bash scripts/test-commit-subject-validator.sh",
     "embeddings": "node scripts/generate-embeddings.mjs",
     "build": "yarn clean && yarn sass && yarn eleventy && yarn embeddings && echo '🏋 Build completed'",
     "dev": "concurrently -k \"sass --load-path src/components --watch --poll src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\"",

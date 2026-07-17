@@ -11,6 +11,7 @@ Source of truth for local commands and script behavior in this repository.
 | `yarn embeddings` | Regenerate semantic-search vectors | After content/model changes that affect embeddings |
 | `yarn lint:css` | Lint SCSS/CSS files | Before committing style changes |
 | `yarn lint:links` | Validate internal links in `build/` | After a build, to catch broken internal links/anchors |
+| `yarn test:commit-subject` | Test commit/PR title validation | After changing hooks or title rules |
 
 ## Script details
 
@@ -48,6 +49,12 @@ Source of truth for local commands and script behavior in this repository.
 - Vercel-proxied hobby-project prefixes (read from `vercel.json` rewrites, e.g. `/PDF-A-go-go/`, `/pinment/`) are skipped too — they resolve in production via proxy but are absent from the local build. `<script>`/`<style>` bodies are stripped before scanning so JS template strings aren't treated as links.
 - Requires a build first (run `yarn eleventy` or `yarn build`). Exits non-zero if any internal link is broken.
 - Runs in CI after the build (currently non-blocking; see `.github/workflows/build-and-deploy.yml`).
+
+### `yarn test:commit-subject`
+
+- Runs the dependency-free regression suite for `scripts/validate-commit-subject.sh`.
+- Covers canonical subjects, optional scopes, malformed input, length and punctuation rules, and Git-generated subject exemptions.
+- The PR title workflow runs the same tests before validating the title.
 
 ### `yarn embeddings`
 
@@ -96,11 +103,12 @@ Source of truth for local commands and script behavior in this repository.
 
 ### Commit message hook (`.githooks/commit-msg`)
 
-- Enforces `<prefix>: <description>` on the commit subject.
+- Enforces `<prefix>(optional-scope): <description>` on the commit subject through `scripts/validate-commit-subject.sh`.
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`.
+- Optional scopes use lowercase letters/numbers separated by `.`, `_`, or `-`.
 - Enforces subject length <= 72 characters and disallows a trailing period.
 - Skips merge/revert/fixup/squash commit subjects.
-- CI checks PR titles in `.github/workflows/pr-title-check.yml` for the same prefix/pattern (`<prefix>: <description>`, optional scope allowed), but does not enforce commit-subject length/punctuation rules.
+- CI runs the validator tests and checks PR titles with the same shared rules.
 
 ### `yarn update-components`
 

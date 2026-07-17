@@ -19,11 +19,14 @@ git config core.hooksPath .githooks
 
 Checks the commit subject against:
 
-- Pattern: `<prefix>: <description>`
+- Pattern: `<prefix>(optional-scope): <description>`
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`
+- Optional scope: lowercase letters/numbers separated by `.`, `_`, or `-`
 - Subject length: `<= 72` characters
 - No trailing period
 - Merge/revert/fixup/squash subjects are skipped
+
+The hook extracts the first non-comment, non-empty line and passes it to [`scripts/validate-commit-subject.sh`](../scripts/validate-commit-subject.sh). Run `yarn test:commit-subject` to exercise the shared validator regression suite.
 
 ### `.githooks/pre-push` (advisory)
 
@@ -33,10 +36,11 @@ Prints pull request title format guidance before push. It does not block the pus
 
 GitHub Actions enforces PR titles in [`.github/workflows/pr-title-check.yml`](../.github/workflows/pr-title-check.yml):
 
-- Pattern: `<prefix>: <description>` (optional scope allowed, for example `chore(deps): ...`)
+- Pattern: `<prefix>(optional-scope): <description>` (for example, `chore(deps): Upgrade pagefind`)
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`
+- The same scope, spacing, 72-character, and punctuation rules as local commits
 
-The workflow does **not** enforce maximum title length or trailing punctuation.
+The workflow checks out the repository, runs the validator tests, and passes the PR title to the same shared validator used by the commit hook.
 
 ## Troubleshooting
 
@@ -64,6 +68,10 @@ The workflow does **not** enforce maximum title length or trailing punctuation.
 
    You should see executable permissions on hook files (`commit-msg`, `pre-push`).
 
-### CI fails PR title check but local commits succeed
+### A subject or PR title is rejected
 
-The commit hook validates commit subjects; CI validates the **PR title** separately. Update the PR title in GitHub to match the same `<prefix>: <description>` convention.
+Read the validator's error output, then compare the subject with `<prefix>(optional-scope): <description>`. Check the prefix, lowercase scope characters, exact `: ` spacing, 72-character limit, and trailing punctuation. Run the subject directly for the same diagnostics CI uses:
+
+```bash
+scripts/validate-commit-subject.sh "chore(deps): Upgrade pagefind"
+```

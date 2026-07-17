@@ -18,7 +18,7 @@ One branch per unit of work. If a content post and an unrelated refactor ship to
 
 ## Commit messages
 
-Format: `prefix: sentence-case description`
+Format: `<prefix>(optional-scope): <description>`
 
 | Prefix | Use for |
 |--------|---------|
@@ -36,22 +36,25 @@ Examples:
 - `fix: Correct trailing-slash redirect for proxied paths`
 - `ci: Add pinment rewrite and CORS headers to vercel.json`
 - `chore: Upgrade pagefind 1.4.0 → 1.5.2`
+- `chore(deps): Upgrade pagefind and regenerate vectors`
 
 ### General rules
 
 - First line ≤ 72 characters (enforced by the hook)
 - No trailing period on the subject (enforced by the hook)
+- Optional scopes use lowercase letters and numbers, with `.`, `_`, or `-` as separators
+- Use exactly one space after the colon and no leading or trailing description whitespace
 - Body optional; when present, focus on the *why* (the diff already shows the *what*)
 - One logical change per commit
 - Never use `--no-verify` or `--no-gpg-sign` to bypass hooks
 
-Commit subjects are enforced locally by `.githooks/commit-msg` (activated on `yarn install` via the `prepare` script). PR titles are enforced in CI by `pr-title-check` for prefix/pattern matching.
+Commit subjects and PR titles use the same validator, `scripts/validate-commit-subject.sh`. The local `.githooks/commit-msg` hook is activated on `yarn install` via the `prepare` script; the `pr-title-check` workflow runs the validator in CI. Run `yarn test:commit-subject` to verify its regression suite.
 
 ## Pull requests
 
 One PR per unit of work. Keep noisy refactors out of content PRs.
 
-**Title**: must match CI's enforced pattern (`<prefix>: <description>`) using prefixes `content|feature|fix|ci|chore`. Optional scope is allowed (for example, `chore(deps): ...`).
+**Title**: must match the canonical format (`<prefix>(optional-scope): <description>`) using prefixes `content|feature|fix|ci|chore`. The same length, punctuation, spacing, and scope rules used for commit subjects apply.
 
 **Body**: use [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md). Two sections:
 

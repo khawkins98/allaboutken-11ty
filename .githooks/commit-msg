@@ -1,44 +1,12 @@
 #!/usr/bin/env bash
-# Enforces the commit message convention: <prefix>: <description>
-# See CONTRIBUTING.md for the full list of prefixes.
+# Enforce the shared commit subject convention.
 set -euo pipefail
 
 msg_file="$1"
+hook_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+validator="${hook_dir}/../scripts/validate-commit-subject.sh"
 
 # First non-comment, non-empty line is the subject.
-subject="$(grep -v '^#' "$msg_file" | sed '/^[[:space:]]*$/d' | head -n 1 || true)"
+subject="$(sed -e '/^[[:space:]]*#/d' -e '/^[[:space:]]*$/d' "$msg_file" | head -n 1 || true)"
 
-# Skip merge, revert, and fixup commits — they are machine-generated.
-case "$subject" in
-  "Merge "*|"Revert "*|"fixup! "*|"squash! "*) exit 0 ;;
-esac
-
-allowed_prefixes="content | feature | fix | ci | chore"
-prefix_pattern='^(content|feature|fix|ci|chore): .+'
-
-fail() {
-  echo ""
-  echo "  ❌  Commit message format error: $1"
-  echo ""
-  echo "  Expected:  <prefix>: <description>"
-  echo "  Prefixes:  ${allowed_prefixes}"
-  echo "  Rules:     subject ≤ 72 chars, no trailing period"
-  echo ""
-  echo "  Got:  ${subject}"
-  echo ""
-  exit 1
-}
-
-if ! [[ "$subject" =~ $prefix_pattern ]]; then
-  fail "missing or unknown prefix"
-fi
-
-if (( ${#subject} > 72 )); then
-  fail "subject is ${#subject} chars (max 72)"
-fi
-
-case "$subject" in
-  *.) fail "subject ends with a period" ;;
-esac
-
-exit 0
+"$validator" "$subject"
