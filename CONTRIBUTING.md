@@ -48,7 +48,7 @@ Examples:
 - One logical change per commit
 - Never use `--no-verify` or `--no-gpg-sign` to bypass hooks
 
-Commit subjects and PR titles use the same validator, `scripts/validate-commit-subject.sh`. The local `.githooks/commit-msg` hook is activated on `yarn install` via the `prepare` script; the `pr-title-check` workflow runs the validator in CI. Run `yarn test:commit-subject` to verify its regression suite.
+Commit subjects and PR titles use the same validator, `scripts/validate-commit-subject.sh`. The local `.githooks/commit-msg` hook is activated on `yarn install` via the `prepare` script and enables exemptions for Git-generated merge, revert, fixup, and squash commit subjects. PR titles are always authored text, so the `pr-title-check` workflow applies the canonical format without those exemptions. Run `yarn test:commit-subject` to verify the regression suite.
 
 ## Pull requests
 

@@ -26,6 +26,20 @@ expect_invalid() {
   passed=$((passed + 1))
 }
 
+expect_generated_commit() {
+  local subject="$1"
+
+  if ! "$validator" --allow-generated "$subject" >/dev/null 2>&1; then
+    echo "FAIL: expected valid generated commit subject: ${subject}" >&2
+    exit 1
+  fi
+  if "$validator" "$subject" >/dev/null 2>&1; then
+    echo "FAIL: expected generated-looking PR title to be invalid: ${subject}" >&2
+    exit 1
+  fi
+  passed=$((passed + 2))
+}
+
 # Standard subjects and optional scopes.
 expect_valid "content: Add editorial workflow overview"
 expect_valid "feature(search-ui): Add result filters"
@@ -41,10 +55,10 @@ expect_invalid "feature(Search): Reject uppercase scope"
 expect_invalid "chore: $(printf 'x%.0s' {1..66})"
 expect_invalid "ci: Update title validation."
 
-# Git-generated subjects are exempt from authored-subject rules.
-expect_valid "Merge branch 'main' into feature/example."
-expect_valid "Revert \"fix: Introduce regression.\""
-expect_valid "fixup! chore: $(printf 'x%.0s' {1..80})."
-expect_valid "squash! feature: Temporary subject."
+# Git-generated commit subjects are exempt, but matching PR titles are not.
+expect_generated_commit "Merge branch 'main' into feature/example."
+expect_generated_commit "Revert \"fix: Introduce regression.\""
+expect_generated_commit "fixup! chore: $(printf 'x%.0s' {1..80})."
+expect_generated_commit "squash! feature: Temporary subject."
 
 echo "Commit subject validator: ${passed} tests passed"

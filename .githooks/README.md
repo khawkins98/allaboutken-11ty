@@ -26,7 +26,7 @@ Reminds you about PR title format requirements before pushing. This helps catch 
 **Valid prefixes:** `content`, `feature`, `fix`, `ci`, `chore`
 **Optional scope:** lowercase letters/numbers separated by `.`, `_`, or `-`
 
-Commit subjects and PR titles are both checked by `scripts/validate-commit-subject.sh`, including the 72-character limit and no-trailing-period rule. Run `yarn test:commit-subject` to test the validator.
+Commit subjects and PR titles are both checked by `scripts/validate-commit-subject.sh`, including the 72-character limit and no-trailing-period rule. The commit hook alone allows Git-generated merge, revert, fixup, and squash subjects; generated-looking PR titles must still use the required CI format. Run `yarn test:commit-subject` to test the validator.
 
 **Examples:**
 - ✓ `content: New blog post on editorial AI`

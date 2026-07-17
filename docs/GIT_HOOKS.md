@@ -26,7 +26,7 @@ Checks the commit subject against:
 - No trailing period
 - Merge/revert/fixup/squash subjects are skipped
 
-The hook extracts the first non-comment, non-empty line and passes it to [`scripts/validate-commit-subject.sh`](../scripts/validate-commit-subject.sh). Run `yarn test:commit-subject` to exercise the shared validator regression suite.
+The hook extracts the first non-comment, non-empty line and passes it to [`scripts/validate-commit-subject.sh`](../scripts/validate-commit-subject.sh) with `--allow-generated`. That option is reserved for the commit hook. Run `yarn test:commit-subject` to exercise the shared validator regression suite.
 
 ### `.githooks/pre-push` (advisory)
 
@@ -39,6 +39,7 @@ GitHub Actions enforces PR titles in [`.github/workflows/pr-title-check.yml`](..
 - Pattern: `<prefix>(optional-scope): <description>` (for example, `chore(deps): Upgrade pagefind`)
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`
 - The same scope, spacing, 72-character, and punctuation rules as local commits
+- No generated-subject exemptions; PR titles that begin with `Merge`, `Revert`, `fixup!`, or `squash!` are rejected
 
 The workflow checks out the repository, runs the validator tests, and passes the PR title to the same shared validator used by the commit hook.
 

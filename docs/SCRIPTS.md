@@ -53,7 +53,7 @@ Source of truth for local commands and script behavior in this repository.
 ### `yarn test:commit-subject`
 
 - Runs the dependency-free regression suite for `scripts/validate-commit-subject.sh`.
-- Covers canonical subjects, optional scopes, malformed input, length and punctuation rules, and Git-generated subject exemptions.
+- Covers canonical subjects, optional scopes, malformed input, length and punctuation rules, hook-only Git-generated subject exemptions, and rejection of generated-looking PR titles.
 - The PR title workflow runs the same tests before validating the title.
 
 ### `yarn embeddings`
@@ -107,8 +107,8 @@ Source of truth for local commands and script behavior in this repository.
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`.
 - Optional scopes use lowercase letters/numbers separated by `.`, `_`, or `-`.
 - Enforces subject length <= 72 characters and disallows a trailing period.
-- Skips merge/revert/fixup/squash commit subjects.
-- CI runs the validator tests and checks PR titles with the same shared rules.
+- Skips merge/revert/fixup/squash commit subjects by passing the validator's hook-only `--allow-generated` option.
+- CI runs the validator tests and checks PR titles with the same shared format rules, without generated-subject exemptions.
 
 ### `yarn update-components`
 

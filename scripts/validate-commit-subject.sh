@@ -17,17 +17,26 @@ fail() {
   exit 1
 }
 
+allow_generated=false
+if [[ "${1:-}" == "--allow-generated" ]]; then
+  allow_generated=true
+  shift
+fi
+
 if (( $# != 1 )); then
-  echo "Usage: $0 \"<subject>\"" >&2
+  echo "Usage: $0 [--allow-generated] \"<subject>\"" >&2
   exit 2
 fi
 
 subject="$1"
 
-# Git creates these subjects; contributors do not need to normalize them.
-case "$subject" in
-  "Merge "*|"Revert "*|"fixup! "*|"squash! "*) exit 0 ;;
-esac
+# Only the commit hook enables this mode. PR titles are always authored text and
+# must use the canonical format, even when they resemble Git-generated subjects.
+if [[ "$allow_generated" == true ]]; then
+  case "$subject" in
+    "Merge "*|"Revert "*|"fixup! "*|"squash! "*) exit 0 ;;
+  esac
+fi
 
 if [[ -z "$subject" ]]; then
   fail "subject cannot be empty"

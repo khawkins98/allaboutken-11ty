@@ -9,4 +9,4 @@ validator="${hook_dir}/../scripts/validate-commit-subject.sh"
 # First non-comment, non-empty line is the subject.
 subject="$(sed -e '/^[[:space:]]*#/d' -e '/^[[:space:]]*$/d' "$msg_file" | head -n 1 || true)"
 
-"$validator" "$subject"
+"$validator" --allow-generated "$subject"
