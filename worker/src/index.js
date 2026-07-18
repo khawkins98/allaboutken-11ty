@@ -42,21 +42,9 @@ const SITE_ORIGIN = 'https://www.allaboutken.com';
 
 // Local dev origins — Referer check allows these in addition to SITE_ORIGIN.
 // Remove or empty this array in production if you prefer stricter validation.
-const DEV_ORIGINS = [
-  'http://localhost',
-  'http://127.0.0.1',
-  'http://192.168.',
-];
+const DEV_ORIGINS = ['http://localhost', 'http://127.0.0.1', 'http://192.168.'];
 
-const BOT_UA_PATTERNS = [
-  'bot', 'crawl', 'spider', 'slurp', 'wget', 'curl',
-  'python-requests', 'go-http-client', 'java/', 'libwww',
-  'httpunit', 'nutch', 'phpcrawl', 'msnbot', 'adidxbot',
-  'blekkobot', 'teoma', 'ia_archiver', 'gigablast', 'yandex',
-  'twiceler', 'mediapartners-google', 'adsbot-google', 'googlebot',
-  'bingbot', 'ahrefsbot', 'semrushbot', 'dotbot', 'petalbot',
-  'bytespider', 'gptbot', 'claudebot',
-];
+const BOT_UA_PATTERNS = ['bot', 'crawl', 'spider', 'slurp', 'wget', 'curl', 'python-requests', 'go-http-client', 'java/', 'libwww', 'httpunit', 'nutch', 'phpcrawl', 'msnbot', 'adidxbot', 'blekkobot', 'teoma', 'ia_archiver', 'gigablast', 'yandex', 'twiceler', 'mediapartners-google', 'adsbot-google', 'googlebot', 'bingbot', 'ahrefsbot', 'semrushbot', 'dotbot', 'petalbot', 'bytespider', 'gptbot', 'claudebot'];
 
 /**
  * Return the request's Origin if it's on the allow list, otherwise SITE_ORIGIN.
@@ -131,12 +119,7 @@ export default {
       // Increment the counter
       const countKey = `count:${type}:${postPath}`;
       const current = parseInt(await env.FEEDBACK_COUNTS.get(countKey), 10) || 0;
-      ctx.waitUntil(
-        Promise.all([
-          env.FEEDBACK_COUNTS.put(countKey, String(current + 1)),
-          env.FEEDBACK_COUNTS.put(rlKey, '1', { expirationTtl: 86400 }),
-        ]),
-      );
+      ctx.waitUntil(Promise.all([env.FEEDBACK_COUNTS.put(countKey, String(current + 1)), env.FEEDBACK_COUNTS.put(rlKey, '1', { expirationTtl: 86400 })]));
 
       return Response.redirect(`${SITE_ORIGIN}/${postPath}/#thanks`, 302);
     }
@@ -144,12 +127,8 @@ export default {
     // --- Count routes: /count/{path}.svg (badge) or /count/{path} (plain text) ---
     if (pathname.startsWith('/count/')) {
       const isSvg = pathname.endsWith('.svg');
-      const postPath = (isSvg
-        ? pathname.slice('/count/'.length, -'.svg'.length)
-        : pathname.slice('/count/'.length)
-      ).replace(/\/$/, '');
-      const count =
-        parseInt(await env.FEEDBACK_COUNTS.get(`count:up:${postPath}`), 10) || 0;
+      const postPath = (isSvg ? pathname.slice('/count/'.length, -'.svg'.length) : pathname.slice('/count/'.length)).replace(/\/$/, '');
+      const count = parseInt(await env.FEEDBACK_COUNTS.get(`count:up:${postPath}`), 10) || 0;
       const corsOrigin = getAllowedOrigin(request);
 
       if (isSvg) {

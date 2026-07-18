@@ -47,27 +47,27 @@ export function initSemanticSearch({ esc, setMode }) {
 
     let intro;
     if (results.length === 1) {
-      intro = results[0].score > 0.45
-        ? '<p>I found one post that closely matches:</p>'
-        : '<p>I found one post that might be relevant:</p>';
+      intro = results[0].score > 0.45 ? '<p>I found one post that closely matches:</p>' : '<p>I found one post that might be relevant:</p>';
     } else {
       intro = `<p>Here are ${results.length} posts that might be relevant:</p>`;
     }
 
-    const cards = results.map(r => {
-      const date = formatDate(r.date);
-      const score = Math.round(r.score * 100);
-      const meta = [date, `${score}% match`].filter(Boolean).join(' · ');
-      // Chunk 0 has teaser — its snippet starts at the beginning of the post.
-      // Later chunks start mid-text, so prefix with ellipsis.
-      const prefix = (r.snippet && !r.teaser) ? '\u2026 ' : '';
-      const displayText = r.snippet ? prefix + r.snippet + ' \u2026' : r.teaser || '';
-      return `<div class="kh-ask__result">
+    const cards = results
+      .map((r) => {
+        const date = formatDate(r.date);
+        const score = Math.round(r.score * 100);
+        const meta = [date, `${score}% match`].filter(Boolean).join(' · ');
+        // Chunk 0 has teaser — its snippet starts at the beginning of the post.
+        // Later chunks start mid-text, so prefix with ellipsis.
+        const prefix = r.snippet && !r.teaser ? '\u2026 ' : '';
+        const displayText = r.snippet ? prefix + r.snippet + ' \u2026' : r.teaser || '';
+        return `<div class="kh-ask__result">
         <a href="${esc(r.url)}"><h3>${esc(r.title || r.url)}</h3></a>
         ${displayText ? `<p>${esc(displayText)}</p>` : ''}
         <p class="kh-ask__result-meta">${esc(meta)}</p>
       </div>`;
-    }).join('');
+      })
+      .join('');
 
     const fallback = `<p class="kh-ask__fallback">Not what you were looking for? Switch to <a href="#" onclick="setMode('keyword'); return false;">keyword search</a>.</p>`;
 
@@ -79,10 +79,7 @@ export function initSemanticSearch({ esc, setMode }) {
     const progressBar = statusMsg.querySelector('progress');
 
     // Fetch vectors and import Transformers.js in parallel
-    const [vectorResp, { pipeline: tfPipeline }] = await Promise.all([
-      fetch(VECTORS_URL),
-      import(TRANSFORMERS_URL),
-    ]);
+    const [vectorResp, { pipeline: tfPipeline }] = await Promise.all([fetch(VECTORS_URL), import(TRANSFORMERS_URL)]);
     if (!vectorResp.ok) throw new Error(`Failed to load vectors: ${vectorResp.status}`);
     vectorData = await vectorResp.json();
     if (vectorData.version !== 2) throw new Error('Stale vectors.json — run yarn build to regenerate');
@@ -135,9 +132,9 @@ export function initSemanticSearch({ esc, setMode }) {
       const threshold = query.trim().length < 4 ? 0.15 : 0.25;
       const results = [...bestByUrl.values()]
         .sort((a, b) => b.score - a.score)
-        .filter(d => d.score > threshold)
+        .filter((d) => d.score > threshold)
         .slice(0, 5)
-        .map(d => ({ ...chunks[d.i], score: d.score }));
+        .map((d) => ({ ...chunks[d.i], score: d.score }));
 
       thinkingMsg.remove();
       addMessage('system', renderResults(results, query));

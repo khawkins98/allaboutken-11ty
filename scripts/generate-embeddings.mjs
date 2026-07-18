@@ -33,21 +33,7 @@ const OUTPUT_FILE = join(OUTPUT_DIR, 'vectors.json');
 const MODEL_NAME = 'Xenova/all-MiniLM-L6-v2';
 
 // Paths to skip (not real content pages)
-const SKIP_PATTERNS = [
-  /\/social\//,
-  /\/node\//,
-  /\/404\//,
-  /\/search\//,
-  /\/sitemap/,
-  /\/robots/,
-  /\/feed/,
-  /\/style-guide\//,
-  /\/pagefind\//,
-  /\/semantic-search\//,
-  /\/css\//,
-  /\/img\//,
-  /\/assets\//,
-];
+const SKIP_PATTERNS = [/\/social\//, /\/node\//, /\/404\//, /\/search\//, /\/sitemap/, /\/robots/, /\/feed/, /\/style-guide\//, /\/pagefind\//, /\/semantic-search\//, /\/css\//, /\/img\//, /\/assets\//];
 
 /**
  * Recursively find all HTML files in a directory.
@@ -100,11 +86,7 @@ function makeSnippet(text, isFirstChunk) {
   if (s.length <= 200) return s;
   // Snap to last sentence end within the 200-char window
   const window = s.slice(0, 200);
-  const sentEnd = Math.max(
-    window.lastIndexOf('. '),
-    window.lastIndexOf('? '),
-    window.lastIndexOf('! ')
-  );
+  const sentEnd = Math.max(window.lastIndexOf('. '), window.lastIndexOf('? '), window.lastIndexOf('! '));
   if (sentEnd > 80) return s.slice(0, sentEnd + 1);
   // Fall back to last space
   const spaceIdx = window.lastIndexOf(' ');
@@ -130,11 +112,7 @@ function chunkText(bodyText) {
     if (end < bodyText.length) {
       // Try to snap to sentence boundary within a 100-char window before the target end
       const window = bodyText.slice(end - 100, end);
-      const sentenceEnd = Math.max(
-        window.lastIndexOf('. '),
-        window.lastIndexOf('? '),
-        window.lastIndexOf('! ')
-      );
+      const sentenceEnd = Math.max(window.lastIndexOf('. '), window.lastIndexOf('? '), window.lastIndexOf('! '));
       if (sentenceEnd !== -1) {
         // +2 to include the punctuation and space
         end = end - 100 + sentenceEnd + 2;
@@ -214,10 +192,14 @@ async function main() {
   const entries = [];
   let pageCount = 0;
   for (const file of allFiles) {
-    const urlPath = '/' + relative(BUILD_DIR, file).replace(/index\.html$/, '').replace(/\.html$/, '/');
+    const urlPath =
+      '/' +
+      relative(BUILD_DIR, file)
+        .replace(/index\.html$/, '')
+        .replace(/\.html$/, '/');
 
     // Skip non-content paths
-    if (SKIP_PATTERNS.some(p => p.test(urlPath))) continue;
+    if (SKIP_PATTERNS.some((p) => p.test(urlPath))) continue;
 
     const html = readFileSync(file, 'utf-8');
     const content = extractContent(html);
@@ -229,9 +211,7 @@ async function main() {
       const chunk = chunks[ci];
       // Chunk 0 gets title + description + body for maximum signal;
       // later chunks get title + body only (description would dilute).
-      const embeddingInput = ci === 0
-        ? content.title + ' ' + content.description + ' ' + chunk.text
-        : content.title + ' ' + chunk.text;
+      const embeddingInput = ci === 0 ? content.title + ' ' + content.description + ' ' + chunk.text : content.title + ' ' + chunk.text;
 
       const entry = {
         url: urlPath,
@@ -268,7 +248,7 @@ async function main() {
     const entry = entries[i];
     const output = await extractor(entry.embeddingInput, { pooling: 'mean', normalize: true });
     // Round to 4 decimal places — well within MiniLM's noise floor, reduces JSON size
-    const embedding = Array.from(output.data).map(v => Math.round(v * 10000) / 10000);
+    const embedding = Array.from(output.data).map((v) => Math.round(v * 10000) / 10000);
 
     const chunk = {
       url: entry.url,
@@ -301,7 +281,7 @@ async function main() {
   // via eleventy.after hook in eleventy.js (runs in both dev and production).
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('Embedding generation failed:', err);
   process.exit(1);
 });

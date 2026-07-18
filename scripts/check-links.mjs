@@ -30,7 +30,7 @@ function proxiedPrefixes() {
   try {
     const cfg = JSON.parse(readFileSync('vercel.json', 'utf-8'));
     return (cfg.rewrites || [])
-      .map(r => (r.source || '').split(':')[0]) // strip ":path*"
+      .map((r) => (r.source || '').split(':')[0]) // strip ":path*"
       .filter(Boolean);
   } catch {
     return [];
@@ -51,9 +51,7 @@ function findHtmlFiles(dir, files = []) {
 // Strips <script>/<style> first so JS template strings (e.g. `${item.url}`)
 // aren't mistaken for links.
 function extractLinks(html) {
-  const cleaned = html
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
-    .replace(/<style[\s\S]*?<\/style>/gi, '');
+  const cleaned = html.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<style[\s\S]*?<\/style>/gi, '');
   const links = [];
   const re = /(?:href|src)\s*=\s*("([^"]*)"|'([^']*)')/gi;
   let m;
@@ -128,7 +126,7 @@ function main() {
     for (const link of extractLinks(html)) {
       if (EXTERNAL.test(link)) continue;
       // Skip Vercel-proxied hobby-project paths (valid in prod, not in build).
-      if (PROXIED.some(p => link === p || link.startsWith(p))) continue;
+      if (PROXIED.some((p) => link === p || link.startsWith(p))) continue;
       checked++;
 
       const target = resolveTarget(link, file);

@@ -18,31 +18,31 @@
  */
 
 const { DateTime } = require('luxon');
-const Path         = require('path');
+const Path = require('path');
 const { execSync, exec } = require('child_process');
-const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
+const { eleventyImageTransformPlugin } = require('@11ty/eleventy-img');
 // const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
 
-module.exports = function(config) {
+module.exports = function (config) {
   const isDev = process.env.ELEVENTY_ENV === 'development';
   // Transform <img>/<picture> in HTML to responsive images at build time
   config.addPlugin(eleventyImageTransformPlugin, {
-    outputDir: "./build/img/",
-    urlPath: "/img/",
+    outputDir: './build/img/',
+    urlPath: '/img/',
     widths: [320, 600, 900, 1280],
-    formats: ["avif", "webp", "jpeg", "gif"],
+    formats: ['avif', 'webp', 'jpeg', 'gif'],
     transformOnRequest: isDev,
     // Do not fail the entire build on a single image error (e.g., 404 remote)
     failOnError: false,
     // Preserve animation for GIF/WEBP when resizing/encoding
     sharpOptions: {
-      animated: true
+      animated: true,
     },
     sharpWebpOptions: {
-      animated: true
+      animated: true,
     },
     sharpGifOptions: {
-      reoptimise: true
+      reoptimise: true,
     },
     // Deterministic file names: <dir-token>-<base-name>-<width>.<format>
     filenameFormat: function filenameFormat(id, src, width, format) {
@@ -78,11 +78,11 @@ module.exports = function(config) {
     },
     htmlOptions: {
       img: {
-        decoding: "async",
-        loading: "lazy",
-        sizes: "100vw"
-      }
-    }
+        decoding: 'async',
+        loading: 'lazy',
+        sizes: '100vw',
+      },
+    },
   });
   config.setServerOptions({
     showVersion: true,
@@ -92,7 +92,7 @@ module.exports = function(config) {
     domDiff: true,
 
     watch: [
-      "build/**/*.css" // watch compiled CSS from Sass for instant reloads
+      'build/**/*.css', // watch compiled CSS from Sass for instant reloads
     ],
 
     // Show local network IP addresses for device testing
@@ -105,12 +105,12 @@ module.exports = function(config) {
     },
 
     // Change the default file encoding for reading/serving files
-    encoding: "utf-8",
+    encoding: 'utf-8',
   });
 
   // Fix any image src paths that were rewritten to input filesystem paths.
   // Ensures URLs point to passthrough-copied /images/ in output.
-  config.addTransform("fixImageSrcToAbsolute", (content, outputPath) => {
+  config.addTransform('fixImageSrcToAbsolute', (content, outputPath) => {
     try {
       if (typeof content !== 'string') return content;
       if (!outputPath || !outputPath.endsWith('.html')) return content;
@@ -125,70 +125,74 @@ module.exports = function(config) {
   // -----
 
   // Add any utility filters
-  config.addFilter("dateDisplay", (dateObj, format = "d LLL y") => {
+  config.addFilter('dateDisplay', (dateObj, format = 'd LLL y') => {
     return DateTime.fromJSDate(dateObj, {
-      zone: "utc"
+      zone: 'utc',
     }).toFormat(format);
   });
 
   // Return the first N items of an array (more specific name to avoid collisions)
-  config.addFilter("limitItems", (array, n) => {
+  config.addFilter('limitItems', (array, n) => {
     if (!Array.isArray(array)) return array;
     if (typeof n !== 'number') return array;
     return n < 0 ? array.slice(n) : array.slice(0, n);
   });
 
   // Ensure trailing slash on URLs for canonical IDs
-  config.addFilter("ensureTrailingSlash", (value) => {
+  config.addFilter('ensureTrailingSlash', (value) => {
     const v = String(value || '');
     if (!v) return v;
     return v.endsWith('/') ? v : v + '/';
   });
-  config.addFilter("rssDate", (dateObj) => {
-    return DateTime.fromJSDate(dateObj, { zone: "utc" }).toISO();
+  config.addFilter('rssDate', (dateObj) => {
+    return DateTime.fromJSDate(dateObj, { zone: 'utc' }).toISO();
   });
-  config.addFilter("rssLastUpdatedDate", (posts) => {
+  config.addFilter('rssLastUpdatedDate', (posts) => {
     if (!Array.isArray(posts) || posts.length === 0) return DateTime.now().toISO();
     const latest = posts.reduce((a, b) => (a.date > b.date ? a : b));
-    return DateTime.fromJSDate(latest.date, { zone: "utc" }).toISO();
+    return DateTime.fromJSDate(latest.date, { zone: 'utc' }).toISO();
   });
   // Convert double hyphens to em dashes for nicer typography
-  config.addFilter("emdash", (value) => {
+  config.addFilter('emdash', (value) => {
     const v = String(value || '');
     return v.replace(/--/g, '—');
   });
-  config.addFilter("htmlToAbsoluteUrls", (content, siteBaseUrl) => {
+  config.addFilter('htmlToAbsoluteUrls', (content, siteBaseUrl) => {
     const base = (siteBaseUrl || '').replace(/\/$/, '');
     const html = content || '';
-    return html
-      // href attributes
-      .replace(/href="\/(?!\/)/g, `href="${base}/`)
-      // src attributes
-      .replace(/src="\/(?!\/)/g, `src="${base}/`)
-      // srcset attributes (handles comma-separated URLs)
-      .replace(/srcset="([^"]*)"/g, (m, val) => {
-        const updated = (val || '').replace(/\s+\/(?!\/)/g, ` ${base}/`).replace(/^\/(?!\/)/, `${base}/`);
-        return `srcset="${updated}"`;
-      });
+    return (
+      html
+        // href attributes
+        .replace(/href="\/(?!\/)/g, `href="${base}/`)
+        // src attributes
+        .replace(/src="\/(?!\/)/g, `src="${base}/`)
+        // srcset attributes (handles comma-separated URLs)
+        .replace(/srcset="([^"]*)"/g, (m, val) => {
+          const updated = (val || '').replace(/\s+\/(?!\/)/g, ` ${base}/`).replace(/^\/(?!\/)/, `${base}/`);
+          return `srcset="${updated}"`;
+        })
+    );
   });
 
   // Strip unsafe elements/attributes from feed content
-  config.addFilter("sanitizeFeedHtml", (content) => {
+  config.addFilter('sanitizeFeedHtml', (content) => {
     const html = String(content || '');
-    return html
-      // remove script/style/link/iframe blocks
-      .replace(/<script[\s\S]*?<\/script>/gi, '')
-      .replace(/<style[\s\S]*?<\/style>/gi, '')
-      .replace(/<link[^>]*>/gi, '')
-      .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
-      // drop inline style attributes
-      .replace(/\sstyle="[^"]*"/gi, '')
-      // drop inline event handlers (on*)
-      .replace(/\son[a-z]+="[^"]*"/gi, '');
+    return (
+      html
+        // remove script/style/link/iframe blocks
+        .replace(/<script[\s\S]*?<\/script>/gi, '')
+        .replace(/<style[\s\S]*?<\/style>/gi, '')
+        .replace(/<link[^>]*>/gi, '')
+        .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
+        // drop inline style attributes
+        .replace(/\sstyle="[^"]*"/gi, '')
+        // drop inline event handlers (on*)
+        .replace(/\son[a-z]+="[^"]*"/gi, '')
+    );
   });
 
   // Compute plain-text word count from HTML content
-  config.addFilter("wordCount", (content) => {
+  config.addFilter('wordCount', (content) => {
     try {
       const html = String(content || '');
       const cleaned = html
@@ -208,7 +212,7 @@ module.exports = function(config) {
   });
 
   // Format a number with locale separators (e.g., 1,234)
-  config.addFilter("formatNumber", (value, locale = 'en-US') => {
+  config.addFilter('formatNumber', (value, locale = 'en-US') => {
     try {
       const n = Number(value);
       if (!isFinite(n)) return String(value ?? '');
@@ -248,44 +252,45 @@ module.exports = function(config) {
     });
   };
 
-  const md = markdownIt({ html: true, linkify: true }).use(markdownItAnchor, {
-    // Add ids to all heading levels so we can deep-link
-    level: [1, 2, 3, 4, 5, 6],
-    // Create clean ASCII slugs: remove punctuation/specials, collapse spaces to '-'
-    slugify: (s) => (
-      (s || '')
-        .toString()
-        .toLowerCase()
-        .normalize('NFKD')
-        .replace(/[\u0300-\u036f]/g, '') // strip combining marks
-        .replace(/&amp;/g, 'and')
-        .replace(/[^a-z0-9\s-]/g, '') // drop punctuation and specials (e.g. ?!@():’–)
-        .replace(/[\s_-]+/g, '-')
-        .replace(/^-+|-+$/g, '')
-    ),
+  const md = markdownIt({ html: true, linkify: true })
+    .use(markdownItAnchor, {
+      // Add ids to all heading levels so we can deep-link
+      level: [1, 2, 3, 4, 5, 6],
+      // Create clean ASCII slugs: remove punctuation/specials, collapse spaces to '-'
+      slugify: (s) =>
+        (s || '')
+          .toString()
+          .toLowerCase()
+          .normalize('NFKD')
+          .replace(/[\u0300-\u036f]/g, '') // strip combining marks
+          .replace(/&amp;/g, 'and')
+          .replace(/[^a-z0-9\s-]/g, '') // drop punctuation and specials (e.g. ?!@():’–)
+          .replace(/[\s_-]+/g, '-')
+          .replace(/^-+|-+$/g, ''),
 
-    // Append a discrete '#' permalink link to the end of the heading content
-    permalink: (slug, opts, state, index) => {
-      try {
-        const inlineToken = state.tokens[index + 1];
-        if (!inlineToken || !Array.isArray(inlineToken.children)) return;
-        // Create a small '#' anchor link that is the only clickable element
-        const linkOpen = new state.Token('link_open', 'a', 1);
-        linkOpen.attrs = [
-          ['href', `#${slug}`],
-          ['class', 'kh-anchor'],
-          ['aria-label', 'Permalink to this heading']
-        ];
-        const textToken = new state.Token('text', '', 0);
-        textToken.content = '#';
-        const linkClose = new state.Token('link_close', 'a', -1);
+      // Append a discrete '#' permalink link to the end of the heading content
+      permalink: (slug, opts, state, index) => {
+        try {
+          const inlineToken = state.tokens[index + 1];
+          if (!inlineToken || !Array.isArray(inlineToken.children)) return;
+          // Create a small '#' anchor link that is the only clickable element
+          const linkOpen = new state.Token('link_open', 'a', 1);
+          linkOpen.attrs = [
+            ['href', `#${slug}`],
+            ['class', 'kh-anchor'],
+            ['aria-label', 'Permalink to this heading'],
+          ];
+          const textToken = new state.Token('text', '', 0);
+          textToken.content = '#';
+          const linkClose = new state.Token('link_close', 'a', -1);
 
-        inlineToken.children.push(linkOpen, textToken, linkClose);
-      } catch (e) {
-        // no-op
-      }
-    }
-  }).use(emdashPlugin);
+          inlineToken.children.push(linkOpen, textToken, linkClose);
+        } catch (e) {
+          // no-op
+        }
+      },
+    })
+    .use(emdashPlugin);
 
   // Use for Eleventy's markdown engine (for .md files and markdown in templates)
   config.setLibrary('md', md);
@@ -300,26 +305,14 @@ module.exports = function(config) {
   // {% endcodeAndDemo %}
   config.addPairedShortcode('codeAndDemo', (content, lang = 'html') => {
     const snippet = String(content || '');
-    const escapeHtml = (s) => (
-      String(s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-    );
+    const escapeHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     const escaped = escapeHtml(snippet);
-    return [
-      '<div class="kh-demo" data-pagefind-ignore>',
-      `<pre><code class="language-${lang}">${escaped}</code></pre>`,
-      '<div class="kh-demo__live">',
-      snippet,
-      '</div>',
-      '</div>'
-    ].join('');
+    return ['<div class="kh-demo" data-pagefind-ignore>', `<pre><code class="language-${lang}">${escaped}</code></pre>`, '<div class="kh-demo__live">', snippet, '</div>', '</div>'].join('');
   });
 
   // Shortcode to generate Eleventy screenshot service URL for dynamic OG images
   // Usage: {% ogImageUrl %}
-  config.addShortcode('ogImageUrl', function() {
+  config.addShortcode('ogImageUrl', function () {
     // Build the social card URL for this page
     const socialCardUrl = `https://www.allaboutken.com/social${this.page.url}`;
     // URI encode the URL for the screenshot service
@@ -373,22 +366,22 @@ module.exports = function(config) {
   // });
 
   // copy js files
-  config.addPassthroughCopy("./src/site/**/*.js");
+  config.addPassthroughCopy('./src/site/**/*.js');
   // pass through favicon assets
-  config.addPassthroughCopy({ "./src/components/ken-favicon/assets": "assets/ken-favicon/assets" });
+  config.addPassthroughCopy({ './src/components/ken-favicon/assets': 'assets/ken-favicon/assets' });
 
   // pass some assets right through
-  config.addPassthroughCopy("./src/site/images");
+  config.addPassthroughCopy('./src/site/images');
 
   // Copy local Recursive font assets to build
-  config.addPassthroughCopy({ "./src/components/kh-font": "assets/kh-font" });
+  config.addPassthroughCopy({ './src/components/kh-font': 'assets/kh-font' });
   // mostly needed for redirecting from old drupal urls
-  config.addPassthroughCopy("./src/site/**/*.html");
+  config.addPassthroughCopy('./src/site/**/*.html');
   // downloadable text resources (starter kits, templates)
-  config.addPassthroughCopy("./src/site/**/*.txt");
+  config.addPassthroughCopy('./src/site/**/*.txt');
 
   // Watch source images for changes
-  config.addWatchTarget("./src/site/images");
+  config.addWatchTarget('./src/site/images');
 
   // Post-build: generate Pagefind search index
   let pagefindChild = null;
@@ -424,7 +417,8 @@ module.exports = function(config) {
 
   config.addCollection('impactStories', (collectionApi) => {
     try {
-      return collectionApi.getAll()
+      return collectionApi
+        .getAll()
         .filter((item) => getTagArray(item).includes('impact-stories'))
         .sort((a, b) => b.date - a.date);
     } catch (e) {
@@ -434,12 +428,11 @@ module.exports = function(config) {
 
   config.addCollection('blogPosts', (collectionApi) => {
     try {
-      return collectionApi.getAll()
+      return collectionApi
+        .getAll()
         .filter((item) => {
           const tags = getTagArray(item);
-          return tags.includes('posts')
-            && !tags.includes('case-studies')
-            && !tags.includes('impact-stories');
+          return tags.includes('posts') && !tags.includes('case-studies') && !tags.includes('impact-stories');
         })
         .sort((a, b) => b.date - a.date);
     } catch (e) {
@@ -449,7 +442,8 @@ module.exports = function(config) {
 
   config.addCollection('allContent', (collectionApi) => {
     try {
-      return collectionApi.getAll()
+      return collectionApi
+        .getAll()
         .filter((item) => {
           const tags = getTagArray(item);
           return tags.includes('posts') || tags.includes('digesting');
@@ -465,17 +459,14 @@ module.exports = function(config) {
   // If you have other `addPlugin` calls, it’s important that UpgradeHelper is added last.
   return {
     dir: {
-      input: "src/site",
-      output: "build",
-      data: "_data",
-      includes: "_includes"
+      input: 'src/site',
+      output: 'build',
+      data: '_data',
+      includes: '_includes',
     },
-    templateFormats : [
-      "njk", "md",
-      "css", "js"
-    ],
-    htmlTemplateEngine : ["njk", "md"],
-    markdownTemplateEngine : "njk",
+    templateFormats: ['njk', 'md', 'css', 'js'],
+    htmlTemplateEngine: ['njk', 'md'],
+    markdownTemplateEngine: 'njk',
     passthroughFileCopy: true,
     // pathPrefix: "/vf-eleventy/" // if your site is deployed to a sub-url, otherwise comment out
   };
