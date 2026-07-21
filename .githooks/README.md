@@ -14,6 +14,19 @@ git config core.hooksPath .githooks
 
 ## Available Hooks
 
+### prepare-commit-msg
+
+Normalizes common commit subject issues before validation:
+
+- Uppercase prefix -> lowercase
+- Spacing around `:` normalized to `<prefix>: <description>`
+- Leading/trailing whitespace trimmed
+- Trailing period removed
+
+It skips machine-generated subjects (`Merge`, `Revert`, `fixup!`, `squash!`).
+
+If a message still does not match the required format after normalization, `commit-msg` blocks the commit.
+
 ### pre-push
 
 Reminds you about PR title format requirements before pushing. This helps catch issues early that would otherwise fail in the `pr-title-check` GitHub Actions workflow.

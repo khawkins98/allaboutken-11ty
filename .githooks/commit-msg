@@ -14,7 +14,7 @@ case "$subject" in
 esac
 
 allowed_prefixes="content | feature | fix | ci | chore"
-prefix_pattern='^(content|feature|fix|ci|chore): .+'
+prefix_pattern='^(content|feature|fix|ci|chore): [^[:space:]].*'
 
 fail() {
   echo ""
@@ -31,6 +31,11 @@ fail() {
 
 if ! [[ "$subject" =~ $prefix_pattern ]]; then
   fail "missing or unknown prefix"
+fi
+
+description="${subject#*: }"
+if [[ -z "${description// }" ]]; then
+  fail "empty description"
 fi
 
 if (( ${#subject} > 72 )); then
