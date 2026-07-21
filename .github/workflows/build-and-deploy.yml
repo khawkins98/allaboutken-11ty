@@ -27,7 +27,7 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v7
       - name: Set up Node.js ☕
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'yarn'
@@ -39,7 +39,7 @@ jobs:
       # on every build. Keyed on the embeddings script (which holds MODEL_NAME),
       # so the cache busts automatically when the model changes.
       - name: Cache embedding model 🧠
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .cache/transformers
           key: transformers-model-${{ hashFiles('scripts/generate-embeddings.mjs') }}
