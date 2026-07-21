@@ -15,6 +15,16 @@ git config core.hooksPath .githooks
 
 ## Active hooks
 
+### `.githooks/prepare-commit-msg` (normalizes)
+
+Normalizes the first commit subject line before validation:
+
+- Uppercase prefix -> lowercase
+- Missing/extra spaces around `:` -> exactly one space
+- Leading/trailing whitespace trimmed
+- Trailing period removed
+- Merge/revert/fixup/squash subjects are skipped
+
 ### `.githooks/commit-msg` (enforced)
 
 Checks the commit subject against:
@@ -23,7 +33,10 @@ Checks the commit subject against:
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`
 - Subject length: `<= 72` characters
 - No trailing period
+- No empty description
 - Merge/revert/fixup/squash subjects are skipped
+
+If a subject cannot be safely normalized (for example, unknown prefix), the commit is rejected with guidance.
 
 ### `.githooks/pre-push` (advisory)
 
@@ -37,6 +50,14 @@ GitHub Actions enforces PR titles in [`.github/workflows/pr-title-check.yml`](..
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`
 
 The workflow does **not** enforce maximum title length or trailing punctuation.
+
+## Testing
+
+Run the commit-message hook regression checks with:
+
+```bash
+yarn test
+```
 
 ## Troubleshooting
 
@@ -62,7 +83,7 @@ The workflow does **not** enforce maximum title length or trailing punctuation.
    ls -l .githooks
    ```
 
-   You should see executable permissions on hook files (`commit-msg`, `pre-push`).
+   You should see executable permissions on hook files (`prepare-commit-msg`, `commit-msg`, `pre-push`).
 
 ### CI fails PR title check but local commits succeed
 

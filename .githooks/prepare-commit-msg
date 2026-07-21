@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Normalizes commit subjects before commit-msg validation.
+set -euo pipefail
+
+msg_file="$1"
+
+subject_line="$(awk '($0 !~ /^#/ && $0 !~ /^[[:space:]]*$/){print NR; exit}' "$msg_file")"
+if [[ -z "${subject_line}" ]]; then
+  exit 0
+fi
+
+subject="$(sed -n "${subject_line}p" "$msg_file")"
+
+# Skip machine-generated subjects.
+case "$subject" in
+  "Merge "*|"Revert "*|"fixup! "*|"squash! "*) exit 0 ;;
+esac
+
+trimmed="$(printf '%s' "$subject" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
+
+if [[ "$trimmed" =~ ^([[:alpha:]]+)[[:space:]]*:[[:space:]]*(.*)$ ]]; then
+  raw_prefix="${BASH_REMATCH[1]}"
+  raw_description="${BASH_REMATCH[2]}"
+  prefix="$(printf '%s' "$raw_prefix" | tr '[:upper:]' '[:lower:]')"
+  description="$(printf '%s' "$raw_description" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/\.$//')"
+
+  case "$prefix" in
+    content|feature|fix|ci|chore)
+      normalized="${prefix}: ${description}"
+      ;;
+    *)
+      normalized="$trimmed"
+      ;;
+  esac
+else
+  normalized="$trimmed"
+fi
+
+if [[ "$normalized" != "$subject" ]]; then
+  tmp_file="$(mktemp)"
+  replacement="$normalized" awk -v line="$subject_line" '
+    NR == line { $0 = ENVIRON["replacement"] }
+    { print }
+  ' "$msg_file" > "$tmp_file"
+  mv "$tmp_file" "$msg_file"
+fi
+
+exit 0

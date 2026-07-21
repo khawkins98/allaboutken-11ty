@@ -33,6 +33,8 @@ jobs:
           cache: 'yarn'
       - name: Install dependencies 📦
         run: yarn install --frozen-lockfile
+      - name: Test Git hooks 🪝
+        run: yarn test
       # Cache the embedding model so it doesn't re-download from HuggingFace
       # on every build. Keyed on the embeddings script (which holds MODEL_NAME),
       # so the cache busts automatically when the model changes.

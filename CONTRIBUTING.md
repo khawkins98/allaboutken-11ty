@@ -39,13 +39,21 @@ Examples:
 
 ### General rules
 
+- The `prepare-commit-msg` hook auto-normalizes common subject issues:
+  - Uppercase prefix -> lowercase (for example, `Fix` -> `fix`)
+  - Missing or extra spaces around `:` -> exactly one space
+  - Leading/trailing whitespace trimmed
+  - Trailing period removed
+- Canonical commit subject format remains: `<prefix>: <description>`
+- Allowed commit prefixes: `content|feature|fix|ci|chore`
+- Unknown prefix, empty description, or subject length > 72 still fail in `commit-msg`
 - First line ≤ 72 characters (enforced by the hook)
 - No trailing period on the subject (enforced by the hook)
 - Body optional; when present, focus on the *why* (the diff already shows the *what*)
 - One logical change per commit
 - Never use `--no-verify` or `--no-gpg-sign` to bypass hooks
 
-Commit subjects are enforced locally by `.githooks/commit-msg` (activated on `yarn install` via the `prepare` script). PR titles are enforced in CI by `pr-title-check` for prefix/pattern matching.
+Commit subjects are normalized locally by `.githooks/prepare-commit-msg` and enforced by `.githooks/commit-msg` (activated on `yarn install` via the `prepare` script). PR titles are enforced in CI by `pr-title-check` for prefix/pattern matching.
 
 ## Pull requests
 
