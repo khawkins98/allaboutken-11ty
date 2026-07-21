@@ -11,6 +11,7 @@ Source of truth for local commands and script behavior in this repository.
 | `yarn embeddings` | Regenerate semantic-search vectors | After content/model changes that affect embeddings |
 | `yarn lint:css` | Lint SCSS/CSS files | Before committing style changes |
 | `yarn lint:links` | Validate internal links in `build/` | After a build, to catch broken internal links/anchors |
+| `yarn test` | Test commit-message normalization and validation | After changing files in `.githooks/` |
 
 ## Script details
 
@@ -78,14 +79,15 @@ Source of truth for local commands and script behavior in this repository.
 
 ### `yarn test`
 
-- Placeholder script; currently prints an informational message and exits successfully.
-- There is no automated test suite wired via this command today.
+- Runs `.githooks/test-commit-msg-hooks.sh`.
+- Checks normalization without corrupting literal escape sequences, preservation of the commit body, and rejection of unknown prefixes and empty descriptions.
+- Runs as a required CI step.
 
 ### `yarn prepare`
 
 - Sets Git hooks path: `git config core.hooksPath .githooks`.
 - Normally runs as part of dependency installation lifecycle.
-- Enables local commit-message enforcement via `.githooks/commit-msg`.
+- Enables local commit-message normalization and enforcement via `.githooks/prepare-commit-msg` and `.githooks/commit-msg`.
 
 ## Lifecycle and automation notes
 
@@ -94,8 +96,9 @@ Source of truth for local commands and script behavior in this repository.
 - `yarn install` runs `yarn prepare` automatically.
 - This repository uses that hook to point Git at `.githooks/`, so local commits are validated before they are created.
 
-### Commit message hook (`.githooks/commit-msg`)
+### Commit message hooks
 
+- `.githooks/prepare-commit-msg` normalizes common prefix, spacing, and trailing-period issues.
 - Enforces `<prefix>: <description>` on the commit subject.
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`.
 - Enforces subject length <= 72 characters and disallows a trailing period.

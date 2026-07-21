@@ -20,7 +20,7 @@ corepack enable
 yarn install
 ```
 
-`yarn install` runs the `prepare` script and configures repo hooks (`.githooks/commit-msg`).
+`yarn install` runs the `prepare` script and configures the hooks in `.githooks/`, including commit-subject normalization and validation.
 If your shell does not pick up the right Yarn automatically, `corepack` is the supported path here because `packageManager` pins Yarn 1.22.22.
 
 ## Daily development workflow

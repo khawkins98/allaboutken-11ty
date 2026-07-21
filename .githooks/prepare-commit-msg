@@ -38,8 +38,8 @@ fi
 
 if [[ "$normalized" != "$subject" ]]; then
   tmp_file="$(mktemp)"
-  awk -v line="$subject_line" -v replacement="$normalized" '
-    NR == line { $0 = replacement }
+  replacement="$normalized" awk -v line="$subject_line" '
+    NR == line { $0 = ENVIRON["replacement"] }
     { print }
   ' "$msg_file" > "$tmp_file"
   mv "$tmp_file" "$msg_file"

@@ -51,6 +51,14 @@ GitHub Actions enforces PR titles in [`.github/workflows/pr-title-check.yml`](..
 
 The workflow does **not** enforce maximum title length or trailing punctuation.
 
+## Testing
+
+Run the commit-message hook regression checks with:
+
+```bash
+yarn test
+```
+
 ## Troubleshooting
 
 ### Hooks are not running
