@@ -8,6 +8,7 @@ Use this page as the entry point for repository documentation. It maps each doc 
 | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) | Branch, commit, and PR conventions | Contributors and assistants | You are preparing commits, PR titles, and merge flow |
 | [`GIT_HOOKS.md`](GIT_HOOKS.md) | Local hook behavior, commit/PR title enforcement, and troubleshooting | Contributors and maintainers | You need to set up hooks or debug local vs CI title/commit checks |
 | [`SCRIPTS.md`](SCRIPTS.md) | Source of truth for `package.json` scripts and lifecycle behavior | Contributors running local/CI commands | You need the right command and expected output |
+| [`PROCESS_IMAGES.md`](PROCESS_IMAGES.md) | Legacy image preprocessing helper status and source-image handling guidance | Contributors and maintainers | You need clarity on `scripts/process-images.js` and current image-prep workflow |
 | [`FONTS.md`](FONTS.md) | Recursive font asset placement, build passthrough, and verification | Contributors editing typography or static assets | You are changing font files or `@font-face` wiring |
 | [`DEPLOYMENT.md`](DEPLOYMENT.md) | Runtime architecture and platform ownership (Vercel, DNS, Pages, Worker) | Maintainer/operators | You are changing deploy config, DNS, or rewrites |
 | [`SEARCH.md`](SEARCH.md) | Keyword and semantic search architecture | Contributors touching search/indexing | You are changing Pagefind, embeddings, or search UI |
@@ -37,4 +38,5 @@ Use this page as the entry point for repository documentation. It maps each doc 
 - **Local setup/debugging:** `DEVELOPMENT_SETUP.md` -> `SCRIPTS.md`
 - **Offline behavior:** `OFFLINE_SERVICE_WORKER.md` -> `ELEVENTY_CONFIG.md` -> `DEVELOPMENT_SETUP.md`
 - **Content workflow:** `PUBLISHING_WORKFLOW.md` -> `../src/site/style-guide/editorial.njk` -> `IMAGE_GENERATION.md`
+- **Image workflow:** `PROCESS_IMAGES.md` -> `IMAGE_GENERATION.md`
 - **Operations/deploy:** `DEPLOYMENT.md` -> `../worker/README.md`

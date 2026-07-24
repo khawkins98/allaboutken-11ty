@@ -48,8 +48,8 @@ By the numbers: +3,069 additions, −10,252 deletions (net −7,183 lines, exclu
   - Condensed and audited local SCSS and components.
 
 - Eleventy-integrated tasks
-  - Images: `scripts/process-images.js` (sharp) runs on build and during dev.
-  - Search: `scripts/build-search-index.js` regenerates the client-side index on build.
+  - Images: at the time of this 2025 migration, `scripts/process-images.js` was part of the workflow; source-image preprocessing is now handled through the Eleventy image pipeline and the helper is no longer wired into current Yarn scripts.
+  - Search: this period included an older `scripts/build-search-index.js` approach; active search indexing now uses the present `scripts/generate-embeddings.mjs` flow.
   - Cleaned passthroughs; removed unused VF assets.
 
 ### Related posts

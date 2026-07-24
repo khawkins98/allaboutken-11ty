@@ -122,6 +122,7 @@ Source of truth for local commands and script behavior in this repository.
 
 ### `scripts/process-images.js`
 
-- Planned helper script only; currently a documented placeholder.
-- It is **not** invoked by `yarn dev`, `yarn build`, or any npm/yarn script in `package.json`.
-- Eleventy image transforms are still handled at build time via the existing Eleventy image pipeline.
+- Legacy helper script that is currently a non-functional placeholder.
+- It is **not** wired into `package.json` (so it is not run by `yarn dev`, `yarn build`, or any current npm/yarn script).
+- Image optimization and responsive source handling are currently handled by the Eleventy image pipeline at build time.
+- See [`PROCESS_IMAGES.md`](PROCESS_IMAGES.md) for current status, rationale, and source-image preparation guidance.
