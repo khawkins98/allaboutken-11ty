@@ -42,9 +42,8 @@
     font-family: var(--kh-font-mono);
     font-size: 12px;
     font-weight: 400;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.035em;
     padding: 0.6rem 1.1rem;
-    text-transform: uppercase;
 
     & + & {
       border-left: 1px solid var(--kh-rule);

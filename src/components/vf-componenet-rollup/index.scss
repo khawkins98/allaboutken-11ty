@@ -39,8 +39,8 @@ body:has(#kh-css-toggle:checked) {
   --kh-ground: #fffae1;
   --kh-grid-size: 26px;
   --kh-grid-size--major: 130px; // every 5th line
-  --kh-grid-ink: rgb(196 168 88 / 13%);
-  --kh-grid-ink--major: rgb(196 168 88 / 30%);
+  --kh-grid-ink: rgb(196 168 88 / 9%);
+  --kh-grid-ink--major: rgb(196 168 88 / 21%);
   --kh-color--sun: #ffd21e;
   --kh-color--sun--deep: #8f6600;
   --kh-color--yellow--dark: #f0b429;
@@ -339,7 +339,6 @@ body:has(#kh-css-toggle:checked) {
     line-height: 1;
     padding: 4px 8px;
     text-decoration: none;
-    text-transform: uppercase;
   }
 
   /* Compact label for categorization chips */
@@ -600,7 +599,6 @@ body:has(#kh-css-toggle:checked) {
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.05em;
-    text-transform: uppercase;
     text-decoration: none;
     padding: 3px 8px;
     border-radius: 0;
