@@ -69,7 +69,9 @@ body:has(#kh-css-toggle:checked) {
     repeating-linear-gradient(to bottom, var(--kh-grid-ink--major) 0 1px, transparent 1px var(--kh-grid-size--major)),
     repeating-linear-gradient(to right, var(--kh-grid-ink) 0 1px, transparent 1px var(--kh-grid-size)),
     repeating-linear-gradient(to bottom, var(--kh-grid-ink) 0 1px, transparent 1px var(--kh-grid-size));
-  background-attachment: fixed;
+  // Scrolls with the page: fixed made the paper feel like a backdrop behind
+  // the content rather than the sheet the content is drawn on.
+  background-attachment: scroll;
   color: #222;
   display: block;
   font-size: 16px;
