@@ -29,9 +29,9 @@ dashes, curly quotes, `&#8209;` and `↦`, which the splits do not cover.
 
 ## Superseded
 
-`Recursive_VF_1.085--subset-GF_latin_basic.woff2` and `Recursive.woff2` are no
-longer referenced by any stylesheet. `Datatype.woff2` is still used by a blog
-post and must stay.
+The Recursive faces were removed once IBM Plex landed; recover them from git
+history if the swap is ever reverted. `Datatype.woff2` stays — a blog post
+uses it.
 
 ## Build + runtime paths
 
