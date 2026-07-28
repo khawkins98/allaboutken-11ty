@@ -19,6 +19,7 @@
 
 const { DateTime } = require('luxon');
 const Path         = require('path');
+const Fs           = require('fs');
 const { execSync, exec } = require('child_process');
 const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 // const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
@@ -275,6 +276,139 @@ module.exports = function(config) {
       ));
       const i = ordered.findIndex((p) => p.url === url);
       return i === -1 ? null : `IS-${String(i + 1).padStart(2, '0')}`;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  // Data marks (micro-visualisations)
+  // ---------------------------------
+  // Build-time data for the small marks on post pages: the twelve-month
+  // pulse strip, the sequence rail, the length gauge, and topic tallies.
+  // Everything is computed at build time and baked into markup — no JS.
+
+  // Classify a collection item into the register's three entry types.
+  // Notes are a flavour of article, not a fourth type.
+  function khEntryType(item) {
+    const tags = getTagArray(item);
+    if (tags.includes('impact-stories')) return 'impact';
+    if (tags.includes('digesting')) return 'digesting';
+    return 'article';
+  }
+
+  // Twelve calendar months ending at the build month, each with counts by
+  // entry type. Fed by a collection (usually allContent) so the strip shows
+  // the whole register, not just one type.
+  config.addFilter('pulseMonths', (items, months = 12) => {
+    try {
+      const start = DateTime.utc().startOf('month').minus({ months: months - 1 });
+      const slots = [];
+      for (let i = 0; i < months; i += 1) {
+        const m = start.plus({ months: i });
+        slots.push({
+          key: m.toFormat('yyyy-LL'),
+          label: m.toFormat('LLL yy').toUpperCase(),
+          counts: { article: 0, digesting: 0, impact: 0 },
+          total: 0
+        });
+      }
+      const byKey = new Map(slots.map((s) => [s.key, s]));
+      (items || []).forEach((item) => {
+        const key = DateTime.fromJSDate(item.date, { zone: 'utc' }).toFormat('yyyy-LL');
+        const slot = byKey.get(key);
+        if (!slot) return;
+        slot.counts[khEntryType(item)] += 1;
+        slot.total += 1;
+      });
+      return slots;
+    } catch (e) {
+      return [];
+    }
+  });
+
+  // The current page plus up to `span` neighbours either side, oldest first,
+  // for the sequence rail. Input collection is newest-first.
+  config.addFilter('neighbourhood', (items, url, span = 3) => {
+    try {
+      const list = items || [];
+      const i = list.findIndex((p) => p.url === url);
+      if (i === -1) return [];
+      const out = [];
+      for (let idx = i + span; idx >= i - span; idx -= 1) {
+        if (idx < 0 || idx >= list.length) continue;
+        const item = list[idx];
+        out.push({
+          url: item.url,
+          title: (item.data && item.data.title) || item.url,
+          dateLabel: DateTime.fromJSDate(item.date, { zone: 'utc' }).toFormat('d LLL yyyy'),
+          type: khEntryType(item),
+          current: idx === i
+        });
+      }
+      return out;
+    } catch (e) {
+      return [];
+    }
+  });
+
+  // How many entries in a collection share a topic (case-insensitive).
+  config.addFilter('topicTally', (items, topic) => {
+    try {
+      const t = String(topic || '').toLowerCase();
+      return (items || []).filter((item) => {
+        const topics = item.data && item.data.topics;
+        return Array.isArray(topics) && topics.some((x) => String(x).toLowerCase() === t);
+      }).length;
+    } catch (e) {
+      return 0;
+    }
+  });
+
+  // Word-count corpus for the length gauge: every file in posts/ whose
+  // frontmatter carries the `posts` tag (articles + impact stories — the same
+  // population that renders through post.njk). Counted from raw source with
+  // tags stripped, which tracks the rendered count closely enough to place a
+  // post on a percentile scale. Computed once per build.
+  let khLengthCorpus = null;
+  function khGetLengthCorpus() {
+    if (khLengthCorpus) return khLengthCorpus;
+    const counts = [];
+    try {
+      const dir = Path.join(__dirname, 'src/site/posts');
+      for (const f of Fs.readdirSync(dir)) {
+        if (!/\.(njk|md)$/.test(f)) continue;
+        const raw = Fs.readFileSync(Path.join(dir, f), 'utf8');
+        const m = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/.exec(raw);
+        if (!m) continue;
+        const fm = m[1];
+        if (!/^tags:\s*posts\s*$/m.test(fm) && !/^\s*-\s*posts\s*$/m.test(fm)) continue;
+        const body = m[2]
+          .replace(/{%[\s\S]*?%}/g, ' ')
+          .replace(/{{[\s\S]*?}}/g, ' ')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+        if (body) counts.push(body.split(/\s+/).length);
+      }
+    } catch (e) {
+      // fall through with whatever was gathered
+    }
+    counts.sort((a, b) => a - b);
+    khLengthCorpus = counts;
+    return counts;
+  }
+
+  // Place a word count on the corpus: percentile rank plus the median.
+  config.addFilter('lengthFrame', (words) => {
+    try {
+      const corpus = khGetLengthCorpus();
+      if (!corpus.length) return null;
+      const n = Number(words) || 0;
+      const below = corpus.filter((c) => c < n).length;
+      return {
+        pct: Math.round((below / corpus.length) * 100),
+        median: corpus[Math.floor(corpus.length / 2)]
+      };
     } catch (e) {
       return null;
     }

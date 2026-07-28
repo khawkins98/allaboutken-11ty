@@ -293,6 +293,50 @@ untouched and every other page that includes it is unaffected.
   </div>
 </section>
 
+{# ── DATA MARKS ── #}
+<section class="kh-grid-stylized kh-u-padding__top--800" id="dataviz">
+  <div></div>
+  <div class="kh-content kh-content--wide">
+{% markdown %}
+## Data marks
+
+Micro-visualisations in the register's voice: build-time data baked into
+markup, no JavaScript, no chart library. Styles live in
+`src/components/vf-componenet-rollup/_kh-dataviz.scss`; markup comes from
+partials in `src/site/_includes/partials/` fed by filters in `eleventy.js`.
+Every mark carries a text equivalent (visually-hidden text plus a `title`),
+so with CSS off each one degrades to a plain sentence or a list of links.
+
+### Entry-type key
+
+One encoding wherever entries appear as marks. Type is always shape and
+colour together, never colour alone.
+{% endmarkdown %}
+
+<p><span class="kh-seq__mark" style="display: inline-flex; vertical-align: middle;"></span> <span class="kh-meta">article — filled ink square</span></p>
+<p><span class="kh-seq__mark kh-seq__mark--digesting" style="display: inline-flex; vertical-align: middle;"></span> <span class="kh-meta">digesting — open blue square</span></p>
+<p><span class="kh-seq__mark kh-seq__mark--impact" style="display: inline-flex; vertical-align: middle;"></span> <span class="kh-meta">impact story — coral diamond</span></p>
+
+{% markdown %}
+### The marks
+
+| Mark | Where | Encoding |
+|------|-------|----------|
+| Pulse strip (`partials/pulse-strip.njk`, `pulseMonths` filter) | post masthead | Twelve months, one 2px tick per entry — counts are countable, not just proportional. Ticks stack articles / digesting / impact bottom-up; a coral tick below the baseline marks this post's month. |
+| Sequence rail (`partials/sequence-mark.njk`, `neighbourhood` filter) | post foot, above prev/next | This entry and up to three neighbours either side on a hairline, oldest left. Every mark is a link; the current entry wears a coral outline. |
+| Length gauge (`partials/length-gauge.njk`, `lengthFrame` filter) | post byline | Coral marker at this post's percentile rank among all `posts`-tagged entries; centre tick is the median. Position is the only encoding. |
+| Topic tally (`topicTally` filter) | post byline | `×N` after a topic: how many entries share it. A ranked list with honest numbers, not a word cloud. |
+
+Colours are the register's own: ink `#2b2b28` for articles, link blue
+`#3b6fb6` for digesting, coral `#bf4a26` for impact stories and for
+apparatus (the current-month tick, the gauge marker, tallies). SVG fills are
+hardcoded in the partials because presentation attributes can't read CSS
+custom properties — keep them in sync with `_kh-dataviz.scss`.
+{% endmarkdown %}
+
+  </div>
+</section>
+
 {# ── BUTTONS ── #}
 <section class="kh-grid-stylized kh-u-padding__top--800" id="buttons">
   <div></div>

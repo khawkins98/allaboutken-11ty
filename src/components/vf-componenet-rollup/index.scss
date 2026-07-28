@@ -4,6 +4,7 @@
 @use './settings' as *;
 @use './semantic-search' as semantic-search;
 @use './kh-datasheet' as kh-datasheet;
+@use './kh-dataviz' as kh-dataviz;
 @use '../kh-ambience/kh-ambience' as kh-ambience;
 
 html {
@@ -25,6 +26,7 @@ body:has(#kh-css-toggle:checked) {
   @include kh-content.kh-vf-content();
   @include semantic-search.semantic-search-styles();
   @include kh-datasheet.kh-datasheet();
+  @include kh-dataviz.kh-dataviz();
   --kh-color--grey: #707372;
   --kh-color--grey--darkest: #373a36;
   --kh-color--blue: #3b6fb6;
