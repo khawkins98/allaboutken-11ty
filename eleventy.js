@@ -308,8 +308,11 @@ module.exports = function(config) {
         slots.push({
           key: m.toFormat('yyyy-LL'),
           label: m.toFormat('LLL yy').toUpperCase(),
+          longLabel: m.toFormat('LLLL yyyy'),
           counts: { article: 0, digesting: 0, impact: 0 },
-          total: 0
+          total: 0,
+          url: null,
+          size: 0
         });
       }
       const byKey = new Map(slots.map((s) => [s.key, s]));
@@ -319,6 +322,18 @@ module.exports = function(config) {
         if (!slot) return;
         slot.counts[khEntryType(item)] += 1;
         slot.total += 1;
+        // Newest entry of the month wins, so the dot links somewhere useful.
+        if (!slot.newest || item.date > slot.newest) {
+          slot.newest = item.date;
+          slot.url = item.url;
+          slot.title = (item.data && item.data.title) || item.url;
+        }
+      });
+      // Size by AREA, not by side length: a month with four entries should
+      // look twice as wide as one with a single entry, not four times.
+      slots.forEach((s2) => {
+        s2.size = s2.total ? Math.min(14, Math.round(4 * Math.sqrt(s2.total))) : 0;
+        delete s2.newest;
       });
       return slots;
     } catch (e) {
