@@ -1,0 +1,49 @@
+{# Pulse strip — twelve months of the register as a tick chart.
+   Expects:
+     pulse           — array from the pulseMonths filter (12 slots)
+     pulseCurrentKey — 'yyyy-MM' of the current post (marks its month)
+
+   Encoding: one column per month; each published entry is one 2px tick, so
+   the count is literally countable. Ticks stack in a fixed order — articles
+   (ink #2b2b28) on the baseline, digests (blue #3b6fb6) above, impact
+   stories (coral #bf4a26) on top — so type is carried by position and
+   colour together, never colour alone. A coral tick below the baseline
+   marks the month this post belongs to. Colours are hardcoded here because
+   SVG presentation attributes can't use CSS custom properties; keep in sync
+   with _kh-dataviz.scss.
+
+   The SVG is decorative to assistive tech; the visually-hidden sentence is
+   the record. With CSS off that sentence renders as plain text. #}
+{%- if pulse and pulse.length -%}
+{%- set slotW = 14 -%}
+{%- set baseY = 36 -%}
+<div class="kh-pulse" data-pagefind-ignore>
+  <p class="kh-meta kh-pulse__label">Register · last 12 mo</p>
+  {#- width/height attributes, not just CSS: with the stylesheet off an SVG
+       carrying only a viewBox expands to the full container width. -#}
+    <svg class="kh-pulse__chart" width="{{ pulse.length * slotW }}" height="42" viewBox="0 0 {{ pulse.length * slotW }} 42" preserveAspectRatio="xMinYMax meet" aria-hidden="true" focusable="false">
+    <rect x="0" y="{{ baseY }}" width="{{ pulse.length * slotW }}" height="1" fill="#2b2b28"></rect>
+    {%- for m in pulse %}
+    {%- set x = loop.index0 * slotW + 3 %}
+    <g>
+      <title>{{ m.label }} — {{ m.total }} {{ 'entry' if m.total == 1 else 'entries' }}{% if m.total %} ({{ m.counts.article }} article{{ '' if m.counts.article == 1 else 's' }}, {{ m.counts.digesting }} digesting, {{ m.counts.impact }} impact){% endif %}</title>
+      <rect x="{{ loop.index0 * slotW }}" y="0" width="{{ slotW }}" height="42" fill="transparent"></rect>
+      {%- for j in range(0, m.counts.article) %}
+      <rect x="{{ x }}" y="{{ baseY - 2 - (j * 3) }}" width="8" height="2" fill="#2b2b28"></rect>
+      {%- endfor %}
+      {%- for j in range(0, m.counts.digesting) %}
+      <rect x="{{ x }}" y="{{ baseY - 2 - ((m.counts.article + j) * 3) }}" width="8" height="2" fill="#3b6fb6"></rect>
+      {%- endfor %}
+      {%- for j in range(0, m.counts.impact) %}
+      <rect x="{{ x }}" y="{{ baseY - 2 - ((m.counts.article + m.counts.digesting + j) * 3) }}" width="8" height="2" fill="#bf4a26"></rect>
+      {%- endfor %}
+      {%- if pulseCurrentKey and m.key == pulseCurrentKey %}
+      <rect x="{{ x }}" y="39" width="8" height="2" fill="#bf4a26"></rect>
+      {%- endif %}
+    </g>
+    {%- endfor %}
+  </svg>
+  <p class="kh-pulse__axis" aria-hidden="true"><span class="kh-meta">{{ pulse[0].label }}</span><span class="kh-pulse__axis-sep"> &ndash; </span><span class="kh-meta">{{ (pulse | last).label }}</span></p>
+  <p class="kh-u-sr-only">Entries published over the last twelve months: {% for m in pulse %}{{ m.label }}: {{ m.total }}{{ '; ' if not loop.last else '.' }}{% endfor %}</p>
+</div>
+{%- endif -%}

@@ -1,0 +1,181 @@
+// Data marks
+// ----------
+// Micro-visualisations in the datasheet register: the twelve-month pulse
+// strip, the sequence rail, the length gauge, and topic tallies. All marks
+// are build-time data baked into markup (Nunjucks partials in
+// src/site/_includes/partials/); this file only dresses them. Flat by rule:
+// no radius, no shadow, hairlines and squares only.
+// Entry-type key (used by the pulse strip and sequence rail):
+//   article   — filled ink square   (#2b2b28)
+//   digesting — open blue square    (#3b6fb6)
+//   impact    — filled coral diamond (#bf4a26)
+// Type is always shape/position + colour together, never colour alone, and
+// every mark carries a text equivalent in the markup.
+@mixin kh-dataviz() {
+  // Mark ink. Matches the structural rule colour: articles are the document
+  // itself, so they are drawn in document ink.
+  --kh-viz-ink: #2b2b28;
+
+  // Pulse strip (masthead). The SVG carries its own fills; this frames it.
+  .kh-pulse {
+    margin-top: 1rem;
+  }
+
+  .kh-pulse__label {
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .kh-pulse__chart {
+    display: block;
+    height: auto;
+    max-width: 15rem;
+    width: 100%;
+  }
+
+  // The dash between the axis labels only exists for the CSS-off reading
+  // ("AUG 25 – JUL 26"); styled, the labels sit at the strip's ends.
+  .kh-pulse__axis-sep {
+    display: none;
+  }
+
+  .kh-pulse__axis {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.15rem 0 0;
+    max-width: 15rem;
+
+    .kh-meta {
+      font-size: 10px;
+    }
+  }
+
+  // Sequence rail (foot of a post). A hairline with typed marks riding it;
+  // each mark is a link with a 24px hit target.
+  .kh-seq {
+    margin-bottom: 1rem;
+  }
+
+  .kh-seq__caption {
+    align-items: baseline;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+    max-width: 15rem;
+  }
+
+  .kh-seq__dir {
+    font-size: 10px;
+    text-transform: lowercase;
+  }
+
+  .kh-seq__track {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    margin: 0;
+    max-width: 15rem;
+    padding: 0;
+    position: relative;
+
+    // The rail itself.
+    &::before {
+      background: var(--kh-rule);
+      content: '';
+      height: 1px;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 50%;
+    }
+  }
+
+  .kh-seq__item {
+    display: flex;
+    margin: 0;
+  }
+
+  .kh-seq__mark {
+    align-items: center;
+    display: flex;
+    height: 24px;
+    justify-content: center;
+    position: relative;
+    text-decoration: none;
+    width: 24px;
+
+    // The shape. Background masks the rail so open marks stay legible.
+    &::before {
+      background: var(--kh-viz-ink);
+      content: '';
+      height: 8px;
+      width: 8px;
+    }
+
+    &:hover::before,
+    &:focus-visible::before {
+      outline: 1px solid var(--kh-viz-ink);
+      outline-offset: 2px;
+    }
+  }
+
+  .kh-seq__mark--digesting::before {
+    background: #fffae1;
+    border: 1px solid var(--kh-color--blue);
+  }
+
+  .kh-seq__mark--impact::before {
+    background: var(--kh-color--coral);
+    height: 7px;
+    transform: rotate(45deg);
+    width: 7px;
+  }
+
+  .kh-seq__mark--current::before {
+    outline: 1px solid var(--kh-color--coral);
+    outline-offset: 2px;
+  }
+
+  // Length gauge (byline). A hairline cell: centre tick = corpus median,
+  // coral marker = this post's percentile rank.
+  .kh-length-gauge {
+    display: inline-block;
+    vertical-align: baseline;
+  }
+
+  .kh-length-gauge__track {
+    border: 1px solid var(--kh-rule);
+    display: inline-block;
+    height: 8px;
+    position: relative;
+    vertical-align: -1px;
+    width: 3.5rem;
+  }
+
+  .kh-length-gauge__mid {
+    background: var(--kh-rule);
+    bottom: 0;
+    height: 4px;
+    left: 50%;
+    position: absolute;
+    width: 1px;
+  }
+
+  .kh-length-gauge__marker {
+    background: var(--kh-color--coral);
+    bottom: 0;
+    left: clamp(0%, var(--kh-len, 50%), calc(100% - 2px));
+    position: absolute;
+    top: 0;
+    width: 2px;
+  }
+
+  // Topic tally (byline). The count is apparatus, so it wears coral.
+  .kh-topic-tally {
+    color: var(--kh-color--coral);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+}

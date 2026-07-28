@@ -1,0 +1,31 @@
+{# Sequence rail — this post's position in the register, as navigation.
+   Expects:
+     seqNeighbours — array from the neighbourhood filter (oldest → newest,
+                     current entry flagged)
+
+   Encoding: one mark per entry on a hairline, older on the left. Type is
+   shape + colour together: article = filled ink square, digesting = open
+   blue square, impact story = coral diamond. The current entry wears a
+   coral outline. Every mark is a real link with the title and date in both
+   the tooltip and visually-hidden text, so with CSS off this degrades to a
+   plain list of nearby entries. #}
+{%- if seqNeighbours and seqNeighbours.length > 1 -%}
+<nav class="kh-seq" aria-label="Nearby entries in the register" data-pagefind-ignore>
+  <p class="kh-meta kh-seq__caption"><span class="kh-seq__dir" aria-hidden="true">← older</span><span class="kh-meta--accent">Sequence</span><span class="kh-seq__dir" aria-hidden="true">newer →</span></p>
+  <ol class="kh-seq__track">
+    {%- for n in seqNeighbours %}
+    <li class="kh-seq__item">
+      {%- if n.current %}
+      <span class="kh-seq__mark kh-seq__mark--{{ n.type }} kh-seq__mark--current" title="{{ n.dateLabel }} — this entry" aria-current="page">
+        <span class="kh-u-sr-only">This entry ({{ n.dateLabel }})</span>
+      </span>
+      {%- else %}
+      <a class="kh-seq__mark kh-seq__mark--{{ n.type }}" href="{{ n.url | url }}" title="{{ n.dateLabel }} — {{ n.title }}">
+        <span class="kh-u-sr-only">{{ n.title }} ({{ n.dateLabel }})</span>
+      </a>
+      {%- endif %}
+    </li>
+    {%- endfor %}
+  </ol>
+</nav>
+{%- endif -%}

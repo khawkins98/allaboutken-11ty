@@ -1,0 +1,16 @@
+{# Length gauge — this post's word count against the register.
+   Expects:
+     lengthStats — { pct, median } from the lengthFrame filter
+     words       — the post's word count (number)
+
+   Encoding: a hairline cell with a centre tick (the median) and a coral
+   marker at this post's percentile rank. Position is the only encoding, and
+   it's an honest one: percentile along the corpus. The visually-hidden text
+   is the accessible record; the title is the hover detail. With CSS off the
+   spans collapse and only the sentence remains. #}
+{%- if lengthStats -%}
+<span class="kh-length-gauge" title="{{ words | formatNumber }} words — longer than {{ lengthStats.pct }}% of entries (median {{ lengthStats.median | formatNumber }} words)">
+  <span class="kh-length-gauge__track" aria-hidden="true"><span class="kh-length-gauge__mid"></span><span class="kh-length-gauge__marker" style="--kh-len: {{ lengthStats.pct }}%;"></span></span>
+  <span class="kh-u-sr-only">(longer than {{ lengthStats.pct }} percent of entries)</span>
+</span>
+{%- endif -%}
