@@ -78,15 +78,8 @@
     margin-bottom: 0;
   }
 
-  blockquote:not([class*='kh-'])::before {
-    border-left: 4px solid #d0d0ce;
-    content: '';
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-  }
-
+// The blockquote's own border-left carries the accent; the old ::before
+  // rule drew a second, competing line.
   code:not([class*='kh-']) {
     padding-left: 3px;
     padding-right: 3px;

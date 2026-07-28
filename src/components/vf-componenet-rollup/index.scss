@@ -345,7 +345,7 @@ body:has(#kh-css-toggle:checked) {
     appearance: none;
     backface-visibility: hidden;
     background-color: var(--kh-button-background-color, var(--kh-button__color__background--default));
-    border: 4px solid var(--kh-button-border-color, var(--kh-button__color__background--default));
+    border: 1px solid var(--kh-button-border-color, var(--kh-button__color__background--default));
     border-radius: 0;
     color: var(--kh-color--blue);
     cursor: pointer;
@@ -768,7 +768,7 @@ body:has(#kh-css-toggle:checked) {
 
   // Highlight anchor-linked headings
   :is(h1, h2, h3, h4, h5, h6):target {
-    border-left: 4px solid var(--kh-color--sun);
+    border-left: 3px solid var(--kh-color--coral);
     padding-left: 0.5em;
   }
 
@@ -907,7 +907,7 @@ body:has(#kh-css-toggle:checked) {
     background-color: #fafafa;
     background-color: var(--box-background-color);
     box-sizing: border-box;
-    border-bottom: 4px solid;
+    border-bottom: 1px solid var(--kh-rule--strong);
     display: block;
     padding: var(--kh-box-padding);
     width: 100%;
@@ -1053,8 +1053,9 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-note-box {
     text-wrap: balance;
-    background: #fff;
-    border: 4px solid var(--kh-color--sun);
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule--strong);
+    border-left: 3px solid var(--kh-color--sun);
     display: block;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
     padding: 0.75rem 1rem;
@@ -1589,7 +1590,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-details {
-    border: 4px solid var(--kh-color--blue);
+    border: 1px solid var(--kh-rule--strong);
     border-radius: 0;
     padding: 0.75rem 1rem;
     margin: 1.5rem 0;
@@ -1638,7 +1639,7 @@ body:has(#kh-css-toggle:checked) {
   .kh-pager__link {
     display: inline-block;
     padding: 8px 12px;
-    border: 4px solid var(--kh-color--blue);
+    border: 1px solid var(--kh-rule--strong);
     border-radius: 0;
     background-color: #fafafa;
     color: var(--kh-color--blue);
@@ -1697,6 +1698,17 @@ body:has(#kh-css-toggle:checked) {
       content: ' ';
       display: none;
     }
+  }
+
+  /* image-compare-viewer is a third-party widget loaded from unpkg by the
+     Recursive post. Its stylesheet is the only source of radius and shadow
+     left on the site; flatten it so the slider matches everything else. */
+  .icv__label,
+  .icv__control-line,
+  .icv__arrow-wrapper,
+  .icv__theme-wrapper {
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 
   /* Self-hosted IBM Plex. Static faces: Plex ships no variable build, so each
