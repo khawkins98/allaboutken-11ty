@@ -23,6 +23,7 @@ permalink: /style-guide/components/
       <p><strong>Jump to:</strong>
         <a href="#colors">Colors</a> ·
         <a href="#typography">Typography</a> ·
+        <a href="#datasheet">Datasheet register</a> ·
         <a href="#buttons">Buttons</a> ·
         <a href="#badges-labels">Badges &amp; labels</a> ·
         <a href="#note-boxes">Note boxes</a> ·
@@ -94,7 +95,7 @@ Design tokens defined as CSS custom properties on the body. The site uses a warm
       </div>
       <div>
         <div style="background: #ffd21e; height: 60px;"></div>
-        <small>Orange (accent)<br><code>--kh-color--orange</code></small>
+        <small>Sun (accent)<br><code>--kh-color--sun</code></small>
       </div>
       <div>
         <div style="background: #f0b429; height: 60px;"></div>
@@ -186,6 +187,112 @@ A pair of typography classes for hero / landing-style introductions: `kh-intro__
   </div>
 </section>
 
+{# ── DATASHEET REGISTER ── #}
+<section class="kh-grid-stylized kh-u-padding__top--800" id="datasheet">
+  <div></div>
+  <div class="kh-content kh-content--wide">
+{% markdown %}
+## Datasheet register
+
+A small set of opt-in primitives that let a page speak in a technical-document
+voice. They live in `src/components/vf-componenet-rollup/_kh-datasheet.scss`.
+Nothing here restyles an existing component: a page adopts the classes
+deliberately. The whole register is flat by rule — no radius, no shadow, the
+hairline *is* the decoration.
+
+Three colours do the work: `--kh-rule--strong` for structural borders,
+`--kh-rule` for internal dividers, and `--kh-color--coral` for apparatus
+(numbers, labels, reference IDs).
+
+### Micro-labels and section numbers
+
+`.kh-meta` annotates rather than titles. `.kh-section-number` prefixes a
+heading; the number is authored in the markup, not generated, so it survives
+with CSS off and stays under editorial control.
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<div class="kh-section-head">
+  <h2 class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Recent writing</h2>
+  <span class="kh-meta">Latest 10</span>
+</div>
+{% endcodeAndDemo %}
+
+{% markdown %}
+`.kh-section-head` pairs a numbered title with a right-hand annotation and
+closes it with a hairline. It is what makes a page scan as a document rather
+than a stack of blocks.
+
+### Panels
+
+`.kh-panel` is a hairline box. `.kh-panel__row` divides it, `.kh-panel__cell`
+subdivides a row into columns (side by side from the `sm` breakpoint, stacked
+below), and `.kh-panel__label` is the coral mono caption inside a cell.
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<div class="kh-panel">
+  <div class="kh-panel__row">
+    <div class="kh-panel__cell">
+      <span class="kh-panel__label">Status</span>
+      Open to strategic opportunities.
+    </div>
+    <div class="kh-panel__cell">
+      <span class="kh-panel__label">Find me</span>
+      Mastodon, LinkedIn, email.
+    </div>
+  </div>
+</div>
+{% endcodeAndDemo %}
+
+{% markdown %}
+### Spec table
+
+`.kh-table--spec` opts out of the default `.kh-content` table styling (the
+`kh-` prefix does that), so it starts from a clean slate: mono uppercase
+column heads, hairline rows, no zebra striping. `.kh-table__id` is the
+reference column, `.kh-table__note` a secondary line under a cell. Wrap in
+`.kh-table-scroll` so a wide table scrolls inside itself rather than making
+the page scroll sideways. Used by `/work`.
+{% endmarkdown %}
+
+{% codeAndDemo 'html' %}
+<div class="kh-table-scroll">
+  <table class="kh-table--spec">
+    <thead>
+      <tr><th scope="col">Ref</th><th scope="col">What</th><th scope="col">When</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="kh-table__id">IS-01</td>
+        <td>An impact story title
+          <small class="kh-table__note">A secondary line describing it.</small>
+        </td>
+        <td>2014</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endcodeAndDemo %}
+
+{% markdown %}
+### Other primitives
+
+| Class | Used by | Notes |
+|-------|---------|-------|
+| `.kh-hero` / `.kh-hero__spec` | homepage | Hairline masthead with a label/value spec column |
+| `.kh-datasheet-list` | homepage | Post list as an outlined grid; promotes the `display: contents` wrappers in `post-summary.njk` to real cells |
+| `.kh-global-header` | every page | Masthead as a strip of bordered nav cells |
+| `.kh-post-head` / `.kh-doc-ref` | post pages | Hairline masthead, mono byline, coral reference number |
+| `.kh-post-rail` | post pages | Sticky numbered contents index in the left margin |
+
+`.kh-datasheet-list` is opt-in on the container, so `post-summary.njk` stays
+untouched and every other page that includes it is unaffected.
+{% endmarkdown %}
+
+  </div>
+</section>
+
 {# ── BUTTONS ── #}
 <section class="kh-grid-stylized kh-u-padding__top--800" id="buttons">
   <div></div>
@@ -193,7 +300,7 @@ A pair of typography classes for hero / landing-style introductions: `kh-intro__
 {% markdown %}
 ## Buttons
 
-The button has a distinctive 3D shadow effect that animates on hover (shifts 4px) and active (shifts 8px, shadow collapses).
+Flat: a 4px border, no radius, no shadow. It signals state by inverting rather than moving — solid blue on hover and focus, blue-dark on active.
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}
@@ -202,7 +309,7 @@ The button has a distinctive 3D shadow effect that animates on hover (shifts 4px
 {% endcodeAndDemo %}
 
 {% markdown %}
-The shadow uses `--kh-button-shadow-background-color` (defaults to blue-dark). Border color is `--kh-button-border-color` (defaults to blue). These can be overridden via CSS custom properties.
+Border colour is `--kh-button-border-color` and fill is `--kh-button-background-color`, both overridable via custom properties. The old `--kh-button-shadow-background-color` is unused since the offset shadow was removed.
 {% endmarkdown %}
 
   </div>
@@ -321,7 +428,7 @@ General-purpose container with a bottom border accent. Themeable via `--kh-box-t
 {% markdown %}
 ## Collapsible details
 
-A styled `<details>` element for secondary content that readers can expand on demand. Uses the site's blue border and offset shadow to match the button aesthetic. The heading inside `<summary>` renders inline next to the disclosure triangle.
+A styled `<details>` element for secondary content that readers can expand on demand. Uses the site's blue border to match the button, with no radius or shadow. The heading inside `<summary>` renders inline next to the disclosure triangle.
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}
@@ -372,7 +479,7 @@ Add the `open` attribute to show the content expanded on page load:
 
 ### Standard blockquote
 
-Inside `.kh-content`, bare blockquotes get a white background, subtle shadow, rounded corners, and a left border accent:
+Inside `.kh-content`, bare blockquotes sit on the panel tint inside a hairline, with a coral rule down the left edge:
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}
@@ -411,15 +518,15 @@ Inline `code` uses IBM Plex Mono with a white background and slight padding.
 
 ### Code blocks
 
-Fenced code blocks inside `.kh-content` get a white background, rounded corners, and a subtle shadow:
+Fenced code blocks inside `.kh-content` get a white background inside a hairline border:
 
 ```css
 .kh-button {
   appearance: none;
-  background-color: #fafafa;
-  border: 4px solid var(--kh-color--blue);
-  box-shadow: 8px 8px 0 var(--kh-color--blue--dark);
-  transition: all linear 125ms;
+  background-color: var(--kh-button-background-color);
+  border: 4px solid var(--kh-button-border-color);
+  border-radius: 0;
+  transition: background-color linear 125ms, color linear 125ms;
 }
 ```
 
@@ -626,14 +733,14 @@ A tabbed radio control used on the [search page](/search/) to switch between key
 - The `<fieldset>` starts with `hidden` in production — JavaScript removes it on load (progressive enhancement, since the toggle only works with JS)
 - Radio `name` must be unique per instance to avoid conflicts
 - The active state uses `:has(input:checked)` to style the parent label — no JS needed for the visual toggle
-- `:has(input:focus-visible)` provides an orange outline for keyboard focus
-- Wrap in `.kh-search-widget` with a `.kh-search-widget__panel` to get the connected tabs-to-card effect
+- `:has(input:focus-visible)` provides a sun-yellow outline for keyboard focus
+- Wrap in `.kh-search-widget` with a `.kh-search-widget__panel`; the tab strip's bottom edge is the panel's top edge, so the two read as one object
 
 ### Search form
 
 `.kh-search-widget__form` is a shared flex layout used by both the keyword and semantic search inputs. The button includes two inner spans — `.kh-button__label` (text) and `.kh-button__icon` (unicode arrow) — that swap at the mobile breakpoint.
 
-- **Desktop:** full text button ("Search" / "Ask") with the standard border + shadow style
+- **Desktop:** full text button ("Search" / "Ask") sharing one hairline row with the input
 - **Mobile (&lt;600px):** text hidden, button becomes a small blue circle with a `→` arrow, positioned inside the input field
 {% endmarkdown %}
 
@@ -843,7 +950,7 @@ Explicit three-column layout. Collapses to single column below 846px. Use `.kh-g
 {% markdown %}
 ### Stylized grid (`.kh-grid-stylized`)
 
-The signature layout pattern: a left gutter (`16rem` on desktop) with main content to the right. Used for most page sections. This page uses it for every section.
+A left gutter (`16rem` on desktop) with main content to the right. This page and most interior pages use it. The homepage and `/work` no longer do: they run full width in the main content area, since the datasheet grids and spec tables want the whole measure.
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}
@@ -1057,7 +1164,7 @@ The Worker returns `302 Location: https://example.com/posts/my-post/#thanks`, wh
 ### Design details
 
 - **Surface**: `#fafafa` background, blue text — matches button palette
-- **3D shadow**: `box-shadow` above the banner uses `--kh-color--blue--dark`
+- **Accent rule**: a flat 6px `border-top` above the banner in `--kh-color--blue--dark`
 - **Timer bar**: `::after` pseudo-element, 4px blue line, shrinks linearly over 15s
 - **Emoji**: `::before` adds a 🎉 prefix
 - **Auto-dismiss**: `kh-banner-out` animation fires at 15s, slides the banner down and sets `visibility: hidden`
@@ -1102,7 +1209,7 @@ The live page already has one of these in the corner — the markup below is sho
 </div>
 ```
 
-Structure: outer wrapper stacks the upvote card on top and the secondary "learn" link below it. Card uses blue background with orange drop shadow; the burst sits behind the text using negative-margin overlap inside the action anchor.
+Structure: outer wrapper stacks the upvote card on top and the secondary "learn" link below it. Card uses a blue background with a flat sun-yellow bottom rule; the burst sits behind the text using negative-margin overlap inside the action anchor.
 {% endmarkdown %}
 
   </div>
@@ -1246,7 +1353,15 @@ All custom properties are scoped to `body:has(#kh-css-toggle:checked)`:
 | `--kh-color--grey--darkest` | `#373a36` |
 | `--kh-color--blue` | `#3b6fb6` |
 | `--kh-color--blue--dark` | `#193f90` |
-| `--kh-color--orange` | `#ffd21e` |
+| `--kh-color--sun` | `#ffd21e` |
+| `--kh-color--sun--deep` | `#8f6600` |
+| `--kh-color--yellow--dark` | `#f0b429` |
+| `--kh-color--coral` | `#bf4a26` |
+| `--kh-ink-muted` | `#5b5e5a` |
+| `--kh-rule` | `#ded2a8` |
+| `--kh-rule--strong` | `#2b2b28` |
+| `--kh-panel-bg` | `#fdf5d6` |
+| `--kh-color--orange` | alias of `--kh-color--sun`, deprecated |
 
 ### Layout
 
@@ -1273,7 +1388,8 @@ All custom properties are scoped to `body:has(#kh-css-toggle:checked)`:
 | `--kh-box-theme-color--foreground` | Box text color override |
 | `--kh-button-background-color` | Button background |
 | `--kh-button-border-color` | Button border |
-| `--kh-button-shadow-background-color` | Button shadow |
+| `--kh-font-sans` | IBM Plex Sans stack |
+| `--kh-font-mono` | IBM Plex Mono stack |
 
 {% endmarkdown %}
 
