@@ -4,6 +4,10 @@ pageClass: posts
 templateEngineOverride: njk
 ---
 
+{%- set pulse = collections.allContent | pulseMonths(12) %}
+{%- set pulseCurrentKey = date | dateDisplay('yyyy-LL') %}
+{% include "partials/pulse-strip.njk" %}
+
 <article class="kh-grid kh-grid__col-3">
   <div class="kh-grid__col--span-1">
     {% set isImpactStory = tags and ('impact-stories' in tags) %}
@@ -36,9 +40,6 @@ templateEngineOverride: njk
           {%- endfor %}
         {%- endif %}
       </p>
-      {%- set pulse = collections.allContent | pulseMonths(12) %}
-      {%- set pulseCurrentKey = date | dateDisplay('yyyy-LL') %}
-      {% include "partials/pulse-strip.njk" %}
     </div>
     {%- set tocEntries = content | tocEntries %}
     {%- if tocEntries.length >= 2 %}

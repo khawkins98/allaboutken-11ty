@@ -7,6 +7,9 @@ image: "/blog/drill-bits.jpg"
 layout: layouts/base.njk
 templateEngineOverride: njk
 ---
+{%- set pulse = collections.allContent | pulseMonths(12) %}
+{% include "partials/pulse-strip.njk" %}
+
 <section class="kh-u-padding__top--500">
   <div class="kh-hero">
     <div class="kh-hero__layout">

@@ -16,38 +16,80 @@
   // itself, so they are drawn in document ink.
   --kh-viz-ink: #2b2b28;
 
-  // Pulse strip (masthead). The SVG carries its own fills; this frames it.
-  .kh-pulse {
-    margin-top: 1rem;
+  // Register timeline. Marks on a rule, one slot per month, sized by area.
+  // Plain elements rather than SVG so each month is a real link with a
+  // native tooltip and a proper hit target.
+  .kh-timeline {
+    margin: 0.25rem 0 1.5rem;
+    max-width: 22rem;
   }
 
-  .kh-pulse__label {
-    display: block;
-    margin-bottom: 0.35rem;
-  }
-
-  .kh-pulse__chart {
-    display: block;
-    height: auto;
-    max-width: 15rem;
-    width: 100%;
-  }
-
-  // The dash between the axis labels only exists for the CSS-off reading
-  // ("AUG 25 – JUL 26"); styled, the labels sit at the strip's ends.
-  .kh-pulse__axis-sep {
-    display: none;
-  }
-
-  .kh-pulse__axis {
+  .kh-timeline__track {
+    align-items: center;
+    border-bottom: 1px solid var(--kh-rule--strong);
     display: flex;
     justify-content: space-between;
-    margin: 0.15rem 0 0;
-    max-width: 15rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 
-    .kh-meta {
-      font-size: 10px;
+  .kh-timeline__slot {
+    display: flex;
+    flex: 1 1 0;
+    justify-content: center;
+  }
+
+  // The hit target is the full slot height; the visible mark is centred in
+  // it and sits on the rule.
+  .kh-timeline__mark {
+    align-items: flex-end;
+    display: flex;
+    height: 22px;
+    justify-content: center;
+    position: relative;
+    text-decoration: none;
+    width: 100%;
+
+    // The one deliberate exception to the site's no-radius rule: a round
+    // mark reads as a point in time, where a square reads as a bar. Set
+    // --kh-mark-radius to e.g. 30% for squircles instead of full circles.
+    &::after {
+      background: var(--kh-viz-ink);
+      border-radius: var(--kh-mark-radius, 50%);
+      content: '';
+      display: block;
+      height: var(--kh-mark-size, 4px);
+      margin-bottom: calc(var(--kh-mark-size, 4px) / -2);
+      width: var(--kh-mark-size, 4px);
     }
+  }
+
+  a.kh-timeline__mark:hover::after,
+  a.kh-timeline__mark:focus-visible::after {
+    background: var(--kh-color--coral);
+  }
+
+  // A month with nothing published is a bare tick on the rule, not a gap:
+  // the absence is data too.
+  .kh-timeline__mark--empty::after {
+    background: var(--kh-rule);
+    height: 3px;
+    margin-bottom: -1.5px;
+    width: 3px;
+  }
+
+  // The post's own month, marked from below so it never competes with the
+  // count encoding above the rule.
+  .kh-timeline__slot--current .kh-timeline__mark::before {
+    background: var(--kh-color--coral);
+    bottom: -4px;
+    content: '';
+    height: 3px;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    width: 7px;
   }
 
   // Sequence rail (foot of a post). A hairline with typed marks riding it;
