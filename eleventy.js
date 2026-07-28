@@ -307,7 +307,7 @@ module.exports = function(config) {
         const m = start.plus({ months: i });
         slots.push({
           key: m.toFormat('yyyy-LL'),
-          label: m.toFormat('LLL yy').toUpperCase(),
+          label: m.toFormat('LLL yy'),
           longLabel: m.toFormat('LLLL yyyy'),
           counts: { article: 0, digesting: 0, impact: 0 },
           total: 0,
