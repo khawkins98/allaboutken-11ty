@@ -24,14 +24,14 @@ This site is built and published with a small, readable stack and a bias for fle
 
 - **Static site generator**: [Eleventy (11ty) v3](https://www.11ty.dev/)
 - **Language & tooling**: Node.js (Yarn scripts), Nunjucks templates, Markdown via Markdown‑It with `markdown-it-anchor`
-- **Styles**: Sass compiled to a single CSS file; custom utility classes; normalize; type set with the Recursive font
+- **Styles**: Sass compiled to a single CSS file; custom utility classes; normalize; type set in IBM Plex Sans and IBM Plex Mono
   - Previously used the EMBL Visual Framework (VF) and Gulp; the [migration to a simpler Eleventy v3 stack is documented here](/posts/20250831-site-overhaul-eleventy-v3).
 - **Search**: Two modes on the [search page](/search/):
   - [Pagefind](https://pagefind.app/) — static keyword search, indexes built HTML at deploy time, serves chunked index fragments on demand. Source: [search page template](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/search.njk)
   - Semantic search — build-time vector embeddings (MiniLM-L6-v2 via [Transformers.js](https://huggingface.co/docs/transformers.js)) + in-browser cosine similarity. Same model runs both sides; no API keys, no server. [Read the post](/posts/20260302-semantic-search-browser-embeddings/)
 - **Hosting**: Vercel (auto‑deploys from GitHub, automatic HTTPS, CDN)
 - **Domain**: Cloudflare (DNS, security, performance)
-- Fonts: [Recursive](/posts/20250904-switching-to-recursive)
+- Fonts: IBM Plex Sans and IBM Plex Mono, self-hosted. The site [previously used Recursive](/posts/20250904-switching-to-recursive).
 
 ## Build & source
 

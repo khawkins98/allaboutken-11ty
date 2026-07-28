@@ -201,6 +201,22 @@ Returns an integer word count computed from an HTML string. Strips `<script>`, `
 
 Returns a locale-formatted number string (e.g., `1,234`). Passes non-finite values back as strings.
 
+### `docRef`
+
+```njk
+{{ page | docRef }}  {# → "AAK-20260626" #}
+```
+
+Document reference for the post masthead. Derived from the dated file slug (`20260626-down-the-stack` → `AAK-20260626`); falls back to the post date (UTC) if the slug has no date prefix. Returns `null` on failure.
+
+### `impactStoryRef`
+
+```njk
+{{ collections.impactStories | impactStoryRef(page.url) }}  {# → "IS-07" #}
+```
+
+Stable part number for an impact story, shared by the `/work` spec table and the story's own masthead. Assigned in date-ascending order (oldest story = `IS-01`, ties broken by URL) so publishing a new story appends to the register instead of renumbering it. Returns `null` if the URL is not in the collection. Backdating a story before an existing one is the only thing that moves refs — don't.
+
 ---
 
 ## Section 5 — Markdown
@@ -253,6 +269,23 @@ Outputs a `<div class="kh-demo">` containing:
 2. A `<div class="kh-demo__live">` with the raw snippet rendered live.
 
 Outputs a wrapper `<div class="kh-demo" data-pagefind-ignore>` so Pagefind never indexes demo code.
+
+---
+
+### `marginnote` / `pullquote` (paired)
+
+```njk
+{% marginnote %}A supporting citation with a [link](https://example.com).{% endmarginnote %}
+
+{% pullquote %}A short phrase lifted verbatim from the paragraph.{% endpullquote %}
+```
+
+Margin apparatus for posts. Both render their content as **inline markdown** (links, emphasis, code, `--` em dashes — no blank lines/paragraphs) inside an `<aside>`:
+
+- `marginnote` → `<aside class="kh-marginnote">`. Supplementary citations and context. Indexed and read by assistive tech — real content is allowed here.
+- `pullquote` → `<aside class="kh-pullquote" aria-hidden="true" data-pagefind-ignore>`. Repeats a phrase from the surrounding body, so it is hidden from screen readers and search. Never put unique content in one.
+
+Place the shortcode immediately after the paragraph it supports, inside the `{% markdown %}` block. On wide screens (≥1300px) both float into the right gutter beside the post body; below that (and in print) they render in the flow as hairline blocks. Raw `<aside class="kh-marginnote">` HTML still works for older posts. See the [component reference](../src/site/style-guide/components.njk) for the visual spec.
 
 ---
 

@@ -7,17 +7,17 @@ image: "/blog/drill-bits.jpg"
 layout: layouts/base.njk
 templateEngineOverride: njk
 ---
-<div class="kh-u-background-color--yellow--dark kh-u-fullbleed">
-<section class="kh-grid-stylized kh-u-padding__top--500 kh-u-padding__bottom--500">
-  <div></div>
-  <div class="kh-content">
+<section class="kh-u-padding__top--500">
+  <div class="kh-hero">
+    <div class="kh-hero__layout">
+    <div class="kh-hero__body kh-content">
     <h1 class="kh-font-headline kh-text-heading--1">
       <div class="kh-font-headline--display">{{title}}.</div>
       <div class="kh-font-headline--display">
         <span class="kh-u-text--nowrap">I am</span> Ken Hawkins.
       </div>
     </h1>
-    <h2 class="kh-text-heading--2">{{ subtitle }}</h2>
+    <h2 class="kh-hero__lede">{{ subtitle }}</h2>
     {% markdown -%}
 
 I turn fragmented digital estates into coherent, measurable services that help complex organizations reach, serve, and learn from their audiences. I build them so their content and data read clearly to people and to the machines increasingly reading on their behalf.
@@ -26,9 +26,28 @@ I ship systems that deliver impact. I understand technology and human organizati
 
     {%- endmarkdown %}
 
+    </div>
+    <aside class="kh-hero__spec">
+      <div class="kh-hero__spec-row">
+        <span class="kh-panel__label">Currently</span>
+        Web Platform Lead, UNDRR (UN) &mdash; Bonn, Germany
+      </div>
+      <div class="kh-hero__spec-row">
+        <span class="kh-panel__label">Experience</span>
+        20+ years &middot; UN, science &amp; media organizations
+      </div>
+      <div class="kh-hero__spec-row">
+        <span class="kh-panel__label">Focus</span>
+        Platforms &middot; design systems &middot; structured content for AI
+      </div>
+      <div class="kh-hero__spec-row">
+        <span class="kh-panel__label">Status</span>
+        <a href="#hello">Open to opportunities ↦</a>
+      </div>
+    </aside>
+    </div>
   </div>
 </section>
-</div>
 
 {#- What Sets Me Apart -#}
 {#- commented out for now
@@ -45,15 +64,24 @@ I ship systems that deliver impact. I understand technology and human organizati
 </section>
 -#}
 
-<section class="kh-card-container kh-grid-stylized">
-  <span></span>
+<section class="kh-card-container">
   <section>
-    <h2 id="recently" class="kh-text-heading--2">Recent writing</h2>
+    <div class="kh-section-head">
+      <h2 id="recently" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Recent writing</h2>
+      <span class="kh-meta">Latest 10</span>
+    </div>
 
+    <div class="kh-datasheet-list">
+      <div class="kh-datasheet-list__head" aria-hidden="true">
+        <span class="kh-meta">Date</span>
+        <span class="kh-meta">Article</span>
+        <span class="kh-meta">Figure</span>
+      </div>
     {%- for post in collections.allContent | limitItems(10) -%}
     {% include "partials/post-summary.njk" %}
     {%- endfor -%}
-    <p class="kh-cluster">
+    </div>
+    <p class="kh-cluster kh-u-margin__top--1200">
       <a href="/all">All writing ↦</a>
       <a href="/blog">Blog ↦</a>
       <a href="/digesting">Digesting ↦</a>
@@ -64,19 +92,31 @@ I ship systems that deliver impact. I understand technology and human organizati
 </section>
 
 {#- Contact -#}
-<section class="kh-grid-stylized">
-  <span></span>
+{#- kh-u-padding__top--500 brings the 1.0 → 2.0 gap level with the
+    hero → 1.0 gap (both land at ~4.5rem). -#}
+<section class="kh-u-padding__top--500">
   <section>
-    <h2 id="hello" class="kh-text-heading--2">Say hello</h2>
-    <p>
-      Open to strategic opportunities — let’s connect.
-    </p>
-    <p class="kh-cluster">
-      <a href="https://toot.io/@khawkins98" >Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
-      <a href="https://www.linkedin.com/in/allaboutken" >LinkedIn</a>
-      <a href="/cv/" >CV</a>
-      <a href="mailto:khawkins98@gmail.com" >Email</a>
-      <a href="https://untappd.com/user/khawkins98">Beer</a>
-    </p>
+    <div class="kh-section-head">
+      <h2 id="hello" class="kh-text-heading--2"><span class="kh-section-number">2.0</span>Say hello</h2>
+      <span class="kh-meta">Open to opportunities</span>
+    </div>
+    <div class="kh-panel">
+      <div class="kh-panel__row">
+        <div class="kh-panel__cell">
+          <span class="kh-panel__label">Status</span>
+          Open to strategic opportunities — let’s connect.
+        </div>
+        <div class="kh-panel__cell">
+          <span class="kh-panel__label">Find me</span>
+          <span class="kh-cluster">
+            <a href="https://toot.io/@khawkins98" >Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
+            <a href="https://www.linkedin.com/in/allaboutken" >LinkedIn</a>
+            <a href="/cv/" >CV</a>
+            <a href="mailto:khawkins98@gmail.com" >Email</a>
+            <a href="https://untappd.com/user/khawkins98">Beer</a>
+          </span>
+        </div>
+      </div>
+    </div>
   </section>
 </section>

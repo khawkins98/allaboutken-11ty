@@ -22,11 +22,11 @@
       font-size: 0.875em; // keep code subordinate to the 18px prose
     }
 
-    /* When margin notes share the row, trade a little measure
+    /* When margin apparatus shares the row, trade a little measure
        for a comfortable note column (see .kh-marginnote below --
        its breakpoint and gutter math must match this block). */
-    @media (min-width: $kh-breakpoint--xl) {
-      &:has(.kh-marginnote) {
+    @media screen and (min-width: $kh-breakpoint--xl) {
+      &:has(.kh-marginnote, .kh-pullquote) {
         max-width: 58ch;
       }
     }
@@ -35,23 +35,21 @@
   pre,
   code {
     background: #fff;
-    border-radius: 1rem;
+    border-radius: 0;
     color: #373a36;
-    font-family: 'Recursive', Monaco, Consolas, 'Lucida Console', monospace;
-    font-variation-settings: 'MONO' 1, 'CASL' 0, 'slnt' 0, 'CRSV' 0;
+    font-family: var(--kh-font-mono);
     font-weight: 400;
     padding-bottom: 0.25rem;
     padding-top: 0.25rem;
   }
 
   pre {
-    border: 1px;
+    border: 1px solid var(--kh-rule);
     display: block;
     margin-bottom: 1rem;
     min-width: 0;
     overflow: auto;
     white-space: pre-wrap;
-    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
     padding: 1rem;
   }
 
@@ -68,12 +66,12 @@
     margin: 0 0 16px;
     padding: 10px 8px 10px 32px;
     position: relative;
-    background: #fff;
-    border-radius: 1rem;
+    background: var(--kh-panel-bg);
+    border-radius: 0;
     color: #373a36;
-    border: 1px;
+    border: 1px solid var(--kh-rule);
+    border-left: 3px solid var(--kh-color--coral);
     overflow: auto;
-    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
   }
 
   blockquote:not([class*='kh-']) p:last-of-type:not([class*='kh-']) {
@@ -131,10 +129,12 @@
     margin-top: 22px;
   }
 
+  // Prose heading weights are 600, not 500: the static Plex faces are 400/600
+  // only, so 500 resolves to Regular and headings sink into the body copy.
   h2:not([class*='kh-']) {
     color: #222;
     font-size: 30px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.333;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
   }
@@ -147,7 +147,7 @@
   h3:not([class*='kh-']) {
     color: #222;
     font-size: 27px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.333;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
   }
@@ -160,7 +160,7 @@
   h4:not([class*='kh-']) {
     color: #222;
     font-size: 21px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.29;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
   }
@@ -173,7 +173,7 @@
   h5:not([class*='kh-']) {
     color: #222;
     font-size: 19px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.5;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
   }
@@ -186,7 +186,7 @@
   hr:not([class*='kh-']) {
     --context-margin--inline: 1rem;
 
-    background-color: var(--kh-color--orange);
+    background-color: var(--kh-rule);
     border: none;
     height: 1px;
     margin-block: 0 var(--kh-divider-margin--block-end, 1.5rem);
@@ -301,27 +301,31 @@
     }
   }
 
-  /* Tufte-inspired margin notes.
-     Below xl: block-level aside within the flow.
+  /* Margin apparatus: notes and pull-quotes in the right gutter.
+     The left rail carries the document's index (masthead + contents);
+     annotations take the opposite margin, beside the paragraph they
+     support, so the two systems never contest the same column and the
+     contents rail can stay sticky.
+
+     Below xl (and in print): block-level asides within the flow, set as
+     hairline panels in the datasheet register.
      Desktop (xl+): floated into the right gutter beside the 58ch post body.
-     Usage in markdown: <aside class="kh-marginnote">…</aside> */
-  .kh-marginnote {
-    color: var(--kh-color--grey--darkest);
-    font-size: 0.8em; // track the surrounding text size, not the root
-    line-height: 1.5;
+     Authoring: {% marginnote %} / {% pullquote %} paired shortcodes
+     (markdown supported); raw <aside class="kh-marginnote"> still works. */
+  .kh-marginnote,
+  .kh-pullquote {
     display: block;
     margin: 0.5rem 0 1rem;
-    padding: 0.5rem 0.75rem;
-    border-left: 3px solid var(--kh-color--orange);
-    background: rgba(255, 255, 255, 0.6);
 
     /* Float into the right gutter only when the post body leaves room.
        The post body narrows to 58ch when notes are present (see
        .kh-post-body above), opening a ~230px gutter for a 200px note.
        Invariant: margin-right must equal -(width + margin-left) so the
        float's net horizontal footprint is zero and pre blocks, images,
-       and line boxes inside the body are never shortened. */
-    @media (min-width: $kh-breakpoint--xl) {
+       and line boxes inside the body are never shortened.
+       `screen and` keeps print on the in-flow rendering even on paper
+       wide enough to match the breakpoint. */
+    @media screen and (min-width: $kh-breakpoint--xl) {
       float: right;
       clear: right;
       width: 200px;
@@ -329,16 +333,77 @@
       margin-left: 1.5rem;
       margin-top: 0.15rem;
       margin-bottom: 0.75rem;
-      padding: 0;
-      border-left: 2px solid var(--kh-color--orange);
-      padding-left: 0.75rem;
-      background: none;
       z-index: 1;
       position: relative;
     }
 
     a {
       color: var(--kh-color--blue);
+    }
+
+    /* The micro-label that files the aside in the datasheet register.
+       Generated, so it never doubles up in the CSS-free view. */
+    &::before {
+      color: var(--kh-color--coral);
+      display: block;
+      font-family: var(--kh-font-mono);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      line-height: 1.4;
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+    }
+  }
+
+  .kh-marginnote {
+    color: var(--kh-color--grey--darkest);
+    font-size: 0.8em; // track the surrounding text size, not the root
+    line-height: 1.5;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--kh-rule);
+    background: var(--kh-panel-bg);
+
+    &::before {
+      content: 'Note';
+    }
+
+    @media screen and (min-width: $kh-breakpoint--xl) {
+      background: none;
+      border: 0;
+      border-top: 1px solid var(--kh-rule--strong);
+      padding: 0.5rem 0 0;
+    }
+  }
+
+  /* Pull-quote: a phrase lifted from the paragraph beside it, set a step
+     up from the note register. Hidden from assistive tech and search by
+     the shortcode, since it repeats body copy. */
+  .kh-pullquote {
+    color: #222;
+    font-size: 1.05em;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--kh-rule--strong);
+    border-top: 1px solid var(--kh-rule--strong);
+    margin: 1.5rem 0;
+    text-wrap: balance;
+
+    &::before {
+      content: 'Quote';
+    }
+
+    @media screen and (min-width: $kh-breakpoint--xl) {
+      border-bottom: 0;
+      font-size: 1em;
+      padding-bottom: 0;
+
+      /* Re-assert the float geometry: the `margin` shorthand above would
+         otherwise cancel the shared negative margin-right at this width. */
+      margin: 0.15rem 1.5rem 1rem;
+      margin-right: -224px;
     }
   }
 
@@ -349,7 +414,7 @@
     display: grid;
     margin: 1.5rem 0 2rem;
     border: 1px solid #d0d0ce;
-    border-radius: 1rem;
+    border-radius: 0;
     overflow: hidden;
   }
 
@@ -376,8 +441,7 @@
     content: "Source";
     display: block;
     margin-bottom: 0.6rem;
-    font-family: "Recursive", system-ui, sans-serif;
-    font-variation-settings: "MONO" 0;
+    font-family: var(--kh-font-sans);
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -390,12 +454,35 @@
     padding: 1.25rem 1.5rem 1.5rem;
     border: none;
     border-radius: 0;
+
+    /* Inside a demo pane there is no gutter to float into (and the pane
+       clips overflow), so margin apparatus renders in-flow at every
+       width -- the same presentation it has below the xl breakpoint. */
+    .kh-marginnote,
+    .kh-pullquote {
+      float: none;
+      margin: 0.5rem 0 1rem;
+      width: auto;
+    }
+
+    .kh-marginnote {
+      background: var(--kh-panel-bg);
+      border: 1px solid var(--kh-rule);
+      padding: 0.75rem 1rem;
+    }
+
+    .kh-pullquote {
+      border-bottom: 1px solid var(--kh-rule--strong);
+      border-top: 1px solid var(--kh-rule--strong);
+      font-size: 1.05em;
+      padding: 1rem 0;
+    }
   }
   .kh-demo__live::before {
     content: "Result";
     display: block;
     margin-bottom: 0.6rem;
-    font-family: "Recursive", system-ui, sans-serif;
+    font-family: var(--kh-font-sans);
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.08em;

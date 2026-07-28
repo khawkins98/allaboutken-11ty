@@ -7,23 +7,44 @@ templateEngineOverride: njk
 <article class="kh-grid kh-grid__col-3">
   <div class="kh-grid__col--span-1">
     {% set isImpactStory = tags and ('impact-stories' in tags) %}
-    <p class="kh-breadcrumb">
-      {% if isImpactStory %}
-        <a href="/work">← Work</a>
-      {% else %}
-        <a href="/blog">← Blog</a>
-      {% endif %}
-    </p>
-    <section class="kh-u-background-color--yellow--dark kh-u-fullbleed">
+    {# Document reference: impact stories echo their IS-nn part number from
+       the /work spec table; everything else gets a date ref from the slug. #}
+    {% set docRef = (collections.impactStories | impactStoryRef(page.url)) if isImpactStory else null %}
+    {% set docRef = docRef or (page | docRef) %}
+    <div class="kh-post-head">
+      <p class="kh-breadcrumb kh-post-head__strap">
+        {% if isImpactStory %}
+          <a href="/work">← Work</a>
+        {% else %}
+          <a href="/blog">← Blog</a>
+        {% endif %}
+        {% if docRef %}<span class="kh-doc-ref">Ref {{ docRef }}</span>{% endif %}
+      </p>
       <h1 class="kh-font-headline kh-post-title kh-text-heading--1">{{title}}</h1>
-    </section>
-    <p>
-      <time datetime="{{ date }}" class="kh-summary__date">
-        {% if isImpactStory %}{{ date | dateDisplay('y') }}{% else %}{{ date | dateDisplay }}{% endif %}
-      </time>
-      <span class="kh-summary__author">{{ content | wordCount | formatNumber }} words</span>
-      {% if topics %}<span class="kh-summary__author">Filed in: {{ topics | join(', ') }}</span>{% endif %}
-    </p>
+      <p class="kh-meta kh-post-meta">
+        <time datetime="{{ date }}">
+          {% if isImpactStory %}{{ date | dateDisplay('y') }}{% else %}{{ date | dateDisplay }}{% endif %}
+        </time>
+        &middot; {{ content | wordCount | formatNumber }} words
+        {% if topics %}&middot; {{ topics | join(', ') }}{% endif %}
+      </p>
+    </div>
+    {%- set tocEntries = content | tocEntries %}
+    {%- if tocEntries.length >= 2 %}
+    <nav class="kh-post-rail" aria-label="Contents" data-pagefind-ignore>
+      <p class="kh-meta kh-meta--accent kh-post-rail__label">Contents</p>
+      <ol class="kh-post-rail__list">
+        {%- for entry in tocEntries %}
+        <li class="kh-post-rail__item">
+          <a class="kh-post-rail__link" href="#{{ entry.id }}">
+            <span class="kh-post-rail__num" aria-hidden="true">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>
+            <span class="kh-post-rail__text">{{ entry.text }}</span>
+          </a>
+        </li>
+        {%- endfor %}
+      </ol>
+    </nav>
+    {%- endif %}
   </div>
   <div class="kh-post--text kh-content kh-grid__col--span-2">
     {% if image %}

@@ -48,7 +48,7 @@ noindex: true
       <div id="semantic-section" hidden>
         <p>Search by describing what you're looking for in your own words.</p>
 
-        <p><small>This <a href="/posts/20260302-semantic-search-browser-embeddings/">searches by meaning</a>, not exact keywords -- and everything runs locally in your browser.</small></p>
+        <p><small>This <a href="/posts/20260302-semantic-search-browser-embeddings/">searches by meaning</a>, not exact keywords; everything runs locally in your browser.</small></p>
 
         <div class="kh-ask" aria-label="Semantic search conversation">
           <div class="kh-ask__conversation" id="ask-conversation" role="log" aria-live="polite" aria-relevant="additions">
@@ -166,13 +166,13 @@ noindex: true
 
       const html = fragments.map(item => `
         <article class="kh-search-result">
-          <a href="${esc(item.url)}"><h3>${esc(item.meta?.title || item.url)}</h3></a>
-          <p class="snippet">${item.excerpt}</p>
-          <p><code>${esc(item.url)}</code></p>
+          <a class="kh-search-result__link" href="${esc(item.url)}"><h3 class="kh-search-result__title">${esc(item.meta?.title || item.url)}</h3></a>
+          <p class="kh-search-result__snippet">${item.excerpt}</p>
+          <p class="kh-search-result__url">${esc(item.url)}</p>
         </article>
       `).join('');
 
-      resultsEl.innerHTML = `<p>${countText}</p>` + html;
+      resultsEl.innerHTML = `<p class="kh-meta kh-search-count">${countText}</p>` + html;
     } catch (err) {
       console.error('Search failed:', err);
       resultsEl.innerHTML = '<p>Search is temporarily unavailable. Try <a href="https://duckduckgo.com/?q=site%3Aallaboutken.com">searching on DuckDuckGo</a> instead.</p>';
