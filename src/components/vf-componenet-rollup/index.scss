@@ -34,6 +34,13 @@ body:has(#kh-css-toggle:checked) {
   // Sunlight yellow, re-keyed from the old orange (#f49e17).
   // --sun is the fill/border tone; --sun--deep is the only one safe for text
   // on a light ground; --yellow--dark is the deeper band tone.
+  // Ground + graph paper. Swap --kh-ground/--kh-grid-ink together for the
+  // drafting-blue variant: #eef3f7 with rgb(120 150 175 / 20%).
+  --kh-ground: #fffae1;
+  --kh-grid-size: 26px;
+  --kh-grid-size--major: 130px; // every 5th line
+  --kh-grid-ink: rgb(196 168 88 / 13%);
+  --kh-grid-ink--major: rgb(196 168 88 / 30%);
   --kh-color--sun: #ffd21e;
   --kh-color--sun--deep: #8f6600;
   --kh-color--yellow--dark: #f0b429;
@@ -50,7 +57,19 @@ body:has(#kh-css-toggle:checked) {
 
   font-family: var(--kh-font-sans);
   position: relative;
-  background: #fffae1;
+  // Graph-paper ground. Two repeating gradients rather than an image, so it
+  // costs nothing and stays crisp at any zoom. --kh-grid-size and
+  // --kh-grid-ink are the two dials; set --kh-grid-ink to transparent to
+  // switch the texture off entirely.
+  background-color: var(--kh-ground);
+  // Two tiers, like real graph paper: a fine grid, with a heavier line every
+  // fifth one. Major layers are listed first so they sit above the minor.
+  background-image:
+    repeating-linear-gradient(to right, var(--kh-grid-ink--major) 0 1px, transparent 1px var(--kh-grid-size--major)),
+    repeating-linear-gradient(to bottom, var(--kh-grid-ink--major) 0 1px, transparent 1px var(--kh-grid-size--major)),
+    repeating-linear-gradient(to right, var(--kh-grid-ink) 0 1px, transparent 1px var(--kh-grid-size)),
+    repeating-linear-gradient(to bottom, var(--kh-grid-ink) 0 1px, transparent 1px var(--kh-grid-size));
+  background-attachment: fixed;
   color: #222;
   display: block;
   font-size: 16px;
