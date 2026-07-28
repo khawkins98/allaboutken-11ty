@@ -3,6 +3,7 @@
 @use './kh-content' as kh-content;
 @use './settings' as *;
 @use './semantic-search' as semantic-search;
+@use './kh-datasheet' as kh-datasheet;
 @use '../kh-ambience/kh-ambience' as kh-ambience;
 
 html {
@@ -23,11 +24,20 @@ body:has(#kh-css-toggle:checked) {
   @include normalize.kh-normalize();
   @include kh-content.kh-vf-content();
   @include semantic-search.semantic-search-styles();
+  @include kh-datasheet.kh-datasheet();
   --kh-color--grey: #707372;
   --kh-color--grey--darkest: #373a36;
   --kh-color--blue: #3b6fb6;
   --kh-color--blue--dark: #193f90;
-  --kh-color--orange: #f49e17;
+  // Sunlight yellow, re-keyed from the old orange (#f49e17).
+  // --sun is the fill/border tone; --sun--deep is the only one safe for text
+  // on a light ground; --yellow--dark is the deeper band tone.
+  --kh-color--sun: #ffd21e;
+  --kh-color--sun--deep: #8f6600;
+  --kh-color--yellow--dark: #f0b429;
+  --kh-color--orange: var(--kh-color--sun); // deprecated alias
+  --kh-font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --kh-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   --kh-body-width: 81.25em;
   --kh-page-grid-gap: 1rem;
   --kh-grid-stylized-module--prime: 16rem;
@@ -36,9 +46,9 @@ body:has(#kh-css-toggle:checked) {
     --kh-page-grid-gap: 2rem;
   }
 
-  font-family: 'Recursive', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--kh-font-sans);
   position: relative;
-  background: #fbf6ef;
+  background: #fffae1;
   color: #222;
   display: block;
   font-size: 16px;
@@ -48,17 +58,24 @@ body:has(#kh-css-toggle:checked) {
   padding: 0 1em;
 
   button {
-    font-family: 'Recursive', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-family: var(--kh-font-sans);
   }
 
   em {
-    font-variation-settings: 'slnt' -10, 'MONO' 0, 'CASL' 1;
+    font-style: italic;
   }
 
   img {
     display: block;
     height: auto;
     max-width: 100%;
+  }
+
+  /* Text selection in the sun yellow — a small survival of the old colour
+     key now that the bands are gone. */
+  ::selection {
+    background: var(--kh-color--sun);
+    color: #222;
   }
 
   /* Visual affordance for elements with a title tooltip */
@@ -99,15 +116,16 @@ body:has(#kh-css-toggle:checked) {
     width: 1em;
   }
 
-  /* Headline and code font helpers using Recursive variable axes */
+  /* Headline and code font helpers. Plex has no variable axes, so these
+     select a declared weight rather than dialling one in. */
   .kh-font-headline {
-    font-family: 'Recursive', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    font-variation-settings: 'wght' 800, 'MONO' 0, 'CASL' 1;
+    font-family: var(--kh-font-sans);
+    font-weight: 600;
+    letter-spacing: -0.015em;
   }
 
   .kh-font-code {
-    font-family: 'Recursive', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-    font-variation-settings: 'MONO' 1, 'CASL' 0, 'slnt' 0, 'CRSV' 0;
+    font-family: var(--kh-font-mono);
   }
 
   .kh-content a:focus,
@@ -306,7 +324,7 @@ body:has(#kh-css-toggle:checked) {
     align-items: center;
     background-color: #f5f5f4;
     border: 1px solid var(--kh-color--grey, #707372);
-    border-radius: 9999px;
+    border-radius: 0;
     color: inherit;
     display: inline-flex;
     font-size: 12px;
@@ -328,8 +346,7 @@ body:has(#kh-css-toggle:checked) {
     backface-visibility: hidden;
     background-color: var(--kh-button-background-color, var(--kh-button__color__background--default));
     border: 4px solid var(--kh-button-border-color, var(--kh-button__color__background--default));
-    border-radius: 4px;
-    box-shadow: 8px 8px 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)), -5px -5px rgb(0 0 0 / 0%);
+    border-radius: 0;
     color: var(--kh-color--blue);
     cursor: pointer;
     display: inline-block;
@@ -341,22 +358,25 @@ body:has(#kh-css-toggle:checked) {
     position: relative;
     text-align: center;
     text-decoration: none;
-    transform: translate(0, 0);
-    transition: all linear 125ms;
+    transition: background-color linear 125ms, color linear 125ms;
+  }
+
+  // The offset "3D" shadow and the slide-on-press are gone; the button now
+  // signals state by inverting instead of moving.
+  .kh-button:focus,
+  .kh-button:hover {
+    --kh-button-background-color: var(--kh-color--blue);
+    --kh-button-border-color: var(--kh-color--blue);
+
+    color: #fff;
+    text-decoration: none;
   }
 
   .kh-button:active {
-    box-shadow: 0 0 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)), 2px 2px 2px rgb(30 30 30 / 12.5%), -5px -5px rgb(0 0 0 / 0%);
-    transform: translate(8px, 8px) translateZ(1px);
-  }
+    --kh-button-background-color: var(--kh-color--blue--dark);
+    --kh-button-border-color: var(--kh-color--blue--dark);
 
-  .kh-button:focus,
-  .kh-button:hover {
-    --kh-button-border-color: var(--kh-color--blue);
-    box-shadow: 4px 4px 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)), 2px 2px 4px rgb(30 30 30 / 25%), -5px -5px rgb(0 0 0 / 0%);
-    text-decoration: none;
-    transform: translate(4px, 4px);
-    transition: all linear 125ms;
+    color: #fff;
   }
 
   .kh-button--sm {
@@ -428,7 +448,7 @@ body:has(#kh-css-toggle:checked) {
   @media (min-width: $kh-breakpoint--md) {
     .kh-post--text:not(:has(.kh-figure)) {
       // padding-top: 25rem;
-      background-color: #fbf6ef;
+      background-color: #fffae1;
       padding-left: 2rem;
       padding-top: 2rem;
     }
@@ -475,6 +495,15 @@ body:has(#kh-css-toggle:checked) {
     > *:last-child {
       margin-bottom: 0;
     }
+  }
+
+  /* Structural wrappers in post-summary.njk. Transparent by default so the
+     existing grid rules below still see date/title/text as direct children;
+     .kh-datasheet-list promotes them to real cells. */
+  .kh-summary__meta,
+  .kh-summary__body,
+  .kh-summary__media {
+    display: contents;
   }
 
   .kh-summary__author {
@@ -534,7 +563,7 @@ body:has(#kh-css-toggle:checked) {
   .kh-summary--highlight {
     background: rgba(244, 158, 23, 0.1);
     padding: 1rem;
-    border-radius: 4px;
+    border-radius: 0;
   }
 
   .kh-summary__tab {
@@ -543,15 +572,15 @@ body:has(#kh-css-toggle:checked) {
     top: 0.25rem;
     transform-origin: left top;
     transform: rotate(-90deg) translateX(-100%);
-    background: var(--kh-color--orange);
-    color: #fff;
+    background: var(--kh-color--sun);
+    color: #3a2c00;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     text-decoration: none;
     padding: 3px 8px;
-    border-radius: 3px 3px 0 0;
+    border-radius: 0;
     white-space: nowrap;
     line-height: 1;
   }
@@ -616,14 +645,16 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-footer {
+    border-top: 1px solid var(--kh-rule--strong);
     max-width: calc(100% - (var(--context-margin--inline, 0px) * 1)); // kh-body padding offset
     padding-bottom: 1.5rem;
     padding-top: 24px;
     text-wrap: balance;
 
+    // The 8px orange band is replaced by the hairline above; kh-u-fullbleed
+    // still supplies a ::before, so suppress it rather than restyle it.
     &::before {
-      background-color: var(--kh-color--orange) !important;
-      height: 8px !important;
+      display: none;
     }
   }
   @media (max-width: $kh-breakpoint--lg-down) {
@@ -723,9 +754,13 @@ body:has(#kh-css-toggle:checked) {
     text-wrap: balance;
   }
 
+  // Heading weights are 600, not 500: the static Plex faces are 400/600 only,
+  // so a declared 500 silently resolves to Regular and headings lose their
+  // weight contrast with body copy. (Recursive's variable axis used to make
+  // 500 real.)
   .kh-text-heading--2 {
     font-size: 30px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.333;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
     text-wrap: balance;
@@ -733,7 +768,7 @@ body:has(#kh-css-toggle:checked) {
 
   // Highlight anchor-linked headings
   :is(h1, h2, h3, h4, h5, h6):target {
-    border-left: 4px solid var(--kh-color--orange);
+    border-left: 4px solid var(--kh-color--sun);
     padding-left: 0.5em;
   }
 
@@ -758,7 +793,7 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-text-heading--3 {
     font-size: 27px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.333;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
     text-wrap: balance;
@@ -806,7 +841,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-u-background-color--yellow--dark {
-    background-color: #ffb81c;
+    background-color: var(--kh-color--yellow--dark);
   }
 
   .kh-u-margin__bottom--200 {
@@ -843,7 +878,7 @@ body:has(#kh-css-toggle:checked) {
     background: #000;
     color: #fff;
     padding: .5rem 1rem;
-    border-radius: .25rem;
+    border-radius: 0;
     transform: translateY(-120%);
     transition: transform .2s ease;
     z-index: 1000;
@@ -900,19 +935,20 @@ body:has(#kh-css-toggle:checked) {
     margin: calc(var(--kh-cluster-margin) / 2) !important;
   }
 
-  // Display styling for expressive headlines
+  // Display styling for expressive headlines. Recursive drove this from its
+  // variable axes (a thin, slanted, cursive lead-in); Plex has no axes, so
+  // the contrast now comes from size and tracking against a single weight.
   .kh-font-headline--display {
-    --kh-headline-display-color: var(--kh-color--orange);
-    font-size: 60px !important;
-    letter-spacing: -1px;
+    font-size: clamp(2.25rem, 6vw, 3.75rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
   }
 
   // When we have two display headlines, make the first one bigger
   .kh-font-headline--display:has(+ .kh-font-headline--display) {
-    font-size: 80px !important;
-    font-variation-settings: 'wght' 100, 'MONO' 0, 'CASL' 1, 'slnt' -8, 'CRSV' 1;
-    padding-bottom: 1rem;
-    padding-top: 2rem;
+    font-size: clamp(2.75rem, 8vw, 5rem);
+    padding-bottom: 0.5rem;
   }
 
   .kh-form__item > * {
@@ -960,8 +996,8 @@ body:has(#kh-css-toggle:checked) {
   .kh-badges svg .badge-text {
     dominant-baseline: middle;
     text-anchor: middle;
-    font-family: 'Recursive', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-    font-variation-settings: 'MONO' 1, 'CASL' 0, 'slnt' 0, 'CRSV' 0, 'wght' 800;
+    font-family: var(--kh-font-mono);
+    font-weight: 600;
     font-size: 12px;
     fill: #fff;
   }
@@ -1010,22 +1046,24 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-logo {
-    font-variation-settings: 'wght' 800, 'MONO' 1, 'CASL' 0;
+    font-family: var(--kh-font-mono);
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
   .kh-note-box {
     text-wrap: balance;
     background: #fff;
-    border: 4px solid var(--kh-color--orange);
+    border: 4px solid var(--kh-color--sun);
     display: block;
-    font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 500, 'slnt' -6, 'CRSV' 0;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
     padding: 0.75rem 1rem;
   }
 
   .kh-note-box__label {
     display: inline-block;
-    font-variation-settings: 'MONO' 1, 'CASL' 1, 'wght' 800, 'slnt' -80, 'CRSV' 1;
+    font-style: italic;
+    font-weight: 600;
   }
 
   .kh-navigation {
@@ -1136,7 +1174,6 @@ body:has(#kh-css-toggle:checked) {
       position: relative;
       top: 2rem;
       left: -2rem;
-      font-variation-settings: 'slnt' -10, 'MONO' 0, 'CASL' 1;
       opacity: 0.8;
     }
 
@@ -1147,7 +1184,7 @@ body:has(#kh-css-toggle:checked) {
       // keep some space for the left border so it stays crisp
       inset: 2rem -1rem 1rem 0.65rem;
       z-index: -1;
-      border-radius: 6px;
+      border-radius: 0;
       transform: rotate(-0.5deg);
 
       // Fallback: use rgba of the brand yellow
@@ -1170,7 +1207,7 @@ body:has(#kh-css-toggle:checked) {
     text-align: center;
     padding: 1.5rem 1rem;
     background: var(--kh-color--yellow--lightest);
-    border-radius: 4px;
+    border-radius: 0;
     transition: transform 0.2s ease;
 
     &:hover {
@@ -1184,7 +1221,6 @@ body:has(#kh-css-toggle:checked) {
     font-weight: 700;
     line-height: 1;
     color: var(--kh-color--text);
-    font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 700, 'slnt' 0, 'CRSV' 0.5;
   }
 
   .kh-metric__label {
@@ -1262,7 +1298,7 @@ body:has(#kh-css-toggle:checked) {
     padding: 0.75rem 1rem;
     font-weight: 600;
     font-size: 1.1rem;
-    box-shadow: 0 -6px 0 var(--kh-color--blue--dark); // 3D accent above banner
+    border-top: 6px solid var(--kh-color--blue--dark); // flat accent above banner
     animation: kh-banner-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both,
       kh-banner-out 0.4s 15s ease-in forwards;
   }
@@ -1358,13 +1394,13 @@ body:has(#kh-css-toggle:checked) {
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
     padding: 0.2rem 0.4rem;
-    border-radius: 4px;
+    border-radius: 0;
     transition: text-decoration-color 0.15s ease, color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
 
     &:hover,
     &:focus-visible {
       color: var(--kh-color--blue--dark);
-      text-decoration-color: var(--kh-color--orange);
+      text-decoration-color: var(--kh-color--sun);
       background-color: rgba(#fff, 0.7);
     }
   }
@@ -1379,9 +1415,9 @@ body:has(#kh-css-toggle:checked) {
     flex-direction: column;
     gap: 0.2rem;
     background: var(--kh-color--blue);
-    border-radius: 14px;
+    border-radius: 0;
+    border-bottom: 4px solid var(--kh-color--sun);
     padding: 0.7rem 1rem 0.7rem 1.8rem; // left padding leaves room for burst overlap
-    box-shadow: 0 4px 0 var(--kh-color--orange);
   }
 
   .kh-floating-thumb__lead {
@@ -1425,13 +1461,13 @@ body:has(#kh-css-toggle:checked) {
     width: 84px;
     height: 84px;
     margin-right: -1.4rem; // overlap into the text card
-    background: var(--kh-color--orange); // stroke colour
+    background: var(--kh-color--sun); // stroke colour
     clip-path: $kh-burst-clip;
     display: grid;
     place-items: center;
     transform: rotate(-8deg);
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.12));
+
 
     &::before {
       content: "";
@@ -1526,7 +1562,7 @@ body:has(#kh-css-toggle:checked) {
       margin-top: -2.15rem; // tuck up so it overlaps the burst's lower-right spike
       padding: 0;
       border: 2px solid var(--kh-color--blue);
-      border-radius: 999px;
+      border-radius: 0;
       background: #fafafa;
       text-decoration: none;
       font-weight: 700;
@@ -1554,8 +1590,7 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-details {
     border: 4px solid var(--kh-color--blue);
-    border-radius: 4px;
-    box-shadow: 6px 6px 0 var(--kh-color--blue--dark);
+    border-radius: 0;
     padding: 0.75rem 1rem;
     margin: 1.5rem 0;
     background-color: #fafafa;
@@ -1604,8 +1639,7 @@ body:has(#kh-css-toggle:checked) {
     display: inline-block;
     padding: 8px 12px;
     border: 4px solid var(--kh-color--blue);
-    border-radius: 4px;
-    box-shadow: 4px 4px 0 var(--kh-color--blue--dark);
+    border-radius: 0;
     background-color: #fafafa;
     color: var(--kh-color--blue);
     text-decoration: none;
@@ -1616,7 +1650,8 @@ body:has(#kh-css-toggle:checked) {
     margin-bottom: 1rem;
 
     &:hover {
-      box-shadow: 2px 2px 0 var(--kh-color--blue--dark);
+      background-color: var(--kh-color--blue);
+      color: #fff;
       transform: translate(2px, 2px);
     }
   }
@@ -1626,7 +1661,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-pager__link--current {
-    background-color: var(--kh-color--orange);
+    background-color: var(--kh-color--sun);
   }
 
   @media print {
@@ -1664,14 +1699,39 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
-  /* Self-hosted Recursive variable font */
+  /* Self-hosted IBM Plex. Static faces: Plex ships no variable build, so each
+     weight is its own file. Only Sans 400 and Mono 400 are preloaded; the
+     other two arrive on demand. font-weight 700 resolves to SemiBold 600 —
+     the nearest declared weight — rather than synthesising a faux bold. */
   @font-face {
-    font-family: 'Recursive';
-    src: url('/assets/kh-font/Recursive_VF_1.085--subset-GF_latin_basic.woff2') format('woff2');
-    // src: url('/assets/kh-font/Recursive.woff2') format('woff2');
-    // src: url(https://fonts.gstatic.com/s/recursive/v43/8vIk7wMr0mhh-RQChyHEH06JlTRq_gukbQr6Mk1QmnhkyU8G_X-dm23WO1ysrvuO.woff2) format('woff2');
-    font-weight: 300 800;
-    font-style: oblique -15deg 0deg; /* maps to slnt axis */
+    font-family: 'IBM Plex Sans';
+    src: url('/assets/kh-font/IBMPlexSans-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'IBM Plex Sans';
+    src: url('/assets/kh-font/IBMPlexSans-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'IBM Plex Sans';
+    src: url('/assets/kh-font/IBMPlexSans-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'IBM Plex Mono';
+    src: url('/assets/kh-font/IBMPlexMono-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
     font-display: swap;
   }
 }

@@ -218,6 +218,68 @@ module.exports = function(config) {
     }
   });
 
+  // Extract h2 headings (id + text) from rendered content for the post
+  // contents rail. Depends on the markdown-it-anchor ids added below; the
+  // trailing '#' permalink anchor is stripped from the visible text.
+  config.addFilter("tocEntries", (content) => {
+    try {
+      const html = String(content || '');
+      const entries = [];
+      const re = /<h2[^>]*\sid="([^"]+)"[^>]*>([\s\S]*?)<\/h2>/gi;
+      let match;
+      while ((match = re.exec(html)) !== null) {
+        const text = match[2]
+          .replace(/<a[^>]*class="kh-anchor"[\s\S]*?<\/a>/gi, ' ')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/&amp;/g, '&')
+          .replace(/[\s\n\r\t]+/g, ' ')
+          .trim();
+        if (match[1] && text) entries.push({ id: match[1], text });
+      }
+      return entries;
+    } catch (e) {
+      return [];
+    }
+  });
+
+  // Document reference for the post masthead, in the datasheet register.
+  // Blog posts derive it from the dated file slug (`20260626-down-the-stack`
+  // -> `AAK-20260626`), falling back to the post date if a slug ever lacks
+  // the prefix. Stable because slugs are permalinks and never renamed.
+  config.addFilter("docRef", (page) => {
+    try {
+      const m = /^(\d{8})(?:-|$)/.exec((page && page.fileSlug) || '');
+      if (m) return `AAK-${m[1]}`;
+      const d = new Date(page && page.date);
+      if (!isNaN(d)) {
+        const pad = (n) => String(n).padStart(2, '0');
+        return `AAK-${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}`;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  // Impact stories carry an `IS-nn` part number, shared between the /work
+  // spec table and the story's own masthead so the register row and the
+  // document it points to can never disagree. Numbers are assigned in
+  // date-ASCENDING order (oldest story = IS-01) so new work appends to the
+  // register instead of renumbering it -- the impactStories collection
+  // itself is newest-first for display. The only way an existing ref moves
+  // is backdating a story before another; don't do that.
+  config.addFilter("impactStoryRef", (stories, url) => {
+    try {
+      const ordered = (stories || []).slice().sort((a, b) => (
+        (a.date - b.date) || String(a.url).localeCompare(String(b.url))
+      ));
+      const i = ordered.findIndex((p) => p.url === url);
+      return i === -1 ? null : `IS-${String(i + 1).padStart(2, '0')}`;
+    } catch (e) {
+      return null;
+    }
+  });
+
   // // Estimate reading time in minutes at ~225 words per minute (min 1)
   // config.addFilter("readingTime", (content, wpm = 225) => {
   //   try {
@@ -291,6 +353,22 @@ module.exports = function(config) {
   config.setLibrary('md', md);
   // Paired shortcode to render inline markdown blocks consistently
   config.addPairedShortcode('markdown', (content) => md.render(content || ''));
+
+  // Margin apparatus, markdown-authorable. Both render inline markdown (links,
+  // emphasis, code, `--` em dashes) so posts no longer need raw `<a href>`
+  // HTML inside the aside. Keep content to 1-2 sentences; no blank lines.
+  //
+  // {% marginnote %}A supporting citation with a [link](https://…).{% endmarginnote %}
+  config.addPairedShortcode('marginnote', (content) => (
+    `<aside class="kh-marginnote">${md.renderInline(String(content || '').trim())}</aside>`
+  ));
+
+  // {% pullquote %}A short phrase lifted verbatim from the paragraph.{% endpullquote %}
+  // Pull-quotes repeat body text, so they are hidden from assistive tech and
+  // the search index; never put content in one that exists nowhere else.
+  config.addPairedShortcode('pullquote', (content) => (
+    `<aside class="kh-pullquote" aria-hidden="true" data-pagefind-ignore>${md.renderInline(String(content || '').trim())}</aside>`
+  ));
 
   // Paired shortcode: render escaped code and a live demo from the same HTML snippet
   // Usage (place outside of a {% markdown %} block):

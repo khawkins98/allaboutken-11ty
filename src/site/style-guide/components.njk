@@ -60,56 +60,56 @@ permalink: /style-guide/components/
 {% markdown %}
 ## Colors
 
-Design tokens defined as CSS custom properties on the body. The site uses a warm paper background (`#fbf6ef`) with dark text (`#222`) and blue accents.
+Design tokens defined as CSS custom properties on the body. The site uses a warm paper background (`#fffae1`) with dark text (`#222`) and blue accents.
 {% endmarkdown %}
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
       <div>
-        <div style="background: #fbf6ef; border: 1px solid #d0d0ce; height: 60px; border-radius: 4px;"></div>
-        <small>Page background<br><code>#fbf6ef</code></small>
+        <div style="background: #fffae1; border: 1px solid #d0d0ce; height: 60px;"></div>
+        <small>Page background<br><code>#fffae1</code></small>
       </div>
       <div>
-        <div style="background: #222; height: 60px; border-radius: 4px;"></div>
+        <div style="background: #222; height: 60px;"></div>
         <small>Body text<br><code>#222</code></small>
       </div>
       <div>
-        <div style="background: #373a36; height: 60px; border-radius: 4px;"></div>
+        <div style="background: #373a36; height: 60px;"></div>
         <small>Grey darkest<br><code>--kh-color--grey--darkest</code></small>
       </div>
       <div>
-        <div style="background: #707372; height: 60px; border-radius: 4px;"></div>
+        <div style="background: #707372; height: 60px;"></div>
         <small>Grey<br><code>--kh-color--grey</code></small>
       </div>
       <div>
-        <div style="background: #3b6fb6; height: 60px; border-radius: 4px;"></div>
+        <div style="background: #3b6fb6; height: 60px;"></div>
         <small>Blue (links)<br><code>--kh-color--blue</code></small>
       </div>
       <div>
-        <div style="background: #193f90; height: 60px; border-radius: 4px;"></div>
+        <div style="background: #193f90; height: 60px;"></div>
         <small>Blue dark<br><code>--kh-color--blue--dark</code></small>
       </div>
       <div>
-        <div style="background: #734595; height: 60px; border-radius: 4px;"></div>
+        <div style="background: #734595; height: 60px;"></div>
         <small>Visited links<br><code>#734595</code></small>
       </div>
       <div>
-        <div style="background: #f49e17; height: 60px; border-radius: 4px;"></div>
+        <div style="background: #ffd21e; height: 60px;"></div>
         <small>Orange (accent)<br><code>--kh-color--orange</code></small>
       </div>
       <div>
-        <div style="background: #ffb81c; height: 60px; border-radius: 4px;"></div>
-        <small>Yellow dark<br><code>#ffb81c</code></small>
+        <div style="background: #f0b429; height: 60px;"></div>
+        <small>Yellow dark<br><code>#f0b429</code></small>
       </div>
       <div>
-        <div style="background: #fafafa; border: 1px solid #d0d0ce; height: 60px; border-radius: 4px;"></div>
+        <div style="background: #fafafa; border: 1px solid #d0d0ce; height: 60px;"></div>
         <small>Surface (boxes, tables)<br><code>#fafafa</code></small>
       </div>
       <div>
-        <div style="background: #d0d0ce; height: 60px; border-radius: 4px;"></div>
+        <div style="background: #d0d0ce; height: 60px;"></div>
         <small>Table header<br><code>#d0d0ce</code></small>
       </div>
       <div>
-        <div style="background: #fff; border: 1px solid #d0d0ce; height: 60px; border-radius: 4px;"></div>
+        <div style="background: #fff; border: 1px solid #d0d0ce; height: 60px;"></div>
         <small>Code/quote bg<br><code>#fff</code></small>
       </div>
     </div>
@@ -123,15 +123,15 @@ Design tokens defined as CSS custom properties on the body. The site uses a warm
 {% markdown %}
 ## Typography
 
-All type is set in [Recursive](https://www.recursive.design/), a variable font with axes for weight, monospace, casual, slant, and cursive. Base size is 16px with 1.7 line height.
+All type is set in [IBM Plex](https://www.ibm.com/plex/) — Plex Sans for text, Plex Mono for code and the datasheet micro-labels. Both are self-hosted. Base size is 16px with 1.7 line height.
 
 ### Heading classes
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}
-<h1 class="kh-text-heading--1">Heading 1 — 42px / 700 weight</h1>
-<h2 class="kh-text-heading--2">Heading 2 — 30px / 500 weight</h2>
-<h3 class="kh-text-heading--3">Heading 3 — 27px / 500 weight</h3>
+<h1 class="kh-text-heading--1">Heading 1 — 42px / declared 700, renders SemiBold 600</h1>
+<h2 class="kh-text-heading--2">Heading 2 — 30px / 600 weight</h2>
+<h3 class="kh-text-heading--3">Heading 3 — 27px / 600 weight</h3>
 {% endcodeAndDemo %}
 
 {% markdown %}
@@ -168,7 +168,7 @@ Inside `.kh-content`, bare heading tags inherit proportional sizing:
 <p><em>Italic text uses font-variation-settings for a slanted casual style.</em></p>
 <p><strong>Bold text for emphasis.</strong></p>
 <p><small>Small text — 13px, used for dates and fine print.</small></p>
-<p>Text with <code>inline code</code> rendered in monospace Recursive.</p>
+<p>Text with <code>inline code</code> rendered in IBM Plex Mono.</p>
 <p>An <abbr title="Abbreviation with tooltip">ABBR</abbr> gets a dotted underline and help cursor.</p>
 {% endcodeAndDemo %}
 
@@ -244,13 +244,13 @@ Pill-shaped categorization chips used for topics and tags:
 {% markdown %}
 ## Note boxes
 
-Orange-bordered callout boxes for asides, updates, and contextual information. The text uses a casual variant of Recursive with a slight slant.
+Yellow-bordered callout boxes for asides, updates, and contextual information. The label is set italic in Plex Sans SemiBold.
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}
 <aside class="kh-note-box">
   <span class="kh-note-box__label">Update</span>
-  This pattern was revised in September 2025 to use the casual axis of Recursive for a more handwritten feel.
+  This pattern was revised in September 2025 to use Recursive's casual axis for a more handwritten feel. That axis went away with the move to IBM Plex; the label now leans on italics instead.
 </aside>
 {% endcodeAndDemo %}
 
@@ -269,17 +269,26 @@ Orange-bordered callout boxes for asides, updates, and contextual information. T
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
-## Margin notes
+## Margin notes and pull-quotes
 
-Tufte-inspired supplementary asides. On desktop (≥ 1024px) they float into the right margin past the main content column; on mobile they fall back to a block-level aside with a left orange border. Use for supporting citations, secondary references, and context that enriches the argument without interrupting the main flow.
+Tufte-inspired supplementary asides, set in the datasheet register: a hairline top rule and a coral mono micro-label (`NOTE` / `QUOTE`). On a post page the left rail carries the document's index (masthead + contents); margin apparatus takes the opposite gutter, beside the paragraph it supports. On desktop (≥ 1300px) they float into the right margin past the post body; below that — and in print — they render in the flow as hairline blocks. Use notes for supporting citations, secondary references, and context that enriches the argument without interrupting the main flow.
 
-Use raw HTML (`<aside class="kh-marginnote">`) inside `{%raw%}{% markdown %}{%endraw%}` blocks. Links inside must use `<a href="">` rather than markdown link syntax. Keep margin notes to 1–2 sentences; for anything longer, use a note box instead.
+Author with the paired shortcodes inside `{%raw%}{% markdown %}{%endraw%}` blocks — content is rendered as inline markdown, so markdown links, emphasis, code, and `--` em dashes all work (no blank lines):
+
+- `{%raw%}{% marginnote %}A citation with a [link](https://example.com).{% endmarginnote %}{%endraw%}` — indexed and read aloud; real content is allowed.
+- `{%raw%}{% pullquote %}A phrase lifted verbatim from the paragraph.{% endpullquote %}{%endraw%}` — repeats body copy, so it is hidden from assistive tech and search. Never put unique content in one.
+
+Raw HTML (`<aside class="kh-marginnote">`) still works in older posts. Keep margin notes to 1–2 sentences; for anything longer, use a note box instead. Keep pull-quotes to a single short phrase.
 
 See the [editorial style guide](/style-guide/editorial/#margin-notes) for when to reach for margin notes versus inline citations.
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}
-<p>This paragraph has a margin note attached. On a wide screen the aside floats off to the right, in the gutter past the main column; on a narrow screen it falls back into the flow as a left-bordered aside, indistinguishable from a small callout. Either way, it's a Tufte-style sidebar without taking interaction weight.<aside class="kh-marginnote">Edward Tufte's <a href="https://www.edwardtufte.com/tufte/books_vdqi">Visual Display</a> popularised the side-margin annotation as a way to keep references close to the argument they support.</aside></p>
+<p>This paragraph has a margin note attached. On a wide post page the aside floats off to the right, in the gutter past the main column; on a narrow screen it falls back into the flow as a hairline panel. Either way, it's a Tufte-style sidebar without taking interaction weight.<aside class="kh-marginnote">Edward Tufte's <a href="https://www.edwardtufte.com/tufte/books_vdqi">Visual Display</a> popularised the side-margin annotation as a way to keep references close to the argument they support.</aside></p>
+{% endcodeAndDemo %}
+
+{% codeAndDemo 'html' %}
+<p>This paragraph has a pull-quote attached, repeating its key phrase a register up. It keeps references close to the argument they support, without interrupting the reading line.<aside class="kh-pullquote" aria-hidden="true">Keep references close to the argument they support.</aside></p>
 {% endcodeAndDemo %}
 
   </div>
@@ -398,7 +407,7 @@ A styled blockquote with a yellow left border, opening quote mark, and a hand-dr
 
 ### Inline code
 
-Inline `code` uses monospace Recursive with a white background and slight padding.
+Inline `code` uses IBM Plex Mono with a white background and slight padding.
 
 ### Code blocks
 
@@ -409,7 +418,6 @@ Fenced code blocks inside `.kh-content` get a white background, rounded corners,
   appearance: none;
   background-color: #fafafa;
   border: 4px solid var(--kh-color--blue);
-  border-radius: 4px;
   box-shadow: 8px 8px 0 var(--kh-color--blue--dark);
   transition: all linear 125ms;
 }
@@ -631,7 +639,7 @@ A tabbed radio control used on the [search page](/search/) to switch between key
 
 {% codeAndDemo 'html' %}
 <div class="kh-search-widget">
-  <div class="kh-search-widget__panel" style="border-radius:4px">
+  <div class="kh-search-widget__panel">
     <form class="kh-search-widget__form" onsubmit="return false">
       <label class="kh-u-sr-only" for="demo-search">Search</label>
       <input type="search" id="demo-search" placeholder="Search my site" class="kh-form__input">
@@ -813,9 +821,9 @@ The base grid uses CSS Grid with auto-flow columns. Children reset their margin 
 
 {% codeAndDemo 'html' %}
 <div class="kh-grid" style="--kh-page-grid-gap: 1rem;">
-  <div style="background: #d0d0ce; padding: 1rem; border-radius: 4px;">Column 1</div>
-  <div style="background: #d0d0ce; padding: 1rem; border-radius: 4px;">Column 2</div>
-  <div style="background: #d0d0ce; padding: 1rem; border-radius: 4px;">Column 3</div>
+  <div style="background: #d0d0ce; padding: 1rem;">Column 1</div>
+  <div style="background: #d0d0ce; padding: 1rem;">Column 2</div>
+  <div style="background: #d0d0ce; padding: 1rem;">Column 3</div>
 </div>
 {% endcodeAndDemo %}
 
@@ -827,8 +835,8 @@ Explicit three-column layout. Collapses to single column below 846px. Use `.kh-g
 
 {% codeAndDemo 'html' %}
 <div class="kh-grid kh-grid__col-3" style="--kh-page-grid-gap: 1rem;">
-  <div class="kh-grid__col--span-1" style="background: #d0d0ce; padding: 1rem; border-radius: 4px;">Span 1</div>
-  <div class="kh-grid__col--span-2" style="background: #ffb81c; padding: 1rem; border-radius: 4px;">Span 2 (wider)</div>
+  <div class="kh-grid__col--span-1" style="background: #d0d0ce; padding: 1rem;">Span 1</div>
+  <div class="kh-grid__col--span-2" style="background: #f0b429; padding: 1rem;">Span 2 (wider)</div>
 </div>
 {% endcodeAndDemo %}
 
@@ -840,8 +848,8 @@ The signature layout pattern: a left gutter (`16rem` on desktop) with main conte
 
 {% codeAndDemo 'html' %}
 <div class="kh-grid-stylized" style="border: 2px dashed #d0d0ce; padding: 1rem;">
-  <div style="background: #d0d0ce; padding: 1rem; border-radius: 4px; text-align: center;">← Gutter (16rem)</div>
-  <div style="background: #ffb81c; padding: 1rem; border-radius: 4px;">Main content area</div>
+  <div style="background: #d0d0ce; padding: 1rem; text-align: center;">← Gutter (16rem)</div>
+  <div style="background: #f0b429; padding: 1rem;">Main content area</div>
 </div>
 {% endcodeAndDemo %}
 
@@ -853,9 +861,9 @@ Vertical rhythm utility. Adds `1rem` margin between sibling children. Use `.kh-s
 
 {% codeAndDemo 'html' %}
 <div class="kh-stack" style="border: 2px dashed #d0d0ce; padding: 1rem;">
-  <div style="background: #d0d0ce; padding: 1rem; border-radius: 4px;">Item 1</div>
-  <div style="background: #d0d0ce; padding: 1rem; border-radius: 4px;">Item 2 (1rem gap)</div>
-  <div style="background: #d0d0ce; padding: 1rem; border-radius: 4px;">Item 3 (1rem gap)</div>
+  <div style="background: #d0d0ce; padding: 1rem;">Item 1</div>
+  <div style="background: #d0d0ce; padding: 1rem;">Item 2 (1rem gap)</div>
+  <div style="background: #d0d0ce; padding: 1rem;">Item 3 (1rem gap)</div>
 </div>
 {% endcodeAndDemo %}
 
@@ -950,35 +958,42 @@ The `.kh-content` class constrains content to `max-width: 70ch` for readable lin
 {% markdown %}
 ## Font variations
 
-Recursive exposes five variable axes. These helper classes apply preset combinations:
+IBM Plex ships no variable build, so the site loads four static faces. These helper classes select among them:
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}
-<p class="kh-font-headline" style="font-size: 32px;">Headline style — weight 800, casual 1, mono 0</p>
-<p class="kh-font-code">Code style — mono 1, casual 0, no slant, no cursive</p>
-<p class="kh-logo" style="font-size: 20px;">Logo style — weight 800, mono 1, casual 0</p>
+<p class="kh-font-headline" style="font-size: 32px;">Headline style — Plex Sans SemiBold, tightened tracking</p>
+<p class="kh-font-code">Code style — Plex Mono Regular</p>
+<p class="kh-logo" style="font-size: 20px;">Logo style — Plex Mono SemiBold</p>
 {% endcodeAndDemo %}
 
 {% markdown %}
 ### Display headlines
 
-Extra-large headings using `.kh-font-headline--display`. When two display headlines are adjacent, the first becomes 80px with a light weight:
+Extra-large headings using `.kh-font-headline--display`, fluidly sized with `clamp()`. When two display headlines are adjacent, the first scales larger:
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}
-<h2 class="kh-font-headline kh-font-headline--display">Display headline — 60px</h2>
+<h2 class="kh-font-headline kh-font-headline--display">Display headline — clamp(2.25rem, 6vw, 3.75rem)</h2>
 {% endcodeAndDemo %}
 
 {% markdown %}
-### Variable font axes reference
+### Loaded faces reference
 
-| Axis | Code | Range | Default | Usage |
-|------|------|-------|---------|-------|
-| Weight | `wght` | 300–800 | 400 | Light to extra-bold |
-| Monospace | `MONO` | 0–1 | 0 | Proportional to monospace |
-| Casual | `CASL` | 0–1 | 0 | Formal to hand-drawn |
-| Slant | `slnt` | -15–0 | 0 | Upright to italic |
-| Cursive | `CRSV` | 0–1 | 0.5 | Controls cursive letterforms |
+IBM Plex has no variable build, so each weight is a separate file. Only the
+weights below exist:
+
+| Family | Weight | Style | File |
+|--------|--------|-------|------|
+| IBM Plex Sans | 400 | normal | `IBMPlexSans-Regular.woff2` |
+| IBM Plex Sans | 400 | italic | `IBMPlexSans-Italic.woff2` |
+| IBM Plex Sans | 600 | normal | `IBMPlexSans-SemiBold.woff2` |
+| IBM Plex Mono | 400 | normal | `IBMPlexMono-Regular.woff2` |
+
+There is no 500. Declaring `font-weight: 500` resolves to Regular 400, which
+silently flattens a heading to body weight — use 600 for emphasis. `font-weight: 700`
+resolves to SemiBold 600. There is no bold italic; browsers synthesise one for
+`<em><strong>`. See [`docs/FONTS.md`](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/FONTS.md).
 {% endmarkdown %}
 
   </div>
@@ -1193,7 +1208,7 @@ The ambient background effects are disabled entirely under `@media (prefers-cont
 
 | Class | Effect |
 |-------|--------|
-| `.kh-u-background-color--yellow--dark` | Background `#ffb81c` |
+| `.kh-u-background-color--yellow--dark` | Background `#f0b429` |
 
 ### Links
 
@@ -1231,7 +1246,7 @@ All custom properties are scoped to `body:has(#kh-css-toggle:checked)`:
 | `--kh-color--grey--darkest` | `#373a36` |
 | `--kh-color--blue` | `#3b6fb6` |
 | `--kh-color--blue--dark` | `#193f90` |
-| `--kh-color--orange` | `#f49e17` |
+| `--kh-color--orange` | `#ffd21e` |
 
 ### Layout
 
