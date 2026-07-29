@@ -45,7 +45,6 @@ permalink: /style-guide/components/
         <a href="#font-variations">Font variations</a> ·
         <a href="#video">Video embed</a> ·
         <a href="#feedback-toast">Feedback toast</a> ·
-        <a href="#floating-feedback">Floating feedback</a> ·
         <a href="#dappled-light">Dappled light</a> ·
         <a href="#accessibility">Accessibility</a> ·
         <a href="#utilities">Utilities</a>
@@ -1221,40 +1220,6 @@ The Worker returns `302 Location: https://example.com/posts/my-post/#thanks`, wh
   <a href="#feedback-toast-demo" class="kh-button kh-button--sm">Trigger toast demo</a>
 </p>
 <span id="feedback-toast-demo" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback!</span>
-
-  </div>
-</section>
-
-{# ── FLOATING FEEDBACK WIDGET ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="floating-feedback">
-  <div></div>
-  <div class="kh-content kh-content--wide">
-{% markdown %}
-## Floating feedback widget
-
-The fixed-position upvote prompt that appears in the corner of post pages. Combines an upvote action with a quieter "learn more" link beneath it, so the link reads as a separate action and can't be confused with the upvote click target. The starburst icon is a CSS-only 12-point polygon (no SVG dependency).
-
-Position is `fixed` to the viewport's bottom-right corner, with `env(safe-area-inset-*)` so it respects mobile notch safe areas. Hidden on print via `.kh-u-do-not-print`.
-
-The live page already has one of these in the corner — the markup below is shown as a reference rather than re-rendered.
-
-```html
-<div class="kh-floating-thumb kh-u-do-not-print">
-  <a href="…upvote endpoint…" class="kh-floating-thumb__action">
-    <span class="kh-floating-thumb__burst" aria-hidden="true">
-      <svg class="kh-floating-thumb__icon" aria-hidden="true" focusable="false">…thumb-up path…</svg>
-    </span>
-    <span class="kh-floating-thumb__text">
-      <span class="kh-floating-thumb__lead">Useful?</span>
-      <span class="kh-floating-thumb__sub">One-tap upvote.</span>
-    </span>
-  </a>
-  <a href="/colophon/#feedback" class="kh-floating-thumb__learn">Why this widget?</a>
-</div>
-```
-
-Structure: outer wrapper stacks the upvote card on top and the secondary "learn" link below it. Card uses a blue background with a flat sun-yellow bottom rule; the burst sits behind the text using negative-margin overlap inside the action anchor.
-{% endmarkdown %}
 
   </div>
 </section>

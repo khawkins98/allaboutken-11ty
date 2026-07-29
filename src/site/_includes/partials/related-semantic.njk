@@ -14,8 +14,11 @@
    Data: src/site/_data/related.json, written by scripts/compute-related.mjs. #}
 {%- set near = related[page.url] -%}
 {%- if near and near.length -%}
-<div class="kh-section-head kh-u-margin__top--1200" data-pagefind-ignore>
-  <h2 class="kh-text-heading--2">Closest in meaning</h2>
+{#- h3, not h2: this now sits under the "Read next" heading rather than
+    standing alone. Page furniture used to compete with the article's own
+    sections in the document outline. -#}
+<div class="kh-section-head" data-pagefind-ignore>
+  <h3 class="kh-text-heading--3">Closest in meaning</h3>
   <span class="kh-meta">By similarity, not by tag</span>
 </div>
 <ol class="kh-near" data-pagefind-ignore>
