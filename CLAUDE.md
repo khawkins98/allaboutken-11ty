@@ -44,6 +44,24 @@ The browser fetches the model directly from HuggingFace at query time. Transform
 ### Updating the embedding model
 Must change in **two places**: `MODEL_NAME` in `scripts/generate-embeddings.mjs` AND `MODEL_ID` in `src/site/semantic-search.js`. Both sides must use the same model. See the header comment in `generate-embeddings.mjs` for full instructions.
 
+### Topics use `>` for hierarchy, never `:`
+Post `topics:` entries may be hierarchical -- `AI > Claude Code`. The parent
+must come from the controlled vocabulary in `docs/TOPIC_TAXONOMY.md` and is the
+only part that groups or counts; the child is free-form detail.
+
+The separator is a greater-than sign because YAML parses an unquoted `- a: b`
+list item as an **object**, not a string, so a colon would silently produce a
+mixed-type list. Quoting works but fails the day someone forgets.
+
+Also: `tags:` decides collection membership (`posts`, `note`, `digesting`,
+`impact-stories`); `topics:` is subject matter only. Editing `tags` restructures
+the site.
+
+### Series are frontmatter keys, not topics
+Multi-part series use `series:` and `series_part:`, not a shared topic, because
+a series is ordered and exclusive. Renders as "Part 2 of 4" with all parts
+linked.
+
 ## Project structure (brief)
 
 - `eleventy.js` -- All config: filters, shortcodes, collections, image transform, Pagefind hook

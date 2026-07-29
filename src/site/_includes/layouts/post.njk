@@ -33,14 +33,25 @@ templateEngineOverride: njk
         &middot; {{ words | formatNumber }} words
         {%- set lengthStats = words | lengthFrame %}
         {% include "partials/length-gauge.njk" %}
+        {#- Topics may be hierarchical: "typography > OpenType ligatures". The
+            parent is the controlled vocabulary and carries the tally; the
+            child is free-form detail shown after it. -#}
         {% if topics %}&middot;
           {%- for topic in topics %}
+          {%- set parent = topic | topicParent %}
+          {%- set child = topic | topicChild %}
           {%- set tally = collections.allContent | topicTally(topic) %}
-          {{ topic }}{% if tally > 1 %}<span class="kh-topic-tally" title="{{ tally }} entries on this topic">&hairsp;×{{ tally }}</span>{% endif %}{{ ", " if not loop.last }}
+          {#- Tally closes the group rather than sitting between parent and
+              child, where "retro computing x3 > emulation" reads as though
+              the count belonged to the child. -#}
+          {{ parent }}
+          {%- if child %}<span class="kh-topic-child"><span class="kh-topic-child__sep" aria-hidden="true">&rsaquo;</span>{{ child }}</span>{% endif %}
+          {%- if tally > 1 %}<span class="kh-topic-tally" title="{{ tally }} entries on {{ parent }}">&hairsp;×{{ tally }}</span>{% endif %}{{ ", " if not loop.last }}
           {%- endfor %}
         {%- endif %}
       </p>
     </div>
+    {% include "partials/series-nav.njk" %}
     {%- set tocEntries = content | tocEntries %}
     {%- if tocEntries.length >= 2 %}
     <nav class="kh-post-rail" aria-label="Contents" data-pagefind-ignore>

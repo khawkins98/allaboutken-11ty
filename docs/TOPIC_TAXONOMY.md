@@ -5,6 +5,47 @@ This document records the controlled vocabulary applied to `topics:` in
 was touched; `tags:` (which drives Eleventy collections) and all other
 frontmatter/body content were left untouched.
 
+## How to use this taxonomy
+
+**Parents are controlled; children are free.** A topic may carry free-form
+detail after a `>`:
+
+```yaml
+topics:
+  - AI > Claude Code
+  - typography > OpenType ligatures
+```
+
+Everything before `>` must be one of the topics listed below. It is the only
+part that groups, counts or appears in any index. Everything after is
+descriptive detail: it displays, quieter, but never forms a bucket.
+
+This exists so specificity does not recreate the problem this taxonomy solved.
+The vocabulary was consolidated from 158 ad-hoc terms of which 116 had exactly
+one post. Detail that would otherwise become a singleton belongs after the `>`.
+
+**Use `>`, not `:`.** YAML parses an unquoted `- a: b` list item as an object
+rather than a string, which would give a list of mixed types that every
+consumer has to type-check. Quoting avoids it but fails silently when someone
+forgets.
+
+**Series are not topics.** A multi-part series uses its own frontmatter keys:
+
+```yaml
+series: Content Action Model
+series_part: 2
+```
+
+A series is ordered and a post belongs to exactly one; topics are neither. See
+`docs/FRONTMATTER.md`.
+
+**Adding a new parent topic.** Only if it will plausibly reach three posts.
+Otherwise make it a child of an existing parent. If you do add one, record it
+here with a definition.
+
+---
+
+
 ## Before / after
 
 - **Before:** 158 distinct topic strings across 100 posts (89 posts tagged,

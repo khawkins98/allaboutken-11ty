@@ -13,7 +13,9 @@ Every field that templates read from YAML frontmatter across post, page, and dig
 | [`teaser`](#teaser) | Recommended | post, listing partials, base | Short description for meta, intro para, cards, OG description |
 | [`image`](#image) | Optional | post | Hero image path |
 | [`image_meta`](#image_meta) | Optional | post, base | Caption, credit, and alt text for the hero image |
-| [`topics`](#topics) | Optional | post, digesting | Display taxonomy (comma list below the date) |
+| [`topics`](#topics) | Optional | post, digesting | Subject taxonomy, controlled vocabulary (shown below the date) |
+| [`series`](#series) | Optional | post | Name of a multi-part series this post belongs to |
+| [`series_part`](#series_part) | Optional | post | This post's position in that series |
 | [`permalink`](#permalink) | Optional | all | Override the default output URL |
 | [`og_image`](#og_image) | Optional | base | Full-URL override for social card image |
 | [`og_title`](#og_title) | Optional | base | Override for OG/Twitter title |
@@ -156,12 +158,62 @@ image_meta:
 ```yaml
 topics:
   - web development
-  - eleventy
-  - static sites
+  - Eleventy
+  - static sites > incremental builds
 ```
 
-- Freeform display taxonomy. Shown as "Filed in: web development, eleventy, static sites" below the date.
-- Not used for collection filtering — purely presentational.
+**Use the controlled vocabulary.** The 31 approved topics and their definitions
+are in [`TOPIC_TAXONOMY.md`](./TOPIC_TAXONOMY.md). Pick 2–5, most specific
+first. Do not invent a new top-level topic without adding it there — the
+taxonomy was consolidated from 158 ad-hoc terms precisely because 73% of them
+had exactly one post and could not be browsed.
+
+**Hierarchical topics.** A topic may carry free-form detail after a `>`:
+
+```yaml
+  - AI > Claude Code
+  - cloud infrastructure > Cloudflare Workers
+```
+
+The part before `>` is the **parent** — it must be from the controlled
+vocabulary, and it is the only part that groups or counts. The part after is
+free-form detail; it displays but never forms a bucket. This is how you keep
+specificity without recreating a long tail of one-post topics.
+
+**Use `>` and not `:`.** YAML parses an unquoted `- a: b` list item as an
+object rather than a string, which would give a list of mixed types. Quoting
+would work but fails silently the day someone forgets, so the separator is a
+greater-than sign.
+
+- Not used for collection filtering — `tags` does that. Topics are subject
+  matter only.
+
+---
+
+### `series`
+
+```yaml
+series: Content Action Model
+series_part: 2
+```
+
+Groups an ordered, multi-part series. Renders as "Part 2 of 4 in Content
+Action Model" above the post body, with every part listed and linked.
+
+A series is deliberately **not** a topic: it is ordered, and a post belongs to
+exactly one. Topics have neither property, so squeezing a series into them
+loses the sequence.
+
+- Use the same `series` string, spelled identically, on every part.
+- The nav only renders when two or more posts share the name.
+
+---
+
+### `series_part`
+
+An integer giving reading order within the series. Ties fall back to date.
+Reading order need not match publication order — an introduction published the
+same day as an origin story can still be part 1.
 
 ---
 
