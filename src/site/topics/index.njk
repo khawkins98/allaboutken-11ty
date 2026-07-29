@@ -30,19 +30,19 @@ permalink: /topics/
     <table class="kh-table--spec kh-topic-index">
       <thead>
         <tr>
-          <th scope="col">Topic</th>
-          <th scope="col">Entries</th>
           <th scope="col">By year <span class="kh-spark__axis">{{ collections.topics[0].firstYear }}&ndash;{{ collections.topics[0].lastYear }}</span></th>
+          <th scope="col">Entries</th>
+          <th scope="col">Topic</th>
         </tr>
       </thead>
       <tbody>
         {%- for t in collections.topics %}
         <tr>
-          <td><a href="/topics/{{ t.slug }}/">{{ t.topic }}</a></td>
-          <td class="kh-topic-index__count">{{ t.count }}</td>
           <td class="kh-topic-index__spark">
             {% topicSparkline t.perYear, peak, t.topic %}
           </td>
+          <td class="kh-topic-index__count">{{ t.count }}</td>
+          <td><a href="/topics/{{ t.slug }}/">{{ t.topic }}</a></td>
         </tr>
         {%- endfor %}
       </tbody>
