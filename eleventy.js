@@ -367,15 +367,51 @@ module.exports = function(config) {
   });
 
   // How many entries in a collection share a topic (case-insensitive).
+  // Topics may be hierarchical: "typography > OpenType ligatures". The parent
+  // is the controlled vocabulary and the only thing that groups; the child is
+  // free-form detail that displays but never forms a bucket.
+  //
+  // '>' rather than ':' deliberately. YAML parses an unquoted `- a: b` list
+  // item as an object, so a colon would give a mixed list of strings and
+  // objects, and forgetting the quotes would change the type silently.
+  const khTopicParent = (topic) => String(topic || '').split('>')[0].trim();
+  const khTopicChild = (topic) => {
+    const parts = String(topic || '').split('>');
+    return parts.length > 1 ? parts.slice(1).join('>').trim() : '';
+  };
+
+  config.addFilter('topicParent', khTopicParent);
+  config.addFilter('topicChild', khTopicChild);
+
+  // Counts by parent, so "AI > Claude Code" tallies under "AI".
   config.addFilter('topicTally', (items, topic) => {
     try {
-      const t = String(topic || '').toLowerCase();
+      const t = khTopicParent(topic).toLowerCase();
+      if (!t) return 0;
       return (items || []).filter((item) => {
         const topics = item.data && item.data.topics;
-        return Array.isArray(topics) && topics.some((x) => String(x).toLowerCase() === t);
+        return Array.isArray(topics)
+          && topics.some((x) => khTopicParent(x).toLowerCase() === t);
       }).length;
     } catch (e) {
       return 0;
+    }
+  });
+
+  // Other posts in the same series, oldest first, for in-series navigation.
+  config.addFilter('seriesPosts', (items, seriesName) => {
+    try {
+      const name = String(seriesName || '').toLowerCase();
+      if (!name) return [];
+      return (items || [])
+        .filter((item) => String((item.data && item.data.series) || '').toLowerCase() === name)
+        .sort((a, b) => {
+          const pa = Number((a.data && a.data.series_part) || 0);
+          const pb = Number((b.data && b.data.series_part) || 0);
+          return pa === pb ? a.date - b.date : pa - pb;
+        });
+    } catch (e) {
+      return [];
     }
   });
 

@@ -16,6 +16,17 @@
   // itself, so they are drawn in document ink.
   --kh-viz-ink: #2b2b28;
 
+  // Hierarchical topic detail. The parent is the controlled term and carries
+  // the tally; the child is free-form and sits quieter behind it.
+  .kh-topic-child {
+    color: var(--kh-ink-muted);
+  }
+
+  .kh-topic-child__sep {
+    margin: 0 0.3em;
+    opacity: 0.7;
+  }
+
   // Register timeline. Marks on a rule, one slot per month, sized by area.
   // Plain elements rather than SVG so each month is a real link with a
   // native tooltip and a proper hit target.

@@ -279,9 +279,11 @@ image_meta:
 date: YYYY-MM-DD
 tags:
   - posts
-topics:
-  - keyword one
-  - keyword two
+topics:              # controlled vocabulary — see docs/TOPIC_TAXONOMY.md
+  - content strategy
+  - AI > Claude Code # optional free-form detail after '>'
+series: Name         # optional: only for multi-part series
+series_part: 2
 via: 'https://example.com/source'  # optional: source attribution
 kens_status: draft  # draft | final_draft | ready_for_publication
 ---
@@ -362,6 +364,46 @@ Use the `kh-note-box` pattern for asides, updates, or contextual callouts:
 Keep the label short: "Update", "Sidebar", "Related", "Context". Place a blank line before and after the aside. Prefer `aside` in post bodies; `div` is acceptable in layout templates.
 
 See the [live note-box example](/style-guide/components/#note-boxes) in the component reference.
+
+---
+
+## Topics and series
+
+`tags` decides which collection a post lands in (`posts`, `note`, `digesting`,
+`impact-stories`). `topics` is what the post is *about*. They are different
+things; do not put subject matter in `tags`.
+
+**Pick 2–5 topics from the controlled vocabulary**, most specific first. The 31
+approved topics live in `docs/TOPIC_TAXONOMY.md`. Don't invent a new top-level
+topic on the fly: the taxonomy was consolidated from 158 ad-hoc terms because
+73% of them had exactly one post, which made the whole set unbrowsable.
+
+**When a topic is too broad, add detail after a `>`** rather than inventing a
+new top-level term:
+
+```yaml
+topics:
+  - AI > Claude Code
+  - typography > OpenType ligatures
+```
+
+The parent is the controlled term and is the only part that groups or counts.
+The child is free-form and displays after it in a quieter tone. This is how to
+be specific without recreating a long tail of one-post topics.
+
+Use `>`, never `:`. YAML reads an unquoted `- a: b` as an object, not a string.
+
+**For a multi-part series, use `series` and `series_part`**, not a shared
+topic:
+
+```yaml
+series: Content Action Model
+series_part: 2
+```
+
+That renders "Part 2 of 4 in Content Action Model" with every part linked. A
+series is ordered and exclusive; topics are neither, so a shared topic would
+lose the sequence.
 
 ---
 
@@ -552,7 +594,7 @@ Before publishing any content, verify:
 - [ ] No trailing whitespace or inconsistent spacing
 - [ ] Blank line after every heading before the next paragraph
 - [ ] Warm closing restating main point and inviting feedback
-- [ ] Frontmatter complete: title, teaser, date, layout, tags, topics
+- [ ] Frontmatter complete: title, teaser, date, layout, tags, topics (from the controlled vocabulary)
 - [ ] Markdown polished: correct heading levels, fenced code, consistent formatting
 - [ ] Length is within target for content type (blog 800 – 1,500; impact 600 – 1,200; digesting 200 – 500)
 - [ ] If over 2,000 words: is it earning that length, or should it split into parts?
