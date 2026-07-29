@@ -300,6 +300,41 @@ module.exports = function(config) {
   // entry type. Fed by a collection (usually allContent) so the strip shows
   // the whole register, not just one type.
   // months = 0 means "all time": span from the earliest item to this month.
+  // Entries grouped by calendar month, newest first, for the archive page.
+  // The timeline's month marks link at a month rather than at a single entry:
+  // a month with five entries has no "the" post, and picking the newest one
+  // quietly hid the other four behind a mark whose whole encoding is "there
+  // are five things here".
+  //
+  // Keys are 'yyyy-LL' so they match pulseMonths' keys exactly -- the mark's
+  // href and the archive's anchor are the same string, generated once.
+  config.addFilter('groupByMonth', (items) => {
+    try {
+      const groups = new Map();
+      (items || []).forEach((item) => {
+        const d = DateTime.fromJSDate(item.date, { zone: 'utc' });
+        const key = d.toFormat('yyyy-LL');
+        if (!groups.has(key)) {
+          groups.set(key, {
+            key,
+            label: d.toFormat('LLLL yyyy'),
+            year: d.toFormat('yyyy'),
+            items: []
+          });
+        }
+        groups.get(key).items.push(item);
+      });
+      return [...groups.values()]
+        .sort((a, b) => (a.key < b.key ? 1 : -1))
+        .map((g) => {
+          g.items.sort((a, b) => b.date - a.date);
+          return g;
+        });
+    } catch (e) {
+      return [];
+    }
+  });
+
   config.addFilter('pulseMonths', (items, months = 12) => {
     try {
       const now = DateTime.utc().startOf('month');
