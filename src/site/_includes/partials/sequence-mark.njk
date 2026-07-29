@@ -10,7 +10,6 @@
    the tooltip and visually-hidden text, so with CSS off this degrades to a
    plain list of nearby entries. #}
 {%- if seqNeighbours and seqNeighbours.length > 1 -%}
-<!--embed:skip-->
 <nav class="kh-seq" aria-label="Nearby entries in the register" data-pagefind-ignore>
   <p class="kh-meta kh-seq__caption"><span class="kh-seq__dir" aria-hidden="true">← older</span><span class="kh-meta--accent">Sequence</span><span class="kh-seq__dir" aria-hidden="true">newer →</span></p>
   <ol class="kh-seq__track">
@@ -29,5 +28,4 @@
     {%- endfor %}
   </ol>
 </nav>
-<!--/embed:skip-->
 {%- endif -%}

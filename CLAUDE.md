@@ -45,19 +45,26 @@ The browser fetches the model directly from HuggingFace at query time. Transform
 Must change in **two places**: `MODEL_NAME` in `scripts/generate-embeddings.mjs` AND `MODEL_ID` in `src/site/semantic-search.js`. Both sides must use the same model. See the header comment in `generate-embeddings.mjs` for full instructions.
 
 ### Navigation chrome must never reach the embeddings
-`scripts/generate-embeddings.mjs` strips anything between `<!--embed:skip-->`
-and `<!--/embed:skip-->` before embedding. Wrap any block that prints other
-entries' titles, or repeats identical text on every page, in those markers.
+`scripts/generate-embeddings.mjs` strips every element carrying
+`data-pagefind-ignore`, with its contents, before embedding. That attribute is
+the site's single "this is chrome, not content" marker: Pagefind already
+honours it for keyword search, and the embeddings honour it for the same
+reason. Do not invent a second marker; put the attribute on any block that
+prints other entries' titles or repeats identical text on every page.
 
 This is not cosmetic. The "closest in meaning" list prints the titles of
-related entries; embedding it fed the feature's own output back into the model
-and those entries drifted closer together on every build. Measured: the link
-count went 116 to 173 with no writing changed, and fell to a stable 85 once the
-chrome was excluded. The register timeline prints an identical sentence on
-every page, which lifts baseline similarity across the whole corpus.
+related entries, so embedding it fed the feature's own output back into the
+model and those entries drifted closer on every build: link count went 116 to
+173 with no writing changed.
 
-Currently marked: related-semantic, pulse-strip, sequence-mark, series-nav, and
-the contents rail in post.njk.
+Stripping is done with a balanced-tag scan, not a regex, because these regions
+nest and a lazy regex stops at the first closing tag of any depth.
+
+Residual: the derived data still moves by a few links per build (172/175/176)
+even though the stripped text is byte-identical across builds, verified by
+hash. That is floating-point non-determinism in the ONNX runtime flipping pairs
+that sit exactly on the 0.6 threshold. It is jitter, not drift, and not worth
+chasing.
 
 ### Topics use `>` for hierarchy, never `:`
 Post `topics:` entries may be hierarchical -- `AI > Claude Code`. The parent

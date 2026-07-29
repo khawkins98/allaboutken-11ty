@@ -10,7 +10,6 @@
 
    Renders nothing when a post has no series. #}
 {%- if series -%}
-<!--embed:skip-->
 {%- set parts = collections.allContent | seriesPosts(series) -%}
 {%- if parts.length > 1 -%}
 <nav class="kh-series" aria-label="Posts in the {{ series }} series" data-pagefind-ignore>
@@ -32,5 +31,4 @@
   </ol>
 </nav>
 {%- endif -%}
-<!--/embed:skip-->
 {%- endif -%}

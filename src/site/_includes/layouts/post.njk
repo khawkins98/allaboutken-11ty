@@ -54,9 +54,6 @@ templateEngineOverride: njk
     {% include "partials/series-nav.njk" %}
     {%- set tocEntries = content | tocEntries %}
     {%- if tocEntries.length >= 2 %}
-    {#- Not embedded: the rail repeats the post's own headings, which are
-        already in the body text. -#}
-    <!--embed:skip-->
     <nav class="kh-post-rail" aria-label="Contents" data-pagefind-ignore>
       <p class="kh-meta kh-meta--accent kh-post-rail__label">Contents</p>
       <ol class="kh-post-rail__list">
@@ -70,7 +67,6 @@ templateEngineOverride: njk
         {%- endfor %}
       </ol>
     </nav>
-    <!--/embed:skip-->
     {%- endif %}
   </div>
   <div class="kh-post--text kh-content kh-grid__col--span-2">
