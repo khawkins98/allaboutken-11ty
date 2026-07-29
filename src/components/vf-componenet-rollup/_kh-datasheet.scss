@@ -702,7 +702,7 @@
   // with that rule; now that it stands alone it aligns with the content like
   // anything else, and a top rule marks the end of the piece.
   .kh-feedback {
-    border-top: 1px solid var(--kh-rule);
+    border-top: 1px solid var(--kh-rule--strong);
     margin-bottom: 2.5rem;
     padding-top: 1rem;
   }
@@ -785,9 +785,30 @@
     margin-top: 1.75rem;
   }
 
-  // Read next: a directory, not prose.
-  .kh-readnext {
+  .kh-readnext > .kh-section-head:first-child {
+    margin-top: 0;
+  }
+
+  // Stacked, the byline no longer needs its own top margin: the rule above it
+  // does the separating.
+  .kh-entry-foot .kh-author {
     margin-top: 2.5rem;
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-entry-foot .kh-author {
+      margin-top: 0;
+    }
+  }
+
+  // Read next: a directory, not prose. The hairline top matches .kh-author's,
+  // so the two columns of the entry foot start on the same rule. Without it
+  // the left column simply began in mid-air -- most obvious on an entry with
+  // no related posts, where there is no section-head rule to stand in for one.
+  .kh-readnext {
+    border-top: 1px solid var(--kh-rule);
+    margin-top: 2.5rem;
+    padding-top: 1rem;
   }
 
   // The foot of an entry, two columns once there is room: onward links left,
@@ -811,6 +832,8 @@
   // The article's closure: sits under the prose, above the feedback strip and
   // "Read next". Left rule rather than a filled box -- it is an aside, not a
   // call to action.
+  // Padding-top matches .kh-readnext so the first line of each column sits at
+  // the same height below their shared rule.
   .kh-author {
     border-left: 3px solid var(--kh-color--sun);
     border-top: 1px solid var(--kh-rule);
