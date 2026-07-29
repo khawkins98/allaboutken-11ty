@@ -739,9 +739,40 @@
     }
   }
 
-  // Read next spans the full content area: it is a directory, not prose.
+  // Read next: a directory, not prose.
   .kh-readnext {
     margin-top: 2.5rem;
+  }
+
+  // The foot of an entry, two columns once there is room: the byline and its
+  // feedback strip on the left, the onward links on the right. Stacked, the
+  // byline's measure left the right half of the page empty and pushed the
+  // links a long way below the article. Read next spans both rows so its
+  // heading rule starts level with the byline's.
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-entry-foot {
+      align-items: start;
+      display: grid;
+      gap: 0 3rem;
+      grid-template-areas:
+        "who next"
+        "feedback next";
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+    }
+
+    .kh-entry-foot .kh-author {
+      grid-area: who;
+    }
+
+    .kh-entry-foot .kh-feedback {
+      grid-area: feedback;
+    }
+
+    .kh-entry-foot .kh-readnext {
+      grid-area: next;
+      margin-top: 0;
+    }
   }
 
   // Byline
