@@ -3,9 +3,9 @@
  "edgeMin": 0.6,
  "nodes": [
   {
-   "url": "/posts/20130321-postfix-spam/",
+   "url": "/posts/20130321-postfix-spam.html",
    "title": "Cutting down on Postfix spam relaying",
-   "topic": "cloud infrastructure",
+   "topic": "",
    "x": 0.374,
    "y": 0.689,
    "fx": 0.996,
@@ -13,9 +13,9 @@
    "degree": 0
   },
   {
-   "url": "/posts/20130612-ubuntu-ips-ec2-multiple/",
+   "url": "/posts/20130612-ubuntu-ips-ec2-multiple.html",
    "title": "Muliple IPs on an Ubuntu EC2 VPC? Yes, please!",
-   "topic": "cloud infrastructure",
+   "topic": "",
    "x": 0.357,
    "y": 0.688,
    "fx": 1,
@@ -23,9 +23,9 @@
    "degree": 0
   },
   {
-   "url": "/posts/20131208-content-model-better-journalism/",
+   "url": "/posts/20131208-content-model-better-journalism.html",
    "title": "A model for better content, better readers, better journalism",
-   "topic": "content strategy",
+   "topic": "",
    "x": 0.571,
    "y": 0.099,
    "fx": 0.999,
@@ -33,9 +33,9 @@
    "degree": 0
   },
   {
-   "url": "/posts/20140407-ux-success-double-conversion/",
+   "url": "/posts/20140407-ux-success-double-conversion.html",
    "title": "UX success story: Doubling conversion rates, sales",
-   "topic": "UX design",
+   "topic": "",
    "x": 0.352,
    "y": 0.048,
    "fx": 0.992,
@@ -43,9 +43,9 @@
    "degree": 0
   },
   {
-   "url": "/posts/20150128-lyra-installation/",
+   "url": "/posts/20150128-lyra-installation.html",
    "title": "How to install Lyra the graphical visualization environment",
-   "topic": "data visualization",
+   "topic": "",
    "x": 0.271,
    "y": 0.657,
    "fx": 0.979,
@@ -53,9 +53,9 @@
    "degree": 0
   },
   {
-   "url": "/posts/20170723-corporate-design-through-ia/",
+   "url": "/posts/20170723-corporate-design-through-ia.html",
    "title": "Better corporate design through information architecture",
-   "topic": "information architecture",
+   "topic": "",
    "x": 0.57,
    "y": 0.147,
    "fx": 0.785,
@@ -63,9 +63,9 @@
    "degree": 3
   },
   {
-   "url": "/posts/20170725-site-update/",
+   "url": "/posts/20170725-site-update.html",
    "title": "A new site for little reason",
-   "topic": "career reflection",
+   "topic": "",
    "x": 0.185,
    "y": 0.366,
    "fx": 0.57,
@@ -73,9 +73,9 @@
    "degree": 2
   },
   {
-   "url": "/posts/20170913-fluid-information-architecture/",
+   "url": "/posts/20170913-fluid-information-architecture.html",
    "title": "Fluid IA to enable user discovery, prepare for change",
-   "topic": "information architecture",
+   "topic": "",
    "x": 0.641,
    "y": 0.345,
    "fx": 0.896,
@@ -83,9 +83,9 @@
    "degree": 2
   },
   {
-   "url": "/posts/20171002-euroia-2017-takeaways/",
+   "url": "/posts/20171002-euroia-2017-takeaways.html",
    "title": "Five highlights from EuroIA 2017",
-   "topic": "information architecture",
+   "topic": "",
    "x": 0.693,
    "y": 0.259,
    "fx": 0.954,
@@ -93,9 +93,9 @@
    "degree": 0
   },
   {
-   "url": "/posts/20171027-video-conferencing-tips-dos-donts/",
+   "url": "/posts/20171027-video-conferencing-tips-dos-donts.html",
    "title": "8 Video conferencing tips, dos, don’ts",
-   "topic": "productivity",
+   "topic": "",
    "x": 0.466,
    "y": 0.328,
    "fx": 0.93,
@@ -103,9 +103,9 @@
    "degree": 0
   },
   {
-   "url": "/posts/20171112-ibm-plex-font-and-fira/",
+   "url": "/posts/20171112-ibm-plex-font-and-fira.html",
    "title": "Comparing IBM Plex and Fira Sans",
-   "topic": "typography",
+   "topic": "",
    "x": 0.214,
    "y": 0.596,
    "fx": 0.9,
@@ -113,9 +113,9 @@
    "degree": 0
   },
   {
-   "url": "/posts/20180122-content-action-model-origin-story/",
+   "url": "/posts/20180122-content-action-model-origin-story.html",
    "title": "The Content-Action Model origin story",
-   "topic": "content strategy",
+   "topic": "",
    "x": 0.591,
    "y": 0.178,
    "fx": 0.829,
@@ -123,9 +123,9 @@
    "degree": 3
   },
   {
-   "url": "/posts/20180122-content-action-model/",
+   "url": "/posts/20180122-content-action-model.html",
    "title": "Introducing the Content-Action Model for Web Systems",
-   "topic": "content strategy",
+   "topic": "",
    "x": 0.596,
    "y": 0.168,
    "fx": 0.725,
@@ -133,9 +133,9 @@
    "degree": 4
   },
   {
-   "url": "/posts/20180207-discovery-and-analysis/",
+   "url": "/posts/20180207-discovery-and-analysis.html",
    "title": "UX, discovery, analysis + the CAM",
-   "topic": "content strategy",
+   "topic": "",
    "x": 0.752,
    "y": 0.169,
    "fx": 0.806,
@@ -143,9 +143,9 @@
    "degree": 3
   },
   {
-   "url": "/posts/20180210-zurb-panini-2-migration/",
+   "url": "/posts/20180210-zurb-panini-2-migration.html",
    "title": "Migrating to Zurb Panini 2.0",
-   "topic": "static sites",
+   "topic": "",
    "x": 0.127,
    "y": 0.522,
    "fx": 0.755,
@@ -153,9 +153,9 @@
    "degree": 1
   },
   {
-   "url": "/posts/20180319-data-font-for-life-sciences/",
+   "url": "/posts/20180319-data-font-for-life-sciences.html",
    "title": "What if: A web font for data",
-   "topic": "typography",
+   "topic": "",
    "x": 0.232,
    "y": 0.671,
    "fx": 0.76,
@@ -163,9 +163,9 @@
    "degree": 1
   },
   {
-   "url": "/posts/20180329-cam-content-action-goal-ontology/",
+   "url": "/posts/20180329-cam-content-action-goal-ontology.html",
    "title": "Inside the Content-Action Model",
-   "topic": "content strategy",
+   "topic": "",
    "x": 0.667,
    "y": 0.22,
    "fx": 0.751,
@@ -193,9 +193,9 @@
    "degree": 3
   },
   {
-   "url": "/posts/20191021-integrating-eleventy-with-gulp/",
+   "url": "/posts/20191021-integrating-eleventy-with-gulp.html",
    "title": "Integrating Eleventy with gulp, upstream JS",
-   "topic": "Eleventy",
+   "topic": "",
    "x": 0.151,
    "y": 0.773,
    "fx": 0.673,
@@ -203,9 +203,9 @@
    "degree": 1
   },
   {
-   "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites/",
+   "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html",
    "title": "Fractal and Eleventy: Getting static sites closer to the design system",
-   "topic": "Eleventy",
+   "topic": "",
    "x": 0.066,
    "y": 0.604,
    "fx": 0.634,
@@ -213,9 +213,9 @@
    "degree": 2
   },
   {
-   "url": "/posts/20191118-first-page-with-the-visual-framework/",
+   "url": "/posts/20191118-first-page-with-the-visual-framework.html",
    "title": "Building your first page with the Visual Framework 2.0",
-   "topic": "Visual Framework",
+   "topic": "",
    "x": 0.088,
    "y": 0.493,
    "fx": 0.609,
@@ -223,9 +223,9 @@
    "degree": 0
   },
   {
-   "url": "/posts/20200208-its-been-20-years/",
+   "url": "/posts/20200208-its-been-20-years.html",
    "title": "Publishing since the 2000s",
-   "topic": "career reflection",
+   "topic": "",
    "x": 0.357,
    "y": 0.129,
    "fx": 0.589,
@@ -1005,6 +1005,138 @@
  ],
  "order": [
   {
+   "i": 12,
+   "topic": "unfiled"
+  },
+  {
+   "i": 91,
+   "topic": "unfiled"
+  },
+  {
+   "i": 5,
+   "topic": "unfiled"
+  },
+  {
+   "i": 11,
+   "topic": "unfiled"
+  },
+  {
+   "i": 13,
+   "topic": "unfiled"
+  },
+  {
+   "i": 16,
+   "topic": "unfiled"
+  },
+  {
+   "i": 88,
+   "topic": "unfiled"
+  },
+  {
+   "i": 93,
+   "topic": "unfiled"
+  },
+  {
+   "i": 6,
+   "topic": "unfiled"
+  },
+  {
+   "i": 7,
+   "topic": "unfiled"
+  },
+  {
+   "i": 20,
+   "topic": "unfiled"
+  },
+  {
+   "i": 95,
+   "topic": "unfiled"
+  },
+  {
+   "i": 98,
+   "topic": "unfiled"
+  },
+  {
+   "i": 14,
+   "topic": "unfiled"
+  },
+  {
+   "i": 15,
+   "topic": "unfiled"
+  },
+  {
+   "i": 19,
+   "topic": "unfiled"
+  },
+  {
+   "i": 92,
+   "topic": "unfiled"
+  },
+  {
+   "i": 96,
+   "topic": "unfiled"
+  },
+  {
+   "i": 97,
+   "topic": "unfiled"
+  },
+  {
+   "i": 0,
+   "topic": "unfiled"
+  },
+  {
+   "i": 1,
+   "topic": "unfiled"
+  },
+  {
+   "i": 2,
+   "topic": "unfiled"
+  },
+  {
+   "i": 3,
+   "topic": "unfiled"
+  },
+  {
+   "i": 4,
+   "topic": "unfiled"
+  },
+  {
+   "i": 8,
+   "topic": "unfiled"
+  },
+  {
+   "i": 9,
+   "topic": "unfiled"
+  },
+  {
+   "i": 10,
+   "topic": "unfiled"
+  },
+  {
+   "i": 21,
+   "topic": "unfiled"
+  },
+  {
+   "i": 22,
+   "topic": "unfiled"
+  },
+  {
+   "i": 89,
+   "topic": "unfiled"
+  },
+  {
+   "i": 90,
+   "topic": "unfiled"
+  },
+  {
+   "i": 94,
+   "topic": "unfiled"
+  },
+  {
+   "i": 99,
+   "topic": "unfiled"
+  },
+  {
    "i": 74,
    "topic": "AI"
   },
@@ -1077,67 +1209,11 @@
    "topic": "AI"
   },
   {
-   "i": 91,
-   "topic": "unfiled"
-  },
-  {
-   "i": 88,
-   "topic": "unfiled"
-  },
-  {
-   "i": 93,
-   "topic": "unfiled"
-  },
-  {
-   "i": 95,
-   "topic": "unfiled"
-  },
-  {
-   "i": 98,
-   "topic": "unfiled"
-  },
-  {
-   "i": 92,
-   "topic": "unfiled"
-  },
-  {
-   "i": 96,
-   "topic": "unfiled"
-  },
-  {
-   "i": 97,
-   "topic": "unfiled"
-  },
-  {
-   "i": 89,
-   "topic": "unfiled"
-  },
-  {
-   "i": 90,
-   "topic": "unfiled"
-  },
-  {
-   "i": 94,
-   "topic": "unfiled"
-  },
-  {
-   "i": 99,
-   "topic": "unfiled"
-  },
-  {
    "i": 23,
    "topic": "Eleventy"
   },
   {
    "i": 32,
-   "topic": "Eleventy"
-  },
-  {
-   "i": 20,
-   "topic": "Eleventy"
-  },
-  {
-   "i": 19,
    "topic": "Eleventy"
   },
   {
@@ -1147,82 +1223,6 @@
   {
    "i": 68,
    "topic": "Eleventy"
-  },
-  {
-   "i": 6,
-   "topic": "career reflection"
-  },
-  {
-   "i": 28,
-   "topic": "career reflection"
-  },
-  {
-   "i": 22,
-   "topic": "career reflection"
-  },
-  {
-   "i": 29,
-   "topic": "career reflection"
-  },
-  {
-   "i": 47,
-   "topic": "career reflection"
-  },
-  {
-   "i": 12,
-   "topic": "content strategy"
-  },
-  {
-   "i": 11,
-   "topic": "content strategy"
-  },
-  {
-   "i": 13,
-   "topic": "content strategy"
-  },
-  {
-   "i": 16,
-   "topic": "content strategy"
-  },
-  {
-   "i": 2,
-   "topic": "content strategy"
-  },
-  {
-   "i": 15,
-   "topic": "typography"
-  },
-  {
-   "i": 84,
-   "topic": "typography"
-  },
-  {
-   "i": 10,
-   "topic": "typography"
-  },
-  {
-   "i": 33,
-   "topic": "typography"
-  },
-  {
-   "i": 80,
-   "topic": "typography"
-  },
-  {
-   "i": 5,
-   "topic": "information architecture"
-  },
-  {
-   "i": 26,
-   "topic": "information architecture"
-  },
-  {
-   "i": 7,
-   "topic": "information architecture"
-  },
-  {
-   "i": 8,
-   "topic": "information architecture"
   },
   {
    "i": 46,
@@ -1241,16 +1241,16 @@
    "topic": "web development"
   },
   {
-   "i": 0,
-   "topic": "cloud infrastructure"
+   "i": 28,
+   "topic": "career reflection"
   },
   {
-   "i": 1,
-   "topic": "cloud infrastructure"
+   "i": 29,
+   "topic": "career reflection"
   },
   {
-   "i": 83,
-   "topic": "cloud infrastructure"
+   "i": 47,
+   "topic": "career reflection"
   },
   {
    "i": 44,
@@ -1301,16 +1301,16 @@
    "topic": "PDF"
   },
   {
-   "i": 9,
-   "topic": "productivity"
+   "i": 84,
+   "topic": "typography"
   },
   {
-   "i": 45,
-   "topic": "productivity"
+   "i": 33,
+   "topic": "typography"
   },
   {
-   "i": 56,
-   "topic": "productivity"
+   "i": 80,
+   "topic": "typography"
   },
   {
    "i": 51,
@@ -1345,6 +1345,14 @@
    "topic": "design systems"
   },
   {
+   "i": 45,
+   "topic": "productivity"
+  },
+  {
+   "i": 56,
+   "topic": "productivity"
+  },
+  {
    "i": 52,
    "topic": "project management"
   },
@@ -1369,20 +1377,16 @@
    "topic": "search"
   },
   {
-   "i": 18,
-   "topic": "Visual Framework"
-  },
-  {
-   "i": 21,
-   "topic": "Visual Framework"
-  },
-  {
-   "i": 4,
-   "topic": "data visualization"
+   "i": 83,
+   "topic": "cloud infrastructure"
   },
   {
    "i": 24,
    "topic": "developer tools"
+  },
+  {
+   "i": 26,
+   "topic": "information architecture"
   },
   {
    "i": 25,
@@ -1397,12 +1401,8 @@
    "topic": "software engineering"
   },
   {
-   "i": 14,
-   "topic": "static sites"
-  },
-  {
-   "i": 3,
-   "topic": "UX design"
+   "i": 18,
+   "topic": "Visual Framework"
   }
  ],
  "edges": [

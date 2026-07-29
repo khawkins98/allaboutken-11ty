@@ -1,12 +1,12 @@
 {
- "/posts/20170723-corporate-design-through-ia/": [
+ "/posts/20170723-corporate-design-through-ia.html": [
   {
    "url": "/posts/20260327-content-architecture-shipping-container/",
    "title": "Content architecture: the delivery problem",
    "score": 0.63
   },
   {
-   "url": "/posts/20170913-fluid-information-architecture/",
+   "url": "/posts/20170913-fluid-information-architecture.html",
    "title": "Fluid IA to enable user discovery, prepare for change",
    "score": 0.62
   },
@@ -16,7 +16,7 @@
    "score": 0.61
   }
  ],
- "/posts/20170725-site-update/": [
+ "/posts/20170725-site-update.html": [
   {
    "url": "/posts/20250831-site-overhaul-eleventy-v3/",
    "title": "A simpler, faster site: moving to pure Eleventy v3",
@@ -33,9 +33,9 @@
    "score": 0.55
   }
  ],
- "/posts/20170913-fluid-information-architecture/": [
+ "/posts/20170913-fluid-information-architecture.html": [
   {
-   "url": "/posts/20170723-corporate-design-through-ia/",
+   "url": "/posts/20170723-corporate-design-through-ia.html",
    "title": "Better corporate design through information architecture",
    "score": 0.62
   },
@@ -45,14 +45,14 @@
    "score": 0.61
   },
   {
-   "url": "/posts/20180122-content-action-model/",
+   "url": "/posts/20180122-content-action-model.html",
    "title": "Introducing the Content-Action Model for Web Systems",
    "score": 0.56
   }
  ],
- "/posts/20171112-ibm-plex-font-and-fira/": [
+ "/posts/20171112-ibm-plex-font-and-fira.html": [
   {
-   "url": "/posts/20180319-data-font-for-life-sciences/",
+   "url": "/posts/20180319-data-font-for-life-sciences.html",
    "title": "What if: A web font for data",
    "score": 0.57
   },
@@ -62,58 +62,58 @@
    "score": 0.56
   }
  ],
- "/posts/20180122-content-action-model-origin-story/": [
+ "/posts/20180122-content-action-model-origin-story.html": [
   {
-   "url": "/posts/20180122-content-action-model/",
+   "url": "/posts/20180122-content-action-model.html",
    "title": "Introducing the Content-Action Model for Web Systems",
    "score": 0.9
   },
   {
-   "url": "/posts/20180329-cam-content-action-goal-ontology/",
+   "url": "/posts/20180329-cam-content-action-goal-ontology.html",
    "title": "Inside the Content-Action Model",
    "score": 0.81
   },
   {
-   "url": "/posts/20180207-discovery-and-analysis/",
+   "url": "/posts/20180207-discovery-and-analysis.html",
    "title": "UX, discovery, analysis + the CAM",
    "score": 0.74
   }
  ],
- "/posts/20180122-content-action-model/": [
+ "/posts/20180122-content-action-model.html": [
   {
-   "url": "/posts/20180122-content-action-model-origin-story/",
+   "url": "/posts/20180122-content-action-model-origin-story.html",
    "title": "The Content-Action Model origin story",
    "score": 0.9
   },
   {
-   "url": "/posts/20180329-cam-content-action-goal-ontology/",
+   "url": "/posts/20180329-cam-content-action-goal-ontology.html",
    "title": "Inside the Content-Action Model",
    "score": 0.84
   },
   {
-   "url": "/posts/20180207-discovery-and-analysis/",
+   "url": "/posts/20180207-discovery-and-analysis.html",
    "title": "UX, discovery, analysis + the CAM",
    "score": 0.79
   }
  ],
- "/posts/20180207-discovery-and-analysis/": [
+ "/posts/20180207-discovery-and-analysis.html": [
   {
-   "url": "/posts/20180122-content-action-model/",
+   "url": "/posts/20180122-content-action-model.html",
    "title": "Introducing the Content-Action Model for Web Systems",
    "score": 0.79
   },
   {
-   "url": "/posts/20180122-content-action-model-origin-story/",
+   "url": "/posts/20180122-content-action-model-origin-story.html",
    "title": "The Content-Action Model origin story",
    "score": 0.74
   },
   {
-   "url": "/posts/20180329-cam-content-action-goal-ontology/",
+   "url": "/posts/20180329-cam-content-action-goal-ontology.html",
    "title": "Inside the Content-Action Model",
    "score": 0.72
   }
  ],
- "/posts/20180210-zurb-panini-2-migration/": [
+ "/posts/20180210-zurb-panini-2-migration.html": [
   {
    "url": "/posts/20200713-moving-from-panini-to-eleventy/",
    "title": "Moving from Panini to Eleventy",
@@ -125,14 +125,14 @@
    "score": 0.56
   }
  ],
- "/posts/20180319-data-font-for-life-sciences/": [
+ "/posts/20180319-data-font-for-life-sciences.html": [
   {
    "url": "/posts/20260512-datatype-data-font-inside-out/",
    "title": "A data font, from the inside out",
    "score": 0.83
   },
   {
-   "url": "/posts/20171112-ibm-plex-font-and-fira/",
+   "url": "/posts/20171112-ibm-plex-font-and-fira.html",
    "title": "Comparing IBM Plex and Fira Sans",
    "score": 0.57
   },
@@ -142,19 +142,19 @@
    "score": 0.56
   }
  ],
- "/posts/20180329-cam-content-action-goal-ontology/": [
+ "/posts/20180329-cam-content-action-goal-ontology.html": [
   {
-   "url": "/posts/20180122-content-action-model/",
+   "url": "/posts/20180122-content-action-model.html",
    "title": "Introducing the Content-Action Model for Web Systems",
    "score": 0.84
   },
   {
-   "url": "/posts/20180122-content-action-model-origin-story/",
+   "url": "/posts/20180122-content-action-model-origin-story.html",
    "title": "The Content-Action Model origin story",
    "score": 0.81
   },
   {
-   "url": "/posts/20180207-discovery-and-analysis/",
+   "url": "/posts/20180207-discovery-and-analysis.html",
    "title": "UX, discovery, analysis + the CAM",
    "score": 0.72
   }
@@ -193,16 +193,16 @@
    "score": 0.67
   }
  ],
- "/posts/20191021-integrating-eleventy-with-gulp/": [
+ "/posts/20191021-integrating-eleventy-with-gulp.html": [
   {
-   "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites/",
+   "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html",
    "title": "Fractal and Eleventy: Getting static sites closer to the design system",
    "score": 0.7
   }
  ],
- "/posts/20191112-extendeing-fractal-components-eleventy-static-sites/": [
+ "/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html": [
   {
-   "url": "/posts/20191021-integrating-eleventy-with-gulp/",
+   "url": "/posts/20191021-integrating-eleventy-with-gulp.html",
    "title": "Integrating Eleventy with gulp, upstream JS",
    "score": 0.7
   },
@@ -217,7 +217,7 @@
    "score": 0.57
   }
  ],
- "/posts/20200208-its-been-20-years/": [
+ "/posts/20200208-its-been-20-years.html": [
   {
    "url": "/work/2025/impact-story-editorial-efficiency/",
    "title": "Reclaiming three weeks of editorial time every month",
@@ -236,19 +236,19 @@
    "score": 0.82
   },
   {
-   "url": "/posts/20170725-site-update/",
+   "url": "/posts/20170725-site-update.html",
    "title": "A new site for little reason",
    "score": 0.61
   },
   {
-   "url": "/posts/20180210-zurb-panini-2-migration/",
+   "url": "/posts/20180210-zurb-panini-2-migration.html",
    "title": "Migrating to Zurb Panini 2.0",
    "score": 0.6
   }
  ],
  "/posts/20201212-using-nunjucks-with-react/": [
   {
-   "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites/",
+   "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html",
    "title": "Fractal and Eleventy: Getting static sites closer to the design system",
    "score": 0.57
   }
@@ -260,12 +260,12 @@
    "score": 0.86
   },
   {
-   "url": "/posts/20170913-fluid-information-architecture/",
+   "url": "/posts/20170913-fluid-information-architecture.html",
    "title": "Fluid IA to enable user discovery, prepare for change",
    "score": 0.61
   },
   {
-   "url": "/posts/20170723-corporate-design-through-ia/",
+   "url": "/posts/20170723-corporate-design-through-ia.html",
    "title": "Better corporate design through information architecture",
    "score": 0.61
   }
@@ -306,7 +306,7 @@
  ],
  "/posts/20250508-its-been-too-long/": [
   {
-   "url": "/posts/20200208-its-been-20-years/",
+   "url": "/posts/20200208-its-been-20-years.html",
    "title": "Publishing since the 2000s",
    "score": 0.58
   },
@@ -352,19 +352,19 @@
    "score": 0.82
   },
   {
-   "url": "/posts/20170725-site-update/",
+   "url": "/posts/20170725-site-update.html",
    "title": "A new site for little reason",
    "score": 0.67
   },
   {
-   "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites/",
+   "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites.html",
    "title": "Fractal and Eleventy: Getting static sites closer to the design system",
    "score": 0.62
   }
  ],
  "/posts/20250904-switching-to-recursive/": [
   {
-   "url": "/posts/20180319-data-font-for-life-sciences/",
+   "url": "/posts/20180319-data-font-for-life-sciences.html",
    "title": "What if: A web font for data",
    "score": 0.56
   }
@@ -567,7 +567,7 @@
    "score": 0.65
   },
   {
-   "url": "/posts/20180122-content-action-model/",
+   "url": "/posts/20180122-content-action-model.html",
    "title": "Introducing the Content-Action Model for Web Systems",
    "score": 0.62
   }
@@ -665,7 +665,7 @@
    "score": 0.58
   },
   {
-   "url": "/posts/20170725-site-update/",
+   "url": "/posts/20170725-site-update.html",
    "title": "A new site for little reason",
    "score": 0.55
   }
@@ -817,12 +817,12 @@
  ],
  "/posts/20260512-datatype-data-font-inside-out/": [
   {
-   "url": "/posts/20180319-data-font-for-life-sciences/",
+   "url": "/posts/20180319-data-font-for-life-sciences.html",
    "title": "What if: A web font for data",
    "score": 0.83
   },
   {
-   "url": "/posts/20171112-ibm-plex-font-and-fira/",
+   "url": "/posts/20171112-ibm-plex-font-and-fira.html",
    "title": "Comparing IBM Plex and Fira Sans",
    "score": 0.56
   }
@@ -916,7 +916,7 @@
  ],
  "/work/2025/impact-story-editorial-efficiency/": [
   {
-   "url": "/posts/20200208-its-been-20-years/",
+   "url": "/posts/20200208-its-been-20-years.html",
    "title": "Publishing since the 2000s",
    "score": 0.59
   }

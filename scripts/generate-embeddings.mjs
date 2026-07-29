@@ -36,7 +36,9 @@ const MODEL_NAME = 'Xenova/all-MiniLM-L6-v2';
 const SKIP_PATTERNS = [
   /\/social\//,
   /\/node\//,
-  /\/404\//,
+  // Both forms: these patterns were written when every URL was rewritten to a
+  // trailing-slash directory. 404.html keeps its extension now.
+  /\/404(\/|\.html$)/,
   /\/search\//,
   /\/sitemap/,
   /\/robots/,
@@ -276,12 +278,29 @@ async function main() {
   const entries = [];
   let pageCount = 0;
   for (const file of allFiles) {
-    const urlPath = '/' + relative(BUILD_DIR, file).replace(/index\.html$/, '').replace(/\.html$/, '/');
+    // The URL must be the path the SITE uses, not a prettified guess. Older
+    // posts have `.html` permalinks (/posts/foo.html), and rewriting those to
+    // /posts/foo/ meant related.json was keyed on a URL that no page has:
+    // related-semantic.njk looks up `page.url`, never matched for those 21
+    // entries, and silently rendered nothing. It read as "no neighbours above
+    // the floor" rather than as a bug.
+    //
+    // So: strip `index.html` to get a directory URL, and otherwise leave the
+    // path exactly as it is on disk. Every derived URL is then a real file.
+    const urlPath = '/' + relative(BUILD_DIR, file).replace(/index\.html$/, '');
 
     // Skip non-content paths
     if (SKIP_PATTERNS.some(p => p.test(urlPath))) continue;
 
     const html = readFileSync(file, 'utf-8');
+
+    // A page marked noindex is saying it is not a destination. Honour that for
+    // the site's own search as well as for crawlers, rather than maintaining a
+    // second hand-written list of paths to skip. This is what keeps scratch
+    // pages -- /stats/map-variants/, the image generator -- out of semantic
+    // search results without anyone having to remember to add them.
+    if (/<meta[^>]+name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html)) continue;
+
     const content = extractContent(html);
     if (!content) continue;
 
