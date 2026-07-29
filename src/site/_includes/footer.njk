@@ -3,7 +3,7 @@
       hero; entries say it in the byline at the foot of the piece, which is
       where a reader who has just finished reading actually asks the question.
       Everything else -- indexes, topics, stats, search, utility pages -- has
-      no other statement of who this is, so the footer carries it there.
+      no other statement of identity, so the footer carries it there.
       Keep this condition in step with the layouts that include
       partials/author-note.njk. -#}
   {%- set hasByline = layout in ["layouts/post.njk", "layouts/digesting.njk"] -%}
@@ -13,16 +13,66 @@
   {% endmarkdown -%}
   {%- endif -%}
 
-  <span class="kh-footer__links">
-    <a href="/privacy">Curious about privacy?</a>
-    <a href="/colophon">Colophon</a>
-    <a href="/work">Work</a>
-    <a href="https://github.com/khawkins98" rel="me">GitHub</a>
-    <span><a href="/rss.xml">RSS</a> (Instant updates with the hottest tech from 20 years ago)</span>
-    <label class="kh-u-text--nowrap" title="Toggle site CSS on or off">
-      <input type="checkbox" id="kh-css-toggle" name="css-toggle" checked> CSS
+  {#- Grouped, not a single row. This was six links of five different kinds on
+      one line -- legal, meta, primary content, a profile, a subscribe action
+      and a UI control -- with no relationship expressed between them. "Work"
+      in particular is primary content and was sitting between GitHub and
+      Colophon as though it were an afterthought.
+
+      Columns use the mono micro-label from the datasheet register, so the
+      footer reads as deliberate structure rather than a leftover list. -#}
+  <nav class="kh-footer__nav" aria-label="Site">
+    <div class="kh-footer__group">
+      <p class="kh-meta kh-footer__label">Writing</p>
+      <ul class="kh-footer__list">
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/digesting">Digesting</a></li>
+        <li><a href="/work">Work</a></li>
+        <li><a href="/topics/">Topics</a></li>
+      </ul>
+    </div>
+    <div class="kh-footer__group">
+      <p class="kh-meta kh-footer__label">This site</p>
+      <ul class="kh-footer__list">
+        <li><a href="/all/">All writing</a></li>
+        <li><a href="/search/">Search</a></li>
+        <li><a href="/stats/">Stats</a></li>
+        <li><a href="/colophon">Colophon</a></li>
+      </ul>
+    </div>
+    <div class="kh-footer__group">
+      <p class="kh-meta kh-footer__label">Elsewhere</p>
+      <ul class="kh-footer__list">
+        <li><a href="https://github.com/khawkins98" rel="me">GitHub</a></li>
+        <li><a href="https://toot.io/@khawkins98" rel="me">Mastodon</a></li>
+        <li><a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a></li>
+      </ul>
+    </div>
+    <div class="kh-footer__group">
+      <p class="kh-meta kh-footer__label">Small print</p>
+      <ul class="kh-footer__list">
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/impressum">Impressum</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  {#- Two controls rather than two links, so they sit apart from the nav.
+      The CSS toggle is the most distinctive thing on the site and used to be
+      the sixth item in a flat list; it is a feature, not a destination.
+      NOTE: #kh-css-toggle must stay in the DOM -- every style on the site is
+      scoped to `body:has(#kh-css-toggle:checked)`. -#}
+  <div class="kh-footer__controls">
+    <span class="kh-footer__control">
+      <a href="/rss.xml">RSS</a>
+      <span class="kh-meta">Instant updates with the hottest tech from 20 years ago</span>
+    </span>
+    <label class="kh-footer__control kh-u-text--nowrap" title="Toggle site CSS on or off">
+      <input type="checkbox" id="kh-css-toggle" name="css-toggle" checked>
+      CSS
+      <span class="kh-meta">Turn the design off</span>
     </label>
-  </span>
+  </div>
 
   {%- if serverInfo.environment == "development" %}
       <div class="kh-banner kh-banner--alert kh-banner--warning">

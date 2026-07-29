@@ -1,0 +1,38 @@
+{# One-tap feedback, and the running count.
+
+   There used to be two of these on every entry: this strip and a fixed-position
+   floating widget in the corner, both posting to the same endpoint and both
+   linking to the same explainer. The floating one was retired -- it hovered
+   over a site whose whole register is flat printed matter, and it collided
+   with the footer. This one sits where a reader has just finished, which is
+   when the question is actually live, and it is the version that can show the
+   count.
+
+   The count is a remote SVG from the upvote service, so its value is unknown
+   at build time. That rules out any phrasing with number agreement: the old
+   wording read "1 people found this useful". Labelling it in the datasheet
+   register -- a mono label, then the value -- sidesteps the grammar entirely
+   and matches how every other figure on the site is presented.
+
+   See /posts/20260220-feedback-buttons-cgi-pattern/ for how the JS-free
+   upvote works. #}
+<div class="kh-feedback">
+  <h2 class="kh-u-sr-only">Was this useful?</h2>
+  <a href="https://feedback.allaboutken.com/up{{ page.url }}"
+     rel="nofollow" class="kh-button kh-button--sm kh-feedback__action">&#128077; This was useful</a>
+
+  <span class="kh-feedback__tally">
+    <span class="kh-meta kh-feedback__label">Found useful</span>
+    {#- `eleventy:ignore` is required, not cosmetic. Without it the image
+        transform fetches this live SVG at build time, rasterises it, and
+        stamps width/height on the tag -- freezing the count, emitting a
+        /.11ty/image/ URL that 404s in production, and specifying both axes so
+        the badge lays out at its full 1280px intrinsic width. See CLAUDE.md. -#}
+    <img src="https://feedback.allaboutken.com/count{{ page.url }}.svg"
+         alt="Feedback count" loading="lazy" decoding="async" eleventy:ignore
+         style="display:inline;vertical-align:middle;width:auto;height:1.5em;max-width:none">
+  </span>
+
+  <!-- Feedback toast: see /posts/20260220-feedback-buttons-cgi-pattern/ -->
+  <span id="thanks" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback! <a href="/posts/20260220-feedback-buttons-cgi-pattern/" class="kh-feedback-thanks__link">Curious how this was built?</a></span>
+</div>

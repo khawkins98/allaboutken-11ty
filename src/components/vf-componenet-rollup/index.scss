@@ -678,17 +678,52 @@ body:has(#kh-css-toggle:checked) {
       display: none;
     }
   }
-  @media (max-width: $kh-breakpoint--lg-down) {
-    .kh-footer__links > * {
-      margin-right: 1rem;
+  // Footer navigation, grouped by kind.
+  // This was one flat row of six links spanning five different kinds -- legal,
+  // meta, primary content, a profile, a subscribe action and a UI control --
+  // with no relationship expressed between them. Columns with mono
+  // micro-labels put the structure back and match the datasheet register used
+  // on /blog, /all and /stats.
+  .kh-footer__nav {
+    display: grid;
+    gap: 1.5rem 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    margin-top: 1.5rem;
+  }
+
+  .kh-footer__label {
+    border-bottom: 1px solid var(--kh-rule);
+    margin: 0 0 0.5rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .kh-footer__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    > li + li {
+      margin-top: 0.3rem;
     }
   }
 
-  @media (min-width: $kh-breakpoint--lg) {
-    .kh-footer__links {
-      display: inline-flex;
-      gap: 1rem;
-    }
+  // Controls, not destinations. RSS and the CSS toggle both DO something
+  // rather than going somewhere, so they sit below the nav behind a rule
+  // instead of being the fifth and sixth items in a list of links.
+  .kh-footer__controls {
+    border-top: 1px solid var(--kh-rule);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+  }
+
+  .kh-footer__control {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .kh-intro__heading {
@@ -1376,177 +1411,6 @@ body:has(#kh-css-toggle:checked) {
     color: inherit;
   }
 
-  // Floating "was this helpful?" thumb — bottom-right, no JS, no count.
-  // Composition: a promotional text card + a starburst badge with 👍.
-  // Same href as the footer button (.../up/{page}); Worker redirects back to
-  // #thanks, which triggers the kh-feedback-thanks toast and hides this widget.
-  // Wrapper stacks the upvote card on top and the secondary "learn" link
-  // below it, so the link reads as a separate action and can't be confused
-  // with the upvote click target.
-  .kh-floating-thumb {
-    position: fixed;
-    z-index: 900;
-    right: max(1rem, env(safe-area-inset-right));
-    bottom: max(1rem, env(safe-area-inset-bottom));
-    display: inline-flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.4rem;
-    color: inherit;
-    max-width: min(360px, calc(100vw - 2rem));
-  }
-
-  // The upvote action — burst + text laid out horizontally inside one anchor.
-  .kh-floating-thumb__action {
-    align-items: stretch;
-    background: var(--kh-panel-bg);
-    border: 1px solid var(--kh-rule--strong);
-    color: inherit;
-    display: inline-flex;
-    text-decoration: none;
-    transition: background-color 0.15s linear;
-  }
-
-  // Secondary link below the card. Visually quieter (smaller, plain text) so
-  // it doesn't compete with the upvote CTA, but with a clear underlined hover
-  // state so it's discoverable as a separate action.
-  .kh-floating-thumb__learn {
-    font-size: 0.78rem;
-    font-weight: 500;
-    color: var(--kh-color--blue);
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 3px;
-    padding: 0.2rem 0.4rem;
-    border-radius: 0;
-    transition: text-decoration-color 0.15s ease, color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
-
-    &:hover,
-    &:focus-visible {
-      color: var(--kh-color--blue--dark);
-      text-decoration-color: var(--kh-color--sun);
-      background-color: rgba(#fff, 0.7);
-    }
-  }
-
-  // Default (desktop): show the long text, hide the icon.
-  .kh-floating-thumb__learn-icon {
-    display: none;
-  }
-
-  // The card: a hairline cell pair, icon on the left of the words. The
-  // starburst it replaces was the last piece of the old playful language;
-  // the affordance is now the panel plus the thumb, not a rotating badge.
-  .kh-floating-thumb__text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    justify-content: center;
-    padding: 0.6rem 0.9rem;
-  }
-
-  .kh-floating-thumb__lead {
-    color: #222;
-    font-size: 0.95rem;
-    font-weight: 600;
-    line-height: 1.2;
-  }
-
-  .kh-floating-thumb__sub {
-    color: var(--kh-ink-muted);
-    font-size: 0.75rem;
-    line-height: 1.35;
-  }
-
-  // Icon cell, divided from the words by a hairline like any panel row.
-  .kh-floating-thumb__burst {
-    align-items: center;
-    border-right: 1px solid var(--kh-rule);
-    display: flex;
-    flex: 0 0 auto;
-    justify-content: center;
-    width: 46px;
-  }
-
-  .kh-floating-thumb__icon {
-    color: var(--kh-color--coral);
-    height: 22px;
-    stroke-width: 2;
-    width: 22px;
-  }
-
-  // Hover inverts the whole cell, matching how buttons behave.
-  .kh-floating-thumb__action:hover,
-  .kh-floating-thumb__action:focus-visible {
-    background: var(--kh-rule--strong);
-
-    .kh-floating-thumb__lead,
-    .kh-floating-thumb__sub {
-      color: #fffae1;
-    }
-
-    .kh-floating-thumb__icon {
-      color: var(--kh-color--sun);
-    }
-
-    .kh-floating-thumb__burst {
-      border-right-color: rgb(255 250 225 / 35%);
-    }
-  }
-
-  // Mobile: the words go, the icon cell stays as a compact square target.
-  @media (max-width: 600px) {
-    .kh-floating-thumb__text {
-      display: none;
-    }
-
-    .kh-floating-thumb__burst {
-      border-right: 0;
-      height: 44px;
-      width: 44px;
-    }
-
-    .kh-floating-thumb__learn-text {
-      display: none;
-    }
-
-    .kh-floating-thumb__learn {
-      position: relative;
-      z-index: 2; // sit above the burst's drop shadow + clipped fill
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      margin-top: -2.15rem; // tuck up so it overlaps the burst's lower-right spike
-      padding: 0;
-      border: 2px solid var(--kh-color--blue);
-      border-radius: 0;
-      background: #fafafa;
-      text-decoration: none;
-      font-weight: 700;
-      line-height: 1;
-
-      &:hover,
-      &:focus-visible {
-        background: var(--kh-color--blue);
-        color: #fff;
-        text-decoration: none;
-      }
-    }
-
-    .kh-floating-thumb__learn-icon {
-      display: inline-block;
-      font-size: 0.95rem;
-    }
-  }
-
-  // Once the user has clicked (URL has #thanks), hide the floating widget so
-  // it doesn't pester them. The kh-feedback-thanks toast covers the confirmation.
-  &:has(#thanks:target) .kh-floating-thumb {
-    display: none;
-  }
 
   .kh-details {
     border: 1px solid var(--kh-rule--strong);

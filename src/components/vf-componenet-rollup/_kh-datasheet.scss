@@ -713,8 +713,32 @@
     max-width: 62ch;
   }
 
+  .kh-author__invite {
+    margin: 0.6rem 0 0;
+  }
+
   .kh-author__links {
     margin: 0.6rem 0 0;
+  }
+
+  // Feedback strip
+  // --------------
+  // Sits directly under the byline. The count is a remote SVG whose value is
+  // unknown at build time, so it is labelled in the mono register rather than
+  // built into a sentence -- the old wording read "1 people found this useful"
+  // and no server-side plural is possible.
+  .kh-feedback {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    margin: 1.25rem 0 0;
+  }
+
+  .kh-feedback__tally {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.5rem;
   }
 
   .kh-author__sep {
