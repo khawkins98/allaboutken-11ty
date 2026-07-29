@@ -348,7 +348,6 @@
     gap: 1rem;
     justify-content: space-between;
     margin-bottom: 0.25rem;
-    max-width: 15rem;
   }
 
   .kh-seq__dir {
@@ -356,13 +355,16 @@
     text-transform: lowercase;
   }
 
+  // Full width of its column. The 15rem cap made a seven-stop line huddle in
+  // the left quarter of the space, which read as a stray mark rather than as
+  // a run of time; spread out, the spacing between stops is itself legible.
+  // The caption above drops the same cap so "newer →" lands at the far end.
   .kh-seq__track {
     align-items: center;
     display: flex;
     justify-content: space-between;
     list-style: none;
     margin: 0;
-    max-width: 15rem;
     padding: 0;
     position: relative;
 
