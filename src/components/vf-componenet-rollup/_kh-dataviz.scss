@@ -34,14 +34,18 @@
   // Every month since the first post is in the markup; the track scrolls and
   // how many are on screen follows the container width, not a breakpoint.
   .kh-timeline {
-    // Chronological, oldest left to newest right, in plain LTR.
-    // Opening it on the recent end needs the one line of JS in the partial.
-    // Every CSS-only way of reversing the flow loses scrollable area in
-    // Firefox, measured against it directly: `direction: rtl` gave maxScroll
-    // 100 of 900, and both `flex-direction: row-reverse` and
-    // `transform: scaleX(-1)` gave 546 of 1000. Plain LTR is the only layout
-    // that keeps the whole archive reachable in both engines, so the scroll
-    // position is set instead of the axis.
+    // Chronological, oldest left to newest right, opening on the recent end
+    // with no JavaScript.
+    // `direction: rtl` moves the scroll origin to the right edge. The DOM and
+    // the track stay ltr, so reading order, tab order and bidi are untouched;
+    // only where the scroller starts changes.
+    // This failed earlier and the reason is worth recording: Firefox
+    // mis-computes the scrollable overflow of a SHRINK-WRAPPED flex track
+    // (inline-flex, or width: max-content) inside an RTL scroller, giving
+    // maxScroll 100 where 900 was expected. An explicit width on the track
+    // avoids it completely, verified in Firefox, Chromium and WebKit. Hence
+    // --kh-track-width, set inline from the trackWidth filter.
+    direction: rtl;
     margin: 0.25rem 0 1.5rem;
     overflow-x: auto;
     // Fade the older end so the strip reads as continuing past the edge.
@@ -64,14 +68,15 @@
     background-position: 0 calc(100% - 1.25rem);
     background-repeat: no-repeat;
     background-size: 100% 1px;
-    // inline-flex, not flex + max-content: Firefox does not size a flex
-    // container from `max-content` here, and shrink-wrapping via inline-flex
-    // is what actually produces a full-width scrollable track in both
-    // engines.
-    display: inline-flex;
+    // Explicit width rather than any shrink-wrap: see .kh-timeline above.
+    // Set inline as --kh-track-width so the slot sizes below and the width
+    // calculation have one source of truth.
+    direction: ltr;
+    display: flex;
     list-style: none;
     margin: 0;
     padding: 0 0 1.25rem;
+    width: var(--kh-track-width);
   }
 
   // Fixed slot width, so how many months are on screen follows the width of
