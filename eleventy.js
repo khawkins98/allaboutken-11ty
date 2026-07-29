@@ -467,6 +467,19 @@ module.exports = function(config) {
     }
   });
 
+  // Total pixel width of the timeline track. Firefox mis-computes the
+  // scrollable overflow of a shrink-wrapped flex track inside an RTL
+  // scroller, which is what broke `direction: rtl` before; giving the track
+  // an explicit width avoids the bug entirely. Keep the two numbers in step
+  // with --kh-slot-width and the gap slot width in _kh-dataviz.scss.
+  config.addFilter('trackWidth', (slots, slotPx = 40, gapPx = 96) => {
+    try {
+      return (slots || []).reduce((sum, s2) => sum + (s2 && s2.gap ? gapPx : slotPx), 0);
+    } catch (e) {
+      return 0;
+    }
+  });
+
   // Other posts in the same series, oldest first, for in-series navigation.
   config.addFilter('seriesPosts', (items, seriesName) => {
     try {
