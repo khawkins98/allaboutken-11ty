@@ -252,8 +252,15 @@
     width: 3px;
   }
 
-  // The post's own month, marked from below so it never competes with the
-  // count encoding above the rule.
+  // The post's own month. The dot itself takes the accent -- a 3px tick below
+  // the rule was too quiet to find among ~180 marks, which is the one thing
+  // this state has to do. The tick stays as a second cue, because a
+  // single-entry month is only 4px across and colour alone is thin at that
+  // size.
+  .kh-timeline__slot--current .kh-timeline__mark::after {
+    background: var(--kh-color--coral);
+  }
+
   .kh-timeline__slot--current .kh-timeline__mark::before {
     background: var(--kh-color--coral);
     bottom: -4px;
