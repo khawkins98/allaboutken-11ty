@@ -467,6 +467,43 @@ module.exports = function(config) {
     }
   });
 
+  // Build-time sparkline for a topic's activity by year. Column marks rather
+  // than a line, because the counts are discrete and frequently zero, and a
+  // line through zeros implies a continuity that is not there.
+  //
+  // `peak` is passed in from the caller and is the maximum across ALL topics,
+  // not this one: side-by-side sparklines are read as sharing a scale whether
+  // or not they do (Few), so a per-row scale would make a quiet topic look as
+  // busy as AI. Rows are therefore comparable by height.
+  config.addShortcode('topicSparkline', (perYear, peak, label) => {
+    try {
+      const years = perYear || [];
+      if (!years.length || !peak) return '';
+      const w = 8;      // column pitch
+      const gap = 1;
+      const h = 20;     // drawing height
+      const width = years.length * w;
+      const bars = years.map((p, i) => {
+        const x = i * w;
+        if (!p.count) {
+          // Absence is data: a baseline tick, not a gap.
+          return `<rect x="${x}" y="${h - 1}" width="${w - gap}" height="1" fill="#ded2a8"></rect>`;
+        }
+        const bh = Math.max(2, Math.round((p.count / peak) * h));
+        return `<rect x="${x}" y="${h - bh}" width="${w - gap}" height="${bh}" fill="#5b5e5a"></rect>`;
+      }).join('');
+      const first = years[0].year;
+      const last = years[years.length - 1].year;
+      const busiest = years.reduce((a, b) => (b.count > a.count ? b : a), years[0]);
+      const desc = `${label}: activity by year, ${first} to ${last}. `
+        + `Busiest year ${busiest.year} with ${busiest.count}.`;
+      return `<svg class="kh-spark" width="${width}" height="${h}" viewBox="0 0 ${width} ${h}" `
+        + `role="img" aria-label="${desc}"><title>${desc}</title>${bars}</svg>`;
+    } catch (e) {
+      return '';
+    }
+  });
+
   // Total pixel width of the timeline track. Firefox mis-computes the
   // scrollable overflow of a shrink-wrapped flex track inside an RTL
   // scroller, which is what broke `direction: rtl` before; giving the track
@@ -815,14 +852,33 @@ module.exports = function(config) {
             map.get(parent).push(item);
           });
         });
+      // Year range spans the whole corpus so every topic's sparkline covers
+      // the same years. Comparing rows only means anything on a shared axis.
+      const all = [...map.values()].flat();
+      const years = all.map((i) => new Date(i.date).getUTCFullYear());
+      const firstYear = Math.min(...years);
+      const lastYear = Math.max(...years);
+      const span = [];
+      for (let y = firstYear; y <= lastYear; y += 1) span.push(y);
+
       return [...map.entries()]
         .filter(([, items]) => items.length >= MIN)
-        .map(([topic, items]) => ({
-          topic,
-          slug: topic.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
-          count: items.length,
-          items: items.sort((a, b) => b.date - a.date)
-        }))
+        .map(([topic, items]) => {
+          const perYear = span.map((y) => ({
+            year: y,
+            count: items.filter((i) => new Date(i.date).getUTCFullYear() === y).length
+          }));
+          return {
+            topic,
+            slug: topic.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+            count: items.length,
+            firstYear,
+            lastYear,
+            perYear,
+            peak: Math.max(...perYear.map((p) => p.count)),
+            items: items.sort((a, b) => b.date - a.date)
+          };
+        })
         .sort((a, b) => (b.count - a.count) || a.topic.localeCompare(b.topic));
     } catch (e) {
       return [];

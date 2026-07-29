@@ -17,6 +17,32 @@
   // itself, so they are drawn in document ink.
   --kh-viz-ink: #2b2b28;
 
+  // Closest-in-meaning list. Hairline rows with the similarity stated in
+  // mono at the end; the number is a soft signal on an unfamiliar scale, so
+  // it is written rather than drawn.
+  .kh-near {
+    border-top: 1px solid var(--kh-rule--strong);
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+  }
+
+  .kh-near__item {
+    align-items: baseline;
+    border-bottom: 1px solid var(--kh-rule);
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+  }
+
+  .kh-near__score {
+    color: var(--kh-ink-muted);
+    flex: 0 0 auto;
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+  }
+
   // Topic index bar. Length on a common scale, which Cleveland & McGill put
   // near the top of the accuracy hierarchy; the count is stated as a number
   // beside it, so the bar is a comparison aid rather than the only encoding.
@@ -26,15 +52,28 @@
     white-space: nowrap;
   }
 
-  .kh-topic-index__bar {
-    width: 45%;
+  // Per-topic activity sparkline. A small multiple: same mark, same scale,
+  // one row per topic, so the reader learns it once and then reads only the
+  // differences between topics.
+  .kh-topic-index__spark {
+    white-space: nowrap;
+    width: 1%;
   }
 
-  .kh-topic-bar {
-    background: var(--kh-ink-muted);
-    display: block;
-    height: 6px;
-    width: var(--kh-bar, 0%);
+  .kh-spark {
+    display: inline-block;
+    vertical-align: bottom;
+  }
+
+  // Stated once in the column head rather than repeated on all 31 rows:
+  // every sparkline covers the same span, so per-row labels were redundant
+  // ink saying nothing that varied.
+  .kh-spark__axis {
+    color: var(--kh-ink-muted);
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    margin-left: 0.5em;
+    text-transform: none;
   }
 
   // Hierarchical topic detail. The parent is the controlled term and carries

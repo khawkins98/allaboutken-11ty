@@ -55,17 +55,7 @@ rather than a continuously scaled font size.
 
 ## 3. Techniques for rendering without JavaScript
 
-### CSS Grid + custom properties bar chart
-Data as a `<dl>`, each bar's size set by an inline `--value`, translated by
-Grid and `calc()`.
-
-- **Where:** <https://css-tricks.com/css-charts-grid-custom-properties/>
-- **Who:** Miriam Suzanne
-- **JS:** None.
-- **A11y:** Readable as plain text, but a `<dl>` has no chart semantics in the
-  accessibility API. Accessible by virtue of its text, not its structure.
-- **Fit:** This is essentially the pattern already used for the month dots,
-  generalised to bars.
+NOTE FROM KEN:  I like these
 
 ### Build-time SVG from an Eleventy shortcode
 A plain function in `eleventy.js` that takes an array and returns an SVG
@@ -125,6 +115,8 @@ Semantic `<table>` plus CSS reading numeric `data-*` values directly.
 ---
 
 ## 4. The idiom, and the honest-encoding cautions
+
+NOTE FROM KEN:  Sparkles are always fun, especially as little easter eggs. We could try inferring semantic word clusters or something. We do have the semantic search index to play with ...
 
 ### Sparklines
 Tufte coined the term in *Beautiful Evidence* (2006) for a small, word-sized
@@ -249,32 +241,3 @@ an ambient mark that is not the primary way anyone reads the archive, that is
 a defensible trade. But it *is* a trade. If precision ever matters more than
 calm, repeating fixed-size ticks is the better-founded option.
 
----
-
-## Could not verify
-
-- **`timharek.no/stats/`** — whether it carries the square grid, or only
-  numeric tables. The grid is credited to Knight/Photogabble only.
-- **Photogabble's owner display name** — not confirmed beyond the site handle.
-- **`niemanlab.org`, `mcgill.ca`, `npmjs.com`, `cloudfour.com`** — return 403
-  to automated requests including a browser user-agent. This is bot-blocking,
-  not a dead page; content and attribution corroborated via search indexing.
-- **Typed `attr()` browser support** — taken from Stoumann's own June 2025 note,
-  not independently re-checked against caniuse.
-- **Lupi's manifesto principles** — paraphrased from the page, not transcribed
-  verbatim.
-- **`@chrisburnell/svg-sparkline`** — excluded regardless of maintenance status,
-  because it is a client-side Web Component and needs JS to render at all.
-- No verified personal-site example was found for a "days since last post"
-  counter, a Project 365 CSS calendar, or a native no-JS reading/watching
-  rating grid. Searches surfaced only tutorials and JS widget services.
-
-## A note on one source
-
-While fetching <https://adactio.com/archive/>, the research agent's fetch
-returned content that appeared to contain an embedded prompt-injection string
-and a roleplay instruction aimed at the AI reading it. The agent did not act on
-it and excluded the page. It could not confirm whether that text is genuinely
-on Jeremy Keith's page or was an artefact of the fetch tooling — the latter
-seems more likely, and no conclusion should be drawn about the site. Recorded
-here only so the exclusion is explained rather than silent.
