@@ -299,9 +299,20 @@ module.exports = function(config) {
   // Twelve calendar months ending at the build month, each with counts by
   // entry type. Fed by a collection (usually allContent) so the strip shows
   // the whole register, not just one type.
+  // months = 0 means "all time": span from the earliest item to this month.
   config.addFilter('pulseMonths', (items, months = 12) => {
     try {
-      const start = DateTime.utc().startOf('month').minus({ months: months - 1 });
+      const now = DateTime.utc().startOf('month');
+      let span = months;
+      if (!span) {
+        const dates = (items || []).map((i) => i.date).filter(Boolean);
+        if (!dates.length) return [];
+        const earliest = DateTime.fromJSDate(new Date(Math.min(...dates)), { zone: 'utc' })
+          .startOf('month');
+        span = Math.max(1, Math.round(now.diff(earliest, 'months').months) + 1);
+      }
+      const start = now.minus({ months: span - 1 });
+      months = span;
       const slots = [];
       for (let i = 0; i < months; i += 1) {
         const m = start.plus({ months: i });

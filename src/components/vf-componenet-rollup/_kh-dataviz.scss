@@ -35,29 +35,47 @@
   // by breakpoint so the strip shows 24 months on desktop, 12 at tablet and
   // 6 on mobile. Cropping in CSS keeps the page a single cacheable artifact.
   .kh-timeline {
+    // `direction: rtl` starts the scroller at its right edge without any
+    // JavaScript, which is what we want: the recent months are the point.
+    // The list inside is switched back to ltr so reading order is normal.
+    direction: rtl;
     margin: 0.25rem 0 1.5rem;
+    overflow-x: auto;
+    // Fade the older end so the strip reads as continuing past the edge.
+    // Without this the hidden scrollbar leaves no hint that it scrolls.
+    mask-image: linear-gradient(to right, transparent 0, #000 3rem);
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .kh-timeline__track {
     align-items: center;
-    border-bottom: 1px solid var(--kh-rule);
+    // The rule is drawn as a background line rather than a border, so it can
+    // sit exactly on the marks' baseline while the padding below still gives
+    // the year captions room. A border-bottom would be pushed down by that
+    // padding and detach from the marks.
+    background-image: linear-gradient(var(--kh-rule), var(--kh-rule));
+    background-position: 0 calc(100% - 1.25rem);
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+    direction: ltr;
     display: flex;
-    justify-content: space-between;
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 0 1.25rem;
+    width: max-content;
   }
 
+  // Fixed slot width, so how many months are on screen follows the width of
+  // the container rather than a breakpoint: wide screens simply show more.
   .kh-timeline__slot {
     display: flex;
-    flex: 1 1 0;
+    flex: 0 0 var(--kh-slot-width, 40px);
     justify-content: center;
     position: relative;
-  }
-
-  // Mobile default: last 6 of the 24 slots.
-  .kh-timeline__slot:nth-child(-n + 18) {
-    display: none;
   }
 
   .kh-timeline__mark {
@@ -110,17 +128,16 @@
     width: 7px;
   }
 
-  // Year axis. Only January carries a label, plus whichever slot happens to
-  // be first at the current crop so a cropped view is never missing its
-  // leading year. A year that has not started yet never appears, because
-  // there is no slot for it.
+  // Year axis: January carries the label, centred on its own slot so it
+  // reads as naming the month it sits under. A year that has not started
+  // has no slot, so it never appears.
   .kh-timeline__year {
     bottom: -1.15rem;
     color: var(--kh-ink-muted);
     display: none;
     font-family: var(--kh-font-mono);
     font-size: 10px;
-    left: 0;
+    left: 50%;
     letter-spacing: 0.03em;
     position: absolute;
     transform: translateX(-50%);
@@ -129,45 +146,6 @@
 
   .kh-timeline__slot--year .kh-timeline__year {
     display: block;
-  }
-
-  // Mobile: slot 19 is the first visible one.
-  .kh-timeline__slot:nth-child(19) .kh-timeline__year {
-    display: block;
-  }
-
-  @media (min-width: $kh-breakpoint--md) {
-    // Tablet: last 12.
-    .kh-timeline__slot:nth-child(-n + 18) {
-      display: flex;
-    }
-
-    .kh-timeline__slot:nth-child(-n + 12) {
-      display: none;
-    }
-
-    .kh-timeline__slot:nth-child(19) .kh-timeline__year {
-      display: none;
-    }
-
-    .kh-timeline__slot:nth-child(13) .kh-timeline__year {
-      display: block;
-    }
-  }
-
-  @media (min-width: $kh-breakpoint--lg) {
-    // Desktop: the full 24.
-    .kh-timeline__slot:nth-child(-n + 12) {
-      display: flex;
-    }
-
-    .kh-timeline__slot:nth-child(13) .kh-timeline__year {
-      display: none;
-    }
-
-    .kh-timeline__slot:first-child .kh-timeline__year {
-      display: block;
-    }
   }
 
   // Sequence rail (foot of a post). A hairline with typed marks riding it;

@@ -3,9 +3,10 @@
      pulse           — array from the pulseMonths filter (12 slots)
      pulseCurrentKey — 'yyyy-MM' of the current post, if any (marks its month)
 
-   Twenty-four slots are always rendered; CSS crops the leading ones so the
-   strip shows 24 months on desktop, 12 at tablet and 6 on mobile. Cropping in
-   CSS rather than at build time keeps it a single cacheable page.
+   Every month since the first post is rendered. The track scrolls
+   horizontally with the scrollbar hidden, starting at the most recent end;
+   how many months are on screen follows the container width rather than a
+   breakpoint.
 
    Plain HTML and CSS, no SVG and no JavaScript: each month with entries is
    an <a>, so it gets a native tooltip on hover and goes somewhere on click.
@@ -21,10 +22,14 @@
    article/digest/impact ticks, which made it read as a chart to study
    rather than an ambient stamp. Counts by type stay in the tooltip. #}
 {%- if pulse and pulse.length -%}
-<nav class="kh-timeline" aria-label="Publishing over the last twelve months" data-pagefind-ignore>
+{#- 35-odd month links sit between the skip link and the page content, so
+    the strip needs its own bypass or keyboard users tab through the whole
+    archive to reach the first heading. -#}
+<a class="kh-u-sr-only kh-skip-link" href="#kh-after-timeline">Skip publishing timeline</a>
+<nav class="kh-timeline" aria-label="Publishing timeline" data-pagefind-ignore>
   {#- No visible label: the marks are meant to be noticed and worked out,
      not announced. The text stays for assistive tech and the CSS-off view. -#}
-  <p class="kh-u-sr-only">Entries published over the last twelve months.</p>
+  <p class="kh-u-sr-only">Entries published each month since the first post.</p>
   <ol class="kh-timeline__track">
     {%- for m in pulse %}
     {%- set tip = m.longLabel ~ ' — ' ~ m.total ~ (' entry' if m.total == 1 else ' entries') %}
@@ -44,4 +49,5 @@
   </ol>
   <p class="kh-u-sr-only">Range: {{ pulse[0].label }} to {{ (pulse | last).label }}.</p>
 </nav>
+<span id="kh-after-timeline" tabindex="-1"></span>
 {%- endif -%}
