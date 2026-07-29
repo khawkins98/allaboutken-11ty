@@ -7,7 +7,7 @@ image: "/blog/drill-bits.jpg"
 layout: layouts/base.njk
 templateEngineOverride: njk
 ---
-{%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) | reverse %}
+{%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) %}
 {% include "partials/pulse-strip.njk" %}
 
 <section class="kh-u-padding__top--500">
