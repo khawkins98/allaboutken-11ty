@@ -102,7 +102,6 @@
   // _kh-content.scss, so this is a clean slate rather than an override.
   .kh-table--spec {
     border-collapse: collapse;
-    border-top: 1px solid var(--kh-rule--strong);
     font-size: 15px;
     margin: var(--kh-stack-margin, 0) 0 1rem 0;
     width: 100%;
@@ -126,9 +125,21 @@
     vertical-align: top;
   }
 
+  // Inset from the frame on both edges; the old rules assumed no frame and
+  // ran the last column flush to the page.
+  .kh-table--spec th:first-child,
+  .kh-table--spec td:first-child {
+    padding-left: 1.25rem;
+  }
+
   .kh-table--spec th:last-child,
   .kh-table--spec td:last-child {
-    padding-right: 0;
+    padding-right: 1.25rem;
+  }
+
+  // The final row's rule would double with the wrapper's border.
+  .kh-table--spec tr:last-child td {
+    border-bottom: 0;
   }
 
   // The part-number column: coral, mono, narrow.
@@ -160,8 +171,12 @@
   }
 
   // Tables are the one place horizontal overflow is likely; contain it
-  // rather than letting the page scroll sideways.
+  // rather than letting the page scroll sideways. The wrapper also carries
+  // the frame and fill, so the table reads as a filled cell like
+  // .kh-datasheet-list rather than sitting directly on the graph paper.
   .kh-table-scroll {
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule--strong);
     overflow-x: auto;
   }
 
