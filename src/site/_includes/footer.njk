@@ -1,27 +1,38 @@
 <footer class="kh-footer kh-u-fullbleed kh-u-do-not-print kh-content" role="contentinfo">
-  {#- The bio appears once per page, never twice. The homepage says it in the
-      hero; entries say it in the byline at the foot of the piece, which is
-      where a reader who has just finished reading actually asks the question.
-      Everything else -- indexes, topics, stats, search, utility pages -- has
-      no other statement of identity, so the footer carries it there.
-      Keep this condition in step with the layouts that include
-      partials/author-note.njk. -#}
-  {%- set hasByline = layout in ["layouts/post.njk", "layouts/digesting.njk"] -%}
-  {%- if page.url != "/" and not hasByline %}
-  {%- markdown %}
-  <strong>I'm Ken Hawkins</strong>. I lead digital platforms and audience engagement, building public-facing systems that help complex organizations reach, serve, and learn from their audiences. I structure their content and data to be usable by people and the machines increasingly reading on their behalf. <a href="/">Learn more</a> or <a href="/#hello">get in touch</a>.
-  {% endmarkdown -%}
-  {%- endif -%}
-
   {#- Grouped, not a single row. This was six links of five different kinds on
       one line -- legal, meta, primary content, a profile, a subscribe action
       and a UI control -- with no relationship expressed between them. "Work"
       in particular is primary content and was sitting between GitHub and
       Colophon as though it were an afterthought.
 
+      The byline is the first column. It used to render at the foot of entries
+      only, which left every index, topic and utility page with no statement of
+      who this is; and the prose bio that used to sit above these columns was a
+      second copy of the same thing. One block, every page, one column.
+
       Columns use the mono micro-label from the datasheet register, so the
       footer reads as deliberate structure rather than a leftover list. -#}
-  <nav class="kh-footer__nav" aria-label="Site">
+  <div class="kh-footer__nav">
+    <div class="kh-footer__group kh-footer__group--who">
+      <p class="kh-meta kh-footer__label">Written by</p>
+      <p class="kh-footer__name">Ken Hawkins</p>
+      {#- Carries the human-and-machine line: it is the differentiator, and it
+          should not be what gets dropped when bios are consolidated. -#}
+      <p class="kh-footer__bio">Digital Platforms &amp; Audience Engagement Lead
+      at UNDRR in Bonn. I build public-facing systems that help complex
+      organizations reach, serve and learn from their audiences, and structure
+      their content and data to be usable by people and by the machines
+      increasingly reading on their behalf.</p>
+      <p class="kh-footer__bio-links">
+        <a href="/cv">The long version</a>
+        <span class="kh-footer__sep" aria-hidden="true">&middot;</span>
+        <a href="/#hello">Get in touch</a>
+      </p>
+    </div>
+    {#- The bio is not navigation, so the landmark wraps only the link
+        columns. `display: contents` keeps the four groups as direct children
+        of the footer grid, the same trick post-summary uses. -#}
+    <nav class="kh-footer__groups" aria-label="Site">
     <div class="kh-footer__group">
       <p class="kh-meta kh-footer__label">Writing</p>
       <ul class="kh-footer__list">
@@ -43,6 +54,7 @@
     <div class="kh-footer__group">
       <p class="kh-meta kh-footer__label">Elsewhere</p>
       <ul class="kh-footer__list">
+        <li><a href="mailto:khawkins98@gmail.com">Email</a></li>
         <li><a href="https://github.com/khawkins98" rel="me">GitHub</a></li>
         <li><a href="https://toot.io/@khawkins98" rel="me">Mastodon</a></li>
         <li><a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a></li>
@@ -55,7 +67,8 @@
         <li><a href="/impressum">Impressum</a></li>
       </ul>
     </div>
-  </nav>
+    </nav>
+  </div>
 
   {#- Two controls rather than two links, so they sit apart from the nav.
       The CSS toggle is the most distinctive thing on the site and used to be
