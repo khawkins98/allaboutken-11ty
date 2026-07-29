@@ -26,7 +26,7 @@
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
 
 const VECTORS = 'build/semantic-search/vectors.json';
 const OUT = 'src/site/_data/related.json';
@@ -49,6 +49,15 @@ const { chunks } = JSON.parse(readFileSync(VECTORS, 'utf-8'));
 // Only real entries. The vectors cover every page, so without this the
 // nearest neighbour of a post is often an index page: /blog/ is "about"
 // everything, so it sits near everything and drowns out real matches.
+// Guard against the URL-derivation bug returning. Every entry URL should be a
+// path the site actually serves; if it is not, related-semantic.njk will look
+// up `page.url` and quietly find nothing, which looks identical to "this entry
+// has no close neighbours". Cheap to check, invisible when it breaks.
+const resolvesOnDisk = (url) => {
+  const rel = url.endsWith('/') ? url.slice(1) + 'index.html' : url.slice(1);
+  return existsSync(join('build', rel));
+};
+
 const isEntry = (url) => /^\/posts\/[^/]+/.test(url) || /^\/work\/\d{4}\/[^/]+/.test(url);
 
 // Average the chunk vectors per URL, so each entry is one point in the space.
@@ -101,7 +110,20 @@ for (const a of entries) {
 mkdirSync(dirname(OUT), { recursive: true });
 writeFileSync(OUT, `${JSON.stringify(related, null, 1)}\n`);
 
+// If a key here is not a URL the site serves, related-semantic.njk looks up
+// `page.url`, finds nothing, and renders nothing -- indistinguishable from an
+// entry with no close neighbours. Loud rather than silent.
+const unresolved = Object.keys(related).filter((u) => !resolvesOnDisk(u));
+if (unresolved.length) {
+  console.warn(
+    `compute-related: WARNING ${unresolved.length} entry URL(s) do not resolve ` +
+    `to a built file; their related lists will render as empty:\n  ` +
+    unresolved.slice(0, 5).join('\n  ')
+  );
+}
+
 console.log(
   `compute-related: ${entries.length} entries, ${withNeighbours} with neighbours ` +
-  `at similarity >= ${MIN_SIMILARITY}, wrote ${OUT}`
+  `at similarity >= ${MIN_SIMILARITY}, wrote ${OUT}` +
+  (unresolved.length ? ` (${unresolved.length} unresolved)` : '')
 );
