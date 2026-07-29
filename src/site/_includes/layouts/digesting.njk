@@ -23,5 +23,11 @@ templateEngineOverride: njk
     <p>
       <a href="/digesting">More things I've been digesting</a>
     </p>
+    {#- Same closing byline as a full entry. Digesting notes are short and are
+        often the only page a search arrival sees, so the case for saying who
+        wrote them is stronger here, not weaker. footer.njk counts this layout
+        as carrying a byline, so removing this include would leave these pages
+        with no bio at all. -#}
+    {% include "partials/author-note.njk" %}
   </div>
 </article>

@@ -125,43 +125,50 @@ templateEngineOverride: njk
 }
 </script>
 
-{#- Read next spans the full content area rather than sitting in the 2/3
-    text column: it is a directory, not prose, and the narrow measure that
-    serves reading works against a scannable list.
+{#- The foot of an entry follows the order a reader actually asks in: who
+    wrote this, was it useful, what next. The byline is the article's closure,
+    so it comes first; the feedback strip follows it; "Read next" comes last
+    and spans the full content area, because it is a directory rather than
+    prose and the narrow measure that serves reading works against a
+    scannable list.
 
-    The byline used to live here. It now sits in the footer, on every page of
-    the site rather than only on entries -- see footer.njk. -#}
+    Pages with no entry carry a short blurb in the footer instead -- see
+    footer.njk. The homepage has neither, because the hero says it. -#}
 <div class="kh-stack kh-u-padding__top--800" data-pagefind-ignore>
   {%- if page.url != '/privacy/' %}
-  <section class="kh-readnext kh-u-do-not-print">
-    {#- Feedback shares the heading rule rather than standing as its own
-        block. "Was this useful?" and "what next?" are the same moment. -#}
-    <div class="kh-section-head kh-readnext__head">
-      <h2 id="read-next" class="kh-text-heading--2">Read next</h2>
-      {%- if comment != false %}
-      {% include "partials/feedback.njk" %}
-      {%- endif %}
-    </div>
+  <div class="kh-entry-foot kh-u-do-not-print">
+    {% include "partials/author-note.njk" %}
 
-    {% include "partials/related-semantic.njk" %}
-
-    {#- No sub-heading over the sequence rail. The rail already labels itself
-        ("older / Sequence / newer"), so a heading above it restated the mark
-        and put a third level of hierarchy into what is one short list. -#}
-    {%- set seqNeighbours = collections.allContent | neighbourhood(page.url, 3) %}
-    {% include "partials/sequence-mark.njk" %}
-    {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
-    {%- set nextPost = collections.posts | getNextCollectionItem(page) %}
-
-    {%- if previousPost %}
-    <p class="kh-text-body--3">Previously: <a href="{{ previousPost.url | url}}">{{ previousPost.data.title }}</a></p>
-    {% endif %}
-
-    {%- if nextPost %}
-    <p class="kh-text-body--3">Next: <a href="{{ nextPost.url | url}}">{{ nextPost.data.title }}</a></p>
+    {%- if comment != false %}
+    {% include "partials/feedback.njk" %}
     {%- endif %}
-    {#- No "Blog index" button: the footer now carries Blog in its Writing
-        column on every page, so a second route to the same place is noise. -#}
-  </section>
+
+    <section class="kh-readnext">
+      <div class="kh-section-head">
+        <h2 id="read-next" class="kh-text-heading--2">Read next</h2>
+        <span class="kh-meta">By meaning, and in sequence</span>
+      </div>
+
+      {% include "partials/related-semantic.njk" %}
+
+      {#- No sub-heading over the sequence rail. The rail already labels itself
+          ("older / Sequence / newer"), so a heading above it restated the mark
+          and put a third level of hierarchy into what is one short list. -#}
+      {%- set seqNeighbours = collections.allContent | neighbourhood(page.url, 3) %}
+      {% include "partials/sequence-mark.njk" %}
+      {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
+      {%- set nextPost = collections.posts | getNextCollectionItem(page) %}
+
+      {%- if previousPost %}
+      <p class="kh-text-body--3">Previously: <a href="{{ previousPost.url | url}}">{{ previousPost.data.title }}</a></p>
+      {% endif %}
+
+      {%- if nextPost %}
+      <p class="kh-text-body--3">Next: <a href="{{ nextPost.url | url}}">{{ nextPost.data.title }}</a></p>
+      {%- endif %}
+      {#- No "Blog index" button: the footer carries Blog in its Writing column
+          on every page, so a second route to the same place is noise. -#}
+    </section>
+  </div>
   {%- endif %}
 </div>

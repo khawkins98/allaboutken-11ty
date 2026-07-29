@@ -702,12 +702,55 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem 1.25rem;
-    margin: 0;
+    margin: 1.25rem 0 0;
   }
 
   // Read next spans the full content area: it is a directory, not prose.
   .kh-readnext {
     margin-top: 2.5rem;
+  }
+
+  // Byline
+  // ------
+  // The article's closure: sits under the prose, above the feedback strip and
+  // "Read next". Left rule rather than a filled box -- it is an aside, not a
+  // call to action.
+  .kh-author {
+    border-left: 3px solid var(--kh-color--sun);
+    border-top: 1px solid var(--kh-rule);
+    padding: 1rem 0 1rem 1.25rem;
+  }
+
+  .kh-author__name {
+    font-weight: 600;
+    margin: 0.25rem 0 0;
+  }
+
+  .kh-author__bio,
+  .kh-author__invite {
+    margin: 0.35rem 0 0;
+    max-width: 62ch;
+  }
+
+  .kh-author__links {
+    margin: 0.6rem 0 0;
+  }
+
+  .kh-author__sep {
+    color: var(--kh-ink-muted);
+    padding: 0 0.4rem;
+  }
+
+  @media (min-width: $kh-breakpoint--md) {
+    .kh-author {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: 7rem minmax(0, 1fr);
+    }
+
+    .kh-author__label {
+      padding-top: 0.35rem;
+    }
   }
 
   .kh-feedback__tally {

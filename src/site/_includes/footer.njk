@@ -12,23 +12,35 @@
 
       Columns use the mono micro-label from the datasheet register, so the
       footer reads as deliberate structure rather than a leftover list. -#}
-  <div class="kh-footer__nav">
+  {#- Entries close with a full byline under the article, so the footer stays
+      out of the way there. Everywhere else -- indexes, topics, search, utility
+      pages -- there is no other statement of who this is, so a short blurb
+      takes the first column. The homepage has neither: the hero says it.
+      Keep this condition in step with the layouts that include
+      partials/author-note.njk. -#}
+  {#- /privacy/ uses the post layout but suppresses the entry foot, so it has
+      no byline despite the layout suggesting otherwise -- it needs the blurb
+      like any other utility page. -#}
+  {%- set hasByline = layout in ["layouts/post.njk", "layouts/digesting.njk"] and page.url != "/privacy/" -%}
+  {%- set showBlurb = page.url != "/" and not hasByline -%}
+  <div class="kh-footer__nav{% if not showBlurb %} kh-footer__nav--links{% endif %}">
+    {%- if showBlurb %}
     <div class="kh-footer__group kh-footer__group--who">
       <p class="kh-meta kh-footer__label">Written by</p>
       <p class="kh-footer__name">Ken Hawkins</p>
-      {#- Carries the human-and-machine line: it is the differentiator, and it
-          should not be what gets dropped when bios are consolidated. -#}
-      <p class="kh-footer__bio">Digital Platforms &amp; Audience Engagement Lead
-      at UNDRR in Bonn. I build public-facing systems that help complex
-      organizations reach, serve and learn from their audiences, and structure
-      their content and data to be usable by people and by the machines
-      increasingly reading on their behalf.</p>
+      {#- The short form. The full bio belongs to an entry's byline; this is
+          the one-breath version, and it keeps the human-and-machine line
+          because that is the differentiator. -#}
+      <p class="kh-footer__bio">I lead digital platforms and audience
+      engagement at UNDRR, building public-facing systems for people and for
+      the machines increasingly reading on their behalf.</p>
       <p class="kh-footer__bio-links">
         <a href="/cv">The long version</a>
         <span class="kh-footer__sep" aria-hidden="true">&middot;</span>
         <a href="/#hello">Get in touch</a>
       </p>
     </div>
+    {%- endif %}
     {#- The bio is not navigation, so the landmark wraps only the link
         columns. `display: contents` keeps the four groups as direct children
         of the footer grid, the same trick post-summary uses. -#}

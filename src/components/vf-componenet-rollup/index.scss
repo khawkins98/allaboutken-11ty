@@ -696,8 +696,17 @@ body:has(#kh-css-toggle:checked) {
   }
 
   @media (min-width: $kh-breakpoint--md) {
+    // With the blurb: one wide column for the paragraph, four narrow ones for
+    // links. A plain auto-fit would set the blurb at a ~9rem measure.
     .kh-footer__nav {
-      grid-template-columns: minmax(16rem, 1.8fr) repeat(4, minmax(7rem, 1fr));
+      grid-template-columns: minmax(15rem, 1.4fr) repeat(4, minmax(7rem, 1fr));
+    }
+
+    // Without it -- on entries, which carry a full byline above -- the four
+    // link columns share the width evenly instead of inheriting the wide
+    // first track meant for prose.
+    .kh-footer__nav--links {
+      grid-template-columns: repeat(4, minmax(7rem, 1fr));
     }
   }
 
