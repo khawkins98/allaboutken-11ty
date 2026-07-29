@@ -16,6 +16,22 @@ yarn lint:links   # Validate internal links/anchors in build/ (run after a build
 ### Image paths are rewritten at build time
 Place images in `src/site/images/blog/`. Reference them in frontmatter as `/blog/filename.jpg` -- **not** `/images/blog/`. The build process adds the `/images/` prefix automatically. Getting this wrong produces broken images that only show up in production.
 
+### Live remote images must carry `eleventy:ignore`
+The image transform treats *any* `<img src>` as a source image, including
+remote URLs. For a live endpoint -- the feedback counter SVG at
+`feedback.allaboutken.com/count/...` -- that is wrong three times over: the
+image is fetched and rasterised at build time so the value freezes, the
+emitted `/.11ty/image/?src=...` URL 404s in production because
+`failOnError: false` lets a failed remote fetch through silently, and the
+`width`/`height` attributes the plugin stamps on the tag combine with any CSS
+`height` to specify both axes, so the badge lays out at its full intrinsic
+width (1280px) instead of scaling.
+
+Add `eleventy:ignore` to the tag. This is not an optimisation opt-out; without
+it the feature does not work. The symptom is easy to misread: it surfaced as
+381 "broken internal links" in `yarn lint:links`, all pointing at
+`/.11ty/image/`, which looks like a link problem and is not.
+
 ### The `image` field is not used for social cards
 `image` in frontmatter is for in-page hero images only. Social sharing images (`og:image`) are auto-generated screenshots. Override with `og_image` (full URL) in frontmatter if needed. This confuses people because every other blog engine uses `image` for both.
 
