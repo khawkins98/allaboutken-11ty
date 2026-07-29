@@ -39,8 +39,11 @@ body:has(#kh-css-toggle:checked) {
   --kh-ground: #fffae1;
   --kh-grid-size: 26px;
   --kh-grid-size--major: 130px; // every 5th line
-  --kh-grid-ink: rgb(196 168 88 / 9%);
-  --kh-grid-ink--major: rgb(196 168 88 / 21%);
+  // These two are the dial for how present the paper is. The ratio between
+  // them is what keeps the two tiers legible as tiers -- roughly 1:1.6 -- so
+  // change them together rather than one at a time.
+  --kh-grid-ink: rgb(196 168 88 / 5%);
+  --kh-grid-ink--major: rgb(196 168 88 / 8%);
   --kh-color--sun: #ffd21e;
   --kh-color--sun--deep: #8f6600;
   --kh-color--yellow--dark: #f0b429;
