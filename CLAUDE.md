@@ -44,6 +44,21 @@ The browser fetches the model directly from HuggingFace at query time. Transform
 ### Updating the embedding model
 Must change in **two places**: `MODEL_NAME` in `scripts/generate-embeddings.mjs` AND `MODEL_ID` in `src/site/semantic-search.js`. Both sides must use the same model. See the header comment in `generate-embeddings.mjs` for full instructions.
 
+### Navigation chrome must never reach the embeddings
+`scripts/generate-embeddings.mjs` strips anything between `<!--embed:skip-->`
+and `<!--/embed:skip-->` before embedding. Wrap any block that prints other
+entries' titles, or repeats identical text on every page, in those markers.
+
+This is not cosmetic. The "closest in meaning" list prints the titles of
+related entries; embedding it fed the feature's own output back into the model
+and those entries drifted closer together on every build. Measured: the link
+count went 116 to 173 with no writing changed, and fell to a stable 85 once the
+chrome was excluded. The register timeline prints an identical sentence on
+every page, which lifts baseline similarity across the whole corpus.
+
+Currently marked: related-semantic, pulse-strip, sequence-mark, series-nav, and
+the contents rail in post.njk.
+
 ### Topics use `>` for hierarchy, never `:`
 Post `topics:` entries may be hierarchical -- `AI > Claude Code`. The parent
 must come from the controlled vocabulary in `docs/TOPIC_TAXONOMY.md` and is the

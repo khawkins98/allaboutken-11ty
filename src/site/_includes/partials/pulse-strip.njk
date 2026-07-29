@@ -22,6 +22,7 @@
    article/digest/impact ticks, which made it read as a chart to study
    rather than an ambient stamp. Counts by type stay in the tooltip. #}
 {%- if pulse and pulse.length -%}
+<!--embed:skip-->
 {#- 35-odd month links sit between the skip link and the page content, so
     the strip needs its own bypass or keyboard users tab through the whole
     archive to reach the first heading. -#}
@@ -60,4 +61,5 @@
   <p class="kh-u-sr-only">Range: {{ pulse[0].label }} to {{ (pulse | last).label }}.</p>
 </nav>
 <span id="kh-after-timeline" tabindex="-1"></span>
+<!--/embed:skip-->
 {%- endif -%}
