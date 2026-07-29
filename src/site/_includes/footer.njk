@@ -1,5 +1,13 @@
 <footer class="kh-footer kh-u-fullbleed kh-u-do-not-print kh-content" role="contentinfo">
-  {%- if page.url != "/" %}
+  {#- The bio appears once per page, never twice. The homepage says it in the
+      hero; entries say it in the byline at the foot of the piece, which is
+      where a reader who has just finished reading actually asks the question.
+      Everything else -- indexes, topics, stats, search, utility pages -- has
+      no other statement of who this is, so the footer carries it there.
+      Keep this condition in step with the layouts that include
+      partials/author-note.njk. -#}
+  {%- set hasByline = layout in ["layouts/post.njk", "layouts/digesting.njk"] -%}
+  {%- if page.url != "/" and not hasByline %}
   {%- markdown %}
   <strong>I'm Ken Hawkins</strong>. I lead digital platforms and audience engagement, building public-facing systems that help complex organizations reach, serve, and learn from their audiences. I structure their content and data to be usable by people and the machines increasingly reading on their behalf. <a href="/">Learn more</a> or <a href="/#hello">get in touch</a>.
   {% endmarkdown -%}
