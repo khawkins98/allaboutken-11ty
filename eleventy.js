@@ -504,22 +504,76 @@ module.exports = function(config) {
     }
   });
 
+  // Words-per-month sparkline for a single year. Scaled to that year's own
+  // busiest month, not the corpus: see statsByYear.
+  config.addShortcode('monthSparkline', (months, peak, year) => {
+    try {
+      const list = months || [];
+      if (!list.length || !peak) return '';
+      const names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const w = 8;
+      const gap = 1;
+      const h = 20;
+      const width = list.length * w;
+      const bars = list.map((m, i) => {
+        const x = i * w;
+        if (!m.words) {
+          return `<rect x="${x}" y="${h - 1}" width="${w - gap}" height="1" fill="#ded2a8"></rect>`;
+        }
+        const bh = Math.max(2, Math.round((m.words / peak) * h));
+        return `<rect x="${x}" y="${h - bh}" width="${w - gap}" height="${bh}" fill="#5b5e5a"></rect>`;
+      }).join('');
+      const busiest = list.reduce((a, b) => (b.words > a.words ? b : a), list[0]);
+      const active = list.filter((m) => m.entries).length;
+      const desc = `${year}: words per month, scaled to this year. `
+        + `Busiest ${names[busiest.month - 1]} with ${busiest.words} words. `
+        + `${active} of 12 months active.`;
+      return `<svg class="kh-spark" width="${width}" height="${h}" viewBox="0 0 ${width} ${h}" `
+        + `role="img" aria-label="${desc}"><title>${desc}</title>${bars}</svg>`;
+    } catch (e) {
+      return '';
+    }
+  });
+
   // Per-year totals for the stats page: entry counts split by type, plus
   // words, so a single pass over the corpus feeds every mark on that page.
   config.addFilter('statsByYear', (items) => {
     try {
       const byYear = new Map();
       (items || []).forEach((item) => {
-        const y = new Date(item.date).getUTCFullYear();
-        if (!byYear.has(y)) byYear.set(y, { year: y, total: 0, words: 0 });
+        const d = new Date(item.date);
+        const y = d.getUTCFullYear();
+        if (!byYear.has(y)) {
+          byYear.set(y, {
+            year: y,
+            total: 0,
+            words: 0,
+            // Twelve slots so every year's sparkline covers Jan to Dec, and a
+            // quiet year reads as quiet rather than as a short chart.
+            months: Array.from({ length: 12 }, (_, m) => ({ month: m + 1, words: 0, entries: 0 }))
+          });
+        }
         const row = byYear.get(y);
         row.total += 1;
         const text = String(item.templateContent || '').replace(/<[^>]*>/g, ' ');
-        row.words += (text.match(/\S+/g) || []).length;
+        const words = (text.match(/\S+/g) || []).length;
+        row.words += words;
+        const slot = row.months[d.getUTCMonth()];
+        slot.words += words;
+        slot.entries += 1;
       });
       const years = [...byYear.values()].sort((a, b) => a.year - b.year);
       const peak = Math.max(1, ...years.map((y) => y.total));
-      years.forEach((y) => { y.share = Math.round((y.total / peak) * 100); });
+      years.forEach((y) => {
+        y.share = Math.round((y.total / peak) * 100);
+        // Deliberately a WITHIN-year peak: this sparkline shows the shape of a
+        // year, while the bar beside it carries the across-year comparison.
+        // Mixing scales in one table is only honest if it is labelled, which
+        // the column head does.
+        y.monthPeak = Math.max(1, ...y.months.map((m) => m.words));
+        y.busiestMonth = y.months.reduce((a, b) => (b.words > a.words ? b : a), y.months[0]);
+      });
       return years;
     } catch (e) {
       return [];
