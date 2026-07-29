@@ -20,8 +20,9 @@
   // Closest-in-meaning list. Hairline rows with the similarity stated in
   // mono at the end; the number is a soft signal on an unfamiliar scale, so
   // it is written rather than drawn.
+  // No top border: .kh-section-head above already closes with one, and the
+  // two together read as a double rule.
   .kh-near {
-    border-top: 1px solid var(--kh-rule--strong);
     list-style: none;
     margin: 0 0 1rem;
     padding: 0;
@@ -48,16 +49,26 @@
   // beside it, so the bar is a comparison aid rather than the only encoding.
   .kh-topic-index__count {
     font-family: var(--kh-font-mono);
+    padding-right: 1.5rem;
     text-align: right;
     white-space: nowrap;
+    width: 1%;
   }
 
   // Per-topic activity sparkline. A small multiple: same mark, same scale,
   // one row per topic, so the reader learns it once and then reads only the
   // differences between topics.
+  // Sparkline first, its value beside it, the label last: the mark and its
+  // number read as one unit, the way a chart and its legend do.
   .kh-topic-index__spark {
+    padding-right: 1rem;
     white-space: nowrap;
     width: 1%;
+  }
+
+  // The column is deliberately narrow, so keep its head on one line.
+  .kh-table--spec th:has(.kh-spark__axis) {
+    white-space: nowrap;
   }
 
   .kh-spark {
