@@ -125,57 +125,43 @@ templateEngineOverride: njk
 }
 </script>
 
+{#- Read next spans the full content area rather than sitting in the 2/3
+    text column: it is a directory, not prose, and the narrow measure that
+    serves reading works against a scannable list.
+
+    The byline used to live here. It now sits in the footer, on every page of
+    the site rather than only on entries -- see footer.njk. -#}
 <div class="kh-stack kh-u-padding__top--800" data-pagefind-ignore>
   {%- if page.url != '/privacy/' %}
-  <article class="kh-grid kh-grid__col-3 kh-u-do-not-print">
-    <div class="kh-grid__col--span-1">
-    </div>
-    <div class="kh-content kh-grid__col--span-2">
-      {#- The tail of an entry answers two questions, in this order: who wrote
-          this, and what should I read next. It used to answer them in five
-          blocks that overlapped -- a "Comment?" section, a feedback strip, the
-          byline, a "Read more" section, and a floating widget that duplicated
-          the feedback strip outright. Contact now lives in the byline, because
-          how to reach the author belongs in the author block, and everything
-          onward lives under one heading. -#}
-
-      {#- 1. WHO. Before the asks, not after them: a reader should know who
-          they would be talking to before being invited to talk. -#}
-      {% include "partials/author-note.njk" %}
-
+  <section class="kh-readnext kh-u-do-not-print">
+    {#- Feedback shares the heading rule rather than standing as its own
+        block. "Was this useful?" and "what next?" are the same moment. -#}
+    <div class="kh-section-head kh-readnext__head">
+      <h2 id="read-next" class="kh-text-heading--2">Read next</h2>
       {%- if comment != false %}
       {% include "partials/feedback.njk" %}
       {%- endif %}
-
-      {#- 2. WHAT NEXT. One heading over every onward route -- semantic
-          neighbours, the sequence rail, and adjacent entries -- because they
-          are all answers to the same question and were previously scattered
-          across three blocks that did not know about each other. -#}
-      <div class="kh-section-head kh-u-margin__top--1200">
-        <h2 id="read-next" class="kh-text-heading--2">Read next</h2>
-        <span class="kh-meta">By meaning, and in sequence</span>
-      </div>
-
-      {% include "partials/related-semantic.njk" %}
-
-      <h3 class="kh-text-heading--3 kh-u-margin__top--800">In sequence</h3>
-      {%- set seqNeighbours = collections.allContent | neighbourhood(page.url, 3) %}
-      {% include "partials/sequence-mark.njk" %}
-      {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
-      {%- set nextPost = collections.posts | getNextCollectionItem(page) %}
-
-      {%- if previousPost %}
-      <p class="kh-text-body--3">Previously: <a href="{{ previousPost.url | url}}">{{ previousPost.data.title }}</a></p>
-      {% endif %}
-
-      {%- if nextPost %}
-      <p class="kh-text-body--3">Next: <a href="{{ nextPost.url | url}}">{{ nextPost.data.title }}</a></p>
-      {%- endif %}
-      <p>
-        <a href="/blog" class="kh-button kh-button--sm"> ⇤ Blog index</a>
-      </p>
     </div>
-  </article>
+
+    {% include "partials/related-semantic.njk" %}
+
+    {#- No sub-heading over the sequence rail. The rail already labels itself
+        ("older / Sequence / newer"), so a heading above it restated the mark
+        and put a third level of hierarchy into what is one short list. -#}
+    {%- set seqNeighbours = collections.allContent | neighbourhood(page.url, 3) %}
+    {% include "partials/sequence-mark.njk" %}
+    {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
+    {%- set nextPost = collections.posts | getNextCollectionItem(page) %}
+
+    {%- if previousPost %}
+    <p class="kh-text-body--3">Previously: <a href="{{ previousPost.url | url}}">{{ previousPost.data.title }}</a></p>
+    {% endif %}
+
+    {%- if nextPost %}
+    <p class="kh-text-body--3">Next: <a href="{{ nextPost.url | url}}">{{ nextPost.data.title }}</a></p>
+    {%- endif %}
+    {#- No "Blog index" button: the footer now carries Blog in its Writing
+        column on every page, so a second route to the same place is noise. -#}
+  </section>
   {%- endif %}
 </div>
-

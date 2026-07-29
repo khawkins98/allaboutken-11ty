@@ -684,11 +684,45 @@ body:has(#kh-css-toggle:checked) {
   // with no relationship expressed between them. Columns with mono
   // micro-labels put the structure back and match the datasheet register used
   // on /blog, /all and /stats.
+  // The byline column needs a paragraph measure; the link columns do not. A
+  // plain auto-fit would give all five the same width and set the bio at a
+  // ~9rem measure, which is unreadable. So: one wide column, then as many
+  // link columns as fit.
   .kh-footer__nav {
     display: grid;
     gap: 1.5rem 2rem;
-    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    grid-template-columns: 1fr;
     margin-top: 1.5rem;
+  }
+
+  @media (min-width: $kh-breakpoint--md) {
+    .kh-footer__nav {
+      grid-template-columns: minmax(16rem, 1.8fr) repeat(4, minmax(7rem, 1fr));
+    }
+  }
+
+  // Landmark wrapper only; the groups stay direct grid children.
+  .kh-footer__groups {
+    display: contents;
+  }
+
+  .kh-footer__name {
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .kh-footer__bio {
+    margin: 0.35rem 0 0;
+    max-width: 42ch;
+  }
+
+  .kh-footer__bio-links {
+    margin: 0.5rem 0 0;
+  }
+
+  .kh-footer__sep {
+    color: var(--kh-ink-muted);
+    padding: 0 0.35rem;
   }
 
   .kh-footer__label {
