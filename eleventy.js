@@ -792,6 +792,43 @@ module.exports = function(config) {
     }
   });
 
+  // Topics grouped by PARENT, so `AI > Claude Code` counts under AI. Only
+  // topics with enough entries to be worth browsing get a page; the taxonomy
+  // was consolidated precisely so that a topic index is not mostly singletons.
+  config.addCollection('topics', (collectionApi) => {
+    try {
+      const MIN = 3;
+      const map = new Map();
+      collectionApi.getAll()
+        .filter((item) => {
+          const tags = getTagArray(item);
+          return tags.includes('posts') || tags.includes('digesting');
+        })
+        .forEach((item) => {
+          const topics = (item.data && item.data.topics) || [];
+          const seen = new Set();
+          topics.forEach((t) => {
+            const parent = String(t || '').split('>')[0].trim();
+            if (!parent || seen.has(parent)) return;
+            seen.add(parent);
+            if (!map.has(parent)) map.set(parent, []);
+            map.get(parent).push(item);
+          });
+        });
+      return [...map.entries()]
+        .filter(([, items]) => items.length >= MIN)
+        .map(([topic, items]) => ({
+          topic,
+          slug: topic.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+          count: items.length,
+          items: items.sort((a, b) => b.date - a.date)
+        }))
+        .sort((a, b) => (b.count - a.count) || a.topic.localeCompare(b.topic));
+    } catch (e) {
+      return [];
+    }
+  });
+
   config.addCollection('allContent', (collectionApi) => {
     try {
       return collectionApi.getAll()

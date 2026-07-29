@@ -90,14 +90,11 @@
       <a href="/" class="kh-logo kh-navigation__link">AllAboutKen.com</a>
       <nav class="kh-cluster kh-navigation kh-u-do-not-print kh-u-show-for-medium">
         <ul class="kh-navigation__list">
+          {#- One "Writing" entry rather than three siblings. Blog, Digesting
+              and Project notes now read as sections of it, reached from
+              /all/, and the nav stays active across all of them. -#}
           <li class="kh-navigation__item">
-            <a href="/blog" class="kh-navigation__link{% if page.url.startsWith('/blog') or (page.url.startsWith('/posts') and tags and not ('impact-stories' in tags)) %} kh-navigation__link--active{% endif %}">Blog</a>
-          </li>
-          <li class="kh-navigation__item">
-            <a href="/work" class="kh-navigation__link{% if page.url.startsWith('/work') %} kh-navigation__link--active{% endif %}">Work</a>
-          </li>
-          <li class="kh-navigation__item">
-            <a href="/digesting" class="kh-navigation__link{% if page.url.startsWith('/digesting') %} kh-navigation__link--active{% endif %}">Digesting</a>
+            <a href="/all/" class="kh-navigation__link{% if page.url.startsWith('/all') or page.url.startsWith('/blog') or page.url.startsWith('/digesting') or page.url.startsWith('/work') or page.url.startsWith('/posts') %} kh-navigation__link--active{% endif %}">Writing</a>
           </li>
           <li class="kh-navigation__item">
             <a href="/search/" class="kh-navigation__link{% if page.url.startsWith('/search') %} kh-navigation__link--active{% endif %}">Search</a>

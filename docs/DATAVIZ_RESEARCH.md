@@ -1,49 +1,5 @@
-# Small data marks for a low-JavaScript site — research notes
+NOTE FROM KEN: Chart.css is neat, but not yet sure if we still need this?
 
-Compiled July 2026. Research brief: find "data is beautiful" ideas that suit a
-personal site, work with **no JavaScript or build-time rendering only**, and
-stay **little touches rather than dashboards**.
-
-Every URL below was checked and returns a live page, except where the "Could
-not verify" section says otherwise. Attribution is to the named person; where
-provenance was unclear it says so rather than guessing.
-
-Existing marks on this site for reference: a twelve-month timeline of dots
-sized by post count, a prev/next sequence rail, a word-count percentile gauge,
-and topic tallies. See `src/site/_includes/partials/` and `_kh-dataviz.scss`.
-
----
-
-## 1. Start here — the three findings worth acting on
-
-### `eleventy-plugin-post-graph` — a drop-in contribution heatmap
-A per-day grid of small squares, lit where a post exists, in the GitHub commit
-graph idiom. Packaged as an Eleventy plugin and invoked with a single
-shortcode: `{% postGraph collections.posts %}`.
-
-- **Where:** <https://postgraph.rknight.me/> · repo <https://github.com/rknightuk/eleventy-plugin-post-graph>
-- **Who:** Robb Knight
-- **JS:** None. Verified by fetching the demo page: it is a CSS Grid of
-  `div.epg__box` elements with a class swap for "has post". No `<script>` in
-  the rendering path.
-- **Fit:** Same generator, same aesthetic family, installable rather than
-  merely inspirational. A dense grid of ticks is very close to the datasheet
-  register already in use.
-
-### `<meter>` instead of hand-rolled spans for the length gauge
-The word-count percentile gauge currently uses `span.kh-length-gauge__track`
-with a marker positioned by a custom property. `<meter>` is the native element
-for "where does this value sit on a defined scale", with `min`/`max`/`low`/
-`high`/`optimum`, and it carries the `meter` ARIA role for free.
-
-- **Where:** <https://www.w3.org/WAI/ARIA/apg/patterns/meter/>
-- **Who:** WAI-ARIA Authoring Practices (W3C)
-- **JS:** None.
-- **Fit:** Straight swap that trades custom markup for native semantics. The
-  APG note about `aria-valuetext` matters here: "72nd percentile" is more
-  meaningful to announce than a bare number. Caveat: `<meter>` is notoriously
-  awkward to style consistently across browsers, so check the appearance
-  before committing.
 
 ### Charts.css — table-as-chart
 A CSS framework that turns an ordinary `<table>` into bar, column, area and
@@ -59,16 +15,8 @@ stay in the DOM as a real table.
 
 ---
 
-## 2. Real examples on personal sites
 
-### Pure-CSS "posts by year" bar chart
-One row per year; a `div` whose inline `width` is a percentage of the busiest
-year, with the count printed alongside.
-
-- **Where:** <https://rknight.me/blog/stats/>
-- **Who:** Robb Knight
-- **JS:** None. The percentage is computed at build time and written inline.
-- **Fit:** About as close to "a hairline rule turned into a bar" as it gets.
+NOTE FROM KEN:  I like the idea of having somewhere like on the site, maybe on the colophone or something, like my writing stats ...
 
 ### The heatmap pattern spreading peer-to-peer
 Photogabble adopted Knight's plugin and credited both him and Tim Hårek
@@ -88,6 +36,9 @@ same mark.
   Knight/Photogabble, not to this page.
 - **Fit:** Supports "a `/stats/` page is a legitimate genre on a personal site".
 
+
+NOTE FROM KEN: we can try riffing off this too
+
 ### Tag cloud as discrete size buckets
 Tags wrapped in bucketed classes (`not-popular-at-all` … `ultra-popular`)
 rather than a continuously scaled font size.
@@ -99,16 +50,6 @@ rather than a continuously scaled font size.
   Bucketing into a few discrete steps is more defensible than continuous
   font-size scaling, though see §4 for why size-as-magnitude remains weak.
 
-### Posting rhythm charts — included as a counter-example
-Four line charts of posts by hour, day of month, weekday and month of year.
-
-- **Where:** <https://www.jvt.me/post-frequency/>
-- **Who:** Jamie Tanna
-- **JS:** **Required.** Chart.js plus four `<canvas>` elements fetching a
-  build-generated JSON file.
-- **Fit:** The *datasets* are the interesting part and they are already static
-  at build time. The same four rhythms could be four rows of CSS bars with no
-  Chart.js at all. Worth citing as "the idea, not the implementation".
 
 ---
 
