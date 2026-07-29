@@ -69,6 +69,18 @@ function findHtmlFiles(dir, files = []) {
  * Extract text content from HTML, stripping tags.
  */
 function stripTags(html) {
+  // Remove regions marked as not-content before anything else. Navigational
+  // chrome must never reach the embeddings: the "closest in meaning" list
+  // prints the titles of related entries, so embedding it feeds the model's
+  // own output back in and those entries drift closer together on every
+  // build. The register timeline prints an identical sentence on every page,
+  // which lifts baseline similarity across the whole corpus. Both inflate the
+  // similarity graph without any writing having changed.
+  html = String(html).replace(/<!--embed:skip-->[\s\S]*?<!--\/embed:skip-->/gi, ' ');
+  return stripTagsInner(html);
+}
+
+function stripTagsInner(html) {
   return html
     .replace(/<script[\s\S]*?<\/script>/gi, '')
     .replace(/<style[\s\S]*?<\/style>/gi, '')

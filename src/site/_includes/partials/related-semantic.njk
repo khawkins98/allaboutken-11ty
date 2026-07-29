@@ -12,6 +12,7 @@
    Data: src/site/_data/related.json, written by scripts/compute-related.mjs. #}
 {%- set near = related[page.url] -%}
 {%- if near and near.length -%}
+<!--embed:skip-->
 <div class="kh-section-head kh-u-margin__top--1200">
   <h2 class="kh-text-heading--2">Closest in meaning</h2>
   <span class="kh-meta">By similarity, not by tag</span>
@@ -26,4 +27,5 @@
   </li>
   {%- endfor %}
 </ol>
+<!--/embed:skip-->
 {%- endif -%}
