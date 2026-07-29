@@ -128,6 +128,47 @@
     width: 7px;
   }
 
+  // A collapsed run of empty years. Wider than a month slot so the caption
+  // has room, and marked with a double tick so the break reads as elided
+  // time rather than as a very quiet month.
+  .kh-timeline__slot--gap {
+    // Wide enough that the centred range caption clears the neighbouring
+    // January label; a month-width slot made them collide.
+    flex: 0 0 6rem;
+  }
+
+  .kh-timeline__break {
+    align-items: center;
+    display: flex;
+    height: 22px;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+
+    &::before,
+    &::after {
+      background: var(--kh-rule);
+      content: '';
+      height: 9px;
+      position: absolute;
+      top: calc(50% + 6px);
+      transform: skewX(-18deg);
+      width: 1px;
+    }
+
+    &::before {
+      left: calc(50% - 3px);
+    }
+
+    &::after {
+      left: calc(50% + 3px);
+    }
+  }
+
+  .kh-timeline__year--gap {
+    color: var(--kh-ink-muted);
+  }
+
   // Year axis: January carries the label, centred on its own slot so it
   // reads as naming the month it sits under. A year that has not started
   // has no slot, so it never appears.
@@ -144,7 +185,8 @@
     white-space: nowrap;
   }
 
-  .kh-timeline__slot--year .kh-timeline__year {
+  .kh-timeline__slot--year .kh-timeline__year,
+  .kh-timeline__slot--gap .kh-timeline__year {
     display: block;
   }
 
