@@ -55,6 +55,20 @@
     width: 1%;
   }
 
+  // Simple length bar, used on the stats page. Length on a common scale is
+  // the channel people judge most accurately, and the number is always
+  // printed beside it.
+  .kh-topic-index__bar {
+    width: 40%;
+  }
+
+  .kh-topic-bar {
+    background: var(--kh-ink-muted);
+    display: block;
+    height: 6px;
+    width: var(--kh-bar, 0%);
+  }
+
   // Per-topic activity sparkline. A small multiple: same mark, same scale,
   // one row per topic, so the reader learns it once and then reads only the
   // differences between topics.

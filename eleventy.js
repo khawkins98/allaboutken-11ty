@@ -504,6 +504,56 @@ module.exports = function(config) {
     }
   });
 
+  // Per-year totals for the stats page: entry counts split by type, plus
+  // words, so a single pass over the corpus feeds every mark on that page.
+  config.addFilter('statsByYear', (items) => {
+    try {
+      const byYear = new Map();
+      (items || []).forEach((item) => {
+        const y = new Date(item.date).getUTCFullYear();
+        if (!byYear.has(y)) byYear.set(y, { year: y, total: 0, words: 0 });
+        const row = byYear.get(y);
+        row.total += 1;
+        const text = String(item.templateContent || '').replace(/<[^>]*>/g, ' ');
+        row.words += (text.match(/\S+/g) || []).length;
+      });
+      const years = [...byYear.values()].sort((a, b) => a.year - b.year);
+      const peak = Math.max(1, ...years.map((y) => y.total));
+      years.forEach((y) => { y.share = Math.round((y.total / peak) * 100); });
+      return years;
+    } catch (e) {
+      return [];
+    }
+  });
+
+  // Whole-corpus figures. Median rather than mean for length: a couple of
+  // very long pieces would drag a mean somewhere unrepresentative.
+  config.addFilter('corpusStats', (items) => {
+    try {
+      const lengths = (items || []).map((item) => {
+        const text = String(item.templateContent || '').replace(/<[^>]*>/g, ' ');
+        return (text.match(/\S+/g) || []).length;
+      }).filter((n) => n > 0).sort((a, b) => a - b);
+      if (!lengths.length) return null;
+      const mid = Math.floor(lengths.length / 2);
+      const median = lengths.length % 2
+        ? lengths[mid]
+        : Math.round((lengths[mid - 1] + lengths[mid]) / 2);
+      const dates = (items || []).map((i) => new Date(i.date)).sort((a, b) => a - b);
+      return {
+        entries: lengths.length,
+        words: lengths.reduce((a, b) => a + b, 0),
+        median,
+        longest: lengths[lengths.length - 1],
+        shortest: lengths[0],
+        first: dates[0],
+        latest: dates[dates.length - 1]
+      };
+    } catch (e) {
+      return null;
+    }
+  });
+
   // Total pixel width of the timeline track. Firefox mis-computes the
   // scrollable overflow of a shrink-wrapped flex track inside an RTL
   // scroller, which is what broke `direction: rtl` before; giving the track

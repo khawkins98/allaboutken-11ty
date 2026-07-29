@@ -1,0 +1,100 @@
+---
+title: Stats
+teaser: "How much there is, when it was written, and how long it runs."
+layout: layouts/base.njk
+permalink: /stats/
+---
+{%- set stats = collections.allContent | corpusStats -%}
+{%- set years = collections.allContent | statsByYear -%}
+<section>
+  <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
+
+  <div class="kh-content">
+    <p>Everything here is counted at build time from the entries themselves, so
+    it goes stale only when the site is rebuilt. Word counts strip markup and
+    count whitespace-separated tokens, which is close enough for a sense of
+    scale and not precise enough to be worth arguing about.</p>
+  </div>
+
+  {%- if stats %}
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="at-a-glance" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>At a glance</h2>
+    <span class="kh-meta">Whole corpus</span>
+  </div>
+  <div class="kh-panel">
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr">
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Entries</span>
+        {{ stats.entries | formatNumber }}
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Words</span>
+        {{ stats.words | formatNumber }}
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Topics</span>
+        <a href="/topics/">{{ collections.topics | length }}</a>
+      </div>
+    </div>
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr">
+      <div class="kh-panel__cell">
+        {#- Median, not mean: a couple of very long pieces would drag a mean
+            somewhere unrepresentative of a typical entry. -#}
+        <span class="kh-panel__label">Median length</span>
+        {{ stats.median | formatNumber }} words
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Range</span>
+        {{ stats.shortest | formatNumber }}&ndash;{{ stats.longest | formatNumber }} words
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Span</span>
+        {{ stats.first | dateDisplay }} to {{ stats.latest | dateDisplay }}
+      </div>
+    </div>
+  </div>
+  {%- endif %}
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="by-year" class="kh-text-heading--2"><span class="kh-section-number">2.0</span>By year</h2>
+    <span class="kh-meta">Entries &amp; words</span>
+  </div>
+  <div class="kh-table-scroll">
+    <table class="kh-table--spec">
+      <thead>
+        <tr>
+          <th scope="col">Year</th>
+          <th scope="col">Entries</th>
+          <th scope="col">Words</th>
+          <th scope="col">Relative volume</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%- for y in years %}
+        <tr>
+          <td class="kh-table__id">{{ y.year }}</td>
+          <td class="kh-topic-index__count">{{ y.total }}</td>
+          <td class="kh-topic-index__count">{{ y.words | formatNumber }}</td>
+          {#- Length on a common scale, with the number stated beside it. -#}
+          <td class="kh-topic-index__bar">
+            <span class="kh-topic-bar" style="--kh-bar: {{ y.share }}%" aria-hidden="true"></span>
+          </td>
+        </tr>
+        {%- endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="method" class="kh-text-heading--2"><span class="kh-section-number">3.0</span>Method</h2>
+    <span class="kh-meta">How these are counted</span>
+  </div>
+  <div class="kh-content">
+    <ul>
+      <li>Entries are everything in the writing register: blog posts, digesting notes and project notes. Pages like this one are not counted.</li>
+      <li>Word counts strip HTML and count whitespace-separated tokens. Code blocks are included, so technical posts read longer than their prose alone.</li>
+      <li>Length uses the median rather than the mean, and the range names the shortest and longest entries rather than a standard deviation, which would imply a normal distribution the corpus does not have.</li>
+      <li>The bars encode count as length on a shared scale, and every number is printed beside its bar. See <a href="/colophon/#how-closest-in-meaning-works">the colophon</a> for how the related-entry suggestions are derived.</li>
+    </ul>
+  </div>
+</section>
