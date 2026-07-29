@@ -92,7 +92,38 @@ permalink: /stats/
   </div>
 
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="method" class="kh-text-heading--2"><span class="kh-section-number">3.0</span>Method</h2>
+    <h2 id="map" class="kh-text-heading--2"><span class="kh-section-number">3.0</span>Map of the corpus</h2>
+    <span class="kh-meta">{{ semanticMap.nodes | length }} entries &middot; {{ semanticMap.edges | length }} links</span>
+  </div>
+  <div class="kh-content">
+    <p>Every entry placed by what it is about, not by tag or date. Two entries
+    sit close together when the language model that powers the site's semantic
+    search puts their text in a similar place; a line is drawn where a pair is
+    genuinely close. Hover a point for its title, or click through.</p>
+  </div>
+  <figure class="kh-map-figure">
+    <div class="kh-map-scroll">
+      {% semanticMap semanticMap %}
+    </div>
+    <figcaption class="kh-meta">
+      The axes mean nothing. Only relative distance does, and only roughly.
+    </figcaption>
+  </figure>
+  <details class="kh-map-details">
+    <summary>The strongest pairs, as text</summary>
+    <ol class="kh-near">
+      {%- for e in semanticMap.edges | sortByScore | limitItems(12) %}
+      <li class="kh-near__item">
+        <a class="kh-near__link" href="{{ semanticMap.nodes[e.a].url }}">{{ semanticMap.nodes[e.a].title }}</a>
+        <span class="kh-near__score">{{ e.s }}</span>
+        <a class="kh-near__link" href="{{ semanticMap.nodes[e.b].url }}">{{ semanticMap.nodes[e.b].title }}</a>
+      </li>
+      {%- endfor %}
+    </ol>
+  </details>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="method" class="kh-text-heading--2"><span class="kh-section-number">4.0</span>Method</h2>
     <span class="kh-meta">How these are counted</span>
   </div>
   <div class="kh-content">
