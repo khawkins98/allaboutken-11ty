@@ -4,6 +4,14 @@ pageClass: digesting
 templateEngineOverride: njk
 ---
 
+{#- The publishing strip, as on every other entry. Digesting notes are in the
+    same register and appear as marks in it, so a note that did not show the
+    strip could not show the reader where it sat -- and the archive page tells
+    readers the strip is at the top of every page. -#}
+{%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) %}
+{%- set pulseCurrentKey = date | dateDisplay('yyyy-LL') %}
+{% include "partials/pulse-strip.njk" %}
+
 <article class="kh-grid-stylized kh-u-margin__top--1200">
   <div></div>
   <div class="kh-content">
@@ -23,11 +31,11 @@ templateEngineOverride: njk
     <p>
       <a href="/digesting">More things I've been digesting</a>
     </p>
-    {#- Same closing byline as a full entry. Digesting notes are short and are
-        often the only page a search arrival sees, so the case for saying who
-        wrote them is stronger here, not weaker. footer.njk counts this layout
-        as carrying a byline, so removing this include would leave these pages
-        with no bio at all. -#}
-    {% include "partials/author-note.njk" %}
   </div>
 </article>
+
+{#- The same closing block as a full entry: byline, feedback, related entries
+    and the sequence rail. These pages used to carry the byline alone, so
+    arriving on a digesting note from a link was a dead end -- nothing related,
+    no position in the register, no way onward. -#}
+{% include "partials/entry-foot.njk" %}
