@@ -1,17 +1,24 @@
-{# Sequence rail — this post's position in the register, as navigation.
+{# Sequence rail — this entry's position in the register, as navigation.
    Expects:
      seqNeighbours — array from the neighbourhood filter (oldest → newest,
                      current entry flagged)
 
    Encoding: one mark per entry on a hairline, older on the left. Type is
-   shape + colour together: article = filled ink square, digesting = open
-   blue square, impact story = coral diamond. The current entry wears a
-   coral outline. Every mark is a real link with the title and date in both
-   the tooltip and visually-hidden text, so with CSS off this degrades to a
-   plain list of nearby entries. #}
+   shape and fill together: article = filled square, digesting = open square,
+   project note = coral diamond. The current entry is a filled coral square.
+
+   The key below the rail is not decoration. Without it the marks are an
+   undocumented code -- some filled, some not, for reasons a reader can only
+   discover by hovering each one in turn, which is not a thing anyone does.
+   A datasheet states its legend; so does this.
+
+   Every mark is a real link with the title and date in both the tooltip and
+   visually-hidden text, so with CSS off this degrades to a plain list of
+   nearby entries. That is also why the "Previously:" and "Next:" lines were
+   dropped from the entry foot: they restated two of these marks in prose. #}
 {%- if seqNeighbours and seqNeighbours.length > 1 -%}
 <nav class="kh-seq" aria-label="Nearby entries in the register" data-pagefind-ignore>
-  <p class="kh-meta kh-seq__caption"><span class="kh-seq__dir" aria-hidden="true">← older</span><span class="kh-meta--accent">Sequence</span><span class="kh-seq__dir" aria-hidden="true">newer →</span></p>
+  <p class="kh-meta kh-seq__caption"><span class="kh-seq__dir" aria-hidden="true">← older</span><span class="kh-seq__dir" aria-hidden="true">newer →</span></p>
   <ol class="kh-seq__track">
     {%- for n in seqNeighbours %}
     <li class="kh-seq__item">
@@ -27,5 +34,14 @@
     </li>
     {%- endfor %}
   </ol>
+
+  {#- aria-hidden: the marks above already carry their type in their
+      visually-hidden text, so reading the key aloud would only add noise. -#}
+  <ul class="kh-seq__key" aria-hidden="true">
+    <li class="kh-seq__key-item"><span class="kh-seq__mark kh-seq__mark--article kh-seq__mark--key"></span>Post</li>
+    <li class="kh-seq__key-item"><span class="kh-seq__mark kh-seq__mark--digesting kh-seq__mark--key"></span>Digesting</li>
+    <li class="kh-seq__key-item"><span class="kh-seq__mark kh-seq__mark--impact kh-seq__mark--key"></span>Project note</li>
+    <li class="kh-seq__key-item"><span class="kh-seq__mark kh-seq__mark--article kh-seq__mark--current kh-seq__mark--key"></span>You are here</li>
+  </ul>
 </nav>
 {%- endif -%}

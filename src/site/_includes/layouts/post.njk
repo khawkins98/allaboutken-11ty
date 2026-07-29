@@ -143,31 +143,22 @@ templateEngineOverride: njk
     {% include "partials/feedback.njk" %}
     {%- endif %}
 
+    {#- No wrapper heading. "Read next / By meaning, and in sequence" sat
+        directly above "Closest in meaning / By similarity, not by tag" --
+        two rules and two straplines for one idea. The related list owns the
+        h2; the rail gets an h3 under it. -#}
     <section class="kh-readnext">
-      <div class="kh-section-head">
-        <h2 id="read-next" class="kh-text-heading--2">Read next</h2>
-        <span class="kh-meta">By meaning, and in sequence</span>
-      </div>
-
       {% include "partials/related-semantic.njk" %}
 
-      {#- No sub-heading over the sequence rail. The rail already labels itself
-          ("older / Sequence / newer"), so a heading above it restated the mark
-          and put a third level of hierarchy into what is one short list. -#}
+      {#- The rail is orientation -- where this entry sits in the register --
+          rather than a reading list; the related entries above are the reading
+          list. Every mark is a link, so the adjacent entries are still one
+          click away, which is why the "Previously:" and "Next:" lines that
+          used to sit here are gone: they restated two of these marks in prose.
+          -#}
+      <h3 class="kh-text-heading--3 kh-readnext__seq-head">Read next in sequence</h3>
       {%- set seqNeighbours = collections.allContent | neighbourhood(page.url, 3) %}
       {% include "partials/sequence-mark.njk" %}
-      {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
-      {%- set nextPost = collections.posts | getNextCollectionItem(page) %}
-
-      {%- if previousPost %}
-      <p class="kh-text-body--3">Previously: <a href="{{ previousPost.url | url}}">{{ previousPost.data.title }}</a></p>
-      {% endif %}
-
-      {%- if nextPost %}
-      <p class="kh-text-body--3">Next: <a href="{{ nextPost.url | url}}">{{ nextPost.data.title }}</a></p>
-      {%- endif %}
-      {#- No "Blog index" button: the footer carries Blog in its Writing column
-          on every page, so a second route to the same place is noise. -#}
     </section>
   </div>
   {%- endif %}
