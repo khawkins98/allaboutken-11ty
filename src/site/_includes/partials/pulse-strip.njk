@@ -32,6 +32,15 @@
   <p class="kh-u-sr-only">Entries published each month since the first post.</p>
   <ol class="kh-timeline__track">
     {%- for m in pulse %}
+    {%- if m.gap %}
+    {#- A run of years with nothing published, collapsed to one break rather
+        than scrolled through. Caption comes from _data/timelineGaps.json. -#}
+    <li class="kh-timeline__slot kh-timeline__slot--gap" title="{{ m.label }}{% if m.caption %} — {{ m.caption }}{% else %} — no entries{% endif %}">
+      <span class="kh-timeline__break" aria-hidden="true"></span>
+      <span class="kh-timeline__year kh-timeline__year--gap" aria-hidden="true">{{ m.label }}</span>
+      <span class="kh-u-sr-only">{{ m.label }}: no entries.{% if m.caption %} {{ m.caption }}{% endif %}</span>
+    </li>
+    {%- else %}
     {%- set tip = m.longLabel ~ ' — ' ~ m.total ~ (' entry' if m.total == 1 else ' entries') %}
     <li class="kh-timeline__slot{% if m.yearStart %} kh-timeline__slot--year{% endif %}{% if pulseCurrentKey and m.key == pulseCurrentKey %} kh-timeline__slot--current{% endif %}" data-year="{{ m.year }}">
       {%- if m.total and m.url %}
@@ -45,6 +54,7 @@
       {%- endif %}
       <span class="kh-timeline__year" aria-hidden="true">{{ m.year }}</span>
     </li>
+    {%- endif %}
     {%- endfor %}
   </ol>
   <p class="kh-u-sr-only">Range: {{ pulse[0].label }} to {{ (pulse | last).label }}.</p>

@@ -356,6 +356,60 @@ module.exports = function(config) {
     }
   });
 
+  // Collapse runs of complete empty calendar years into a single break, so
+  // the timeline does not scroll through years of nothing. Only whole years
+  // that fall entirely inside the range are collapsed; a partial year at
+  // either end stays as months.
+  config.addFilter('collapseEmptyYears', (slots, captions) => {
+    try {
+      const list = slots || [];
+      if (!list.length) return list;
+      const byYear = new Map();
+      list.forEach((s2) => {
+        if (!byYear.has(s2.year)) byYear.set(s2.year, []);
+        byYear.get(s2.year).push(s2);
+      });
+      const empty = new Set();
+      byYear.forEach((months, year) => {
+        // 12 months present and none of them carrying an entry.
+        if (months.length === 12 && months.every((m) => !m.total)) empty.add(year);
+      });
+      if (!empty.size) return list;
+
+      const out = [];
+      let run = [];
+      const flush = () => {
+        if (!run.length) return;
+        const from = run[0];
+        const to = run[run.length - 1];
+        const key = from === to ? from : `${from}-${to}`;
+        const caption = (captions && (captions[key] || captions[from])) || '';
+        out.push({
+          gap: true,
+          key: `gap-${key}`,
+          fromYear: from,
+          toYear: to,
+          months: run.length * 12,
+          label: from === to ? from : `${from}\u2013${to}`,
+          caption
+        });
+        run = [];
+      };
+      list.forEach((s2) => {
+        if (empty.has(s2.year)) {
+          if (!run.includes(s2.year)) run.push(s2.year);
+          return;
+        }
+        flush();
+        out.push(s2);
+      });
+      flush();
+      return out;
+    } catch (e) {
+      return [];
+    }
+  });
+
   // The current page plus up to `span` neighbours either side, oldest first,
   // for the sequence rail. Input collection is newest-first.
   config.addFilter('neighbourhood', (items, url, span = 3) => {

@@ -1,0 +1,5 @@
+{
+  "_comment": "Captions for gaps in the register timeline. A run of calendar years with no posts is collapsed into a single break rather than scrolling through empty months. Key by the year, or by 'first-last' for a run. Keep them short: they show as a caption under the break and in the hover tooltip. Ken's copy, so edit freely; delete a key and the break falls back to a plain 'no posts' note.",
+  "2015-2016": "A quiet couple of years.",
+  "2022-2024": "Three years off; too busy with other things."
+}
