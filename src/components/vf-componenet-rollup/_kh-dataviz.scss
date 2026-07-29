@@ -35,15 +35,19 @@
   // by breakpoint so the strip shows 24 months on desktop, 12 at tablet and
   // 6 on mobile. Cropping in CSS keeps the page a single cacheable artifact.
   .kh-timeline {
-    // `direction: rtl` starts the scroller at its right edge without any
-    // JavaScript, which is what we want: the recent months are the point.
-    // The list inside is switched back to ltr so reading order is normal.
-    direction: rtl;
+    // Months run newest-first, left to right, so the strip opens on the
+    // recent end with no JavaScript.
+    // The obvious alternative, `direction: rtl` on the scroller to start it
+    // at the right, is broken in Firefox: an overflowing flex track inside an
+    // RTL scroller reports only a fraction of its scrollable width, leaving
+    // most of the archive unreachable. Verified against Firefox directly.
+    // There is no CSS-only way to open an LTR scroller at its right edge, so
+    // the axis is reversed instead.
     margin: 0.25rem 0 1.5rem;
     overflow-x: auto;
     // Fade the older end so the strip reads as continuing past the edge.
     // Without this the hidden scrollbar leaves no hint that it scrolls.
-    mask-image: linear-gradient(to right, transparent 0, #000 3rem);
+    mask-image: linear-gradient(to left, transparent 0, #000 3rem);
     scrollbar-width: none;
 
     &::-webkit-scrollbar {
@@ -61,12 +65,14 @@
     background-position: 0 calc(100% - 1.25rem);
     background-repeat: no-repeat;
     background-size: 100% 1px;
-    direction: ltr;
-    display: flex;
+    // inline-flex, not flex + max-content: Firefox does not size a flex
+    // container from `max-content` here, and shrink-wrapping via inline-flex
+    // is what actually produces a full-width scrollable track in both
+    // engines.
+    display: inline-flex;
     list-style: none;
     margin: 0;
     padding: 0 0 1.25rem;
-    width: max-content;
   }
 
   // Fixed slot width, so how many months are on screen follows the width of
