@@ -538,6 +538,95 @@ module.exports = function(config) {
 
   config.addFilter('sortByScore', (arr) => [...(arr || [])].sort((a, b) => b.s - a.s));
 
+  // Force-directed view of the same graph. Included for comparison: with 100
+  // nodes it tends toward a hairball, and force position encodes nothing
+  // reliable, unlike the MDS view where distance means similarity.
+  config.addShortcode('semanticForce', (map, w = 900, h = 520) => {
+    try {
+      if (!map || !map.nodes || !map.nodes.length) return '';
+      const pad = 20;
+      const px = (n) => (pad + (n.fx != null ? n.fx : n.x) * (w - pad * 2)).toFixed(1);
+      const py = (n) => (pad + (1 - (n.fy != null ? n.fy : n.y)) * (h - pad * 2)).toFixed(1);
+      const edges = (map.edges || []).map((e) => {
+        const a = map.nodes[e.a]; const b = map.nodes[e.b];
+        if (!a || !b) return '';
+        return `<line x1="${px(a)}" y1="${py(a)}" x2="${px(b)}" y2="${py(b)}" stroke="#a89257" stroke-opacity="0.5" stroke-width="1"></line>`;
+      }).join('');
+      const dots = map.nodes.map((n) => {
+        const r = 3 + Math.min(4, (n.degree || 0) * 0.5);
+        return `<a href="${n.url}"><title>${n.title}${n.topic ? ` — ${n.topic}` : ''} (${n.degree || 0} links)</title>`
+          + `<circle cx="${px(n)}" cy="${py(n)}" r="${r.toFixed(1)}" fill="#5b5e5a"></circle></a>`;
+      }).join('');
+      return `<svg class="kh-map" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" `
+        + `aria-label="Force-directed view of the same ${map.nodes.length} entries and ${(map.edges || []).length} links. Point size shows how many links an entry has."><g>${edges}</g><g>${dots}</g></svg>`;
+    } catch (e) { return ''; }
+  });
+
+  // Adjacency matrix. Rows and columns are entries grouped by primary topic; a
+  // filled cell means that pair is linked. A matrix cannot produce a hairball:
+  // density is read directly, and blocks on the diagonal are clusters.
+  config.addShortcode('semanticMatrix', (map, cell = 7) => {
+    try {
+      if (!map || !map.order || !map.order.length) return '';
+      const ord = map.order;
+      const n = ord.length;
+      const pos = new Map(ord.map((o, k) => [o.i, k]));
+      const size = n * cell;
+      const cells = (map.edges || []).flatMap((e) => {
+        const a = pos.get(e.a); const b = pos.get(e.b);
+        if (a == null || b == null) return [];
+        const o = Math.min(0.95, 0.35 + (e.s - map.edgeMin) * 1.6).toFixed(2);
+        const t = `${map.nodes[e.a].title} + ${map.nodes[e.b].title} (${e.s})`;
+        return [
+          `<rect x="${b * cell}" y="${a * cell}" width="${cell - 1}" height="${cell - 1}" fill="#5b5e5a" fill-opacity="${o}"><title>${t}</title></rect>`,
+          `<rect x="${a * cell}" y="${b * cell}" width="${cell - 1}" height="${cell - 1}" fill="#5b5e5a" fill-opacity="${o}"><title>${t}</title></rect>`
+        ];
+      }).join('');
+      // Rule between topic groups, so the blocks are readable as clusters.
+      let rules = '';
+      for (let k = 1; k < n; k += 1) {
+        if (ord[k].topic !== ord[k - 1].topic) {
+          const at = k * cell - 0.5;
+          rules += `<line x1="0" y1="${at}" x2="${size}" y2="${at}" stroke="#ded2a8" stroke-width="1"></line>`
+            + `<line x1="${at}" y1="0" x2="${at}" y2="${size}" stroke="#ded2a8" stroke-width="1"></line>`;
+        }
+      }
+      return `<svg class="kh-map kh-matrix" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" `
+        + `aria-label="Adjacency matrix of ${n} entries grouped by topic. A filled cell means the pair is linked; blocks along the diagonal are clusters."><g>${rules}</g><g>${cells}</g></svg>`;
+    } catch (e) { return ''; }
+  });
+
+  // Arc diagram. Entries on one line in cluster order, links as arcs above.
+  // Compact, and it fits a strip far better than any 2D layout.
+  config.addShortcode('semanticArc', (map, w = 900, h = 190) => {
+    try {
+      if (!map || !map.order || !map.order.length) return '';
+      const ord = map.order;
+      const n = ord.length;
+      const pos = new Map(ord.map((o, k) => [o.i, k]));
+      const step = (w - 20) / (n - 1);
+      const x = (k) => (10 + k * step);
+      const base = h - 22;
+      const arcs = (map.edges || []).map((e) => {
+        const a = pos.get(e.a); const b = pos.get(e.b);
+        if (a == null || b == null) return '';
+        const x1 = x(Math.min(a, b)); const x2 = x(Math.max(a, b));
+        const r = (x2 - x1) / 2;
+        const o = Math.min(0.8, 0.25 + (e.s - map.edgeMin) * 1.6).toFixed(2);
+        return `<path d="M ${x1.toFixed(1)} ${base} A ${r.toFixed(1)} ${Math.min(r, base - 6).toFixed(1)} 0 0 1 ${x2.toFixed(1)} ${base}" `
+          + `fill="none" stroke="#a89257" stroke-opacity="${o}" stroke-width="1"><title>${map.nodes[e.a].title} + ${map.nodes[e.b].title} (${e.s})</title></path>`;
+      }).join('');
+      const dots = ord.map((o, k) => {
+        const nd = map.nodes[o.i];
+        return `<a href="${nd.url}"><title>${nd.title}${nd.topic ? ` — ${nd.topic}` : ''}</title>`
+          + `<circle cx="${x(k).toFixed(1)}" cy="${base}" r="2.5" fill="#5b5e5a"></circle></a>`;
+      }).join('');
+      return `<svg class="kh-map" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" `
+        + `aria-label="Arc diagram: ${n} entries on a line in topic order, with an arc for each of the ${(map.edges || []).length} links."><g>${arcs}</g>`
+        + `<line x1="10" y1="${base}" x2="${w - 10}" y2="${base}" stroke="#ded2a8" stroke-width="1"></line><g>${dots}</g></svg>`;
+    } catch (e) { return ''; }
+  });
+
   // Static SVG map of the corpus: entries positioned by semantic similarity,
   // with a link drawn where two are genuinely close. Built at build time from
   // src/site/_data/semanticMap.json; no client-side library, no layout run in
@@ -635,6 +724,16 @@ module.exports = function(config) {
         ? lengths[mid]
         : Math.round((lengths[mid - 1] + lengths[mid]) / 2);
       const dates = (items || []).map((i) => new Date(i.date)).sort((a, b) => a - b);
+      // Cadence is stated as an average over the years that actually have
+      // entries, not over the calendar span. Dividing by the span would let a
+      // multi-year gap quietly halve the rate and make an active site look
+      // dormant; dividing by active years answers "when they write, how much?"
+      // The gap is visible in the pulse strip either way, so nothing is hidden.
+      const years = dates.map((d) => d.getUTCFullYear());
+      const activeYears = new Set(years).size;
+      const perYearTally = new Map();
+      years.forEach((y) => perYearTally.set(y, (perYearTally.get(y) || 0) + 1));
+      const busiest = [...perYearTally.entries()].sort((a, b) => b[1] - a[1])[0];
       return {
         entries: lengths.length,
         words: lengths.reduce((a, b) => a + b, 0),
@@ -642,7 +741,12 @@ module.exports = function(config) {
         longest: lengths[lengths.length - 1],
         shortest: lengths[0],
         first: dates[0],
-        latest: dates[dates.length - 1]
+        latest: dates[dates.length - 1],
+        activeYears,
+        // One decimal place: "2.4 a year" is a rate, "2 a year" reads as a count.
+        perYear: Math.round((lengths.length / Math.max(1, activeYears)) * 10) / 10,
+        busiestYear: busiest ? busiest[0] : null,
+        busiestYearCount: busiest ? busiest[1] : 0
       };
     } catch (e) {
       return null;
@@ -977,6 +1081,22 @@ module.exports = function(config) {
   // Topics grouped by PARENT, so `AI > Claude Code` counts under AI. Only
   // topics with enough entries to be worth browsing get a page; the taxonomy
   // was consolidated precisely so that a topic index is not mostly singletons.
+  // Hand-picked entries, the one part of the register that is chosen rather
+  // than computed. Everything else here — topics, neighbours, cadence, the
+  // timeline — is derived at build time and therefore complete and neutral,
+  // which is exactly why none of it can answer "what's worth reading?".
+  // Ordering is explicit (`featured: 1`) rather than by date or score, because
+  // the point is an editorial sequence.
+  config.addCollection('featured', (collectionApi) => {
+    try {
+      return collectionApi.getAll()
+        .filter((item) => item.data && typeof item.data.featured === 'number')
+        .sort((a, b) => a.data.featured - b.data.featured);
+    } catch (e) {
+      return [];
+    }
+  });
+
   config.addCollection('topics', (collectionApi) => {
     try {
       const MIN = 3;

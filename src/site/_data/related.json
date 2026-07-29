@@ -1,672 +1,408 @@
 {
- "/posts/20130321-postfix-spam/": [
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.62
-  },
-  {
-   "url": "/posts/20131208-content-model-better-journalism/",
-   "title": "A model for better content, better readers, better journalism",
-   "score": 0.61
-  },
-  {
-   "url": "/posts/20170725-site-update/",
-   "title": "A new site for little reason",
-   "score": 0.59
-  }
- ],
- "/posts/20131208-content-model-better-journalism/": [
-  {
-   "url": "/work/2025/impact-story-editorial-efficiency/",
-   "title": "Reclaiming three weeks of editorial time every month",
-   "score": 0.8
-  },
-  {
-   "url": "/posts/20180122-content-action-model-origin-story/",
-   "title": "The Content-Action Model origin story",
-   "score": 0.79
-  },
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.79
-  }
- ],
- "/posts/20140407-ux-success-double-conversion/": [
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.77
-  },
-  {
-   "url": "/posts/20131208-content-model-better-journalism/",
-   "title": "A model for better content, better readers, better journalism",
-   "score": 0.76
-  },
-  {
-   "url": "/posts/20170725-site-update/",
-   "title": "A new site for little reason",
-   "score": 0.75
-  }
- ],
- "/posts/20150128-lyra-installation/": [
-  {
-   "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
-   "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.62
-  },
-  {
-   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
-   "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.61
-  },
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.59
-  }
- ],
  "/posts/20170723-corporate-design-through-ia/": [
+  {
+   "url": "/posts/20260327-content-architecture-shipping-container/",
+   "title": "Content architecture: the delivery problem",
+   "score": 0.63
+  },
+  {
+   "url": "/posts/20170913-fluid-information-architecture/",
+   "title": "Fluid IA to enable user discovery, prepare for change",
+   "score": 0.62
+  },
   {
    "url": "/posts/20210830-embl-best-footer-forward/",
    "title": "EMBL.org: Empowering users to navigate a large scientific organization",
-   "score": 0.78
-  },
-  {
-   "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
-   "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.77
-  },
-  {
-   "url": "/posts/20251028-introducing-work-section/",
-   "title": "Introducing a &quot;Work&quot; section",
-   "score": 0.76
+   "score": 0.61
   }
  ],
  "/posts/20170725-site-update/": [
   {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.89
-  },
-  {
    "url": "/posts/20250831-site-overhaul-eleventy-v3/",
    "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.85
+   "score": 0.67
   },
   {
-   "url": "/posts/20251028-introducing-work-section/",
-   "title": "Introducing a &quot;Work&quot; section",
-   "score": 0.84
+   "url": "/posts/20200713-moving-from-panini-to-eleventy/",
+   "title": "Moving from Panini to Eleventy",
+   "score": 0.61
+  },
+  {
+   "url": "/posts/20260305-digesting-eleventy-becomes-build-awesome/",
+   "title": "11ty is dead, long live Build Awesome",
+   "score": 0.55
   }
  ],
  "/posts/20170913-fluid-information-architecture/": [
   {
-   "url": "/posts/20180207-discovery-and-analysis/",
-   "title": "UX, discovery, analysis + the CAM",
-   "score": 0.77
+   "url": "/posts/20170723-corporate-design-through-ia/",
+   "title": "Better corporate design through information architecture",
+   "score": 0.62
   },
   {
    "url": "/posts/20210830-embl-best-footer-forward/",
    "title": "EMBL.org: Empowering users to navigate a large scientific organization",
-   "score": 0.77
-  },
-  {
-   "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
-   "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.74
-  }
- ],
- "/posts/20171002-euroia-2017-takeaways/": [
-  {
-   "url": "/posts/20251028-introducing-work-section/",
-   "title": "Introducing a &quot;Work&quot; section",
-   "score": 0.75
-  },
-  {
-   "url": "/posts/20211223-something-new-2022/",
-   "title": "Something new for 2022",
-   "score": 0.74
-  },
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.73
-  }
- ],
- "/posts/20171027-video-conferencing-tips-dos-donts/": [
-  {
-   "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
-   "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.68
-  },
-  {
-   "url": "/posts/20180207-discovery-and-analysis/",
-   "title": "UX, discovery, analysis + the CAM",
-   "score": 0.68
-  },
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.67
-  }
- ],
- "/posts/20171112-ibm-plex-font-and-fira/": [
-  {
-   "url": "/posts/20250904-switching-to-recursive/",
-   "title": "Recursion: it’s fonts all the way down",
-   "score": 0.67
-  },
-  {
-   "url": "/posts/20180319-data-font-for-life-sciences/",
-   "title": "What if: A web font for data",
-   "score": 0.66
-  },
-  {
-   "url": "/posts/20260512-datatype-data-font-inside-out/",
-   "title": "A data font, from the inside out",
-   "score": 0.66
-  }
- ],
- "/posts/20180122-content-action-model-origin-story/": [
-  {
-   "url": "/posts/20180329-cam-content-action-goal-ontology/",
-   "title": "Inside the Content-Action Model",
-   "score": 0.94
+   "score": 0.61
   },
   {
    "url": "/posts/20180122-content-action-model/",
    "title": "Introducing the Content-Action Model for Web Systems",
-   "score": 0.92
+   "score": 0.56
+  }
+ ],
+ "/posts/20171112-ibm-plex-font-and-fira/": [
+  {
+   "url": "/posts/20180319-data-font-for-life-sciences/",
+   "title": "What if: A web font for data",
+   "score": 0.57
+  },
+  {
+   "url": "/posts/20260512-datatype-data-font-inside-out/",
+   "title": "A data font, from the inside out",
+   "score": 0.56
+  }
+ ],
+ "/posts/20180122-content-action-model-origin-story/": [
+  {
+   "url": "/posts/20180122-content-action-model/",
+   "title": "Introducing the Content-Action Model for Web Systems",
+   "score": 0.9
+  },
+  {
+   "url": "/posts/20180329-cam-content-action-goal-ontology/",
+   "title": "Inside the Content-Action Model",
+   "score": 0.81
   },
   {
    "url": "/posts/20180207-discovery-and-analysis/",
    "title": "UX, discovery, analysis + the CAM",
-   "score": 0.87
+   "score": 0.74
   }
  ],
  "/posts/20180122-content-action-model/": [
   {
    "url": "/posts/20180122-content-action-model-origin-story/",
    "title": "The Content-Action Model origin story",
-   "score": 0.92
+   "score": 0.9
   },
   {
    "url": "/posts/20180329-cam-content-action-goal-ontology/",
    "title": "Inside the Content-Action Model",
-   "score": 0.9
+   "score": 0.84
   },
   {
    "url": "/posts/20180207-discovery-and-analysis/",
    "title": "UX, discovery, analysis + the CAM",
-   "score": 0.86
+   "score": 0.79
   }
  ],
  "/posts/20180207-discovery-and-analysis/": [
   {
-   "url": "/posts/20180329-cam-content-action-goal-ontology/",
-   "title": "Inside the Content-Action Model",
-   "score": 0.88
+   "url": "/posts/20180122-content-action-model/",
+   "title": "Introducing the Content-Action Model for Web Systems",
+   "score": 0.79
   },
   {
    "url": "/posts/20180122-content-action-model-origin-story/",
    "title": "The Content-Action Model origin story",
-   "score": 0.87
+   "score": 0.74
   },
   {
-   "url": "/posts/20180122-content-action-model/",
-   "title": "Introducing the Content-Action Model for Web Systems",
-   "score": 0.86
+   "url": "/posts/20180329-cam-content-action-goal-ontology/",
+   "title": "Inside the Content-Action Model",
+   "score": 0.72
   }
  ],
  "/posts/20180210-zurb-panini-2-migration/": [
   {
    "url": "/posts/20200713-moving-from-panini-to-eleventy/",
    "title": "Moving from Panini to Eleventy",
-   "score": 0.86
+   "score": 0.6
   },
   {
    "url": "/posts/20250831-site-overhaul-eleventy-v3/",
    "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.7
-  },
-  {
-   "url": "/posts/20170725-site-update/",
-   "title": "A new site for little reason",
-   "score": 0.68
+   "score": 0.56
   }
  ],
  "/posts/20180319-data-font-for-life-sciences/": [
   {
    "url": "/posts/20260512-datatype-data-font-inside-out/",
    "title": "A data font, from the inside out",
-   "score": 0.91
-  },
-  {
-   "url": "/posts/20250904-switching-to-recursive/",
-   "title": "Recursion: it’s fonts all the way down",
-   "score": 0.82
+   "score": 0.83
   },
   {
    "url": "/posts/20171112-ibm-plex-font-and-fira/",
    "title": "Comparing IBM Plex and Fira Sans",
-   "score": 0.66
+   "score": 0.57
+  },
+  {
+   "url": "/posts/20250904-switching-to-recursive/",
+   "title": "Recursion: it’s fonts all the way down",
+   "score": 0.56
   }
  ],
  "/posts/20180329-cam-content-action-goal-ontology/": [
   {
-   "url": "/posts/20180122-content-action-model-origin-story/",
-   "title": "The Content-Action Model origin story",
-   "score": 0.94
-  },
-  {
    "url": "/posts/20180122-content-action-model/",
    "title": "Introducing the Content-Action Model for Web Systems",
-   "score": 0.9
+   "score": 0.84
+  },
+  {
+   "url": "/posts/20180122-content-action-model-origin-story/",
+   "title": "The Content-Action Model origin story",
+   "score": 0.81
   },
   {
    "url": "/posts/20180207-discovery-and-analysis/",
    "title": "UX, discovery, analysis + the CAM",
-   "score": 0.88
+   "score": 0.72
   }
  ],
  "/posts/20180912-faster-scientific-websites-through-reusability/": [
   {
+   "url": "/work/2019/impact-story-embl-visual-framework/",
+   "title": "Building a component library adopted across 50+ scientific properties",
+   "score": 0.66
+  },
+  {
+   "url": "/posts/20211221-enabling-a-more-dynamic-embl-online/",
+   "title": "Enabling a more dynamic EMBL online",
+   "score": 0.58
+  },
+  {
    "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
    "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.84
-  },
-  {
-   "url": "/posts/20210830-embl-best-footer-forward/",
-   "title": "EMBL.org: Empowering users to navigate a large scientific organization",
-   "score": 0.83
-  },
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.82
+   "score": 0.55
   }
  ],
  "/posts/20190627-embl-vf2-ebi-day-2019/": [
   {
    "url": "/posts/20211221-enabling-a-more-dynamic-embl-online/",
    "title": "Enabling a more dynamic EMBL online",
-   "score": 0.9
+   "score": 0.75
   },
   {
-   "url": "/posts/20210830-embl-best-footer-forward/",
-   "title": "EMBL.org: Empowering users to navigate a large scientific organization",
-   "score": 0.89
+   "url": "/work/2019/impact-story-embl-visual-framework/",
+   "title": "Building a component library adopted across 50+ scientific properties",
+   "score": 0.74
   },
   {
    "url": "/posts/20211223-something-new-2022/",
    "title": "Something new for 2022",
-   "score": 0.87
+   "score": 0.67
   }
  ],
  "/posts/20191021-integrating-eleventy-with-gulp/": [
   {
    "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites/",
    "title": "Fractal and Eleventy: Getting static sites closer to the design system",
-   "score": 0.68
-  },
-  {
-   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
-   "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.65
-  },
-  {
-   "url": "/posts/20200713-moving-from-panini-to-eleventy/",
-   "title": "Moving from Panini to Eleventy",
-   "score": 0.56
+   "score": 0.7
   }
  ],
  "/posts/20191112-extendeing-fractal-components-eleventy-static-sites/": [
   {
-   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
-   "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.73
-  },
-  {
    "url": "/posts/20191021-integrating-eleventy-with-gulp/",
    "title": "Integrating Eleventy with gulp, upstream JS",
-   "score": 0.68
-  },
-  {
-   "url": "/posts/20200713-moving-from-panini-to-eleventy/",
-   "title": "Moving from Panini to Eleventy",
-   "score": 0.66
-  }
- ],
- "/posts/20191118-first-page-with-the-visual-framework/": [
-  {
-   "url": "/posts/20250906-css-naked-css-only/",
-   "title": "Exposing HTML: The No-JS nudist CSS toggle",
-   "score": 0.64
-  },
-  {
-   "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
-   "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.59
+   "score": 0.7
   },
   {
    "url": "/posts/20250831-site-overhaul-eleventy-v3/",
    "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.59
+   "score": 0.62
+  },
+  {
+   "url": "/posts/20201212-using-nunjucks-with-react/",
+   "title": "Using Nunjucks templates with React",
+   "score": 0.57
   }
  ],
  "/posts/20200208-its-been-20-years/": [
   {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.8
-  },
-  {
-   "url": "/posts/20170725-site-update/",
-   "title": "A new site for little reason",
-   "score": 0.79
-  },
-  {
    "url": "/work/2025/impact-story-editorial-efficiency/",
    "title": "Reclaiming three weeks of editorial time every month",
-   "score": 0.78
+   "score": 0.59
+  },
+  {
+   "url": "/posts/20250508-its-been-too-long/",
+   "title": "It’s been 3.5 years",
+   "score": 0.58
   }
  ],
  "/posts/20200713-moving-from-panini-to-eleventy/": [
   {
-   "url": "/posts/20180210-zurb-panini-2-migration/",
-   "title": "Migrating to Zurb Panini 2.0",
-   "score": 0.86
-  },
-  {
    "url": "/posts/20250831-site-overhaul-eleventy-v3/",
    "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.86
+   "score": 0.82
   },
   {
    "url": "/posts/20170725-site-update/",
    "title": "A new site for little reason",
-   "score": 0.77
-  }
- ],
- "/posts/20201111-using-lerna-with-fewer-tags-and-custom-release-notes/": [
-  {
-   "url": "/posts/20251028-introducing-work-section/",
-   "title": "Introducing a &quot;Work&quot; section",
-   "score": 0.67
+   "score": 0.61
   },
   {
-   "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
-   "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.67
-  },
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.65
+   "url": "/posts/20180210-zurb-panini-2-migration/",
+   "title": "Migrating to Zurb Panini 2.0",
+   "score": 0.6
   }
  ],
  "/posts/20201212-using-nunjucks-with-react/": [
   {
    "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites/",
    "title": "Fractal and Eleventy: Getting static sites closer to the design system",
-   "score": 0.61
-  },
-  {
-   "url": "/posts/20250906-css-naked-css-only/",
-   "title": "Exposing HTML: The No-JS nudist CSS toggle",
-   "score": 0.58
-  },
-  {
-   "url": "/posts/20180210-zurb-panini-2-migration/",
-   "title": "Migrating to Zurb Panini 2.0",
-   "score": 0.55
+   "score": 0.57
   }
  ],
  "/posts/20210830-embl-best-footer-forward/": [
   {
-   "url": "/posts/20211221-enabling-a-more-dynamic-embl-online/",
-   "title": "Enabling a more dynamic EMBL online",
-   "score": 0.9
-  },
-  {
-   "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
-   "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.89
-  },
-  {
-   "url": "/posts/20211223-something-new-2022/",
-   "title": "Something new for 2022",
+   "url": "/work/2021/impact-story-embl-footer-directory/",
+   "title": "Untangling an 80-link footer into scannable navigation",
    "score": 0.86
+  },
+  {
+   "url": "/posts/20170913-fluid-information-architecture/",
+   "title": "Fluid IA to enable user discovery, prepare for change",
+   "score": 0.61
+  },
+  {
+   "url": "/posts/20170723-corporate-design-through-ia/",
+   "title": "Better corporate design through information architecture",
+   "score": 0.61
   }
  ],
  "/posts/20211221-enabling-a-more-dynamic-embl-online/": [
   {
    "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
    "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.9
+   "score": 0.75
   },
   {
-   "url": "/posts/20210830-embl-best-footer-forward/",
-   "title": "EMBL.org: Empowering users to navigate a large scientific organization",
-   "score": 0.9
+   "url": "/work/2021/impact-story-ending-platform-lock-in/",
+   "title": "Decoupling content from platforms across 80 properties",
+   "score": 0.72
   },
   {
-   "url": "/posts/20211223-something-new-2022/",
-   "title": "Something new for 2022",
-   "score": 0.85
+   "url": "/work/2019/impact-story-embl-visual-framework/",
+   "title": "Building a component library adopted across 50+ scientific properties",
+   "score": 0.65
   }
  ],
  "/posts/20211223-something-new-2022/": [
   {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.9
-  },
-  {
    "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
    "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.87
+   "score": 0.67
   },
   {
-   "url": "/posts/20210830-embl-best-footer-forward/",
-   "title": "EMBL.org: Empowering users to navigate a large scientific organization",
-   "score": 0.86
+   "url": "/posts/20211221-enabling-a-more-dynamic-embl-online/",
+   "title": "Enabling a more dynamic EMBL online",
+   "score": 0.58
+  },
+  {
+   "url": "/posts/20250508-its-been-too-long/",
+   "title": "It’s been 3.5 years",
+   "score": 0.57
   }
  ],
  "/posts/20250508-its-been-too-long/": [
   {
-   "url": "/posts/20211223-something-new-2022/",
-   "title": "Something new for 2022",
-   "score": 0.9
+   "url": "/posts/20200208-its-been-20-years/",
+   "title": "Publishing since the 2000s",
+   "score": 0.58
   },
   {
-   "url": "/posts/20170725-site-update/",
-   "title": "A new site for little reason",
-   "score": 0.89
+   "url": "/posts/20211223-something-new-2022/",
+   "title": "Something new for 2022",
+   "score": 0.57
   },
   {
    "url": "/posts/20251028-introducing-work-section/",
    "title": "Introducing a &quot;Work&quot; section",
-   "score": 0.88
+   "score": 0.56
   }
  ],
  "/posts/20250710-metrics-of-caution-azure-mysql/": [
   {
    "url": "/work/2025/impact-story-platform-recovery-optimization/",
    "title": "Recovering platform performance after a cloud migration failure",
-   "score": 0.79
-  },
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.65
-  },
-  {
-   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
-   "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.64
+   "score": 0.76
   }
  ],
  "/posts/20250811-pdf-a-go-go/": [
   {
-   "url": "/posts/20260216-introducing-pdf-a-go-slim/",
-   "title": "PDF-A-go-slim: a browser-based PDF optimizer",
-   "score": 0.85
-  },
-  {
    "url": "/posts/20250905-embedpdf-and-pdf-a-go-go/",
    "title": "Go-go-go … I missed EmbedPDF",
-   "score": 0.81
+   "score": 0.83
+  },
+  {
+   "url": "/posts/20260216-introducing-pdf-a-go-slim/",
+   "title": "PDF-A-go-slim: a browser-based PDF optimizer",
+   "score": 0.76
   },
   {
    "url": "/posts/20260216-90s-desktop-paradigm-browser-utilities/",
    "title": "Your browser utility wants to be a floating palette",
-   "score": 0.65
+   "score": 0.61
   }
  ],
  "/posts/20250831-site-overhaul-eleventy-v3/": [
   {
    "url": "/posts/20200713-moving-from-panini-to-eleventy/",
    "title": "Moving from Panini to Eleventy",
-   "score": 0.86
+   "score": 0.82
   },
   {
    "url": "/posts/20170725-site-update/",
    "title": "A new site for little reason",
-   "score": 0.85
+   "score": 0.67
   },
   {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.85
+   "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites/",
+   "title": "Fractal and Eleventy: Getting static sites closer to the design system",
+   "score": 0.62
   }
  ],
  "/posts/20250904-switching-to-recursive/": [
   {
-   "url": "/posts/20260512-datatype-data-font-inside-out/",
-   "title": "A data font, from the inside out",
-   "score": 0.82
-  },
-  {
    "url": "/posts/20180319-data-font-for-life-sciences/",
    "title": "What if: A web font for data",
-   "score": 0.82
-  },
-  {
-   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
-   "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.74
+   "score": 0.56
   }
  ],
  "/posts/20250905-embedpdf-and-pdf-a-go-go/": [
   {
    "url": "/posts/20250811-pdf-a-go-go/",
    "title": "Making PDFs more viewable",
-   "score": 0.81
+   "score": 0.83
   },
   {
    "url": "/posts/20260216-introducing-pdf-a-go-slim/",
    "title": "PDF-A-go-slim: a browser-based PDF optimizer",
-   "score": 0.8
-  },
-  {
-   "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
-   "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.64
-  }
- ],
- "/posts/20250906-css-naked-css-only/": [
-  {
-   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
-   "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.73
-  },
-  {
-   "url": "/posts/20251028-introducing-work-section/",
-   "title": "Introducing a &quot;Work&quot; section",
-   "score": 0.73
-  },
-  {
-   "url": "/posts/20170725-site-update/",
-   "title": "A new site for little reason",
-   "score": 0.73
-  }
- ],
- "/posts/20250907-deterministic-image-filenames/": [
-  {
-   "url": "/posts/20250912-knowledge-over-data/",
-   "title": "Sacrificing knowledge in the name of data",
-   "score": 0.6
-  },
-  {
-   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
-   "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.6
-  },
-  {
-   "url": "/posts/20260303-generating-blog-art/",
-   "title": "Blog art that belongs",
-   "score": 0.59
-  }
- ],
- "/posts/20250912-knowledge-over-data/": [
-  {
-   "url": "/posts/20180207-discovery-and-analysis/",
-   "title": "UX, discovery, analysis + the CAM",
-   "score": 0.78
-  },
-  {
-   "url": "/posts/20180329-cam-content-action-goal-ontology/",
-   "title": "Inside the Content-Action Model",
-   "score": 0.78
-  },
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.77
+   "score": 0.74
   }
  ],
  "/posts/20250914-ai-and-the-commoditization-of-reference/": [
   {
    "url": "/posts/evidence-based-content-guidelines-drupal-ai/",
    "title": "Improving AI chatbots with an editorial handbook from your best content",
-   "score": 0.73
+   "score": 0.59
   },
   {
    "url": "/posts/20250919-smart-ai-integration-context-first/",
    "title": "Thoughtful AI integration beats bolted-on Clippy",
-   "score": 0.66
+   "score": 0.59
   },
   {
-   "url": "/posts/20251203-five-flavours-of-copilot/",
-   "title": "Making sense of Microsoft’s many AI Copilots",
-   "score": 0.63
-  }
- ],
- "/posts/20250919-killing-word-junk-drupal-ckeditor5-build-free-plugin/": [
-  {
-   "url": "/work/2025/impact-story-editorial-efficiency/",
-   "title": "Reclaiming three weeks of editorial time every month",
-   "score": 0.6
-  },
-  {
-   "url": "/posts/20250906-css-naked-css-only/",
-   "title": "Exposing HTML: The No-JS nudist CSS toggle",
-   "score": 0.57
-  },
-  {
-   "url": "/posts/20251028-introducing-work-section/",
-   "title": "Introducing a &quot;Work&quot; section",
-   "score": 0.57
+   "url": "/posts/20260615-digesting-reddit-ai-poisoning/",
+   "title": "13 words to turn a rumor into AI fact",
+   "score": 0.56
   }
  ],
  "/posts/20250919-smart-ai-integration-context-first/": [
   {
    "url": "/posts/evidence-based-content-guidelines-drupal-ai/",
    "title": "Improving AI chatbots with an editorial handbook from your best content",
-   "score": 0.82
+   "score": 0.81
   },
   {
    "url": "/posts/20260609-iterative-pattern-framework/",
@@ -676,24 +412,24 @@
   {
    "url": "/posts/20260405-four-phases-of-ai-adoption/",
    "title": "Four gears of AI-assisted development: from coding to context",
-   "score": 0.67
+   "score": 0.65
   }
  ],
  "/posts/20250923-effective-ai-work-is-project-management/": [
   {
-   "url": "/posts/20260420-let-ai-worry-about-the-code/",
-   "title": "Let AI worry about the code, you worry about the work",
-   "score": 0.73
-  },
-  {
    "url": "/posts/20260609-iterative-pattern-framework/",
    "title": "CADI: a prescriptive path for slop-free AI in content work",
-   "score": 0.7
+   "score": 0.68
   },
   {
-   "url": "/posts/20260405-four-phases-of-ai-adoption/",
-   "title": "Four gears of AI-assisted development: from coding to context",
-   "score": 0.68
+   "url": "/posts/20260420-let-ai-worry-about-the-code/",
+   "title": "Let AI worry about the code, you worry about the work",
+   "score": 0.66
+  },
+  {
+   "url": "/posts/20251204-digesting-mega-project-management/",
+   "title": "Large projects need large communicating",
+   "score": 0.63
   }
  ],
  "/posts/20250929-ai-must-rtfm-context-curators/": [
@@ -703,21 +439,21 @@
    "score": 0.74
   },
   {
-   "url": "/posts/20260407-four-traditions-one-bottleneck/",
-   "title": "The right answer has to be woven",
+   "url": "/posts/20260330-context-was-always-the-job/",
+   "title": "Why context engineering was always the job",
    "score": 0.7
   },
   {
-   "url": "/posts/20260330-context-was-always-the-job/",
-   "title": "Why context engineering was always the job",
-   "score": 0.69
+   "url": "/posts/20260407-four-traditions-one-bottleneck/",
+   "title": "The right answer has to be woven",
+   "score": 0.68
   }
  ],
  "/posts/20251003-effective-context-engineering-for-ai-agents/": [
   {
    "url": "/posts/20260330-context-was-always-the-job/",
    "title": "Why context engineering was always the job",
-   "score": 0.75
+   "score": 0.77
   },
   {
    "url": "/posts/20250929-ai-must-rtfm-context-curators/",
@@ -727,24 +463,19 @@
   {
    "url": "/posts/20260407-four-traditions-one-bottleneck/",
    "title": "The right answer has to be woven",
-   "score": 0.69
+   "score": 0.7
   }
  ],
  "/posts/20251028-introducing-work-section/": [
   {
+   "url": "/posts/20260205-business-analyst-guide-digital-transformation/",
+   "title": "The practitioner&#39;s guide to planning digital transformation (Parts 3-4)",
+   "score": 0.58
+  },
+  {
    "url": "/posts/20250508-its-been-too-long/",
    "title": "It’s been 3.5 years",
-   "score": 0.88
-  },
-  {
-   "url": "/posts/20211223-something-new-2022/",
-   "title": "Something new for 2022",
-   "score": 0.84
-  },
-  {
-   "url": "/posts/20170725-site-update/",
-   "title": "A new site for little reason",
-   "score": 0.84
+   "score": 0.56
   }
  ],
  "/posts/20251104-digesting-fedora-ai-contribution-policy/": [
@@ -759,8 +490,8 @@
    "score": 0.58
   },
   {
-   "url": "/posts/20260328-digesting-comprehension-debt/",
-   "title": "Comprehension debt, when AI-generated code outpaces human understanding",
+   "url": "/posts/20260405-four-phases-of-ai-adoption/",
+   "title": "Four gears of AI-assisted development: from coding to context",
    "score": 0.56
   }
  ],
@@ -773,230 +504,26 @@
   {
    "url": "/posts/20260405-four-phases-of-ai-adoption/",
    "title": "Four gears of AI-assisted development: from coding to context",
-   "score": 0.55
-  }
- ],
- "/posts/20251203-five-flavours-of-copilot/": [
-  {
-   "url": "/posts/20260405-four-phases-of-ai-adoption/",
-   "title": "Four gears of AI-assisted development: from coding to context",
-   "score": 0.7
-  },
-  {
-   "url": "/work/2025/impact-story-evidence-based-content-guidelines/",
-   "title": "Turning vague content guidelines into measurable AI-ready standards",
-   "score": 0.67
-  },
-  {
-   "url": "/posts/20260420-let-ai-worry-about-the-code/",
-   "title": "Let AI worry about the code, you worry about the work",
-   "score": 0.66
+   "score": 0.6
   }
  ],
  "/posts/20251203-measuring-success-beyond-page-view/": [
   {
    "url": "/posts/20260115-how-to-measure-impact-when-analytics-lie/",
    "title": "How to measure impact when analytics lie",
-   "score": 0.89
+   "score": 0.87
   },
   {
    "url": "/work/2026/impact-story-undrr-analytics-infrastructure/",
    "title": "Designing analytics infrastructure that measures audience quality, not just traffic",
-   "score": 0.85
-  },
-  {
-   "url": "/posts/20131208-content-model-better-journalism/",
-   "title": "A model for better content, better readers, better journalism",
-   "score": 0.69
+   "score": 0.83
   }
  ],
  "/posts/20251204-digesting-mega-project-management/": [
   {
    "url": "/posts/20250923-effective-ai-work-is-project-management/",
    "title": "The power of the pause: How planning beats prompt tuning",
-   "score": 0.6
-  },
-  {
-   "url": "/posts/20260420-let-ai-worry-about-the-code/",
-   "title": "Let AI worry about the code, you worry about the work",
-   "score": 0.55
-  }
- ],
- "/posts/20260115-how-to-measure-impact-when-analytics-lie/": [
-  {
-   "url": "/work/2026/impact-story-undrr-analytics-infrastructure/",
-   "title": "Designing analytics infrastructure that measures audience quality, not just traffic",
-   "score": 0.9
-  },
-  {
-   "url": "/posts/20251203-measuring-success-beyond-page-view/",
-   "title": "Measuring success beyond the page view",
-   "score": 0.89
-  },
-  {
-   "url": "/work/2026/impact-story-undrr-analytics-overlay-mcp/",
-   "title": "Putting GA4 where the work happens: an in-browser analytics overlay and its MCP bridge",
-   "score": 0.67
-  }
- ],
- "/posts/20260130-digital-transformation-complex-organizations/": [
-  {
-   "url": "/posts/20260205-business-analyst-guide-digital-transformation/",
-   "title": "The practitioner&#39;s guide to planning digital transformation (Parts 3-4)",
-   "score": 0.89
-  },
-  {
-   "url": "/posts/20170723-corporate-design-through-ia/",
-   "title": "Better corporate design through information architecture",
-   "score": 0.74
-  },
-  {
-   "url": "/posts/20180122-content-action-model/",
-   "title": "Introducing the Content-Action Model for Web Systems",
-   "score": 0.69
-  }
- ],
- "/posts/20260205-business-analyst-guide-digital-transformation/": [
-  {
-   "url": "/posts/20260130-digital-transformation-complex-organizations/",
-   "title": "Digital transformation for complex organizations (Parts 1-2)",
-   "score": 0.89
-  },
-  {
-   "url": "/posts/20251028-introducing-work-section/",
-   "title": "Introducing a &quot;Work&quot; section",
-   "score": 0.67
-  },
-  {
-   "url": "/posts/20170723-corporate-design-through-ia/",
-   "title": "Better corporate design through information architecture",
-   "score": 0.66
-  }
- ],
- "/posts/20260216-90s-desktop-paradigm-browser-utilities/": [
-  {
-   "url": "/posts/20260216-introducing-pdf-a-go-slim/",
-   "title": "PDF-A-go-slim: a browser-based PDF optimizer",
-   "score": 0.68
-  },
-  {
-   "url": "/posts/20250811-pdf-a-go-go/",
-   "title": "Making PDFs more viewable",
-   "score": 0.65
-  },
-  {
-   "url": "/posts/20250906-css-naked-css-only/",
-   "title": "Exposing HTML: The No-JS nudist CSS toggle",
-   "score": 0.62
-  }
- ],
- "/posts/20260216-introducing-pdf-a-go-slim/": [
-  {
-   "url": "/posts/20250811-pdf-a-go-go/",
-   "title": "Making PDFs more viewable",
-   "score": 0.85
-  },
-  {
-   "url": "/posts/20250905-embedpdf-and-pdf-a-go-go/",
-   "title": "Go-go-go … I missed EmbedPDF",
-   "score": 0.8
-  },
-  {
-   "url": "/posts/20260216-90s-desktop-paradigm-browser-utilities/",
-   "title": "Your browser utility wants to be a floating palette",
-   "score": 0.68
-  }
- ],
- "/posts/20260220-feedback-buttons-cgi-pattern/": [
-  {
-   "url": "/posts/20260225-introducing-pinment/",
-   "title": "Collaborate on any webpage with a bookmarklet and URL state",
-   "score": 0.65
-  },
-  {
-   "url": "/posts/20250906-css-naked-css-only/",
-   "title": "Exposing HTML: The No-JS nudist CSS toggle",
-   "score": 0.6
-  },
-  {
-   "url": "/posts/20180122-content-action-model/",
-   "title": "Introducing the Content-Action Model for Web Systems",
-   "score": 0.55
-  }
- ],
- "/posts/20260225-introducing-pinment/": [
-  {
-   "url": "/posts/20260220-feedback-buttons-cgi-pattern/",
-   "title": "Feedback buttons without JavaScript, using a 1990s web pattern",
-   "score": 0.65
-  },
-  {
-   "url": "/posts/20180912-faster-scientific-websites-through-reusability/",
-   "title": "Faster scientific websites through reusability",
-   "score": 0.65
-  },
-  {
-   "url": "/posts/20210830-embl-best-footer-forward/",
-   "title": "EMBL.org: Empowering users to navigate a large scientific organization",
-   "score": 0.65
-  }
- ],
- "/posts/20260228-replacing-lunr-with-pagefind/": [
-  {
-   "url": "/posts/20260302-semantic-search-browser-embeddings/",
-   "title": "Semantic search on a static site, no API keys required",
-   "score": 0.83
-  },
-  {
-   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
-   "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.69
-  },
-  {
-   "url": "/posts/20170725-site-update/",
-   "title": "A new site for little reason",
-   "score": 0.68
-  }
- ],
- "/posts/20260302-semantic-search-browser-embeddings/": [
-  {
-   "url": "/posts/20260228-replacing-lunr-with-pagefind/",
-   "title": "Site search without a search service",
-   "score": 0.83
-  },
-  {
-   "url": "/posts/20260303-generating-blog-art/",
-   "title": "Blog art that belongs",
-   "score": 0.62
-  },
-  {
-   "url": "/posts/20180912-faster-scientific-websites-through-reusability/",
-   "title": "Faster scientific websites through reusability",
-   "score": 0.61
-  }
- ],
- "/posts/20260303-generating-blog-art/": [
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.81
-  },
-  {
-   "url": "/posts/20251028-introducing-work-section/",
-   "title": "Introducing a &quot;Work&quot; section",
-   "score": 0.79
-  },
-  {
-   "url": "/posts/20131208-content-model-better-journalism/",
-   "title": "A model for better content, better readers, better journalism",
-   "score": 0.77
-  }
- ],
- "/posts/20260304-digesting-burning-out-ai-coding-agents/": [
-  {
-   "url": "/posts/20260405-four-phases-of-ai-adoption/",
-   "title": "Four gears of AI-assisted development: from coding to context",
-   "score": 0.64
+   "score": 0.63
   },
   {
    "url": "/posts/20260420-let-ai-worry-about-the-code/",
@@ -1004,49 +531,176 @@
    "score": 0.58
   }
  ],
- "/posts/20260305-digesting-eleventy-becomes-build-awesome/": [
+ "/posts/20251205-digesting-ai-sketchnotes-video-preview/": [
   {
-   "url": "/posts/20250904-switching-to-recursive/",
-   "title": "Recursion: it’s fonts all the way down",
+   "url": "/posts/20260609-iterative-pattern-framework/",
+   "title": "CADI: a prescriptive path for slop-free AI in content work",
+   "score": 0.56
+  }
+ ],
+ "/posts/20260115-how-to-measure-impact-when-analytics-lie/": [
+  {
+   "url": "/work/2026/impact-story-undrr-analytics-infrastructure/",
+   "title": "Designing analytics infrastructure that measures audience quality, not just traffic",
+   "score": 0.91
+  },
+  {
+   "url": "/posts/20251203-measuring-success-beyond-page-view/",
+   "title": "Measuring success beyond the page view",
+   "score": 0.87
+  },
+  {
+   "url": "/work/2026/impact-story-undrr-analytics-overlay-mcp/",
+   "title": "Putting GA4 where the work happens: an in-browser analytics overlay and its MCP bridge",
+   "score": 0.56
+  }
+ ],
+ "/posts/20260130-digital-transformation-complex-organizations/": [
+  {
+   "url": "/posts/20260205-business-analyst-guide-digital-transformation/",
+   "title": "The practitioner&#39;s guide to planning digital transformation (Parts 3-4)",
+   "score": 0.85
+  },
+  {
+   "url": "/posts/20260327-content-architecture-shipping-container/",
+   "title": "Content architecture: the delivery problem",
+   "score": 0.65
+  },
+  {
+   "url": "/posts/20180122-content-action-model/",
+   "title": "Introducing the Content-Action Model for Web Systems",
+   "score": 0.62
+  }
+ ],
+ "/posts/20260205-business-analyst-guide-digital-transformation/": [
+  {
+   "url": "/posts/20260130-digital-transformation-complex-organizations/",
+   "title": "Digital transformation for complex organizations (Parts 1-2)",
+   "score": 0.85
+  },
+  {
+   "url": "/posts/20250923-effective-ai-work-is-project-management/",
+   "title": "The power of the pause: How planning beats prompt tuning",
    "score": 0.6
   },
   {
-   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
-   "title": "A simpler, faster site: moving to pure Eleventy v3",
+   "url": "/posts/20260609-iterative-pattern-framework/",
+   "title": "CADI: a prescriptive path for slop-free AI in content work",
    "score": 0.59
   }
  ],
- "/posts/20260327-content-architecture-shipping-container/": [
+ "/posts/20260216-90s-desktop-paradigm-browser-utilities/": [
   {
-   "url": "/work/2021/impact-story-ending-platform-lock-in/",
-   "title": "Decoupling content from platforms across 80 properties",
-   "score": 0.75
+   "url": "/posts/20260216-introducing-pdf-a-go-slim/",
+   "title": "PDF-A-go-slim: a browser-based PDF optimizer",
+   "score": 0.63
   },
   {
-   "url": "/posts/20170723-corporate-design-through-ia/",
-   "title": "Better corporate design through information architecture",
+   "url": "/posts/20250811-pdf-a-go-go/",
+   "title": "Making PDFs more viewable",
+   "score": 0.61
+  }
+ ],
+ "/posts/20260216-introducing-pdf-a-go-slim/": [
+  {
+   "url": "/posts/20250811-pdf-a-go-go/",
+   "title": "Making PDFs more viewable",
+   "score": 0.76
+  },
+  {
+   "url": "/posts/20250905-embedpdf-and-pdf-a-go-go/",
+   "title": "Go-go-go … I missed EmbedPDF",
    "score": 0.74
   },
   {
-   "url": "/posts/20260407-four-traditions-one-bottleneck/",
-   "title": "The right answer has to be woven",
-   "score": 0.72
+   "url": "/posts/20260216-90s-desktop-paradigm-browser-utilities/",
+   "title": "Your browser utility wants to be a floating palette",
+   "score": 0.63
   }
  ],
- "/posts/20260328-digesting-comprehension-debt/": [
+ "/posts/20260220-feedback-buttons-cgi-pattern/": [
+  {
+   "url": "/posts/20260225-introducing-pinment/",
+   "title": "Collaborate on any webpage with a bookmarklet and URL state",
+   "score": 0.58
+  }
+ ],
+ "/posts/20260225-introducing-pinment/": [
+  {
+   "url": "/posts/20260220-feedback-buttons-cgi-pattern/",
+   "title": "Feedback buttons without JavaScript, using a 1990s web pattern",
+   "score": 0.58
+  }
+ ],
+ "/posts/20260228-replacing-lunr-with-pagefind/": [
+  {
+   "url": "/posts/20260302-semantic-search-browser-embeddings/",
+   "title": "Semantic search on a static site, no API keys required",
+   "score": 0.71
+  }
+ ],
+ "/posts/20260302-semantic-search-browser-embeddings/": [
+  {
+   "url": "/posts/20260228-replacing-lunr-with-pagefind/",
+   "title": "Site search without a search service",
+   "score": 0.71
+  }
+ ],
+ "/posts/20260304-digesting-burning-out-ai-coding-agents/": [
   {
    "url": "/posts/20260405-four-phases-of-ai-adoption/",
    "title": "Four gears of AI-assisted development: from coding to context",
    "score": 0.62
   },
   {
-   "url": "/posts/20250919-smart-ai-integration-context-first/",
-   "title": "Thoughtful AI integration beats bolted-on Clippy",
-   "score": 0.6
+   "url": "/posts/20260420-let-ai-worry-about-the-code/",
+   "title": "Let AI worry about the code, you worry about the work",
+   "score": 0.57
+  }
+ ],
+ "/posts/20260305-digesting-eleventy-becomes-build-awesome/": [
+  {
+   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
+   "title": "A simpler, faster site: moving to pure Eleventy v3",
+   "score": 0.58
   },
   {
-   "url": "/posts/20251107-ai-isnt-software/",
-   "title": "Why AI can&#39;t be debugged like traditional software",
+   "url": "/posts/20170725-site-update/",
+   "title": "A new site for little reason",
+   "score": 0.55
+  }
+ ],
+ "/posts/20260327-content-architecture-shipping-container/": [
+  {
+   "url": "/work/2021/impact-story-ending-platform-lock-in/",
+   "title": "Decoupling content from platforms across 80 properties",
+   "score": 0.73
+  },
+  {
+   "url": "/posts/20260407-four-traditions-one-bottleneck/",
+   "title": "The right answer has to be woven",
+   "score": 0.7
+  },
+  {
+   "url": "/posts/20260130-digital-transformation-complex-organizations/",
+   "title": "Digital transformation for complex organizations (Parts 1-2)",
+   "score": 0.65
+  }
+ ],
+ "/posts/20260328-digesting-comprehension-debt/": [
+  {
+   "url": "/posts/20260405-four-phases-of-ai-adoption/",
+   "title": "Four gears of AI-assisted development: from coding to context",
+   "score": 0.67
+  },
+  {
+   "url": "/posts/20260420-let-ai-worry-about-the-code/",
+   "title": "Let AI worry about the code, you worry about the work",
+   "score": 0.61
+  },
+  {
+   "url": "/posts/20250919-smart-ai-integration-context-first/",
+   "title": "Thoughtful AI integration beats bolted-on Clippy",
    "score": 0.6
   }
  ],
@@ -1059,24 +713,24 @@
   {
    "url": "/posts/20260405-four-phases-of-ai-adoption/",
    "title": "Four gears of AI-assisted development: from coding to context",
-   "score": 0.64
+   "score": 0.65
   },
   {
    "url": "/posts/20260407-four-traditions-one-bottleneck/",
    "title": "The right answer has to be woven",
-   "score": 0.63
+   "score": 0.59
   }
  ],
  "/posts/20260330-context-was-always-the-job/": [
   {
    "url": "/posts/20260407-four-traditions-one-bottleneck/",
    "title": "The right answer has to be woven",
-   "score": 0.81
+   "score": 0.79
   },
   {
    "url": "/posts/20251003-effective-context-engineering-for-ai-agents/",
    "title": "Context engineering beats prompt tricks for AI agents",
-   "score": 0.75
+   "score": 0.77
   },
   {
    "url": "/posts/20260329-digesting-software-engineering-splits-three/",
@@ -1088,34 +742,34 @@
   {
    "url": "/posts/20260420-let-ai-worry-about-the-code/",
    "title": "Let AI worry about the code, you worry about the work",
-   "score": 0.79
+   "score": 0.74
   },
   {
-   "url": "/posts/20260407-four-traditions-one-bottleneck/",
-   "title": "The right answer has to be woven",
-   "score": 0.75
+   "url": "/posts/20260328-digesting-comprehension-debt/",
+   "title": "Comprehension debt, when AI-generated code outpaces human understanding",
+   "score": 0.67
   },
   {
-   "url": "/posts/20260609-iterative-pattern-framework/",
-   "title": "CADI: a prescriptive path for slop-free AI in content work",
-   "score": 0.73
+   "url": "/posts/20251003-effective-context-engineering-for-ai-agents/",
+   "title": "Context engineering beats prompt tricks for AI agents",
+   "score": 0.66
   }
  ],
  "/posts/20260407-four-traditions-one-bottleneck/": [
   {
    "url": "/posts/20260330-context-was-always-the-job/",
    "title": "Why context engineering was always the job",
-   "score": 0.81
-  },
-  {
-   "url": "/posts/20260405-four-phases-of-ai-adoption/",
-   "title": "Four gears of AI-assisted development: from coding to context",
-   "score": 0.75
+   "score": 0.79
   },
   {
    "url": "/posts/20260327-content-architecture-shipping-container/",
    "title": "Content architecture: the delivery problem",
-   "score": 0.72
+   "score": 0.7
+  },
+  {
+   "url": "/posts/20251003-effective-context-engineering-for-ai-agents/",
+   "title": "Context engineering beats prompt tricks for AI agents",
+   "score": 0.7
   }
  ],
  "/posts/20260408-digesting-emdash-wordpress/": [
@@ -1125,43 +779,26 @@
    "score": 0.59
   },
   {
-   "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
-   "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.58
-  },
-  {
-   "url": "/posts/20211223-something-new-2022/",
-   "title": "Something new for 2022",
-   "score": 0.56
-  }
- ],
- "/posts/20260408-mini-guide-claude-copilot-skills/": [
-  {
-   "url": "/posts/20260420-let-ai-worry-about-the-code/",
-   "title": "Let AI worry about the code, you worry about the work",
-   "score": 0.64
-  },
-  {
-   "url": "/posts/20260405-four-phases-of-ai-adoption/",
-   "title": "Four gears of AI-assisted development: from coding to context",
-   "score": 0.6
+   "url": "/work/2019/impact-story-embl-visual-framework/",
+   "title": "Building a component library adopted across 50+ scientific properties",
+   "score": 0.55
   }
  ],
  "/posts/20260420-let-ai-worry-about-the-code/": [
   {
    "url": "/posts/20260405-four-phases-of-ai-adoption/",
    "title": "Four gears of AI-assisted development: from coding to context",
-   "score": 0.79
+   "score": 0.74
   },
   {
    "url": "/posts/20250923-effective-ai-work-is-project-management/",
    "title": "The power of the pause: How planning beats prompt tuning",
-   "score": 0.73
+   "score": 0.66
   },
   {
    "url": "/posts/20260609-iterative-pattern-framework/",
    "title": "CADI: a prescriptive path for slop-free AI in content work",
-   "score": 0.72
+   "score": 0.63
   }
  ],
  "/posts/20260423-digesting-ars-technica-ai-newsroom-policy/": [
@@ -1171,96 +808,40 @@
    "score": 0.58
   }
  ],
- "/posts/20260429-svgomg-font/": [
-  {
-   "url": "/posts/20250904-switching-to-recursive/",
-   "title": "Recursion: it’s fonts all the way down",
-   "score": 0.64
-  },
-  {
-   "url": "/posts/20260512-datatype-data-font-inside-out/",
-   "title": "A data font, from the inside out",
-   "score": 0.63
-  },
-  {
-   "url": "/posts/20180319-data-font-for-life-sciences/",
-   "title": "What if: A web font for data",
-   "score": 0.62
-  }
- ],
- "/posts/20260503-foveacast/": [
-  {
-   "url": "/posts/sunlit-dappled-light-effect/",
-   "title": "Creating warm, dappled light with CSS and SVG",
-   "score": 0.65
-  },
-  {
-   "url": "/posts/20180207-discovery-and-analysis/",
-   "title": "UX, discovery, analysis + the CAM",
-   "score": 0.56
-  },
-  {
-   "url": "/posts/20251203-measuring-success-beyond-page-view/",
-   "title": "Measuring success beyond the page view",
-   "score": 0.56
-  }
- ],
  "/posts/20260506-digesting-when-digital-systems-fail/": [
   {
    "url": "/work/2025/impact-story-gar2025-landing/",
    "title": "Making disaster economics compelling for global policymakers",
-   "score": 0.66
-  }
- ],
- "/posts/20260509-vercel-proxy-hobby-projects/": [
-  {
-   "url": "/posts/20260303-generating-blog-art/",
-   "title": "Blog art that belongs",
-   "score": 0.64
-  },
-  {
-   "url": "/posts/20251028-introducing-work-section/",
-   "title": "Introducing a &quot;Work&quot; section",
    "score": 0.63
-  },
-  {
-   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
-   "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.62
   }
  ],
  "/posts/20260512-datatype-data-font-inside-out/": [
   {
    "url": "/posts/20180319-data-font-for-life-sciences/",
    "title": "What if: A web font for data",
-   "score": 0.91
+   "score": 0.83
   },
   {
-   "url": "/posts/20250904-switching-to-recursive/",
-   "title": "Recursion: it’s fonts all the way down",
-   "score": 0.82
-  },
-  {
-   "url": "/posts/20250912-knowledge-over-data/",
-   "title": "Sacrificing knowledge in the name of data",
-   "score": 0.68
+   "url": "/posts/20171112-ibm-plex-font-and-fira/",
+   "title": "Comparing IBM Plex and Fira Sans",
+   "score": 0.56
   }
  ],
  "/posts/20260609-iterative-pattern-framework/": [
   {
    "url": "/work/2025/impact-story-evidence-based-content-guidelines/",
    "title": "Turning vague content guidelines into measurable AI-ready standards",
-   "score": 0.76
-  },
-  {
-   "url": "/posts/20260405-four-phases-of-ai-adoption/",
-   "title": "Four gears of AI-assisted development: from coding to context",
-   "score": 0.73
-  },
-  {
-   "url": "/posts/20260420-let-ai-worry-about-the-code/",
-   "title": "Let AI worry about the code, you worry about the work",
    "score": 0.72
+  },
+  {
+   "url": "/posts/evidence-based-content-guidelines-drupal-ai/",
+   "title": "Improving AI chatbots with an editorial handbook from your best content",
+   "score": 0.71
+  },
+  {
+   "url": "/posts/20250919-smart-ai-integration-context-first/",
+   "title": "Thoughtful AI integration beats bolted-on Clippy",
+   "score": 0.7
   }
  ],
  "/posts/20260615-digesting-reddit-ai-poisoning/": [
@@ -1270,118 +851,62 @@
    "score": 0.56
   }
  ],
- "/posts/20260626-down-the-stack/": [
-  {
-   "url": "/posts/20251028-introducing-work-section/",
-   "title": "Introducing a &quot;Work&quot; section",
-   "score": 0.59
-  },
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.59
-  },
-  {
-   "url": "/posts/20200208-its-been-20-years/",
-   "title": "Publishing since the 2000s",
-   "score": 0.56
-  }
- ],
  "/posts/evidence-based-content-guidelines-drupal-ai/": [
   {
    "url": "/posts/20250919-smart-ai-integration-context-first/",
    "title": "Thoughtful AI integration beats bolted-on Clippy",
-   "score": 0.82
+   "score": 0.81
   },
   {
    "url": "/work/2025/impact-story-evidence-based-content-guidelines/",
    "title": "Turning vague content guidelines into measurable AI-ready standards",
-   "score": 0.75
+   "score": 0.71
   },
   {
-   "url": "/posts/20250914-ai-and-the-commoditization-of-reference/",
-   "title": "Individualism is the flavor AI chatbots can&#39;t stomach",
-   "score": 0.73
-  }
- ],
- "/posts/sunlit-dappled-light-effect/": [
-  {
-   "url": "/posts/20260503-foveacast/",
-   "title": "Eye-tracking heatmaps in your browser, no lab needed",
-   "score": 0.65
-  },
-  {
-   "url": "/posts/20250906-css-naked-css-only/",
-   "title": "Exposing HTML: The No-JS nudist CSS toggle",
-   "score": 0.64
-  },
-  {
-   "url": "/posts/20260429-svgomg-font/",
-   "title": "Stop converting SVG text to outlines",
-   "score": 0.59
-  }
- ],
- "/work/2014/impact-story-drs-scaled-drupal/": [
-  {
-   "url": "/posts/20140407-ux-success-double-conversion/",
-   "title": "UX success story: Doubling conversion rates, sales",
-   "score": 0.74
-  },
-  {
-   "url": "/posts/20180912-faster-scientific-websites-through-reusability/",
-   "title": "Faster scientific websites through reusability",
-   "score": 0.64
-  },
-  {
-   "url": "/posts/20170723-corporate-design-through-ia/",
-   "title": "Better corporate design through information architecture",
-   "score": 0.62
+   "url": "/posts/20260609-iterative-pattern-framework/",
+   "title": "CADI: a prescriptive path for slop-free AI in content work",
+   "score": 0.71
   }
  ],
  "/work/2019/impact-story-embl-visual-framework/": [
   {
-   "url": "/posts/20180912-faster-scientific-websites-through-reusability/",
-   "title": "Faster scientific websites through reusability",
-   "score": 0.79
-  },
-  {
    "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
    "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.77
+   "score": 0.74
   },
   {
    "url": "/work/2021/impact-story-ending-platform-lock-in/",
    "title": "Decoupling content from platforms across 80 properties",
-   "score": 0.75
+   "score": 0.72
+  },
+  {
+   "url": "/posts/20180912-faster-scientific-websites-through-reusability/",
+   "title": "Faster scientific websites through reusability",
+   "score": 0.66
   }
  ],
  "/work/2021/impact-story-embl-footer-directory/": [
   {
    "url": "/posts/20210830-embl-best-footer-forward/",
    "title": "EMBL.org: Empowering users to navigate a large scientific organization",
-   "score": 0.79
+   "score": 0.86
   },
   {
-   "url": "/posts/20211221-enabling-a-more-dynamic-embl-online/",
-   "title": "Enabling a more dynamic EMBL online",
-   "score": 0.69
-  },
-  {
-   "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
-   "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
-   "score": 0.65
+   "url": "/work/2021/impact-story-ending-platform-lock-in/",
+   "title": "Decoupling content from platforms across 80 properties",
+   "score": 0.55
   }
  ],
  "/work/2021/impact-story-ending-platform-lock-in/": [
   {
    "url": "/posts/20260327-content-architecture-shipping-container/",
    "title": "Content architecture: the delivery problem",
-   "score": 0.75
+   "score": 0.73
   },
   {
    "url": "/work/2019/impact-story-embl-visual-framework/",
    "title": "Building a component library adopted across 50+ scientific properties",
-   "score": 0.75
+   "score": 0.72
   },
   {
    "url": "/posts/20211221-enabling-a-more-dynamic-embl-online/",
@@ -1391,104 +916,69 @@
  ],
  "/work/2025/impact-story-editorial-efficiency/": [
   {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.81
-  },
-  {
-   "url": "/posts/20251028-introducing-work-section/",
-   "title": "Introducing a &quot;Work&quot; section",
-   "score": 0.8
-  },
-  {
-   "url": "/posts/20131208-content-model-better-journalism/",
-   "title": "A model for better content, better readers, better journalism",
-   "score": 0.8
+   "url": "/posts/20200208-its-been-20-years/",
+   "title": "Publishing since the 2000s",
+   "score": 0.59
   }
  ],
  "/work/2025/impact-story-evidence-based-content-guidelines/": [
   {
    "url": "/posts/20260609-iterative-pattern-framework/",
    "title": "CADI: a prescriptive path for slop-free AI in content work",
-   "score": 0.76
+   "score": 0.72
   },
   {
    "url": "/posts/evidence-based-content-guidelines-drupal-ai/",
    "title": "Improving AI chatbots with an editorial handbook from your best content",
-   "score": 0.75
+   "score": 0.71
   },
   {
-   "url": "/posts/20250912-knowledge-over-data/",
-   "title": "Sacrificing knowledge in the name of data",
-   "score": 0.7
+   "url": "/posts/20250919-smart-ai-integration-context-first/",
+   "title": "Thoughtful AI integration beats bolted-on Clippy",
+   "score": 0.6
   }
  ],
  "/work/2025/impact-story-gar2025-landing/": [
   {
-   "url": "/posts/20251028-introducing-work-section/",
-   "title": "Introducing a &quot;Work&quot; section",
-   "score": 0.71
-  },
-  {
-   "url": "/posts/20131208-content-model-better-journalism/",
-   "title": "A model for better content, better readers, better journalism",
-   "score": 0.69
-  },
-  {
-   "url": "/work/2025/impact-story-editorial-efficiency/",
-   "title": "Reclaiming three weeks of editorial time every month",
-   "score": 0.69
+   "url": "/posts/20260506-digesting-when-digital-systems-fail/",
+   "title": "My daily routine assumes the internet survives the disaster",
+   "score": 0.63
   }
  ],
  "/work/2025/impact-story-platform-recovery-optimization/": [
   {
    "url": "/posts/20250710-metrics-of-caution-azure-mysql/",
    "title": "Drupal delayed by Azure MySQL",
-   "score": 0.79
-  },
-  {
-   "url": "/posts/20250508-its-been-too-long/",
-   "title": "It’s been 3.5 years",
-   "score": 0.74
-  },
-  {
-   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
-   "title": "A simpler, faster site: moving to pure Eleventy v3",
-   "score": 0.71
+   "score": 0.76
   }
  ],
  "/work/2026/impact-story-undrr-analytics-infrastructure/": [
   {
    "url": "/posts/20260115-how-to-measure-impact-when-analytics-lie/",
    "title": "How to measure impact when analytics lie",
-   "score": 0.9
+   "score": 0.91
   },
   {
    "url": "/posts/20251203-measuring-success-beyond-page-view/",
    "title": "Measuring success beyond the page view",
-   "score": 0.85
+   "score": 0.83
   },
   {
    "url": "/work/2026/impact-story-undrr-analytics-overlay-mcp/",
    "title": "Putting GA4 where the work happens: an in-browser analytics overlay and its MCP bridge",
-   "score": 0.7
+   "score": 0.57
   }
  ],
  "/work/2026/impact-story-undrr-analytics-overlay-mcp/": [
   {
    "url": "/work/2026/impact-story-undrr-analytics-infrastructure/",
    "title": "Designing analytics infrastructure that measures audience quality, not just traffic",
-   "score": 0.7
+   "score": 0.57
   },
   {
    "url": "/posts/20260115-how-to-measure-impact-when-analytics-lie/",
    "title": "How to measure impact when analytics lie",
-   "score": 0.67
-  },
-  {
-   "url": "/posts/20260420-let-ai-worry-about-the-code/",
-   "title": "Let AI worry about the code, you worry about the work",
-   "score": 0.64
+   "score": 0.56
   }
  ]
 }

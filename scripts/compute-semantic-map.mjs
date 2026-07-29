@@ -173,12 +173,102 @@ for (let i = 0; i < N; i += 1) {
   });
 }
 
+// ---- alternative layouts, for comparison ---------------------------------
+// A) Force-directed (Fruchterman-Reingold), seeded from the MDS coordinates so
+//    it is deterministic across builds. Included mostly so the hairball can be
+//    judged against the alternatives rather than assumed to be best.
+// Seeded on a circle, not from the MDS coordinates. Seeding from MDS looks
+// tempting but the layout never escapes that starting axis: measured, it left
+// the middle 50% of nodes spanning 0.44 of the width but only 0.17 of the
+// height, a flattened smear. A circle gives the simulation no prior.
+const fr = nodes.map((_, i) => {
+  const a = (2 * Math.PI * i) / nodes.length;
+  return { x: 50 + 35 * Math.cos(a), y: 50 + 35 * Math.sin(a), dx: 0, dy: 0 };
+});
+const adj = Array.from({ length: N }, () => []);
+edges.forEach((e) => { adj[e.a].push(e.b); adj[e.b].push(e.a); });
+{
+  // Work in a 0..100 box rather than 0..1: at unit scale the repulsion term
+  // k^2/d swamps everything and every node ends up flattened against a wall.
+  const SC = 100;
+  // Slightly larger k than textbook FR: spreads the linked cluster so it is
+  // not a single dark blob at this node count.
+  // Textbook Fruchterman-Reingold k is sqrt(area/N); at this node count that
+  // collapses into a single blob. 7x was chosen by sweeping the parameter and
+  // measuring how much of the frame the middle 50% of nodes occupy, rather
+  // than by eye: it lands at 0.42 of the width and 0.48 of the height.
+  const k = Math.sqrt((SC * SC) / N) * 7;
+  let temp = SC / 12;
+  for (let it = 0; it < 450; it += 1) {
+    fr.forEach((p) => { p.dx = 0; p.dy = 0; });
+    for (let i = 0; i < N; i += 1) {
+      for (let j = i + 1; j < N; j += 1) {
+        let dx = fr[i].x - fr[j].x;
+        let dy = fr[i].y - fr[j].y;
+        const d = Math.hypot(dx, dy) || 0.01;
+        const rep = (k * k) / d;
+        dx = (dx / d) * rep; dy = (dy / d) * rep;
+        fr[i].dx += dx; fr[i].dy += dy;
+        fr[j].dx -= dx; fr[j].dy -= dy;
+      }
+    }
+    edges.forEach((e) => {
+      let dx = fr[e.a].x - fr[e.b].x;
+      let dy = fr[e.a].y - fr[e.b].y;
+      const d = Math.hypot(dx, dy) || 0.01;
+      const att = (d * d) / k;
+      dx = (dx / d) * att; dy = (dy / d) * att;
+      fr[e.a].dx -= dx; fr[e.a].dy -= dy;
+      fr[e.b].dx += dx; fr[e.b].dy += dy;
+    });
+    // Mild pull to the centre keeps disconnected nodes from drifting off,
+    // which is what a hard clamp was doing badly.
+    fr.forEach((p) => {
+      // Gravity has to be strong enough to bring unconnected nodes back in;
+      // too weak and they drift to the corners while the linked bulk collapses.
+      p.dx += (SC / 2 - p.x) * 0.04;
+      p.dy += (SC / 2 - p.y) * 0.04;
+      const d = Math.hypot(p.dx, p.dy) || 0.01;
+      p.x += (p.dx / d) * Math.min(d, temp);
+      p.y += (p.dy / d) * Math.min(d, temp);
+    });
+    temp *= 0.985;
+  }
+  const fx = fr.map((p) => p.x); const fy = fr.map((p) => p.y);
+  const nx = Math.min(...fx); const sx = (Math.max(...fx) - nx) || 1;
+  const ny = Math.min(...fy); const sy = (Math.max(...fy) - ny) || 1;
+  nodes.forEach((n, i) => {
+    n.fx = Math.round(((fr[i].x - nx) / sx) * 1000) / 1000;
+    n.fy = Math.round(((fr[i].y - ny) / sy) * 1000) / 1000;
+  });
+}
+
+// B) An ordering for the matrix and arc views: group by primary topic, largest
+//    group first, and order within a group by how connected each entry is.
+//    A node-link diagram hides density; a matrix shows it exactly.
+const order = (() => {
+  const groups = new Map();
+  nodes.forEach((n, i) => {
+    const key = n.topic || 'unfiled';
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(i);
+  });
+  return [...groups.entries()]
+    .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]))
+    .flatMap(([topic, idx]) => {
+      idx.sort((p, q) => adj[q].length - adj[p].length);
+      return idx.map((i) => ({ i, topic }));
+    });
+})();
+
 const out = {
   generated: 'classical MDS on cosine distance; axes carry no meaning',
   edgeMin: EDGE_MIN,
   nodes: nodes.map((n) => ({
-    url: n.url, title: n.title, topic: n.topic, x: n.x, y: n.y
+    url: n.url, title: n.title, topic: n.topic, x: n.x, y: n.y, fx: n.fx, fy: n.fy,
+    degree: adj[nodes.indexOf(n)].length
   })),
+  order,
   edges
 };
 
