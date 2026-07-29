@@ -17,6 +17,49 @@
   // itself, so they are drawn in document ink.
   --kh-viz-ink: #2b2b28;
 
+  // Corpus map. Static SVG, so it just needs containing and a sensible
+  // shrink on narrow screens.
+  .kh-map-figure {
+    display: block;
+    margin: 0 0 1rem;
+  }
+
+  .kh-map-scroll {
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule--strong);
+    overflow-x: auto;
+  }
+
+  // Scales to the container. The width/height attributes stay on the SVG so
+  // it keeps a sane intrinsic size with the stylesheet off.
+  .kh-map {
+    display: block;
+    height: auto;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .kh-map-figure figcaption {
+    display: block;
+    margin-top: 0.4rem;
+  }
+
+  .kh-map-details {
+    margin-bottom: 1rem;
+
+    > summary {
+      cursor: pointer;
+      font-family: var(--kh-font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 0.4rem 0;
+    }
+  }
+
+  .kh-map-details .kh-near__item {
+    gap: 0.75rem;
+  }
+
   // Closest-in-meaning list. Hairline rows with the similarity stated in
   // mono at the end; the number is a soft signal on an unfamiliar scale, so
   // it is written rather than drawn.

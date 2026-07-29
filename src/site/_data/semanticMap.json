@@ -1,0 +1,1288 @@
+{
+ "generated": "classical MDS on cosine distance; axes carry no meaning",
+ "edgeMin": 0.6,
+ "nodes": [
+  {
+   "url": "/posts/20130321-postfix-spam/",
+   "title": "Cutting down on Postfix spam relaying",
+   "topic": "cloud infrastructure",
+   "x": 0.262,
+   "y": 0.598
+  },
+  {
+   "url": "/posts/20130612-ubuntu-ips-ec2-multiple/",
+   "title": "Muliple IPs on an Ubuntu EC2 VPC? Yes, please!",
+   "topic": "cloud infrastructure",
+   "x": 0.32,
+   "y": 0.556
+  },
+  {
+   "url": "/posts/20131208-content-model-better-journalism/",
+   "title": "A model for better content, better readers, better journalism",
+   "topic": "content strategy",
+   "x": 0.354,
+   "y": 0.896
+  },
+  {
+   "url": "/posts/20140407-ux-success-double-conversion/",
+   "title": "UX success story: Doubling conversion rates, sales",
+   "topic": "UX design",
+   "x": 0.224,
+   "y": 0.961
+  },
+  {
+   "url": "/posts/20150128-lyra-installation/",
+   "title": "How to install Lyra the graphical visualization environment",
+   "topic": "data visualization",
+   "x": 0.237,
+   "y": 0.358
+  },
+  {
+   "url": "/posts/20170723-corporate-design-through-ia/",
+   "title": "Better corporate design through information architecture",
+   "topic": "information architecture",
+   "x": 0.402,
+   "y": 0.837
+  },
+  {
+   "url": "/posts/20170725-site-update/",
+   "title": "A new site for little reason",
+   "topic": "career reflection",
+   "x": 0.225,
+   "y": 0.653
+  },
+  {
+   "url": "/posts/20170913-fluid-information-architecture/",
+   "title": "Fluid IA to enable user discovery, prepare for change",
+   "topic": "information architecture",
+   "x": 0.48,
+   "y": 0.62
+  },
+  {
+   "url": "/posts/20171002-euroia-2017-takeaways/",
+   "title": "Five highlights from EuroIA 2017",
+   "topic": "information architecture",
+   "x": 0.541,
+   "y": 0.675
+  },
+  {
+   "url": "/posts/20171027-video-conferencing-tips-dos-donts/",
+   "title": "8 Video conferencing tips, dos, don’ts",
+   "topic": "productivity",
+   "x": 0.36,
+   "y": 0.624
+  },
+  {
+   "url": "/posts/20171112-ibm-plex-font-and-fira/",
+   "title": "Comparing IBM Plex and Fira Sans",
+   "topic": "typography",
+   "x": 0.194,
+   "y": 0.407
+  },
+  {
+   "url": "/posts/20180122-content-action-model-origin-story/",
+   "title": "The Content-Action Model origin story",
+   "topic": "content strategy",
+   "x": 0.39,
+   "y": 0.678
+  },
+  {
+   "url": "/posts/20180122-content-action-model/",
+   "title": "Introducing the Content-Action Model for Web Systems",
+   "topic": "content strategy",
+   "x": 0.467,
+   "y": 0.798
+  },
+  {
+   "url": "/posts/20180207-discovery-and-analysis/",
+   "title": "UX, discovery, analysis + the CAM",
+   "topic": "content strategy",
+   "x": 0.49,
+   "y": 0.693
+  },
+  {
+   "url": "/posts/20180210-zurb-panini-2-migration/",
+   "title": "Migrating to Zurb Panini 2.0",
+   "topic": "static sites",
+   "x": 0.112,
+   "y": 0.396
+  },
+  {
+   "url": "/posts/20180319-data-font-for-life-sciences/",
+   "title": "What if: A web font for data",
+   "topic": "typography",
+   "x": 0.179,
+   "y": 0.227
+  },
+  {
+   "url": "/posts/20180329-cam-content-action-goal-ontology/",
+   "title": "Inside the Content-Action Model",
+   "topic": "content strategy",
+   "x": 0.449,
+   "y": 0.699
+  },
+  {
+   "url": "/posts/20180912-faster-scientific-websites-through-reusability/",
+   "title": "Faster scientific websites through reusability",
+   "topic": "design systems",
+   "x": 0.123,
+   "y": 0.623
+  },
+  {
+   "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
+   "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
+   "topic": "Visual Framework",
+   "x": 0.203,
+   "y": 0.574
+  },
+  {
+   "url": "/posts/20191021-integrating-eleventy-with-gulp/",
+   "title": "Integrating Eleventy with gulp, upstream JS",
+   "topic": "Eleventy",
+   "x": 0.116,
+   "y": 0.162
+  },
+  {
+   "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites/",
+   "title": "Fractal and Eleventy: Getting static sites closer to the design system",
+   "topic": "Eleventy",
+   "x": 0.033,
+   "y": 0.303
+  },
+  {
+   "url": "/posts/20191118-first-page-with-the-visual-framework/",
+   "title": "Building your first page with the Visual Framework 2.0",
+   "topic": "Visual Framework",
+   "x": 0.045,
+   "y": 0.333
+  },
+  {
+   "url": "/posts/20200208-its-been-20-years/",
+   "title": "Publishing since the 2000s",
+   "topic": "career reflection",
+   "x": 0.244,
+   "y": 0.754
+  },
+  {
+   "url": "/posts/20200713-moving-from-panini-to-eleventy/",
+   "title": "Moving from Panini to Eleventy",
+   "topic": "Eleventy",
+   "x": 0.067,
+   "y": 0.512
+  },
+  {
+   "url": "/posts/20201111-using-lerna-with-fewer-tags-and-custom-release-notes/",
+   "title": "Lerna monorepos with fewer tags",
+   "topic": "developer tools",
+   "x": 0.253,
+   "y": 0.223
+  },
+  {
+   "url": "/posts/20201212-using-nunjucks-with-react/",
+   "title": "Using Nunjucks templates with React",
+   "topic": "JavaScript",
+   "x": 0,
+   "y": 0.255
+  },
+  {
+   "url": "/posts/20210830-embl-best-footer-forward/",
+   "title": "EMBL.org: Empowering users to navigate a large scientific organization",
+   "topic": "information architecture",
+   "x": 0.259,
+   "y": 0.701
+  },
+  {
+   "url": "/posts/20211221-enabling-a-more-dynamic-embl-online/",
+   "title": "Enabling a more dynamic EMBL online",
+   "topic": "design systems",
+   "x": 0.206,
+   "y": 0.706
+  },
+  {
+   "url": "/posts/20211223-something-new-2022/",
+   "title": "Something new for 2022",
+   "topic": "career reflection",
+   "x": 0.338,
+   "y": 0.712
+  },
+  {
+   "url": "/posts/20250508-its-been-too-long/",
+   "title": "It’s been 3.5 years",
+   "topic": "career reflection",
+   "x": 0.295,
+   "y": 0.717
+  },
+  {
+   "url": "/posts/20250710-metrics-of-caution-azure-mysql/",
+   "title": "Drupal delayed by Azure MySQL",
+   "topic": "Drupal",
+   "x": 0.267,
+   "y": 0.753
+  },
+  {
+   "url": "/posts/20250811-pdf-a-go-go/",
+   "title": "Making PDFs more viewable",
+   "topic": "PDF",
+   "x": 0.103,
+   "y": 0.494
+  },
+  {
+   "url": "/posts/20250831-site-overhaul-eleventy-v3/",
+   "title": "A simpler, faster site: moving to pure Eleventy v3",
+   "topic": "Eleventy",
+   "x": 0.052,
+   "y": 0.462
+  },
+  {
+   "url": "/posts/20250904-switching-to-recursive/",
+   "title": "Recursion: it’s fonts all the way down",
+   "topic": "typography",
+   "x": 0.11,
+   "y": 0.235
+  },
+  {
+   "url": "/posts/20250905-embedpdf-and-pdf-a-go-go/",
+   "title": "Go-go-go … I missed EmbedPDF",
+   "topic": "PDF",
+   "x": 0.082,
+   "y": 0.416
+  },
+  {
+   "url": "/posts/20250906-css-naked-css-only/",
+   "title": "Exposing HTML: The No-JS nudist CSS toggle",
+   "topic": "CSS",
+   "x": 0.015,
+   "y": 0.346
+  },
+  {
+   "url": "/posts/20250907-deterministic-image-filenames/",
+   "title": "Predictable, token-based filenames with Eleventy Image",
+   "topic": "Eleventy",
+   "x": 0.073,
+   "y": 0.143
+  },
+  {
+   "url": "/posts/20250912-knowledge-over-data/",
+   "title": "Sacrificing knowledge in the name of data",
+   "topic": "AI",
+   "x": 0.624,
+   "y": 0.509
+  },
+  {
+   "url": "/posts/20250914-ai-and-the-commoditization-of-reference/",
+   "title": "Individualism is the flavor AI chatbots can&#39;t stomach",
+   "topic": "AI",
+   "x": 0.713,
+   "y": 0.675
+  },
+  {
+   "url": "/posts/20250919-killing-word-junk-drupal-ckeditor5-build-free-plugin/",
+   "title": "A stop-gap Drupal module to kill Word Junk in CKEditor 5",
+   "topic": "Drupal",
+   "x": 0.298,
+   "y": 0.203
+  },
+  {
+   "url": "/posts/20250919-smart-ai-integration-context-first/",
+   "title": "Thoughtful AI integration beats bolted-on Clippy",
+   "topic": "AI",
+   "x": 0.848,
+   "y": 0.307
+  },
+  {
+   "url": "/posts/20250923-effective-ai-work-is-project-management/",
+   "title": "The power of the pause: How planning beats prompt tuning",
+   "topic": "AI",
+   "x": 0.79,
+   "y": 0.39
+  },
+  {
+   "url": "/posts/20250927-the-best-css-unit-might-be-a-combination/",
+   "title": "Embracing px and rem for CSS",
+   "topic": "CSS",
+   "x": 0.13,
+   "y": 0.428
+  },
+  {
+   "url": "/posts/20250929-ai-must-rtfm-context-curators/",
+   "title": "Developers are becoming context technical writers for AI",
+   "topic": "AI",
+   "x": 0.839,
+   "y": 0.368
+  },
+  {
+   "url": "/posts/20251003-effective-context-engineering-for-ai-agents/",
+   "title": "Context engineering beats prompt tricks for AI agents",
+   "topic": "context engineering",
+   "x": 0.912,
+   "y": 0.492
+  },
+  {
+   "url": "/posts/20251013-distracting-engineers-is-harmful/",
+   "title": "It&#39;s true, short disruptions costs lots of time",
+   "topic": "productivity",
+   "x": 0.612,
+   "y": 0.627
+  },
+  {
+   "url": "/posts/20251013-html-output-tag/",
+   "title": "Output: An HTML-native tag once again saves JS befuddling",
+   "topic": "web development",
+   "x": 0.189,
+   "y": 0.242
+  },
+  {
+   "url": "/posts/20251028-introducing-work-section/",
+   "title": "Introducing a &quot;Work&quot; section",
+   "topic": "career reflection",
+   "x": 0.367,
+   "y": 0.576
+  },
+  {
+   "url": "/posts/20251104-digesting-fedora-ai-contribution-policy/",
+   "title": "Plenty to learn from Fedora&#39;s approach to AI code",
+   "topic": "AI",
+   "x": 0.852,
+   "y": 0.336
+  },
+  {
+   "url": "/posts/20251107-ai-isnt-software/",
+   "title": "Why AI can&#39;t be debugged like traditional software",
+   "topic": "AI",
+   "x": 0.947,
+   "y": 0.259
+  },
+  {
+   "url": "/posts/20251203-five-flavours-of-copilot/",
+   "title": "Making sense of Microsoft’s many AI Copilots",
+   "topic": "AI",
+   "x": 0.757,
+   "y": 0.406
+  },
+  {
+   "url": "/posts/20251203-measuring-success-beyond-page-view/",
+   "title": "Measuring success beyond the page view",
+   "topic": "analytics",
+   "x": 0.502,
+   "y": 0.963
+  },
+  {
+   "url": "/posts/20251204-digesting-mega-project-management/",
+   "title": "Large projects need large communicating",
+   "topic": "project management",
+   "x": 0.804,
+   "y": 0.604
+  },
+  {
+   "url": "/posts/20251205-digesting-ai-sketchnotes-video-preview/",
+   "title": "Digest videos into sketchnotes through AI",
+   "topic": "AI",
+   "x": 0.698,
+   "y": 0.118
+  },
+  {
+   "url": "/posts/20251226-url-state-management/",
+   "title": "URLs are the state management you should use",
+   "topic": "web development",
+   "x": 0.059,
+   "y": 0.74
+  },
+  {
+   "url": "/posts/20260115-how-to-measure-impact-when-analytics-lie/",
+   "title": "How to measure impact when analytics lie",
+   "topic": "analytics",
+   "x": 0.502,
+   "y": 0.979
+  },
+  {
+   "url": "/posts/20260124-vr-productivity-setup-quest-3-immersed/",
+   "title": "VR Productivity finally almost surpasses physical displays",
+   "topic": "productivity",
+   "x": 0.278,
+   "y": 0.657
+  },
+  {
+   "url": "/posts/20260130-digital-transformation-complex-organizations/",
+   "title": "Digital transformation for complex organizations (Parts 1-2)",
+   "topic": "digital transformation",
+   "x": 0.637,
+   "y": 0.825
+  },
+  {
+   "url": "/posts/20260205-business-analyst-guide-digital-transformation/",
+   "title": "The practitioner&#39;s guide to planning digital transformation (Parts 3-4)",
+   "topic": "digital transformation",
+   "x": 0.621,
+   "y": 0.771
+  },
+  {
+   "url": "/posts/20260216-90s-desktop-paradigm-browser-utilities/",
+   "title": "Your browser utility wants to be a floating palette",
+   "topic": "retro computing",
+   "x": 0.056,
+   "y": 0.438
+  },
+  {
+   "url": "/posts/20260216-introducing-pdf-a-go-slim/",
+   "title": "PDF-A-go-slim: a browser-based PDF optimizer",
+   "topic": "PDF",
+   "x": 0.143,
+   "y": 0.369
+  },
+  {
+   "url": "/posts/20260220-feedback-buttons-cgi-pattern/",
+   "title": "Feedback buttons without JavaScript, using a 1990s web pattern",
+   "topic": "web development",
+   "x": 0.155,
+   "y": 0.515
+  },
+  {
+   "url": "/posts/20260223-digesting-hidden-danger-shipping-fast/",
+   "title": "Two-way communication beats another shipped feature",
+   "topic": "project management",
+   "x": 0.722,
+   "y": 0.757
+  },
+  {
+   "url": "/posts/20260225-introducing-pinment/",
+   "title": "Collaborate on any webpage with a bookmarklet and URL state",
+   "topic": "web development",
+   "x": 0.172,
+   "y": 0.528
+  },
+  {
+   "url": "/posts/20260228-replacing-lunr-with-pagefind/",
+   "title": "Site search without a search service",
+   "topic": "search",
+   "x": 0.158,
+   "y": 0.508
+  },
+  {
+   "url": "/posts/20260302-semantic-search-browser-embeddings/",
+   "title": "Semantic search on a static site, no API keys required",
+   "topic": "search",
+   "x": 0.272,
+   "y": 0.463
+  },
+  {
+   "url": "/posts/20260303-generating-blog-art/",
+   "title": "Blog art that belongs",
+   "topic": "AI",
+   "x": 0.324,
+   "y": 0.455
+  },
+  {
+   "url": "/posts/20260304-digesting-burning-out-ai-coding-agents/",
+   "title": "AI coding tools turned my once-a-year hobby project into a daily habit",
+   "topic": "AI",
+   "x": 0.799,
+   "y": 0.325
+  },
+  {
+   "url": "/posts/20260305-digesting-eleventy-becomes-build-awesome/",
+   "title": "11ty is dead, long live Build Awesome",
+   "topic": "Eleventy",
+   "x": 0.122,
+   "y": 0.402
+  },
+  {
+   "url": "/posts/20260327-content-architecture-shipping-container/",
+   "title": "Content architecture: the delivery problem",
+   "topic": "content architecture",
+   "x": 0.434,
+   "y": 0.72
+  },
+  {
+   "url": "/posts/20260328-digesting-comprehension-debt/",
+   "title": "Comprehension debt, when AI-generated code outpaces human understanding",
+   "topic": "AI",
+   "x": 1,
+   "y": 0.206
+  },
+  {
+   "url": "/posts/20260329-digesting-software-engineering-splits-three/",
+   "title": "The ladder was always context",
+   "topic": "software engineering",
+   "x": 0.784,
+   "y": 0.488
+  },
+  {
+   "url": "/posts/20260330-context-was-always-the-job/",
+   "title": "Why context engineering was always the job",
+   "topic": "context engineering",
+   "x": 0.804,
+   "y": 0.485
+  },
+  {
+   "url": "/posts/20260404-digesting-schema-first-skeleton-loading/",
+   "title": "Go schema-first and skeleton loading stops being a problem",
+   "topic": "content architecture",
+   "x": 0.19,
+   "y": 0.321
+  },
+  {
+   "url": "/posts/20260405-four-phases-of-ai-adoption/",
+   "title": "Four gears of AI-assisted development: from coding to context",
+   "topic": "AI",
+   "x": 0.897,
+   "y": 0.346
+  },
+  {
+   "url": "/posts/20260407-four-traditions-one-bottleneck/",
+   "title": "The right answer has to be woven",
+   "topic": "context engineering",
+   "x": 0.776,
+   "y": 0.445
+  },
+  {
+   "url": "/posts/20260408-digesting-emdash-wordpress/",
+   "title": "EmDash won&#39;t beat WordPress. Drupal just needs to wait",
+   "topic": "Drupal",
+   "x": 0.306,
+   "y": 0.58
+  },
+  {
+   "url": "/posts/20260408-mini-guide-claude-copilot-skills/",
+   "title": "How to write one skill for both Claude Code and GitHub Copilot CLI",
+   "topic": "AI",
+   "x": 0.735,
+   "y": 0
+  },
+  {
+   "url": "/posts/20260420-let-ai-worry-about-the-code/",
+   "title": "Let AI worry about the code, you worry about the work",
+   "topic": "AI",
+   "x": 0.771,
+   "y": 0.423
+  },
+  {
+   "url": "/posts/20260423-digesting-ars-technica-ai-newsroom-policy/",
+   "title": "Why &#39;reviewed&#39; should be a protected verb",
+   "topic": "AI",
+   "x": 0.819,
+   "y": 0.414
+  },
+  {
+   "url": "/posts/20260429-svgomg-font/",
+   "title": "Stop converting SVG text to outlines",
+   "topic": "typography",
+   "x": 0.079,
+   "y": 0.212
+  },
+  {
+   "url": "/posts/20260503-foveacast/",
+   "title": "Eye-tracking heatmaps in your browser, no lab needed",
+   "topic": "open source",
+   "x": 0.323,
+   "y": 0.472
+  },
+  {
+   "url": "/posts/20260506-digesting-when-digital-systems-fail/",
+   "title": "My daily routine assumes the internet survives the disaster",
+   "topic": "digital transformation",
+   "x": 0.474,
+   "y": 0.821
+  },
+  {
+   "url": "/posts/20260509-vercel-proxy-hobby-projects/",
+   "title": "Building a virtual garage for hobby projects",
+   "topic": "cloud infrastructure",
+   "x": 0.126,
+   "y": 0.288
+  },
+  {
+   "url": "/posts/20260512-datatype-data-font-inside-out/",
+   "title": "A data font, from the inside out",
+   "topic": "typography",
+   "x": 0.222,
+   "y": 0.243
+  },
+  {
+   "url": "/posts/20260609-iterative-pattern-framework/",
+   "title": "CADI: a prescriptive path for slop-free AI in content work",
+   "topic": "AI",
+   "x": 0.753,
+   "y": 0.39
+  },
+  {
+   "url": "/posts/20260615-digesting-reddit-ai-poisoning/",
+   "title": "13 words to turn a rumor into AI fact",
+   "topic": "AI",
+   "x": 0.758,
+   "y": 0.58
+  },
+  {
+   "url": "/posts/20260626-down-the-stack/",
+   "title": "Field notes on Mac OS 9.2, New World ROMs, and Apple Silicon",
+   "topic": "retro computing",
+   "x": 0.373,
+   "y": 0.322
+  },
+  {
+   "url": "/posts/evidence-based-content-guidelines-drupal-ai/",
+   "title": "Improving AI chatbots with an editorial handbook from your best content",
+   "topic": "",
+   "x": 0.758,
+   "y": 0.407
+  },
+  {
+   "url": "/posts/sunlit-dappled-light-effect/",
+   "title": "Creating warm, dappled light with CSS and SVG",
+   "topic": "",
+   "x": 0.037,
+   "y": 0.321
+  },
+  {
+   "url": "/work/2014/impact-story-drs-scaled-drupal/",
+   "title": "Scaling Drupal e-commerce for 150,000 satellite-connected customers",
+   "topic": "",
+   "x": 0.175,
+   "y": 1
+  },
+  {
+   "url": "/work/2019/impact-story-embl-visual-framework/",
+   "title": "Building a component library adopted across 50+ scientific properties",
+   "topic": "",
+   "x": 0.282,
+   "y": 0.685
+  },
+  {
+   "url": "/work/2021/impact-story-embl-footer-directory/",
+   "title": "Untangling an 80-link footer into scannable navigation",
+   "topic": "",
+   "x": 0.255,
+   "y": 0.738
+  },
+  {
+   "url": "/work/2021/impact-story-ending-platform-lock-in/",
+   "title": "Decoupling content from platforms across 80 properties",
+   "topic": "",
+   "x": 0.231,
+   "y": 0.753
+  },
+  {
+   "url": "/work/2025/impact-story-editorial-efficiency/",
+   "title": "Reclaiming three weeks of editorial time every month",
+   "topic": "",
+   "x": 0.379,
+   "y": 0.712
+  },
+  {
+   "url": "/work/2025/impact-story-evidence-based-content-guidelines/",
+   "title": "Turning vague content guidelines into measurable AI-ready standards",
+   "topic": "",
+   "x": 0.698,
+   "y": 0.577
+  },
+  {
+   "url": "/work/2025/impact-story-gar2025-landing/",
+   "title": "Making disaster economics compelling for global policymakers",
+   "topic": "",
+   "x": 0.526,
+   "y": 0.671
+  },
+  {
+   "url": "/work/2025/impact-story-platform-recovery-optimization/",
+   "title": "Recovering platform performance after a cloud migration failure",
+   "topic": "",
+   "x": 0.345,
+   "y": 0.864
+  },
+  {
+   "url": "/work/2026/impact-story-undrr-analytics-infrastructure/",
+   "title": "Designing analytics infrastructure that measures audience quality, not just traffic",
+   "topic": "",
+   "x": 0.42,
+   "y": 0.938
+  },
+  {
+   "url": "/work/2026/impact-story-undrr-analytics-overlay-mcp/",
+   "title": "Putting GA4 where the work happens: an in-browser analytics overlay and its MCP bridge",
+   "topic": "",
+   "x": 0.416,
+   "y": 0.63
+  }
+ ],
+ "edges": [
+  {
+   "a": 2,
+   "b": 3,
+   "s": 0.61
+  },
+  {
+   "a": 3,
+   "b": 90,
+   "s": 0.67
+  },
+  {
+   "a": 5,
+   "b": 69,
+   "s": 0.7
+  },
+  {
+   "a": 5,
+   "b": 26,
+   "s": 0.69
+  },
+  {
+   "a": 5,
+   "b": 7,
+   "s": 0.69
+  },
+  {
+   "a": 6,
+   "b": 29,
+   "s": 0.75
+  },
+  {
+   "a": 6,
+   "b": 32,
+   "s": 0.73
+  },
+  {
+   "a": 6,
+   "b": 23,
+   "s": 0.7
+  },
+  {
+   "a": 7,
+   "b": 26,
+   "s": 0.71
+  },
+  {
+   "a": 7,
+   "b": 27,
+   "s": 0.7
+  },
+  {
+   "a": 7,
+   "b": 8,
+   "s": 0.69
+  },
+  {
+   "a": 8,
+   "b": 47,
+   "s": 0.65
+  },
+  {
+   "a": 8,
+   "b": 18,
+   "s": 0.62
+  },
+  {
+   "a": 10,
+   "b": 15,
+   "s": 0.61
+  },
+  {
+   "a": 11,
+   "b": 12,
+   "s": 0.91
+  },
+  {
+   "a": 11,
+   "b": 16,
+   "s": 0.86
+  },
+  {
+   "a": 11,
+   "b": 13,
+   "s": 0.86
+  },
+  {
+   "a": 12,
+   "b": 13,
+   "s": 0.88
+  },
+  {
+   "a": 12,
+   "b": 16,
+   "s": 0.87
+  },
+  {
+   "a": 13,
+   "b": 16,
+   "s": 0.82
+  },
+  {
+   "a": 14,
+   "b": 23,
+   "s": 0.77
+  },
+  {
+   "a": 14,
+   "b": 32,
+   "s": 0.6
+  },
+  {
+   "a": 15,
+   "b": 84,
+   "s": 0.86
+  },
+  {
+   "a": 15,
+   "b": 33,
+   "s": 0.7
+  },
+  {
+   "a": 17,
+   "b": 18,
+   "s": 0.83
+  },
+  {
+   "a": 17,
+   "b": 91,
+   "s": 0.75
+  },
+  {
+   "a": 17,
+   "b": 27,
+   "s": 0.73
+  },
+  {
+   "a": 18,
+   "b": 27,
+   "s": 0.86
+  },
+  {
+   "a": 18,
+   "b": 91,
+   "s": 0.78
+  },
+  {
+   "a": 19,
+   "b": 20,
+   "s": 0.71
+  },
+  {
+   "a": 20,
+   "b": 32,
+   "s": 0.69
+  },
+  {
+   "a": 20,
+   "b": 23,
+   "s": 0.67
+  },
+  {
+   "a": 22,
+   "b": 29,
+   "s": 0.69
+  },
+  {
+   "a": 6,
+   "b": 22,
+   "s": 0.68
+  },
+  {
+   "a": 22,
+   "b": 94,
+   "s": 0.67
+  },
+  {
+   "a": 23,
+   "b": 32,
+   "s": 0.84
+  },
+  {
+   "a": 26,
+   "b": 92,
+   "s": 0.87
+  },
+  {
+   "a": 26,
+   "b": 27,
+   "s": 0.86
+  },
+  {
+   "a": 18,
+   "b": 26,
+   "s": 0.75
+  },
+  {
+   "a": 27,
+   "b": 28,
+   "s": 0.74
+  },
+  {
+   "a": 18,
+   "b": 28,
+   "s": 0.76
+  },
+  {
+   "a": 28,
+   "b": 29,
+   "s": 0.73
+  },
+  {
+   "a": 27,
+   "b": 29,
+   "s": 0.73
+  },
+  {
+   "a": 30,
+   "b": 97,
+   "s": 0.79
+  },
+  {
+   "a": 31,
+   "b": 34,
+   "s": 0.85
+  },
+  {
+   "a": 31,
+   "b": 60,
+   "s": 0.81
+  },
+  {
+   "a": 31,
+   "b": 59,
+   "s": 0.66
+  },
+  {
+   "a": 18,
+   "b": 32,
+   "s": 0.72
+  },
+  {
+   "a": 32,
+   "b": 33,
+   "s": 0.69
+  },
+  {
+   "a": 33,
+   "b": 84,
+   "s": 0.64
+  },
+  {
+   "a": 34,
+   "b": 60,
+   "s": 0.77
+  },
+  {
+   "a": 32,
+   "b": 35,
+   "s": 0.62
+  },
+  {
+   "a": 37,
+   "b": 38,
+   "s": 0.61
+  },
+  {
+   "a": 38,
+   "b": 88,
+   "s": 0.67
+  },
+  {
+   "a": 38,
+   "b": 40,
+   "s": 0.65
+  },
+  {
+   "a": 40,
+   "b": 88,
+   "s": 0.82
+  },
+  {
+   "a": 40,
+   "b": 85,
+   "s": 0.72
+  },
+  {
+   "a": 40,
+   "b": 74,
+   "s": 0.66
+  },
+  {
+   "a": 41,
+   "b": 85,
+   "s": 0.7
+  },
+  {
+   "a": 41,
+   "b": 78,
+   "s": 0.66
+  },
+  {
+   "a": 41,
+   "b": 74,
+   "s": 0.65
+  },
+  {
+   "a": 43,
+   "b": 44,
+   "s": 0.74
+  },
+  {
+   "a": 43,
+   "b": 75,
+   "s": 0.71
+  },
+  {
+   "a": 43,
+   "b": 72,
+   "s": 0.71
+  },
+  {
+   "a": 44,
+   "b": 72,
+   "s": 0.77
+  },
+  {
+   "a": 44,
+   "b": 75,
+   "s": 0.71
+  },
+  {
+   "a": 29,
+   "b": 47,
+   "s": 0.72
+  },
+  {
+   "a": 18,
+   "b": 47,
+   "s": 0.71
+  },
+  {
+   "a": 6,
+   "b": 47,
+   "s": 0.67
+  },
+  {
+   "a": 49,
+   "b": 70,
+   "s": 0.6
+  },
+  {
+   "a": 51,
+   "b": 55,
+   "s": 0.88
+  },
+  {
+   "a": 51,
+   "b": 98,
+   "s": 0.83
+  },
+  {
+   "a": 41,
+   "b": 52,
+   "s": 0.62
+  },
+  {
+   "a": 55,
+   "b": 98,
+   "s": 0.9
+  },
+  {
+   "a": 55,
+   "b": 99,
+   "s": 0.6
+  },
+  {
+   "a": 57,
+   "b": 58,
+   "s": 0.88
+  },
+  {
+   "a": 5,
+   "b": 57,
+   "s": 0.66
+  },
+  {
+   "a": 57,
+   "b": 69,
+   "s": 0.64
+  },
+  {
+   "a": 47,
+   "b": 58,
+   "s": 0.61
+  },
+  {
+   "a": 59,
+   "b": 60,
+   "s": 0.73
+  },
+  {
+   "a": 61,
+   "b": 63,
+   "s": 0.66
+  },
+  {
+   "a": 64,
+   "b": 65,
+   "s": 0.79
+  },
+  {
+   "a": 65,
+   "b": 66,
+   "s": 0.64
+  },
+  {
+   "a": 29,
+   "b": 66,
+   "s": 0.67
+  },
+  {
+   "a": 47,
+   "b": 66,
+   "s": 0.64
+  },
+  {
+   "a": 67,
+   "b": 74,
+   "s": 0.63
+  },
+  {
+   "a": 32,
+   "b": 68,
+   "s": 0.63
+  },
+  {
+   "a": 69,
+   "b": 93,
+   "s": 0.73
+  },
+  {
+   "a": 69,
+   "b": 75,
+   "s": 0.67
+  },
+  {
+   "a": 70,
+   "b": 74,
+   "s": 0.64
+  },
+  {
+   "a": 40,
+   "b": 70,
+   "s": 0.6
+  },
+  {
+   "a": 71,
+   "b": 72,
+   "s": 0.74
+  },
+  {
+   "a": 71,
+   "b": 74,
+   "s": 0.67
+  },
+  {
+   "a": 71,
+   "b": 75,
+   "s": 0.62
+  },
+  {
+   "a": 72,
+   "b": 75,
+   "s": 0.82
+  },
+  {
+   "a": 74,
+   "b": 78,
+   "s": 0.74
+  },
+  {
+   "a": 74,
+   "b": 75,
+   "s": 0.71
+  },
+  {
+   "a": 72,
+   "b": 74,
+   "s": 0.7
+  },
+  {
+   "a": 77,
+   "b": 78,
+   "s": 0.6
+  },
+  {
+   "a": 78,
+   "b": 85,
+   "s": 0.67
+  },
+  {
+   "a": 82,
+   "b": 96,
+   "s": 0.65
+  },
+  {
+   "a": 85,
+   "b": 95,
+   "s": 0.74
+  },
+  {
+   "a": 85,
+   "b": 88,
+   "s": 0.71
+  },
+  {
+   "a": 88,
+   "b": 95,
+   "s": 0.75
+  },
+  {
+   "a": 91,
+   "b": 93,
+   "s": 0.72
+  },
+  {
+   "a": 27,
+   "b": 92,
+   "s": 0.71
+  },
+  {
+   "a": 92,
+   "b": 93,
+   "s": 0.6
+  },
+  {
+   "a": 27,
+   "b": 93,
+   "s": 0.74
+  },
+  {
+   "a": 29,
+   "b": 94,
+   "s": 0.66
+  },
+  {
+   "a": 47,
+   "b": 94,
+   "s": 0.63
+  },
+  {
+   "a": 40,
+   "b": 95,
+   "s": 0.66
+  },
+  {
+   "a": 47,
+   "b": 96,
+   "s": 0.65
+  },
+  {
+   "a": 29,
+   "b": 97,
+   "s": 0.69
+  },
+  {
+   "a": 94,
+   "b": 97,
+   "s": 0.62
+  },
+  {
+   "a": 98,
+   "b": 99,
+   "s": 0.64
+  },
+  {
+   "a": 78,
+   "b": 99,
+   "s": 0.61
+  }
+ ]
+}

@@ -536,6 +536,47 @@ module.exports = function(config) {
     }
   });
 
+  config.addFilter('sortByScore', (arr) => [...(arr || [])].sort((a, b) => b.s - a.s));
+
+  // Static SVG map of the corpus: entries positioned by semantic similarity,
+  // with a link drawn where two are genuinely close. Built at build time from
+  // src/site/_data/semanticMap.json; no client-side library, no layout run in
+  // the browser, and the same picture every time.
+  config.addShortcode('semanticMap', (map, w = 900, h = 520) => {
+    try {
+      if (!map || !map.nodes || !map.nodes.length) return '';
+      const pad = 18;
+      const px = (n) => (pad + n.x * (w - pad * 2)).toFixed(1);
+      // SVG y grows downward; flip so the projection is not mirrored.
+      const py = (n) => (pad + (1 - n.y) * (h - pad * 2)).toFixed(1);
+
+      const edges = (map.edges || []).map((e) => {
+        const a = map.nodes[e.a];
+        const b = map.nodes[e.b];
+        if (!a || !b) return '';
+        // Opacity carries strength, faintly. The link's existence is the
+        // signal; its exact weight is not worth reading off a line.
+        const o = Math.min(0.85, 0.3 + (e.s - map.edgeMin) * 1.8).toFixed(2);
+        return `<line x1="${px(a)}" y1="${py(a)}" x2="${px(b)}" y2="${py(b)}" `
+          + `stroke="#a89257" stroke-opacity="${o}" stroke-width="1"></line>`;
+      }).join('');
+
+      const dots = map.nodes.map((n) => {
+        const label = n.topic ? `${n.title} — ${n.topic}` : n.title;
+        return `<a href="${n.url}"><title>${label}</title>`
+          + `<circle cx="${px(n)}" cy="${py(n)}" r="3.5" fill="#5b5e5a"></circle></a>`;
+      }).join('');
+
+      return `<svg class="kh-map" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" `
+        + `role="img" aria-label="Map of ${map.nodes.length} entries positioned by similarity of meaning, `
+        + `with ${(map.edges || []).length} links between closely related pairs. `
+        + `The axes carry no meaning; only relative distance does.">`
+        + `<g>${edges}</g><g>${dots}</g></svg>`;
+    } catch (e) {
+      return '';
+    }
+  });
+
   // Per-year totals for the stats page: entry counts split by type, plus
   // words, so a single pass over the corpus feeds every mark on that page.
   config.addFilter('statsByYear', (items) => {
