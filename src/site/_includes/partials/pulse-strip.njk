@@ -59,5 +59,15 @@
   </ol>
   <p class="kh-u-sr-only">Range: {{ pulse[0].label }} to {{ (pulse | last).label }}.</p>
 </nav>
+{#- The one line of JavaScript on this strip, and the only way to open a
+    chronological timeline on its recent end. Every CSS-only alternative
+    (direction: rtl, flex-direction: row-reverse, transform: scaleX(-1))
+    loses scrollable area in Firefox, measured directly: roughly half the
+    archive becomes unreachable. Inline rather than deferred so it runs
+    before paint and there is no visible jump.
+
+    Degrades cleanly: with JavaScript off the strip simply opens on the
+    oldest month, and every month is still reachable by scrolling. -#}
+<script>(function(){var t=document.currentScript.previousElementSibling;if(!t)return;var g=function(){t.scrollLeft=t.scrollWidth;};g();requestAnimationFrame(g);addEventListener('load',g);})();</script>
 <span id="kh-after-timeline" tabindex="-1"></span>
 {%- endif -%}
