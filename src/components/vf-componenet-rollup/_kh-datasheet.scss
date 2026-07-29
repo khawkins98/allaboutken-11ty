@@ -697,12 +697,48 @@
   // unknown at build time, so it is labelled in the mono register rather than
   // built into a sentence -- the old wording read "1 people found this useful"
   // and no server-side plural is possible.
+  // Aligned to the byline's grid, not to the aside's outer edge. The
+  // transparent left border matches .kh-author's 3px rule so the label and the
+  // button land in the same two columns as "Written by" and the bio; the rule
+  // itself is not repeated, because this is a separate action rather than part
+  // of the aside.
   .kh-feedback {
+    border-left: 3px solid transparent;
+    padding: 0 0 1rem 1.25rem;
+  }
+
+  .kh-feedback__label {
+    margin: 0 0 0.5rem;
+  }
+
+  .kh-feedback__body {
     align-items: center;
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem 1.25rem;
-    margin: 1.25rem 0 0;
+  }
+
+  // Not .kh-button: that component is still keyed to the old blue and carries
+  // a 16px bottom margin. Same hairline grammar as .kh-panel instead, with the
+  // sun as the hover fill.
+  .kh-feedback__action {
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule--strong);
+    color: inherit;
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    transition: background-color 125ms linear;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--kh-color--sun);
+      color: inherit;
+      text-decoration: none;
+    }
   }
 
   // Read next spans the full content area: it is a directory, not prose.
@@ -757,6 +793,19 @@
     align-items: center;
     display: inline-flex;
     gap: 0.5rem;
+  }
+
+  @media (min-width: $kh-breakpoint--md) {
+    .kh-feedback {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: 7rem minmax(0, 1fr);
+    }
+
+    .kh-feedback__label {
+      margin: 0;
+      padding-top: 0.7rem;
+    }
   }
 
 }
