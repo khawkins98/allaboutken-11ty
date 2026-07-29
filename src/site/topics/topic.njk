@@ -1,0 +1,31 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: collections.topics
+  size: 1
+  alias: topicPage
+permalink: "/topics/{{ topicPage.slug }}/"
+eleventyComputed:
+  title: "{{ topicPage.topic }}"
+  teaser: "Everything filed under {{ topicPage.topic }}: {{ topicPage.count }} entries."
+---
+<section>
+  <p class="kh-breadcrumb"><a href="/topics/">← Topics</a></p>
+  <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{ topicPage.topic }}</h1>
+
+  <div class="kh-section-head">
+    <h2 id="entries" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Entries</h2>
+    <span class="kh-meta">{{ topicPage.count }} &middot; newest first</span>
+  </div>
+
+  <div class="kh-datasheet-list">
+  {%- for post in topicPage.items -%}
+    {% include "partials/post-summary.njk" %}
+  {%- endfor -%}
+  </div>
+
+  <p class="kh-cluster kh-u-margin__top--1200">
+    <a href="/topics/">All topics ↦</a>
+    <a href="/all/">All writing ↦</a>
+  </p>
+</section>

@@ -9,18 +9,53 @@ pagination:
 permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 }}/{% endif %}"
 ---
 {%- set siteConfig = siteConfig.siteInformation -%}
-<div class="kh-grid-stylized">
-  <div>
-  </div>
-  <section>
-    <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
-    {% include "partials/search-box.njk" %}
+<section>
+  <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
 
+  {#- The three sections of the register. Nav collapsed to a single
+      "Writing" entry, so this page is where they are reached from. -#}
+  <div class="kh-section-head">
+    <h2 id="sections" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Sections</h2>
+    <span class="kh-meta">{{ collections.allContent | length }} entries in total</span>
+  </div>
+  <div class="kh-panel">
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr">
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Blog</span>
+        <a href="/blog/">Longer pieces &amp; notes</a>
+        <span class="kh-meta kh-u-margin__top--200">{{ collections.blogPosts | length }} entries</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Digesting</span>
+        <a href="/digesting/">Bookmarks &amp; reading</a>
+        <span class="kh-meta kh-u-margin__top--200">{{ collections.digesting | length }} entries</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Project notes</span>
+        <a href="/work/">Impact stories</a>
+        <span class="kh-meta kh-u-margin__top--200">{{ collections.impactStories | length }} entries</span>
+      </div>
+    </div>
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr">
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">By subject</span>
+        <a href="/topics/">Browse by topic</a>
+        <span class="kh-meta kh-u-margin__top--200">{{ collections.topics | length }} topics</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="everything" class="kh-text-heading--2"><span class="kh-section-number">2.0</span>Everything</h2>
+    <span class="kh-meta">Newest first</span>
+  </div>
+  {% include "partials/search-box.njk" %}
+
+  <div class="kh-datasheet-list">
   {%- for post in pagedPosts -%}
     {% include "partials/post-summary.njk" %}
   {%- endfor -%}
+  </div>
 
   {% include "partials/pager.njk" %}
-
-  </section>
-</div>
+</section>

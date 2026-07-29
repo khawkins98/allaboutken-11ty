@@ -17,6 +17,26 @@
   // itself, so they are drawn in document ink.
   --kh-viz-ink: #2b2b28;
 
+  // Topic index bar. Length on a common scale, which Cleveland & McGill put
+  // near the top of the accuracy hierarchy; the count is stated as a number
+  // beside it, so the bar is a comparison aid rather than the only encoding.
+  .kh-topic-index__count {
+    font-family: var(--kh-font-mono);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .kh-topic-index__bar {
+    width: 45%;
+  }
+
+  .kh-topic-bar {
+    background: var(--kh-ink-muted);
+    display: block;
+    height: 6px;
+    width: var(--kh-bar, 0%);
+  }
+
   // Hierarchical topic detail. The parent is the controlled term and carries
   // the tally; the child is free-form and sits quieter behind it.
   .kh-topic-child {
