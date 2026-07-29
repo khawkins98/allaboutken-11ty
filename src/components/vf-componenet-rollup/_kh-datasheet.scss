@@ -739,6 +739,46 @@
     }
   }
 
+  // Archive
+  // -------
+  // The dense index: date, title, kind. No teasers, no images -- /all/ is the
+  // one with those. Month headings carry the anchor the timeline marks point
+  // at, and scroll-margin keeps the target clear of the sticky header.
+  .kh-archive__month {
+    margin-top: 2rem;
+  }
+
+  .kh-archive__heading {
+    align-items: baseline;
+    border-bottom: 1px solid var(--kh-rule--strong);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    justify-content: space-between;
+    margin: 0 0 0.5rem;
+    padding-bottom: 0.35rem;
+    scroll-margin-top: 15vh;
+  }
+
+  .kh-archive__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-archive__item {
+    align-items: baseline;
+    border-bottom: 1px solid var(--kh-rule);
+    display: grid;
+    gap: 0.25rem 1rem;
+    grid-template-columns: 5rem minmax(0, 1fr) auto;
+    padding: 0.5rem 0;
+  }
+
+  .kh-archive__kind {
+    color: var(--kh-color--coral);
+  }
+
   // Read next: a directory, not prose.
   .kh-readnext {
     margin-top: 2.5rem;

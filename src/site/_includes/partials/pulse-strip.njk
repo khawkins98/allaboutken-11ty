@@ -41,11 +41,15 @@
       <span class="kh-u-sr-only">{{ m.label }}: no entries.{% if m.caption %} {{ m.caption }}{% endif %}</span>
     </li>
     {%- else %}
+    {#- The mark points at the month in the archive, not at one entry. It used
+        to link to whichever entry that month was newest, which quietly hid the
+        other four behind a mark whose entire encoding is "there are five
+        things here". The id on the archive heading is this same key. -#}
     {%- set tip = m.longLabel ~ ' — ' ~ m.total ~ (' entry' if m.total == 1 else ' entries') %}
     <li class="kh-timeline__slot{% if m.yearStart %} kh-timeline__slot--year{% endif %}{% if pulseCurrentKey and m.key == pulseCurrentKey %} kh-timeline__slot--current{% endif %}" data-year="{{ m.year }}">
       {%- if m.total and m.url %}
-      <a class="kh-timeline__mark" href="{{ m.url | url }}" style="--kh-mark-size: {{ m.size }}px" title="{{ tip }}{% if m.total > 1 %} — latest: {{ m.title }}{% endif %}">
-        <span class="kh-u-sr-only">{{ m.longLabel }}: {{ m.total }}{{ ' entry' if m.total == 1 else ' entries' }}. Latest: {{ m.title }}.</span>
+      <a class="kh-timeline__mark" href="/archive/#{{ m.key }}" style="--kh-mark-size: {{ m.size }}px" title="{{ tip }}">
+        <span class="kh-u-sr-only">{{ m.longLabel }}: {{ m.total }}{{ ' entry' if m.total == 1 else ' entries' }}.</span>
       </a>
       {%- else %}
       <span class="kh-timeline__mark kh-timeline__mark--empty" title="{{ m.longLabel }} — no entries">
