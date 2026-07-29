@@ -245,11 +245,17 @@ function extractContent(html) {
   const mainMatch = html.match(/<main[^>]*data-pagefind-body[^>]*>([\s\S]*?)<\/main>/i);
   if (!mainMatch) return null;
 
-  let mainHtml = mainMatch[1];
+  const mainHtml = mainMatch[1];
 
-  // Remove data-pagefind-ignore sections
-  mainHtml = mainHtml.replace(/<[^>]+data-pagefind-ignore[^>]*>[\s\S]*?<\/[^>]+>/gi, '');
-
+  // data-pagefind-ignore regions are removed inside stripTags, by the
+  // balanced-tag scan in stripIgnoredRegions. There used to be a lazy regex
+  // here doing the same job first, and it was actively harmful: it matched
+  // from the opening marked tag to the FIRST closing tag of any depth, so on
+  //   <aside data-pagefind-ignore><p>Written by</p><p>…bio…</p></aside>
+  // it deleted `<aside …><p>Written by</p>` and left the bio behind with no
+  // marker on it — which meant the balanced scan that runs next had nothing
+  // to find and the text sailed through into the embeddings. Do not
+  // reintroduce a regex here; nested markup is the normal case, not the edge.
   const bodyText = stripTags(mainHtml);
 
   // Skip pages with very little content

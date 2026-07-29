@@ -60,11 +60,27 @@ model and those entries drifted closer on every build: link count went 116 to
 Stripping is done with a balanced-tag scan, not a regex, because these regions
 nest and a lazy regex stops at the first closing tag of any depth.
 
-Residual: the derived data still moves by a few links per build (172/175/176)
-even though the stripped text is byte-identical across builds, verified by
-hash. That is floating-point non-determinism in the ONNX runtime flipping pairs
-that sit exactly on the 0.6 threshold. It is jitter, not drift, and not worth
-chasing.
+**A lazy regex doing the same job used to run first, and it silently disabled
+the scan.** `extractContent` pre-stripped with
+`/<[^>]+data-pagefind-ignore[^>]*>[\s\S]*?<\/[^>]+>/gi`. On a nested region it
+matched from the opening marked tag to the *first* closing tag of any depth, so
+on `<aside data-pagefind-ignore><p>Written by</p><p>bio</p></aside>` it deleted
+`<aside ...><p>Written by</p>` and left the bio behind **with the marker now
+gone** -- so the balanced scan that ran next had nothing to find. Every marked
+region with nested markup was leaking. Removing that one line cut the corpus
+from 1,708 chunks to 1,068 (-37%) and thresholded links from 188 to 66. Do not
+reintroduce a regex there.
+
+The link counts in this file are therefore not comparable across that fix: the
+116-to-173 figure above was measured while chrome was still leaking. Post-fix,
+66 links at >= 0.6 and 71 of 100 entries with at least one neighbour is the
+real baseline. Most of the old "similarity" was shared navigation, not shared
+subject matter.
+
+Residual: the derived data still moves by a few links per build even though the
+stripped text is byte-identical across builds, verified by hash. That is
+floating-point non-determinism in the ONNX runtime flipping pairs that sit
+exactly on the threshold. It is jitter, not drift, and not worth chasing.
 
 ### Topics use `>` for hierarchy, never `:`
 Post `topics:` entries may be hierarchical -- `AI > Claude Code`. The parent

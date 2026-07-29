@@ -23,5 +23,9 @@ templateEngineOverride: njk
     <p>
       <a href="/digesting">More things I've been digesting</a>
     </p>
+    {#- Same byline as a full post. Digesting entries are short and often the
+        only page a search arrival sees, so the case for saying who wrote
+        them is stronger here, not weaker. -#}
+    {% include "partials/author-note.njk" %}
   </div>
 </article>

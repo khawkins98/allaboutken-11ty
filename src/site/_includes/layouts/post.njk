@@ -157,6 +157,11 @@ templateEngineOverride: njk
     <div class="kh-grid__col--span-1">
     </div>
     <div class="kh-content kh-grid__col--span-2">
+      {#- Byline comes first, before the onward links: most arrivals here are
+          from search and have never seen the homepage, so this is the only
+          place they learn who wrote the thing they just read. -#}
+      {% include "partials/author-note.njk" %}
+
       {% include "partials/related-semantic.njk" %}
 
       <h2 class="kh-text-heading--2">Read more</h2>
@@ -181,7 +186,7 @@ templateEngineOverride: njk
 </div>
 
 {%- if comment != false %}
-<div class="kh-floating-thumb kh-u-do-not-print">
+<div class="kh-floating-thumb kh-u-do-not-print" data-pagefind-ignore>
   <a href="https://feedback.allaboutken.com/up{{ page.url }}"
      rel="nofollow"
      class="kh-floating-thumb__action">

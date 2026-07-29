@@ -622,4 +622,115 @@
       border-left: 1px solid var(--kh-rule);
     }
   }
+
+  // Start here
+  // ----------
+  // The one chosen list on the site. Numbered like a spec so it reads as a
+  // deliberate sequence rather than a ranking; the note carries the reason.
+  .kh-picked {
+    border-top: 1px solid var(--kh-rule--strong);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-picked__item {
+    align-items: baseline;
+    background: var(--kh-panel-bg);
+    border-bottom: 1px solid var(--kh-rule);
+    display: grid;
+    gap: 0 1.25rem;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    padding: 0.9rem 1.25rem;
+  }
+
+  .kh-picked__num {
+    color: var(--kh-ink-muted);
+    font-family: var(--kh-font-mono);
+    font-size: 0.8125rem;
+  }
+
+  .kh-picked__link {
+    font-weight: 600;
+  }
+
+  .kh-picked__note {
+    color: var(--kh-ink-muted);
+    margin: 0.25rem 0 0;
+    max-width: 60ch;
+  }
+
+  .kh-picked__date {
+    text-align: right;
+  }
+
+  // Recurring subjects
+  // ------------------
+  // A ranked row, not a cloud: the count is stated rather than encoded as
+  // type size, which is the least accurately read channel there is.
+  .kh-topic-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-topic-chips__item {
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule);
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .kh-topic-chips__count {
+    color: var(--kh-ink-muted);
+    font-family: var(--kh-font-mono);
+    font-size: 0.8125rem;
+  }
+
+  // Byline
+  // ------
+  // Sits at the foot of every entry for the search traffic that never reaches
+  // the homepage. Left rule rather than a filled box: it is an aside, not a
+  // call to action.
+  .kh-author {
+    border-left: 3px solid var(--kh-color--sun);
+    border-top: 1px solid var(--kh-rule);
+    margin: 3rem 0 2rem;
+    padding: 1rem 0 1rem 1.25rem;
+  }
+
+  .kh-author__name {
+    font-weight: 600;
+    margin: 0.25rem 0 0;
+  }
+
+  .kh-author__bio {
+    margin: 0.35rem 0 0;
+    max-width: 62ch;
+  }
+
+  .kh-author__links {
+    margin: 0.6rem 0 0;
+  }
+
+  .kh-author__sep {
+    color: var(--kh-ink-muted);
+    padding: 0 0.4rem;
+  }
+
+  @media (min-width: $kh-breakpoint--md) {
+    .kh-author {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: 7rem minmax(0, 1fr);
+    }
+
+    .kh-author__label {
+      padding-top: 0.35rem;
+    }
+  }
 }

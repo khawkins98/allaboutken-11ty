@@ -1,0 +1,29 @@
+{# Start here — a short, chosen list.
+
+   Every other route into the writing is complete and neutral: all entries,
+   all topics, all time, newest first. That answers "what is there?" and never
+   "what's worth reading?", because recency is not a proxy for quality. This
+   is the only list on the site ordered by judgement.
+
+   Set on the entry itself:
+     featured      — position in the list, 1 upward
+     featured_note — one line on why it's here, in the first person
+
+   Kept deliberately short. A list of fifteen picks is not a pick. #}
+{%- set picks = collections.featured -%}
+{%- if picks and picks.length -%}
+<ol class="kh-picked">
+  {%- for p in picks %}
+  <li class="kh-picked__item">
+    <span class="kh-picked__num" aria-hidden="true">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>
+    <div class="kh-picked__body">
+      <a class="kh-picked__link" href="{{ p.url | url }}">{{ p.data.title }}</a>
+      {%- if p.data.featured_note %}
+      <p class="kh-picked__note">{{ p.data.featured_note | emdash | safe }}</p>
+      {%- endif %}
+    </div>
+    <span class="kh-meta kh-picked__date">{{ p.date | dateDisplay('y') }}</span>
+  </li>
+  {%- endfor %}
+</ol>
+{%- endif -%}

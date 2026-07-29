@@ -1,0 +1,49 @@
+{# Cadence and scale, in words rather than dots.
+
+   The pulse strip above shows the rhythm accurately but only as marks: a
+   reader has to decode a scatter of circles to learn whether the site is
+   still alive. This states it.
+
+   Expects:
+     glance      — a corpusStats result for the collection being listed
+     glanceLabel — what is being counted, e.g. "blog posts"
+
+   The rate is averaged over years that actually have entries, not over the
+   calendar span, so a quiet stretch doesn't misreport an active site. The
+   gap stays visible in the strip regardless. #}
+{%- if glance -%}
+<div class="kh-panel kh-glance">
+  <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr">
+    <div class="kh-panel__cell">
+      <span class="kh-panel__label">How many</span>
+      {{ glance.entries | formatNumber }} {{ glanceLabel or 'entries' }}
+    </div>
+    <div class="kh-panel__cell">
+      <span class="kh-panel__label">Since</span>
+      {{ glance.first | dateDisplay('y') }}
+      <span class="kh-meta kh-u-margin__top--200">{{ glance.activeYears }} years with entries</span>
+    </div>
+    <div class="kh-panel__cell">
+      <span class="kh-panel__label">Most recent</span>
+      {{ glance.latest | dateDisplay }}
+    </div>
+  </div>
+  <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr">
+    <div class="kh-panel__cell">
+      {#- An average across active years, not a promise about the next one. -#}
+      <span class="kh-panel__label">Rate</span>
+      {{ glance.perYear }} a year on average
+    </div>
+    <div class="kh-panel__cell">
+      <span class="kh-panel__label">Busiest year</span>
+      {{ glance.busiestYear }} <span class="kh-meta">&middot; {{ glance.busiestYearCount }}</span>
+    </div>
+    <div class="kh-panel__cell">
+      {#- Median, not mean: two long pieces would drag a mean somewhere
+          unrepresentative of a typical entry. -#}
+      <span class="kh-panel__label">Typical length</span>
+      {{ glance.median | formatNumber }} words
+    </div>
+  </div>
+</div>
+{%- endif -%}

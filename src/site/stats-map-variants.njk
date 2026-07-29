@@ -1,0 +1,79 @@
+---
+title: Corpus map — variants
+teaser: "Four ways of drawing the same 100 entries and their links, for comparison."
+layout: layouts/base.njk
+permalink: /stats/map-variants/
+noindex: true
+eleventyExcludeFromCollections: true
+---
+<section>
+  <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
+
+  <div class="kh-content">
+    <p><strong>A scratch page for comparison, not for keeping.</strong> Same data
+    throughout: {{ semanticMap.nodes | length }} entries, {{ semanticMap.edges | length }}
+    links at similarity ≥ {{ semanticMap.edgeMin }}. Only the drawing changes.</p>
+  </div>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="a" class="kh-text-heading--2"><span class="kh-section-number">A</span>Projection <span class="kh-meta">currently live</span></h2>
+    <span class="kh-meta">position = similarity</span>
+  </div>
+  <div class="kh-content">
+    <p>Position comes from classical MDS, so distance on the page approximates
+    distance in meaning. Edges are drawn on top but are not what places the
+    points. The honest one: if two dots are close, they really are related.</p>
+  </div>
+  <div class="kh-map-scroll">{% semanticMap semanticMap %}</div>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="b" class="kh-text-heading--2"><span class="kh-section-number">B</span>Force-directed</h2>
+    <span class="kh-meta">position = whatever the simulation settled on</span>
+  </div>
+  <div class="kh-content">
+    <p>The same graph relaxed with a spring simulation, seeded on a circle and run
+    with a fixed number of steps so it is deterministic. Point size shows how
+    many links an entry has. It looks the most like a network, and it is the
+    least trustworthy: position encodes nothing, so two dots can end up adjacent
+    purely because the layout had nowhere else to put them. It also took four
+    rounds of parameter tuning to stop it collapsing into a blob or pinning
+    nodes to the walls, which is itself an argument against it.</p>
+  </div>
+  <div class="kh-map-scroll">{% semanticForce semanticMap %}</div>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="c" class="kh-text-heading--2"><span class="kh-section-number">C</span>Adjacency matrix</h2>
+    <span class="kh-meta">rows grouped by topic</span>
+  </div>
+  <div class="kh-content">
+    <p>Every entry is a row and a column, grouped by primary topic. A filled cell
+    means that pair is linked, darker where the similarity is higher. A matrix
+    cannot become a hairball: density is read directly, blocks on the diagonal
+    are clusters, and off-diagonal marks are the cross-topic pairings that a
+    node-link diagram tends to bury.</p>
+  </div>
+  <div class="kh-map-scroll">{% semanticMatrix semanticMap %}</div>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="d" class="kh-text-heading--2"><span class="kh-section-number">D</span>Arc diagram</h2>
+    <span class="kh-meta">one line, links as arcs</span>
+  </div>
+  <div class="kh-content">
+    <p>Entries on a single line in topic order, each link an arc. Compact enough
+    to sit in a strip rather than needing a whole panel, and the span of an arc
+    shows at a glance whether a link stays inside a topic or reaches across the
+    corpus.</p>
+  </div>
+  <div class="kh-map-scroll">{% semanticArc semanticMap %}</div>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="verdict" class="kh-text-heading--2">Where I land</h2>
+  </div>
+  <div class="kh-content">
+    <p><strong>A for the stats page, C if one had to be picked for insight.</strong>
+    A is the only one where position carries meaning, which is what a "map"
+    implies. C is the most informative but reads as an instrument rather than an
+    illustration. B is the most conventional and the least honest. D is the most
+    compact and would suit a sidebar or a strip better than a feature.</p>
+  </div>
+</section>

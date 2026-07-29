@@ -6,8 +6,10 @@
    about, and they surface pairings across sections that no shared tag links.
 
    Renders nothing when a post has no neighbour above the similarity floor.
-   Roughly a fifth of entries are singular enough that they don't, which is
-   the honest outcome rather than a padded list.
+   Roughly a third of entries are singular enough that they don't, which is
+   the honest outcome rather than a padded list. That share went UP when the
+   chrome leak was fixed: a lot of the old "similarity" was entries sharing
+   navigation boilerplate rather than sharing a subject.
 
    Data: src/site/_data/related.json, written by scripts/compute-related.mjs. #}
 {%- set near = related[page.url] -%}
