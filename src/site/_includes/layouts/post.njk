@@ -4,7 +4,7 @@ pageClass: posts
 templateEngineOverride: njk
 ---
 
-{%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) %}
+{%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) | reverse %}
 {%- set pulseCurrentKey = date | dateDisplay('yyyy-LL') %}
 {% include "partials/pulse-strip.njk" %}
 
