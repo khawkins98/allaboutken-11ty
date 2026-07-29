@@ -367,11 +367,17 @@ See the [live note-box example](/style-guide/components/#note-boxes) in the comp
 
 ## Margin notes
 
-Use `kh-marginnote` for supplementary citations, supporting evidence, and secondary references that enrich the argument without interrupting the main flow. On desktop they float into the right margin (Tufte-style); on mobile they render as block-level asides. See the [live margin-note example](/style-guide/components/#margin-notes) in the component reference.
+Use a margin note for supplementary citations, supporting evidence, and secondary references that enrich the argument without interrupting the main flow. On desktop they float into the right margin (Tufte-style); on mobile they render as block-level asides. See the [live margin-note example](/style-guide/components/#margin-notes) in the component reference.
 
-```html
-<aside class="kh-marginnote">Gergely Orosz <a href="https://example.com">reports</a> practitioners saying AI now writes the majority of their production code.</aside>
+Write them with the {%raw%}`{% marginnote %}`{%endraw%} shortcode, which renders inline markdown — so ordinary link syntax works:
+
+```njk
+{%raw%}{% marginnote %}Gergely Orosz [reports](https://example.com) practitioners saying AI now writes the majority of their production code.{% endmarginnote %}{%endraw%}
 ```
+
+For a short phrase lifted from the body copy, {%raw%}`{% pullquote %}`{%endraw%} works the same way and sits in the same margin, one register up.
+
+Raw `<aside class="kh-marginnote">` HTML still works and existing posts using it are fine, but the shortcode is preferred for anything new.
 
 **When to use:**
 
@@ -387,8 +393,8 @@ Use `kh-marginnote` for supplementary citations, supporting evidence, and second
 
 **Guidelines:**
 
-- Use raw HTML (`<aside class="kh-marginnote">`) inside {%raw%}`{% markdown %}`{%endraw%} blocks. Links must use `<a href="">` tags, not markdown link syntax.
-- Place a blank line before and after the aside
+- Use the {%raw%}`{% marginnote %}`{%endraw%} shortcode. Links use ordinary markdown syntax; the shortcode renders them.
+- Place a blank line before and after the note
 - Keep margin notes to 1--2 sentences
 - In citation-heavy sections (3+ references in a paragraph), move the supplementary ones to margin notes and keep only the strongest evidence inline
 
