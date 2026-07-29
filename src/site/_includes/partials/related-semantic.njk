@@ -14,12 +14,13 @@
    Data: src/site/_data/related.json, written by scripts/compute-related.mjs. #}
 {%- set near = related[page.url] -%}
 {%- if near and near.length -%}
-{#- h3, not h2: this now sits under the "Read next" heading rather than
-    standing alone. Page furniture used to compete with the article's own
-    sections in the document outline. -#}
+{#- The block's own heading. There used to be a "Read next / By meaning, and
+    in sequence" header above this one, which said the same thing twice in a
+    row: two heading rules, two mono straplines, one idea. This is the h2 now
+    and the sequence rail carries a plain h3 beneath the list. -#}
 <div class="kh-section-head" data-pagefind-ignore>
-  <h3 class="kh-text-heading--3">Closest in meaning</h3>
-  <span class="kh-meta">By similarity, not by tag</span>
+  <h2 id="related" class="kh-text-heading--2">Related posts</h2>
+  <span class="kh-meta">By meaning, not by tag</span>
 </div>
 <ol class="kh-near" data-pagefind-ignore>
   {%- for n in near %}
