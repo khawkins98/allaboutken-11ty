@@ -1,3 +1,4 @@
+@use './settings' as *;
 // Data marks
 // ----------
 // Micro-visualisations in the datasheet register: the twelve-month pulse
@@ -30,14 +31,16 @@
   // Register timeline. Marks on a rule, one slot per month, sized by area.
   // Plain elements rather than SVG so each month is a real link with a
   // native tooltip and a proper hit target.
+  // Twenty-four slots are always in the markup; the leading ones are hidden
+  // by breakpoint so the strip shows 24 months on desktop, 12 at tablet and
+  // 6 on mobile. Cropping in CSS keeps the page a single cacheable artifact.
   .kh-timeline {
     margin: 0.25rem 0 1.5rem;
-    max-width: 22rem;
   }
 
   .kh-timeline__track {
     align-items: center;
-    border-bottom: 1px solid var(--kh-rule--strong);
+    border-bottom: 1px solid var(--kh-rule);
     display: flex;
     justify-content: space-between;
     list-style: none;
@@ -49,10 +52,14 @@
     display: flex;
     flex: 1 1 0;
     justify-content: center;
+    position: relative;
   }
 
-  // The hit target is the full slot height; the visible mark is centred in
-  // it and sits on the rule.
+  // Mobile default: last 6 of the 24 slots.
+  .kh-timeline__slot:nth-child(-n + 18) {
+    display: none;
+  }
+
   .kh-timeline__mark {
     align-items: flex-end;
     display: flex;
@@ -66,7 +73,7 @@
     // mark reads as a point in time, where a square reads as a bar. Set
     // --kh-mark-radius to e.g. 30% for squircles instead of full circles.
     &::after {
-      background: var(--kh-viz-ink);
+      background: var(--kh-ink-muted);
       border-radius: var(--kh-mark-radius, 50%);
       content: '';
       display: block;
@@ -101,6 +108,66 @@
     position: absolute;
     transform: translateX(-50%);
     width: 7px;
+  }
+
+  // Year axis. Only January carries a label, plus whichever slot happens to
+  // be first at the current crop so a cropped view is never missing its
+  // leading year. A year that has not started yet never appears, because
+  // there is no slot for it.
+  .kh-timeline__year {
+    bottom: -1.15rem;
+    color: var(--kh-ink-muted);
+    display: none;
+    font-family: var(--kh-font-mono);
+    font-size: 10px;
+    left: 0;
+    letter-spacing: 0.03em;
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  .kh-timeline__slot--year .kh-timeline__year {
+    display: block;
+  }
+
+  // Mobile: slot 19 is the first visible one.
+  .kh-timeline__slot:nth-child(19) .kh-timeline__year {
+    display: block;
+  }
+
+  @media (min-width: $kh-breakpoint--md) {
+    // Tablet: last 12.
+    .kh-timeline__slot:nth-child(-n + 18) {
+      display: flex;
+    }
+
+    .kh-timeline__slot:nth-child(-n + 12) {
+      display: none;
+    }
+
+    .kh-timeline__slot:nth-child(19) .kh-timeline__year {
+      display: none;
+    }
+
+    .kh-timeline__slot:nth-child(13) .kh-timeline__year {
+      display: block;
+    }
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    // Desktop: the full 24.
+    .kh-timeline__slot:nth-child(-n + 12) {
+      display: flex;
+    }
+
+    .kh-timeline__slot:nth-child(13) .kh-timeline__year {
+      display: none;
+    }
+
+    .kh-timeline__slot:first-child .kh-timeline__year {
+      display: block;
+    }
   }
 
   // Sequence rail (foot of a post). A hairline with typed marks riding it;

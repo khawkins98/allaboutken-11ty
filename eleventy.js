@@ -309,6 +309,10 @@ module.exports = function(config) {
           key: m.toFormat('yyyy-LL'),
           label: m.toFormat('LLL yy'),
           longLabel: m.toFormat('LLLL yyyy'),
+          year: m.toFormat('yyyy'),
+          // January starts a new year band on the axis. The first slot also
+          // gets a label so a cropped view is never missing its leading year.
+          yearStart: m.month === 1,
           counts: { article: 0, digesting: 0, impact: 0 },
           total: 0,
           url: null,

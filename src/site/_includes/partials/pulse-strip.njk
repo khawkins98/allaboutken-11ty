@@ -3,6 +3,10 @@
      pulse           — array from the pulseMonths filter (12 slots)
      pulseCurrentKey — 'yyyy-MM' of the current post, if any (marks its month)
 
+   Twenty-four slots are always rendered; CSS crops the leading ones so the
+   strip shows 24 months on desktop, 12 at tablet and 6 on mobile. Cropping in
+   CSS rather than at build time keeps it a single cacheable page.
+
    Plain HTML and CSS, no SVG and no JavaScript: each month with entries is
    an <a>, so it gets a native tooltip on hover and goes somewhere on click.
    Empty months are a bare tick, not a link.
@@ -24,7 +28,7 @@
   <ol class="kh-timeline__track">
     {%- for m in pulse %}
     {%- set tip = m.longLabel ~ ' — ' ~ m.total ~ (' entry' if m.total == 1 else ' entries') %}
-    <li class="kh-timeline__slot{% if pulseCurrentKey and m.key == pulseCurrentKey %} kh-timeline__slot--current{% endif %}">
+    <li class="kh-timeline__slot{% if m.yearStart %} kh-timeline__slot--year{% endif %}{% if pulseCurrentKey and m.key == pulseCurrentKey %} kh-timeline__slot--current{% endif %}" data-year="{{ m.year }}">
       {%- if m.total and m.url %}
       <a class="kh-timeline__mark" href="{{ m.url | url }}" style="--kh-mark-size: {{ m.size }}px" title="{{ tip }}{% if m.total > 1 %} — latest: {{ m.title }}{% endif %}">
         <span class="kh-u-sr-only">{{ m.longLabel }}: {{ m.total }}{{ ' entry' if m.total == 1 else ' entries' }}. Latest: {{ m.title }}.</span>
@@ -34,6 +38,7 @@
         <span class="kh-u-sr-only">{{ m.longLabel }}: no entries.</span>
       </span>
       {%- endif %}
+      <span class="kh-timeline__year" aria-hidden="true">{{ m.year }}</span>
     </li>
     {%- endfor %}
   </ol>
