@@ -6,883 +6,1023 @@
    "url": "/posts/20130321-postfix-spam/",
    "title": "Cutting down on Postfix spam relaying",
    "topic": "cloud infrastructure",
-   "x": 0.356,
-   "y": 0.591
+   "x": 0.139,
+   "y": 0.822
   },
   {
    "url": "/posts/20130612-ubuntu-ips-ec2-multiple/",
    "title": "Muliple IPs on an Ubuntu EC2 VPC? Yes, please!",
    "topic": "cloud infrastructure",
-   "x": 0.372,
-   "y": 0.615
+   "x": 0.193,
+   "y": 0.813
   },
   {
    "url": "/posts/20131208-content-model-better-journalism/",
    "title": "A model for better content, better readers, better journalism",
    "topic": "content strategy",
-   "x": 0.526,
-   "y": 0.093
+   "x": 0.203,
+   "y": 0.822
   },
   {
    "url": "/posts/20140407-ux-success-double-conversion/",
    "title": "UX success story: Doubling conversion rates, sales",
    "topic": "UX design",
-   "x": 0.334,
-   "y": 0.067
+   "x": 0.113,
+   "y": 0.845
   },
   {
    "url": "/posts/20150128-lyra-installation/",
    "title": "How to install Lyra the graphical visualization environment",
    "topic": "data visualization",
-   "x": 0.315,
-   "y": 0.675
+   "x": 0.135,
+   "y": 0.458
   },
   {
    "url": "/posts/20170723-corporate-design-through-ia/",
    "title": "Better corporate design through information architecture",
    "topic": "information architecture",
-   "x": 0.52,
-   "y": 0.175
+   "x": 0.225,
+   "y": 0.818
   },
   {
    "url": "/posts/20170725-site-update/",
    "title": "A new site for little reason",
    "topic": "career reflection",
-   "x": 0.24,
-   "y": 0.418
+   "x": 0.108,
+   "y": 0.697
   },
   {
    "url": "/posts/20170913-fluid-information-architecture/",
    "title": "Fluid IA to enable user discovery, prepare for change",
    "topic": "information architecture",
-   "x": 0.586,
-   "y": 0.382
+   "x": 0.313,
+   "y": 0.702
   },
   {
    "url": "/posts/20171002-euroia-2017-takeaways/",
    "title": "Five highlights from EuroIA 2017",
    "topic": "information architecture",
-   "x": 0.672,
-   "y": 0.287
+   "x": 0.317,
+   "y": 0.715
   },
   {
    "url": "/posts/20171027-video-conferencing-tips-dos-donts/",
    "title": "8 Video conferencing tips, dos, don’ts",
    "topic": "productivity",
-   "x": 0.471,
-   "y": 0.373
+   "x": 0.221,
+   "y": 0.648
   },
   {
    "url": "/posts/20171112-ibm-plex-font-and-fira/",
    "title": "Comparing IBM Plex and Fira Sans",
    "topic": "typography",
-   "x": 0.257,
-   "y": 0.61
+   "x": 0.11,
+   "y": 0.501
   },
   {
    "url": "/posts/20180122-content-action-model-origin-story/",
    "title": "The Content-Action Model origin story",
    "topic": "content strategy",
-   "x": 0.514,
-   "y": 0.254
+   "x": 0.213,
+   "y": 0.668
   },
   {
    "url": "/posts/20180122-content-action-model/",
    "title": "Introducing the Content-Action Model for Web Systems",
    "topic": "content strategy",
-   "x": 0.581,
-   "y": 0.196
+   "x": 0.299,
+   "y": 0.734
   },
   {
    "url": "/posts/20180207-discovery-and-analysis/",
    "title": "UX, discovery, analysis + the CAM",
    "topic": "content strategy",
-   "x": 0.695,
-   "y": 0.197
+   "x": 0.269,
+   "y": 0.732
   },
   {
    "url": "/posts/20180210-zurb-panini-2-migration/",
    "title": "Migrating to Zurb Panini 2.0",
    "topic": "static sites",
-   "x": 0.155,
-   "y": 0.55
+   "x": 0.04,
+   "y": 0.45
   },
   {
    "url": "/posts/20180319-data-font-for-life-sciences/",
    "title": "What if: A web font for data",
    "topic": "typography",
-   "x": 0.248,
-   "y": 0.686
+   "x": 0.107,
+   "y": 0.295
   },
   {
    "url": "/posts/20180329-cam-content-action-goal-ontology/",
    "title": "Inside the Content-Action Model",
    "topic": "content strategy",
-   "x": 0.59,
-   "y": 0.267
+   "x": 0.231,
+   "y": 0.666
   },
   {
    "url": "/posts/20180912-faster-scientific-websites-through-reusability/",
    "title": "Faster scientific websites through reusability",
    "topic": "design systems",
-   "x": 0.223,
-   "y": 0.279
+   "x": 0.071,
+   "y": 0.673
   },
   {
    "url": "/posts/20190627-embl-vf2-ebi-day-2019/",
    "title": "EMBL-EBI Day: Visual Framework 2.0 outreach",
    "topic": "Visual Framework",
-   "x": 0.292,
-   "y": 0.372
+   "x": 0.114,
+   "y": 0.629
   },
   {
    "url": "/posts/20191021-integrating-eleventy-with-gulp/",
    "title": "Integrating Eleventy with gulp, upstream JS",
    "topic": "Eleventy",
-   "x": 0.205,
-   "y": 0.79
+   "x": 0.105,
+   "y": 0.209
   },
   {
    "url": "/posts/20191112-extendeing-fractal-components-eleventy-static-sites/",
    "title": "Fractal and Eleventy: Getting static sites closer to the design system",
    "topic": "Eleventy",
-   "x": 0.127,
-   "y": 0.657
+   "x": 0.042,
+   "y": 0.357
   },
   {
    "url": "/posts/20191118-first-page-with-the-visual-framework/",
    "title": "Building your first page with the Visual Framework 2.0",
    "topic": "Visual Framework",
-   "x": 0.133,
-   "y": 0.536
+   "x": 0.036,
+   "y": 0.274
   },
   {
    "url": "/posts/20200208-its-been-20-years/",
    "title": "Publishing since the 2000s",
    "topic": "career reflection",
-   "x": 0.358,
-   "y": 0.179
+   "x": 0.137,
+   "y": 0.7
   },
   {
    "url": "/posts/20200713-moving-from-panini-to-eleventy/",
    "title": "Moving from Panini to Eleventy",
    "topic": "Eleventy",
-   "x": 0.22,
-   "y": 0.45
+   "x": 0.038,
+   "y": 0.581
   },
   {
    "url": "/posts/20201111-using-lerna-with-fewer-tags-and-custom-release-notes/",
    "title": "Lerna monorepos with fewer tags",
    "topic": "developer tools",
-   "x": 0.34,
-   "y": 0.78
+   "x": 0.167,
+   "y": 0.385
   },
   {
    "url": "/posts/20201212-using-nunjucks-with-react/",
    "title": "Using Nunjucks templates with React",
    "topic": "JavaScript",
-   "x": 0.071,
-   "y": 0.684
+   "x": 0.004,
+   "y": 0.204
   },
   {
    "url": "/posts/20210830-embl-best-footer-forward/",
    "title": "EMBL.org: Empowering users to navigate a large scientific organization",
    "topic": "information architecture",
-   "x": 0.39,
-   "y": 0.272
+   "x": 0.15,
+   "y": 0.757
   },
   {
    "url": "/posts/20211221-enabling-a-more-dynamic-embl-online/",
    "title": "Enabling a more dynamic EMBL online",
    "topic": "design systems",
-   "x": 0.273,
-   "y": 0.29
+   "x": 0.095,
+   "y": 0.722
   },
   {
    "url": "/posts/20211223-something-new-2022/",
    "title": "Something new for 2022",
    "topic": "career reflection",
-   "x": 0.441,
-   "y": 0.307
+   "x": 0.151,
+   "y": 0.741
   },
   {
    "url": "/posts/20250508-its-been-too-long/",
    "title": "It’s been 3.5 years",
    "topic": "career reflection",
-   "x": 0.409,
-   "y": 0.284
+   "x": 0.125,
+   "y": 0.738
   },
   {
    "url": "/posts/20250710-metrics-of-caution-azure-mysql/",
    "title": "Drupal delayed by Azure MySQL",
    "topic": "Drupal",
-   "x": 0.403,
-   "y": 0.273
+   "x": 0.177,
+   "y": 0.813
   },
   {
    "url": "/posts/20250811-pdf-a-go-go/",
    "title": "Making PDFs more viewable",
    "topic": "PDF",
-   "x": 0.186,
-   "y": 0.403
+   "x": 0.1,
+   "y": 0.353
   },
   {
    "url": "/posts/20250831-site-overhaul-eleventy-v3/",
    "title": "A simpler, faster site: moving to pure Eleventy v3",
    "topic": "Eleventy",
-   "x": 0.19,
-   "y": 0.468
+   "x": 0.042,
+   "y": 0.578
   },
   {
    "url": "/posts/20250904-switching-to-recursive/",
    "title": "Recursion: it’s fonts all the way down",
    "topic": "typography",
-   "x": 0.26,
-   "y": 0.764
+   "x": 0.077,
+   "y": 0.328
   },
   {
    "url": "/posts/20250905-embedpdf-and-pdf-a-go-go/",
    "title": "Go-go-go … I missed EmbedPDF",
    "topic": "PDF",
-   "x": 0.159,
-   "y": 0.531
+   "x": 0.065,
+   "y": 0.412
   },
   {
    "url": "/posts/20250906-css-naked-css-only/",
    "title": "Exposing HTML: The No-JS nudist CSS toggle",
    "topic": "CSS",
    "x": 0,
-   "y": 0.557
+   "y": 0.368
   },
   {
    "url": "/posts/20250907-deterministic-image-filenames/",
    "title": "Predictable, token-based filenames with Eleventy Image",
    "topic": "Eleventy",
-   "x": 0.174,
-   "y": 0.798
+   "x": 0.1,
+   "y": 0.248
   },
   {
    "url": "/posts/20250912-knowledge-over-data/",
    "title": "Sacrificing knowledge in the name of data",
    "topic": "AI",
-   "x": 0.783,
-   "y": 0.452
+   "x": 0.329,
+   "y": 0.675
   },
   {
    "url": "/posts/20250914-ai-and-the-commoditization-of-reference/",
    "title": "Individualism is the flavor AI chatbots can&#39;t stomach",
    "topic": "AI",
-   "x": 0.798,
-   "y": 0.287
+   "x": 0.58,
+   "y": 0.752
   },
   {
    "url": "/posts/20250919-killing-word-junk-drupal-ckeditor5-build-free-plugin/",
    "title": "A stop-gap Drupal module to kill Word Junk in CKEditor 5",
    "topic": "Drupal",
-   "x": 0.344,
-   "y": 0.799
+   "x": 0.24,
+   "y": 0.369
   },
   {
    "url": "/posts/20250919-smart-ai-integration-context-first/",
    "title": "Thoughtful AI integration beats bolted-on Clippy",
    "topic": "AI",
-   "x": 0.894,
-   "y": 0.693
+   "x": 0.816,
+   "y": 0.414
   },
   {
    "url": "/posts/20250923-effective-ai-work-is-project-management/",
    "title": "The power of the pause: How planning beats prompt tuning",
    "topic": "AI",
-   "x": 0.851,
-   "y": 0.598
+   "x": 0.595,
+   "y": 0.546
   },
   {
    "url": "/posts/20250927-the-best-css-unit-might-be-a-combination/",
    "title": "Embracing px and rem for CSS",
    "topic": "CSS",
-   "x": 0.216,
-   "y": 0.494
+   "x": 0.204,
+   "y": 0.201
   },
   {
    "url": "/posts/20250929-ai-must-rtfm-context-curators/",
    "title": "Developers are becoming context technical writers for AI",
    "topic": "AI",
-   "x": 0.888,
-   "y": 0.605
+   "x": 0.804,
+   "y": 0.433
   },
   {
    "url": "/posts/20251003-effective-context-engineering-for-ai-agents/",
    "title": "Context engineering beats prompt tricks for AI agents",
    "topic": "context engineering",
-   "x": 0.947,
-   "y": 0.506
+   "x": 0.893,
+   "y": 0.586
   },
   {
    "url": "/posts/20251013-distracting-engineers-is-harmful/",
    "title": "It&#39;s true, short disruptions costs lots of time",
    "topic": "productivity",
-   "x": 0.667,
-   "y": 0.376
+   "x": 0.571,
+   "y": 0.69
   },
   {
    "url": "/posts/20251013-html-output-tag/",
    "title": "Output: An HTML-native tag once again saves JS befuddling",
    "topic": "web development",
-   "x": 0.273,
-   "y": 0.648
+   "x": 0.25,
+   "y": 0
   },
   {
    "url": "/posts/20251028-introducing-work-section/",
    "title": "Introducing a &quot;Work&quot; section",
    "topic": "career reflection",
-   "x": 0.451,
-   "y": 0.329
+   "x": 0.218,
+   "y": 0.595
   },
   {
    "url": "/posts/20251104-digesting-fedora-ai-contribution-policy/",
    "title": "Plenty to learn from Fedora&#39;s approach to AI code",
    "topic": "AI",
-   "x": 0.871,
-   "y": 0.689
+   "x": 0.856,
+   "y": 0.449
   },
   {
    "url": "/posts/20251107-ai-isnt-software/",
    "title": "Why AI can&#39;t be debugged like traditional software",
    "topic": "AI",
-   "x": 0.941,
-   "y": 0.753
+   "x": 0.933,
+   "y": 0.372
   },
   {
    "url": "/posts/20251203-five-flavours-of-copilot/",
    "title": "Making sense of Microsoft’s many AI Copilots",
    "topic": "AI",
-   "x": 0.751,
-   "y": 0.612
+   "x": 0.508,
+   "y": 0.618
   },
   {
    "url": "/posts/20251203-measuring-success-beyond-page-view/",
    "title": "Measuring success beyond the page view",
    "topic": "analytics",
-   "x": 0.616,
-   "y": 0.009
+   "x": 0.294,
+   "y": 0.937
   },
   {
    "url": "/posts/20251204-digesting-mega-project-management/",
    "title": "Large projects need large communicating",
    "topic": "project management",
-   "x": 0.857,
-   "y": 0.413
+   "x": 0.741,
+   "y": 0.74
   },
   {
    "url": "/posts/20251205-digesting-ai-sketchnotes-video-preview/",
    "title": "Digest videos into sketchnotes through AI",
    "topic": "AI",
-   "x": 0.737,
-   "y": 0.802
+   "x": 0.734,
+   "y": 0.032
   },
   {
    "url": "/posts/20251226-url-state-management/",
    "title": "URLs are the state management you should use",
    "topic": "web development",
-   "x": 0.188,
-   "y": 0.239
+   "x": 0.078,
+   "y": 0.583
   },
   {
    "url": "/posts/20260115-how-to-measure-impact-when-analytics-lie/",
    "title": "How to measure impact when analytics lie",
    "topic": "analytics",
-   "x": 0.583,
-   "y": 0.033
+   "x": 0.317,
+   "y": 1
   },
   {
    "url": "/posts/20260124-vr-productivity-setup-quest-3-immersed/",
    "title": "VR Productivity finally almost surpasses physical displays",
    "topic": "productivity",
-   "x": 0.374,
-   "y": 0.301
+   "x": 0.229,
+   "y": 0.609
   },
   {
    "url": "/posts/20260130-digital-transformation-complex-organizations/",
    "title": "Digital transformation for complex organizations (Parts 1-2)",
    "topic": "digital transformation",
-   "x": 0.761,
-   "y": 0.17
+   "x": 0.454,
+   "y": 0.831
   },
   {
    "url": "/posts/20260205-business-analyst-guide-digital-transformation/",
    "title": "The practitioner&#39;s guide to planning digital transformation (Parts 3-4)",
    "topic": "digital transformation",
-   "x": 0.724,
-   "y": 0.212
+   "x": 0.438,
+   "y": 0.773
   },
   {
    "url": "/posts/20260216-90s-desktop-paradigm-browser-utilities/",
    "title": "Your browser utility wants to be a floating palette",
    "topic": "retro computing",
-   "x": 0.151,
-   "y": 0.448
+   "x": 0.042,
+   "y": 0.248
   },
   {
    "url": "/posts/20260216-introducing-pdf-a-go-slim/",
    "title": "PDF-A-go-slim: a browser-based PDF optimizer",
    "topic": "PDF",
-   "x": 0.22,
-   "y": 0.55
+   "x": 0.145,
+   "y": 0.322
   },
   {
    "url": "/posts/20260220-feedback-buttons-cgi-pattern/",
    "title": "Feedback buttons without JavaScript, using a 1990s web pattern",
    "topic": "web development",
-   "x": 0.242,
-   "y": 0.468
+   "x": 0.157,
+   "y": 0.436
   },
   {
    "url": "/posts/20260223-digesting-hidden-danger-shipping-fast/",
    "title": "Two-way communication beats another shipped feature",
    "topic": "project management",
-   "x": 0.785,
-   "y": 0.288
+   "x": 0.65,
+   "y": 0.856
   },
   {
    "url": "/posts/20260225-introducing-pinment/",
    "title": "Collaborate on any webpage with a bookmarklet and URL state",
    "topic": "web development",
-   "x": 0.288,
-   "y": 0.419
+   "x": 0.133,
+   "y": 0.498
   },
   {
    "url": "/posts/20260228-replacing-lunr-with-pagefind/",
    "title": "Site search without a search service",
    "topic": "search",
-   "x": 0.255,
-   "y": 0.525
+   "x": 0.113,
+   "y": 0.592
   },
   {
    "url": "/posts/20260302-semantic-search-browser-embeddings/",
    "title": "Semantic search on a static site, no API keys required",
    "topic": "search",
-   "x": 0.395,
-   "y": 0.52
+   "x": 0.236,
+   "y": 0.477
   },
   {
    "url": "/posts/20260303-generating-blog-art/",
    "title": "Blog art that belongs",
    "topic": "AI",
-   "x": 0.457,
-   "y": 0.584
+   "x": 0.185,
+   "y": 0.579
   },
   {
    "url": "/posts/20260304-digesting-burning-out-ai-coding-agents/",
    "title": "AI coding tools turned my once-a-year hobby project into a daily habit",
    "topic": "AI",
-   "x": 0.833,
-   "y": 0.654
+   "x": 0.776,
+   "y": 0.41
   },
   {
    "url": "/posts/20260305-digesting-eleventy-becomes-build-awesome/",
    "title": "11ty is dead, long live Build Awesome",
    "topic": "Eleventy",
-   "x": 0.225,
-   "y": 0.542
+   "x": 0.132,
+   "y": 0.328
   },
   {
    "url": "/posts/20260327-content-architecture-shipping-container/",
    "title": "Content architecture: the delivery problem",
    "topic": "content architecture",
-   "x": 0.541,
-   "y": 0.224
+   "x": 0.344,
+   "y": 0.634
   },
   {
    "url": "/posts/20260328-digesting-comprehension-debt/",
    "title": "Comprehension debt, when AI-generated code outpaces human understanding",
    "topic": "AI",
    "x": 1,
-   "y": 0.786
+   "y": 0.303
   },
   {
    "url": "/posts/20260329-digesting-software-engineering-splits-three/",
    "title": "The ladder was always context",
    "topic": "software engineering",
-   "x": 0.825,
-   "y": 0.493
+   "x": 0.735,
+   "y": 0.542
   },
   {
    "url": "/posts/20260330-context-was-always-the-job/",
    "title": "Why context engineering was always the job",
    "topic": "context engineering",
-   "x": 0.878,
-   "y": 0.495
+   "x": 0.658,
+   "y": 0.597
   },
   {
    "url": "/posts/20260404-digesting-schema-first-skeleton-loading/",
    "title": "Go schema-first and skeleton loading stops being a problem",
    "topic": "content architecture",
-   "x": 0.282,
-   "y": 0.546
+   "x": 0.255,
+   "y": 0.056
   },
   {
    "url": "/posts/20260405-four-phases-of-ai-adoption/",
    "title": "Four gears of AI-assisted development: from coding to context",
    "topic": "AI",
-   "x": 0.961,
-   "y": 0.656
+   "x": 0.689,
+   "y": 0.544
   },
   {
    "url": "/posts/20260407-four-traditions-one-bottleneck/",
    "title": "The right answer has to be woven",
    "topic": "context engineering",
-   "x": 0.83,
-   "y": 0.494
+   "x": 0.604,
+   "y": 0.538
   },
   {
    "url": "/posts/20260408-digesting-emdash-wordpress/",
    "title": "EmDash won&#39;t beat WordPress. Drupal just needs to wait",
    "topic": "Drupal",
-   "x": 0.4,
-   "y": 0.41
+   "x": 0.265,
+   "y": 0.571
   },
   {
    "url": "/posts/20260408-mini-guide-claude-copilot-skills/",
    "title": "How to write one skill for both Claude Code and GitHub Copilot CLI",
    "topic": "AI",
-   "x": 0.743,
-   "y": 1
+   "x": 0.627,
+   "y": 0.216
   },
   {
    "url": "/posts/20260420-let-ai-worry-about-the-code/",
    "title": "Let AI worry about the code, you worry about the work",
    "topic": "AI",
-   "x": 0.84,
-   "y": 0.596
+   "x": 0.529,
+   "y": 0.569
   },
   {
    "url": "/posts/20260423-digesting-ars-technica-ai-newsroom-policy/",
    "title": "Why &#39;reviewed&#39; should be a protected verb",
    "topic": "AI",
-   "x": 0.842,
-   "y": 0.595
+   "x": 0.812,
+   "y": 0.466
   },
   {
    "url": "/posts/20260429-svgomg-font/",
    "title": "Stop converting SVG text to outlines",
    "topic": "typography",
-   "x": 0.175,
-   "y": 0.718
+   "x": 0.13,
+   "y": 0.138
   },
   {
    "url": "/posts/20260503-foveacast/",
    "title": "Eye-tracking heatmaps in your browser, no lab needed",
    "topic": "open source",
-   "x": 0.41,
-   "y": 0.499
+   "x": 0.23,
+   "y": 0.48
   },
   {
    "url": "/posts/20260506-digesting-when-digital-systems-fail/",
    "title": "My daily routine assumes the internet survives the disaster",
    "topic": "digital transformation",
-   "x": 0.575,
-   "y": 0.207
+   "x": 0.389,
+   "y": 0.862
   },
   {
    "url": "/posts/20260509-vercel-proxy-hobby-projects/",
    "title": "Building a virtual garage for hobby projects",
    "topic": "cloud infrastructure",
-   "x": 0.183,
-   "y": 0.666
+   "x": 0.159,
+   "y": 0.387
   },
   {
    "url": "/posts/20260512-datatype-data-font-inside-out/",
    "title": "A data font, from the inside out",
    "topic": "typography",
-   "x": 0.311,
-   "y": 0.685
+   "x": 0.132,
+   "y": 0.366
   },
   {
    "url": "/posts/20260609-iterative-pattern-framework/",
    "title": "CADI: a prescriptive path for slop-free AI in content work",
    "topic": "AI",
-   "x": 0.825,
-   "y": 0.584
+   "x": 0.627,
+   "y": 0.453
   },
   {
    "url": "/posts/20260615-digesting-reddit-ai-poisoning/",
    "title": "13 words to turn a rumor into AI fact",
    "topic": "AI",
-   "x": 0.837,
-   "y": 0.459
+   "x": 0.696,
+   "y": 0.685
   },
   {
    "url": "/posts/20260626-down-the-stack/",
    "title": "Field notes on Mac OS 9.2, New World ROMs, and Apple Silicon",
    "topic": "retro computing",
-   "x": 0.425,
-   "y": 0.642
+   "x": 0.296,
+   "y": 0.417
   },
   {
    "url": "/posts/evidence-based-content-guidelines-drupal-ai/",
    "title": "Improving AI chatbots with an editorial handbook from your best content",
    "topic": "",
-   "x": 0.853,
-   "y": 0.613
+   "x": 0.637,
+   "y": 0.567
   },
   {
    "url": "/posts/sunlit-dappled-light-effect/",
    "title": "Creating warm, dappled light with CSS and SVG",
    "topic": "",
-   "x": 0.091,
-   "y": 0.56
+   "x": 0.034,
+   "y": 0.303
   },
   {
    "url": "/work/2014/impact-story-drs-scaled-drupal/",
    "title": "Scaling Drupal e-commerce for 150,000 satellite-connected customers",
    "topic": "",
-   "x": 0.289,
-   "y": 0
+   "x": 0.104,
+   "y": 0.975
   },
   {
    "url": "/work/2019/impact-story-embl-visual-framework/",
    "title": "Building a component library adopted across 50+ scientific properties",
    "topic": "",
-   "x": 0.402,
-   "y": 0.215
+   "x": 0.176,
+   "y": 0.626
   },
   {
    "url": "/work/2021/impact-story-embl-footer-directory/",
    "title": "Untangling an 80-link footer into scannable navigation",
    "topic": "",
-   "x": 0.393,
-   "y": 0.199
+   "x": 0.176,
+   "y": 0.67
   },
   {
    "url": "/work/2021/impact-story-ending-platform-lock-in/",
    "title": "Decoupling content from platforms across 80 properties",
    "topic": "",
-   "x": 0.371,
-   "y": 0.215
+   "x": 0.153,
+   "y": 0.687
   },
   {
    "url": "/work/2025/impact-story-editorial-efficiency/",
    "title": "Reclaiming three weeks of editorial time every month",
    "topic": "",
-   "x": 0.491,
-   "y": 0.291
+   "x": 0.219,
+   "y": 0.712
   },
   {
    "url": "/work/2025/impact-story-evidence-based-content-guidelines/",
    "title": "Turning vague content guidelines into measurable AI-ready standards",
    "topic": "",
-   "x": 0.813,
-   "y": 0.44
+   "x": 0.515,
+   "y": 0.665
   },
   {
    "url": "/work/2025/impact-story-gar2025-landing/",
    "title": "Making disaster economics compelling for global policymakers",
    "topic": "",
-   "x": 0.558,
-   "y": 0.257
+   "x": 0.34,
+   "y": 0.762
   },
   {
    "url": "/work/2025/impact-story-platform-recovery-optimization/",
    "title": "Recovering platform performance after a cloud migration failure",
    "topic": "",
-   "x": 0.47,
-   "y": 0.165
+   "x": 0.177,
+   "y": 0.911
   },
   {
    "url": "/work/2026/impact-story-undrr-analytics-infrastructure/",
    "title": "Designing analytics infrastructure that measures audience quality, not just traffic",
    "topic": "",
-   "x": 0.554,
-   "y": 0.067
+   "x": 0.265,
+   "y": 0.942
   },
   {
    "url": "/work/2026/impact-story-undrr-analytics-overlay-mcp/",
    "title": "Putting GA4 where the work happens: an in-browser analytics overlay and its MCP bridge",
    "topic": "",
-   "x": 0.497,
-   "y": 0.37
+   "x": 0.256,
+   "y": 0.685
   }
  ],
  "edges": [
   {
-   "a": 5,
-   "b": 69,
-   "s": 0.67
+   "a": 0,
+   "b": 29,
+   "s": 0.62
+  },
+  {
+   "a": 0,
+   "b": 2,
+   "s": 0.61
+  },
+  {
+   "a": 2,
+   "b": 94,
+   "s": 0.8
+  },
+  {
+   "a": 2,
+   "b": 11,
+   "s": 0.79
+  },
+  {
+   "a": 2,
+   "b": 29,
+   "s": 0.79
+  },
+  {
+   "a": 3,
+   "b": 29,
+   "s": 0.77
+  },
+  {
+   "a": 2,
+   "b": 3,
+   "s": 0.76
+  },
+  {
+   "a": 3,
+   "b": 6,
+   "s": 0.75
+  },
+  {
+   "a": 4,
+   "b": 18,
+   "s": 0.62
+  },
+  {
+   "a": 4,
+   "b": 32,
+   "s": 0.61
   },
   {
    "a": 5,
    "b": 26,
-   "s": 0.64
+   "s": 0.78
   },
   {
    "a": 5,
-   "b": 7,
-   "s": 0.63
+   "b": 18,
+   "s": 0.77
   },
   {
-   "a": 6,
-   "b": 32,
-   "s": 0.71
-  },
-  {
-   "a": 6,
-   "b": 23,
-   "s": 0.64
+   "a": 5,
+   "b": 47,
+   "s": 0.76
   },
   {
    "a": 6,
    "b": 29,
-   "s": 0.6
+   "s": 0.89
+  },
+  {
+   "a": 6,
+   "b": 32,
+   "s": 0.85
+  },
+  {
+   "a": 6,
+   "b": 47,
+   "s": 0.84
+  },
+  {
+   "a": 7,
+   "b": 13,
+   "s": 0.77
   },
   {
    "a": 7,
    "b": 26,
-   "s": 0.65
+   "s": 0.77
   },
   {
    "a": 7,
-   "b": 8,
-   "s": 0.61
+   "b": 18,
+   "s": 0.74
+  },
+  {
+   "a": 8,
+   "b": 47,
+   "s": 0.75
+  },
+  {
+   "a": 8,
+   "b": 28,
+   "s": 0.74
+  },
+  {
+   "a": 8,
+   "b": 29,
+   "s": 0.73
+  },
+  {
+   "a": 9,
+   "b": 18,
+   "s": 0.68
+  },
+  {
+   "a": 9,
+   "b": 13,
+   "s": 0.68
+  },
+  {
+   "a": 9,
+   "b": 29,
+   "s": 0.67
+  },
+  {
+   "a": 10,
+   "b": 33,
+   "s": 0.67
+  },
+  {
+   "a": 10,
+   "b": 15,
+   "s": 0.66
+  },
+  {
+   "a": 10,
+   "b": 84,
+   "s": 0.66
+  },
+  {
+   "a": 11,
+   "b": 16,
+   "s": 0.94
   },
   {
    "a": 11,
    "b": 12,
-   "s": 0.91
-  },
-  {
-   "a": 11,
-   "b": 16,
-   "s": 0.82
+   "s": 0.92
   },
   {
    "a": 11,
    "b": 13,
-   "s": 0.74
+   "s": 0.87
   },
   {
    "a": 12,
    "b": 16,
-   "s": 0.85
+   "s": 0.9
   },
   {
    "a": 12,
    "b": 13,
-   "s": 0.82
+   "s": 0.86
   },
   {
    "a": 13,
    "b": 16,
-   "s": 0.73
+   "s": 0.88
   },
   {
    "a": 14,
    "b": 23,
-   "s": 0.68
+   "s": 0.86
   },
   {
    "a": 14,
    "b": 32,
-   "s": 0.61
+   "s": 0.7
+  },
+  {
+   "a": 6,
+   "b": 14,
+   "s": 0.68
   },
   {
    "a": 15,
    "b": 84,
-   "s": 0.85
+   "s": 0.91
   },
   {
    "a": 15,
    "b": 33,
-   "s": 0.61
+   "s": 0.82
   },
   {
    "a": 17,
    "b": 18,
-   "s": 0.76
+   "s": 0.84
   },
   {
    "a": 17,
-   "b": 91,
-   "s": 0.7
+   "b": 26,
+   "s": 0.83
   },
   {
    "a": 17,
-   "b": 27,
-   "s": 0.68
+   "b": 29,
+   "s": 0.82
   },
   {
    "a": 18,
    "b": 27,
-   "s": 0.8
+   "s": 0.9
   },
   {
    "a": 18,
-   "b": 91,
-   "s": 0.71
+   "b": 26,
+   "s": 0.89
+  },
+  {
+   "a": 18,
+   "b": 28,
+   "s": 0.87
   },
   {
    "a": 19,
    "b": 20,
-   "s": 0.72
+   "s": 0.68
+  },
+  {
+   "a": 19,
+   "b": 32,
+   "s": 0.65
   },
   {
    "a": 20,
    "b": 32,
+   "s": 0.73
+  },
+  {
+   "a": 20,
+   "b": 23,
+   "s": 0.66
+  },
+  {
+   "a": 21,
+   "b": 35,
    "s": 0.64
   },
   {
    "a": 22,
-   "b": 94,
-   "s": 0.63
+   "b": 29,
+   "s": 0.8
+  },
+  {
+   "a": 6,
+   "b": 22,
+   "s": 0.79
   },
   {
    "a": 22,
-   "b": 29,
-   "s": 0.61
+   "b": 94,
+   "s": 0.78
   },
   {
    "a": 23,
    "b": 32,
-   "s": 0.83
+   "s": 0.86
   },
   {
-   "a": 26,
-   "b": 92,
-   "s": 0.84
+   "a": 6,
+   "b": 23,
+   "s": 0.77
+  },
+  {
+   "a": 24,
+   "b": 47,
+   "s": 0.67
+  },
+  {
+   "a": 18,
+   "b": 24,
+   "s": 0.67
+  },
+  {
+   "a": 24,
+   "b": 29,
+   "s": 0.65
+  },
+  {
+   "a": 20,
+   "b": 25,
+   "s": 0.61
   },
   {
    "a": 26,
    "b": 27,
-   "s": 0.8
+   "s": 0.9
   },
   {
-   "a": 27,
-   "b": 92,
-   "s": 0.69
-  },
-  {
-   "a": 18,
+   "a": 26,
    "b": 28,
-   "s": 0.71
+   "s": 0.86
   },
   {
    "a": 27,
    "b": 28,
-   "s": 0.62
+   "s": 0.85
   },
   {
    "a": 28,
    "b": 29,
-   "s": 0.6
+   "s": 0.9
   },
   {
    "a": 29,
-   "b": 32,
-   "s": 0.61
-  },
-  {
-   "a": 29,
-   "b": 97,
-   "s": 0.61
+   "b": 47,
+   "s": 0.88
   },
   {
    "a": 30,
@@ -890,39 +1030,114 @@
    "s": 0.79
   },
   {
-   "a": 31,
-   "b": 34,
-   "s": 0.82
+   "a": 29,
+   "b": 30,
+   "s": 0.65
+  },
+  {
+   "a": 30,
+   "b": 32,
+   "s": 0.64
   },
   {
    "a": 31,
    "b": 60,
-   "s": 0.77
+   "s": 0.85
+  },
+  {
+   "a": 31,
+   "b": 34,
+   "s": 0.81
   },
   {
    "a": 31,
    "b": 59,
-   "s": 0.64
+   "s": 0.65
   },
   {
-   "a": 18,
+   "a": 29,
    "b": 32,
-   "s": 0.66
+   "s": 0.85
+  },
+  {
+   "a": 33,
+   "b": 84,
+   "s": 0.82
+  },
+  {
+   "a": 32,
+   "b": 33,
+   "s": 0.74
   },
   {
    "a": 34,
    "b": 60,
-   "s": 0.76
+   "s": 0.8
+  },
+  {
+   "a": 18,
+   "b": 34,
+   "s": 0.64
+  },
+  {
+   "a": 32,
+   "b": 35,
+   "s": 0.73
+  },
+  {
+   "a": 35,
+   "b": 47,
+   "s": 0.73
+  },
+  {
+   "a": 6,
+   "b": 35,
+   "s": 0.73
+  },
+  {
+   "a": 36,
+   "b": 37,
+   "s": 0.6
+  },
+  {
+   "a": 13,
+   "b": 37,
+   "s": 0.78
+  },
+  {
+   "a": 16,
+   "b": 37,
+   "s": 0.78
+  },
+  {
+   "a": 29,
+   "b": 37,
+   "s": 0.77
   },
   {
    "a": 38,
    "b": 88,
-   "s": 0.61
+   "s": 0.73
+  },
+  {
+   "a": 38,
+   "b": 40,
+   "s": 0.66
+  },
+  {
+   "a": 38,
+   "b": 50,
+   "s": 0.63
+  },
+  {
+   "a": 39,
+   "b": 94,
+   "s": 0.6
   },
   {
    "a": 40,
    "b": 88,
-   "s": 0.81
+   "s": 0.82
   },
   {
    "a": 40,
@@ -936,18 +1151,18 @@
   },
   {
    "a": 41,
-   "b": 85,
-   "s": 0.69
-  },
-  {
-   "a": 41,
    "b": 78,
-   "s": 0.65
+   "s": 0.73
   },
   {
    "a": 41,
-   "b": 52,
-   "s": 0.63
+   "b": 85,
+   "s": 0.7
+  },
+  {
+   "a": 41,
+   "b": 74,
+   "s": 0.68
   },
   {
    "a": 43,
@@ -956,23 +1171,28 @@
   },
   {
    "a": 43,
-   "b": 72,
+   "b": 75,
    "s": 0.7
   },
   {
    "a": 43,
-   "b": 75,
+   "b": 72,
    "s": 0.69
   },
   {
    "a": 44,
    "b": 72,
-   "s": 0.77
+   "s": 0.75
   },
   {
    "a": 44,
    "b": 75,
-   "s": 0.71
+   "s": 0.69
+  },
+  {
+   "a": 28,
+   "b": 47,
+   "s": 0.84
   },
   {
    "a": 49,
@@ -980,49 +1200,119 @@
    "s": 0.6
   },
   {
+   "a": 50,
+   "b": 74,
+   "s": 0.7
+  },
+  {
+   "a": 50,
+   "b": 95,
+   "s": 0.67
+  },
+  {
+   "a": 50,
+   "b": 78,
+   "s": 0.66
+  },
+  {
    "a": 51,
    "b": 55,
-   "s": 0.88
+   "s": 0.89
   },
   {
    "a": 51,
    "b": 98,
-   "s": 0.82
+   "s": 0.85
+  },
+  {
+   "a": 2,
+   "b": 51,
+   "s": 0.69
+  },
+  {
+   "a": 41,
+   "b": 52,
+   "s": 0.6
   },
   {
    "a": 55,
    "b": 98,
-   "s": 0.91
+   "s": 0.9
+  },
+  {
+   "a": 55,
+   "b": 99,
+   "s": 0.67
   },
   {
    "a": 57,
    "b": 58,
-   "s": 0.86
+   "s": 0.89
   },
   {
-   "a": 57,
-   "b": 69,
-   "s": 0.65
+   "a": 5,
+   "b": 57,
+   "s": 0.74
   },
   {
    "a": 12,
    "b": 57,
-   "s": 0.62
+   "s": 0.69
+  },
+  {
+   "a": 47,
+   "b": 58,
+   "s": 0.67
+  },
+  {
+   "a": 5,
+   "b": 58,
+   "s": 0.66
   },
   {
    "a": 59,
    "b": 60,
-   "s": 0.69
+   "s": 0.68
+  },
+  {
+   "a": 35,
+   "b": 59,
+   "s": 0.62
   },
   {
    "a": 61,
    "b": 63,
-   "s": 0.63
+   "s": 0.65
+  },
+  {
+   "a": 35,
+   "b": 61,
+   "s": 0.6
+  },
+  {
+   "a": 17,
+   "b": 63,
+   "s": 0.65
+  },
+  {
+   "a": 26,
+   "b": 63,
+   "s": 0.65
   },
   {
    "a": 64,
    "b": 65,
-   "s": 0.72
+   "s": 0.83
+  },
+  {
+   "a": 32,
+   "b": 64,
+   "s": 0.69
+  },
+  {
+   "a": 6,
+   "b": 64,
+   "s": 0.68
   },
   {
    "a": 65,
@@ -1030,29 +1320,54 @@
    "s": 0.62
   },
   {
-   "a": 67,
-   "b": 74,
-   "s": 0.62
+   "a": 17,
+   "b": 65,
+   "s": 0.61
   },
   {
-   "a": 32,
+   "a": 29,
+   "b": 66,
+   "s": 0.81
+  },
+  {
+   "a": 47,
+   "b": 66,
+   "s": 0.79
+  },
+  {
+   "a": 2,
+   "b": 66,
+   "s": 0.77
+  },
+  {
+   "a": 67,
+   "b": 74,
+   "s": 0.64
+  },
+  {
+   "a": 33,
    "b": 68,
-   "s": 0.61
+   "s": 0.6
   },
   {
    "a": 69,
    "b": 93,
-   "s": 0.73
+   "s": 0.75
+  },
+  {
+   "a": 5,
+   "b": 69,
+   "s": 0.74
   },
   {
    "a": 69,
    "b": 75,
-   "s": 0.7
+   "s": 0.72
   },
   {
    "a": 70,
    "b": 74,
-   "s": 0.66
+   "s": 0.62
   },
   {
    "a": 40,
@@ -1067,67 +1382,207 @@
   {
    "a": 71,
    "b": 74,
-   "s": 0.66
+   "s": 0.64
+  },
+  {
+   "a": 71,
+   "b": 75,
+   "s": 0.63
   },
   {
    "a": 72,
    "b": 75,
-   "s": 0.8
+   "s": 0.81
   },
   {
    "a": 74,
    "b": 78,
-   "s": 0.74
-  },
-  {
-   "a": 44,
-   "b": 74,
-   "s": 0.68
+   "s": 0.79
   },
   {
    "a": 74,
    "b": 75,
-   "s": 0.68
+   "s": 0.75
   },
   {
-   "a": 40,
+   "a": 74,
+   "b": 85,
+   "s": 0.73
+  },
+  {
+   "a": 77,
    "b": 78,
+   "s": 0.64
+  },
+  {
+   "a": 74,
+   "b": 77,
+   "s": 0.6
+  },
+  {
+   "a": 78,
+   "b": 85,
+   "s": 0.72
+  },
+  {
+   "a": 33,
+   "b": 80,
+   "s": 0.64
+  },
+  {
+   "a": 80,
+   "b": 84,
    "s": 0.63
+  },
+  {
+   "a": 15,
+   "b": 80,
+   "s": 0.62
+  },
+  {
+   "a": 81,
+   "b": 89,
+   "s": 0.65
   },
   {
    "a": 82,
    "b": 96,
+   "s": 0.66
+  },
+  {
+   "a": 66,
+   "b": 83,
+   "s": 0.64
+  },
+  {
+   "a": 47,
+   "b": 83,
+   "s": 0.63
+  },
+  {
+   "a": 32,
+   "b": 83,
    "s": 0.62
   },
   {
-   "a": 85,
-   "b": 95,
-   "s": 0.73
+   "a": 37,
+   "b": 84,
+   "s": 0.68
   },
   {
    "a": 85,
-   "b": 88,
-   "s": 0.71
-  },
-  {
-   "a": 88,
    "b": 95,
    "s": 0.76
   },
   {
+   "a": 88,
+   "b": 95,
+   "s": 0.75
+  },
+  {
+   "a": 35,
+   "b": 89,
+   "s": 0.64
+  },
+  {
+   "a": 3,
+   "b": 90,
+   "s": 0.74
+  },
+  {
+   "a": 17,
+   "b": 90,
+   "s": 0.64
+  },
+  {
+   "a": 5,
+   "b": 90,
+   "s": 0.62
+  },
+  {
+   "a": 17,
+   "b": 91,
+   "s": 0.79
+  },
+  {
+   "a": 18,
+   "b": 91,
+   "s": 0.77
+  },
+  {
    "a": 91,
    "b": 93,
-   "s": 0.73
+   "s": 0.75
+  },
+  {
+   "a": 26,
+   "b": 92,
+   "s": 0.79
+  },
+  {
+   "a": 27,
+   "b": 92,
+   "s": 0.69
+  },
+  {
+   "a": 18,
+   "b": 92,
+   "s": 0.65
   },
   {
    "a": 27,
    "b": 93,
-   "s": 0.66
+   "s": 0.72
   },
   {
-   "a": 40,
+   "a": 29,
+   "b": 94,
+   "s": 0.81
+  },
+  {
+   "a": 47,
+   "b": 94,
+   "s": 0.8
+  },
+  {
+   "a": 37,
    "b": 95,
-   "s": 0.65
+   "s": 0.7
+  },
+  {
+   "a": 47,
+   "b": 96,
+   "s": 0.71
+  },
+  {
+   "a": 2,
+   "b": 96,
+   "s": 0.69
+  },
+  {
+   "a": 94,
+   "b": 96,
+   "s": 0.69
+  },
+  {
+   "a": 29,
+   "b": 97,
+   "s": 0.74
+  },
+  {
+   "a": 32,
+   "b": 97,
+   "s": 0.71
+  },
+  {
+   "a": 98,
+   "b": 99,
+   "s": 0.7
+  },
+  {
+   "a": 78,
+   "b": 99,
+   "s": 0.64
   }
  ]
 }
