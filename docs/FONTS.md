@@ -24,7 +24,7 @@ Eleventy passthrough copies the whole font directory into the build output:
 
 - Source: `./src/components/kh-font`
 - Output: `build/assets/kh-font`
-- Config location: [`eleventy.js`](../eleventy.js) via `addPassthroughCopy({ "./src/components/kh-font": "assets/kh-font" })`
+- Config location: [`config/eleventy/assets-and-search.js`](../config/eleventy/assets-and-search.js) via `addPassthroughCopy({ "./src/components/kh-font": "assets/kh-font" })`
 
 ## CSS integration
 

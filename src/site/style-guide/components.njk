@@ -302,7 +302,7 @@ untouched and every other page that includes it is unaffected.
 Micro-visualisations in the register's voice: build-time data baked into
 markup, no JavaScript, no chart library. Styles live in
 `src/components/vf-componenet-rollup/_kh-dataviz.scss`; markup comes from
-partials in `src/site/_includes/partials/` fed by filters in `eleventy.js`.
+partials in `src/site/_includes/partials/` fed by filters registered from `config/eleventy/`.
 Every mark carries a text equivalent (visually-hidden text plus a `title`),
 so with CSS off each one degrades to a plain sentence or a list of links.
 
@@ -620,7 +620,7 @@ Example output:
 - Keep the snippet self-contained where possible. If it depends on a site-wide utility class (for example `kh-u-sr-only`), call that out in surrounding prose.
 - Do not duplicate the same example in both a fenced code block and the shortcode — let the shortcode handle both halves.
 
-Defined in: `src/components/vf-componenet-rollup/_kh-content.scss` (look for `.kh-demo`). Shortcode in: `eleventy.js` (`config.addPairedShortcode('codeAndDemo', …)`).
+Defined in: `src/components/vf-componenet-rollup/_kh-content.scss` (look for `.kh-demo`). Shortcode in: `config/eleventy/markdown.js` (`config.addPairedShortcode('codeAndDemo', …)`).
 {% endmarkdown %}
 
   </div>

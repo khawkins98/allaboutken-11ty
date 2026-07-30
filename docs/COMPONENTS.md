@@ -53,7 +53,7 @@ Templates consume component output mainly via class names and static assets:
 
 1. Add/update SCSS in `src/components/` (usually via `index.scss` imports or inline module styles).
 2. Use `kh-` prefix for class naming, matching existing conventions.
-3. If component needs static assets, place them under an existing passthrough path or add a passthrough rule in `eleventy.js`.
+3. If component needs static assets, place them under an existing passthrough path or add a passthrough rule in `config/eleventy/assets-and-search.js`.
 4. Add markup in templates/partials under `src/site/`.
 
 ## Build requirements and checks

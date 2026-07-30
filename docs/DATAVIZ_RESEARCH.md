@@ -58,7 +58,8 @@ rather than a continuously scaled font size.
 NOTE FROM KEN:  I like these
 
 ### Build-time SVG from an Eleventy shortcode
-A plain function in `eleventy.js` that takes an array and returns an SVG
+A plain shortcode registration in `config/eleventy/topic-visuals.js` or
+`config/eleventy/semantic-visuals.js` that takes an array and returns an SVG
 string. Output ships as static inline SVG.
 
 - **Where:** <https://www.11ty.dev/docs/languages/nunjucks/> · <https://chriskirknielsen.com/blog/manage-your-svg-files-with-eleventys-render-plugin/>
@@ -240,4 +241,3 @@ The dots were an explicit design choice for quietness over precision, and for
 an ambient mark that is not the primary way anyone reads the archive, that is
 a defensible trade. But it *is* a trade. If precision ever matters more than
 calm, repeating fixed-size ticks is the better-founded option.
-

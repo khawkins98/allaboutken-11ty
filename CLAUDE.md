@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Exceptions and gotchas that aren't obvious from reading the code or existing docs. For the full picture, read the source files directly -- `eleventy.js`, `package.json`, the templates, and the `docs/` directory.
+Exceptions and gotchas that aren't obvious from reading the code or existing docs. For the full picture, read the source files directly -- `eleventy.js`, its `config/eleventy/` registration modules, `package.json`, the templates, and the `docs/` directory.
 
 ## Quick reference
 
@@ -118,7 +118,7 @@ linked.
 
 ## Project structure (brief)
 
-- `eleventy.js` -- All config: filters, shortcodes, collections, image transform, Pagefind hook
+- `eleventy.js` and `config/eleventy/` -- Eleventy assembly and concern-specific registrations
 - `src/components/vf-componenet-rollup/` -- Sass entry point and all CSS
 - `src/site/` -- Templates, posts, data, includes
 - `scripts/generate-embeddings.mjs` -- Build-time vector embeddings

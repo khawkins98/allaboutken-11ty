@@ -1,8 +1,24 @@
 # Eleventy configuration reference
 
-Source file: `eleventy.js` at the repository root.
+Assembly file: `eleventy.js` at the repository root. Concern-specific
+registrations live in `config/eleventy/`.
 
-This document maps every plugin, server option, transform, filter, shortcode, passthrough rule, hook, collection, and the return config to its purpose and signature. Sections follow the order in which they appear in `eleventy.js`.
+This document maps every plugin, server option, transform, filter, shortcode,
+passthrough rule, hook, collection, and the return config to its purpose and
+signature. The split changes where the implementation lives, not the names
+available to templates.
+
+| Source | Responsibility |
+| --- | --- |
+| `eleventy.js` | Assembly, server options, common filters and return config |
+| `config/eleventy/images.js` | Image plugin and transform |
+| `config/eleventy/timeline.js` | Timeline, archive grouping and neighbourhood filters |
+| `config/eleventy/topic-visuals.js` | Topic helpers and sparkline shortcodes |
+| `config/eleventy/semantic-visuals.js` | Semantic SVG shortcodes |
+| `config/eleventy/stats.js` | Corpus statistics, series and length filters |
+| `config/eleventy/markdown.js` | Markdown library and markdown-backed shortcodes |
+| `config/eleventy/assets-and-search.js` | Passthrough rules, watching and Pagefind |
+| `config/eleventy/collections.js` | Collections |
 
 ---
 
@@ -332,7 +348,7 @@ config.on('eleventy.after', () => { ... });
 
 Runs `pagefind --site build --exclude-selectors "pre, code"` after every Eleventy build:
 
-- **Production** (`eleventy.js` with `ELEVENTY_ENV != 'development'`): runs synchronously with `execSync`; build fails if Pagefind fails.
+- **Production** (`ELEVENTY_ENV != 'development'`): runs synchronously with `execSync`; build fails if Pagefind fails.
 - **Development**: runs asynchronously with `exec` so dev rebuilds are not blocked. A reference to the child process is kept so overlapping rebuilds kill the previous run before starting a new one.
 
 The `--exclude-selectors "pre, code"` flag prevents code blocks from polluting keyword search results.

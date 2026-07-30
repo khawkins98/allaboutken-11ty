@@ -7,6 +7,7 @@ on:
     paths: [
       "src/**",
       "scripts/**",
+      "config/eleventy/**",
       "eleventy.js",
       "package.json",
       "yarn.lock",
