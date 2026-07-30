@@ -38,4 +38,14 @@ if "$hook_dir/commit-msg" "$msg_file" >/dev/null 2>&1; then
   fail 'empty description was accepted'
 fi
 
+printf '%s\n' 'Chore(deps):   Upgrade pagefind. ' > "$msg_file"
+"$hook_dir/prepare-commit-msg" "$msg_file"
+assert_subject 'chore(deps): Upgrade pagefind'
+"$hook_dir/commit-msg" "$msg_file"
+
+printf '%s\n' 'unknown(deps): description' > "$msg_file"
+if "$hook_dir/commit-msg" "$msg_file" >/dev/null 2>&1; then
+  fail 'unknown prefix with scope was accepted'
+fi
+
 echo 'Commit message hook tests passed.'

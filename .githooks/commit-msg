@@ -14,7 +14,7 @@ case "$subject" in
 esac
 
 allowed_prefixes="content | feature | fix | ci | chore"
-prefix_pattern='^(content|feature|fix|ci|chore): [^[:space:]].*'
+prefix_pattern='^(content|feature|fix|ci|chore)(\([a-z0-9 ._-]+\))?: [^[:space:]].*'
 
 fail() {
   echo ""
