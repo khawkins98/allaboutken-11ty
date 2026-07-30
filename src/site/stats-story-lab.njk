@@ -22,13 +22,10 @@ eleventyExcludeFromCollections: true
     The interactive script only adds coordinated highlighting and detail text.
     Every chart is rendered as meaningful HTML or SVG before JavaScript runs.
 
-    The ordinary production build regenerates embeddings and semanticMap.json,
-    but does not currently regenerate storyLab.json. To refresh everything after
-    adding or editing posts, run these in order:
-
-      yarn build
-      yarn story-lab
-      yarn eleventy
+    The production build first renders bootstrap HTML, regenerates embeddings
+    and all three ignored semantic data files, then renders the final site.
+    Adding or editing a post therefore requires only `yarn build`; none of the
+    generated JSON belongs in version control.
 
     Most experiments are generated from rules and will absorb new entries.
     Editorial exceptions and fixed thresholds are documented beside each view
@@ -37,7 +34,7 @@ eleventyExcludeFromCollections: true
   <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{ title }}</h1>
 
   <div class="kh-content">
-    <p><strong>An uncommitted playground, not a proposed page.</strong> Each view
+    <p><strong>An experimental playground, not a proposed page.</strong> Each view
     starts with a different question. The semantic model suggests which texts
     resemble one another, although many were already deliberately cross-linked;
     the interpretation still belongs to the writer.<sup><a class="kh-lab-citation" href="#source-pudding" aria-label="Source 10: The Pudding's guide to visual storytelling">[10]</a></sup></p>

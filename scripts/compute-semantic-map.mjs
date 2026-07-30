@@ -18,9 +18,9 @@
  * variance; they have no interpretation and are not labelled on the page. Only
  * relative distance is meaningful, and only roughly.
  *
- * Same one-build lag as compute-related.mjs: embeddings are computed from the
- * built HTML, and `yarn clean` wipes build/, so the output is committed and
- * each build publishes what the previous one measured.
+ * Like compute-related.mjs, this runs between a bootstrap Eleventy pass and the
+ * final pass. Its ignored output is therefore regenerated for every production
+ * build and never needs to be committed.
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'fs';

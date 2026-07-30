@@ -8,7 +8,7 @@ Custom styles and static UI assets live under `src/components/`.
 | --- | --- | --- |
 | `src/components/vf-componenet-rollup/` | Main Sass entry and style system | Compiled to `build/css/styles.css` by `yarn sass` / `yarn dev` |
 | `src/components/kh-ambience/` | Decorative ambient background SCSS mixin | Imported into the rollup entrypoint |
-| `src/components/kh-font/` | Self-hosted Recursive font files | Copied to `build/assets/kh-font/` via passthrough |
+| `src/components/kh-font/` | Self-hosted IBM Plex font files | Copied to `build/assets/kh-font/` via passthrough |
 | `src/components/ken-favicon/assets/` | Favicon/manifest assets | Copied to `build/assets/ken-favicon/assets/` via passthrough |
 
 > `vf-componenet-rollup` is intentionally misspelled for path stability. Do not rename it.
@@ -60,6 +60,6 @@ Templates consume component output mainly via class names and static assets:
 
 - `yarn dev`: local Sass watch + Eleventy dev server.
 - `yarn lint:css`: stylelint for SCSS/CSS changes.
-- `yarn build`: full production build (includes Sass + Eleventy + embeddings).
+- `yarn build`: full production build (bootstrap HTML, semantic data, final Eleventy).
 
 For broader CSS architecture constraints, see [`CSS_ARCHITECTURE.md`](CSS_ARCHITECTURE.md). For Eleventy passthrough details, see [`ELEVENTY_CONFIG.md`](ELEVENTY_CONFIG.md).

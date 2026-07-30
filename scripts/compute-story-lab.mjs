@@ -1,10 +1,12 @@
 /**
- * Build experimental narrative views from the committed semantic corpus map.
+ * Build experimental narrative views from the generated semantic corpus map.
  *
  * This is deliberately separate from compute-semantic-map.mjs. The semantic
  * map answers "what is close?"; this file adds editorial context (date, career
  * chapter and content type) and prepares several possible stories. It is a lab,
- * not production data, and can be removed without touching the search system.
+ * not production data, and its ignored output can be removed without touching
+ * the search system. The production build regenerates it before the final
+ * Eleventy pass.
  */
 
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'fs';

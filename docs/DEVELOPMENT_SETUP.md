@@ -40,7 +40,8 @@ This runs:
 yarn build
 ```
 
-This runs clean + sass + eleventy + embeddings.
+This renders bootstrap HTML, generates embeddings and derived semantic data,
+then renders the final Eleventy site.
 
 ## Recommended editor setup
 

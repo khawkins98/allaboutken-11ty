@@ -225,7 +225,7 @@ deliberately and echoes that were not directly linked.
 
 ## Topic-join bug uncovered during the experiment
 
-The committed `semanticMap.json` previously marked 33 entries as `unfiled` even
+The generated `semanticMap.json` previously marked 33 entries as `unfiled` even
 though all 100 current source entries have topics. Legacy `.html` URLs and
 custom `/work/` permalinks did not match source filenames. The uncommitted lab
 changes repair the join by stripping `.html` and falling back to title. This
@@ -284,11 +284,10 @@ note.
 ## Running the experiment
 
 ```bash
-node scripts/compute-story-lab.mjs
-yarn sass
-yarn eleventy
+yarn build
 ```
 
 Then open `/stats/story-lab/`. The page is `noindex` and excluded from
-collections. None of the experimental changes should be committed until a
-direction is chosen.
+collections. The build uses a bootstrap Eleventy pass to create embedding input,
+regenerates `related.json`, `semanticMap.json` and `storyLab.json`, then renders
+the final site. Those three ignored files are build artifacts, not source.

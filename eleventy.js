@@ -21,6 +21,7 @@ const registerAssetsAndSearch = require('./config/eleventy/assets-and-search');
 
 module.exports = function(config) {
   const isDev = process.env.ELEVENTY_ENV === 'development';
+  const isBootstrap = process.env.ELEVENTY_BOOTSTRAP === '1';
   registerImagePlugin(config, isDev);
   config.setServerOptions({
     showVersion: true,
@@ -215,7 +216,7 @@ module.exports = function(config) {
 
   registerMarkdown(config);
 
-  registerAssetsAndSearch(config, isDev);
+  registerAssetsAndSearch(config, isDev, isBootstrap);
 
   registerCollections(config);
 

@@ -8,7 +8,7 @@ Use this page as the entry point for repository documentation. It maps each doc 
 | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) | Branch, commit, and PR conventions | Contributors and assistants | You are preparing commits, PR titles, and merge flow |
 | [`GIT_HOOKS.md`](GIT_HOOKS.md) | Local hook behavior, commit/PR title enforcement, and troubleshooting | Contributors and maintainers | You need to set up hooks or debug local vs CI title/commit checks |
 | [`SCRIPTS.md`](SCRIPTS.md) | Source of truth for `package.json` scripts and lifecycle behavior | Contributors running local/CI commands | You need the right command and expected output |
-| [`FONTS.md`](FONTS.md) | Recursive font asset placement, build passthrough, and verification | Contributors editing typography or static assets | You are changing font files or `@font-face` wiring |
+| [`FONTS.md`](FONTS.md) | IBM Plex font asset placement, build passthrough, and verification | Contributors editing typography or static assets | You are changing font files or `@font-face` wiring |
 | [`DEPLOYMENT.md`](DEPLOYMENT.md) | Runtime architecture and platform ownership (Vercel, DNS, Pages, Worker) | Maintainer/operators | You are changing deploy config, DNS, or rewrites |
 | [`SEARCH.md`](SEARCH.md) | Keyword and semantic search architecture | Contributors touching search/indexing | You are changing Pagefind, embeddings, or search UI |
 | [`CSS_ARCHITECTURE.md`](CSS_ARCHITECTURE.md) | Sass structure and CSS toggle constraints | Contributors editing styles | You are adding or refactoring SCSS |

@@ -6,7 +6,7 @@ Exceptions and gotchas that aren't obvious from reading the code or existing doc
 
 ```bash
 yarn dev          # Development server (Sass watch + Eleventy --serve)
-yarn build        # Full production build (clean → sass → eleventy → embeddings)
+yarn build        # Full build (bootstrap HTML → semantic data → final Eleventy)
 yarn lint:css     # Lint SCSS files
 yarn lint:links   # Validate internal links/anchors in build/ (run after a build)
 ```

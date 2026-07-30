@@ -1,6 +1,6 @@
 const { execSync, exec } = require('child_process');
 
-module.exports = function registerAssetsAndSearch(config, isDev) {
+module.exports = function registerAssetsAndSearch(config, isDev, isBootstrap) {
   // copy js files
   config.addPassthroughCopy("./src/site/**/*.js");
   // pass through favicon assets
@@ -18,6 +18,12 @@ module.exports = function registerAssetsAndSearch(config, isDev) {
 
   // Watch source images for changes
   config.addWatchTarget("./src/site/images");
+
+  // The production build renders once to create embedding input, derives its
+  // semantic data, then renders the final site. Pagefind is useful only after
+  // that final pass; skipping it here avoids indexing disposable bootstrap
+  // output.
+  if (isBootstrap) return;
 
   // Post-build: generate Pagefind search index
   let pagefindChild = null;

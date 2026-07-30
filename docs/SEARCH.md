@@ -64,7 +64,9 @@ Both sides must use the same model:
 - Normalises vectors so that dot product equals cosine similarity.
 - Writes `build/semantic-search/vectors.json`.
 
-Run order: `yarn eleventy` (which also runs Pagefind) **then** `yarn embeddings`. `yarn build` does both automatically.
+The production run order is bootstrap Eleventy, embeddings and derived semantic
+data, then final Eleventy (which also runs Pagefind). `yarn build` orchestrates
+the complete sequence automatically.
 
 The `@huggingface/transformers` devDependency is ~476 MB because the ONNX runtime ships native binaries for every platform. There is no lighter alternative for build-time inference.
 

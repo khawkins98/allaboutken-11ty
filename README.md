@@ -20,7 +20,7 @@ Most posts are practitioner-level takes and technical tutorials. The [Work secti
 ```bash
 yarn install
 yarn dev        # Sass watch + Eleventy --serve
-yarn build      # Full production build: clean → sass → eleventy → embeddings
+yarn build      # Full build: bootstrap HTML → semantic data → final Eleventy
                 # The embeddings step downloads ~476 MB of ONNX Runtime on first run for the build-time ML toolchain.
                 # The MiniLM model is cached under .cache/transformers (CI restores it between runs).
 yarn lint:links # Validate internal links/anchors in build/ (run after a build)

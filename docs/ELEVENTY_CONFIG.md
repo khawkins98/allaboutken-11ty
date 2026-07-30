@@ -330,7 +330,7 @@ Used in `base.njk` to auto-generate `og:image` and `twitter:image` when no expli
 | `./src/site/**/*.js` | same relative path | All site JS files (scripts, service worker, semantic-search) |
 | `./src/components/ken-favicon/assets` | `assets/ken-favicon/assets/` | Favicon PNG/SVG/manifest files |
 | `./src/site/images` | `images/` | All post and page images (referenced as `/images/…` in templates) |
-| `./src/components/kh-font` | `assets/kh-font/` | Recursive variable font WOFF2 |
+| `./src/components/kh-font` | `assets/kh-font/` | IBM Plex Sans and Mono WOFF2 files |
 | `./src/site/**/*.html` | same relative path | Legacy Drupal redirect stubs |
 | `./src/site/**/*.txt` | same relative path | Downloadable text resources (starter kits, templates) |
 

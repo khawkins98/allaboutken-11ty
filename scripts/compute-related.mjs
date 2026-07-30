@@ -10,17 +10,13 @@
  * editorial topic tag. This turns that latent signal into navigation without
  * any new model, index or runtime cost.
  *
- * Ordering, and the one-build lag
- * -------------------------------
+ * Ordering
+ * --------
  * generate-embeddings.mjs reads the BUILT HTML, so it must run after Eleventy;
  * and `yarn clean` deletes build/ at the start of every build. The neighbours
- * therefore cannot be computed and consumed within a single pass.
- *
- * So the output is written into src/site/_data/ and committed. Each build
- * publishes the neighbours computed at the end of the previous one. In
- * practice this only matters for a brand new post, which has no neighbours
- * until the next build. Everything else stays correct, and the file is plain
- * JSON that can be inspected in a diff.
+ * therefore cannot be computed and consumed within one Eleventy pass. The
+ * production build renders bootstrap HTML, derives this ignored data file,
+ * then renders again so the published site always consumes fresh neighbours.
  *
  * Run: yarn related   (wired into `yarn build` after `yarn embeddings`)
  */
