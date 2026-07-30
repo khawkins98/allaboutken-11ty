@@ -64,6 +64,7 @@ for (const [url, e] of byUrl) {
 // ---- attach a primary topic, for colouring and for cluster labels ---------
 // Read straight from frontmatter: the vectors know nothing about taxonomy.
 const topicByUrl = new Map();
+const topicByTitle = new Map();
 for (const file of readdirSync(POSTS_DIR).filter((f) => f.endsWith('.njk'))) {
   const src = readFileSync(join(POSTS_DIR, file), 'utf-8');
   const fm = src.split('---')[1] || '';
@@ -72,11 +73,28 @@ for (const file of readdirSync(POSTS_DIR).filter((f) => f.endsWith('.njk'))) {
   const first = (block[1].match(/-\s+(.+)/) || [])[1];
   if (!first) continue;
   // Parent only: `AI > Claude Code` groups under AI.
-  topicByUrl.set(file.replace(/\.njk$/, ''), String(first).split('>')[0].trim());
+  const topic = String(first).split('>')[0].trim();
+  const base = file.replace(/\.njk$/, '');
+  topicByUrl.set(base, topic);
+  // Work entries use custom permalinks whose slug need not match the source
+  // filename. Title is the stable join shared by the source and vector data.
+  const title = ((fm.match(/^title:\s*['"]?(.+?)['"]?\s*$/m) || [])[1] || '')
+    .replace(/^['"]|['"]$/g, '')
+    .replace(/&(?:#39|apos);/g, "'")
+    .replace(/&quot;/g, '"')
+    .trim();
+  if (title) topicByTitle.set(title, topic);
 }
 for (const n of nodes) {
-  const slug = n.url.replace(/\/$/, '').split('/').pop();
-  n.topic = topicByUrl.get(slug) || '';
+  // Legacy post URLs end in `.html`; source basenames do not. Custom /work/
+  // permalinks may differ entirely, so fall back to the entry title.
+  const slug = n.url.replace(/\/$/, '').split('/').pop().replace(/\.html$/, '');
+  const decodedTitle = String(n.title || '')
+    .replace(/&#39;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&')
+    .trim();
+  n.topic = topicByUrl.get(slug) || topicByTitle.get(decodedTitle) || '';
 }
 
 const N = nodes.length;
