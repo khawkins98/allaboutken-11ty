@@ -262,31 +262,112 @@ const scatter = allEdges.map((edge) => ({
   second: edge.second
 }));
 
-const candidateTrails = [
+// ---- semantically assembled biographies ---------------------------------
+// Each biography keeps an editorial name and a small set of anchor entries,
+// but membership comes from the passage embeddings. The anchors define the
+// centre of the lens; candidates above its similarity floor are ranked by
+// score, then capped per publication year so a recent burst cannot erase the
+// earlier life of an idea. New writing can enter without changing this list.
+const semanticTrailSpecs = [
   {
     name: 'Content as infrastructure',
-    match: ['Better corporate design through information architecture', 'Introducing the Content-Action Model for Web Systems', 'Decoupling content from platforms across 80 properties', 'Content architecture: the delivery problem']
+    description: 'Content models, information architecture and platforms treated as organizational infrastructure.',
+    anchors: ['Better corporate design through information architecture', 'Introducing the Content-Action Model for Web Systems', 'Decoupling content from platforms across 80 properties', 'Content architecture: the delivery problem'],
+    minScore: 0.68,
+    limit: 7,
+    perYear: 1
   },
   {
-    name: 'A typeface for data',
-    match: ['What if: A web font for data', 'A data font, from the inside out']
+    name: 'Typography and data',
+    description: 'Type choices, data fonts and the work of keeping text legible, portable and meaningful.',
+    anchors: ['What if: A web font for data', 'A data font, from the inside out'],
+    minScore: 0.5,
+    limit: 6,
+    perYear: 2
   },
   {
-    name: 'Rebuilding the personal site',
-    match: ['A new site for little reason', 'Moving from Panini to Eleventy', 'A simpler, faster site: moving to pure Eleventy v3']
+    name: 'Rebuilding and preserving a personal site',
+    description: 'The publishing stack keeps changing; the longer project is keeping the archive together.',
+    anchors: ['A new site for little reason', 'Moving from Panini to Eleventy', 'A simpler, faster site: moving to pure Eleventy v3', 'What a personal archive remembers'],
+    minScore: 0.6,
+    limit: 8,
+    perYear: 1
   },
   {
-    name: 'Reusable systems becoming organizational systems',
-    match: ['Faster scientific websites through reusability', 'EMBL-EBI Day: Visual Framework 2.0 outreach', 'Enabling a more dynamic EMBL online', 'Building a component library adopted across 50+ scientific properties']
+    name: 'Reusable systems at organizational scale',
+    description: 'Components begin as technical reuse and become a way to coordinate institutions.',
+    anchors: ['Faster scientific websites through reusability', 'EMBL-EBI Day: Visual Framework 2.0 outreach', 'Enabling a more dynamic EMBL online', 'Building a component library adopted across 50+ scientific properties'],
+    minScore: 0.58,
+    limit: 7,
+    perYear: 1
   }
 ];
-const trails = candidateTrails.map((trail) => ({
-  name: trail.name,
-  nodes: trail.match
+
+const trailDot = (a, b) => {
+  let value = 0;
+  for (let index = 0; index < a.length; index += 1) value += a[index] * b[index];
+  return value;
+};
+const trailAverage = (vectors) => {
+  if (!vectors.length) return null;
+  const sum = new Array(vectors[0].length).fill(0);
+  for (const vector of vectors) {
+    for (let index = 0; index < sum.length; index += 1) sum[index] += vector[index];
+  }
+  const magnitude = Math.sqrt(trailDot(sum, sum));
+  return magnitude ? sum.map((value) => value / magnitude) : null;
+};
+
+const trailVectors = new Map();
+if (vectorCorpus) {
+  const wantedUrls = new Set(nodes.map((node) => node.url));
+  const chunksByUrl = new Map();
+  for (const chunk of vectorCorpus.chunks || []) {
+    if (!wantedUrls.has(chunk.url) || !Array.isArray(chunk.embedding)) continue;
+    if (!chunksByUrl.has(chunk.url)) chunksByUrl.set(chunk.url, []);
+    chunksByUrl.get(chunk.url).push(chunk.embedding);
+  }
+  for (const [url, embeddings] of chunksByUrl) {
+    // The first chunk contains header metadata. The biography should follow
+    // the writing, not shared masthead language; retain it only for a one-chunk
+    // entry where excluding it would remove the entry entirely.
+    trailVectors.set(url, trailAverage(embeddings.length > 1 ? embeddings.slice(1) : embeddings));
+  }
+}
+
+const trails = semanticTrailSpecs.map((spec) => {
+  const anchorNodes = spec.anchors
     .map((title) => nodes.find((node) => node.title === title))
-    .filter(Boolean)
-    .sort((a, b) => a.date.localeCompare(b.date))
-})).filter((trail) => trail.nodes.length >= 2);
+    .filter(Boolean);
+  const centroid = trailAverage(anchorNodes.map((node) => trailVectors.get(node.url)).filter(Boolean));
+  if (!centroid) {
+    return {
+      ...spec,
+      nodes: anchorNodes.sort((a, b) => a.date.localeCompare(b.date))
+    };
+  }
+
+  const perYear = new Map();
+  const selected = nodes
+    .filter((node) => trailVectors.get(node.url))
+    .map((node) => ({
+      ...node,
+      similarity: Math.round(trailDot(centroid, trailVectors.get(node.url)) * 1000) / 1000,
+      anchor: anchorNodes.some((anchor) => anchor.url === node.url)
+    }))
+    .filter((node) => node.similarity >= spec.minScore)
+    .sort((a, b) => b.similarity - a.similarity)
+    .filter((node) => {
+      const count = perYear.get(node.year) || 0;
+      if (count >= spec.perYear) return false;
+      perYear.set(node.year, count + 1);
+      return true;
+    })
+    .slice(0, spec.limit)
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  return { ...spec, nodes: selected };
+}).filter((trail) => trail.nodes.length >= 2);
 
 const counts = {
   entries: nodes.length,

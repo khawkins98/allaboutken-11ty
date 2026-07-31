@@ -38,14 +38,18 @@ Best raw material:
 
 ### 2. Biographies of a few ideas
 
-Curated small multiples. Each row is a named trajectory rather than an
-algorithmic component: content as infrastructure, a typeface for data, the
-personal publishing stack, and reusable systems becoming organizational
-systems.
+Semantically assembled small multiples. Each row retains an editorial name and
+two to four anchor entries. The generator averages the anchors' non-header
+passage embeddings, ranks the corpus against that centroid, applies a per-lens
+similarity floor, and caps entries from any one year before restoring chronology.
+The current lenses are content as infrastructure, typography and data,
+rebuilding and preserving a personal site, and reusable systems at
+organizational scale.
 
-This is the most promising form for a finished story because annotations can
-say *how* an idea changed. Embeddings can only say that texts resemble one
-another.
+This is a hybrid rather than an automated claim. Embeddings choose which texts
+resemble the lens and allow new writing to enter on a later build. The editorial
+name and annotation still say *how* the idea changed. A score is evidence of
+textual proximity, not development, influence or causality.
 
 ### 3. From argument to evidence
 

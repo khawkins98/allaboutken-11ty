@@ -205,8 +205,16 @@
   .kh-trail__plot {
     align-self: center;
     grid-column: 2;
+    grid-row: 1;
     height: 18px;
     position: relative;
+  }
+
+  .kh-trail__description {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+    text-wrap: pretty;
   }
 
   .kh-trail__line {
@@ -240,6 +248,7 @@
 
   .kh-trail__entries {
     grid-column: 2;
+    grid-row: 2;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -247,6 +256,12 @@
     li + li {
       margin-top: 0.25rem;
     }
+  }
+
+  .kh-trail__score {
+    float: right;
+    font-variant-numeric: tabular-nums;
+    margin-left: 0.75rem;
   }
 
   .kh-lab-heatmap th:not(:first-child),
