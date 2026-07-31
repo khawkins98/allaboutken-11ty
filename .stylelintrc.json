@@ -1,25 +1,40 @@
 {
   "customSyntax": "postcss-scss",
   "extends": [
-    "stylelint-config-recommended-scss"
+    "stylelint-config-standard-scss"
   ],
   "plugins": [
     "stylelint-scss",
     "@stylistic/stylelint-plugin"
   ],
+  "_ruleNotes": {
+    "selector-class-pattern, custom-property-pattern, scss/dollar-variable-pattern": "The site uses a kh-/vf- BEM dialect (block__element--modifier) for classes, custom properties and Sass variables. standard-scss expects plain kebab-case, which rejects every __ and -- in the codebase: 625 of the 694 findings. CLAUDE.md pins these names for markup and path stability, so the pattern rules are off rather than the names changed.",
+    "property-no-vendor-prefix, at-rule-no-vendor-prefix": "The prefixes here are load-bearing, not leftovers: -webkit-mask (Safari before 15.4), -webkit-text-size-adjust (iOS orientation), -webkit-appearance (vendored normalize) and @-moz-document, the Firefox-only opt-out from the expensive SVG filter documented in _kh-ambience.scss.",
+    "value-keyword-case": "Font family names are proper nouns; lowercasing Roboto/Helvetica/Consolas would be wrong. The rule stays on for every other property.",
+    "media-feature-range-notation": "Breakpoint queries are written with Sass variables, which this rule cannot convert. Enforcing range notation would rewrite only the two literal-valued queries and leave the rest in min-/max- form, adding inconsistency rather than removing it.",
+    "declaration-block-no-redundant-longhand-properties": "Both findings are unwanted. grid-column: span 2 leaves grid-column-end at auto, so the grid-column-end: span 2 that follows is not redundant; and the margin block it flags has each side individually documented as part of a float invariant.",
+    "normalize.scss": "Vendored third-party code, ignored rather than reformatted."
+  },
   "rules": {
     "no-duplicate-selectors": true,
     "no-descending-specificity": null,
     "number-max-precision": 4,
     "@stylistic/block-closing-brace-newline-after": "always",
     "max-nesting-depth": [3, { "ignore": ["blockless-at-rules"] }],
-    "selector-max-compound-selectors": 3
+    "selector-max-compound-selectors": 3,
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "scss/dollar-variable-pattern": null,
+    "property-no-vendor-prefix": null,
+    "at-rule-no-vendor-prefix": null,
+    "value-keyword-case": ["lower", { "ignoreProperties": ["/font/"] }],
+    "media-feature-range-notation": null,
+    "declaration-block-no-redundant-longhand-properties": [true, { "ignoreShorthands": ["grid-column", "margin"] }]
   },
   "ignoreFiles": [
     "build/**",
     "**/*.min.css",
-    "node_modules/**"
+    "node_modules/**",
+    "src/components/vf-componenet-rollup/normalize.scss"
   ]
 }
-
-

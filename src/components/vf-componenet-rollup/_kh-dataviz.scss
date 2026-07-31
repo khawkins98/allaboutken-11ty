@@ -1,4 +1,5 @@
 @use './settings' as *;
+
 // Data marks
 // ----------
 // Micro-visualisations in the datasheet register: the twelve-month pulse
@@ -175,6 +176,7 @@
     direction: rtl;
     margin: 0.25rem 0 1.5rem;
     overflow-x: auto;
+
     // Fade the older end so the strip reads as continuing past the edge.
     // Without this the hidden scrollbar leaves no hint that it scrolls.
     mask-image: linear-gradient(to right, transparent 0, #000 3rem);
@@ -187,6 +189,7 @@
 
   .kh-timeline__track {
     align-items: center;
+
     // The rule is drawn as a background line rather than a border, so it can
     // sit exactly on the marks' baseline while the padding below still gives
     // the year captions room. A border-bottom would be pushed down by that
@@ -195,6 +198,7 @@
     background-position: 0 calc(100% - 1.25rem);
     background-repeat: no-repeat;
     background-size: 100% 1px;
+
     // Explicit width rather than any shrink-wrap: see .kh-timeline above.
     // Set inline as --kh-track-width so the slot sizes below and the width
     // calculation have one source of truth.

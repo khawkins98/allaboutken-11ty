@@ -421,6 +421,7 @@
     overflow-x: auto;
     white-space: pre;
   }
+
   /* Override the site default .kh-content code background so the source
      reads as one continuous block instead of per-line white rectangles. */
   .kh-demo > pre code,
@@ -429,6 +430,7 @@
     padding: 0;
     border-radius: 0;
   }
+
   .kh-demo > pre::before {
     content: "Source";
     display: block;
@@ -469,6 +471,7 @@
       padding: 1rem 0;
     }
   }
+
   .kh-demo__live::before {
     content: "Result";
     display: block;

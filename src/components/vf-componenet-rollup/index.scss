@@ -23,16 +23,18 @@ html {
 
 // This acts as our root selector so we can use it to toggle the custom CSS
 body:has(#kh-css-toggle:checked) {
-  @include normalize.kh-normalize();
-  @include kh-content.kh-vf-content();
-  @include semantic-search.semantic-search-styles();
-  @include kh-datasheet.kh-datasheet();
-  @include kh-dataviz.kh-dataviz();
-  @include kh-story-lab.kh-story-lab();
+  @include normalize.kh-normalize;
+  @include kh-content.kh-vf-content;
+  @include semantic-search.semantic-search-styles;
+  @include kh-datasheet.kh-datasheet;
+  @include kh-dataviz.kh-dataviz;
+  @include kh-story-lab.kh-story-lab;
+
   --kh-color--grey: #707372;
   --kh-color--grey--darkest: #373a36;
   --kh-color--blue: #3b6fb6;
   --kh-color--blue--dark: #193f90;
+
   // Sunlight yellow, re-keyed from the old orange (#f49e17).
   // --sun is the fill/border tone; --sun--deep is the only one safe for text
   // on a light ground; --yellow--dark is the deeper band tone.
@@ -62,11 +64,13 @@ body:has(#kh-css-toggle:checked) {
 
   font-family: var(--kh-font-sans);
   position: relative;
+
   // Graph-paper ground. Two repeating gradients rather than an image, so it
   // costs nothing and stays crisp at any zoom. --kh-grid-size and
   // --kh-grid-ink are the two dials; set --kh-grid-ink to transparent to
   // switch the texture off entirely.
   background-color: var(--kh-ground);
+
   // Two tiers, like real graph paper: a fine grid, with a heavier line every
   // fifth one. Major layers are listed first so they sit above the minor.
   background-image:
@@ -74,6 +78,7 @@ body:has(#kh-css-toggle:checked) {
     repeating-linear-gradient(to bottom, var(--kh-grid-ink--major) 0 1px, transparent 1px var(--kh-grid-size--major)),
     repeating-linear-gradient(to right, var(--kh-grid-ink) 0 1px, transparent 1px var(--kh-grid-size)),
     repeating-linear-gradient(to bottom, var(--kh-grid-ink) 0 1px, transparent 1px var(--kh-grid-size));
+
   // Scrolls with the page: fixed made the paper feel like a backdrop behind
   // the content rather than the sheet the content is drawn on.
   background-attachment: scroll;
@@ -286,6 +291,7 @@ body:has(#kh-css-toggle:checked) {
     .kh-grid {
       grid-auto-flow: column;
     }
+
     .kh-grid__col-3 {
       grid-template-columns: repeat(3, 1fr);
     }
@@ -308,6 +314,7 @@ body:has(#kh-css-toggle:checked) {
     .kh-grid-stylized > :first-child {
       grid-column: span 1;
     }
+
     .kh-grid-stylized > *:last-child {
       grid-column-start: 2;
     }
@@ -368,6 +375,7 @@ body:has(#kh-css-toggle:checked) {
     --kh-button-background-color: #fafafa;
     --kh-button-border-color: var(--kh-color--blue);
     --kh-button-shadow-background-color: var(--kh-color--blue--dark);
+
     align-self: center;
     appearance: none;
     backface-visibility: hidden;
@@ -510,6 +518,7 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-summary {
     --kh-text-margin--bottom: 16px;
+
     align-self: start;
     gap: 0.5rem;
     column-gap: var(--kh-page-grid-gap);
@@ -588,7 +597,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-summary--highlight {
-    background: rgba(244, 158, 23, 0.1);
+    background: rgb(244 158 23 / 10%);
     padding: 1rem;
     border-radius: 0;
   }
@@ -683,6 +692,7 @@ body:has(#kh-css-toggle:checked) {
       display: none;
     }
   }
+
   // Footer navigation, grouped by kind.
   // This was one flat row of six links spanning five different kinds -- legal,
   // meta, primary content, a profile, a subscribe action and a UI control --
@@ -888,6 +898,7 @@ body:has(#kh-css-toggle:checked) {
       letter-spacing: 0.3em;
       transform: scale(0.95);
     }
+
     100% {
       opacity: 1;
       letter-spacing: normal;
@@ -987,9 +998,11 @@ body:has(#kh-css-toggle:checked) {
     transition: transform .2s ease;
     z-index: 1000;
   }
+
   .kh-skip-link:focus, .kh-skip-link:focus-visible {
     transform: translateY(0);
   }
+
   .kh-u-sr-only.kh-skip-link:focus, .kh-u-sr-only.kh-skip-link:focus-visible {
     clip-path: none;
     width: auto;
@@ -1079,6 +1092,7 @@ body:has(#kh-css-toggle:checked) {
   // Classic 88×31 badges: pixelated rendering + dark-mode aware SVG theme
   .kh-badges {
     --kh-cluster-margin: 0.5rem;
+
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -1209,6 +1223,7 @@ body:has(#kh-css-toggle:checked) {
       grid-column: 3 / span 1;
       grid-row: 1 / span 4;
     }
+
     margin-right: 30px;
     min-width: 220px;
     max-width: 220px;
@@ -1216,6 +1231,7 @@ body:has(#kh-css-toggle:checked) {
 
     img {
       display: block;
+
       // Enforce 3:2 crop similar to previous crop-cinema outputs
       aspect-ratio: 3 / 2;
       height: auto;
@@ -1250,7 +1266,7 @@ body:has(#kh-css-toggle:checked) {
   .kh-quote--featured {
     border-left: 3px solid var(--kh-color--yellow--dark);
     padding: 1rem 0 1rem 1.5rem;
-    margin: 0 0 2rem 0;
+    margin: 0 0 2rem;
     font-style: normal;
     font-weight: 400;
     color: var(--kh-color--text);
@@ -1269,6 +1285,7 @@ body:has(#kh-css-toggle:checked) {
     // Subtle opening quote mark
     &::before {
       content: '"';
+
       // "
       font-size: 2.5rem;
       line-height: 0;
@@ -1286,6 +1303,7 @@ body:has(#kh-css-toggle:checked) {
     &::after {
       content: '';
       position: absolute;
+
       // keep some space for the left border so it stays crisp
       inset: 2rem -1rem 1rem 0.65rem;
       z-index: -1;
@@ -1293,7 +1311,7 @@ body:has(#kh-css-toggle:checked) {
       transform: rotate(-0.5deg);
 
       // Fallback: use rgba of the brand yellow
-      background-color: rgba(255, 184, 28, 0.12);
+      background-color: rgb(255 184 28 / 12%);
 
       // Slight emphasis on print-like saturation
       filter: saturate(110%);

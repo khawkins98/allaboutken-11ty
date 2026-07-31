@@ -10,10 +10,12 @@
   --kh-color--coral: #bf4a26;
   --kh-rule: #ded2a8;
   --kh-rule--strong: #2b2b28;
+
   // Cells sit slightly LIGHTER than the graph-paper ground and are opaque,
   // so type never lands on a gridline. The paper reads in the margins and
   // between cells, which is where it belongs.
   --kh-panel-bg: #fffdf3;
+
   // Micro-type ink. The global grey (#707372) is only 4.6:1 on the sunlight
   // ground — legally AA but squinty at 11–12px letterspaced mono caps.
   // This darker grey clears 6:1 at the sizes the datasheet register uses.
