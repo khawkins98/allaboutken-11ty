@@ -41,7 +41,9 @@ Best raw material:
 Semantically assembled small multiples. Each row retains an editorial name and
 two to four anchor entries. The generator averages the anchors' non-header
 passage embeddings, ranks the corpus against that centroid, applies a per-lens
-similarity floor, and caps entries from any one year before restoring chronology.
+similarity floor, and caps additional candidates from any one year before
+restoring chronology. Editorial anchors remain in the lens regardless of their
+score.
 The current lenses are content as infrastructure, typography and data,
 rebuilding and preserving a personal site, and reusable systems at
 organizational scale.

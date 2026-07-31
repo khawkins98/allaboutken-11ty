@@ -266,8 +266,9 @@ const scatter = allEdges.map((edge) => ({
 // Each biography keeps an editorial name and a small set of anchor entries,
 // but membership comes from the passage embeddings. The anchors define the
 // centre of the lens; candidates above its similarity floor are ranked by
-// score, then capped per publication year so a recent burst cannot erase the
-// earlier life of an idea. New writing can enter without changing this list.
+// score, then additional candidates are capped per publication year so a
+// recent burst cannot erase the earlier life of an idea. Anchors always remain
+// in their lens; new writing can enter without changing this list.
 const semanticTrailSpecs = [
   {
     name: 'Content as infrastructure',
@@ -347,15 +348,17 @@ const trails = semanticTrailSpecs.map((spec) => {
     };
   }
 
-  const perYear = new Map();
-  const selected = nodes
+  const scored = nodes
     .filter((node) => trailVectors.get(node.url))
     .map((node) => ({
       ...node,
       similarity: Math.round(trailDot(centroid, trailVectors.get(node.url)) * 1000) / 1000,
       anchor: anchorNodes.some((anchor) => anchor.url === node.url)
-    }))
-    .filter((node) => node.similarity >= spec.minScore)
+    }));
+  const selectedAnchors = scored.filter((node) => node.anchor);
+  const perYear = new Map(selectedAnchors.map((node) => [node.year, 1]));
+  const candidates = scored
+    .filter((node) => !node.anchor && node.similarity >= spec.minScore)
     .sort((a, b) => b.similarity - a.similarity)
     .filter((node) => {
       const count = perYear.get(node.year) || 0;
@@ -363,7 +366,8 @@ const trails = semanticTrailSpecs.map((spec) => {
       perYear.set(node.year, count + 1);
       return true;
     })
-    .slice(0, spec.limit)
+    .slice(0, Math.max(0, spec.limit - selectedAnchors.length));
+  const selected = [...selectedAnchors, ...candidates]
     .sort((a, b) => a.date.localeCompare(b.date));
 
   return { ...spec, nodes: selected };
