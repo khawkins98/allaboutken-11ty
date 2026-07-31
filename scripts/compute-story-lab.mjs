@@ -289,7 +289,7 @@ const semanticTrailSpecs = [
   {
     name: 'Rebuilding and preserving a personal site',
     description: 'The publishing stack keeps changing; the longer project is keeping the archive together.',
-    anchors: ['A new site for little reason', 'Moving from Panini to Eleventy', 'A simpler, faster site: moving to pure Eleventy v3', 'What a personal archive remembers'],
+    anchors: ['A new site for little reason', 'Moving from Panini to Eleventy', 'A simpler, faster site: moving to pure Eleventy v3', 'I have been rearranging information for 24 years'],
     minScore: 0.6,
     limit: 8,
     perYear: 1
