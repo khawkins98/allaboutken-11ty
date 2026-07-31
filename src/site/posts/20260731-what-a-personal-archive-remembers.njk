@@ -1,0 +1,101 @@
+---
+title: "What a personal archive remembers"
+layout: layouts/post.njk
+teaser: "The Story Lab turned a site redesign into a larger project: bringing years of writing, photographs, and small software projects back together."
+date: 2026-07-31
+tags:
+  - posts
+topics:
+  - career reflection > personal archive
+  - data visualization > corpus storytelling
+  - static sites > personal publishing
+  - content strategy > digital preservation
+kens_status: draft
+image: /blog/20years-ibook-g4.jpg
+image_meta:
+  text: 'An archived website from 2001, shown on the sort of iBook I used to build it. The page survives because the Wayback Machine happened to keep a copy.'
+  credit: 'iBook G4 background image <a href="https://www.flickr.com/photos/adrians/60475676/">by Adriam MB</a>.'
+  altext: 'A translucent white iBook G4 displaying an archived early-2000s website for Environmental Media.'
+---
+
+{% markdown %}
+
+I started this redesign because I wanted the site to feel more like mine again. It ended up showing me what the site could not remember.
+
+The archive here now spans 2013 to 2026: roughly a hundred entries written on and off across different jobs, tools and recurring concerns. That is enough material to draw timelines, compare topics and find passages that unexpectedly resemble one another. It is also only a fraction of what I have made on the web.
+
+> **tl;dr**
+>
+> - The redesigned site treats the archive as a register rather than a stream of recent posts.
+> - A new Story Lab uses links, topics and semantic similarity to test several ways of reading across thirteen years of entries.
+> - The gaps are as revealing as the patterns: older blogs, photographs, writing published elsewhere and GitHub projects still sit in separate places.
+> - My longer project is to bring those things together without flattening them into one enormous feed.
+
+## A redesign became an archive project
+
+The visible changes began with typography, graph paper and a more technical datasheet vocabulary. Posts gained document references. The archive gained a timeline. Topic pages and small activity charts made it possible to browse by subject rather than only by publication date.
+
+Those details changed the basic question of the site. A blog normally asks, "What did I publish most recently?" A register asks, "What is here, and how does one thing relate to another?"
+
+That distinction matters once a site has been around for a while. The newest entry is not necessarily the best way into the work. A post from 2017 about information architecture might lead more naturally to a 2026 argument about content delivery than to whatever happened to be published in between. A type experiment from 2018 may make more sense beside later work on data fonts, embedded SVG text and the typography of the site itself.
+
+The [Corpus Story Lab](/stats/story-lab/) is where I have been testing those readings. It is deliberately a lab rather than a polished dashboard. One view looks for ideas that return after several years. Another reads topic activity against career chapters. The radial diagrams compare links I deliberately wrote with relationships suggested by passage embeddings. JavaScript adds highlighting and tooltips, but the underlying charts are rendered as HTML and SVG during the build.
+
+The most useful experiment may be "Biographies of a few ideas." I name a broad lens, such as typography and data or rebuilding a personal site, and choose a handful of anchor entries. The build averages their passage embeddings, finds other entries near that semantic centre, limits how many can come from one busy year, and puts the result back into chronological order.
+
+The model chooses candidates. It does not get to decide what the story means.
+
+## Similarity is a prompt for reading
+
+Semantic search is good at finding repeated language and adjacent subject matter. It is not evidence that one idea caused another, that an employer shaped a topic, or even that I consciously remembered an older post while writing a newer one.
+
+That limitation is useful. It keeps the visualizations in their proper role: prompts for close reading.
+
+Sometimes the model confirms an obvious connection because I linked the two entries myself. Sometimes it notices that an old technical concern and a newer organizational argument share a vocabulary. Sometimes it produces a plausible pair that falls apart as soon as I read both pieces. All three outcomes tell me something about the archive and about the method.
+
+The same caution applies to the career bands. They locate the writing in time; they do not claim an employer caused a theme. The publishing record is uneven, particularly around 2022 to 2024, and the recent surge would dominate a raw count. The visualizations have to show those conditions instead of quietly turning them into a cleaner story.
+
+## The archive starts before this archive
+
+My first website was a GeoCities page I made in high school around 1997. I will probably never find it again. My memory is that my first web editor was HotDog, a Windows HTML editor [first released in 1995](https://www.webdesignmuseum.org/software/hotdog-1-0-in-1995). That is not much of an archive, but it is a start.
+
+The first part I can recover properly is Stuffed in a Box. An [October 2002 snapshot](https://web.archive.org/web/20021012212136/http://www.stuffedinabox.com/) preserves a mostly "Coming Soon" site for my tiny web-design service. By April 2003, an [online résumé](https://web.archive.org/web/20030425093346/http://www.stuffedinabox.com/portfolio/resume/index.htm) listed Stuffed in a Box Design as a self-owned business and used proper em dashes. So, for the record, the dash habit predates generative AI by more than twenty years.
+
+The blog arrived on [5 September 2003](https://web.archive.org/web/20050206010037/http://www.stuffedinabox.com/archives/000004.html). Its first post, "I've done and will do," promised observations about newspapers, infographics, technology, politics and history. Not much happened after that. A post the following September admitted that it had been nearly a year since the last one. Still, enough survives to make the beginning less speculative.
+
+Other work survived by chance. The Wayback Machine kept a [2002 snapshot of an Environmental Media site](https://web.archive.org/web/20020120145620/https://envmedia.com/) I built in 2001 with search, Flash video and an online shop. In 2020, finding old newspaper clips prompted me to write about [publishing since the 2000s](/posts/20200208-its-been-20-years.html). Those fragments are valuable precisely because so much around them disappeared.
+
+Other material still exists but lives elsewhere:
+
+- photographs in [my Flickr archive](https://www.flickr.com/photos/khawkins04/), now subject to limits that make it a poor single home for them;
+- writing published through employers, projects and publications I did not control;
+- small tools and experiments spread across [my GitHub repositories](https://github.com/khawkins98);
+- older versions of this site preserved unevenly in Git history and the Wayback Machine.
+
+None of those collections is the same kind of thing. A photograph is not a post. A repository is not an essay. A work artifact needs context that a commit log cannot provide. Bringing them together should not mean pouring them all into one chronological feed and calling it an archive.
+
+## A personal site can be the index
+
+The better role for this site is an index I control.
+
+That may mean importing selected photographs with dates, captions and links back to their original context. It may mean short project records that connect a GitHub repository to the problem it tried to solve, the posts that described it and whatever eventually happened to it. It may mean recovering older writing where I have permission, while keeping clear provenance for where it first appeared.
+
+It also means accepting gaps. I do not want to manufacture a continuous personal history from incomplete evidence. "I cannot find this" is useful archive metadata. So is "this only survives as a screenshot" or "the original link is gone."
+
+Photography is the part I most want to bring back into the site as an active practice, not only a rescue operation. The current archive is heavily weighted toward words and software. More photographs would change both the texture of individual posts and the kinds of stories the site can tell over time.
+
+## What comes next
+
+The immediate work is modest:
+
+1. keep refining the Story Lab until a few views earn a permanent place;
+2. create a useful inventory of writing, photographs and projects that live elsewhere;
+3. recover selectively, with source links and dates intact;
+4. add structures for photographs and project records instead of forcing them into blog-post templates;
+5. make the archive easier to export so this exercise does not have to be repeated from scratch.
+
+The site has been rebuilt several times: Drupal, Gulp, Panini, Eleventy, then a much simpler Eleventy stack. Each migration focused on the machinery. This redesign is starting to feel different. The machinery still matters, but the real question is what I want it to keep.
+
+If you have recovered an old personal site, photo archive or scattered set of projects, I would be interested in what you preserved, what you left where it was, and what was already gone by the time you looked.
+
+{% endmarkdown %}
