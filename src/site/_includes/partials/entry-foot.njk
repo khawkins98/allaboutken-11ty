@@ -1,4 +1,4 @@
-{# The foot of an entry — feedback, then related entries and the byline.
+{# The foot of an entry — onward reading and authorship.
 
    Shared by layouts/post.njk and layouts/digesting.njk. It lived inline in
    post.njk, which meant digesting entries had a byline and nothing else: no
@@ -6,25 +6,20 @@
    from a link. Extracting it is what stops the two layouts drifting apart
    again.
 
-   Order: the feedback strip closes the article itself. "Was that useful?" is a
-   question about what you have just read, and it should be asked while that is
-   still what you have just read. It used to sit inside the closure block
-   below, which asked it after the subject had already changed to what else
-   there is.
+   Feedback sits at the end of the reading column in the calling layout. This
+   full-width block begins only after that question, when attention shifts to
+   what to read next and who wrote the piece.
 
-   Then two columns: onward links on the left, who wrote this on the right. The
-   DOM order matches that left-to-right order rather than being reversed with
-   `order` or grid placement, so keyboard tab order and screen-reader order
-   agree with what is on screen.
+   Two columns: onward links on the left, authorship on the right.
+
+   The DOM follows the desktop columns from left to right, so keyboard tab
+   order and screen-reader order agree with what is on screen. At narrower
+   widths the same two units stack without CSS reordering.
 
    Pages with no entry carry a short blurb in the footer instead -- see
    footer.njk. The homepage has neither, because the hero says it. #}
 <div class="kh-stack kh-u-padding__top--800" data-pagefind-ignore>
   {%- if page.url != '/privacy/' %}
-
-  {%- if comment != false %}
-  {% include "partials/feedback.njk" %}
-  {%- endif %}
 
   <div class="kh-entry-foot kh-u-do-not-print">
     {#- No wrapper heading. "Read next / By meaning, and in sequence" sat

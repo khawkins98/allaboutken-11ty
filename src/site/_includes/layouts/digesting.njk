@@ -31,10 +31,13 @@ templateEngineOverride: njk
     <p>
       <a href="/digesting">More things I've been digesting</a>
     </p>
+    {%- if comment != false %}
+    {% include "partials/feedback.njk" %}
+    {%- endif %}
   </div>
 </article>
 
-{#- The same closing block as a full entry: byline, feedback, related entries
+{#- The same closing block as a full entry: byline, related entries
     and the sequence rail. These pages used to carry the byline alone, so
     arriving on a digesting note from a link was a dead end -- nothing related,
     no position in the register, no way onward. -#}

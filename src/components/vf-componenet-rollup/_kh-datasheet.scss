@@ -691,19 +691,17 @@
     font-size: 0.8125rem;
   }
 
-  // Feedback strip
-  // --------------
-  // Sits directly under the byline. The count is a remote SVG whose value is
+  // Feedback
+  // --------
+  // Sits directly after the final sentence in the article's reading column,
+  // before the full-width onward-navigation and authorship block. The count is
+  // a remote SVG whose value is
   // unknown at build time, so it is labelled in the mono register rather than
   // built into a sentence -- the old wording read "1 people found this useful"
   // and no server-side plural is possible.
-  // Closes the article, above the two-column block below. It used to sit
-  // beside the byline and carried a transparent 3px left border to line up
-  // with that rule; now that it stands alone it aligns with the content like
-  // anything else, and a top rule marks the end of the piece.
   .kh-feedback {
     border-top: 1px solid var(--kh-rule--strong);
-    margin-bottom: 2.5rem;
+    margin: 2.5rem 0 0;
     padding-top: 1rem;
   }
 
@@ -722,22 +720,28 @@
   // a 16px bottom margin. Same hairline grammar as .kh-panel instead, with the
   // sun as the hover fill.
   .kh-feedback__action {
+    align-items: center;
     background: var(--kh-panel-bg);
     border: 1px solid var(--kh-rule--strong);
     color: inherit;
-    display: inline-block;
+    display: inline-flex;
     font-size: 15px;
     font-weight: 600;
     line-height: 1;
+    min-height: 40px;
     padding: 0.6rem 1rem;
     text-decoration: none;
-    transition: background-color 125ms linear;
+    transition: background-color 125ms linear, transform 125ms linear;
 
     &:hover,
     &:focus-visible {
       background: var(--kh-color--sun);
       color: inherit;
       text-decoration: none;
+    }
+
+    &:active {
+      transform: scale(0.96);
     }
   }
 
@@ -789,8 +793,7 @@
     margin-top: 0;
   }
 
-  // Stacked, the byline no longer needs its own top margin: the rule above it
-  // does the separating.
+  // Stacked, the byline needs space after the onward-reading column.
   .kh-entry-foot .kh-author {
     margin-top: 2.5rem;
   }
@@ -829,11 +832,8 @@
 
   // Byline
   // ------
-  // The article's closure: sits under the prose, above the feedback strip and
-  // "Read next". Left rule rather than a filled box -- it is an aside, not a
-  // call to action.
-  // Padding-top matches .kh-readnext so the first line of each column sits at
-  // the same height below their shared rule.
+  // The article's authorship closure. Padding-top matches .kh-readnext so the
+  // first line of each column sits at the same height below its rule.
   .kh-author {
     border-left: 3px solid var(--kh-color--sun);
     border-top: 1px solid var(--kh-rule);

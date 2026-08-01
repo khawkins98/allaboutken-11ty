@@ -96,6 +96,12 @@ templateEngineOverride: njk
       {%- endif %}
       {{ content | safe }}
     </div>
+    {#- Feedback belongs to the reading column: it asks about the sentence the
+        reader just finished, before attention shifts to authorship or onward
+        navigation in the full-width entry foot below. -#}
+    {%- if comment != false %}
+    {% include "partials/feedback.njk" %}
+    {%- endif %}
   </div>
 </article>
 
