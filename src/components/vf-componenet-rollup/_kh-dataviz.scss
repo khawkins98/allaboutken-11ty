@@ -334,8 +334,9 @@
     display: block;
   }
 
-  // Sequence rail (foot of a post). A hairline with typed marks riding it;
-  // each mark is a link with a 24px hit target.
+  // Sequence rail (foot of a post). A hairline with typed marks riding it.
+  // On wide screens each stop becomes an architectural callout: a leader
+  // joins the exact position to a dated title above or below the datum line.
   .kh-seq {
     margin-bottom: 1rem;
   }
@@ -362,6 +363,7 @@
   .kh-seq__track {
     align-items: center;
     display: flex;
+    height: 40px;
     justify-content: space-between;
     list-style: none;
     margin: 0;
@@ -382,7 +384,29 @@
 
   .kh-seq__item {
     display: flex;
+    flex: 1 1 0;
     margin: 0;
+    min-width: 0;
+  }
+
+  // The label is visible at the wide breakpoint. Keeping the whole callout
+  // as one link makes the label, leader and mark one generous target instead
+  // of asking a reader to hit a ten-pixel square.
+  .kh-seq__callout {
+    align-items: center;
+    color: var(--kh-viz-ink);
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    min-width: 40px;
+    position: relative;
+    text-decoration: none;
+    width: 100%;
+  }
+
+  .kh-seq__label,
+  .kh-seq__leader {
+    display: none;
   }
 
   .kh-seq__mark {
@@ -391,7 +415,6 @@
     height: 24px;
     justify-content: center;
     position: relative;
-    text-decoration: none;
     width: 24px;
 
     // The shape. Background masks the rail so open marks stay legible.
@@ -405,11 +428,12 @@
       width: 10px;
     }
 
-    &:hover::before,
-    &:focus-visible::before {
-      outline: 1px solid var(--kh-viz-ink);
-      outline-offset: 2px;
-    }
+  }
+
+  .kh-seq__callout:not(.kh-seq__callout--current):hover .kh-seq__mark::before,
+  .kh-seq__callout:focus-visible .kh-seq__mark::before {
+    outline: 1px solid var(--kh-viz-ink);
+    outline-offset: 2px;
   }
 
   .kh-seq__mark--digesting::before {
@@ -432,6 +456,111 @@
     border: 0;
     outline: 1px solid var(--kh-color--coral);
     outline-offset: 2px;
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-seq__track {
+      height: 12rem;
+    }
+
+    .kh-seq__item,
+    .kh-seq__callout {
+      height: 100%;
+    }
+
+    .kh-seq__label {
+      color: var(--kh-viz-ink);
+      display: block;
+      left: 0.25rem;
+      padding: 0.35rem 0;
+      position: absolute;
+      right: 0.25rem;
+      text-align: left;
+    }
+
+    .kh-seq__item--above .kh-seq__label {
+      border-bottom: 1px solid var(--kh-rule);
+      bottom: calc(50% + 2.25rem);
+    }
+
+    .kh-seq__item--below .kh-seq__label {
+      border-top: 1px solid var(--kh-rule);
+      top: calc(50% + 2.25rem);
+    }
+
+    .kh-seq__date,
+    .kh-seq__title {
+      display: block;
+    }
+
+    .kh-seq__date {
+      color: var(--kh-ink-muted);
+      font-family: var(--kh-font-mono);
+      font-size: 10px;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.15rem;
+    }
+
+    .kh-seq__title {
+      display: -webkit-box;
+      font-size: 12px;
+      line-height: 1.3;
+      overflow: hidden;
+      text-wrap: pretty;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    // A slight lean keeps the leader from reading as a chart gridline. Its
+    // outer end meets the label rule; its inner end terminates at the mark.
+    .kh-seq__leader {
+      border-left: 1px solid var(--kh-rule--strong);
+      display: block;
+      height: 2.25rem;
+      left: 50%;
+      position: absolute;
+      transform: skewX(-14deg);
+      width: 1px;
+    }
+
+    .kh-seq__item--above .kh-seq__leader {
+      bottom: 50%;
+      transform-origin: bottom;
+    }
+
+    .kh-seq__item--below .kh-seq__leader {
+      top: 50%;
+      transform: skewX(14deg);
+      transform-origin: top;
+    }
+
+    .kh-seq__mark {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .kh-seq__callout:not(.kh-seq__callout--current):hover .kh-seq__title,
+    .kh-seq__callout:focus-visible .kh-seq__title {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    .kh-seq__callout:focus-visible {
+      outline: none;
+    }
+
+    .kh-seq__callout:focus-visible .kh-seq__label {
+      outline: 1px solid var(--kh-viz-ink);
+      outline-offset: 2px;
+    }
+
+    .kh-seq__callout--current .kh-seq__date,
+    .kh-seq__callout--current .kh-seq__title {
+      color: var(--kh-color--coral);
+    }
   }
 
   // Key. States the encoding instead of leaving it to be discovered by
@@ -460,10 +589,6 @@
     height: auto;
     width: auto;
 
-    &:hover::before,
-    &:focus-visible::before {
-      outline: none;
-    }
   }
 
   .kh-seq__mark--current.kh-seq__mark--key::before {

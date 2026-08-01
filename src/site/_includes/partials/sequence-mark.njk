@@ -12,23 +12,36 @@
    discover by hovering each one in turn, which is not a thing anyone does.
    A datasheet states its legend; so does this.
 
-   Every mark is a real link with the title and date in both the tooltip and
-   visually-hidden text, so with CSS off this degrades to a plain list of
-   nearby entries. That is also why the "Previously:" and "Next:" lines were
-   dropped from the entry foot: they restated two of these marks in prose. #}
+   Each non-current callout is one link: label, leader and mark share the same
+   target. At wide viewports the visible labels alternate above and below the
+   rail, in the manner of architectural reference marks; narrow viewports
+   retain the compact rail and expose the same titles to assistive technology.
+   With CSS off this degrades to a plain list of dated links. That is also why
+   the "Previously:" and "Next:" lines were dropped from the entry foot: they
+   restated two of these marks in prose. #}
 {%- if seqNeighbours and seqNeighbours.length > 1 -%}
 <nav class="kh-seq" aria-label="Nearby entries in the register" data-pagefind-ignore>
   <p class="kh-meta kh-seq__caption"><span class="kh-seq__dir" aria-hidden="true">← older</span><span class="kh-seq__dir" aria-hidden="true">newer →</span></p>
   <ol class="kh-seq__track">
     {%- for n in seqNeighbours %}
-    <li class="kh-seq__item">
+    <li class="kh-seq__item kh-seq__item--{% if loop.index0 % 2 == 0 %}above{% else %}below{% endif %}">
       {%- if n.current %}
-      <span class="kh-seq__mark kh-seq__mark--{{ n.type }} kh-seq__mark--current" title="{{ n.dateLabel }} — this entry" aria-current="page">
-        <span class="kh-u-sr-only">This entry ({{ n.dateLabel }})</span>
+      <span class="kh-seq__callout kh-seq__callout--current" title="{{ n.dateLabel }} — {{ n.title }} — this entry" aria-label="{{ n.title }} ({{ n.dateLabel }}), this entry" aria-current="page">
+        <span class="kh-seq__label">
+          <span class="kh-seq__date">{{ n.dateLabel }} · you are here</span>
+          <span class="kh-seq__title">{{ n.title }}</span>
+        </span>
+        <span class="kh-seq__leader" aria-hidden="true"></span>
+        <span class="kh-seq__mark kh-seq__mark--{{ n.type }} kh-seq__mark--current" aria-hidden="true"></span>
       </span>
       {%- else %}
-      <a class="kh-seq__mark kh-seq__mark--{{ n.type }}" href="{{ n.url | url }}" title="{{ n.dateLabel }} — {{ n.title }}">
-        <span class="kh-u-sr-only">{{ n.title }} ({{ n.dateLabel }})</span>
+      <a class="kh-seq__callout" href="{{ n.url | url }}" title="{{ n.dateLabel }} — {{ n.title }}" aria-label="{{ n.title }} ({{ n.dateLabel }})">
+        <span class="kh-seq__label">
+          <span class="kh-seq__date">{{ n.dateLabel }}</span>
+          <span class="kh-seq__title">{{ n.title }}</span>
+        </span>
+        <span class="kh-seq__leader" aria-hidden="true"></span>
+        <span class="kh-seq__mark kh-seq__mark--{{ n.type }}" aria-hidden="true"></span>
       </a>
       {%- endif %}
     </li>

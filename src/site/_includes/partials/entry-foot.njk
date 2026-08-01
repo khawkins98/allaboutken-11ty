@@ -10,7 +10,9 @@
    full-width block begins only after that question, when attention shifts to
    what to read next and who wrote the piece.
 
-   Two columns: onward links on the left, authorship on the right.
+   Related links and authorship form the first row at wide viewports. The
+   chronological sequence takes the full second row: seven titled callouts
+   need drawing-board width, not half a column.
 
    The DOM follows the desktop columns from left to right, so keyboard tab
    order and screen-reader order agree with what is on screen. At narrower
@@ -21,26 +23,30 @@
 <div class="kh-stack kh-u-padding__top--800" data-pagefind-ignore>
   {%- if page.url != '/privacy/' %}
 
-  <div class="kh-entry-foot kh-u-do-not-print">
+  {%- set near = related[page.url] -%}
+  <div class="kh-entry-foot{% if not near or not near.length %} kh-entry-foot--no-related{% endif %} kh-u-do-not-print">
     {#- No wrapper heading. "Read next / By meaning, and in sequence" sat
         directly above "Closest in meaning / By similarity, not by tag" --
         two rules and two straplines for one idea. The related list owns the
         h2; the rail gets an h3 under it. -#}
-    <section class="kh-readnext">
-      {% include "partials/related-semantic.njk" %}
+    {%- if near and near.length %}
+      <section class="kh-readnext">
+        {% include "partials/related-semantic.njk" %}
+      </section>
+    {%- endif %}
 
-      {#- The rail is orientation -- where this entry sits in the register --
-          rather than a reading list; the related entries above are the reading
-          list. Every mark is a link, so the adjacent entries are still one
-          click away, which is why the "Previously:" and "Next:" lines that
-          used to sit here are gone: they restated two of these marks in prose.
-          -#}
-      <h3 class="kh-text-heading--3 kh-readnext__seq-head">Read next in sequence</h3>
+    {% include "partials/author-note.njk" %}
+
+    {#- The rail is orientation -- where this entry sits in the register --
+        rather than a semantic reading list. It follows the two-column row in
+        the DOM and spans both columns on wide screens, so reading and keyboard
+        order remain the same. Every non-current callout is a link, which is
+        why the old "Previously:" and "Next:" lines are not repeated here. -#}
+    <section class="kh-sequence">
+      <h3 class="kh-text-heading--3 kh-sequence__head">Read next in sequence</h3>
       {%- set seqNeighbours = collections.allContent | neighbourhood(page.url, 3) %}
       {% include "partials/sequence-mark.njk" %}
     </section>
-
-    {% include "partials/author-note.njk" %}
   </div>
   {%- endif %}
 </div>

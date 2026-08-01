@@ -322,7 +322,7 @@ colour together, never colour alone.
 | Mark | Where | Encoding |
 |------|-------|----------|
 | Pulse strip (`partials/pulse-strip.njk`, `pulseMonths` filter) | post masthead | Twelve months, one 2px tick per entry — counts are countable, not just proportional. Ticks stack articles / digesting / impact bottom-up; a coral tick below the baseline marks this post's month. |
-| Sequence rail (`partials/sequence-mark.njk`, `neighbourhood` filter) | post foot, above prev/next | This entry and up to three neighbours either side on a hairline, oldest left. Every mark is a link; the current entry wears a coral outline. |
+| Sequence rail (`partials/sequence-mark.njk`, `neighbourhood` filter) | post foot | This entry and up to three neighbours either side on a hairline, oldest left. At wide viewports, alternating leader lines join each mark to its dated, linked title; narrow viewports retain the compact rail. The current entry wears a filled coral mark and a plain-text label. |
 | Length gauge (`partials/length-gauge.njk`, `lengthFrame` filter) | post byline | Coral marker at this post's percentile rank among all `posts`-tagged entries; centre tick is the median. Position is the only encoding. |
 | Topic tally (`topicTally` filter) | post byline | `×N` after a topic: how many entries share it. A ranked list with honest numbers, not a word cloud. |
 

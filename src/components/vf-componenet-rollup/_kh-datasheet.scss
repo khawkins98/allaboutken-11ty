@@ -785,10 +785,6 @@
     color: var(--kh-color--coral);
   }
 
-  .kh-readnext__seq-head {
-    margin-top: 1.75rem;
-  }
-
   .kh-readnext > .kh-section-head:first-child {
     margin-top: 0;
   }
@@ -814,6 +810,19 @@
     padding-top: 1rem;
   }
 
+  // The architectural sequence drawing follows the two-column closure and
+  // owns a full-width rule. Seven labelled stops need the drawing-board width;
+  // in the old half-column each title collapsed into a stack of single words.
+  .kh-sequence {
+    border-top: 1px solid var(--kh-rule);
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+  }
+
+  .kh-sequence__head {
+    margin-top: 0;
+  }
+
   // The foot of an entry, two columns once there is room: onward links left,
   // byline right. No grid-area placement -- the DOM is already in this order,
   // so tab order and screen-reader order match the screen.
@@ -827,6 +836,17 @@
 
     .kh-entry-foot .kh-readnext {
       margin-top: 0;
+    }
+
+    .kh-entry-foot .kh-sequence {
+      grid-column: 1 / -1;
+    }
+
+    // Preserve the authorship column when the semantic computation honestly
+    // returns no neighbours; do not manufacture an empty left-hand panel just
+    // to make CSS Grid place the next item in column two.
+    .kh-entry-foot--no-related .kh-author {
+      grid-column: 2;
     }
   }
 
