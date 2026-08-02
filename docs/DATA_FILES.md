@@ -1,6 +1,6 @@
 # Data files reference
 
-Global data files live in `src/site/_data/`. Eleventy exposes them as top-level template variables matching the filename (without extension). Templates access them as `{{ siteConfig.siteInformation.title }}` or `{% for project in garage %}`.
+Global data files live in `src/site/_data/`. Eleventy exposes them as top-level template variables matching the filename (without extension). Templates access them as `{{ siteConfig.siteInformation.title }}` or `{% for project in garage %}`. `siteConfig.json`, `garage.json`, and `timelineGaps.json` are maintained source; `related.json`, `semanticMap.json`, and `storyLab.json` are ignored build artifacts.
 
 ---
 
@@ -151,3 +151,138 @@ There is no enforced vocabulary; use whatever label is accurate:
 | `active` | Under ongoing development |
 | `experimental` | Early-stage, may change significantly |
 | `archived` | No longer maintained but preserved for reference |
+
+---
+
+## `timelineGaps.json`
+
+**Template variable:** `timelineGaps`
+
+**Status:** Tracked, hand-maintained source data
+
+Maps an empty calendar year or consecutive year range to the short caption shown when the register timeline collapses that gap.
+
+### Schema
+
+```json
+{
+  "YYYY": "short caption",
+  "YYYY-YYYY": "short caption"
+}
+```
+
+Keys must match the year or inclusive year range produced by the `collapseEmptyYears` filter. Values are plain-text captions. The `_comment` key in the current file records the same maintenance guidance for editors.
+
+### Consumers and editing guidance
+
+- `src/site/index.njk` and the post and digesting layouts pass this object to `collapseEmptyYears`.
+- `src/site/_includes/partials/pulse-strip.njk` renders the selected caption beneath the collapsed gap and in its tooltip.
+- Edit this file when a known publication gap needs purposeful copy. Keep captions short.
+- Deleting or omitting a matching key is safe: the timeline falls back to a plain `no posts` note.
+- No generation command is required; changes are picked up by `yarn dev`, `yarn eleventy`, or `yarn build`.
+
+---
+
+## `related.json`
+
+**Template variable:** `related`
+
+**Status:** Generated and ignored; do not edit or commit
+
+**Generate with:** `yarn related` after `yarn embeddings`, or run `yarn build`
+
+Maps an entry's exact served URL to up to three semantically similar entries. Only neighbours with cosine similarity >= 0.55 are included, so an entry may have no key.
+
+### Practical schema
+
+```json
+{
+  "/posts/example.html": [
+    {
+      "url": "/posts/another-entry/",
+      "title": "Another entry",
+      "score": 0.63
+    }
+  ]
+}
+```
+
+`url` and the object keys are served paths, `title` is display text from the embedding corpus, and `score` is cosine similarity rounded to two decimal places.
+
+`src/site/_includes/partials/related-semantic.njk` looks up `related[page.url]`; `entry-foot.njk` includes that partial for entry layouts. Exact URL forms matter, including legacy `.html` permalinks. To change the algorithm, threshold, or neighbour cap, edit `scripts/compute-related.mjs` and regenerate rather than editing the JSON.
+
+If `build/semantic-search/vectors.json` is absent, the generator exits successfully without output and templates render no related list.
+
+---
+
+## `semanticMap.json`
+
+**Template variable:** `semanticMap`
+
+**Status:** Generated and ignored; do not edit or commit
+
+**Generate with:** `yarn semantic-map` after `yarn embeddings`, or run `yarn build`
+
+Contains the entry-level semantic graph and deterministic two-dimensional layouts used by `src/site/stats.njk`, `src/site/stats-map-variants.njk`, semantic visualization shortcodes, and the Story Lab generator.
+
+### Practical schema
+
+```json
+{
+  "generated": "method description",
+  "edgeMin": 0.6,
+  "nodes": [
+    {
+      "url": "/posts/example.html",
+      "title": "Example",
+      "topic": "information architecture",
+      "x": 0.5,
+      "y": 0.4,
+      "fx": 0.6,
+      "fy": 0.3,
+      "degree": 2
+    }
+  ],
+  "order": [{ "i": 0, "topic": "information architecture" }],
+  "edges": [{ "a": 0, "b": 4, "s": 0.68 }]
+}
+```
+
+- `x`/`y` are normalized classical-MDS coordinates; `fx`/`fy` are deterministic force-layout coordinates. Neither axis has semantic meaning.
+- `a`, `b`, and `i` are indexes into `nodes`; `s` is cosine similarity rounded to two decimals.
+- `topic` is the parent portion of the first frontmatter topic, and `degree` counts retained graph connections.
+- `order` groups node indexes for matrix and arc variants.
+
+The generator needs `build/semantic-search/vectors.json` and at least three eligible `/posts/` or `/work/` entries. Missing or insufficient input is non-fatal and leaves any existing artifact untouched. Change projection or edge rules in `scripts/compute-semantic-map.mjs`, then regenerate.
+
+---
+
+## `storyLab.json`
+
+**Template variable:** `storyLab`
+
+**Status:** Generated and ignored; do not edit or commit
+
+**Generate with:** `yarn story-lab` after `yarn semantic-map`, or run `yarn build`
+
+Supplies the experimental `/stats/story-lab/` page in `src/site/stats-story-lab.njk`. The generator combines `semanticMap.json`, post frontmatter and source links, rendered entry HTML, and the embedding corpus into ready-to-render narrative and visualization data.
+
+### Practical schema
+
+The top-level object contains:
+
+| Field | Purpose |
+| --- | --- |
+| `generated`, `counts`, `years` | Provenance, corpus totals, and displayed years |
+| `nodes`, `allEdges` | Dated and classified entries plus enriched semantic links |
+| `returnEdges`, `featuredReturns`, `practiceEdges` | Long-range, highlighted, and article-to-impact-story relationships |
+| `careerBands`, `topicCareer`, `topicYears` | Career-period and topic matrices |
+| `scatter`, `trails` | Similarity/time points and editorially seeded semantic trails |
+| `outbound` | External-link totals, domains, suffix classes, and career breakdowns |
+| `semanticIndex` | Embedding metadata and selected passage-level echoes |
+| `radial` | Authored-versus-semantic graph geometry, edges, groups, and timeline |
+| `topicSparks` | Rolling topic-activity series and precomputed chart geometry |
+
+Many nested objects include SVG coordinates or paths calculated specifically for the current template. Treat the generator and `docs/CORPUS_STORY_LAB.md` as the schema source of truth; consumers should not infer new editorial meaning from layout-only fields.
+
+`semanticMap.json` is required. If it is missing, the command exits successfully without output. `vectors.json` is optional when running this command alone: without it, the artifact is still written, but passage-based sections are empty or fall back to whole-entry map edges. A normal `yarn build` always supplies both inputs. Change career bands, narrative lenses, thresholds, or chart construction in `scripts/compute-story-lab.mjs`, then regenerate.
