@@ -169,24 +169,46 @@ noindex: true
         return;
       }
 
-      const toShow = search.results.slice(0, 10);
-      const fragments = await Promise.all(toShow.map(r => r.data()));
+      // Ten at a time, with a way to get the rest. It used to slice to ten and
+      // print "Showing 10 of 35" with nothing to click, so two thirds of the
+      // matches were simply unreachable.
+      const PAGE = 10;
+      const all = search.results;
+      let shown = 0;
 
-      const total = search.results.length;
-      const shown = toShow.length;
-      const countText = total > shown
-        ? `Showing ${shown} of ${total} results.`
-        : `${total} result${total === 1 ? '' : 's'} found.`;
+      const renderCount = () => shown >= all.length
+        ? `${all.length} result${all.length === 1 ? '' : 's'} found.`
+        : `Showing ${shown} of ${all.length} results.`;
 
-      const html = fragments.map(item => `
+      const countEl = document.createElement('p');
+      countEl.className = 'kh-meta kh-search-count';
+      const listEl = document.createElement('div');
+      const moreEl = document.createElement('button');
+      moreEl.type = 'button';
+      moreEl.className = 'kh-button kh-button--sm kh-search-more';
+
+      async function showNext() {
+        moreEl.disabled = true;
+        const batch = all.slice(shown, shown + PAGE);
+        const fragments = await Promise.all(batch.map(r => r.data()));
+        listEl.insertAdjacentHTML('beforeend', fragments.map(item => `
         <article class="kh-search-result">
           <a class="kh-search-result__link" href="${esc(item.url)}"><h3 class="kh-search-result__title">${esc(item.meta?.title || item.url)}</h3></a>
           <p class="kh-search-result__snippet">${item.excerpt}</p>
           <p class="kh-search-result__url">${esc(item.url)}</p>
         </article>
-      `).join('');
+      `).join(''));
+        shown += batch.length;
+        countEl.textContent = renderCount();
+        const remaining = all.length - shown;
+        moreEl.textContent = `Show ${Math.min(PAGE, remaining)} more`;
+        moreEl.hidden = remaining <= 0;
+        moreEl.disabled = false;
+      }
 
-      resultsEl.innerHTML = `<p class="kh-meta kh-search-count">${countText}</p>` + html;
+      moreEl.addEventListener('click', showNext);
+      resultsEl.replaceChildren(countEl, listEl, moreEl);
+      await showNext();
     } catch (err) {
       console.error('Search failed:', err);
       resultsEl.innerHTML = '<p>Search is temporarily unavailable. Try <a href="https://duckduckgo.com/?q=site%3Aallaboutken.com">searching on DuckDuckGo</a> instead.</p>';

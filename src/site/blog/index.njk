@@ -67,7 +67,12 @@ permalink: "/blog/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1
   </div>
   {% include "partials/search-box.njk" %}
 
-  <div class="kh-datasheet-list">
+  {#- The entry list is other entries' titles and teasers, so it is chrome by
+      the CLAUDE.md rule -- the same marker topic pages and the archive already
+      carry. Without it a search for "drupal" returned "All writing" (pages
+      /all/4/ and /all/5/) as results, competing with the articles themselves.
+      The page's own intro stays indexed, so it is still findable as a page. -#}
+  <div class="kh-datasheet-list" data-pagefind-ignore>
   {%- for post in pagedPosts -%}
     {% include "partials/post-summary.njk" %}
   {%- endfor -%}

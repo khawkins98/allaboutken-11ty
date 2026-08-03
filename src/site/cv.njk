@@ -39,14 +39,15 @@ active_path: front
 
 {{ contactInfoPrint | safe }}
 
-<div class="kh-grid-stylized kh-u-background-color--yellow--dark kh-u-fullbleed">
+{#- Datasheet masthead rather than the full-bleed yellow slab, so the CV
+    belongs to the same document as the rest of the site. The wordmark pair
+    was two responsive variants of the same line; one line wraps by itself. -#}
+<div class="kh-grid-stylized">
   <div></div>
-  <section class="kh-content kh-u-padding__bottom--200 kh-u-padding__top--800">
+  <section class="kh-content kh-u-padding__bottom--200">
     <div class="kh-u-do-not-print">
-      <p class="kh-font-headline kh-font-headline--display kh-u-margin__bottom--200 kh-u-show-for-mobile-only">Ken <br/> Hawkins.</p>
-      <p class="kh-font-headline kh-font-headline--display kh-u-margin__bottom--200 kh-u-show-for-medium-up">Ken Hawkins.</p>
-      <h2 class="kh-font-headline kh-font-headline--display kh-text-heading--1 kh-u-padding__top--500 kh-u-padding__bottom--400">{{subtitle}}</h2>
-
+      <p class="kh-font-headline kh-font-headline--display kh-u-margin__bottom--200">Ken Hawkins.</p>
+      <h2 class="kh-font-headline kh-text-heading--2 kh-u-padding__bottom--400">{{subtitle}}</h2>
     </div>
   </section>
 </div>

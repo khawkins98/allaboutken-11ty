@@ -16,7 +16,14 @@ templateEngineOverride: njk
     {% set docRef = (collections.impactStories | impactStoryRef(page.url)) if isImpactStory else null %}
     {% set docRef = docRef or (page | docRef) %}
     <div class="kh-post-head">
-      <p class="kh-breadcrumb kh-post-head__strap">
+      {#- Apparatus, not content. The breadcrumb, the reference number, the
+          date/word-count/gauge line and the topic tallies were all inside the
+          indexed body, so a search for "drupal" returned excerpts reading
+          "Ref IS-01 … 1,125 words (longer than 62 percent of entries) ·
+          Drupal x8, performance x8 …" before reaching a sentence of the
+          article. `data-pagefind-ignore` is the site's single chrome marker
+          and keeps this out of both Pagefind and the embeddings. -#}
+      <p class="kh-breadcrumb kh-post-head__strap" data-pagefind-ignore>
         {% if isImpactStory %}
           <a href="/work">← Work</a>
         {% else %}
@@ -25,7 +32,7 @@ templateEngineOverride: njk
         {% if docRef %}<span class="kh-doc-ref">Ref {{ docRef }}</span>{% endif %}
       </p>
       <h1 class="kh-font-headline kh-post-title kh-text-heading--1">{{title}}</h1>
-      <p class="kh-meta kh-post-meta">
+      <p class="kh-meta kh-post-meta" data-pagefind-ignore>
         <time datetime="{{ date }}">
           {% if isImpactStory %}{{ date | dateDisplay('y') }}{% else %}{{ date | dateDisplay }}{% endif %}
         </time>
