@@ -5,9 +5,34 @@ module.exports = function registerCollections(config) {
     return Array.isArray(tags) ? tags : [tags];
   }
 
+  // `kens_status: draft` used to be a note to self with no build behaviour, so
+  // a post marked draft still reached the blog index, the sitemap, the feed and
+  // the embedding corpus -- merging the branch published it. It now means what
+  // it says: the page still renders at its URL, so a draft can be read and
+  // shared for review, but it is absent from every collection and carries a
+  // noindex tag (see layouts/base.njk), which in turn keeps it out of Pagefind
+  // and out of the semantic corpus.
+  //
+  // Rendering rather than suppressing the page is the deliberate half of this.
+  // A draft you cannot open is a draft you cannot review, and `permalink: false`
+  // would also break any link already shared.
+  // The vocabulary comes from CONTRIBUTING.md: draft -> final_draft ->
+  // ready_for_publication -> published. Only the first two are withheld.
+  // `ready_for_publication` means reviewed and approved, so holding it back
+  // would strand finished work behind a second, undocumented gate, and an
+  // absent field means the post predates the workflow and is already live.
+  const UNPUBLISHED = new Set(['draft', 'final_draft']);
+  const isDraft = (item) => UNPUBLISHED.has(item.data?.kens_status);
+  const published = (items) => items.filter((item) => !isDraft(item));
+
+  // Eleventy builds `collections.posts` itself from the `posts` tag, and an
+  // automatic tag collection cannot be filtered at registration. Templates that
+  // consume it -- the feed, chiefly -- pipe through this instead.
+  config.addFilter('published', (items) => published(items || []));
+
   config.addCollection('impactStories', (collectionApi) => {
     try {
-      return collectionApi.getAll()
+      return published(collectionApi.getAll())
         .filter((item) => getTagArray(item).includes('impact-stories'))
         .sort((a, b) => b.date - a.date);
     } catch (e) {
@@ -17,7 +42,7 @@ module.exports = function registerCollections(config) {
 
   config.addCollection('blogPosts', (collectionApi) => {
     try {
-      return collectionApi.getAll()
+      return published(collectionApi.getAll())
         .filter((item) => {
           const tags = getTagArray(item);
           return tags.includes('posts')
@@ -41,7 +66,7 @@ module.exports = function registerCollections(config) {
   // the point is an editorial sequence.
   config.addCollection('featured', (collectionApi) => {
     try {
-      return collectionApi.getAll()
+      return published(collectionApi.getAll())
         .filter((item) => item.data && typeof item.data.featured === 'number')
         .sort((a, b) => a.data.featured - b.data.featured);
     } catch (e) {
@@ -53,7 +78,11 @@ module.exports = function registerCollections(config) {
     try {
       const MIN = 3;
       const map = new Map();
-      collectionApi.getAll()
+      // Drafts excluded here too. Without this a withheld post is absent from
+      // the blog index, the feed, the sitemap and search, then appears in full
+      // on its topic page -- and worse, its existence counts toward MIN, so a
+      // topic could earn a page on the strength of unpublished writing.
+      published(collectionApi.getAll())
         .filter((item) => {
           const tags = getTagArray(item);
           return tags.includes('posts') || tags.includes('digesting');
@@ -104,7 +133,7 @@ module.exports = function registerCollections(config) {
 
   config.addCollection('allContent', (collectionApi) => {
     try {
-      return collectionApi.getAll()
+      return published(collectionApi.getAll())
         .filter((item) => {
           const tags = getTagArray(item);
           return tags.includes('posts') || tags.includes('digesting');

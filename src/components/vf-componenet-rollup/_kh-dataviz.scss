@@ -176,13 +176,36 @@
     margin: 0.25rem 0 1.5rem;
     overflow-x: auto;
     // Fade the older end so the strip reads as continuing past the edge.
-    // Without this the hidden scrollbar leaves no hint that it scrolls.
     mask-image: linear-gradient(to right, transparent 0, #000 3rem);
-    scrollbar-width: none;
+    // A thin scrollbar, not a hidden one. The fade above was the only hint
+    // that this scrolls, and it was not enough: a desktop review found that
+    // everything before 2022 was simply unreachable with a mouse, because the
+    // track is ~4,200px inside a ~1,300px window with the scrollbar removed
+    // and no arrows. `thin` keeps the strip delicate while restoring drag.
+    scrollbar-width: thin;
 
     &::-webkit-scrollbar {
-      display: none;
+      height: 6px;
     }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--kh-rule);
+    }
+  }
+
+  // The one visible caption on the strip, and the way out of it: the marks
+  // link to a month in the archive, and this links to the archive itself.
+  .kh-timeline__label {
+    display: flex;
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+    gap: 0.75rem;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.15rem;
+  }
+
+  .kh-timeline__hint {
+    color: var(--kh-ink-muted);
   }
 
   .kh-timeline__track {
@@ -404,9 +427,69 @@
     width: 100%;
   }
 
-  .kh-seq__label,
-  .kh-seq__leader {
-    display: none;
+  // Below the wide breakpoint the rail becomes a plain vertical list.
+  // It used to hide the labels entirely and show seven bare 10px squares, so
+  // the site's main post-to-post navigation asked a reader to tap an
+  // unlabelled shape to discover where it went. The dates and titles were in
+  // the DOM the whole time, and the `title` attribute that carried them does
+  // not fire on touch at all. There is no room for a horizontal rail with
+  // labels on a phone, so it stops being a rail.
+  // Scoped to below the wide breakpoint. The `min-width: lg` block further
+  // down rebuilds the horizontal rail and does not reset every property set
+  // here, so these must not leak upwards.
+  @media (max-width: $kh-breakpoint--lg-down) {
+    .kh-seq__track {
+      display: block;
+      height: auto;
+
+      // The datum line only means anything when marks sit along it.
+      &::before {
+        content: none;
+      }
+    }
+
+    .kh-seq__item {
+      display: block;
+    }
+
+    .kh-seq__callout {
+      align-items: baseline;
+      display: flex;
+      gap: 0.6rem;
+      height: auto;
+      justify-content: flex-start;
+      min-height: 44px;
+      padding: 0.35rem 0;
+      text-align: left;
+    }
+
+    .kh-seq__label {
+      display: block;
+    }
+
+    .kh-seq__date {
+      color: var(--kh-ink-muted);
+      display: block;
+      font-family: var(--kh-font-mono);
+      font-size: 11px;
+      letter-spacing: 0.02em;
+    }
+
+    .kh-seq__title {
+      display: block;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .kh-seq__mark {
+      flex: 0 0 auto;
+      height: 12px;
+      width: 12px;
+    }
+
+    .kh-seq__leader {
+      display: none;
+    }
   }
 
   .kh-seq__mark {
@@ -539,6 +622,21 @@
       position: absolute;
       top: 50%;
       transform: translate(-50%, -50%);
+    }
+
+    // The key's swatches are inline decoration, not rail marks, so they must
+    // opt out of the rule above. Without this they take `position: absolute`,
+    // find no positioned ancestor anywhere in the key list, and resolve
+    // against <body> -- which is `position: relative`. All four then stack on
+    // the exact centre point of the document, landing on top of whatever
+    // paragraph happens to be there, while the key itself renders with no
+    // marks beside its labels.
+    // `transform: none` is not optional: a transform applies to a static
+    // element too, so the translate would still shift the swatches by half
+    // their own size.
+    .kh-seq__mark--key {
+      position: static;
+      transform: none;
     }
 
     .kh-seq__callout:not(.kh-seq__callout--current):hover .kh-seq__title,

@@ -271,10 +271,20 @@ body:has(#kh-css-toggle:checked) {
       flex: 0 0 49.183%;
     }
 
+    // `grid-template-columns` is only declared from 600px up, so below that
+    // this was a grid with one implicit `auto` column. An auto track sizes to
+    // its MAX-content and will not shrink below its min-content, so the column
+    // grew to 569px inside a 313px phone viewport and the page scrolled
+    // sideways -- on /ai/, both style-guide pages and any post using this
+    // layout. The container was the overflow, not anything in it.
+    // `minmax(0, 1fr)` is the fix rather than plain `1fr`: a `1fr` track still
+    // takes min-content as its automatic minimum, which is what let a long
+    // word or a wide table push it open in the first place.
     .kh-grid-stylized {
       align-items: start;
       display: grid;
       gap: var(--kh-page-grid-gap);
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .kh-grid-stylized .kh-grid {
@@ -364,7 +374,6 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-button {
     --kh-button__color__background--default: var(--kh-color--grey);
-    --kh-button__color__background--default-dark: var(--kh-color--grey--darkest);
     --kh-button-background-color: #fafafa;
     --kh-button-border-color: var(--kh-color--blue);
     --kh-button-shadow-background-color: var(--kh-color--blue--dark);
@@ -657,11 +666,17 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
+  // Layout only. The masthead's own look lives in the datasheet mixin.
+  // No horizontal padding: this rule is emitted after that mixin, so the
+  // `padding: 12px 16px` it used to carry silently beat the `padding: 0`
+  // there, insetting the wordmark from the rule beneath it by 16px and
+  // stopping the nav short of the other end. The masthead should sit on the
+  // same left and right edges as the content column it sits above.
   .kh-global-header {
     display: flex;
     flex-wrap: wrap;
     gap: var(--kh-page-grid-gap);
-    padding: 12px 16px;
+    padding: 0;
   }
 
   @media (min-width: $kh-breakpoint--lg) {
@@ -1025,18 +1040,30 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
+  // The two `.kh-cluster > *` rules that used to live here are gone. They were
+  // the pre-`gap` negative-margin gutter technique, and they had stopped
+  // working long before they were removed: they depended on
+  // `--kh-cluster-margin`, which is defined only on `.kh-badges` -- not a
+  // cluster -- and nowhere else. With the variable undefined,
+  // `calc(var(--kh-cluster-margin) / 2)` is invalid at computed-value time, so
+  // both declarations resolved to `margin: 0 !important` on every child and
+  // grandchild of every cluster.
+  // That is worse than dead code. It silently won every specificity contest
+  // against any spacing set inside a cluster item, which is exactly how
+  // "AI27" in the directory became unfixable until the cause was found. All
+  // real spacing already came from `gap` on .kh-cluster itself.
+  // The rules also set `display: flex` on each child, making every `<a>` in a
+  // cluster a flex container for no stated reason. All ten usages in the site
+  // are a flat row of links; `display: flex; flex-wrap: wrap; gap` is the
+  // whole requirement.
+  // What survives is the one part that was actually load-bearing: a cluster
+  // owns the spacing BETWEEN its items, so an item's own outer margin has to
+  // stand down or it adds to the gap. `.kh-button` carries
+  // `margin: 0 16px 16px 0`, which would otherwise widen every button row.
+  // Plain `margin: 0`, no `!important`, and children only -- so anything
+  // nested inside an item can still space itself.
   .kh-cluster > * {
-    align-items: var(--kh-cluster-alignment, center);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    margin: calc(var(--kh-cluster-margin) / 2 * -1) !important;
-  }
-
-  .kh-cluster > * > * {
-    flex: var(--kh-cluster__item--flex);
-    margin: 1rem;
-    margin: calc(var(--kh-cluster-margin) / 2) !important;
+    margin: 0;
   }
 
   // Display styling for expressive headlines. Recursive drove this from its
@@ -1089,21 +1116,15 @@ body:has(#kh-css-toggle:checked) {
     display: inline-block;
   }
 
-  .kh-badges img,
-  .kh-badges svg {
+  // Badges are all <img> now -- the remote 88x31 PNGs plus the self-hosted
+  // Eleventy GIF. The inline-SVG badge these rules also covered no longer
+  // exists, so the `svg` half of the selector and its `.badge-text` label
+  // styling went with it.
+  .kh-badges img {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
     height: auto;
     max-width: 100%;
-  }
-
-  .kh-badges svg .badge-text {
-    dominant-baseline: middle;
-    text-anchor: middle;
-    font-family: var(--kh-font-mono);
-    font-weight: 600;
-    font-size: 12px;
-    fill: #fff;
   }
 
   .kh-grid {
@@ -1571,15 +1592,97 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
-  /* image-compare-viewer is a third-party widget loaded from unpkg by the
-     Recursive post. Its stylesheet is the only source of radius and shadow
-     left on the site; flatten it so the slider matches everything else. */
-  .icv__label,
-  .icv__control-line,
-  .icv__arrow-wrapper,
-  .icv__theme-wrapper {
-    border-radius: 0 !important;
-    box-shadow: none !important;
+  /* Before/after comparison slider. Replaces image-compare-viewer, which was
+     loaded from unpkg by the Recursive post: 53 KB, almost all of it core-js
+     polyfills for browsers that no longer exist, to do what a range input and
+     a clip-path do here. It was also the last third-party stylesheet on the
+     site and the only remaining source of radius and shadow, which is why the
+     rules it replaced were four `!important` overrides.
+
+     The control IS a range input, deliberately: that gets pointer dragging,
+     touch, and keyboard arrow keys from the platform rather than from a
+     pointermove handler. It is transparent and laid over the whole figure.
+
+     Without JavaScript the split stays wherever the inline custom property
+     puts it, so the figure reads as a static before/after rather than
+     breaking. Without CSS both images simply stack. */
+  .kh-compare {
+    --kh-compare-split: 50%;
+    display: grid;
+    position: relative;
+  }
+
+  /* The grid child is a <picture>, not the <img>: the Eleventy image
+     transform wraps every <img src> it processes. Both are targeted so the
+     figure survives whether or not the transform ran. */
+  .kh-compare > picture,
+  .kh-compare > .kh-compare__img {
+    grid-area: 1 / 1;
+  }
+
+  .kh-compare__img {
+    display: block;
+    height: auto;
+    width: 100%;
+  }
+
+  /* Clipped from the left, so the after image occupies everything to the
+     right of the split. */
+  .kh-compare__img--after {
+    clip-path: inset(0 0 0 var(--kh-compare-split));
+  }
+
+  .kh-compare__handle {
+    background: var(--kh-color--sun);
+    grid-area: 1 / 1;
+    justify-self: start;
+    margin-left: calc(var(--kh-compare-split) - 1px);
+    pointer-events: none;
+    width: 2px;
+    z-index: 2;
+  }
+
+  .kh-compare__label {
+    align-self: end;
+    background: var(--kh-ground);
+    border: 1px solid var(--kh-rule--strong);
+    color: #222;
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+    grid-area: 1 / 1;
+    letter-spacing: 0.04em;
+    margin: 0.75rem;
+    padding: 0.15rem 0.4rem;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .kh-compare__label--before {
+    justify-self: start;
+  }
+
+  .kh-compare__label--after {
+    justify-self: end;
+  }
+
+  /* Invisible but fully operable: the native control does the work, the
+     images above are the visible state. */
+  .kh-compare__range {
+    appearance: none;
+    background: transparent;
+    cursor: col-resize;
+    grid-area: 1 / 1;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    width: 100%;
+    z-index: 3;
+  }
+
+  .kh-compare__range:focus-visible {
+    opacity: 1;
+    outline: 2px solid var(--kh-color--sun);
+    outline-offset: 2px;
   }
 
   /* Self-hosted IBM Plex. Static faces: Plex ships no variable build, so each

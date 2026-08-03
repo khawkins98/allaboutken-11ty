@@ -27,11 +27,41 @@ one on the rare `<em><strong>` nesting.
 These are the *complete* faces, not the Latin-1 splits. The site uses em
 dashes, curly quotes, `&#8209;` and `↦`, which the splits do not cover.
 
-## Superseded
+## Retained but not loaded
 
-The Recursive faces were removed once IBM Plex landed; recover them from git
-history if the swap is ever reverted. `Datatype.woff2` stays — a blog post
-uses it.
+Two faces sit in this directory that no `@font-face` rule references. They are
+kept deliberately. Do not "tidy" them away.
+
+| File | Size | Why it stays |
+| --- | --- | --- |
+| `Recursive.woff2` | 155 KB | Superseded by IBM Plex, retained as archive |
+| `Recursive_VF_1.085--subset-GF_latin_basic.woff2` | 287 KB | Variable build of the same, retained as archive |
+| `Datatype.woff2` | 73 KB | Actively used by a blog post |
+
+### Why Recursive is retained
+
+Recursive was the site's typeface from 2025 until IBM Plex replaced it, and
+both halves of that story live in one post:
+
+- **[Recursion: it's fonts all the way down](https://www.allaboutken.com/posts/20250904-switching-to-recursive/)**
+  (`src/site/posts/20250904-switching-to-recursive.njk`) — why it was adopted,
+  with a drag-to-compare slider of the change, and an Update box at the top
+  recording the move back to IBM Plex.
+
+"Recover them from git history" was the previous instruction here, and it is
+the wrong answer for a site whose own writing is about keeping an archive
+together. A file that survives only in history is one `git gc` and one
+force-push away from gone, and nobody browsing this directory would know the
+faces had ever existed. 442 KB is a cheap price for the artefact staying next
+to the writing that explains it.
+
+They are not served: no `@font-face` rule points at them, so they cost a reader
+nothing. They are passthrough-copied to `build/assets/kh-font/` along with
+everything else here, which is deliberate — the URLs in the 2025 posts keep
+resolving.
+
+If you ever do want them gone, the test is whether the posts above have been
+retired too. Until then, they stay.
 
 ## Build + runtime paths
 

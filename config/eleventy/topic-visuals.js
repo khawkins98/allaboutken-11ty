@@ -1,3 +1,5 @@
+const { esc } = require('./escape');
+
 module.exports = function registerTopicVisuals(config) {
   // How many entries in a collection share a topic (case-insensitive).
   // Topics may be hierarchical: "typography > OpenType ligatures". The parent
@@ -15,6 +17,29 @@ module.exports = function registerTopicVisuals(config) {
 
   config.addFilter('topicParent', khTopicParent);
   config.addFilter('topicChild', khTopicChild);
+
+  // The unique parents of a topics list, in order. Anything that consumes
+  // `topics` for grouping, filtering or machine output must go through this
+  // rather than the raw strings -- otherwise `AI > Claude Code` fails an
+  // `'AI' in topics` test, and a feed reader receives
+  // `career reflection > personal archive` as a category of its own.
+  config.addFilter('topicParents', (topics) => {
+    const seen = [];
+    for (const topic of topics || []) {
+      const parent = khTopicParent(topic);
+      if (parent && !seen.includes(parent)) seen.push(parent);
+    }
+    return seen;
+  });
+
+  // The slug of a topic's page, or '' when the topic has too few entries to
+  // have earned one. Templates use this to decide whether a topic name is a
+  // link, so a sub-threshold topic renders as plain text rather than a 404.
+  config.addFilter('topicPageSlug', (topics, topic) => {
+    const parent = khTopicParent(topic).toLowerCase();
+    const match = (topics || []).find((t) => String(t.topic).toLowerCase() === parent);
+    return match ? match.slug : '';
+  });
 
   // Counts by parent, so "AI > Claude Code" tallies under "AI".
   config.addFilter('topicTally', (items, topic) => {
@@ -59,8 +84,10 @@ module.exports = function registerTopicVisuals(config) {
       const first = years[0].year;
       const last = years[years.length - 1].year;
       const busiest = years.reduce((a, b) => (b.count > a.count ? b : a), years[0]);
-      const desc = `${label}: activity by year, ${first} to ${last}. `
-        + `Busiest year ${busiest.year} with ${busiest.count}.`;
+      // `label` is a topic name from the controlled vocabulary, so it is the
+      // one value here a human types. Escape it like any other.
+      const desc = esc(`${label}: activity by year, ${first} to ${last}. `
+        + `Busiest year ${busiest.year} with ${busiest.count}.`);
       return `<svg class="kh-spark" width="${width}" height="${h}" viewBox="0 0 ${width} ${h}" `
         + `role="img" aria-label="${desc}"><title>${desc}</title>${bars}</svg>`;
     } catch (e) {
@@ -90,9 +117,9 @@ module.exports = function registerTopicVisuals(config) {
       }).join('');
       const busiest = list.reduce((a, b) => (b.words > a.words ? b : a), list[0]);
       const active = list.filter((m) => m.entries).length;
-      const desc = `${year}: words per month, scaled to this year. `
+      const desc = esc(`${year}: words per month, scaled to this year. `
         + `Busiest ${names[busiest.month - 1]} with ${busiest.words} words. `
-        + `${active} of 12 months active.`;
+        + `${active} of 12 months active.`);
       return `<svg class="kh-spark" width="${width}" height="${h}" viewBox="0 0 ${width} ${h}" `
         + `role="img" aria-label="${desc}"><title>${desc}</title>${bars}</svg>`;
     } catch (e) {

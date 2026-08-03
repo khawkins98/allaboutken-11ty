@@ -74,6 +74,12 @@ Track readiness via the `kens_status` frontmatter field:
 - `final_draft`: content complete, ready for editorial review
 - `ready_for_publication`: reviewed and approved per [`PUBLISHING_WORKFLOW.md`](docs/PUBLISHING_WORKFLOW.md)
 
+`draft` and `final_draft` are enforced at build time, not just tracked: the page
+renders at its URL so you can share it for review, but it stays out of every
+listing, the sitemap, the feed, on-site search and the embedding corpus. From
+`ready_for_publication` onward the entry publishes normally, so that promotion is
+the moment the post goes live. See [`docs/FRONTMATTER.md`](docs/FRONTMATTER.md#kens_status).
+
 ## Before pushing
 
 - Use [`docs/SCRIPTS.md`](docs/SCRIPTS.md) as the source of truth for command behavior and expected outputs.

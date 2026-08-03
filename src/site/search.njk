@@ -7,7 +7,10 @@ noindex: true
 ---
 
 <div data-pagefind-ignore>
-  <h1 id="search-heading">{{title}}</h1>
+  {#- Headline treatment, but NOT `--display`: this is a utility page where
+     the controls are the point, so a 42px display heading would push the
+     search field down the screen for no benefit. -#}
+  <h1 id="search-heading" class="kh-font-headline kh-text-heading--1">{{title}}</h1>
 
   <div class="kh-search-widget">
     <fieldset id="search-mode" class="kh-search-mode" hidden>
@@ -86,9 +89,20 @@ noindex: true
   const semanticSection = document.getElementById('semantic-section');
   const modeRadios = modeFieldset.querySelectorAll('input[name="search_mode"]');
 
-  // Show the toggle (requires JS); visually hide the heading (tabs replace it)
+  // Show the toggle (requires JS). The heading STAYS.
+  //
+  // This used to add `kh-u-sr-only` to the h1 on the argument that the mode
+  // tabs replace it. They do not: tabs are a control, not a title, and with
+  // the h1 gone this was the only page on the site that opened with no
+  // heading -- two first-time readers independently described it as looking
+  // half-loaded or broken.
+  //
+  // On whether it still earns its place once results arrive: yes. It is the
+  // page's accessible name and the anchor for heading navigation, and a
+  // results list whose only headings are result titles has no outline. The
+  // real cost was its size, not its presence, so it is set at the normal
+  // heading scale here rather than the display scale other pages use.
   modeFieldset.removeAttribute('hidden');
-  document.getElementById('search-heading').classList.add('kh-u-sr-only');
 
   // Exposed on window for inline onclick fallback links
   window.setMode = setMode;

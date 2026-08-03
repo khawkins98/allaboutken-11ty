@@ -271,6 +271,24 @@ const scatter = allEdges.map((edge) => ({
 // in their lens; new writing can enter without changing this list.
 const semanticTrailSpecs = [
   {
+    // The thread the archive's own title now names. It is the clearest
+    // human-to-machine cross-cut in the corpus: the 2018 Content-Action Model
+    // asks what a person should be able to do after reading, and the 2026
+    // context-engineering argument asks the same question about a machine
+    // acting on someone's behalf. Anchored on the CAM series plus that later
+    // piece so both ends of the arc are fixed and the middle is earned.
+    //
+    // 0.57 rather than 0.55: at 0.55 a 2017 fluid-IA post joins at 0.554,
+    // which is close enough to be about information architecture generally and
+    // not close enough to be about action specifically.
+    name: 'Information action',
+    description: 'Content that exists to make something happen: first for people deciding what to do, later for machines acting on their behalf.',
+    anchors: ['Introducing the Content-Action Model for Web Systems', 'The Content-Action Model origin story', 'Inside the Content-Action Model', 'Why context engineering was always the job'],
+    minScore: 0.57,
+    limit: 7,
+    perYear: 1
+  },
+  {
     name: 'Content as infrastructure',
     description: 'Content models, information architecture and platforms treated as organizational infrastructure.',
     anchors: ['Better corporate design through information architecture', 'Introducing the Content-Action Model for Web Systems', 'Decoupling content from platforms across 80 properties', 'Content architecture: the delivery problem'],
@@ -289,7 +307,7 @@ const semanticTrailSpecs = [
   {
     name: 'Rebuilding and preserving a personal site',
     description: 'The publishing stack keeps changing; the longer project is keeping the archive together.',
-    anchors: ['A new site for little reason', 'Moving from Panini to Eleventy', 'A simpler, faster site: moving to pure Eleventy v3', 'I have been rearranging information for 24 years'],
+    anchors: ['A new site for little reason', 'Moving from Panini to Eleventy', 'A simpler, faster site: moving to pure Eleventy v3', 'I have been making information actionable for 24 years'],
     minScore: 0.6,
     limit: 8,
     perYear: 1
@@ -336,9 +354,19 @@ if (vectorCorpus) {
   }
 }
 
+// Anchors are matched on the exact title string, so renaming a post silently
+// drops it from its lens -- the biography simply comes back a little smaller
+// and nobody notices. Collect the misses and say so, the same way
+// compute-related.mjs reports entry URLs that do not resolve on disk.
+const missingAnchors = [];
+
 const trails = semanticTrailSpecs.map((spec) => {
   const anchorNodes = spec.anchors
-    .map((title) => nodes.find((node) => node.title === title))
+    .map((title) => {
+      const node = nodes.find((candidate) => candidate.title === title);
+      if (!node) missingAnchors.push({ lens: spec.name, title });
+      return node;
+    })
     .filter(Boolean);
   const centroid = trailAverage(anchorNodes.map((node) => trailVectors.get(node.url)).filter(Boolean));
   if (!centroid) {
@@ -989,4 +1017,15 @@ writeFileSync(OUT, `${JSON.stringify({
   topicSparks
 }, null, 1)}\n`);
 
-console.log(`story-lab: ${counts.entries} entries, ${counts.returnLinks} non-companion returns, wrote ${OUT}`);
+if (missingAnchors.length) {
+  console.warn(
+    `story-lab: WARNING ${missingAnchors.length} editorial anchor(s) did not match any entry title. ` +
+    `The lens still renders, with that entry missing. Retitled, unpublished or removed?\n  ` +
+    missingAnchors.map(({ lens, title }) => `${lens}: "${title}"`).join('\n  ')
+  );
+}
+
+console.log(
+  `story-lab: ${counts.entries} entries, ${counts.returnLinks} non-companion returns, wrote ${OUT}` +
+  (missingAnchors.length ? ` (${missingAnchors.length} unmatched anchor(s))` : '')
+);

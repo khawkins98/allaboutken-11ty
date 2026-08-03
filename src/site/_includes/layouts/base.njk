@@ -21,7 +21,14 @@
     <meta name="MobileOptimized" content="width" />
     <meta name="HandheldFriendly" content="true" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    {% if noindex %}<meta name="robots" content="noindex,follow" />{% endif %}
+    {#- A draft is noindex by the same route as an explicit `noindex: true`.
+        That is deliberate: generate-embeddings.mjs already skips any page
+        carrying a noindex robots tag, so routing drafts through the same meta
+        tag keeps unfinished writing out of the semantic corpus without a
+        second list of paths to maintain. See collections.js for the matching
+        collection filter. -#}
+    {%- set isUnpublished = kens_status in ['draft', 'final_draft'] %}
+    {% if noindex or isUnpublished %}<meta name="robots" content="noindex,follow" />{% endif %}
     {#- OpenGraph and Twitter meta tags with defaults and per-post overrides #}
     {#- Compute values once for reuse #}
     {%- set ogTitleComputed = og_title or (title ~ " | All about Ken Hawkins") %}
@@ -88,16 +95,42 @@
     <aside class="kh-css-off-note">If you're reading this the site styles are currently disabled. Toggle the “CSS” checkbox in the footer to restore styling.<hr></aside>
     <header class="kh-global-header" role="banner">
       <a href="/" class="kh-logo kh-navigation__link">AllAboutKen.com</a>
-      <nav class="kh-cluster kh-navigation kh-u-do-not-print kh-u-show-for-medium">
+      {#- `kh-u-show-for-medium` used to be here and was a no-op: the defined
+          utilities are `-medium-only` and `-medium-up`, so nothing matched and
+          the nav rendered at every width. That accident is the only reason
+          phones have navigation, because this is the site's sole nav and there
+          is no mobile alternative. Making the class "work" would hide it.
+          Removed rather than corrected; the row simply wraps under the
+          wordmark on narrow screens. -#}
+      <nav class="kh-cluster kh-navigation kh-u-do-not-print">
         <ul class="kh-navigation__list">
           {#- One "Writing" entry rather than three siblings. Blog, Digesting
-              and Project notes now read as sections of it, reached from
-              /all/, and the nav stays active across all of them. -#}
+              and Work now read as sections of it, reached from /all/, and the
+              nav stays active across all of them. -#}
+          {#- Two strengths of state, because they are different claims.
+              A filled cell plus `aria-current="page"` means you are ON this
+              page. A rule underneath plus `aria-current="true"` means you are
+              somewhere this item leads. Previously both were the same solid
+              fill, so /work/ asserted "you are on Writing" and /cv/ asserted
+              "you are on Directory", which a reviewer reasonably read as a
+              bug. -#}
+          {%- set inWriting = page.url.startsWith('/all') or page.url.startsWith('/blog') or page.url.startsWith('/digesting') or page.url.startsWith('/work') or page.url.startsWith('/posts') %}
           <li class="kh-navigation__item">
-            <a href="/all/" class="kh-navigation__link{% if page.url.startsWith('/all') or page.url.startsWith('/blog') or page.url.startsWith('/digesting') or page.url.startsWith('/work') or page.url.startsWith('/posts') %} kh-navigation__link--active{% endif %}">Writing</a>
+            <a href="/all/" class="kh-navigation__link{% if page.url == '/all/' %} kh-navigation__link--active{% elif inWriting %} kh-navigation__link--section{% endif %}"{% if page.url == '/all/' %} aria-current="page"{% elif inWriting %} aria-current="true"{% endif %}>Writing</a>
+          </li>
+          {#- Everything that is not writing -- Work, CV, Garage, Topics,
+              Archive, Stats, the Story Lab -- previously existed only in the
+              footer. Two independent first-time-visitor reviews, desktop and
+              phone, both reported the same failure: they could not find the
+              portfolio, and on a phone the footer is five thumb-flicks down.
+              Directory is the one link that leads to all of it, which is why
+              it goes here rather than adding four more nav items. -#}
+          {%- set inDirectory = page.url.startsWith('/topics') or page.url.startsWith('/archive') or page.url.startsWith('/stats') or page.url.startsWith('/garage') or page.url.startsWith('/cv') or page.url.startsWith('/colophon') or page.url.startsWith('/ai') %}
+          <li class="kh-navigation__item">
+            <a href="/directory/" class="kh-navigation__link{% if page.url == '/directory/' %} kh-navigation__link--active{% elif inDirectory %} kh-navigation__link--section{% endif %}"{% if page.url == '/directory/' %} aria-current="page"{% elif inDirectory %} aria-current="true"{% endif %}>Directory</a>
           </li>
           <li class="kh-navigation__item">
-            <a href="/search/" class="kh-navigation__link{% if page.url.startsWith('/search') %} kh-navigation__link--active{% endif %}">Search</a>
+            <a href="/search/" class="kh-navigation__link{% if page.url.startsWith('/search') %} kh-navigation__link--active{% endif %}"{% if page.url.startsWith('/search') %} aria-current="page"{% endif %}>Search</a>
           </li>
           <li class="kh-navigation__item">
             <a href="/#hello" class="kh-navigation__link">Contact</a>
@@ -105,7 +138,13 @@
         </ul>
       </nav>
     </header>
-    <main role="main" id="main-content" data-pagefind-body>
+    {#- `data-pagefind-body` is what puts a page into the on-site keyword index.
+        A page marked noindex is saying it is not a destination, and that has to
+        mean the site's own search too -- otherwise scratch pages such as
+        /stats/story-lab/ stay out of Google but still turn up when a reader
+        searches here, which is the more likely way to meet them. Same rule,
+        same marker, both indexes. -#}
+    <main role="main" id="main-content"{% if not (noindex or isUnpublished) %} data-pagefind-body{% endif %}>
     {{ content | safe }}
     </main>
     {% include "footer.njk" %}

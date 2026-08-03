@@ -45,12 +45,19 @@
         columns. `display: contents` keeps the four groups as direct children
         of the footer grid, the same trick post-summary uses. -#}
     <nav class="kh-footer__groups" aria-label="Site">
+    {#- "Writing & making" rather than "Writing", because two of these are not
+        writing: Work is delivered outcomes and the Garage is side projects.
+        The garage had exactly one inbound link on the whole site -- from the
+        post that announced it -- so it was reachable only by already knowing
+        it existed. It sits here rather than in the header because it is a
+        place to find, not a thing to announce. -#}
     <div class="kh-footer__group">
-      <p class="kh-meta kh-footer__label">Writing</p>
+      <p class="kh-meta kh-footer__label">Writing &amp; making</p>
       <ul class="kh-footer__list">
         <li><a href="/blog">Blog</a></li>
         <li><a href="/digesting">Digesting</a></li>
         <li><a href="/work">Work</a></li>
+        <li><a href="/garage/">Garage</a></li>
         <li><a href="/topics/">Topics</a></li>
       </ul>
     </div>
@@ -59,6 +66,7 @@
       <ul class="kh-footer__list">
         <li><a href="/all/">All writing</a></li>
         <li><a href="/archive/">Archive</a></li>
+        <li><a href="/directory/">Directory</a></li>
         <li><a href="/search/">Search</a></li>
         <li><a href="/stats/">Stats</a></li>
         <li><a href="/colophon">Colophon</a></li>

@@ -78,11 +78,22 @@
     margin-bottom: 0;
   }
 
-// The blockquote's own border-left carries the accent; the old ::before
+  // The blockquote's own border-left carries the accent; the old ::before
   // rule drew a second, competing line.
+
+  // Inline code and bare URLs are the two things in body copy with no natural
+  // break point, so a long one pushes the column wider than the viewport.
+  // `<pre>` already handles this with `overflow: auto`; inline runs had
+  // nothing. Breaking mid-token is ugly but a sideways-scrolling page is
+  // worse, and it only engages when the token genuinely will not fit.
   code:not([class*='kh-']) {
+    overflow-wrap: break-word;
     padding-left: 3px;
     padding-right: 3px;
+  }
+
+  a:not([class*='kh-']) {
+    overflow-wrap: break-word;
   }
 
   figcaption:not([class*='kh-']),
@@ -93,12 +104,26 @@
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
   }
 
+  // The `display: table` trick exists so a figcaption sizes itself to the
+  // image rather than the column. It only makes sense for figures that
+  // actually wrap an image, so it is scoped to those with `:has()`.
+  // Unscoped, it applied to content figures too -- one legacy post wraps
+  // headings, prose and an `<hr>` in a `<figure>` -- and a table box cannot be
+  // squeezed below its min-content, so `max-width: 100%` could not save it:
+  // the figure sat at 441px inside a 313px phone column and scrolled the page.
+  // A content figure is just a block.
   figure:not([class*='kh-']) {
-    display: table;
     margin: auto;
+    max-width: 100%;
   }
 
-  figure:not([class*='kh-']) figcaption:not([class*='kh-']) {
+  figure:not([class*='kh-']):has(> img) {
+    display: table;
+  }
+
+  // Paired with the `:has(> img)` rule above: `table-caption` only means
+  // anything inside a table box, so it is scoped the same way.
+  figure:not([class*='kh-']):has(> img) figcaption:not([class*='kh-']) {
     caption-side: bottom;
     display: table-caption;
   }

@@ -60,10 +60,6 @@
     margin: var(--kh-stack-margin, 0) 0 1rem 0;
   }
 
-  .kh-panel__body {
-    padding: 1.25rem 1.5rem;
-  }
-
   // Rows and cells divide a panel without doubling up borders.
   .kh-panel__row + .kh-panel__row {
     border-top: 1px solid var(--kh-rule);
@@ -170,6 +166,78 @@
     margin-top: 0.35rem;
   }
 
+  // A spec table that stops being a table when there is no room for one.
+  // Opt-in via `.kh-table--stack`, because most spec tables are narrow enough
+  // to survive the scroller; this is for the wide ones where side-scrolling
+  // hides more than it shows.
+  // Each row becomes a bordered card, the header row is dropped, and the cells
+  // that need naming carry their column name in `data-label`. Ref and What
+  // deliberately have none.
+  @media (max-width: $kh-breakpoint--md-down) {
+    .kh-table--stack,
+    .kh-table--stack tbody,
+    .kh-table--stack tr,
+    .kh-table--stack td {
+      display: block;
+      width: auto;
+    }
+
+    // Visually gone, still announced: the header row is the only thing naming
+    // these columns for a screen reader that reads the table linearly.
+    .kh-table--stack thead {
+      clip-path: inset(50%);
+      height: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+
+    .kh-table--stack tr {
+      border-bottom: 1px solid var(--kh-rule--strong);
+      padding: 1rem 1.25rem;
+    }
+
+    .kh-table--stack tr:last-child {
+      border-bottom: 0;
+    }
+
+    // Cell padding is carried by the card now.
+    .kh-table--stack td,
+    .kh-table--stack td:first-child,
+    .kh-table--stack td:last-child {
+      border-bottom: 0;
+      padding: 0 0 0.5rem;
+    }
+
+    .kh-table--stack tr td:last-child {
+      padding-bottom: 0;
+    }
+
+    .kh-table--stack td[data-label]::before {
+      color: var(--kh-ink-muted);
+      content: attr(data-label);
+      display: block;
+      font-family: var(--kh-font-mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.15rem;
+    }
+
+    // The ref reads as the card's number, so it leads.
+    .kh-table--stack .kh-table__id {
+      font-size: 12px;
+      padding-bottom: 0.25rem;
+    }
+
+    // Nothing to scroll once the table is a stack, so drop the frame the
+    // scroller was drawing around it.
+    .kh-table-scroll:has(.kh-table--stack) {
+      border: 0;
+      overflow-x: visible;
+    }
+  }
+
   // Tables are the one place horizontal overflow is likely; contain it
   // rather than letting the page scroll sideways. The wrapper also carries
   // the frame and fill, so the table reads as a filled cell like
@@ -180,23 +248,49 @@
     overflow-x: auto;
   }
 
-  // Global header as a cell strip. Gremble puts its nav in a bordered row of
-  // cells; doing the same here is what makes the masthead belong to the same
-  // document as the content below it, on every page rather than just the
-  // homepage.
+  // Markdown tables get the scroller automatically (see config/eleventy/
+  // markdown.js) but not the frame: a content table already carries its own
+  // background and rules, so the datasheet border would double up around it.
+  // This variant contributes containment only.
+  .kh-table-scroll--content {
+    background: none;
+    border: 0;
+    margin-bottom: 1rem;
+  }
+
+  // Global header. This was a bordered strip of filled cells, on the argument
+  // that a masthead built from the same cells as the content belongs to the
+  // same document. In practice the box and the fill read as a chrome bar
+  // bolted on top of the sheet rather than as the top of it, and once the nav
+  // was promoted the container was competing with it for attention. Both are
+  // gone; a single rule underneath does the separating.
+  // That rule is 2px where every other hairline on the site is 1px. At 1px the
+  // masthead was divided from the page by exactly the line that divides one
+  // section from another, so it read as the first section rather than as the
+  // top of the sheet. Doubling it asserts the masthead without a box.
+  // Horizontal padding lives at 0 here AND in the later .kh-global-header rule
+  // in index.scss, which would otherwise win and inset the wordmark.
   .kh-global-header {
     align-items: stretch;
-    background: var(--kh-panel-bg);
-    border: 1px solid var(--kh-rule--strong);
+    border-bottom: 2px solid var(--kh-rule--strong);
     gap: 0;
     margin-bottom: 2rem;
     padding: 0;
   }
 
-  .kh-logo {
+  // Flush left with the content column, and set above the nav.
+  // The `a.kh-logo` qualifier is doing real work. The wordmark carries BOTH
+  // `kh-logo` and `kh-navigation__link`, so `.kh-global-header
+  // .kh-navigation__link` (0,2,0) outranks a bare `.kh-logo` (0,1,0) and was
+  // silently holding the site's name at the nav's 14px with the nav's cell
+  // padding. Adding the element selector takes this to (0,2,1) so it wins
+  // regardless of source order.
+  .kh-global-header a.kh-logo {
     align-items: center;
     display: flex;
-    padding: 0.7rem 1.25rem;
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+    padding: 0.9rem 0;
   }
 
   .kh-navigation {
@@ -216,22 +310,85 @@
     display: flex;
   }
 
-  .kh-navigation__item,
-  .kh-logo + .kh-navigation {
-    border-left: 1px solid var(--kh-rule);
+  // The vertical rules between items went with the box. They were what made
+  // three links read as a row of toolbar buttons; spacing separates them
+  // perfectly well, and the active item now has a fill to distinguish it.
+  // The last item loses its right padding so the nav ends on the content
+  // edge rather than floating a cell's width short of it.
+  .kh-navigation__item:last-child .kh-navigation__link {
+    padding-right: 0;
   }
 
+  // Navigation was set at 12px mono: the same register the site uses for ref
+  // numbers, captions and field labels. Navigation dressed as metadata reads
+  // as a utility toolbar, and that is what made the masthead feel secondary
+  // to the page beneath it. It now takes 14px at 600 -- the wordmark's own
+  // weight -- so the two ends of the masthead answer each other instead of
+  // one whispering across a gap at the other.
+  // These selectors are deliberately `.kh-global-header`-qualified. The base
+  // .kh-navigation__link rules in index.scss are emitted AFTER this mixin, so
+  // an equal-specificity rule here would lose the tie.
   .kh-global-header .kh-navigation__link {
     align-items: center;
     display: flex;
     font-family: var(--kh-font-mono);
-    font-size: 12px;
-    letter-spacing: 0.035em;
-    padding: 0.7rem 1.1rem;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 0.85rem 1.4rem;
   }
 
-  .kh-global-header .kh-navigation__link--active {
-    color: var(--kh-color--coral);
+  .kh-global-header .kh-navigation__link:hover,
+  .kh-global-header .kh-navigation__link:focus-visible {
+    background: var(--kh-ground);
+    text-decoration: none;
+  }
+
+  // A filled cell rather than a tint. Coral text alone was a weak "you are
+  // here" among three otherwise identical cells, and it spent the accent
+  // colour on the one thing that did not need explaining.
+  .kh-global-header .kh-navigation__link--active,
+  .kh-global-header .kh-navigation__link--active:visited,
+  .kh-global-header .kh-navigation__link--active:hover,
+  .kh-global-header .kh-navigation__link--active:focus-visible {
+    background: var(--kh-color--coral);
+    color: var(--kh-ground);
+    text-decoration: none;
+  }
+
+  // The weaker state: you are somewhere this item leads, not on it. A rule
+  // rather than a fill, so the masthead never claims you are on a page you
+  // are not.
+  .kh-global-header .kh-navigation__link--section,
+  .kh-global-header .kh-navigation__link--section:visited {
+    box-shadow: inset 0 -3px 0 var(--kh-color--coral);
+    text-decoration: none;
+  }
+
+  // Sits under the related list, so it reads as a footnote to the numbers
+  // above rather than as another item in the list.
+  .kh-near__key {
+    max-width: 46ch;
+    text-wrap: pretty;
+  }
+
+  // Directory topic list. Not .kh-cluster, which is a 2rem gap: this is a
+  // dense list of 31 items where the name and its count need to read as one
+  // token, so the gap between topics has to be clearly larger than the gap
+  // inside a topic. (This class originally existed to escape .kh-cluster's
+  // `!important` margins; those are gone now, but the tighter spacing is
+  // still its own reason to exist.)
+  .kh-directory__topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.75rem;
+    margin: var(--kh-stack-margin, 0) 0 1rem;
+  }
+
+  // `rem`, not `em`: the count is 12px, so an em resolves against that small
+  // size and gives about 4px, which is too tight to read as separate.
+  .kh-directory__topics .kh-meta {
+    margin-left: 0.45rem;
   }
 
   // Post masthead. Replaces the full-bleed yellow slab: same hairline
@@ -403,15 +560,6 @@
     background: var(--kh-panel-bg);
     border: 1px solid var(--kh-rule--strong);
     margin-bottom: 2.5rem;
-  }
-
-  .kh-hero__strap {
-    align-items: baseline;
-    border-bottom: 1px solid var(--kh-rule);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem 1.25rem;
-    padding: 0.75rem 1.5rem;
   }
 
   .kh-hero__body {

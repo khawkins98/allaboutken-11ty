@@ -4,6 +4,12 @@ pagination:
   data: collections.topics
   size: 1
   alias: topicPage
+  # Without this Eleventy adds only the FIRST paginated page to
+  # `collections.all`, so 30 of the 31 topic pages were missing from
+  # sitemap.njk and from social-cards.njk -- which meant their og:image
+  # pointed at a /social/topics/<slug>/ URL that did not exist, and the
+  # screenshot service would have cached the 404 page as their social card.
+  addAllPagesToCollections: true
 permalink: "/topics/{{ topicPage.slug }}/"
 eleventyComputed:
   title: "{{ topicPage.topic }}"
@@ -18,7 +24,14 @@ eleventyComputed:
     <span class="kh-meta">{{ topicPage.count }} &middot; newest first</span>
   </div>
 
-  <div class="kh-datasheet-list">
+  {#- Chrome, not content: this whole block is other entries' titles and
+      teasers. Per CLAUDE.md, `data-pagefind-ignore` is the site's single
+      marker for that, and it keeps the block out of both Pagefind and the
+      embeddings. Without it the 31 topic pages contributed 68 chunks of
+      recycled titles to the semantic corpus and competed with the posts
+      themselves in on-site search. The heading above stays indexed, so the
+      page is still findable by its own subject. -#}
+  <div class="kh-datasheet-list" data-pagefind-ignore>
   {%- for post in topicPage.items -%}
     {% include "partials/post-summary.njk" %}
   {%- endfor -%}

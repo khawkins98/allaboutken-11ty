@@ -26,9 +26,17 @@
     the strip needs its own bypass or keyboard users tab through the whole
     archive to reach the first heading. -#}
 <a class="kh-u-sr-only kh-skip-link" href="#kh-after-timeline" data-pagefind-ignore>Skip publishing timeline</a>
+{#- The strip used to carry no visible label, on the argument that the marks
+    should be noticed and worked out rather than announced. Two independent
+    first-time-visitor reviews both stopped at it: one called it "the mystery
+    dot strip", the other said it "looks like decoration". Neither worked out
+    what it was, and its only explanation lives on /archive/ -- which you
+    reach by clicking a dot you have not understood yet.
+
+    One quiet mono line fixes that and doubles as the way out. It sits
+    OUTSIDE the scroller, or it would scroll away with the track. -#}
+<p class="kh-timeline__label" data-pagefind-ignore><a href="/archive/">Published by month</a> <span class="kh-timeline__hint" aria-hidden="true">&larr; earlier</span></p>
 <nav class="kh-timeline" aria-label="Publishing timeline" data-pagefind-ignore>
-  {#- No visible label: the marks are meant to be noticed and worked out,
-     not announced. The text stays for assistive tech and the CSS-off view. -#}
   <p class="kh-u-sr-only">Entries published each month since the first post.</p>
   <ol class="kh-timeline__track" style="--kh-track-width: {{ pulse | trackWidth }}px">
     {%- for m in pulse %}

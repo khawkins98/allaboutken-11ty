@@ -56,6 +56,23 @@ module.exports = function registerMarkdown(config) {
     }
   }).use(emdashPlugin);
 
+  // Wrap every markdown table in the same scroller the datasheet tables use.
+  //
+  // Without this a wide table makes the PAGE scroll sideways instead of the
+  // table: unwrapped content tables were the single largest cause of
+  // horizontal overflow on a phone, taking /ai/ to 585px of scroll width
+  // inside a 360px viewport. /stats/ never had the problem because its table
+  // is hand-wrapped in `.kh-table-scroll`; markdown tables had no way to opt
+  // in.
+  //
+  // A renderer rule rather than an output transform, so it applies wherever
+  // the markdown library runs -- posts, the `markdown` paired shortcode and
+  // templates -- and touches nothing else in the HTML.
+  md.renderer.rules.table_open = (tokens, idx, options, env, self) =>
+    `<div class="kh-table-scroll kh-table-scroll--content">${self.renderToken(tokens, idx, options)}`;
+  md.renderer.rules.table_close = (tokens, idx, options, env, self) =>
+    `${self.renderToken(tokens, idx, options)}</div>`;
+
   // Use for Eleventy's markdown engine (for .md files and markdown in templates)
   config.setLibrary('md', md);
   // Paired shortcode to render inline markdown blocks consistently

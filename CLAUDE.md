@@ -16,6 +16,24 @@ yarn lint:links   # Validate internal links/anchors in build/ (run after a build
 ### Image paths are rewritten at build time
 Place images in `src/site/images/blog/`. Reference them in frontmatter as `/blog/filename.jpg` -- **not** `/images/blog/`. The build process adds the `/images/` prefix automatically. Getting this wrong produces broken images that only show up in production.
 
+### `/.11ty/image/?src=` in built HTML means broken images in production
+That is the dev-server endpoint. It does not exist in `build/`, so every such
+URL is a 404 on the live site. `failOnError: false` on the image plugin is what
+converts a transform failure into one of these instead of a failed build.
+
+It happens to **local** images too, not just the remote case below, and it is
+**intermittent**: one build emitted 48 pages where every listing thumbnail was
+one of these, and five subsequent builds (cold cache, warm cache, single-pass,
+two-pass, full `yarn build`) all came out clean. Do not assume a passing build
+means the class of bug is gone.
+
+`yarn lint:links` detects them — the query string is stripped, so the target
+resolves to a `build/.11ty/` directory that is not there. That check is now a
+hard gate in CI for exactly this reason; it previously ran with
+`continue-on-error: true` and went green while the images were broken.
+
+If you see it: rebuild, then check `grep -rl "\.11ty/image" build --include="*.html"`.
+
 ### Live remote images must carry `eleventy:ignore`
 The image transform treats *any* `<img src>` as a source image, including
 remote URLs. For a live endpoint -- the feedback counter SVG at
@@ -31,6 +49,51 @@ Add `eleventy:ignore` to the tag. This is not an optimisation opt-out; without
 it the feature does not work. The symptom is easy to misread: it surfaced as
 381 "broken internal links" in `yarn lint:links`, all pointing at
 `/.11ty/image/`, which looks like a link problem and is not.
+
+### `.kh-cluster` is now plain flex; it used to fight you
+It is `display: flex; flex-wrap: wrap; gap`, plus `> * { margin: 0 }` so an
+item's own outer margin (`.kh-button` has one) does not add to the gap. Nothing
+else. Keep it that way.
+
+It previously also carried the pre-`gap` negative-margin gutter on
+`.kh-cluster > *` and `.kh-cluster > * > *`, both `!important`, plus
+`display: flex` on every child. Those had been broken for a long time: they
+depended on `--kh-cluster-margin`, which is defined only on `.kh-badges` — not
+a cluster — so the `calc()` was invalid at computed-value time and both rules
+resolved to `margin: 0 !important` on every child *and grandchild*.
+
+Worth knowing because of how it presented: a perfectly valid rule of your own,
+present in the compiled CSS at brace depth zero with no competing selector,
+that the browser simply ignored. Raising the value changed nothing — that is
+the tell for an `!important` you have not found yet. Removing the rules changed
+exactly one pixel on the site, and it was a bug fix: `display: flex` on an
+`<a>` had been swallowing the leading space in a nested `<span>`, rendering
+"Mastodon@khawkins98@toot.io" on the homepage.
+
+### Laying out an `<img>` means laying out a `<picture>`
+The image transform rewrites every processed `<img src>` into
+`<picture><source…><img></picture>`. So in any flex or grid container the
+*direct child is the `<picture>`*, and a class on the `<img>` is a level too
+deep to position. `.kh-compare` hit exactly this: `grid-area` on the image
+class did nothing, the pictures flowed into their own rows, and the overlay
+elements stacked above the images instead of on top of them.
+
+Target both, so the layout survives whether or not the transform ran:
+
+```scss
+.thing > picture,
+.thing > .thing__img { grid-area: 1 / 1; }
+```
+
+The symptom is a layout that looks like an extra empty row appeared, which
+reads as a CSS bug rather than as markup you did not write.
+
+### Fonts in `kh-font/` may be retained but unloaded
+`Recursive.woff2` and its variable build are referenced by no `@font-face`
+rule. They are kept on purpose as the archive of a typeface the site used to
+run on, and `src/components/kh-font/README.md` says so. Do not remove them as
+dead assets. `Datatype.woff2` is likewise unreferenced by the rollup but used
+by a blog post.
 
 ### The `image` field is not used for social cards
 `image` in frontmatter is for in-page hero images only. Social sharing images (`og:image`) are auto-generated screenshots. Override with `og_image` (full URL) in frontmatter if needed. This confuses people because every other blog engine uses `image` for both.
@@ -97,6 +160,56 @@ Residual: the derived data still moves by a few links per build even though the
 stripped text is byte-identical across builds, verified by hash. That is
 floating-point non-determinism in the ONNX runtime flipping pairs that sit
 exactly on the threshold. It is jitter, not drift, and not worth chasing.
+
+### `noindex` is the single "not a destination" marker
+One frontmatter flag drives four exclusions, and they must stay together:
+the `robots` meta tag, the Pagefind index (`base.njk` omits
+`data-pagefind-body`), the semantic embeddings (`generate-embeddings.mjs`
+already skips any page whose HTML carries a noindex robots tag), and the
+sitemap.
+
+The trap is that `noindex` alone *looks* sufficient. It is not: it keeps a page
+out of Google while leaving it in the site's own search, which is the more
+likely way a reader meets a scratch page. `/stats/story-lab/` and
+`/stats/map-variants/` were both turning up in on-site search results.
+
+Do not add a second list of paths to exclude. Set `noindex: true` and every
+index honours it.
+
+### `kens_status: draft` withholds the entry; it used to be decorative
+`draft` and `final_draft` now gate publication. The page still renders at its
+URL -- a draft you cannot open is a draft you cannot review, and suppressing
+the permalink would also break links already shared -- but it is absent from
+every collection, the sitemap, the feed, on-site search and the embeddings.
+`ready_for_publication` and later publish normally, as does an absent field
+(most older posts have none).
+
+Two consequences that are easy to miss:
+
+- Eleventy builds `collections.posts` itself from the `posts` tag, and an
+  automatic tag collection cannot be filtered at registration. Templates
+  consuming it pipe through the `published` filter instead. Same for
+  `collections.all` in `sitemap.njk` and `ai.njk`.
+- A draft is excluded from the embedding corpus, so it cannot serve as an
+  editorial anchor in `scripts/compute-story-lab.mjs`. Naming one there trips
+  the unmatched-anchor warning on every build. Add the anchor when the post
+  publishes.
+
+### Story-lab anchors match on the exact title string
+`semanticTrailSpecs` in `scripts/compute-story-lab.mjs` finds its anchor
+entries by exact title. Retitle a post and it drops out of its biography; the
+lens just comes back smaller. The generator warns on any unmatched anchor --
+that warning is the only thing standing between a typo and a silently degraded
+view, so do not quiet it.
+
+### Shortcodes that build SVG must escape everything they interpolate
+`config/eleventy/escape.js` exists because a shortcode returns a finished
+string that Eleventy inserts verbatim; the autoescaping that protects
+`{{ title }}` in a template never sees it. A title as ordinary as "Q&A with the
+type designer" emits an invalid entity, and one containing `<` truncates the
+element. Neither throws, so the `try/catch` around each shortcode catches
+nothing and the chart simply renders wrong. Escape titles, URLs and topic names
+even when they "cannot" contain markup.
 
 ### Topics use `>` for hierarchy, never `:`
 Post `topics:` entries may be hierarchical -- `AI > Claude Code`. The parent

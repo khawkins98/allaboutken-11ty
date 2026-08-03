@@ -30,33 +30,65 @@ eleventyExcludeFromCollections: true
     Most experiments are generated from rules and will absorb new entries.
     Editorial exceptions and fixed thresholds are documented beside each view
     below. Longer methodology notes live in docs/CORPUS_STORY_LAB.md.
+
+    ORDERING
+
+    The page is three bands, not a flat list of ten. "Put it all out there" and
+    "these are the good ones" were previously the same gesture, so a reader had
+    to audit ten views to find the three worth their time.
+
+    A. Selected -- views that name specific entries and read without a
+       paragraph of method first.
+    B. How to distrust this -- instruments whose value is undermining band A.
+       Kept visible, because a gallery that hides its own diagnostics is
+       arguing in bad faith.
+    C. Workbench -- folded into a <details>, uncurated, explicitly labelled as
+       not yet worth reading. Nothing is deleted: a view that cannot be read
+       today may be readable after another year of writing.
+
+    Section numbers follow the new reading order, so 1.0-3.0 are the selected
+    views. The anchors (#returns, #radial, and so on) are unchanged, so any
+    link already shared still lands in the right place.
   -->
   <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{ title }}</h1>
 
   <div class="kh-content">
-    <p><strong>An experimental playground, not a proposed page.</strong> Each view
-    starts with a different question. The semantic model suggests which texts
-    resemble one another, although many were already deliberately cross-linked;
-    the interpretation still belongs to the writer.<sup><a class="kh-lab-citation" href="#source-pudding" aria-label="Source 10: The Pudding's guide to visual storytelling">[10]</a></sup></p>
+    <p><strong>A working gallery, sorted into three.</strong> Everything here asks
+    a question of the same archive, but not everything earned the same standing.
+    <a href="#selected">Selected</a> holds the three views I would defend to a
+    reader. <a href="#methods">How to distrust this</a> holds the ones whose real
+    job is to show where the others are weakest. <a href="#workbench">Workbench</a>
+    is uncurated and stays folded away: interesting to make, not yet worth
+    anyone's time to read.</p>
+    <p>The semantic model suggests which texts resemble one another, although many
+    were already deliberately cross-linked; the interpretation still belongs to
+    the writer.<sup><a class="kh-lab-citation" href="#source-pudding" aria-label="Source 10: The Pudding's guide to visual storytelling">[10]</a></sup></p>
   </div>
 
   <nav class="kh-lab-index" aria-label="Story experiments">
     <ol>
       <li><a href="#returns">Ideas that came back</a></li>
       <li><a href="#biographies">Biographies of a few ideas</a></li>
-      <li><a href="#practice">From argument to evidence</a></li>
-      <li><a href="#career">Themes read against career chapters</a></li>
-      <li><a href="#pulses">When themes became active</a></li>
-      <li><a href="#diagnostic">Is this really a long-term network?</a></li>
-      <li><a href="#outbound">The web behind the writing</a></li>
-      <li><a href="#passages">Passages the map averaged away</a></li>
-      <li><a href="#radial">Topic families and two kinds of connection</a></li>
       <li><a href="#sparks">When subjects entered the archive</a></li>
+      <li><a href="#diagnostic">Is this really a long-term network?</a></li>
+      <li><a href="#passages">Passages the map averaged away</a></li>
+      <li><a href="#career">Themes read against career chapters</a></li>
+      <li><a href="#workbench">Workbench &mdash; four views not yet worth reading</a></li>
     </ol>
   </nav>
 
+
+  <div class="kh-section-head kh-u-margin__top--1200 kh-lab-band">
+    <h2 id="selected" class="kh-text-heading--2"><span class="kh-section-number">A</span>Selected</h2>
+  </div>
+  <div class="kh-content">
+    <p>Three views that say something this archive alone could say. Each names
+    specific entries rather than describing the corpus in aggregate, and each
+    reads without a paragraph of method first.</p>
+  </div>
+
   <!--
-    1. IDEAS THAT CAME BACK
+    1.0 IDEAS THAT CAME BACK
     Automatic: uses every semantic-map pair at least three years apart, excluding
     companion pieces such as the same series or article and impact-story pairs.
     Editorial rule: the three-year floor defines what this experiment calls a
@@ -119,7 +151,7 @@ eleventyExcludeFromCollections: true
   </ol>
 
   <!--
-    2. BIOGRAPHIES OF A FEW IDEAS
+    2.0 BIOGRAPHIES OF A FEW IDEAS
     Hybrid: scripts/compute-story-lab.mjs names each lens and supplies two to
     four anchor entries. It averages their non-header passage embeddings, ranks
     the corpus against that centroid, applies a labelled similarity floor, and
@@ -160,13 +192,202 @@ eleventyExcludeFromCollections: true
   </div>
 
   <!--
-    3. FROM ARGUMENT TO EVIDENCE
+    3.0 WHEN SUBJECTS ENTERED THE ARCHIVE
+    Automatic: includes every primary topic used by at least two entries and
+    orders topics by first appearance. Each trace is a trailing six-month count,
+    normalized to that topic's own peak; dots mark actual publication months and
+    the right label preserves the raw total. The six-month window and the 2013
+    through 2026 time domain are currently fixed constants.
+  -->
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="sparks" class="kh-text-heading--2"><span class="kh-section-number">3.0</span>When subjects entered the archive</h2>
+    <span class="kh-meta">{{ storyLab.topicSparks.topics }} recurring topics · {{ storyLab.topicSparks.entries }} entries</span>
+  </div>
+  <div class="kh-content">
+    <p><strong>Question:</strong> when did each subject first appear, and did it
+    become a continuing practice, a short burst or a later return? Each line is
+    a trailing {{ storyLab.topicSparks.windowMonths }}-month publication count,
+    ordered by the topic's first appearance. Like Kevin Marks's
+    <cite>The Joy of Sparks</cite>, the offset, overlapping lines turn small time
+    series into a shared terrain.<sup><a class="kh-lab-citation" href="#source-joy-of-sparks" aria-label="Source 12: The Joy of Sparks">[12]</a></sup>
+    Every topic is normalized to its own peak, so height compares timing and
+    shape within a row, never volume between rows; the right-hand number is the
+    actual entry total.</p>
+  </div>
+  <figure id="kh-topic-sparks" class="kh-topic-sparks">
+    <div class="kh-map-scroll">
+      <svg viewBox="0 0 {{ storyLab.topicSparks.width }} {{ storyLab.topicSparks.height }}" width="{{ storyLab.topicSparks.width }}" height="{{ storyLab.topicSparks.height }}" role="img" aria-labelledby="topic-sparks-title topic-sparks-desc">
+        <title id="topic-sparks-title">Publication activity by recurring primary topic</title>
+        <desc id="topic-sparks-desc">{{ storyLab.topicSparks.topics }} topic sparklines run from 2013 to 2026 and are ordered by first appearance. Each shows a trailing six-month count normalized to its own peak; exact post dates are marked with dots and actual totals appear at right.</desc>
+        <g class="kh-topic-sparks__years" aria-hidden="true">
+          {%- for year in storyLab.topicSparks.years %}
+          <line x1="{{ year.x }}" y1="24" x2="{{ year.x }}" y2="{{ storyLab.topicSparks.height - 34 }}"></line>
+          <text x="{{ year.x }}" y="{{ storyLab.topicSparks.height - 12 }}" text-anchor="middle">{{ year.year }}</text>
+          {%- endfor %}
+        </g>
+        <g class="kh-topic-sparks__series-list">
+          {%- for series in storyLab.topicSparks.series %}
+          <a class="kh-topic-sparks__series" href="#sparks" data-topic="{{ series.topic }}" data-group="{{ series.groupLabel }}" data-total="{{ series.total }}" data-first="{{ series.firstDate }}" data-last="{{ series.lastDate }}" data-peak="{{ series.peak }}" data-peak-period="{{ series.peakPeriod }}" aria-describedby="kh-topic-sparks-detail">
+            <title>{{ series.topic }} — {{ series.total }} entries from {{ series.firstDate }} to {{ series.lastDate }}; peak {{ series.peak }} in a trailing six-month window ending {{ series.peakPeriod }}</title>
+            <path class="kh-topic-sparks__area" d="{{ series.area }}"></path>
+            <path class="kh-topic-sparks__line" d="{{ series.line }}"></path>
+            {%- for post in series.posts %}<circle class="kh-topic-sparks__post" cx="{{ post.x }}" cy="{{ post.y }}" r="2.8"><title>{{ post.date }} — {{ post.title }}</title></circle>{%- endfor %}
+            <text class="kh-topic-sparks__label" x="{{ storyLab.topicSparks.plotLeft - 12 }}" y="{{ series.baseline + 4 }}" text-anchor="end">{{ series.topic }}</text>
+            <text class="kh-topic-sparks__total" x="{{ storyLab.topicSparks.plotRight + 16 }}" y="{{ series.baseline + 4 }}">{{ series.total }}</text>
+          </a>
+          {%- endfor %}
+        </g>
+      </svg>
+    </div>
+    <figcaption id="kh-topic-sparks-detail" class="kh-meta" aria-live="polite">Hover a line or focus its label to read its span and peak. Topics with a single entry are omitted.</figcaption>
+  </figure>
+
+  <div class="kh-section-head kh-u-margin__top--1200 kh-lab-band">
+    <h2 id="methods" class="kh-text-heading--2"><span class="kh-section-number">B</span>How to distrust this</h2>
+  </div>
+  <div class="kh-content">
+    <p>These are instruments, not exhibits. Their value is that they undercut the
+    three above: they show how much of the apparent network is recency, where the
+    thresholds were set, and which comparisons are confounded. Read them as the
+    caveats made visible.</p>
+  </div>
+
+  <!--
+    4.0 IS THIS REALLY A LONG-TERM NETWORK?
+    Automatic: plots every displayed whole-entry semantic-map edge by elapsed
+    years and similarity. New entries affect this only if they survive the public
+    map's similarity floor and per-entry neighbour cap. Plot domains are fixed.
+  -->
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="diagnostic" class="kh-text-heading--2"><span class="kh-section-number">4.0</span>Is this really a long-term network?</h2>
+    <span class="kh-meta">All {{ storyLab.counts.links }} displayed semantic links</span>
+  </div>
+  <div class="kh-content">
+    <p><strong>Question:</strong> how much of the apparent network is recurrence,
+    and how much is a recent burst describing the same work? Most links sit near
+    zero years. The rare points on the right are the better raw material for a
+    story about ideas returning.</p>
+  </div>
+  <figure class="kh-lab-figure">
+    <div class="kh-map-scroll">
+      <svg class="kh-map kh-lab-scatter" viewBox="0 0 1200 280" width="1200" height="280" role="img" aria-labelledby="scatter-title scatter-desc">
+        <title id="scatter-title">Semantic similarity by years between linked entries</title>
+        <desc id="scatter-desc">Most of the sixty-six pairs are less than one year apart. Filled points cross a career boundary; open points do not. Faded points are likely article and impact-story companions.</desc>
+        <g class="kh-lab-grid" aria-hidden="true">
+          {% for gap in [0, 2, 4, 6, 8, 10] %}<line x1="{{ 72 + (gap / 10 * 1040) }}" y1="34" x2="{{ 72 + (gap / 10 * 1040) }}" y2="228"></line><text x="{{ 72 + (gap / 10 * 1040) }}" y="254">{{ gap }}y</text>{% endfor %}
+          {% for score in [0.6, 0.7, 0.8, 0.9] %}<line x1="72" y1="{{ 228 - ((score - 0.6) / 0.32 * 190) }}" x2="1112" y2="{{ 228 - ((score - 0.6) / 0.32 * 190) }}"></line><text x="28" y="{{ 232 - ((score - 0.6) / 0.32 * 190) }}">{{ score }}</text>{% endfor %}
+        </g>
+        <g class="kh-lab-scatter__points">
+          {%- for point in storyLab.scatter %}
+          <circle cx="{{ point.x }}" cy="{{ point.y }}" r="{% if point.gapYears >= 3 %}5{% else %}3.5{% endif %}" class="{% if point.crossCareer %}is-cross-career {% endif %}{% if point.companion %}is-companion{% endif %}"><title>{{ point.first.title }} + {{ point.second.title }}: {{ point.gapYears }} years, similarity {{ point.score }}</title></circle>
+          {%- endfor %}
+        </g>
+      </svg>
+    </div>
+    <figcaption class="kh-meta">Horizontal position is elapsed time; vertical position is model similarity. Filled marks cross a career boundary. Faded marks are likely companion pieces.</figcaption>
+  </figure>
+
+  <!--
+    5.0 PASSAGES THE MAP AVERAGED AWAY
+    Automatic after embeddings are regenerated: compares non-header passage
+    vectors for entry pairs separated by at least three years that did not become
+    public semantic-map edges. The passage floor, minimum lift and eight-result
+    display limit are exploratory constants in scripts/compute-story-lab.mjs.
+  -->
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="passages" class="kh-text-heading--2"><span class="kh-section-number">5.0</span>Passages the map averaged away</h2>
+    <span class="kh-meta">{{ storyLab.semanticIndex.entryChunks }} chunks from {{ storyLab.semanticIndex.entryPages }} entries</span>
+  </div>
+  <div class="kh-content">
+    <p><strong>Question:</strong> which small echoes disappear when the semantic
+    search index is averaged into one vector per entry? These candidates span at
+    least three years, have no displayed map edge, and contain one passage pair
+    that is substantially closer than the two entries overall. The snippets are
+    prompts for close reading, not proof that the ideas are related.</p>
+  </div>
+  <ol class="kh-passage-list">
+    {%- for echo in storyLab.semanticIndex.passageEchoes %}
+    <li class="kh-passage">
+      <div class="kh-passage__pair">
+        <div>
+          <span class="kh-meta">{{ echo.first.year }}</span>
+          <a href="{{ echo.first.url }}">{{ echo.first.title }}</a>
+          <p>{{ echo.firstSnippet }}</p>
+        </div>
+        <div class="kh-passage__score">
+          <span>{{ echo.passageScore }} passage</span>
+          <i aria-hidden="true">↕</i>
+          <span>{{ echo.entryScore }} whole entry</span>
+        </div>
+        <div>
+          <span class="kh-meta">{{ echo.second.year }}</span>
+          <a href="{{ echo.second.url }}">{{ echo.second.title }}</a>
+          <p>{{ echo.secondSnippet }}</p>
+        </div>
+      </div>
+      <span class="kh-meta">{{ echo.gapYears }} years apart · {% if echo.explicitLink %}linked directly in the writing{% else %}no direct source link found{% endif %}</span>
+    </li>
+    {%- endfor %}
+  </ol>
+  <p class="kh-meta">The latest full-build index contains {{ storyLab.semanticIndex.totalChunks }} chunks from {{ storyLab.semanticIndex.totalPages }} searchable pages. The corpus map uses {{ storyLab.semanticIndex.entryChunks }} chunks belonging to the {{ storyLab.semanticIndex.entryPages }} writing entries shown here.</p>
+
+  <!--
+    6.0 THEMES READ AGAINST CAREER CHAPTERS
+    Automatic counts: the ten most frequent primary topics are recalculated, and
+    cells count posts within each career date band. Fill uses a shared square-root
+    count scale; printed percentages are normalized within a chapter.
+    Bespoke context: employer labels and their start and end dates are maintained
+    in the careers array in scripts/compute-story-lab.mjs.
+  -->
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="career" class="kh-text-heading--2"><span class="kh-section-number">6.0</span>Themes read against career chapters</h2>
+    <span class="kh-meta">Color: post count · percentage: chapter share</span>
+  </div>
+  <div class="kh-content">
+    <p><strong>Question:</strong> which subjects appear in the public writing from
+    each chapter? Darker cells mean more posts on a shared scale, so four posts
+    always read as more than two. The percentage says how prominent that topic
+    was within its chapter. This is context, not a claim of correlation or
+    organizational influence.<sup><a class="kh-lab-citation" href="#source-themeriver" aria-label="Source 2: ThemeRiver">[2]</a></sup></p>
+  </div>
+  <div class="kh-table-scroll">
+    <table class="kh-table--spec kh-lab-heatmap">
+      <thead><tr><th scope="col">Primary topic</th>{% for career in storyLab.careerBands %}<th scope="col">{{ career.label }} <span class="kh-spark__axis">{{ career.tagged }} tagged</span></th>{% endfor %}</tr></thead>
+      <tbody>
+        {%- for row in storyLab.topicCareer %}
+        <tr><th scope="row">{{ row.topic }} <span class="kh-meta">{{ row.total }}</span></th>
+          {%- for cell in row.cells %}<td style="--kh-strength: {{ cell.strength }}%"><span>{{ cell.count }}</span><small>{{ cell.share }}%</small></td>{%- endfor %}
+        </tr>
+        {%- endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="kh-section-head kh-u-margin__top--1200 kh-lab-band">
+    <h2 id="workbench" class="kh-text-heading--2"><span class="kh-section-number">C</span>Workbench</h2>
+  </div>
+  <div class="kh-content">
+    <p>Four views kept for stewing, folded away because none of them currently
+    earns a reader's attention. Two show pairs I deliberately cross-linked, so the
+    model discovered nothing; one is a ranking every blog could produce; one is
+    the best-looking thing on the page and needs three hundred words to explain
+    what its angle and radius mean. Nothing here is deleted &mdash; a view that
+    cannot be read today may be readable after another year of writing.</p>
+  </div>
+
+  <details class="kh-lab-workbench kh-u-margin__top--600">
+    <summary>Open the workbench &mdash; four uncurated views</summary>
+    <div class="kh-lab-workbench__body">
+
+  <!--
+    7.0 FROM ARGUMENT TO EVIDENCE
     Automatic: filters semantic-map pairs so exactly one entry is an impact story
     and the other is not. Content type comes from tags and filename conventions.
     The view therefore updates when a new impact story enters the semantic map.
   -->
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="practice" class="kh-text-heading--2"><span class="kh-section-number">3.0</span>From argument to evidence</h2>
+    <h2 id="practice" class="kh-text-heading--2"><span class="kh-section-number">7.0</span>From argument to evidence</h2>
     <span class="kh-meta">{{ storyLab.practiceEdges | length }} article ↔ impact-story pairs</span>
   </div>
   <div class="kh-content">
@@ -199,46 +420,14 @@ eleventyExcludeFromCollections: true
   </figure>
 
   <!--
-    4. THEMES READ AGAINST CAREER CHAPTERS
-    Automatic counts: the ten most frequent primary topics are recalculated, and
-    cells count posts within each career date band. Fill uses a shared square-root
-    count scale; printed percentages are normalized within a chapter.
-    Bespoke context: employer labels and their start and end dates are maintained
-    in the careers array in scripts/compute-story-lab.mjs.
-  -->
-  <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="career" class="kh-text-heading--2"><span class="kh-section-number">4.0</span>Themes read against career chapters</h2>
-    <span class="kh-meta">Color: post count · percentage: chapter share</span>
-  </div>
-  <div class="kh-content">
-    <p><strong>Question:</strong> which subjects appear in the public writing from
-    each chapter? Darker cells mean more posts on a shared scale, so four posts
-    always read as more than two. The percentage says how prominent that topic
-    was within its chapter. This is context, not a claim of correlation or
-    organizational influence.<sup><a class="kh-lab-citation" href="#source-themeriver" aria-label="Source 2: ThemeRiver">[2]</a></sup></p>
-  </div>
-  <div class="kh-table-scroll">
-    <table class="kh-table--spec kh-lab-heatmap">
-      <thead><tr><th scope="col">Primary topic</th>{% for career in storyLab.careerBands %}<th scope="col">{{ career.label }} <span class="kh-spark__axis">{{ career.tagged }} tagged</span></th>{% endfor %}</tr></thead>
-      <tbody>
-        {%- for row in storyLab.topicCareer %}
-        <tr><th scope="row">{{ row.topic }} <span class="kh-meta">{{ row.total }}</span></th>
-          {%- for cell in row.cells %}<td style="--kh-strength: {{ cell.strength }}%"><span>{{ cell.count }}</span><small>{{ cell.share }}%</small></td>{%- endfor %}
-        </tr>
-        {%- endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <!--
-    5. WHEN THEMES BECAME ACTIVE
+    8.0 WHEN THEMES BECAME ACTIVE
     Automatic: uses the same recalculated top ten primary topics as section 4 and
     counts them by publication year. Each row is normalized to its own peak, so
     color compares a topic with itself rather than comparing volumes across rows.
     The displayed year array is currently fixed at 2013 through 2026.
   -->
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="pulses" class="kh-text-heading--2"><span class="kh-section-number">5.0</span>When themes became active</h2>
+    <h2 id="pulses" class="kh-text-heading--2"><span class="kh-section-number">8.0</span>When themes became active</h2>
     <span class="kh-meta">Each row scaled to its own peak year</span>
   </div>
   <div class="kh-content">
@@ -260,42 +449,7 @@ eleventyExcludeFromCollections: true
   </div>
 
   <!--
-    6. IS THIS REALLY A LONG-TERM NETWORK?
-    Automatic: plots every displayed whole-entry semantic-map edge by elapsed
-    years and similarity. New entries affect this only if they survive the public
-    map's similarity floor and per-entry neighbour cap. Plot domains are fixed.
-  -->
-  <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="diagnostic" class="kh-text-heading--2"><span class="kh-section-number">6.0</span>Is this really a long-term network?</h2>
-    <span class="kh-meta">All {{ storyLab.counts.links }} displayed semantic links</span>
-  </div>
-  <div class="kh-content">
-    <p><strong>Question:</strong> how much of the apparent network is recurrence,
-    and how much is a recent burst describing the same work? Most links sit near
-    zero years. The rare points on the right are the better raw material for a
-    story about ideas returning.</p>
-  </div>
-  <figure class="kh-lab-figure">
-    <div class="kh-map-scroll">
-      <svg class="kh-map kh-lab-scatter" viewBox="0 0 1200 280" width="1200" height="280" role="img" aria-labelledby="scatter-title scatter-desc">
-        <title id="scatter-title">Semantic similarity by years between linked entries</title>
-        <desc id="scatter-desc">Most of the sixty-six pairs are less than one year apart. Filled points cross a career boundary; open points do not. Faded points are likely article and impact-story companions.</desc>
-        <g class="kh-lab-grid" aria-hidden="true">
-          {% for gap in [0, 2, 4, 6, 8, 10] %}<line x1="{{ 72 + (gap / 10 * 1040) }}" y1="34" x2="{{ 72 + (gap / 10 * 1040) }}" y2="228"></line><text x="{{ 72 + (gap / 10 * 1040) }}" y="254">{{ gap }}y</text>{% endfor %}
-          {% for score in [0.6, 0.7, 0.8, 0.9] %}<line x1="72" y1="{{ 228 - ((score - 0.6) / 0.32 * 190) }}" x2="1112" y2="{{ 228 - ((score - 0.6) / 0.32 * 190) }}"></line><text x="28" y="{{ 232 - ((score - 0.6) / 0.32 * 190) }}">{{ score }}</text>{% endfor %}
-        </g>
-        <g class="kh-lab-scatter__points">
-          {%- for point in storyLab.scatter %}
-          <circle cx="{{ point.x }}" cy="{{ point.y }}" r="{% if point.gapYears >= 3 %}5{% else %}3.5{% endif %}" class="{% if point.crossCareer %}is-cross-career {% endif %}{% if point.companion %}is-companion{% endif %}"><title>{{ point.first.title }} + {{ point.second.title }}: {{ point.gapYears }} years, similarity {{ point.score }}</title></circle>
-          {%- endfor %}
-        </g>
-      </svg>
-    </div>
-    <figcaption class="kh-meta">Horizontal position is elapsed time; vertical position is model similarity. Filled marks cross a career boundary. Faded marks are likely companion pieces.</figcaption>
-  </figure>
-
-  <!--
-    7. THE WEB BEHIND THE WRITING
+    9.0 THE WEB BEHIND THE WRITING
     Automatic after a rendered build: scans anchors inside each article, ranks
     hosts by distinct entries mentioning them, and counts suffix classes within
     career chapters. The top-fifteen limit and suffix classification rules are
@@ -303,7 +457,7 @@ eleventyExcludeFromCollections: true
     not endorsement, influence or trust.
   -->
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="outbound" class="kh-text-heading--2"><span class="kh-section-number">7.0</span>The web behind the writing</h2>
+    <h2 id="outbound" class="kh-text-heading--2"><span class="kh-section-number">9.0</span>The web behind the writing</h2>
     <span class="kh-meta">{{ storyLab.outbound.links }} links · {{ storyLab.outbound.uniqueHosts }} hosts</span>
   </div>
   <div class="kh-content">
@@ -346,51 +500,7 @@ eleventyExcludeFromCollections: true
   </div>
 
   <!--
-    8. PASSAGES THE MAP AVERAGED AWAY
-    Automatic after embeddings are regenerated: compares non-header passage
-    vectors for entry pairs separated by at least three years that did not become
-    public semantic-map edges. The passage floor, minimum lift and eight-result
-    display limit are exploratory constants in scripts/compute-story-lab.mjs.
-  -->
-  <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="passages" class="kh-text-heading--2"><span class="kh-section-number">8.0</span>Passages the map averaged away</h2>
-    <span class="kh-meta">{{ storyLab.semanticIndex.entryChunks }} chunks from {{ storyLab.semanticIndex.entryPages }} entries</span>
-  </div>
-  <div class="kh-content">
-    <p><strong>Question:</strong> which small echoes disappear when the semantic
-    search index is averaged into one vector per entry? These candidates span at
-    least three years, have no displayed map edge, and contain one passage pair
-    that is substantially closer than the two entries overall. The snippets are
-    prompts for close reading, not proof that the ideas are related.</p>
-  </div>
-  <ol class="kh-passage-list">
-    {%- for echo in storyLab.semanticIndex.passageEchoes %}
-    <li class="kh-passage">
-      <div class="kh-passage__pair">
-        <div>
-          <span class="kh-meta">{{ echo.first.year }}</span>
-          <a href="{{ echo.first.url }}">{{ echo.first.title }}</a>
-          <p>{{ echo.firstSnippet }}</p>
-        </div>
-        <div class="kh-passage__score">
-          <span>{{ echo.passageScore }} passage</span>
-          <i aria-hidden="true">↕</i>
-          <span>{{ echo.entryScore }} whole entry</span>
-        </div>
-        <div>
-          <span class="kh-meta">{{ echo.second.year }}</span>
-          <a href="{{ echo.second.url }}">{{ echo.second.title }}</a>
-          <p>{{ echo.secondSnippet }}</p>
-        </div>
-      </div>
-      <span class="kh-meta">{{ echo.gapYears }} years apart · {% if echo.explicitLink %}linked directly in the writing{% else %}no direct source link found{% endif %}</span>
-    </li>
-    {%- endfor %}
-  </ol>
-  <p class="kh-meta">The latest full-build index contains {{ storyLab.semanticIndex.totalChunks }} chunks from {{ storyLab.semanticIndex.totalPages }} searchable pages. The corpus map uses {{ storyLab.semanticIndex.entryChunks }} chunks belonging to the {{ storyLab.semanticIndex.entryPages }} writing entries shown here.</p>
-
-  <!--
-    9. TOPIC FAMILIES AND TWO KINDS OF CONNECTION
+    10.0 TOPIC FAMILIES AND TWO KINDS OF CONNECTION
     Automatic relationships: authored edges come from links between rendered
     entries; semantic edges come from passage pairs at the exploratory floor.
     Bespoke structure: radialGroupDefs assigns controlled-vocabulary topics to
@@ -398,7 +508,7 @@ eleventyExcludeFromCollections: true
     family and radius means panel-specific cross-family connection count.
   -->
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="radial" class="kh-text-heading--2"><span class="kh-section-number">9.0</span>Topic families and two kinds of connection</h2>
+    <h2 id="radial" class="kh-text-heading--2"><span class="kh-section-number">10.0</span>Topic families and two kinds of connection</h2>
     <span class="kh-meta">{{ storyLab.radial.counts.authored }} authored · {{ storyLab.radial.counts.semantic }} semantic · {{ storyLab.radial.counts.overlap }} both</span>
   </div>
   <div class="kh-content">
@@ -475,7 +585,7 @@ eleventyExcludeFromCollections: true
         {%- endfor %}
       </svg>
     </div>
-    <p id="kh-radial-detail" class="kh-radial-detail kh-meta" aria-live="polite">Hover a topic, entry or connection; keyboard users can focus an entry link.</p>
+    <p id="kh-radial-detail" class="kh-radial-detail kh-meta" aria-live="polite">Hover a topic, entry or connection; keyboard users can focus a topic family or an entry link.</p>
     <div class="kh-radial-tooltip" role="tooltip" aria-hidden="true">
       <div class="kh-radial-tooltip__entries">
         <div class="kh-radial-tooltip__entry" data-tooltip-entry="first"><span class="kh-radial-tooltip__label"></span><strong></strong></div>
@@ -491,56 +601,8 @@ eleventyExcludeFromCollections: true
     groups repeated vocabulary within them.</p>
   </div>
 
-  <!--
-    10. WHEN SUBJECTS ENTERED THE ARCHIVE
-    Automatic: includes every primary topic used by at least two entries and
-    orders topics by first appearance. Each trace is a trailing six-month count,
-    normalized to that topic's own peak; dots mark actual publication months and
-    the right label preserves the raw total. The six-month window and the 2013
-    through 2026 time domain are currently fixed constants.
-  -->
-  <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="sparks" class="kh-text-heading--2"><span class="kh-section-number">10.0</span>When subjects entered the archive</h2>
-    <span class="kh-meta">{{ storyLab.topicSparks.topics }} recurring topics · {{ storyLab.topicSparks.entries }} entries</span>
-  </div>
-  <div class="kh-content">
-    <p><strong>Question:</strong> when did each subject first appear, and did it
-    become a continuing practice, a short burst or a later return? Each line is
-    a trailing {{ storyLab.topicSparks.windowMonths }}-month publication count,
-    ordered by the topic's first appearance. Like Kevin Marks's
-    <cite>The Joy of Sparks</cite>, the offset, overlapping lines turn small time
-    series into a shared terrain.<sup><a class="kh-lab-citation" href="#source-joy-of-sparks" aria-label="Source 12: The Joy of Sparks">[12]</a></sup>
-    Every topic is normalized to its own peak, so height compares timing and
-    shape within a row, never volume between rows; the right-hand number is the
-    actual entry total.</p>
-  </div>
-  <figure id="kh-topic-sparks" class="kh-topic-sparks">
-    <div class="kh-map-scroll">
-      <svg viewBox="0 0 {{ storyLab.topicSparks.width }} {{ storyLab.topicSparks.height }}" width="{{ storyLab.topicSparks.width }}" height="{{ storyLab.topicSparks.height }}" role="img" aria-labelledby="topic-sparks-title topic-sparks-desc">
-        <title id="topic-sparks-title">Publication activity by recurring primary topic</title>
-        <desc id="topic-sparks-desc">{{ storyLab.topicSparks.topics }} topic sparklines run from 2013 to 2026 and are ordered by first appearance. Each shows a trailing six-month count normalized to its own peak; exact post dates are marked with dots and actual totals appear at right.</desc>
-        <g class="kh-topic-sparks__years" aria-hidden="true">
-          {%- for year in storyLab.topicSparks.years %}
-          <line x1="{{ year.x }}" y1="24" x2="{{ year.x }}" y2="{{ storyLab.topicSparks.height - 34 }}"></line>
-          <text x="{{ year.x }}" y="{{ storyLab.topicSparks.height - 12 }}" text-anchor="middle">{{ year.year }}</text>
-          {%- endfor %}
-        </g>
-        <g class="kh-topic-sparks__series-list">
-          {%- for series in storyLab.topicSparks.series %}
-          <a class="kh-topic-sparks__series" href="#sparks" data-topic="{{ series.topic }}" data-group="{{ series.groupLabel }}" data-total="{{ series.total }}" data-first="{{ series.firstDate }}" data-last="{{ series.lastDate }}" data-peak="{{ series.peak }}" data-peak-period="{{ series.peakPeriod }}" aria-describedby="kh-topic-sparks-detail">
-            <title>{{ series.topic }} — {{ series.total }} entries from {{ series.firstDate }} to {{ series.lastDate }}; peak {{ series.peak }} in a trailing six-month window ending {{ series.peakPeriod }}</title>
-            <path class="kh-topic-sparks__area" d="{{ series.area }}"></path>
-            <path class="kh-topic-sparks__line" d="{{ series.line }}"></path>
-            {%- for post in series.posts %}<circle class="kh-topic-sparks__post" cx="{{ post.x }}" cy="{{ post.y }}" r="2.8"><title>{{ post.date }} — {{ post.title }}</title></circle>{%- endfor %}
-            <text class="kh-topic-sparks__label" x="{{ storyLab.topicSparks.plotLeft - 12 }}" y="{{ series.baseline + 4 }}" text-anchor="end">{{ series.topic }}</text>
-            <text class="kh-topic-sparks__total" x="{{ storyLab.topicSparks.plotRight + 16 }}" y="{{ series.baseline + 4 }}">{{ series.total }}</text>
-          </a>
-          {%- endfor %}
-        </g>
-      </svg>
     </div>
-    <figcaption id="kh-topic-sparks-detail" class="kh-meta" aria-live="polite">Hover a line or focus its label to read its span and peak. Topics with a single entry are omitted.</figcaption>
-  </figure>
+  </details>
 
   <details class="kh-map-details kh-u-margin__top--600">
     <summary>Limits shared by these experiments</summary>

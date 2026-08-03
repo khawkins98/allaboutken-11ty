@@ -7,7 +7,7 @@
     `.kh-datasheet-list` they become real grid cells with hairline borders. -#}
 <article class="kh-summary kh-summary--news{% if isDigesting %} kh-summary--highlight{% endif %}">
   <div class="kh-summary__meta">
-    <div class="kh-summary__date">{{ post.date | dateDisplay }}{% if isImpactStory %} | <a href="/work">Project note</a>{% elif isNote %} | Note post{% endif %}</div>
+    <div class="kh-summary__date">{{ post.date | dateDisplay }}{% if isImpactStory %} | <a href="/work">Impact story</a>{% elif isNote %} | Note post{% endif %}</div>
     {% if isDigesting %}<a href="/digesting" class="kh-summary__tab">Digesting</a>{% endif %}
   </div>
   <div class="kh-summary__body">

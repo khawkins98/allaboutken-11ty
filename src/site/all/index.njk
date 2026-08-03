@@ -1,6 +1,6 @@
 ---
 title: All writing
-teaser: "Everything in one place — blog posts, digesting bookmarks, and project notes."
+teaser: "Everything in one place — blog posts, digesting bookmarks, and impact stories."
 layout: layouts/base.njk
 pagination:
   data: collections.allContent
@@ -22,7 +22,7 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
     <p>Every entry on the site in one register, newest first. Three kinds of
     thing sit here together: <strong>blog posts</strong>, which are written
     pieces; <strong>digesting</strong> entries, which are something I read
-    plus what I took from it; and <strong>project notes</strong>, which are
+    plus what I took from it; and <strong>impact stories</strong>, which are
     write-ups of work I actually shipped. They are mixed here on purpose
     &mdash; if you would rather keep them apart, the three links below do
     that.</p>
@@ -32,7 +32,14 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
   {%- endif %}
 
   {#- The three sections of the register. Nav collapsed to a single
-      "Writing" entry, so this page is where they are reached from. -#}
+      "Writing" entry, so this page is where they are reached from.
+
+      First page only, like the intro and the pace figures above. On /all/4/ a
+      reader is deep in a chronological list and has already chosen not to
+      branch off; repeating the whole panel there pushes the actual list below
+      the fold and restates counts for the entire corpus next to a slice of
+      fifteen entries. The footer carries the same four links on every page. -#}
+  {%- if isFirstPage %}
   <div class="kh-section-head kh-u-margin__top--1200">
     <h2 id="sections" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Sections</h2>
     <span class="kh-meta">{{ collections.allContent | length }} entries in total</span>
@@ -47,10 +54,10 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
       <div class="kh-panel__cell">
         <span class="kh-panel__label">Digesting</span>
         <a href="/digesting/">Bookmarks &amp; reading</a>
-        <span class="kh-meta kh-u-margin__top--200">{{ collections.digesting | length }} entries</span>
+        <span class="kh-meta kh-u-margin__top--200">{{ collections.digesting | published | length }} entries</span>
       </div>
       <div class="kh-panel__cell">
-        <span class="kh-panel__label">Project notes</span>
+        <span class="kh-panel__label">Work</span>
         <a href="/work/">Impact stories</a>
         <span class="kh-meta kh-u-margin__top--200">{{ collections.impactStories | length }} entries</span>
       </div>
@@ -63,6 +70,7 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
       </div>
     </div>
   </div>
+  {%- endif %}
 
   {%- if isFirstPage %}
   <div class="kh-section-head kh-u-margin__top--1200">
@@ -74,7 +82,8 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
   {%- endif %}
 
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="everything" class="kh-text-heading--2"><span class="kh-section-number">{% if isFirstPage %}3.0{% else %}2.0{% endif %}</span>Everything</h2>
+    {#- Sole section on a pager page, so it numbers from the top there. -#}
+    <h2 id="everything" class="kh-text-heading--2"><span class="kh-section-number">{% if isFirstPage %}3.0{% else %}1.0{% endif %}</span>Everything</h2>
     <span class="kh-meta">Newest first{% if not isFirstPage %} &middot; page {{ pagination.pageNumber + 1 }}{% endif %}</span>
   </div>
   {% include "partials/search-box.njk" %}

@@ -16,7 +16,7 @@ permalink: /style-guide/editorial/
 
     <aside class="kh-note-box">
       <span class="kh-note-box__label">Related</span>
-      This page covers <em>voice, tone, and when</em> to reach for a pattern. For the live visual reference (what each pattern looks like, all class names, and live demos), see the <a href="/style-guide/components/">Component reference</a>.
+      This page covers <em>voice, tone, and when</em> to reach for a pattern. For the live visual reference (what each pattern looks like, all class names, and live demos), see the <a href="/style-guide/components/">Component reference</a>. The words that appear <em>inside</em> components — section names, straplines, the keys that explain a number — are editorial and live here, under <a href="#interface-vocabulary">Interface vocabulary</a>; the rules for setting them are in <a href="/style-guide/components/#micro-copy">Labels and micro-copy</a>.
     </aside>
 
 {% markdown %}
@@ -248,6 +248,36 @@ Consistent casing and formatting for proper nouns and technical terms:
 - **Product names as published**: Drupal (not drupal), JavaScript (not Javascript), GitHub (not Github), Eleventy (not 11ty in prose)
 - **Compound modifiers**: hyphenate when used as adjectives ("front-end development"), not as nouns ("the front end")
 - **Acronyms**: spell out on first use, then abbreviate ("Content Management System (CMS)")
+
+### Interface vocabulary
+
+The words in the interface are editorial decisions, not design decisions, and
+they belong to this guide rather than to the components one. The rule is **one
+name per thing**, and the name is the one used here.
+
+This matters because it drifts silently. The same page was at one point called
+*Work* in the footer, *Project notes* on the homepage, *Impact stories* in a
+link, and *My work and impact* in its own heading — four names for one
+destination, none of them wrong on its own. Two first-time readers each
+reported believing they were separate sections.
+
+Two levels, and they are allowed to differ from each other:
+
+| Level | Name | Where it appears |
+| --- | --- | --- |
+| Section | **Blog** | nav, footer, panels, `/blog/` |
+| Section | **Digesting** | nav, footer, panels, `/digesting/` |
+| Section | **Work** | nav, footer, panels, `/work/` |
+| Entry type | **blog post** | prose, chips |
+| Entry type | **digesting entry** | prose, chips |
+| Entry type | **impact story** | prose, chips, the `IS-` reference prefix |
+
+So an impact story lives in Work. That is one noun for the place and one for
+the thing, which reads correctly in both directions; what is not allowed is a
+third noun for either.
+
+When adding a section, add its row here first. When renaming one, this table
+and `grep` are the migration plan.
 
 ### Rhythm and pacing
 

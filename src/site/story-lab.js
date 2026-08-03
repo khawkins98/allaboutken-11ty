@@ -15,15 +15,36 @@
   const labels = new WeakMap();
   const interactive = [...nodes, ...edges, ...topics];
 
+  // The native <title> has to go, or the browser tooltip races the custom one
+  // and you get both. But removing it also removes the element's accessible
+  // name, and this used to hand it back to nodes only -- leaving every edge and
+  // topic arc anonymous to a screen reader the moment JavaScript ran. The
+  // no-JS page was the accessible one, which is the wrong way round.
+  //
+  // So: every interactive element keeps its name as an aria-label. The <g>
+  // wrappers also need role="img", because a bare group is not a name-bearing
+  // role and the label would be ignored.
   function takeNativeTitle(element) {
     const title = [...element.children].find((child) => child.tagName.toLowerCase() === 'title');
     const text = title?.textContent?.trim() || '';
-    if (text) labels.set(element, text);
-    if (element.matches('.kh-radial__node') && text) element.setAttribute('aria-label', text);
+    if (text) {
+      labels.set(element, text);
+      element.setAttribute('aria-label', text);
+      if (element.tagName.toLowerCase() === 'g') element.setAttribute('role', 'img');
+    }
     title?.remove();
   }
 
   interactive.forEach(takeNativeTitle);
+
+  // Topic families are made focusable; entries already are, being links. Edges
+  // deliberately are not: there are several hundred, and turning each into a
+  // tab stop would bury the rest of the page. They are named, not navigable --
+  // every pair an edge represents is still reachable from both its entries.
+  topics.forEach((topic) => {
+    topic.setAttribute('tabindex', '0');
+    topic.setAttribute('aria-describedby', 'kh-radial-detail');
+  });
 
   const pairKey = (a, b) => [Number(a), Number(b)].sort((x, y) => x - y).join('|');
   const edgeTouchesNode = (edge, node) => edge.dataset.a === node || edge.dataset.b === node;
@@ -214,7 +235,7 @@
     clearMarks();
     tooltip.classList.remove('is-visible');
     tooltip.setAttribute('aria-hidden', 'true');
-    detail.textContent = 'Hover a topic, entry or connection; keyboard users can focus an entry link.';
+    detail.textContent = 'Hover a topic, entry or connection; keyboard users can focus a topic family or an entry link.';
   }
 
   interactive.forEach((element) => {
@@ -229,13 +250,13 @@
     });
   });
 
-  nodes.forEach((node) => {
-    node.addEventListener('focus', () => {
-      focused = node;
-      activate(node);
+  [...nodes, ...topics].forEach((element) => {
+    element.addEventListener('focus', () => {
+      focused = element;
+      activate(element);
     });
-    node.addEventListener('blur', () => {
-      if (focused === node) focused = null;
+    element.addEventListener('blur', () => {
+      if (focused === element) focused = null;
       if (hovered) activate(hovered);
       else deactivate();
     });

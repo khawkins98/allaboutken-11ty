@@ -14,7 +14,7 @@ metadata:
   <subtitle>{{ siteConfig.short_description }}</subtitle>
   <link href="{{ metadata.url }}" rel="self"/>
   <link href="{{ siteConfig.url }}"/>
-  <updated>{{ collections.posts | rssLastUpdatedDate }}</updated>
+  <updated>{{ collections.posts | published | rssLastUpdatedDate }}</updated>
   <id>{{ metadata.id | ensureTrailingSlash }}</id>
   <logo>{{ metadata.id }}/assets/ken-favicon/assets/android-chrome-512x512.png</logo>
   <icon>{{ metadata.id }}/assets/ken-favicon/assets/favicon-32x32.png</icon>
@@ -22,7 +22,9 @@ metadata:
     <name>{{ siteConfig.author }}</name>
     <email>{{ siteConfig.email }}</email>
   </author>
-  {%- for post in collections.posts | reverse | limitItems(10) %}
+  {#- A feed entry cannot be unsent. Drafts are filtered before the slice, not
+      after, so an unfinished post cannot push a published one out of the ten. -#}
+  {%- for post in collections.posts | published | reverse | limitItems(10) %}
   {%- set absolutePostUrl %}{{ metadata.id }}{{ post.url }}{% endset %}
   <entry>
     <title>{{ post.data.title }}</title>
@@ -34,8 +36,12 @@ metadata:
       <name>{{ siteConfig.author }}</name>
       <email>{{ siteConfig.email }}</email>
     </author>
+    {#- Parents only. Emitting the raw string gave subscribers both
+        `career reflection` and `career reflection > personal archive` as two
+        unrelated categories; the hierarchy is a storage convention and means
+        nothing outside this site. -#}
     {%- if post.data.topics %}
-    {%- for topic in post.data.topics %}
+    {%- for topic in post.data.topics | topicParents %}
     <category term="{{ topic }}" />
     {%- endfor %}
     {%- elseif post.data.tags %}

@@ -33,7 +33,11 @@ permalink: /archive/
       {{ m.label }}
       <span class="kh-meta kh-archive__count">{{ m.items | length }}{{ ' entry' if m.items | length == 1 else ' entries' }}</span>
     </h3>
-    <ul class="kh-archive__list">
+    {#- Every entry's title, on one page. Chrome by the CLAUDE.md rule, and
+        the clearest case of it on the site: without the marker this page is
+        nine chunks of other people's headlines in the semantic corpus and a
+        competitor to the entries themselves in search. -#}
+    <ul class="kh-archive__list" data-pagefind-ignore>
       {%- for item in m.items %}
       {%- set itemTags = item.data.tags or [] %}
       <li class="kh-archive__item">
@@ -42,7 +46,7 @@ permalink: /archive/
         {%- if 'digesting' in itemTags %}
         <span class="kh-meta kh-archive__kind">Digesting</span>
         {%- elif 'impact-stories' in itemTags %}
-        <span class="kh-meta kh-archive__kind">Project note</span>
+        <span class="kh-meta kh-archive__kind">Impact story</span>
         {%- endif %}
       </li>
       {%- endfor %}

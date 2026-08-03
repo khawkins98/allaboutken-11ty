@@ -1,3 +1,5 @@
+const { esc, plural } = require('./escape');
+
 module.exports = function registerSemanticVisuals(config) {
   config.addFilter('sortByScore', (arr) => [...(arr || [])].sort((a, b) => b.s - a.s));
 
@@ -17,11 +19,11 @@ module.exports = function registerSemanticVisuals(config) {
       }).join('');
       const dots = map.nodes.map((n) => {
         const r = 3 + Math.min(4, (n.degree || 0) * 0.5);
-        return `<a href="${n.url}"><title>${n.title}${n.topic ? ` — ${n.topic}` : ''} (${n.degree || 0} links)</title>`
+        return `<a href="${esc(n.url)}"><title>${esc(n.title)}${n.topic ? ` — ${esc(n.topic)}` : ''} (${plural(n.degree || 0, 'link')})</title>`
           + `<circle cx="${px(n)}" cy="${py(n)}" r="${r.toFixed(1)}" fill="#5b5e5a"></circle></a>`;
       }).join('');
       return `<svg class="kh-map" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" `
-        + `aria-label="Force-directed view of the same ${map.nodes.length} entries and ${(map.edges || []).length} links. Point size shows how many links an entry has."><g>${edges}</g><g>${dots}</g></svg>`;
+        + `aria-label="Force-directed view of the same ${plural(map.nodes.length, 'entry', 'entries')} and ${plural((map.edges || []).length, 'link')}. Point size shows how many links an entry has."><g>${edges}</g><g>${dots}</g></svg>`;
     } catch (e) { return ''; }
   });
 
@@ -39,7 +41,7 @@ module.exports = function registerSemanticVisuals(config) {
         const a = pos.get(e.a); const b = pos.get(e.b);
         if (a == null || b == null) return [];
         const o = Math.min(0.95, 0.35 + (e.s - map.edgeMin) * 1.6).toFixed(2);
-        const t = `${map.nodes[e.a].title} + ${map.nodes[e.b].title} (${e.s})`;
+        const t = esc(`${map.nodes[e.a].title} + ${map.nodes[e.b].title} (${e.s})`);
         return [
           `<rect x="${b * cell}" y="${a * cell}" width="${cell - 1}" height="${cell - 1}" fill="#5b5e5a" fill-opacity="${o}"><title>${t}</title></rect>`,
           `<rect x="${a * cell}" y="${b * cell}" width="${cell - 1}" height="${cell - 1}" fill="#5b5e5a" fill-opacity="${o}"><title>${t}</title></rect>`
@@ -55,7 +57,7 @@ module.exports = function registerSemanticVisuals(config) {
         }
       }
       return `<svg class="kh-map kh-matrix" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" `
-        + `aria-label="Adjacency matrix of ${n} entries grouped by topic. A filled cell means the pair is linked; blocks along the diagonal are clusters."><g>${rules}</g><g>${cells}</g></svg>`;
+        + `aria-label="Adjacency matrix of ${plural(n, 'entry', 'entries')} grouped by topic. A filled cell means the pair is linked; blocks along the diagonal are clusters."><g>${rules}</g><g>${cells}</g></svg>`;
     } catch (e) { return ''; }
   });
 
@@ -67,8 +69,10 @@ module.exports = function registerSemanticVisuals(config) {
       const ord = map.order;
       const n = ord.length;
       const pos = new Map(ord.map((o, k) => [o.i, k]));
-      const step = (w - 20) / (n - 1);
-      const x = (k) => (10 + k * step);
+      // A single entry would divide by zero and place every mark at Infinity,
+      // which renders as an empty box rather than an error. Centre it instead.
+      const step = n > 1 ? (w - 20) / (n - 1) : 0;
+      const x = (k) => (n > 1 ? 10 + k * step : w / 2);
       const base = h - 22;
       const arcs = (map.edges || []).map((e) => {
         const a = pos.get(e.a); const b = pos.get(e.b);
@@ -77,15 +81,15 @@ module.exports = function registerSemanticVisuals(config) {
         const r = (x2 - x1) / 2;
         const o = Math.min(0.8, 0.25 + (e.s - map.edgeMin) * 1.6).toFixed(2);
         return `<path d="M ${x1.toFixed(1)} ${base} A ${r.toFixed(1)} ${Math.min(r, base - 6).toFixed(1)} 0 0 1 ${x2.toFixed(1)} ${base}" `
-          + `fill="none" stroke="#a89257" stroke-opacity="${o}" stroke-width="1"><title>${map.nodes[e.a].title} + ${map.nodes[e.b].title} (${e.s})</title></path>`;
+          + `fill="none" stroke="#a89257" stroke-opacity="${o}" stroke-width="1"><title>${esc(`${map.nodes[e.a].title} + ${map.nodes[e.b].title} (${e.s})`)}</title></path>`;
       }).join('');
       const dots = ord.map((o, k) => {
         const nd = map.nodes[o.i];
-        return `<a href="${nd.url}"><title>${nd.title}${nd.topic ? ` — ${nd.topic}` : ''}</title>`
+        return `<a href="${esc(nd.url)}"><title>${esc(nd.title)}${nd.topic ? ` — ${esc(nd.topic)}` : ''}</title>`
           + `<circle cx="${x(k).toFixed(1)}" cy="${base}" r="2.5" fill="#5b5e5a"></circle></a>`;
       }).join('');
       return `<svg class="kh-map" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" `
-        + `aria-label="Arc diagram: ${n} entries on a line in topic order, with an arc for each of the ${(map.edges || []).length} links."><g>${arcs}</g>`
+        + `aria-label="Arc diagram: ${plural(n, 'entry', 'entries')} on a line in topic order, with an arc for each of the ${plural((map.edges || []).length, 'link')}."><g>${arcs}</g>`
         + `<line x1="10" y1="${base}" x2="${w - 10}" y2="${base}" stroke="#ded2a8" stroke-width="1"></line><g>${dots}</g></svg>`;
     } catch (e) { return ''; }
   });
@@ -114,14 +118,14 @@ module.exports = function registerSemanticVisuals(config) {
       }).join('');
 
       const dots = map.nodes.map((n) => {
-        const label = n.topic ? `${n.title} — ${n.topic}` : n.title;
-        return `<a href="${n.url}"><title>${label}</title>`
+        const label = esc(n.topic ? `${n.title} — ${n.topic}` : n.title);
+        return `<a href="${esc(n.url)}"><title>${label}</title>`
           + `<circle cx="${px(n)}" cy="${py(n)}" r="3.5" fill="#5b5e5a"></circle></a>`;
       }).join('');
 
       return `<svg class="kh-map" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" `
-        + `role="img" aria-label="Map of ${map.nodes.length} entries positioned by similarity of meaning, `
-        + `with ${(map.edges || []).length} links between closely related pairs. `
+        + `role="img" aria-label="Map of ${plural(map.nodes.length, 'entry', 'entries')} positioned by similarity of meaning, `
+        + `with ${plural((map.edges || []).length, 'link')} between closely related pairs. `
         + `The axes carry no meaning; only relative distance does.">`
         + `<g>${edges}</g><g>${dots}</g></svg>`;
     } catch (e) {

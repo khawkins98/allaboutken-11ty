@@ -3,6 +3,38 @@
 Working notes for `/stats/story-lab/`. This is an experimental gallery, not a
 proposal to publish every view.
 
+## How the page is sorted
+
+The ten views are grouped into three bands. The flat list they used to form
+made "kept for stewing" and "worth your time" indistinguishable, so a reader
+had to audit all ten to find the three that repay the effort.
+
+**A. Selected** — 1 Ideas that came back, 2 Biographies of a few ideas,
+3 When subjects entered the archive. These name specific entries rather than
+describing the corpus in aggregate, and each reads without a paragraph of
+method first.
+
+**B. How to distrust this** — 4 Is this really a long-term network?,
+5 Passages the map averaged away, 6 Themes read against career chapters.
+Instruments, not exhibits. Their job is to undercut band A: the recency skew,
+the threshold choices, the confounding of career with time. They stay visible,
+because a gallery that folds away its own diagnostics is arguing in bad faith.
+
+**C. Workbench** — 7 From argument to evidence, 8 When themes became active,
+9 The web behind the writing, 10 Topic families and two kinds of connection.
+Folded into a `<details>` and labelled as uncurated. 7 and 10 largely surface
+pairs that were deliberately cross-linked, so the model discovered little; 9 is
+a ranking any blog could produce; 8 is mostly a weaker reading of 3. 10 is the
+best-looking view on the page and needs several hundred words to explain what
+its angle and radius mean — the same trap `/stats/map-variants/` already
+identifies in its force-directed variant.
+
+Nothing is deleted. A view that cannot be read today may be readable after
+another year of writing, and the generators keep producing all ten.
+
+Section numbers follow this reading order. The anchors (`#returns`, `#radial`
+and so on) are unchanged, so previously shared links still land correctly.
+
 ## The useful reframing
 
 The semantic graph is not interesting merely because posts connect to posts.
@@ -44,9 +76,22 @@ passage embeddings, ranks the corpus against that centroid, applies a per-lens
 similarity floor, and caps additional candidates from any one year before
 restoring chronology. Editorial anchors remain in the lens regardless of their
 score.
-The current lenses are content as infrastructure, typography and data,
-rebuilding and preserving a personal site, and reusable systems at
-organizational scale.
+The current lenses are information action, content as infrastructure,
+typography and data, rebuilding and preserving a personal site, and reusable
+systems at organizational scale.
+
+**Information action** is the newest, and the one the archive's own title now
+names. It is the clearest human-to-machine cross-cut in the corpus: the 2018
+Content-Action Model asks what a person should be able to *do* after reading,
+and the 2026 context-engineering argument asks the same question about a
+machine acting on someone's behalf. Its floor is 0.57 rather than the 0.55 that
+would also admit a 2017 fluid-IA post, because that post is about information
+architecture generally and not about action specifically.
+
+It overlaps *Content as infrastructure* by two entries, which is deliberate.
+The two ask different questions of the same material: infrastructure asks what
+content *is* inside an organization, action asks what it is *for*. If that
+overlap stops being productive, action is the one with the sharper claim.
 
 This is a hybrid rather than an automated claim. Embeddings choose which texts
 resemble the lens and allow new writing to enter on a later build. The editorial

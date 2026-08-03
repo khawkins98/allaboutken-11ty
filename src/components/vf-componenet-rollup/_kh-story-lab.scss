@@ -24,6 +24,47 @@
     }
   }
 
+  // The lab is sorted into three bands -- Selected, How to distrust this,
+  // Workbench -- so that "kept for stewing" and "worth your time" stop looking
+  // identical. A band head is heavier than the section heads beneath it: a
+  // double rule above, and the letter badge sized up, so the grouping reads
+  // before any individual chart does.
+  .kh-lab-band {
+    border-top: 3px double var(--kh-rule--strong);
+    margin-top: 4rem;
+    padding-top: 1rem;
+
+    .kh-section-number {
+      font-size: 1.1em;
+    }
+  }
+
+  // Folded by default and left that way. The summary states the count, because
+  // a closed <details> otherwise hides how much is behind it.
+  .kh-lab-workbench {
+    margin-top: 1rem;
+
+    > summary {
+      border-block: 1px solid var(--kh-rule--strong);
+      cursor: pointer;
+      font-family: var(--kh-font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 0.6rem 0;
+    }
+
+  }
+
+  // Everything inside is provisional; hold it back a shade from the selected
+  // views so the distinction survives scrolling past the summary. A wrapper
+  // rather than `> :not(summary)`, which would repeat the rule on every one of
+  // the four views' many sibling elements.
+  .kh-lab-workbench__body {
+    border-left: 1px solid var(--kh-rule--strong);
+    margin-top: 1.5rem;
+    padding-left: 1.25rem;
+  }
+
   .kh-lab-figure {
     margin: 0 0 1.5rem;
 

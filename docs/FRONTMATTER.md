@@ -27,7 +27,7 @@ Every field that templates read from YAML frontmatter across post, page, and dig
 | [`digest_link`](#digest_link) | Optional | digesting | URL for the "Learn more at the source" button |
 | [`href`](#href) | Optional | post | Wraps the hero image in a link |
 | [`org`](#org) | Optional | post | Organisation name for impact stories |
-| [`kens_status`](#kens_status) | Optional | — | Editorial workflow marker (not rendered) |
+| [`kens_status`](#kens_status) | Optional | — | Editorial workflow marker; `draft`/`final_draft` withhold the entry |
 | [`oldurl`](#oldurl) | Optional | — | Legacy Drupal URL (used for passthrough redirects) |
 | [`bodyClass`](#bodyclass) | Optional | base | Extra CSS class on `<body>` |
 | [`templateEngineOverride`](#templateengineoverride) | Optional | layouts | Force a specific template engine for the file |
@@ -343,8 +343,20 @@ org: EMBL
 kens_status: published
 ```
 
-- Editorial workflow marker. Not read by any layout template — it is for human/AI reviewers only.
-- Common value: `published`.
+- Editorial workflow marker, and a real gate on publication.
+- Vocabulary, in order: `draft` → `final_draft` → `ready_for_publication` → `published`. See [`CONTRIBUTING.md`](../CONTRIBUTING.md).
+- **`draft` and `final_draft` withhold the entry.** The page still renders at its
+  URL, so it can be opened and shared for review, but it is absent from every
+  collection (blog index, `/all/`, topics, digesting, featured), from the
+  sitemap and the RSS feed, and it carries `<meta name="robots" content="noindex,follow">`.
+  That noindex is also what keeps it out of Pagefind and out of the semantic
+  embedding corpus, so an unfinished post cannot become a "closest in meaning"
+  suggestion on a published one.
+- `ready_for_publication`, `published`, and an absent field all publish normally.
+  Most older posts have no field at all.
+- Because a draft is excluded from the embeddings, it cannot serve as an anchor
+  in `scripts/compute-story-lab.mjs`; the generator warns if a named anchor no
+  longer resolves.
 
 ---
 

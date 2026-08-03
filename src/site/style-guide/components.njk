@@ -16,7 +16,7 @@ permalink: /style-guide/components/
 
     <aside class="kh-note-box">
       <span class="kh-note-box__label">Related</span>
-      This page documents the <em>visual</em> side of each pattern. For voice, tone, and <em>when</em> to use a pattern in a post (note boxes, margin notes, the code + demo shortcode), see the <a href="/style-guide/editorial/">Editorial style guide</a>.
+      This page documents the <em>visual</em> side of each pattern. For voice, tone, and <em>when</em> to use a pattern in a post (note boxes, margin notes, the code + demo shortcode), see the <a href="/style-guide/editorial/">Editorial style guide</a>. The two meet at <a href="#micro-copy">Labels and micro-copy</a>: components carry words, and a label is written rather than designed but constrained by the component it sits in, so neither guide owns it alone.
     </aside>
 
     <nav>
@@ -24,6 +24,7 @@ permalink: /style-guide/components/
         <a href="#colors">Colors</a> ·
         <a href="#typography">Typography</a> ·
         <a href="#datasheet">Datasheet register</a> ·
+        <a href="#micro-copy">Labels &amp; micro-copy</a> ·
         <a href="#buttons">Buttons</a> ·
         <a href="#badges-labels">Badges &amp; labels</a> ·
         <a href="#note-boxes">Note boxes</a> ·
@@ -54,7 +55,7 @@ permalink: /style-guide/components/
 </article>
 
 {# ── COLORS ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="colors">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -117,7 +118,7 @@ Design tokens defined as CSS custom properties on the body. The site uses a warm
 </section>
 
 {# ── TYPOGRAPHY ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="typography">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -284,9 +285,82 @@ the page scroll sideways. Used by `/work`.
 | `.kh-global-header` | every page | Masthead as a strip of bordered nav cells |
 | `.kh-post-head` / `.kh-doc-ref` | post pages | Hairline masthead, mono byline, coral reference number |
 | `.kh-post-rail` | post pages | Sticky numbered contents index in the left margin |
+| `.kh-compare` | Recursive post | Before/after image slider. The control is a real `<input type="range">`, so pointer, touch and keyboard all come from the platform; JS only mirrors its value into `--kh-compare-split`, which a `clip-path` reads. With no JS the split stays where the inline custom property puts it |
 
 `.kh-datasheet-list` is opt-in on the container, so `post-summary.njk` stays
 untouched and every other page that includes it is unaffected.
+
+### Everyday chrome
+
+Components a reader meets on every entry, previously undocumented here even
+though they are the most-seen things on the site:
+
+| Class | Where | Notes |
+|-------|-------|-------|
+| `.kh-timeline` | above every entry | Publishing history, one mark per month, scrolling and opening on the recent end. Carries a visible `.kh-timeline__label` linking to `/archive/`; the marks link to a month within it |
+| `.kh-entry-foot` | foot of every entry | The wrapper for what comes after the article: related reading, authorship, sequence |
+| `.kh-readnext` / `.kh-near` | entry foot | "Related posts", computed from the embeddings. Owns the `h2` |
+| `.kh-sequence` / `.kh-seq` | entry foot | Where this entry sits in the register, with a typed key |
+| `.kh-author` | entry foot | Byline and contact, on entries only; index pages get the footer blurb instead |
+| `.kh-length-gauge`, `.kh-topic-tally` | byline | Apparatus — see *Labels and micro-copy* below |
+
+Story Lab components (`.kh-lab-*`, `.kh-radial-*`, `.kh-trail*`, `.kh-passage*`)
+are deliberately **not** documented here. They belong to one noindex
+experimental page and are described in `docs/CORPUS_STORY_LAB.md`; promoting
+them into this guide would imply they are site-wide patterns, which they are
+not.
+{% endmarkdown %}
+
+  </div>
+</section>
+
+{# ── LABELS AND MICRO-COPY ── #}
+<section class="kh-grid-stylized kh-u-padding__top--800" id="micro-copy">
+  <div></div>
+  <div class="kh-content kh-content--wide">
+{% markdown %}
+## Labels and micro-copy
+
+The seam between the [editorial guide](/style-guide/editorial/) and this one.
+Components carry words, and those words are written, not designed — but they
+are constrained by the component they sit in, so neither guide owns them
+alone. The rules live here; the vocabulary lives in
+[Interface vocabulary](/style-guide/editorial/#interface-vocabulary).
+
+### Naming
+
+**One name per thing.** A destination gets one section name and its contents
+get one entry-type name; see the table in the editorial guide. Before adding a
+label, check whether the thing already has a name somewhere else.
+
+### Straplines
+
+The `.kh-meta` line beside a section heading states *what the reader is looking
+at*, not what it is called — the heading already did that. "Related posts /
+Suggested by similarity" works because the second half says where the list came
+from. "Related posts / By meaning, not by tag" did not, because it assumed the
+reader knows the site has tags; they never see any.
+
+### Apparatus must be legible without hover
+
+The register prints numbers next to things: a similarity score, a topic tally,
+a length gauge. **No meaning may live only in a `title` attribute.** A tooltip
+does not exist on touch at all, and a reader on a phone met three bare decimals
+with no way to find out what they were.
+
+If a number needs explaining, explain it once in visible text near the block —
+a `.kh-meta` key line under the list, not a tooltip per item. Keep `title` as a
+convenience for pointer users, never as the only carrier.
+
+The same rule covers instructions: `/stats/` said "hover a point for its title"
+above 3.5px targets, which is an instruction a phone cannot follow.
+
+### Register
+
+Labels take the mono micro-type (`.kh-meta`, `.kh-panel__label`), body copy
+takes the sans. That contrast is what makes a label read as apparatus rather
+than as content — which is also why navigation must **not** use it: nav set in
+the metadata register reads as a utility toolbar rather than as the masthead.
 {% endmarkdown %}
 
   </div>
@@ -337,7 +411,7 @@ custom properties — keep them in sync with `_kh-dataviz.scss`.
 </section>
 
 {# ── BUTTONS ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="buttons">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -388,7 +462,7 @@ Pill-shaped categorization chips used for topics and tags:
 </section>
 
 {# ── NOTE BOXES ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="note-boxes">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -445,7 +519,7 @@ See the [editorial style guide](/style-guide/editorial/#margin-notes) for when t
 </section>
 
 {# ── CONTENT BOXES ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="content-boxes">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -503,7 +577,7 @@ Add the `open` attribute to show the content expanded on page load:
 - Technical implementation details on a non-technical post
 - Code examples that supplement but aren't essential to the narrative
 
-### Markup notes
+### Markup notes: collapsible details
 
 - The heading level inside `<summary>` should match your document outline (use `<h2>`, `<h3>`, etc. as appropriate)
 - The `.kh-details` class handles all styling — no additional classes needed on child elements
@@ -514,7 +588,7 @@ Add the `open` attribute to show the content expanded on page load:
 </section>
 
 {# ── BLOCKQUOTES ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="blockquotes">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -549,7 +623,7 @@ A styled blockquote with a yellow left border, opening quote mark, and a hand-dr
 </section>
 
 {# ── CODE ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="code">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -672,11 +746,26 @@ The `.kh-bleed-out` utility makes images break out of their container on larger 
 </section>
 
 {# ── TABLES ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="tables">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
 ## Tables
+
+A wide `.kh-table--spec` can also take `.kh-table--stack`, which makes it stop
+being a table below the `md` breakpoint: each row becomes a bordered card, the
+header row is visually hidden but still announced, and cells name themselves
+from `data-label`. Cells that are self-evident — a reference number, a title —
+carry no `data-label` and so get no name.
+
+Reach for it when horizontal scrolling would hide more than it shows. `/work/`
+is the case that prompted it: as a five-column table on a phone it hid 209px of
+its 565px width, collapsing the summary column to two-word lines and slicing
+the topic chips mid-word against the container edge, which reads as broken
+rendering rather than as an invitation to scroll.
+
+It is opt-in for the same reason `.kh-datasheet-list` is: most spec tables are
+narrow enough that the scroller is the better answer.
 
 Inside `.kh-content`, bare tables get alternating row striping with a grey header row:
 {% endmarkdown %}
@@ -721,7 +810,7 @@ Inside `.kh-content`, bare tables get alternating row striping with a grey heade
 </section>
 
 {# ── FORMS ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="forms">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -742,7 +831,7 @@ Form elements used for the site search. The search input has a custom SVG cancel
 </section>
 
 {# ── SEARCH MODE TOGGLE ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="search-mode-toggle">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -771,7 +860,7 @@ A tabbed radio control used on the [search page](/search/) to switch between key
 {% endcodeAndDemo %}
 
 {% markdown %}
-### Markup notes
+### Markup notes: search mode toggle
 
 - The `<fieldset>` starts with `hidden` in production — JavaScript removes it on load (progressive enhancement, since the toggle only works with JS)
 - Radio `name` must be unique per instance to avoid conflicts
@@ -791,8 +880,8 @@ A tabbed radio control used on the [search page](/search/) to switch between key
 <div class="kh-search-widget">
   <div class="kh-search-widget__panel">
     <form class="kh-search-widget__form" onsubmit="return false">
-      <label class="kh-u-sr-only" for="demo-search">Search</label>
-      <input type="search" id="demo-search" placeholder="Search my site" class="kh-form__input">
+      <label class="kh-u-sr-only" for="demo-search-toggle">Search</label>
+      <input type="search" id="demo-search-toggle" placeholder="Search my site" class="kh-form__input">
       <button type="submit" class="kh-button" aria-label="Search">
         <span class="kh-button__label" aria-hidden="true">Search</span>
         <span class="kh-button__icon" aria-hidden="true">&#x2192;</span>
@@ -803,7 +892,7 @@ A tabbed radio control used on the [search page](/search/) to switch between key
 {% endcodeAndDemo %}
 
 {% markdown %}
-#### Markup notes
+#### Markup notes: semantic search
 
 - Always include `aria-label` on the button so the purpose is announced when only the icon is visible
 - `.kh-button__label` and `.kh-button__icon` both carry `aria-hidden="true"` — the `aria-label` is the accessible name
@@ -840,7 +929,7 @@ A chat-bubble conversation pattern used by the semantic search page (`/search/`)
 </section>
 
 {# ── SUMMARY CARDS ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="summary-cards">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -900,7 +989,7 @@ Summaries can include a thumbnail image that snaps to the right column on medium
 </section>
 
 {# ── METRICS ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="metrics">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -946,7 +1035,7 @@ A timeline-style list for career milestones, with bold labels and bottom borders
 </section>
 
 {# ── LAYOUT ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="layout">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -1020,7 +1109,16 @@ Vertical rhythm utility. Adds `1rem` margin between sibling children. Use `.kh-s
 {% markdown %}
 ### Cluster (`.kh-cluster`)
 
-Horizontal flex layout with wrapping and center alignment. Used for navigation and grouped elements:
+Horizontal flex layout with wrapping and centre alignment. Used for navigation
+and grouped elements.
+
+Spacing comes from `gap` (`--kh-page-grid-gap`, 2rem). Direct children are
+reset to `margin: 0` so an item's own outer margin — `.kh-button` has one —
+does not add to that gap. Nothing else is imposed: an item is free to lay out
+its own contents, which was not true before, when the cluster forced
+`display: flex` and an `!important` margin on children *and* grandchildren.
+For a denser row, write a purpose-built flex class rather than overriding this
+one; `.kh-directory__topics` is the example.
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}
@@ -1049,7 +1147,7 @@ Makes a section's background extend to the full viewport width while keeping con
 </section>
 
 {# ── PAGER ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="pager">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -1074,7 +1172,7 @@ Navigation between paginated lists (blog index, work archive). Wrap in `<nav cla
 </section>
 
 {# ── SPACING ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="spacing">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -1102,7 +1200,7 @@ The `.kh-content` class constrains content to `max-width: 70ch` for readable lin
 </section>
 
 {# ── FONT VARIATIONS ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="font-variations">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -1169,7 +1267,7 @@ The `.kh-video` wrapper provides a responsive 16:9 container. Iframes, objects, 
 </section>
 
 {# ── FEEDBACK TOAST ── #}
-<section class="kh-grid-stylized kh-u-padding__top--800" id="feedback-toast">
+<section class="kh-grid-stylized kh-u-padding__top--800">
   <div></div>
   <div class="kh-content kh-content--wide">
 {% markdown %}
@@ -1354,7 +1452,7 @@ Links in `.kh-content` lose their decoration on print. Elements with `.kh-u-do-n
 
 All custom properties are scoped to `body:has(#kh-css-toggle:checked)`:
 
-### Colors
+### Color properties
 
 | Property | Default |
 |----------|---------|
@@ -1372,7 +1470,7 @@ All custom properties are scoped to `body:has(#kh-css-toggle:checked)`:
 | `--kh-panel-bg` | `#fdf5d6` |
 | `--kh-color--orange` | alias of `--kh-color--sun`, deprecated |
 
-### Layout
+### Layout properties
 
 | Property | Default | Notes |
 |----------|---------|-------|
@@ -1387,7 +1485,7 @@ All custom properties are scoped to `body:has(#kh-css-toggle:checked)`:
 | `--kh-stack-margin` | `1rem` | Vertical stack gap |
 | `--kh-text-margin--bottom` | `16px` | Text element bottom margin |
 | `--kh-box-padding` | `1rem` | Box component padding |
-| `--kh-cluster-margin` | `0.5rem` | Cluster item spacing |
+| `--kh-page-grid-gap` | `1rem`, `2rem` at `lg` | Cluster item spacing (`gap` on `.kh-cluster`) |
 
 ### Theming
 

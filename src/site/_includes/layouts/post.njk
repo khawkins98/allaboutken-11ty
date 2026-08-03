@@ -41,10 +41,18 @@ templateEngineOverride: njk
           {%- set parent = topic | topicParent %}
           {%- set child = topic | topicChild %}
           {%- set tally = collections.allContent | topicTally(topic) %}
+          {%- set topicSlug = collections.topics | topicPageSlug(topic) %}
           {#- Tally closes the group rather than sitting between parent and
               child, where "retro computing x3 > emulation" reads as though
-              the count belonged to the child. -#}
-          {{ parent }}
+              the count belonged to the child.
+
+              The parent is a link when a topic page exists, and plain text
+              when it does not. That contrast is the `>` convention made
+              visible: the parent is the controlled vocabulary and a place you
+              can go; the child is detail. Before this the taxonomy was
+              write-only -- 31 topic pages, and the word "typography" under a
+              typography post was inert. -#}
+          {%- if topicSlug %}<a href="/topics/{{ topicSlug }}/">{{ parent }}</a>{% else %}{{ parent }}{% endif %}
           {%- if child %}<span class="kh-topic-child"><span class="kh-topic-child__sep" aria-hidden="true">&rsaquo;</span>{{ child }}</span>{% endif %}
           {%- if tally > 1 %}<span class="kh-topic-tally" title="{{ tally }} entries on {{ parent }}">&hairsp;×{{ tally }}</span>{% endif %}{{ ", " if not loop.last }}
           {%- endfor %}
