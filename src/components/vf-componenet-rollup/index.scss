@@ -372,25 +372,34 @@ body:has(#kh-css-toggle:checked) {
     white-space: nowrap;
   }
 
+  // Datasheet register. This was a blue-bordered, blue-labelled button from
+  // the old Visual Framework -- the last piece of browser-chrome blue on the
+  // site, and conspicuously out of place next to hairline rules, mono labels
+  // and the coral accent. It is now a hairline cell like everything else:
+  // ink on the panel fill, mono label, no radius.
+  // The custom properties are kept and re-pointed rather than removed, so the
+  // existing per-context overrides (the search widget, chiefly) still work.
   .kh-button {
-    --kh-button__color__background--default: var(--kh-color--grey);
-    --kh-button-background-color: #fafafa;
-    --kh-button-border-color: var(--kh-color--blue);
-    --kh-button-shadow-background-color: var(--kh-color--blue--dark);
+    --kh-button__color__background--default: var(--kh-panel-bg);
+    --kh-button-background-color: var(--kh-panel-bg);
+    --kh-button-border-color: var(--kh-rule--strong);
     align-self: center;
     appearance: none;
     backface-visibility: hidden;
     background-color: var(--kh-button-background-color, var(--kh-button__color__background--default));
     border: 1px solid var(--kh-button-border-color, var(--kh-button__color__background--default));
     border-radius: 0;
-    color: var(--kh-color--blue);
+    color: #222;
     cursor: pointer;
     display: inline-block;
-    font-weight: 700;
+    font-family: var(--kh-font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
     line-height: 1;
     margin: 0 16px 16px 0;
     outline: 0;
-    padding: 12px 24px;
+    padding: 0.85rem 1.4rem;
     position: relative;
     text-align: center;
     text-decoration: none;
@@ -399,20 +408,22 @@ body:has(#kh-css-toggle:checked) {
 
   // The offset "3D" shadow and the slide-on-press are gone; the button now
   // signals state by inverting instead of moving.
+  // Inverts to the accent on hover, the same coral fill the current nav item
+  // uses, so "this is actionable" and "you are here" share one visual idea.
   .kh-button:focus,
   .kh-button:hover {
-    --kh-button-background-color: var(--kh-color--blue);
-    --kh-button-border-color: var(--kh-color--blue);
+    --kh-button-background-color: var(--kh-color--coral);
+    --kh-button-border-color: var(--kh-color--coral);
 
-    color: #fff;
+    color: var(--kh-ground);
     text-decoration: none;
   }
 
   .kh-button:active {
-    --kh-button-background-color: var(--kh-color--blue--dark);
-    --kh-button-border-color: var(--kh-color--blue--dark);
+    --kh-button-background-color: var(--kh-rule--strong);
+    --kh-button-border-color: var(--kh-rule--strong);
 
-    color: #fff;
+    color: var(--kh-ground);
   }
 
   .kh-button--sm {
