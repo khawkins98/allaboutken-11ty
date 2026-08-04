@@ -825,7 +825,23 @@ const sparksMonths = Array.from(
   })
 );
 const sparksWidth = 1200;
-const sparksPlotLeft = 178;
+// The label gutter is derived, not guessed. Row labels are IBM Plex Mono at
+// 12px (0.6em advance = 7.2px a character) right-aligned to `plotLeft - 12`,
+// so the longest topic name sets the minimum. Hardcoded at 178 this gave the
+// labels 166px, and "information architecture" needs 173 -- its leading "i"
+// was clipped by the viewBox edge on the live chart, which reads as a missing
+// letter rather than as a layout bug. Deriving it means the next long topic
+// name cannot silently reintroduce that.
+const sparksLabelAdvance = 7.2;
+const sparksLabelGap = 12;
+const sparksLabelMargin = 8;
+const sparksLongestLabel = Math.max(
+  ...[...topicCounts.entries()].filter(([, count]) => count >= 2).map(([topic]) => String(topic).length)
+);
+const sparksPlotLeft = Math.max(
+  178,
+  Math.ceil(sparksLongestLabel * sparksLabelAdvance) + sparksLabelGap + sparksLabelMargin
+);
 const sparksPlotRight = 1120;
 const sparksTop = 78;
 const sparksRowGap = 27;
