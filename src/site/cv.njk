@@ -28,9 +28,14 @@ active_path: front
    <small class="kh-summary__date">{{ location }}</small></p>
 {% endmacro -%}
 
-{# Section header #}
-{%- macro sectionHeader(title) %}
-<h2 class="kh-badge kh-badge--outline kh-u-margin__bottom--600 kh-u-margin__top--1200">{{ title }}</h2>
+{#- Section header. The same `.kh-section-head` -- hairline rule plus a coral
+    section number -- that every other page uses. It was a boxed outline badge,
+    a device found nowhere else on the site, which made the CV read as its own
+    design era. -#}
+{%- macro sectionHeader(num, title) %}
+<div class="kh-section-head kh-u-margin__top--1200">
+  <h2 class="kh-text-heading--2"><span class="kh-section-number">{{ num }}</span>{{ title }}</h2>
+</div>
 {% endmacro -%}
 
 <div class="kh-u-show-for-print-only">
@@ -81,7 +86,7 @@ active_path: front
 <div class="kh-grid-stylized kh-u-padding__top--600 kh-u-padding__bottom--400">
   <div></div>
   <section>
-    <h2 class="kh-badge kh-badge--outline kh-u-margin__bottom--600">Impact at a glance</h2>
+    {{ sectionHeader('1.0', 'Impact at a glance') }}
     <div class="kh-metrics-grid">
       <div class="kh-metric">
         <span class="kh-metric__number">50–70%</span>
@@ -115,7 +120,7 @@ active_path: front
 <div class="kh-grid-stylized kh-u-padding__top--600 kh-u-padding__bottom--600">
   <div></div>
   <section>
-    <h2 class="kh-badge kh-badge--outline kh-u-margin__bottom--600">Career snapshot</h2>
+    {{ sectionHeader('2.0', 'Career snapshot') }}
     <div class="kh-career-snapshot">
       <ul class="kh-snapshot-list">
         <li><strong>Core value:</strong> Strategic bridge-builder who translates between executive vision, technical implementation, and user needs — building working systems, not just strategies</li>
@@ -152,7 +157,7 @@ active_path: front
 {% markdown %}
 
 
-{{ sectionHeader('Professional Experience') }}
+{{ sectionHeader('3.0', 'Professional experience') }}
 
 <section class="kh-grid-stylized kh-u-margin__bottom--600">
   <div>
@@ -340,7 +345,7 @@ Co-founded TheDigitel.com in 2009 to revolutionize newspaper methodology for the
 
 {# Core Capabilities #}
 <div id="experience" data-magellan-target="experience"></div>
-{{ sectionHeader('Core Capabilities') }}
+{{ sectionHeader('4.0', 'Core capabilities') }}
 
 <section class="kh-grid-stylized kh-u-margin__bottom--600">
   <h2 class="kh-text-heading--2">Strategic Bridge-Building & Systems Thinking</h2>
@@ -423,7 +428,7 @@ Co-founded TheDigitel.com in 2009 to revolutionize newspaper methodology for the
 
 {# {{ position('Education, collaboration, speaking') }} #}
 
-{{ sectionHeader('Education, speaking & community') }}
+{{ sectionHeader('5.0', 'Education, speaking & community') }}
 
 <section class="kh-grid-stylized kh-u-margin__bottom--600">
   <div>
