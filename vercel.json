@@ -41,16 +41,6 @@
       "source": "/pinment/",
       "destination": "/pinment/index.html",
       "permanent": false
-    },
-    {
-      "source": "/topics",
-      "destination": "/directory/#subjects",
-      "permanent": true
-    },
-    {
-      "source": "/topics/",
-      "destination": "/directory/#subjects",
-      "permanent": true
     }
   ],
   "rewrites": [

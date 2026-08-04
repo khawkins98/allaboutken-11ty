@@ -68,15 +68,14 @@ permalink: /directory/
     </div>
   </div>
 
-  {#- This absorbed the former /topics/ index page. That page and this section
-      listed the same 31 topics, and the only difference was that /topics/
-      carried the sparklines -- so the flat chip list that used to sit here was
-      strictly the poorer of two copies. The sparkline table moved in and the
-      page went away; /topics/ now redirects here via vercel.json so the
-      footer links people have already followed still land somewhere.
+  {#- This absorbed a /topics/ index page that briefly existed alongside it.
+      Both listed the same 31 topics and only /topics/ carried the sparklines,
+      so the flat chip list that used to sit here was the poorer of two copies.
+      The table moved in and that page went away before either shipped, which
+      is why there is no redirect for it -- the URL was never live.
 
       The child pages at /topics/<slug>/ are unaffected and still exist; this
-      is their index, at a different address. -#}
+      is their index. -#}
   <div class="kh-section-head kh-u-margin__top--1200">
     <h2 id="subjects" class="kh-text-heading--2"><span class="kh-section-number">2.0</span>Subjects</h2>
     <span class="kh-meta">{{ collections.topics | length }} topics &middot; by entry count</span>
