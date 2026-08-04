@@ -206,7 +206,12 @@ eleventyExcludeFromCollections: true
       <p class="kh-trail__description kh-meta">{{ trail.description }} Similarity ≥ {{ trail.minScore }}.</p>
       <div class="kh-trail__plot" aria-hidden="true">
         <i class="kh-trail__line" style="--kh-from: {{ trail.nodes[0].xPercent }}%; --kh-to: {{ trail.nodes[trail.nodes.length - 1].xPercent }}%"></i>
-        {%- for node in trail.nodes %}<i class="kh-trail__node kh-trail__node--{{ node.kind }}" style="--kh-at: {{ node.xPercent }}%"></i>{%- endfor %}
+        {#- `title` so a marker says which entry it is. The plot stays
+            aria-hidden: the ordered list below is the accessible version of
+            the same data, and naming the dots as well would read every trail
+            out twice. Sighted users had no way at all to tell which dot was
+            which, which is what this fixes. -#}
+        {%- for node in trail.nodes %}<i class="kh-trail__node kh-trail__node--{{ node.kind }}" style="--kh-at: {{ node.xPercent }}%" title="{{ node.year }} &mdash; {{ node.title }}"></i>{%- endfor %}
       </div>
       <ol class="kh-trail__entries">
         {%- for node in trail.nodes %}<li><span class="kh-meta">{{ node.year }}</span> <a href="{{ node.url }}">{{ node.title }}</a>{% if node.similarity %} <span class="kh-trail__score kh-meta" title="Cosine similarity to the editorial anchor centroid">{{ node.similarity }}</span>{% endif %}</li>{%- endfor %}

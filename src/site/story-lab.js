@@ -343,22 +343,46 @@
   const lab = document.querySelector('.kh-story-lab');
   if (!lab) return;
 
-  const BESPOKE = '#kh-radial-comparison, #kh-topic-sparks';
-  const named = [...lab.querySelectorAll('svg a, svg path, svg rect, svg circle, svg line, svg g')]
-    .filter((element) => !element.closest(BESPOKE))
-    .filter((element) => [...element.children].some((child) => child.tagName.toLowerCase() === 'title'));
-  if (!named.length) return;
-
+  // No exclusion list for the two coordinated charts. They run earlier in this
+  // file and strip their own <title>s as they bind, so by the time this reaches
+  // them there is nothing left to claim. That is deliberately load-bearing: an
+  // explicit skip-list is what left the sparks chart's per-post circles on the
+  // native tooltip while its series had a custom one, in the same chart.
   const label = new WeakMap();
-  named.forEach((element) => {
+  const named = [];
+
+  // Decorative subtrees keep their name off the accessibility layer. The trail
+  // plot is aria-hidden because the ordered list beneath it says the same thing
+  // properly; labelling the dots would read the trail out twice.
+  const exposed = (element) => element.getAttribute('aria-hidden') !== 'true'
+    && !element.closest('[aria-hidden="true"]');
+
+  // SVG shapes carry their label as a <title> child element.
+  [...lab.querySelectorAll('svg a, svg path, svg rect, svg circle, svg line, svg g')].forEach((element) => {
     const title = [...element.children].find((child) => child.tagName.toLowerCase() === 'title');
     const value = title?.textContent?.trim() || '';
     if (!value) return;
     label.set(element, value);
-    element.setAttribute('aria-label', value);
-    if (element.tagName.toLowerCase() === 'g') element.setAttribute('role', 'img');
+    if (exposed(element)) {
+      element.setAttribute('aria-label', value);
+      if (element.tagName.toLowerCase() === 'g') element.setAttribute('role', 'img');
+    }
     title.remove();
+    named.push(element);
   });
+
+  // HTML elements carry it as a title attribute -- the trail markers and the
+  // similarity scores, which were still on the browser's own tooltip.
+  [...lab.querySelectorAll('[title]')].forEach((element) => {
+    const value = (element.getAttribute('title') || '').trim();
+    if (!value) return;
+    label.set(element, value);
+    if (exposed(element)) element.setAttribute('aria-label', value);
+    element.removeAttribute('title');
+    named.push(element);
+  });
+
+  if (!named.length) return;
 
   // aria-hidden: the accessible name already lives on the shape itself, so
   // announcing the tip as well would say everything twice.

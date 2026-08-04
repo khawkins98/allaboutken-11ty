@@ -318,6 +318,18 @@
     width: 8px;
   }
 
+  // An 8px dot is a fine mouse target and an impossible finger one. On coarse
+  // pointers a transparent pseudo-element widens the tap area to 44px without
+  // moving or resizing the mark itself. Not applied at all widths: on a mouse
+  // it would swallow hovers meant for the marks either side.
+  @media (hover: none) {
+    .kh-trail__node::after {
+      content: '';
+      inset: -18px;
+      position: absolute;
+    }
+  }
+
   .kh-trail__node--impact {
     background: var(--kh-color--sun--deep);
     transform: translateX(-50%) rotate(45deg);
