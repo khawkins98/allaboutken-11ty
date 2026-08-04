@@ -2,17 +2,65 @@
   "buildCommand": "yarn build",
   "outputDirectory": "build",
   "headers": [
-    { "source": "/PDF-A-go-go/:path*", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] },
-    { "source": "/pinment/:path*", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] }
+    {
+      "source": "/PDF-A-go-go/:path*",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/pinment/:path*",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
   ],
   "redirects": [
-    { "source": "/PDF-A-go-go", "destination": "/PDF-A-go-go/index.html", "permanent": false },
-    { "source": "/PDF-A-go-go/", "destination": "/PDF-A-go-go/index.html", "permanent": false },
-    { "source": "/pinment", "destination": "/pinment/index.html", "permanent": false },
-    { "source": "/pinment/", "destination": "/pinment/index.html", "permanent": false }
+    {
+      "source": "/PDF-A-go-go",
+      "destination": "/PDF-A-go-go/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/PDF-A-go-go/",
+      "destination": "/PDF-A-go-go/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/pinment",
+      "destination": "/pinment/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/pinment/",
+      "destination": "/pinment/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/topics",
+      "destination": "/directory/#subjects",
+      "permanent": true
+    },
+    {
+      "source": "/topics/",
+      "destination": "/directory/#subjects",
+      "permanent": true
+    }
   ],
   "rewrites": [
-    { "source": "/PDF-A-go-go/:path*", "destination": "https://khawkins98.github.io/PDF-A-go-go/:path*" },
-    { "source": "/pinment/:path*", "destination": "https://khawkins98.github.io/pinment/:path*" }
+    {
+      "source": "/PDF-A-go-go/:path*",
+      "destination": "https://khawkins98.github.io/PDF-A-go-go/:path*"
+    },
+    {
+      "source": "/pinment/:path*",
+      "destination": "https://khawkins98.github.io/pinment/:path*"
+    }
   ]
 }

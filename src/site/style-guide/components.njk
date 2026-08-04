@@ -1154,8 +1154,8 @@ reset to `margin: 0` so an item's own outer margin — `.kh-button` has one —
 does not add to that gap. Nothing else is imposed: an item is free to lay out
 its own contents, which was not true before, when the cluster forced
 `display: flex` and an `!important` margin on children *and* grandchildren.
-For a denser row, write a purpose-built flex class rather than overriding this
-one; `.kh-directory__topics` is the example.
+For a denser row, write a purpose-built flex or grid class rather than
+overriding this one.
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}

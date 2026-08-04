@@ -62,25 +62,61 @@ permalink: /directory/
       </div>
       <div class="kh-panel__cell">
         <span class="kh-panel__label">By subject</span>
-        <a href="/topics/">Topics</a>
+        <a href="#subjects">Topics</a>
         <span class="kh-meta kh-u-margin__top--200">{{ collections.topics | length }} topics</span>
       </div>
     </div>
   </div>
 
-  {#- Topic pages exist only above a threshold, so listing them here is the
-      one place a reader can see the whole controlled vocabulary at once. -#}
+  {#- This absorbed the former /topics/ index page. That page and this section
+      listed the same 31 topics, and the only difference was that /topics/
+      carried the sparklines -- so the flat chip list that used to sit here was
+      strictly the poorer of two copies. The sparkline table moved in and the
+      page went away; /topics/ now redirects here via vercel.json so the
+      footer links people have already followed still land somewhere.
+
+      The child pages at /topics/<slug>/ are unaffected and still exist; this
+      is their index, at a different address. -#}
   <div class="kh-section-head kh-u-margin__top--1200">
     <h2 id="subjects" class="kh-text-heading--2"><span class="kh-section-number">2.0</span>Subjects</h2>
-    <span class="kh-meta">Every topic with a page of its own</span>
+    <span class="kh-meta">{{ collections.topics | length }} topics &middot; by entry count</span>
   </div>
-  {#- The count sits OUTSIDE the anchor. Inside it, the link underline ran
-      straight through and welded the two together: "AI27". It is also not
-      part of the link's label, so a screen reader announcing "AI, 27" as one
-      name was wrong on its own terms. -#}
-  <p class="kh-directory__topics" data-pagefind-ignore>
-    {%- for t in collections.topics %}<span class="kh-directory__topic"><a href="/topics/{{ t.slug }}/">{{ t.topic }}</a><span class="kh-meta">{{ t.count }}</span></span>{% endfor %}
-  </p>
+
+  <div class="kh-content">
+    <p>The subject vocabulary is deliberately small. It was consolidated from 158
+    ad-hoc terms, of which 116 appeared exactly once, into a controlled set. Only
+    topics carrying three or more entries get a page here; anything thinner lives
+    as detail after a <code>&gt;</code> on the entry itself.</p>
+  </div>
+
+  {#- Count is the encoding: the number is stated, and the bar is a length on a
+      common scale, which is the most accurately read visual channel. No area,
+      no font-size scaling, no cloud. -#}
+  {#- One shared peak across all rows, so heights are comparable. -#}
+  {%- set peak = 0 %}
+  {%- for t in collections.topics %}{% if t.peak > peak %}{% set peak = t.peak %}{% endif %}{% endfor %}
+  <div class="kh-table-scroll">
+    <table class="kh-table--spec kh-topic-index">
+      <thead>
+        <tr>
+          <th scope="col">By year <span class="kh-spark__axis">{{ collections.topics[0].firstYear }}&ndash;{{ collections.topics[0].lastYear }}</span></th>
+          <th scope="col">Entries</th>
+          <th scope="col">Topic</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%- for t in collections.topics %}
+        <tr>
+          <td class="kh-topic-index__spark">
+            {% topicSparkline t.perYear, peak, t.topic %}
+          </td>
+          <td class="kh-topic-index__count">{{ t.count }}</td>
+          <td><a href="/topics/{{ t.slug }}/">{{ t.topic }}</a></td>
+        </tr>
+        {%- endfor %}
+      </tbody>
+    </table>
+  </div>
 
   <div class="kh-section-head kh-u-margin__top--1200">
     <h2 id="making" class="kh-text-heading--2"><span class="kh-section-number">3.0</span>Making</h2>

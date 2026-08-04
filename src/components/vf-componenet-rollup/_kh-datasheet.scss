@@ -398,39 +398,6 @@
     text-wrap: pretty;
   }
 
-  // Directory topic list. Not .kh-cluster, which is a 2rem gap: this is a
-  // dense list of 31 items where the name and its count need to read as one
-  // token, so the gap between topics has to be clearly larger than the gap
-  // inside a topic. (This class originally existed to escape .kh-cluster's
-  // `!important` margins; those are gone now, but the tighter spacing is
-  // still its own reason to exist.)
-  // Columns, not a wrapped row. Thirty-one items flowing left-to-right gave
-  // ragged rows of uneven length -- nothing lined up, so the eye had to
-  // re-find the left edge on every line and the counts scattered. A grid puts
-  // them on a shared axis and makes the list scannable down as well as
-  // across, which is how anyone actually reads an index.
-  .kh-directory__topics {
-    display: grid;
-    gap: 0.35rem 1.75rem;
-    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-    margin: var(--kh-stack-margin, 0) 0 1rem;
-  }
-
-  // Name left, count right, so the numbers form their own readable column
-  // inside each cell instead of trailing the name at a ragged offset.
-  .kh-directory__topic {
-    align-items: baseline;
-    display: flex;
-    gap: 0.5rem;
-    justify-content: space-between;
-  }
-
-  // `rem`, not `em`: the count is 12px, so an em resolves against that small
-  // size and gives about 4px, which is too tight to read as separate.
-  .kh-directory__topics .kh-meta {
-    flex: 0 0 auto;
-  }
-
   // Post masthead. Replaces the full-bleed yellow slab: same hairline
   // grammar as .kh-section-head, with the byline data in the mono register.
   .kh-post-head {
