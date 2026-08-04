@@ -199,16 +199,41 @@ body:has(#kh-css-toggle:checked) {
     }
 
     .kh-bleed-out {
-      margin-left: -50%;
-      margin-right: -50%;
+      margin-left: -46%;
+      margin-right: 0;
     }
   }
 
   @media (width >= 767px) {
+    // Bleeds LEFT only, into the contents rail.
+    // It used to bleed both ways at -30%/-50%, which scrolled the whole page
+    // sideways at every mid-range width -- measured 86px at 800, 138px at
+    // 900, 161px at 1024. This pre-dates the screenshots that made it
+    // obvious; the Recursive post's comparison slider had the same overflow.
+    // The cause is that the reading column sits right of centre in the
+    // three-column grid, so a symmetric percentage of the CONTAINER says
+    // nothing about the room actually beside it: there is a wide rail to the
+    // left and almost nothing to the right. Bleeding only into the rail uses
+    // the space that exists. Verified 390 to 1800: no overflow at any width,
+    // and the figure still reaches 817px against a ~667px measure.
     .kh-bleed-out {
-      margin-left: -30%;
-      margin-right: -30%;
+      margin-left: -22%;
+      margin-right: 0;
     }
+  }
+
+  // A bleed-out reaches into the left rail, where the contents index is
+  // `position: sticky` -- which makes it a positioned element that paints
+  // above static content, so the rail's links showed through the figure.
+  // Positioning the figure and giving it the page ground puts it on top and
+  // occludes cleanly rather than letting two things share the same pixels.
+  // Not applied to `.kh-figure`: that is `display: grid` with three columns,
+  // so combining the two squeezed the image into a third of the measure. A
+  // full-bleed screenshot is a bare `<figure class="kh-bleed-out">`.
+  .kh-bleed-out {
+    background: var(--kh-ground);
+    position: relative;
+    z-index: 2;
   }
 
   @media (max-width: $kh-breakpoint--md-down) {
