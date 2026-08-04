@@ -5,37 +5,98 @@ set -euo pipefail
 
 msg_file="$1"
 
-# First non-comment, non-empty line is the subject.
-subject="$(grep -v '^#' "$msg_file" | sed '/^[[:space:]]*$/d' | head -n 1 || true)"
-
-# Skip merge, revert, and fixup commits — they are machine-generated.
-case "$subject" in
-  "Merge "*|"Revert "*|"fixup! "*|"squash! "*) exit 0 ;;
-esac
-
-allowed_prefixes="content | feature | fix | ci | chore"
-prefix_pattern='^(content|feature|fix|ci|chore)(\([a-z0-9 ._-]+\))?: .+'
+# Shared format constants.
+allowed_prefixes=("content" "feature" "fix" "ci" "chore")
+skip_prefixes=("Merge " "Revert " "fixup! " "squash! ")
+max_subject_length=72
+scope_pattern='[a-z0-9 ._-]+'
+allowed_prefixes_label="$(printf '%s | ' "${allowed_prefixes[@]}")"
+allowed_prefixes_label="${allowed_prefixes_label% | }"
 
 fail() {
   echo ""
   echo "  ❌  Commit message format error: $1"
   echo ""
   echo "  Expected:  <prefix>[(<scope>)]: <description>"
-  echo "  Prefixes:  ${allowed_prefixes}"
+  echo "  Prefixes:  ${allowed_prefixes_label}"
   echo "  Scope:     optional, e.g. chore(deps): upgrade pagefind"
-  echo "  Rules:     subject ≤ 72 chars, no trailing period"
+  echo "  Rules:     description not empty, exactly one space after ':', subject ≤ ${max_subject_length} chars, no trailing period"
   echo ""
   echo "  Got:  ${subject}"
   echo ""
   exit 1
 }
 
-if ! [[ "$subject" =~ $prefix_pattern ]]; then
+# First non-comment, non-empty line is the subject.
+subject="$(grep -v '^[[:space:]]*#' "$msg_file" | sed '/^[[:space:]]*$/d' | head -n 1 || true)"
+if [[ -z "$subject" ]]; then
+  fail "missing or empty subject"
+fi
+
+# Skip merge, revert, fixup, and squash commits — they are machine-generated.
+for skip_prefix in "${skip_prefixes[@]}"; do
+  if [[ "$subject" == "${skip_prefix}"* ]]; then
+    exit 0
+  fi
+done
+
+if [[ "$subject" == *:* ]]; then
+  prefix_scope="${subject%%:*}"
+  post_colon="${subject#*:}"
+else
   fail "missing or unknown prefix"
 fi
 
-if (( ${#subject} > 72 )); then
-  fail "subject is ${#subject} chars (max 72)"
+# Enforce exactly one space after the colon.
+if [[ "$post_colon" != " "* ]]; then
+  fail "missing or unknown prefix"
+fi
+if [[ "$post_colon" == "  "* ]]; then
+  fail "use exactly one space after colon"
+fi
+
+description="${post_colon# }"
+
+# Split known prefix from optional scope.
+prefix="$prefix_scope"
+scope=""
+
+if [[ "$prefix_scope" == *\(* ]]; then
+  if [[ "$prefix_scope" != *\) ]]; then
+    fail "invalid scope syntax"
+  fi
+
+  scope="${prefix_scope#*\(}"
+  scope="${scope%\)}"
+  prefix="${prefix_scope%%\(*}"
+else
+  if [[ "$prefix_scope" == *[[:space:]]* ]]; then
+    fail "missing or unknown prefix"
+  fi
+fi
+
+is_allowed_prefix=false
+for allowed_prefix in "${allowed_prefixes[@]}"; do
+  if [[ "$prefix" == "$allowed_prefix" ]]; then
+    is_allowed_prefix=true
+    break
+  fi
+done
+
+if [[ "$is_allowed_prefix" != true ]]; then
+  fail "missing or unknown prefix"
+fi
+
+if [[ -n "$scope" && ! "$scope" =~ ^${scope_pattern}$ ]]; then
+  fail "invalid scope"
+fi
+
+if [[ -z "${description//[[:space:]]/}" ]]; then
+  fail "empty description"
+fi
+
+if (( ${#subject} > max_subject_length )); then
+  fail "subject is ${#subject} chars (max ${max_subject_length})"
 fi
 
 case "$subject" in

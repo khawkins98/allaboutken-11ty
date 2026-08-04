@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# Normalizes commit subjects before commit-msg validation.
+set -euo pipefail
+
+msg_file="$1"
+
+# Shared format constants.
+allowed_prefixes=("content" "feature" "fix" "ci" "chore")
+skip_prefixes=("Merge " "Revert " "fixup! " "squash! ")
+max_subject_length=72
+
+subject_line="$(awk '($0 !~ /^[[:space:]]*#/ && $0 !~ /^[[:space:]]*$/){print NR; exit}' "$msg_file")"
+if [[ -z "${subject_line}" ]]; then
+  exit 0
+fi
+
+subject="$(sed -n "${subject_line}p" "$msg_file")"
+
+for skip_prefix in "${skip_prefixes[@]}"; do
+  if [[ "$subject" == "${skip_prefix}"* ]]; then
+    exit 0
+  fi
+done
+
+trimmed="$(printf '%s' "$subject" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
+
+if [[ "$trimmed" =~ ^([^:]*)[[:space:]]*:[[:space:]]*(.*)$ ]]; then
+  raw_prefix_scope="$(printf '%s' "${BASH_REMATCH[1]}" | sed -E 's/[[:space:]]+$//')"
+  raw_description="${BASH_REMATCH[2]}"
+
+  scope=""
+  raw_prefix="$raw_prefix_scope"
+  if [[ "$raw_prefix_scope" == *\(*\) ]]; then
+    raw_prefix="${raw_prefix_scope%%\(*}"
+    scope_body="${raw_prefix_scope#*\(}"
+    scope_body="${scope_body%\)}"
+    scope="(${scope_body})"
+  fi
+
+  normalized_prefix="$(printf '%s' "$raw_prefix" | tr '[:upper:]' '[:lower:]')"
+  is_allowed_prefix=false
+  for allowed_prefix in "${allowed_prefixes[@]}"; do
+    if [[ "$normalized_prefix" == "$allowed_prefix" ]]; then
+      is_allowed_prefix=true
+      break
+    fi
+  done
+
+  if [[ "$is_allowed_prefix" == true ]]; then
+    description="$(printf '%s' "$raw_description" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/\.$//')"
+    normalized="${normalized_prefix}${scope}: ${description}"
+  else
+    normalized="$trimmed"
+  fi
+else
+  normalized="$trimmed"
+fi
+
+if [[ "$normalized" != "$subject" ]]; then
+  tmp_file="$(mktemp)"
+  awk -v line="$subject_line" -v replacement="$normalized" '
+    NR == line { $0 = replacement; }
+    { print }
+  ' "$msg_file" > "$tmp_file"
+  mv "$tmp_file" "$msg_file"
+fi
+
+exit 0

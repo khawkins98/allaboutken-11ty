@@ -15,12 +15,28 @@ git config core.hooksPath .githooks
 
 ## Active hooks
 
+### `.githooks/prepare-commit-msg` (normalizes)
+
+Normalizes the first commit subject line before validation:
+
+- Detects the first non-empty, non-comment line.
+- Trims leading/trailing whitespace.
+- Skips machine-generated subjects: `Merge`, `Revert`, `fixup!`, `squash!`.
+- For known prefixes, it applies deterministic normalization:
+  - `content`, `feature`, `fix`, `ci`, `chore`
+  - lowercases the prefix
+  - normalizes colon spacing to exactly one space
+  - trims description leading/trailing whitespace
+  - removes one trailing period
+- Unknown prefixes are not rewritten.
+
 ### `.githooks/commit-msg` (enforced)
 
-Checks the commit subject against:
+Validates the final commit subject against:
 
 - Pattern: `<prefix>[(<scope>)]: <description>` (scope is optional)
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`
+- Required non-empty description
 - Subject length: `<= 72` characters
 - No trailing period
 - Merge/revert/fixup/squash subjects are skipped
@@ -32,8 +48,18 @@ Checks the commit subject against:
 - ✓ `feature(search): add semantic search results page`
 - ✗ `update deps` ← missing prefix
 - ✗ `chore: update deps.` ← trailing period
+- ✗ `release: create v2.0 release` ← unknown prefix
+
+### `.githooks/test-commit-msg-hooks.sh` (tests)
+
+Run the commit-message normalization and enforcement regression checks with:
+
+```bash
+bash .githooks/test-commit-msg-hooks.sh
+```
 
 ### `.githooks/pre-push` (advisory)
+
 
 Prints pull request title format guidance before push. It does not block the push; CI is the enforcement source of truth.
 
@@ -72,7 +98,7 @@ The workflow does **not** enforce maximum title length or trailing punctuation.
    ls -l .githooks
    ```
 
-   You should see executable permissions on hook files (`commit-msg`, `pre-push`).
+   You should see executable permissions on hook files (`prepare-commit-msg`, `commit-msg`, `pre-push`).
 
 ### CI fails PR title check but local commits succeed
 

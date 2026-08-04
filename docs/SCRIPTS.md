@@ -11,6 +11,7 @@ Source of truth for local commands and script behavior in this repository.
 | `yarn embeddings` | Regenerate semantic-search vectors | After content/model changes that affect embeddings |
 | `yarn lint:css` | Lint SCSS/CSS files | Before committing style changes |
 | `yarn lint:links` | Validate internal links in `build/` | After a build, to catch broken internal links/anchors |
+| `yarn test` | Run commit-message hook regression checks | After editing `.githooks` scripts |
 
 ## Script details
 
@@ -78,8 +79,8 @@ Source of truth for local commands and script behavior in this repository.
 
 ### `yarn test`
 
-- Placeholder script; currently prints an informational message and exits successfully.
-- There is no automated test suite wired via this command today.
+- Runs `.githooks/test-commit-msg-hooks.sh` to validate commit-message normalization and enforcement behavior.
+- Ensures edge cases (normalization and rejections) are covered before commit and PR work.
 
 ### `yarn prepare`
 
@@ -96,9 +97,10 @@ Source of truth for local commands and script behavior in this repository.
 
 ### Commit message hook (`.githooks/commit-msg`)
 
-- Enforces `<prefix>: <description>` on the commit subject.
+- Enforces `<prefix>[(<scope>)]: <description>` on the commit subject.
+- Normalizes common prefix/casing/spacing/punctuation issues via `.githooks/prepare-commit-msg`.
 - Allowed prefixes: `content`, `feature`, `fix`, `ci`, `chore`.
-- Enforces subject length <= 72 characters and disallows a trailing period.
+- Enforces subject length <= 72 characters, non-empty description, and disallows a trailing period.
 - Skips merge/revert/fixup/squash commit subjects.
 - CI checks PR titles in `.github/workflows/pr-title-check.yml` for the same prefix/pattern (`<prefix>: <description>`, optional scope allowed), but does not enforce commit-subject length/punctuation rules.
 

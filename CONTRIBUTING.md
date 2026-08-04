@@ -39,13 +39,19 @@ Examples:
 
 ### General rules
 
-- First line ≤ 72 characters (enforced by the hook)
-- No trailing period on the subject (enforced by the hook)
+- Commit subject rules are normalized then enforced for the first line only:
+  - `prepare-commit-msg` lowercases known prefixes (`content`, `feature`, `fix`, `ci`, `chore`)
+  - `prepare-commit-msg` normalizes colon spacing to exactly one space
+  - `prepare-commit-msg` trims leading/trailing subject whitespace
+  - `prepare-commit-msg` removes one trailing period
+  - `prepare-commit-msg` leaves unknown prefixes untouched so validation can reject them
+- First line ≤ 72 characters (enforced by `commit-msg`)
+- No trailing period on the subject (enforced by `commit-msg`)
 - Body optional; when present, focus on the *why* (the diff already shows the *what*)
 - One logical change per commit
 - Never use `--no-verify` or `--no-gpg-sign` to bypass hooks
 
-Commit subjects are enforced locally by `.githooks/commit-msg` (activated on `yarn install` via the `prepare` script). PR titles are enforced in CI by `pr-title-check` for the same prefix set and optional scope, but CI does not enforce the 72-character limit or trailing-period rule.
+Commit subjects are normalized by `.githooks/prepare-commit-msg` then enforced by `.githooks/commit-msg` (activated on `yarn install` via the `prepare` script). PR titles are enforced in CI by `pr-title-check` for the same prefix set and optional scope, but CI does not enforce the 72-character limit or trailing-period rule.
 
 ## Pull requests
 
