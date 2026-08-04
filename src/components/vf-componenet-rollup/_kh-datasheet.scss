@@ -606,25 +606,29 @@
     padding-top: 0.1em;
   }
 
-  // The rail and a full-bleed figure share the left column, and that bleed is
-  // deliberate -- it is the whole point of `.kh-bleed-out`. Something has to
-  // give, and it is the figure: navigation that blinks out as you scroll
-  // reads as a bug, whereas a figure sliding under a pinned card reads as
-  // depth. The figure is much wider than the overlap, so nothing is lost.
-  // The opaque fill is what makes that legible; without it the two shared
-  // pixels and both looked broken. `z-index: 3` clears `.kh-bleed-out` at 2.
-  // Padding keeps the rail's text off the figure's edge and the matching
-  // negative margin keeps it aligned with the column it started in.
-  // Only while it is sticky. Below this breakpoint the rail is a normal block
-  // in the flow, nothing overlaps it, and a floating card would be noise.
+  // The rail sticks only on pages that have nothing bleeding into its column.
+  // It shares the left column with `.kh-bleed-out`, whose whole point is to
+  // bleed into exactly that space. Pinning the rail unconditionally was tried
+  // first -- sticky, opaque fill, `z-index: 3` over the bleed's 2, on the
+  // reasoning that a figure sliding under a pinned card reads as depth. That
+  // trade was wrong, and the case that broke it is instructive: when the
+  // bleed-out figure is a *screenshot of a page layout*, the region the card
+  // covers is the screenshot's own left column -- its masthead and title, the
+  // thing the figure exists to show. "The figure is much wider than the
+  // overlap, so nothing is lost" was true about area and false about content.
+  // So ask the page. `:has()` tests for a bleed anywhere in the article and
+  // drops the rail into normal flow when it finds one; the many posts without
+  // one keep their running index. Deliberately page-wide rather than
+  // per-figure: CSS cannot ask "will these two overlap while scrolling", and a
+  // rail that pins and unpins as figures pass would be worse than either
+  // steady state. The JS alternative -- hiding the rail on collision -- is
+  // cosmetic scripting, which this site does not spend.
+  // No opaque card here: with no bleed there is nothing to sit above, and the
+  // column below the rail is empty.
   @media (min-width: $kh-breakpoint--md) {
-    .kh-post-rail {
-      background: var(--kh-panel-bg);
-      margin-left: -0.9rem;
-      padding: 0.75rem 0.9rem 0.9rem;
+    .kh-grid:has(.kh-post-rail):not(:has(.kh-bleed-out)) .kh-post-rail {
       position: sticky;
       top: 1.5rem;
-      z-index: 3;
     }
   }
 

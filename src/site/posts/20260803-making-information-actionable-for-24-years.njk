@@ -13,14 +13,14 @@ topics:
 kens_status: published
 image: /blog/20years-rating-our-schools.jpg
 image_meta:
-  text: 'Rating our schools, November 2006; the top of the page, which ran on for five more districts. The source was a spreadsheet of state report-card scores; the stars, the shading and the grouping by district were an attempt to make it answerable at a glance.'
+  text: 'Rating our schools, November 2006: the stars, the shading and the grouping by district were an attempt to make it answerable at a glance.  It was a real find-replace joy.'
   credit: 'Own work.'
   altext: 'The top of a newspaper page headed "Rating our schools". A key reads five stars for Excellent down to one star for Unsatisfactory, and three columns of tables list schools by district, each row rated in stars for improvement and for absolute scores across 2003 to 2006.'
 ---
 
 {% markdown %}
 
-I went looking through my old online presences, the websites and the photo archives, expecting a little technological nostalgia. Instead, I found the same question I am working on now: how should information be arranged so someone can find it, understand it and connect it to something else?
+I went looking through my old online presences, the websites and the photo archives, expecting nostalgia. Instead, I found the same question I work on now: how should information be arranged so someone can find it, understand it and connect it to something else?
 
 The record I can recover runs from 2002 to 2026. The tools changed from static HTML and Flash to content models, semantic embeddings and server-rendered SVG.
 
@@ -48,10 +48,37 @@ The archive on this site starts much later, in 2013. It now contains roughly a h
 
 The redesign began with typography, graph paper and a more technical datasheet vocabulary. Posts gained document references. The [archive gained a timeline](/archive/), while [topic pages](/topics/) and small activity charts made it possible to browse by subject rather than only by publication date.
 
-<figure class="kh-bleed-out">
-  <img src="/images/blog/newsite-post-masthead.jpg" alt="The top of an entry: a row of dots marking every month since 2013, a document reference reading Ref AAK-20260330, the title, then the date, word count, a small length gauge, and three topics each with a count." class="kh-figure__image" />
-  <figcaption class="kh-figure__caption">The head of an entry now reads like a datasheet: a document reference, a length gauge against the corpus median, and topics with the number of other entries filed under each.</figcaption>
-</figure>
+<article class="kh-bleed-out">
+  <div class="kh-compare" style="--kh-compare-split: 50%;">
+    <img class="kh-compare__img" src="/images/blog/oldsite-post-masthead.jpg" alt="The old head of the same entry: a site navigation bar, a back link, then the title reversed out of a wide yellow band, with the date, word count and a comma-separated list of tags beneath it." loading="lazy" />
+    <img class="kh-compare__img kh-compare__img--after" src="/images/blog/newsite-post-masthead.jpg" alt="The new head of the same entry: a row of dots marking every month since 2013, a document reference reading Ref AAK-20260330, the title, then the date, word count, a small length gauge, and three topics each with a count." loading="lazy" />
+    <span class="kh-compare__label kh-compare__label--before" aria-hidden="true">Before</span>
+    <span class="kh-compare__label kh-compare__label--after" aria-hidden="true">After</span>
+    <span class="kh-compare__handle" aria-hidden="true"></span>
+    <input class="kh-compare__range" type="range" min="0" max="100" value="50" step="1" aria-label="Reveal more of the new layout" />
+  </div>
+  <figcaption class="kh-text-body--3">The same entry, before and after. The head now reads like a datasheet: a document reference, a length gauge against the corpus median, and topics with the number of other entries filed under each. Drag to compare, or focus the slider and use the arrow keys.</figcaption>
+</article>
+
+{# Mirrors the range input's value into the custom property the CSS reads;
+   the range itself supplies pointer, touch and keyboard interaction. With no
+   JavaScript the split stays at the inline 50% and this reads as a static
+   before/after, which is why the value is set inline rather than here.
+   `querySelectorAll` because a post may carry more than one comparison --
+   the earlier font post's copy of this script assumed a single instance. #}
+<script>
+  (function () {
+    document.querySelectorAll('.kh-compare').forEach(function (figure) {
+      var range = figure.querySelector('.kh-compare__range');
+      if (!range) return;
+      var apply = function () {
+        figure.style.setProperty('--kh-compare-split', range.value + '%');
+      };
+      range.addEventListener('input', apply);
+      apply();
+    });
+  })();
+</script>
 
 
 A blog normally asks, "What did I publish most recently?" A register asks, "What is here, and how does one thing relate to another?"
