@@ -52,7 +52,17 @@ eleventyExcludeFromCollections: true
   -->
   <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{ title }}</h1>
 
+  {#- Standing disclaimer. The views below name real entries and draw real
+      numbers, which makes them look more settled than they are; several
+      thresholds here are one person's guess and will move. Saying so once at
+      the top is cheaper than hedging every caption, and it is the honest
+      framing for a page called a lab. -#}
   <div class="kh-content">
+    <p class="kh-lab-caveat"><strong>This is a lab.</strong> Everything on this
+    page is experimental and subject to change: the thresholds, the groupings,
+    the charts themselves, and which of them survive at all. Views get added,
+    reworked and deleted. Numbers here describe this archive on the day it was
+    built and will shift as writing is added. Nothing here is a finding.</p>
     <p><strong>A working gallery, sorted into three.</strong> Everything here asks
     a question of the same archive, but not everything earned the same standing.
     <a href="#selected">Selected</a> holds the three views I would defend to a
@@ -96,24 +106,38 @@ eleventyExcludeFromCollections: true
   -->
   <div class="kh-section-head kh-u-margin__top--1200">
     <h2 id="returns" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Ideas that came back</h2>
-    <span class="kh-meta">{{ storyLab.returnEdges | length }} echoes after 3+ years</span>
+    <span class="kh-meta">{{ storyLab.returnEdges | length }} echoes after 3+ years &middot; {{ storyLab.nearEdges | length }} near links</span>
   </div>
   <div class="kh-content">
     <p><strong>Question:</strong> which ideas followed me between jobs, technologies
-    and years? Time finally earns the horizontal axis. Only non-companion pairs
-    separated by at least three years are shown, so an arc is a return rather
-    than two versions of the same recent piece. Some are deliberate callbacks;
-    others are uncited echoes.<sup><a class="kh-lab-citation" href="#source-shape-of-song" aria-label="Source 1: The Shape of Song">[1]</a></sup></p>
+    and years? Time finally earns the horizontal axis. The tall arcs are the
+    returns: non-companion pairs separated by at least three years, so an arc
+    is a recurrence rather than two versions of the same recent piece. Some are
+    deliberate callbacks; others are uncited echoes.<sup><a class="kh-lab-citation" href="#source-shape-of-song" aria-label="Source 1: The Shape of Song">[1]</a></sup></p>
+    <p>The faint mat along the axis is everything closer together than that.
+    Those are not returns and are not the argument; they are there because
+    where they bunch up is a period when a lot of related writing happened at
+    once. Read the height as time between two entries, never as strength.</p>
   </div>
   <figure class="kh-lab-figure">
     <div class="kh-map-scroll">
       <svg class="kh-map kh-lab-arc" viewBox="0 0 1200 320" width="1200" height="320" role="img" aria-labelledby="returns-title returns-desc">
         <title id="returns-title">Long-distance semantic echoes through the writing archive</title>
-        <desc id="returns-desc">Entries run chronologically from 2013 to 2026. Curves connect nine related pairs separated by at least three years. Career chapters appear beneath the baseline as context, not causes.</desc>
+        <desc id="returns-desc">Entries run chronologically from 2013 to 2026. {{ storyLab.returnEdges | length }} tall curves connect related pairs separated by at least three years; a lower, fainter mat of {{ storyLab.nearEdges | length }} curves connects related pairs closer together in time, and bunches where a period produced several related entries. Career chapters appear beneath the baseline as context, not causes.</desc>
         <g class="kh-lab-arc__careers" aria-hidden="true">
           {%- for career in storyLab.careerBands %}
           <rect x="{{ career.x }}" y="260" width="{{ career.width }}" height="34"></rect>
           <text x="{{ career.x + 8 }}" y="282">{{ career.label }}</text>
+          {%- endfor %}
+        </g>
+        {#- Near links first, so the returns paint over them rather than under.
+            Same reason they are a separate <g>: two layers, not one set of
+            arcs with two strengths. -#}
+        <g class="kh-lab-arc__links kh-lab-arc__links--near">
+          {%- for edge in storyLab.nearEdges %}
+          <path d="{{ edge.path }}">
+            <title>{{ edge.first.title }} to {{ edge.second.title }}, {{ edge.gapYears }} years apart, similarity {{ edge.score }}</title>
+          </path>
           {%- endfor %}
         </g>
         <g class="kh-lab-arc__links">

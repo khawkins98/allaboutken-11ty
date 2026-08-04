@@ -108,6 +108,25 @@
     stroke-width: 1.5;
   }
 
+  // Standing "this is a lab" caveat. A left rule in the accent rather than a
+  // tinted box: the page is already dense with panels and charts, and one more
+  // filled rectangle would read as another view rather than as a note about
+  // all of them.
+  .kh-lab-caveat {
+    border-left: 2px solid var(--kh-color--coral);
+    padding-left: 0.9rem;
+  }
+
+  // Near links: the sub-three-year hops. Ground texture, not narrative. They
+  // outnumber the returns roughly seven to one, so at the returns' weight the
+  // chart would read as a hairball and the six arcs that carry the section's
+  // argument would be lost in it. Thin and faint, they thicken where a burst
+  // of related writing happened, which is the cluster the returns arc over.
+  .kh-lab-arc__links--near path {
+    stroke-opacity: 0.22;
+    stroke-width: 1;
+  }
+
   .kh-lab-arc__entries line {
     stroke: var(--kh-lab-ink);
     stroke-opacity: 0.7;

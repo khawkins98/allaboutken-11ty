@@ -189,6 +189,47 @@ const returnEdges = allEdges
     };
   });
 
+// The short hops the 3-year filter used to discard. They are not returns --
+// that is the whole point of keeping them visually separate -- but leaving
+// them out made the archive look like six lonely arcs over an empty axis,
+// when most of the relatedness sits inside single working periods. Drawn low
+// and faint they read as ground texture: where the mat thickens is a burst of
+// writing that hung together, which is exactly the cluster the returns arc
+// over.
+//
+// Same non-companion rule as the returns, so a series or an impact-story
+// pairing still does not count as an idea recurring.
+//
+// The lift is capped hard at 46 against the returns' 205. That gap is doing
+// the work: at a glance the two layers must not be confusable, and a long
+// near-edge must never out-climb a short return. The floor of 22 is there
+// because span alone left the shortest hops invisible.
+//
+// KNOWN LIMIT: this does not make the 2026 cluster legible, and no arc
+// treatment will. 38 of these 41 edges fall inside a burst of a few months,
+// which on a 2011-2027 axis is a handful of pixels wide, so they overlap into
+// a tuft that says "something happened here" without saying what. That is
+// honest but coarse. Showing the internal structure of a dense period needs a
+// different encoding -- a per-month density strip along the axis, or an
+// ordinal x-scale -- not a thinner stroke. Do not spend another afternoon
+// tuning opacity and lift; the axis is the constraint.
+const nearEdges = allEdges
+  .filter((edge) => edge.gapYears < 3 && !edge.companion)
+  .sort((a, b) => a.score - b.score)
+  .map((edge) => {
+    const x1 = edge.first.x;
+    const x2 = edge.second.x;
+    const span = Math.max(6, x2 - x1);
+    const base = 250;
+    const lift = Math.min(46, Math.max(22, 12 + span * 0.22));
+    return {
+      ...edge,
+      x1,
+      x2,
+      path: `M ${x1} ${base} Q ${Math.round(((x1 + x2) / 2) * 10) / 10} ${Math.round((base - lift) * 10) / 10} ${x2} ${base}`
+    };
+  });
+
 const practiceEdges = allEdges
   .filter((edge) => (edge.first.kind === 'impact') !== (edge.second.kind === 'impact'))
   .map((edge) => {
@@ -406,6 +447,7 @@ const counts = {
   links: allEdges.length,
   tagged: nodes.filter((node) => node.topic).length,
   returnLinks: returnEdges.length,
+  nearLinks: nearEdges.length,
   companions: allEdges.filter((edge) => edge.companion).length,
   explicitLinks: allEdges.filter((edge) => edge.explicitLink).length,
   sameYear: allEdges.filter((edge) => edge.gapYears < 1).length,
@@ -1021,6 +1063,7 @@ writeFileSync(OUT, `${JSON.stringify({
   careerBands,
   allEdges,
   returnEdges,
+  nearEdges,
   featuredReturns: returnEdges.slice(0, 4),
   practiceEdges,
   topicCareer,
