@@ -104,6 +104,19 @@
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
   }
 
+  // Safeguard. `.kh-figure` is a three-column grid, which is right where it is
+  // used as a page-level component and wrong inside prose: nested here it
+  // silently squeezed a full-width screenshot into a third of the measure and
+  // made its type unreadable. Rather than rely on everyone remembering the
+  // rule, the grid is neutralised in this context.
+  // Editorially: do not put `.kh-figure` inside `.kh-content`. Use a bare
+  // `<figure>` for an in-prose image, or `<figure class="kh-bleed-out">` for
+  // one that should escape the measure. See the style guide.
+  .kh-figure {
+    display: block;
+    grid-template-columns: none;
+  }
+
   // The `display: table` trick exists so a figcaption sizes itself to the
   // image rather than the column. It only makes sense for figures that
   // actually wrap an image, so it is scoped to those with `:has()`.

@@ -753,7 +753,26 @@ Bare `figure` tags inside `.kh-content` use `display: table` with bottom-aligned
 {% markdown %}
 ### Bleed-out image
 
-The `.kh-bleed-out` utility makes images break out of their container on larger screens (30% on medium, 50% on large):
+The `.kh-bleed-out` utility lets an image escape the reading measure on larger
+screens. It bleeds **left only**, into the contents rail — that is where the
+room is. The reading column sits right of centre in the three-column post
+grid, so a symmetric percentage of the container says nothing about the space
+actually beside it, and bleeding both ways scrolled the whole page sideways at
+mid-range widths.
+
+Where it meets the sticky contents rail, the **rail wins**: it carries an
+opaque fill and a higher `z-index`, so a wide figure slides underneath a
+pinned card. Navigation that blinks out as you scroll reads as a bug; a figure
+passing behind something reads as depth. The figure is far wider than the
+overlap, so nothing is lost.
+
+**Do not put `.kh-figure` inside `.kh-content`.** `.kh-figure` is a
+three-column grid — correct as a page-level component, wrong in prose, where
+it silently squeezes a figure into a third of the measure and makes its type
+unreadable. In body copy use a bare `<figure>`, or `<figure class="kh-bleed-out">`
+for one that should escape the measure. The stylesheet also neutralises the
+grid in that context, so a mistake degrades rather than corrupts — but the
+rule is the primary defence, and the reset is the seatbelt.
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}

@@ -606,10 +606,25 @@
     padding-top: 0.1em;
   }
 
+  // The rail and a full-bleed figure share the left column, and that bleed is
+  // deliberate -- it is the whole point of `.kh-bleed-out`. Something has to
+  // give, and it is the figure: navigation that blinks out as you scroll
+  // reads as a bug, whereas a figure sliding under a pinned card reads as
+  // depth. The figure is much wider than the overlap, so nothing is lost.
+  // The opaque fill is what makes that legible; without it the two shared
+  // pixels and both looked broken. `z-index: 3` clears `.kh-bleed-out` at 2.
+  // Padding keeps the rail's text off the figure's edge and the matching
+  // negative margin keeps it aligned with the column it started in.
+  // Only while it is sticky. Below this breakpoint the rail is a normal block
+  // in the flow, nothing overlaps it, and a floating card would be noise.
   @media (min-width: $kh-breakpoint--md) {
     .kh-post-rail {
+      background: var(--kh-panel-bg);
+      margin-left: -0.9rem;
+      padding: 0.75rem 0.9rem 0.9rem;
       position: sticky;
       top: 1.5rem;
+      z-index: 3;
     }
   }
 
