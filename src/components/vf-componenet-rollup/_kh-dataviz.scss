@@ -177,19 +177,26 @@
     overflow-x: auto;
     // Fade the older end so the strip reads as continuing past the edge.
     mask-image: linear-gradient(to right, transparent 0, #000 3rem);
-    // A thin scrollbar, not a hidden one. The fade above was the only hint
-    // that this scrolls, and it was not enough: a desktop review found that
-    // everything before 2022 was simply unreachable with a mouse, because the
-    // track is ~4,200px inside a ~1,300px window with the scrollbar removed
-    // and no arrows. `thin` keeps the strip delicate while restoring drag.
-    scrollbar-width: thin;
+    // NO SCROLLBAR. This is deliberate -- please do not "fix" it.
+    // A review flagged that with the bar hidden there is no obvious cue that
+    // the strip scrolls, and that the track is ~4,200px inside a ~1,300px
+    // window, so a mouse user might never reach the years before 2022. That
+    // is all true, and it was briefly changed to `scrollbar-width: thin` on
+    // the strength of it. The change was wrong.
+    // The strip is ambience, not a control. It is a small pleasure to notice
+    // and work out; a reader who never discovers it can scroll misses nothing,
+    // because the visible "Published by month" label above it links straight
+    // to /archive/, which is the same content in a form built for reading.
+    // Nothing is stranded behind the scroll. A scrollbar under an ornament
+    // makes it look like a component that failed to fit.
+    // If a hint is ever wanted, the answer is a hairline rather than a
+    // restored bar -- `scrollbar-width: thin` plus a 1px semi-transparent
+    // thumb, so it reads as a watermark instead of a control. The mask-image
+    // fade above already does most of that job.
+    scrollbar-width: none;
 
     &::-webkit-scrollbar {
-      height: 6px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--kh-rule);
+      display: none;
     }
   }
 

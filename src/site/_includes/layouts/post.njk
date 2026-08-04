@@ -40,10 +40,14 @@ templateEngineOverride: njk
         &middot; {{ words | formatNumber }} words
         {%- set lengthStats = words | lengthFrame %}
         {% include "partials/length-gauge.njk" %}
-        {#- Topics may be hierarchical: "typography > OpenType ligatures". The
-            parent is the controlled vocabulary and carries the tally; the
-            child is free-form detail shown after it. -#}
-        {% if topics %}&middot;
+      </p>
+      {#- Topics get a line each, not a comma-separated run.
+          Inline, four hierarchical topics wrapped into a five-line blob that
+          broke mid-term -- "career / reflection", "static / sites" -- so a
+          single link's text was split across two lines and the whole thing
+          read as one run-on string. A list is what this always was. -#}
+      {% if topics %}
+      <ul class="kh-meta kh-post-topics" data-pagefind-ignore>
           {%- for topic in topics %}
           {%- set parent = topic | topicParent %}
           {%- set child = topic | topicChild %}
@@ -59,12 +63,18 @@ templateEngineOverride: njk
               can go; the child is detail. Before this the taxonomy was
               write-only -- 31 topic pages, and the word "typography" under a
               typography post was inert. -#}
+          <li class="kh-post-topics__item">
           {%- if topicSlug %}<a href="/topics/{{ topicSlug }}/">{{ parent }}</a>{% else %}{{ parent }}{% endif %}
-          {%- if child %}<span class="kh-topic-child"><span class="kh-topic-child__sep" aria-hidden="true">&rsaquo;</span>{{ child }}</span>{% endif %}
-          {%- if tally > 1 %}<span class="kh-topic-tally" title="{{ tally }} entries on {{ parent }}">&hairsp;×{{ tally }}</span>{% endif %}{{ ", " if not loop.last }}
+          {#- No separator glyph. The `>` is a storage convention, and rendered
+              as a chevron it read as a breadcrumb -- implying the child was a
+              second, clickable level. Columns carry the relationship instead:
+              controlled term, then free-form detail, then the count. -#}
+          <span class="kh-topic-child">{{ child }}</span>
+          {%- if tally > 1 %}<span class="kh-topic-tally" title="{{ tally }} entries on {{ parent }}">×{{ tally }}</span>{% else %}<span></span>{% endif %}
+          </li>
           {%- endfor %}
-        {%- endif %}
-      </p>
+      </ul>
+      {%- endif %}
     </div>
     {% include "partials/series-nav.njk" %}
     {%- set tocEntries = content | tocEntries %}
