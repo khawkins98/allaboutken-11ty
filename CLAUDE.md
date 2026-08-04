@@ -27,14 +27,17 @@ one of these, and five subsequent builds (cold cache, warm cache, single-pass,
 two-pass, full `yarn build`) all came out clean. Do not assume a passing build
 means the class of bug is gone.
 
-One partial reproduction, which is the only correlation found so far: the
-**first** build after adding a brand-new source image to
-`src/site/images/blog/` emitted them across 49 pages, and an immediately
-repeated, otherwise identical build was clean. So the trigger appears to be a
-cold cache entry for a *newly added* file rather than anything about the page
-that references it — which fits the blast radius, since one failed transform
-poisons every listing thumbnail in that build, not just the new image. If you
-have just added an image, build twice before believing the first result.
+A near-miss hypothesis, recorded so nobody spends the afternoon re-deriving
+it: the first build after adding a brand-new source image to
+`src/site/images/blog/` once emitted them across 49 pages, and an immediately
+repeated, otherwise identical build was clean. "Cold cache entry for a newly
+added file" fits the blast radius, since one failed transform poisons every
+listing thumbnail in that build rather than just the new image. **It did not
+hold.** Adding another image the same afternoon produced a clean first build.
+So this is one more data point in the intermittency, not a trigger.
+
+The practical rule is unchanged and does not depend on knowing the cause:
+build, check, and do not trust a single clean result.
 
 `yarn lint:links` detects them — the query string is stripped, so the target
 resolves to a `build/.11ty/` directory that is not there. That check is now a
