@@ -80,7 +80,7 @@ Source of truth for local commands and script behavior in this repository.
 ### `yarn test`
 
 - Runs `.githooks/test-commit-msg-hooks.sh` to validate commit-message normalization and enforcement behavior.
-- Ensures edge cases (normalization and rejections) are covered before commit and PR work.
+- Ensures normalization and rejection edge-cases (uppercase prefix, colon spacing, trailing period, whitespace trimming, body preservation, unknown prefix, empty description) are covered before commit and PR work.
 
 ### `yarn prepare`
 

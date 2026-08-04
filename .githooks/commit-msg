@@ -26,6 +26,7 @@ fail() {
 
 # First non-comment, non-empty line is the subject.
 subject="$(grep -v '^[[:space:]]*#' "$msg_file" | sed '/^[[:space:]]*$/d' | head -n 1 || true)"
+subject="$(printf '%s' "$subject" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
 if [[ -z "$subject" ]]; then
   fail "missing or empty subject"
 fi

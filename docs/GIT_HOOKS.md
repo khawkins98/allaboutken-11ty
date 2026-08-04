@@ -22,8 +22,7 @@ Normalizes the first commit subject line before validation:
 - Detects the first non-empty, non-comment line.
 - Trims leading/trailing whitespace.
 - Skips machine-generated subjects: `Merge`, `Revert`, `fixup!`, `squash!`.
-- For known prefixes, it applies deterministic normalization:
-  - `content`, `feature`, `fix`, `ci`, `chore`
+- For known prefixes (`content`, `feature`, `fix`, `ci`, `chore`), it applies deterministic normalization:
   - lowercases the prefix
   - normalizes colon spacing to exactly one space
   - trims description leading/trailing whitespace

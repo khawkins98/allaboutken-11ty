@@ -12,14 +12,15 @@ if [[ -z "${subject_line}" ]]; then
 fi
 
 subject="$(sed -n "${subject_line}p" "$msg_file")"
+trimmed="$(printf '%s' "$subject" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
 
 for skip_prefix in "${SKIP_PREFIXES[@]}"; do
-  if [[ "$subject" == "${skip_prefix}"* ]]; then
+  if [[ "$trimmed" == "${skip_prefix}"* ]]; then
     exit 0
   fi
 done
 
-trimmed="$(printf '%s' "$subject" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
+normalized="$trimmed"
 
 if [[ "$trimmed" =~ ^([^:]*)[[:space:]]*:[[:space:]]*(.*)$ ]]; then
   raw_prefix_scope="$(printf '%s' "${BASH_REMATCH[1]}" | sed -E 's/[[:space:]]+$//')"

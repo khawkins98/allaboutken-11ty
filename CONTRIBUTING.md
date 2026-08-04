@@ -51,7 +51,9 @@ Examples:
 - One logical change per commit
 - Never use `--no-verify` or `--no-gpg-sign` to bypass hooks
 
-Commit subjects are normalized by `.githooks/prepare-commit-msg` then enforced by `.githooks/commit-msg` (activated on `yarn install` via the `prepare` script). PR titles are enforced in CI by `pr-title-check` for the same prefix set and optional scope, but CI does not enforce the 72-character limit or trailing-period rule.
+Commit subjects are normalized by `.githooks/prepare-commit-msg` and enforced by `.githooks/commit-msg` (activated on `yarn install` via the `prepare` script). PR titles are enforced in CI by `pr-title-check` for the same prefix set and optional scope, but CI does not enforce the 72-character limit or trailing-period rule.
+
+`prepare-commit-msg` only normalizes known prefixes and known formatting issues; unknown prefixes are preserved so strict enforcement can reject them.
 
 ## Pull requests
 

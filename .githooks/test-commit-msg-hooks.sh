@@ -33,7 +33,7 @@ assert_commit_rejects() {
   fi
 }
 
-# Uppercase prefix normalization + spacing + trailing period cleanup.
+# Uppercase prefix normalization + colon spacing + trailing period cleanup.
 cat <<'MSG' > "$msg_file"
   FiX   :  Normalize subject shape.
 MSG
@@ -49,7 +49,7 @@ MSG
 assert_subject 'chore: remove trailing period'
 assert_commit_accepts 'trailing-period normalization'
 
-# Leading/trailing whitespace cleanup and body preservation.
+# Leading/trailing subject whitespace cleanup and body preservation.
 cat <<'MSG' > "$msg_file"
    content   :   whitespace cleanup.  
 
@@ -57,6 +57,7 @@ Body line must stay.
 MSG
 "$hook_dir/prepare-commit-msg" "$msg_file"
 assert_subject 'content: whitespace cleanup'
+[[ "$(sed -n '2p' "$msg_file")" == '' ]] || fail 'blank line before body changed'
 [[ "$(sed -n '3p' "$msg_file")" == 'Body line must stay.' ]] || fail 'commit body changed'
 assert_commit_accepts 'leading/trailing subject whitespace + body preservation'
 
@@ -70,7 +71,7 @@ assert_commit_accepts 'colon spacing normalization'
 
 # Scoped prefix is retained and validated.
 cat <<'MSG' > "$msg_file"
-Feature(Search): standardize scoped subjects.
+feature(Search): standardize scoped subjects.
 MSG
 "$hook_dir/prepare-commit-msg" "$msg_file"
 assert_subject 'feature(Search): standardize scoped subjects'
