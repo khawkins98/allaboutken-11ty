@@ -89,8 +89,37 @@
     padding: 1.1rem 0;
   }
 
+  // Underlined like every other link on the site. It was `text-decoration:
+  // none`, which switched the site's link language off on the one page whose
+  // whole job is clicking through -- a result title rendered as a plain
+  // heading, while the only underlined thing nearby was the mono URL, which
+  // is not the link.
   .kh-search-result__link {
-    text-decoration: none;
+    text-decoration-color: var(--kh-color--blue);
+    text-decoration-line: underline;
+    text-underline-offset: 2px;
+  }
+
+  .kh-search-result:hover,
+  .kh-search-result:focus-within {
+    background: var(--kh-panel-bg);
+  }
+
+  // The empty and loading lines share the count line's treatment, so the
+  // three states of one region look like one component.
+  .kh-search-status {
+    border-bottom: 1px solid var(--kh-rule--strong);
+    display: block;
+    margin: 0 0 0.25rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .kh-search-empty {
+    margin: 0.75rem 0 0;
+  }
+
+  .kh-search-more {
+    margin-top: 1rem;
   }
 
   .kh-search-result__title {

@@ -21,7 +21,9 @@
 
    See /posts/20260220-feedback-buttons-cgi-pattern/ for the JS-free upvote. #}
 <div class="kh-feedback kh-u-do-not-print" data-pagefind-ignore>
-  <h2 class="kh-meta kh-feedback__label">Was this useful?</h2>
+  {#- A label, not a section heading. It renders at 12px mono, so as an <h2>
+      it announced a top-level section that visually is apparatus. -#}
+  <p class="kh-meta kh-feedback__label">Was this useful?</p>
   <div class="kh-feedback__body">
     <a href="https://feedback.allaboutken.com/up{{ page.url }}"
        rel="nofollow" class="kh-feedback__action">&#128077; This was useful</a>

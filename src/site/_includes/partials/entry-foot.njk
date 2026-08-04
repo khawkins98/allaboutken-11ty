@@ -43,7 +43,10 @@
         order remain the same. Every non-current callout is a link, which is
         why the old "Previously:" and "Next:" lines are not repeated here. -#}
     <section class="kh-sequence">
-      <h3 class="kh-text-heading--3 kh-sequence__head">Read next in sequence</h3>
+      {#- h2, not h3: this is a peer of "Related posts" above and renders at
+          nearly the same size, so the old level inverted the document outline
+          against what the page actually looks like. -#}
+      <h2 class="kh-text-heading--2 kh-sequence__head">Read next in sequence</h2>
       {%- set seqNeighbours = collections.allContent | neighbourhood(page.url, 3) %}
       {% include "partials/sequence-mark.njk" %}
     </section>

@@ -6,7 +6,11 @@
     <link rel="preload" as="font" href="/assets/kh-font/IBMPlexSans-Regular.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="/assets/kh-font/IBMPlexMono-Regular.woff2" type="font/woff2" crossorigin>
     <link rel="stylesheet" media="all" href="{{ '/css/styles.css' | url }}" />
-    <title>{{ title or (renderData and renderData.title) or siteConfig.siteInformation.title}} | All about Ken Hawkins</title>
+    {#- `seoTitle` overrides for pages whose on-page heading is written for the
+        page rather than for a search result. The homepage h1 is "Hello", which
+        is right in the hero and useless as the string that appears in Google,
+        browser tabs, bookmarks and Slack unfurls. -#}
+    <title>{{ seoTitle or title or (renderData and renderData.title) or siteConfig.siteInformation.title}} | All about Ken Hawkins</title>
     <link rel="canonical" href="https://www.allaboutken.com{{ page.url | url }}" />
     <link rel="webmention" href="https://webmention.io/allaboutken.com/webmention" />
     <link rel="pingback" href="https://webmention.io/allaboutken.com/xmlrpc" />
@@ -107,16 +111,19 @@
           {#- One "Writing" entry rather than three siblings. Blog, Digesting
               and Work now read as sections of it, reached from /all/, and the
               nav stays active across all of them. -#}
-          {#- Two strengths of state, because they are different claims.
-              A filled cell plus `aria-current="page"` means you are ON this
-              page. A rule underneath plus `aria-current="true"` means you are
-              somewhere this item leads. Previously both were the same solid
-              fill, so /work/ asserted "you are on Writing" and /cv/ asserted
-              "you are on Directory", which a reviewer reasonably read as a
-              bug. -#}
+          {#- Two visual strengths, one semantic. A filled cell means you are ON
+              this page; a rule underneath means this item leads somewhere you
+              are. Both used to be the same solid fill, so /work/ asserted "you
+              are on Writing" and /cv/ asserted "you are on Directory".
+
+              `aria-current` is exact-page ONLY, and deliberately does not
+              mirror the softer visual state. Announcing "Directory, current"
+              to a screen-reader user standing on the CV is simply false; the
+              underline is a wayfinding hint for people who can see it, not a
+              claim about which page this is. -#}
           {%- set inWriting = page.url.startsWith('/all') or page.url.startsWith('/blog') or page.url.startsWith('/digesting') or page.url.startsWith('/work') or page.url.startsWith('/posts') %}
           <li class="kh-navigation__item">
-            <a href="/all/" class="kh-navigation__link{% if page.url == '/all/' %} kh-navigation__link--active{% elif inWriting %} kh-navigation__link--section{% endif %}"{% if page.url == '/all/' %} aria-current="page"{% elif inWriting %} aria-current="true"{% endif %}>Writing</a>
+            <a href="/all/" class="kh-navigation__link{% if page.url == '/all/' %} kh-navigation__link--active{% elif inWriting %} kh-navigation__link--section{% endif %}"{% if page.url == '/all/' %} aria-current="page"{% endif %}>Writing</a>
           </li>
           {#- Everything that is not writing -- Work, CV, Garage, Topics,
               Archive, Stats, the Story Lab -- previously existed only in the
@@ -127,7 +134,7 @@
               it goes here rather than adding four more nav items. -#}
           {%- set inDirectory = page.url.startsWith('/topics') or page.url.startsWith('/archive') or page.url.startsWith('/stats') or page.url.startsWith('/garage') or page.url.startsWith('/cv') or page.url.startsWith('/colophon') or page.url.startsWith('/ai') %}
           <li class="kh-navigation__item">
-            <a href="/directory/" class="kh-navigation__link{% if page.url == '/directory/' %} kh-navigation__link--active{% elif inDirectory %} kh-navigation__link--section{% endif %}"{% if page.url == '/directory/' %} aria-current="page"{% elif inDirectory %} aria-current="true"{% endif %}>Directory</a>
+            <a href="/directory/" class="kh-navigation__link{% if page.url == '/directory/' %} kh-navigation__link--active{% elif inDirectory %} kh-navigation__link--section{% endif %}"{% if page.url == '/directory/' %} aria-current="page"{% endif %}>Directory</a>
           </li>
           <li class="kh-navigation__item">
             <a href="/search/" class="kh-navigation__link{% if page.url.startsWith('/search') %} kh-navigation__link--active{% endif %}"{% if page.url.startsWith('/search') %} aria-current="page"{% endif %}>Search</a>

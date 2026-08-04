@@ -107,7 +107,12 @@ module.exports = function registerTimeline(config) {
       // Size by AREA, not by side length: a month with four entries should
       // look twice as wide as one with a single entry, not four times.
       slots.forEach((s2) => {
-        s2.size = s2.total ? Math.min(14, Math.round(4 * Math.sqrt(s2.total))) : 0;
+        // Floor of 6px. Sized by area, a single-entry month came out at 4px
+        // while an empty month is a 3px tick -- one is a link and the other is
+        // not, and they differed by a pixel. 6px keeps the area encoding
+        // (6, 8, 10, 12, 14) while making "there is something here" visible
+        // and clickable; the empty months stay 3px and are a different shape.
+        s2.size = s2.total ? Math.max(6, Math.min(14, Math.round(4 * Math.sqrt(s2.total)))) : 0;
         delete s2.newest;
       });
       return slots;

@@ -426,6 +426,28 @@ body:has(#kh-css-toggle:checked) {
     color: var(--kh-ground);
   }
 
+  // Primary. The base button is the outline; this is the one action a page
+  // wants you to take. `.kh-button--secondary` was in the markup but never
+  // defined, so a page with three CTAs rendered three identical peers and led
+  // with none of them.
+  // Coral fill, matching the current nav cell and the button hover state, so
+  // the accent means one thing throughout: this is the live one.
+  .kh-button--primary,
+  .kh-button--primary:visited {
+    --kh-button-background-color: var(--kh-color--coral);
+    --kh-button-border-color: var(--kh-color--coral);
+
+    color: var(--kh-ground);
+  }
+
+  .kh-button--primary:focus,
+  .kh-button--primary:hover {
+    --kh-button-background-color: var(--kh-rule--strong);
+    --kh-button-border-color: var(--kh-rule--strong);
+
+    color: var(--kh-ground);
+  }
+
   .kh-button--sm {
     font-size: 14px;
     font-weight: 700;
