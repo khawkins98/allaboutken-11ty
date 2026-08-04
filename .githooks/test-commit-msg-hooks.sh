@@ -68,6 +68,14 @@ MSG
 assert_subject 'fix: standardize colon spacing'
 assert_commit_accepts 'colon spacing normalization'
 
+# Scoped prefix is retained and validated.
+cat <<'MSG' > "$msg_file"
+Feature(Search): standardize scoped subjects.
+MSG
+"$hook_dir/prepare-commit-msg" "$msg_file"
+assert_subject 'feature(Search): standardize scoped subjects'
+assert_commit_accepts 'scoped prefix normalization and enforcement'
+
 # Unknown prefix is not rewritten by normalization.
 cat <<'MSG' > "$msg_file"
   unknown  :   should stay untouched.

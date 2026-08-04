@@ -4,13 +4,10 @@
 set -euo pipefail
 
 msg_file="$1"
+hook_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${hook_dir}/commit-message-format.sh"
 
-# Shared format constants.
-allowed_prefixes=("content" "feature" "fix" "ci" "chore")
-skip_prefixes=("Merge " "Revert " "fixup! " "squash! ")
-max_subject_length=72
-scope_pattern='[a-z0-9 ._-]+'
-allowed_prefixes_label="$(printf '%s | ' "${allowed_prefixes[@]}")"
+allowed_prefixes_label="$(printf '%s | ' "${ALLOWED_PREFIXES[@]}")"
 allowed_prefixes_label="${allowed_prefixes_label% | }"
 
 fail() {
@@ -20,7 +17,7 @@ fail() {
   echo "  Expected:  <prefix>[(<scope>)]: <description>"
   echo "  Prefixes:  ${allowed_prefixes_label}"
   echo "  Scope:     optional, e.g. chore(deps): upgrade pagefind"
-  echo "  Rules:     description not empty, exactly one space after ':', subject ≤ ${max_subject_length} chars, no trailing period"
+  echo "  Rules:     description not empty, exactly one space after ':', subject ≤ ${MAX_SUBJECT_LENGTH} chars, no trailing period"
   echo ""
   echo "  Got:  ${subject}"
   echo ""
@@ -34,18 +31,18 @@ if [[ -z "$subject" ]]; then
 fi
 
 # Skip merge, revert, fixup, and squash commits — they are machine-generated.
-for skip_prefix in "${skip_prefixes[@]}"; do
+for skip_prefix in "${SKIP_PREFIXES[@]}"; do
   if [[ "$subject" == "${skip_prefix}"* ]]; then
     exit 0
   fi
 done
 
-if [[ "$subject" == *:* ]]; then
-  prefix_scope="${subject%%:*}"
-  post_colon="${subject#*:}"
-else
+if [[ "$subject" != *:* ]]; then
   fail "missing or unknown prefix"
 fi
+
+prefix_scope="${subject%%:*}"
+post_colon="${subject#*:}"
 
 # Enforce exactly one space after the colon.
 if [[ "$post_colon" != " "* ]]; then
@@ -57,10 +54,8 @@ fi
 
 description="${post_colon# }"
 
-# Split known prefix from optional scope.
 prefix="$prefix_scope"
 scope=""
-
 if [[ "$prefix_scope" == *\(* ]]; then
   if [[ "$prefix_scope" != *\) ]]; then
     fail "invalid scope syntax"
@@ -69,14 +64,10 @@ if [[ "$prefix_scope" == *\(* ]]; then
   scope="${prefix_scope#*\(}"
   scope="${scope%\)}"
   prefix="${prefix_scope%%\(*}"
-else
-  if [[ "$prefix_scope" == *[[:space:]]* ]]; then
-    fail "missing or unknown prefix"
-  fi
 fi
 
 is_allowed_prefix=false
-for allowed_prefix in "${allowed_prefixes[@]}"; do
+for allowed_prefix in "${ALLOWED_PREFIXES[@]}"; do
   if [[ "$prefix" == "$allowed_prefix" ]]; then
     is_allowed_prefix=true
     break
@@ -87,16 +78,12 @@ if [[ "$is_allowed_prefix" != true ]]; then
   fail "missing or unknown prefix"
 fi
 
-if [[ -n "$scope" && ! "$scope" =~ ^${scope_pattern}$ ]]; then
-  fail "invalid scope"
-fi
-
 if [[ -z "${description//[[:space:]]/}" ]]; then
   fail "empty description"
 fi
 
-if (( ${#subject} > max_subject_length )); then
-  fail "subject is ${#subject} chars (max ${max_subject_length})"
+if (( ${#subject} > MAX_SUBJECT_LENGTH )); then
+  fail "subject is ${#subject} chars (max ${MAX_SUBJECT_LENGTH})"
 fi
 
 case "$subject" in
