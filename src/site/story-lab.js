@@ -438,15 +438,25 @@
   // chart CSS targets these by descendant selector and would restroke them.
   const hits = [];
   if (window.matchMedia('(hover: none)').matches) {
+    const FAT = 'fill:none;stroke:transparent;stroke-width:14;pointer-events:stroke';
     named.forEach((element) => {
       const tag = element.tagName.toLowerCase();
-      if (tag !== 'path' && tag !== 'line') return;
-      const hit = element.cloneNode(false);
+      // A labelled <a> is the shape's wrapper, not the shape: the entry ticks
+      // on the arc chart are <a><title/><line/></a>, and an <a> has no
+      // geometry of its own. Measured on a phone the first one is 0x3px --
+      // literally untappable. Clone the shape it wraps and put the twin INSIDE
+      // the anchor, so the tap both opens the tip and still follows the link.
+      const shape = tag === 'a' ? element.querySelector('line, path') : element;
+      if (!shape) return;
+      const shapeTag = shape.tagName.toLowerCase();
+      if (shapeTag !== 'path' && shapeTag !== 'line') return;
+      const hit = shape.cloneNode(false);
       hit.removeAttribute('aria-label');
       hit.removeAttribute('role');
       hit.setAttribute('aria-hidden', 'true');
-      hit.setAttribute('style', 'fill:none;stroke:transparent;stroke-width:14;pointer-events:stroke');
-      element.parentNode.insertBefore(hit, element.nextSibling);
+      hit.setAttribute('style', FAT);
+      if (tag === 'a') element.appendChild(hit);
+      else element.parentNode.insertBefore(hit, element.nextSibling);
       label.set(hit, label.get(element));
       hits.push(hit);
     });
