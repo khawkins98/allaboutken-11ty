@@ -108,6 +108,28 @@
     stroke-width: 1.5;
   }
 
+  // Generic chart tooltip, created by story-lab.js. `fixed`, because the
+  // charts it serves sit inside horizontally scrolling containers that would
+  // otherwise clip it. pointer-events: none so it can never sit between a
+  // finger and the shape underneath it.
+  .kh-lab-tip {
+    background: var(--kh-panel-bg);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--kh-lab-ink) 18%, transparent),
+      0 8px 24px color-mix(in srgb, var(--kh-lab-ink) 18%, transparent);
+    font-size: 13px;
+    line-height: 1.4;
+    max-width: min(22rem, calc(100vw - 1rem));
+    padding: 0.5rem 0.7rem;
+    pointer-events: none;
+    position: fixed;
+    z-index: 6;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
   // Standing "this is a lab" caveat. A left rule in the accent rather than a
   // tinted box: the page is already dense with panels and charts, and one more
   // filled rectangle would read as another view rather than as a note about

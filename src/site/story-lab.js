@@ -323,3 +323,140 @@
     });
   });
 })();
+
+// ---------------------------------------------------------------------------
+// Generic chart tooltips.
+//
+// Progressive enhancement, and the fallback is the whole reason the markup
+// looks the way it does: every chart element ships a real SVG <title>, so with
+// JavaScript off the browser's own tooltip still names it. When this runs it
+// takes those titles over -- leave them in place and the native tooltip races
+// the custom one, and you get both -- and hands the name straight back as an
+// aria-label. Removing a <title> without doing that would make the no-JS page
+// the accessible one, which is the wrong way round.
+//
+// #kh-radial-comparison and #kh-topic-sparks are skipped: they have bespoke
+// tooltips above that also drive highlighting and a live detail line, and
+// binding this on top would fight them.
+// ---------------------------------------------------------------------------
+(() => {
+  const lab = document.querySelector('.kh-story-lab');
+  if (!lab) return;
+
+  const BESPOKE = '#kh-radial-comparison, #kh-topic-sparks';
+  const named = [...lab.querySelectorAll('svg a, svg path, svg rect, svg circle, svg line, svg g')]
+    .filter((element) => !element.closest(BESPOKE))
+    .filter((element) => [...element.children].some((child) => child.tagName.toLowerCase() === 'title'));
+  if (!named.length) return;
+
+  const label = new WeakMap();
+  named.forEach((element) => {
+    const title = [...element.children].find((child) => child.tagName.toLowerCase() === 'title');
+    const value = title?.textContent?.trim() || '';
+    if (!value) return;
+    label.set(element, value);
+    element.setAttribute('aria-label', value);
+    if (element.tagName.toLowerCase() === 'g') element.setAttribute('role', 'img');
+    title.remove();
+  });
+
+  // aria-hidden: the accessible name already lives on the shape itself, so
+  // announcing the tip as well would say everything twice.
+  const tip = document.createElement('div');
+  tip.className = 'kh-lab-tip';
+  tip.setAttribute('aria-hidden', 'true');
+  tip.hidden = true;
+  // Inside the lab section, not on <body>: every style on this site is scoped
+  // under the CSS toggle and the lab's own variables (--kh-lab-ink) are
+  // declared on .kh-story-lab, so a tip parented to <body> would render
+  // unstyled. It is `position: fixed` regardless, which is why the parent can
+  // be chosen for cascade rather than for coordinates.
+  lab.appendChild(tip);
+
+  let current = null;
+
+  // Prefer above the target, flip below when the top of the viewport is in the
+  // way, then clamp on both axes. Fixed positioning, not absolute: several of
+  // these charts sit inside horizontally scrolling containers, where an
+  // absolutely positioned tip is clipped by the scroller or drifts away from
+  // its target as you scroll.
+  function place(target) {
+    const pad = 8;
+    const rect = target.getBoundingClientRect();
+    const size = tip.getBoundingClientRect();
+    let left = rect.left + rect.width / 2 - size.width / 2;
+    let top = rect.top - size.height - 10;
+    if (top < pad) top = rect.bottom + 10;
+    left = Math.max(pad, Math.min(left, window.innerWidth - size.width - pad));
+    top = Math.max(pad, Math.min(top, window.innerHeight - size.height - pad));
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
+  }
+
+  function show(target) {
+    const value = label.get(target);
+    if (!value) return;
+    current = target;
+    tip.textContent = value;
+    tip.hidden = false;
+    place(target);
+  }
+
+  function hide() {
+    current = null;
+    tip.hidden = true;
+  }
+
+  // Touch: a 1px arc cannot be hit with a finger, so on coarse pointers every
+  // thin element gets an invisible fat twin to catch the tap. Built only when
+  // a coarse pointer is actually present -- a few hundred extra nodes is not a
+  // cost a mouse should pay. Inline styles rather than a class because the
+  // chart CSS targets these by descendant selector and would restroke them.
+  const hits = [];
+  if (window.matchMedia('(hover: none)').matches) {
+    named.forEach((element) => {
+      const tag = element.tagName.toLowerCase();
+      if (tag !== 'path' && tag !== 'line') return;
+      const hit = element.cloneNode(false);
+      hit.removeAttribute('aria-label');
+      hit.removeAttribute('role');
+      hit.setAttribute('aria-hidden', 'true');
+      hit.setAttribute('style', 'fill:none;stroke:transparent;stroke-width:14;pointer-events:stroke');
+      element.parentNode.insertBefore(hit, element.nextSibling);
+      label.set(hit, label.get(element));
+      hits.push(hit);
+    });
+  }
+
+  [...named, ...hits].forEach((element) => {
+    element.addEventListener('pointerenter', (event) => {
+      if (event.pointerType === 'touch') return;
+      show(element);
+    });
+    element.addEventListener('pointerleave', (event) => {
+      if (event.pointerType === 'touch') return;
+      if (current === element) hide();
+    });
+    // Tap toggles, so a second tap on the same shape dismisses rather than
+    // leaving a tip stuck under the finger.
+    element.addEventListener('pointerup', (event) => {
+      if (event.pointerType !== 'touch') return;
+      event.stopPropagation();
+      if (current === element) hide();
+      else show(element);
+    });
+    element.addEventListener('focus', () => show(element));
+    element.addEventListener('blur', () => hide());
+  });
+
+  document.addEventListener('pointerup', (event) => {
+    if (current && event.pointerType === 'touch') hide();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') hide();
+  });
+  // Reposition rather than hide: the tip stays glued to its shape while a
+  // horizontally scrolling chart is dragged.
+  window.addEventListener('scroll', () => { if (current) place(current); }, { passive: true, capture: true });
+  window.addEventListener('resize', () => { if (current) place(current); });
+})();
