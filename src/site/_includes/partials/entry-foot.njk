@@ -1,0 +1,55 @@
+{# The foot of an entry — onward reading and authorship.
+
+   Shared by layouts/post.njk and layouts/digesting.njk. It lived inline in
+   post.njk, which meant digesting entries had a byline and nothing else: no
+   related entries, no rail, no way forward or back once you had landed on one
+   from a link. Extracting it is what stops the two layouts drifting apart
+   again.
+
+   Feedback sits at the end of the reading column in the calling layout. This
+   full-width block begins only after that question, when attention shifts to
+   what to read next and who wrote the piece.
+
+   Related links and authorship form the first row at wide viewports. The
+   chronological sequence takes the full second row: seven titled callouts
+   need drawing-board width, not half a column.
+
+   The DOM follows the desktop columns from left to right, so keyboard tab
+   order and screen-reader order agree with what is on screen. At narrower
+   widths the same two units stack without CSS reordering.
+
+   Pages with no entry carry a short blurb in the footer instead -- see
+   footer.njk. The homepage has neither, because the hero says it. #}
+<div class="kh-stack kh-u-padding__top--800" data-pagefind-ignore>
+  {%- if page.url != '/privacy/' %}
+
+  {%- set near = related[page.url] -%}
+  <div class="kh-entry-foot{% if not near or not near.length %} kh-entry-foot--no-related{% endif %} kh-u-do-not-print">
+    {#- No wrapper heading. "Read next / By meaning, and in sequence" sat
+        directly above "Closest in meaning / By similarity, not by tag" --
+        two rules and two straplines for one idea. The related list owns the
+        h2; the rail gets an h3 under it. -#}
+    {%- if near and near.length %}
+      <section class="kh-readnext">
+        {% include "partials/related-semantic.njk" %}
+      </section>
+    {%- endif %}
+
+    {% include "partials/author-note.njk" %}
+
+    {#- The rail is orientation -- where this entry sits in the register --
+        rather than a semantic reading list. It follows the two-column row in
+        the DOM and spans both columns on wide screens, so reading and keyboard
+        order remain the same. Every non-current callout is a link, which is
+        why the old "Previously:" and "Next:" lines are not repeated here. -#}
+    <section class="kh-sequence">
+      {#- h2, not h3: this is a peer of "Related posts" above and renders at
+          nearly the same size, so the old level inverted the document outline
+          against what the page actually looks like. -#}
+      <h2 class="kh-text-heading--2 kh-sequence__head">Read next in sequence</h2>
+      {%- set seqNeighbours = collections.allContent | neighbourhood(page.url, 3) %}
+      {% include "partials/sequence-mark.njk" %}
+    </section>
+  </div>
+  {%- endif %}
+</div>

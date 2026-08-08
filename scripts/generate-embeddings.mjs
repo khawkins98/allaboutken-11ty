@@ -36,7 +36,9 @@ const MODEL_NAME = 'Xenova/all-MiniLM-L6-v2';
 const SKIP_PATTERNS = [
   /\/social\//,
   /\/node\//,
-  /\/404\//,
+  // Both forms: these patterns were written when every URL was rewritten to a
+  // trailing-slash directory. 404.html keeps its extension now.
+  /\/404(\/|\.html$)/,
   /\/search\//,
   /\/sitemap/,
   /\/robots/,
@@ -68,7 +70,63 @@ function findHtmlFiles(dir, files = []) {
 /**
  * Extract text content from HTML, stripping tags.
  */
+/**
+ * Remove any element carrying data-pagefind-ignore, with its contents.
+ *
+ * That attribute is the site's existing "this is chrome, not content" marker:
+ * Pagefind already honours it to keep navigation out of keyword search, and
+ * the same regions must stay out of the embeddings for the same reason. One
+ * marker, two consumers.
+ *
+ * This matters more than it looks. The "closest in meaning" list prints the
+ * titles of related entries; embedding it fed the feature's own output back
+ * into the model and those entries drifted closer together on every build.
+ * Measured: link count went 116 to 173 with no writing changed, and settled at
+ * a stable 85 once the chrome was excluded. The register timeline prints an
+ * identical sentence on every page, which lifts baseline similarity across the
+ * whole corpus.
+ *
+ * Written as a balanced-tag scan rather than a regex because these regions
+ * nest (a <nav> containing an <ol> containing <li>), and a lazy regex would
+ * stop at the first closing tag of any depth.
+ */
+function stripIgnoredRegions(html) {
+  let out = String(html);
+  const marker = /<([a-z][a-z0-9]*)\b[^>]*\bdata-pagefind-ignore\b[^>]*>/i;
+  for (let guard = 0; guard < 200; guard += 1) {
+    const m = marker.exec(out);
+    if (!m) break;
+    const tag = m[1].toLowerCase();
+    const start = m.index;
+    // Self-closing or void: drop just the tag.
+    if (m[0].endsWith('/>')) {
+      out = out.slice(0, start) + ' ' + out.slice(start + m[0].length);
+      continue;
+    }
+    const scan = new RegExp(`<(/?)${tag}\\b[^>]*>`, 'gi');
+    scan.lastIndex = start;
+    let depth = 0;
+    let end = -1;
+    let hit;
+    while ((hit = scan.exec(out)) !== null) {
+      depth += hit[1] ? -1 : 1;
+      if (depth === 0) { end = hit.index + hit[0].length; break; }
+    }
+    if (end === -1) {
+      // Unbalanced: drop only the opening tag rather than the rest of the page.
+      out = out.slice(0, start) + ' ' + out.slice(start + m[0].length);
+      continue;
+    }
+    out = out.slice(0, start) + ' ' + out.slice(end);
+  }
+  return out;
+}
+
 function stripTags(html) {
+  return stripTagsInner(stripIgnoredRegions(html));
+}
+
+function stripTagsInner(html) {
   return html
     .replace(/<script[\s\S]*?<\/script>/gi, '')
     .replace(/<style[\s\S]*?<\/style>/gi, '')
@@ -189,11 +247,17 @@ function extractContent(html) {
   const mainMatch = html.match(/<main[^>]*data-pagefind-body[^>]*>([\s\S]*?)<\/main>/i);
   if (!mainMatch) return null;
 
-  let mainHtml = mainMatch[1];
+  const mainHtml = mainMatch[1];
 
-  // Remove data-pagefind-ignore sections
-  mainHtml = mainHtml.replace(/<[^>]+data-pagefind-ignore[^>]*>[\s\S]*?<\/[^>]+>/gi, '');
-
+  // data-pagefind-ignore regions are removed inside stripTags, by the
+  // balanced-tag scan in stripIgnoredRegions. There used to be a lazy regex
+  // here doing the same job first, and it was actively harmful: it matched
+  // from the opening marked tag to the FIRST closing tag of any depth, so on
+  //   <aside data-pagefind-ignore><p>Written by</p><p>…bio…</p></aside>
+  // it deleted `<aside …><p>Written by</p>` and left the bio behind with no
+  // marker on it — which meant the balanced scan that runs next had nothing
+  // to find and the text sailed through into the embeddings. Do not
+  // reintroduce a regex here; nested markup is the normal case, not the edge.
   const bodyText = stripTags(mainHtml);
 
   // Skip pages with very little content
@@ -214,12 +278,29 @@ async function main() {
   const entries = [];
   let pageCount = 0;
   for (const file of allFiles) {
-    const urlPath = '/' + relative(BUILD_DIR, file).replace(/index\.html$/, '').replace(/\.html$/, '/');
+    // The URL must be the path the SITE uses, not a prettified guess. Older
+    // posts have `.html` permalinks (/posts/foo.html), and rewriting those to
+    // /posts/foo/ meant related.json was keyed on a URL that no page has:
+    // related-semantic.njk looks up `page.url`, never matched for those 21
+    // entries, and silently rendered nothing. It read as "no neighbours above
+    // the floor" rather than as a bug.
+    //
+    // So: strip `index.html` to get a directory URL, and otherwise leave the
+    // path exactly as it is on disk. Every derived URL is then a real file.
+    const urlPath = '/' + relative(BUILD_DIR, file).replace(/index\.html$/, '');
 
     // Skip non-content paths
     if (SKIP_PATTERNS.some(p => p.test(urlPath))) continue;
 
     const html = readFileSync(file, 'utf-8');
+
+    // A page marked noindex is saying it is not a destination. Honour that for
+    // the site's own search as well as for crawlers, rather than maintaining a
+    // second hand-written list of paths to skip. This is what keeps scratch
+    // pages -- /stats/map-variants/, the image generator -- out of semantic
+    // search results without anyone having to remember to add them.
+    if (/<meta[^>]+name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html)) continue;
+
     const content = extractContent(html);
     if (!content) continue;
 

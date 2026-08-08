@@ -2,16 +2,27 @@
 {%- set isDigesting = ('digesting' in tags) -%}
 {%- set isNote = ('note' in tags) -%}
 {%- set isImpactStory = ('impact-stories' in tags) -%}
+{#- The __meta / __body / __media wrappers are `display: contents` by default,
+    so this markup flattens to exactly what it was before. Inside
+    `.kh-datasheet-list` they become real grid cells with hairline borders. -#}
 <article class="kh-summary kh-summary--news{% if isDigesting %} kh-summary--highlight{% endif %}">
-  {% if isDigesting %}<a href="/digesting" class="kh-summary__tab">Digesting</a>{% endif %}
-  <div class="kh-summary__date">{{ post.date | dateDisplay }}{% if isImpactStory %} | <a href="/work">Project note</a>{% elif isNote %} | Note post{% endif %}</div>
-  {% if (not isNote) and (not isDigesting) and post.data.image %}
-    <a href="{{ post.url }}" class="kh-summary__image">
-      <img width="300" class="kh-summary__image" src="/images{{ post.data.image }}" alt="{{ post.data.title }}">
-    </a>
-  {% endif %}
-  <h3 class="kh-font-headline kh-summary__title">
-    <a href="{{ post.url | url }}" class="kh-summary__link">{{ post.data.title }}</a>
-  </h3>
-  <p class="kh-content kh-summary__text">{{ post.data.teaser | emdash | safe }}</p>
+  <div class="kh-summary__meta">
+    <div class="kh-summary__date">{{ post.date | dateDisplay }}{% if isImpactStory %} | <a href="/work">Impact story</a>{% elif isNote %} | Note post{% endif %}</div>
+    {% if isDigesting %}<a href="/digesting" class="kh-summary__tab">Digesting</a>{% endif %}
+  </div>
+  <div class="kh-summary__body">
+    <h3 class="kh-font-headline kh-summary__title">
+      <a href="{{ post.url | url }}" class="kh-summary__link">{{ post.data.title }}</a>
+    </h3>
+    <p class="kh-content kh-summary__text">{{ post.data.teaser | emdash | safe }}</p>
+  </div>
+  {#- Kept whitespace-free so an imageless cell stays `:empty` and the
+      datasheet list can render its explicit em-dash placeholder. -#}
+  <div class="kh-summary__media">
+    {%- if (not isNote) and (not isDigesting) and post.data.image -%}
+      <a href="{{ post.url }}" class="kh-summary__image">
+        <img width="300" class="kh-summary__image" src="/images{{ post.data.image }}" alt="{{ post.data.title }}">
+      </a>
+    {%- endif -%}
+  </div>
 </article>

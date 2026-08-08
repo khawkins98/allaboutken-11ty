@@ -1,0 +1,225 @@
+---
+title: Directory
+teaser: "Every part of this site on one page: the writing, the projects, and the machinery."
+layout: layouts/base.njk
+permalink: /directory/
+---
+{#
+  The human counterpart to /sitemap.xml.
+
+  Deliberately a map of PLACES, not of entries. /all/ and /archive/ already
+  list all ~100 entries, and a third list of the same titles would be a third
+  thing to scroll rather than a way to see the shape of the site. This page
+  answers "what is here?"; those answer "what has been published?".
+
+  Counts come from the collections, so a new section or topic appears here
+  without anyone remembering to add it. The one hand-maintained part is the
+  grouping, because what belongs next to what is an editorial judgement.
+#}
+<section>
+  <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{ title }}</h1>
+
+  <div class="kh-content">
+    <p>Everything on this site, grouped by what it is for. Counted at build
+    time, so it cannot drift out of date. If you want the entries themselves
+    rather than the places they live, <a href="/all/">All writing</a> lists
+    them newest first and <a href="/archive/">the archive</a> lists them by
+    month.</p>
+  </div>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="writing" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Writing</h2>
+    <span class="kh-meta">{{ collections.allContent | length }} entries in total</span>
+  </div>
+  <div class="kh-panel">
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr">
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Blog</span>
+        <a href="/blog/">Longer pieces &amp; notes</a>
+        <span class="kh-meta kh-u-margin__top--200">{{ collections.blogPosts | length }} entries</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Digesting</span>
+        <a href="/digesting/">Bookmarks &amp; reading</a>
+        <span class="kh-meta kh-u-margin__top--200">{{ collections.digesting | published | length }} entries</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Work</span>
+        <a href="/work/">Impact stories</a>
+        <span class="kh-meta kh-u-margin__top--200">{{ collections.impactStories | length }} entries</span>
+      </div>
+    </div>
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr">
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Everything</span>
+        <a href="/all/">All writing</a>
+        <span class="kh-meta kh-u-margin__top--200">newest first, paginated</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">By month</span>
+        <a href="/archive/">Archive</a>
+        <span class="kh-meta kh-u-margin__top--200">one dense page</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">By subject</span>
+        <a href="#subjects">Topics</a>
+        <span class="kh-meta kh-u-margin__top--200">{{ collections.topics | length }} topics</span>
+      </div>
+    </div>
+  </div>
+
+  {#- This absorbed a /topics/ index page that briefly existed alongside it.
+      Both listed the same 31 topics and only /topics/ carried the sparklines,
+      so the flat chip list that used to sit here was the poorer of two copies.
+      The table moved in and that page went away before either shipped, which
+      is why there is no redirect for it -- the URL was never live.
+
+      The child pages at /topics/<slug>/ are unaffected and still exist; this
+      is their index. -#}
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="subjects" class="kh-text-heading--2"><span class="kh-section-number">2.0</span>Subjects</h2>
+    <span class="kh-meta">{{ collections.topics | length }} topics &middot; by entry count</span>
+  </div>
+
+  <div class="kh-content">
+    <p>The subject vocabulary is deliberately small. It was consolidated from 158
+    ad-hoc terms, of which 116 appeared exactly once, into a controlled set. Only
+    topics carrying three or more entries get a page here; anything thinner lives
+    as detail after a <code>&gt;</code> on the entry itself.</p>
+  </div>
+
+  {#- Count is the encoding: the number is stated, and the bar is a length on a
+      common scale, which is the most accurately read visual channel. No area,
+      no font-size scaling, no cloud. -#}
+  {#- One shared peak across all rows, so heights are comparable. -#}
+  {%- set peak = 0 %}
+  {%- for t in collections.topics %}{% if t.peak > peak %}{% set peak = t.peak %}{% endif %}{% endfor %}
+  <div class="kh-table-scroll">
+    <table class="kh-table--spec kh-topic-index">
+      <thead>
+        <tr>
+          <th scope="col">By year <span class="kh-spark__axis">{{ collections.topics[0].firstYear }}&ndash;{{ collections.topics[0].lastYear }}</span></th>
+          <th scope="col">Entries</th>
+          <th scope="col">Topic</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%- for t in collections.topics %}
+        <tr>
+          <td class="kh-topic-index__spark">
+            {% topicSparkline t.perYear, peak, t.topic %}
+          </td>
+          <td class="kh-topic-index__count">{{ t.count }}</td>
+          <td><a href="/topics/{{ t.slug }}/">{{ t.topic }}</a></td>
+        </tr>
+        {%- endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="making" class="kh-text-heading--2"><span class="kh-section-number">3.0</span>Making</h2>
+    <span class="kh-meta">{{ garage | length }} projects</span>
+  </div>
+  <div class="kh-panel">
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr">
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Index</span>
+        <a href="/garage/">The garage</a>
+        <span class="kh-meta kh-u-margin__top--200">side projects, utilities and experiments</span>
+      </div>
+    </div>
+    {%- for project in garage %}
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr">
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">{{ project.status }}</span>
+        <a href="{{ project.path }}">{{ project.name }}</a>
+        <span class="kh-meta kh-u-margin__top--200">{{ project.description }}</span>
+      </div>
+    </div>
+    {%- endfor %}
+  </div>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="about" class="kh-text-heading--2"><span class="kh-section-number">4.0</span>About</h2>
+    <span class="kh-meta">Who and how</span>
+  </div>
+  <div class="kh-panel">
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr">
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Start</span>
+        <a href="/">Home</a>
+        <span class="kh-meta kh-u-margin__top--200">the short version</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Long form</span>
+        <a href="/cv/">CV</a>
+        <span class="kh-meta kh-u-margin__top--200">roles, dates and evidence</span>
+      </div>
+    </div>
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr">
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">How it is built</span>
+        <a href="/colophon/">Colophon</a>
+        <span class="kh-meta kh-u-margin__top--200">stack, type and credits</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Slash page</span>
+        <a href="/ai/">AI notes</a>
+        <span class="kh-meta kh-u-margin__top--200">how AI is and is not used here</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="machinery" class="kh-text-heading--2"><span class="kh-section-number">5.0</span>Machinery</h2>
+    <span class="kh-meta">Finding, measuring, feeds and small print</span>
+  </div>
+  <div class="kh-panel">
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr">
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Find</span>
+        <a href="/search/">Search</a>
+        <span class="kh-meta kh-u-margin__top--200">keyword and semantic</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Measure</span>
+        <a href="/stats/">Stats</a>
+        <span class="kh-meta kh-u-margin__top--200">the corpus, counted</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Patterns</span>
+        <a href="/style-guide/components/">Style guide</a>
+        <span class="kh-meta kh-u-margin__top--200">components and editorial rules</span>
+      </div>
+    </div>
+    {#- The lab had exactly one inbound link on the whole site -- a body-text
+        mention inside a single post -- and was missing from this page, which
+        opens by claiming to list everything. Both first-time-visitor reviews
+        found it by accident or not at all. -#}
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr">
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Experiment</span>
+        <a href="/stats/story-lab/">Corpus story lab</a>
+        <span class="kh-meta kh-u-margin__top--200">several ways of reading the archive as data; experimental and deliberately rough</span>
+      </div>
+    </div>
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr">
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Subscribe</span>
+        <a href="/rss.xml">RSS</a>
+        <span class="kh-meta kh-u-margin__top--200">the last ten entries</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">For machines</span>
+        <a href="/sitemap.xml">sitemap.xml</a>
+        <span class="kh-meta kh-u-margin__top--200">every indexable URL</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Small print</span>
+        <a href="/privacy/">Privacy</a> &middot; <a href="/impressum/">Impressum</a>
+        <span class="kh-meta kh-u-margin__top--200">no tracking beyond counts</span>
+      </div>
+    </div>
+  </div>
+</section>

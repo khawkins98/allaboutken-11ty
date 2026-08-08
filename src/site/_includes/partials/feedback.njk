@@ -1,0 +1,47 @@
+{# One-tap feedback, and the running count.
+
+   Laid out on the same two-column grid as the byline above it -- mono label
+   left, content right -- so "Was this useful?" sits under "Written by" and the
+   button sits under the bio. Previously this was a flush-left flex row, which
+   put the button at the aside's outer edge while the text above it was
+   indented by the label column.
+
+   The heading was screen-reader-only. It is now the visible label, which is
+   both more informative and what makes the alignment read as deliberate.
+
+   The action does not use .kh-button: that component is still keyed to the
+   old blue and carries a 16px bottom margin, so it sat oddly in a register
+   that is otherwise hairline, square and sunlight-keyed.
+
+   The count is a remote SVG from the upvote service, so its value is unknown
+   at build time. That rules out any phrasing with number agreement -- the old
+   wording read "1 people found this useful". Labelling it in the datasheet
+   register sidesteps the grammar and matches how every other figure on the
+   site is presented.
+
+   See /posts/20260220-feedback-buttons-cgi-pattern/ for the JS-free upvote. #}
+<div class="kh-feedback kh-u-do-not-print" data-pagefind-ignore>
+  {#- A label, not a section heading. It renders at 12px mono, so as an <h2>
+      it announced a top-level section that visually is apparatus. -#}
+  <p class="kh-meta kh-feedback__label">Was this useful?</p>
+  <div class="kh-feedback__body">
+    <a href="https://feedback.allaboutken.com/up{{ page.url }}"
+       rel="nofollow" class="kh-feedback__action">&#128077; This was useful</a>
+
+    <span class="kh-feedback__tally">
+      <span class="kh-meta">Found useful</span>
+      {#- `eleventy:ignore` is required, not cosmetic. Without it the image
+          transform fetches this live SVG at build time, rasterises it, and
+          stamps width/height on the tag -- freezing the count, emitting a
+          /.11ty/image/ URL that 404s in production, and specifying both axes
+          so the badge lays out at its full 1280px intrinsic width. See
+          CLAUDE.md. -#}
+      <img src="https://feedback.allaboutken.com/count{{ page.url }}.svg"
+           alt="Feedback count" loading="lazy" decoding="async" eleventy:ignore
+           style="display:inline;vertical-align:middle;width:auto;height:1.5em;max-width:none">
+    </span>
+
+    <!-- Feedback toast: see /posts/20260220-feedback-buttons-cgi-pattern/ -->
+    <span id="thanks" class="kh-feedback-thanks" aria-live="polite">Thanks for the feedback! <a href="/posts/20260220-feedback-buttons-cgi-pattern/" class="kh-feedback-thanks__link">Curious how this was built?</a></span>
+  </div>
+</div>

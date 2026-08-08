@@ -24,14 +24,14 @@ This site is built and published with a small, readable stack and a bias for fle
 
 - **Static site generator**: [Eleventy (11ty) v3](https://www.11ty.dev/)
 - **Language & tooling**: Node.js (Yarn scripts), Nunjucks templates, Markdown via Markdown‑It with `markdown-it-anchor`
-- **Styles**: Sass compiled to a single CSS file; custom utility classes; normalize; type set with the Recursive font
+- **Styles**: Sass compiled to a single CSS file; custom utility classes; normalize; type set in IBM Plex Sans and IBM Plex Mono
   - Previously used the EMBL Visual Framework (VF) and Gulp; the [migration to a simpler Eleventy v3 stack is documented here](/posts/20250831-site-overhaul-eleventy-v3).
 - **Search**: Two modes on the [search page](/search/):
   - [Pagefind](https://pagefind.app/) — static keyword search, indexes built HTML at deploy time, serves chunked index fragments on demand. Source: [search page template](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/search.njk)
   - Semantic search — build-time vector embeddings (MiniLM-L6-v2 via [Transformers.js](https://huggingface.co/docs/transformers.js)) + in-browser cosine similarity. Same model runs both sides; no API keys, no server. [Read the post](/posts/20260302-semantic-search-browser-embeddings/)
 - **Hosting**: Vercel (auto‑deploys from GitHub, automatic HTTPS, CDN)
 - **Domain**: Cloudflare (DNS, security, performance)
-- Fonts: [Recursive](/posts/20250904-switching-to-recursive)
+- Fonts: IBM Plex Sans and IBM Plex Mono, self-hosted. The site [previously used Recursive](/posts/20250904-switching-to-recursive).
 
 ## Build & source
 
@@ -39,6 +39,46 @@ This site is built and published with a small, readable stack and a bias for fle
 - **Images**: [Eleventy Image plugin](https://www.11ty.dev/docs/plugins/image) ([Sharp](https://sharp.pixelplumbing.com/) under the hood) configured to [generate deterministic, token‑based filenames](/posts/20250907-deterministic-image-filenames)
 - **Social sharing images**: Auto‑generated OpenGraph/Twitter cards using [Eleventy's Screenshot Service](https://www.11ty.dev/docs/services/opengraph/) — dynamically captures styled HTML pages as 1200×630px images
 - **Build command**: `yarn build` → compiles Sass, runs Eleventy, processes images, builds search index
+
+## How closest-in-meaning works
+
+At the foot of most entries there is a short list of the closest entries by
+meaning. It is not driven by tags, and it is worth being precise about what it
+is and is not.
+
+The site already computes vector embeddings for semantic search: each page is
+split into chunks and each chunk is turned into a 384-number vector by a small
+language model at build time. Those vectors place text that means similar
+things near each other, whether or not it shares any words.
+
+The related list reuses that work rather than adding anything new:
+
+1. Average a page's chunk vectors into one vector for the whole entry, and
+   normalise it to unit length.
+2. Compare every pair by cosine similarity, which for unit vectors is just the
+   dot product. 1.0 is identical, 0 is unrelated.
+3. Keep the best three above a floor of 0.55.
+
+Three details do most of the work:
+
+- **Index pages are excluded.** A page like the blog index is "about"
+  everything, so it sits near everything and crowds out real matches.
+- **The floor is measured, not chosen by feel.** Across this corpus the median
+  entry's best match scores 0.70. At 0.55, about a fifth of entries end up with
+  no neighbour at all, which is the right answer for a genuinely singular
+  piece: a padded suggestion is worse than none.
+- **The number shown is the raw similarity**, rounded to two places. It is not
+  a percentage or a confidence, and it is stated rather than drawn as a bar,
+  because a bar would imply more precision than a soft signal has.
+
+The trade-off worth naming: this reflects what the writing is *about*, not what
+it *argues*. Two entries taking opposite positions on the same subject will
+look very close together, because they are, semantically. It is a reading aid,
+not an endorsement that one follows from the other.
+
+Neighbours are computed after each build and committed as data, so a brand new
+entry has no neighbours until the next build. Code:
+[`scripts/compute-related.mjs`](https://github.com/khawkins98/allaboutken-11ty/blob/main/scripts/compute-related.mjs).
 
 ## Privacy
 
@@ -76,10 +116,10 @@ This site is built and published with a small, readable stack and a bias for fle
       <img class="kh-badge__img" width="176" height="62" src="https://seirdy.one/p/b/eightyeightthirtyone.4286714267.png" alt="eighty eight thirty dot one." loading="lazy" decoding="async" eleventy:ignore>
     </a>
     <a role="listitem" class="kh-badge__link" href="https://www.11ty.dev/" title="Built with Eleventy">
-      <img class="kh-badge__img" width="176" height="62" src="https://chrisburnell.com/images/animated/built-with-eleventy.gif" alt="Built with Eleventy 88×31 animated badge" loading="lazy" decoding="async" eleventy:ignore>
+      <img class="kh-badge__img" width="176" height="62" src="/images/badges/built-with-eleventy.gif" alt="Built with Eleventy 88×31 animated badge" loading="lazy" decoding="async" eleventy:ignore>
     </a>
   </div>
-  <p class="kh-u-text-color--grey">Badges sourced from <a href="https://seirdy.one/meta/badges/">Seirdy’s “Classic web badges”</a> — licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY‑SA 4.0</a>. Eleventy badge by <a href="https://chrisburnell.com/note/eleventy-animated-88x31/">Chris Burnell</a>.</p>
+  <p class="kh-u-text-color--grey">Badges sourced from <a href="https://seirdy.one/meta/badges/">Seirdy’s “Classic web badges”</a> — licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY‑SA 4.0</a>. Animated Eleventy badge made by <a href="https://chrisburnell.com/note/eleventy-animated-88x31/">Chris Burnell</a>, self-hosted here rather than hotlinked.</p>
 </section>
 
 <hr>

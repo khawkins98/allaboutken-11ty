@@ -1,0 +1,243 @@
+NOTE FROM KEN: Chart.css is neat, but not yet sure if we still need this?
+
+
+### Charts.css — table-as-chart
+A CSS framework that turns an ordinary `<table>` into bar, column, area and
+other charts through utility classes on the table's own markup. The numbers
+stay in the DOM as a real table.
+
+- **Where:** <https://chartscss.org/docs/> · <https://github.com/ChartsCSS/charts.css/>
+- **Who:** Rami Yushuvaev and contributors. Release 1.2.0, July 2025 — active.
+- **JS:** None.
+- **Fit:** "Table as the source of truth, styled into a chart" *is* the
+  datasheet register. If a real chart is ever wanted, this is the way in
+  without a dependency graph.
+
+---
+
+
+NOTE FROM KEN:  I like the idea of having somewhere like on the site, maybe on the colophone or something, like my writing stats ...
+
+### The heatmap pattern spreading peer-to-peer
+Photogabble adopted Knight's plugin and credited both him and Tim Hårek
+Andreassen in the changelog — a visible chain of personal sites borrowing the
+same mark.
+
+- **Where:** <https://photogabble.co.uk/stats/> · <https://photogabble.co.uk/changelog/addition-of-post-graphs-to-stats-page/>
+- **Who:** the Photogabble site owner (display name not confirmed beyond the handle)
+- **JS:** None — same plugin output.
+- **Fit:** Second independent confirmation this works in Eleventy specifically.
+
+### A stats page as its own small artifact
+- **Where:** <https://timharek.no/stats/>
+- **Who:** Tim Hårek Andreassen
+- **JS:** The numeric per-year breakdown reads as static. Whether this page
+  carries the square grid was **not** confirmed — the grid is credited to
+  Knight/Photogabble, not to this page.
+- **Fit:** Supports "a `/stats/` page is a legitimate genre on a personal site".
+
+
+NOTE FROM KEN: we can try riffing off this too
+
+### Tag cloud as discrete size buckets
+Tags wrapped in bucketed classes (`not-popular-at-all` … `ultra-popular`)
+rather than a continuously scaled font size.
+
+- **Where:** <https://simonwillison.net/tags/>
+- **Who:** Simon Willison
+- **JS:** None in the browser; classes are baked in server-side.
+- **Fit:** Interesting given the word cloud was already rejected here.
+  Bucketing into a few discrete steps is more defensible than continuous
+  font-size scaling, though see §4 for why size-as-magnitude remains weak.
+
+
+---
+
+## 3. Techniques for rendering without JavaScript
+
+NOTE FROM KEN:  I like these
+
+### Build-time SVG from an Eleventy shortcode
+A plain shortcode registration in `config/eleventy/topic-visuals.js` or
+`config/eleventy/semantic-visuals.js` that takes an array and returns an SVG
+string. Output ships as static inline SVG.
+
+- **Where:** <https://www.11ty.dev/docs/languages/nunjucks/> · <https://chriskirknielsen.com/blog/manage-your-svg-files-with-eleventys-render-plugin/>
+- **Who:** Eleventy core docs (Zach Leatherman); pattern write-up by Chris Kirk-Nielsen
+- **JS:** Build-time only.
+- **A11y:** Add `role="img"` plus `<title>`/`<desc>`, or pair with a real table.
+- **Fit:** **Recommended default for any new mark**, ahead of reaching for a
+  library. Full control, zero runtime cost.
+
+### `<details>`/`<summary>` to disclose the underlying numbers
+Native disclosure with keyboard support and exposed state, no ARIA needed.
+
+- **Where:** <https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details> · <https://www.scottohara.me/blog/2022/09/12/details-summary.html>
+- **Who:** HTML Living Standard; accessibility analysis by Scott O'Hara
+- **JS:** None.
+- **Fit:** A good answer to "where do the raw numbers live?" — tuck the twelve
+  monthly counts into a `<details>` under the timeline. Give the `<summary>` a
+  specific label, not "Details".
+
+### `repeating-linear-gradient()` for ruled backgrounds
+Already in use for the graph-paper ground. Listed for completeness.
+
+- **Where:** <https://css-tricks.com/almanac/functions/r/repeating-linear-gradient/>
+- **JS:** None. Decorative, so a11y-neutral provided it never carries meaning alone.
+
+### `conic-gradient()` for proportion rings
+- **Where:** <https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/conic-gradient>
+- **JS:** None if the gradient string is computed at build time.
+- **A11y:** MDN is explicit that gradients carry no semantics and should not be
+  used for real infographics without an adjacent table or text summary.
+
+### Typed `attr()` charts — frontier, not yet dependable
+Semantic `<table>` plus CSS reading numeric `data-*` values directly.
+
+- **Where:** <https://dev.to/madsstoumann/charts-in-css-1di1> (June 2025)
+- **Who:** Mads Stoumann
+- **JS:** None for core rendering, but the author notes Safari and Firefox
+  lacked typed `attr()` at time of writing, so responsive resizing needs a JS
+  fallback there. Browser support not independently re-checked.
+
+### Things to avoid
+- **CSS `attr()` tooltips** (<https://davidwalsh.name/css-attr-content-tooltips>,
+  David Walsh): `content` generated by CSS is inconsistently announced by
+  screen readers, and hover-only reveal excludes touch. Fine as a visual
+  flourish over text that is already present; never as the only home for a value.
+- **Checkbox hack / `:target` toggles**: no focus management, no `Escape`, no
+  `aria-expanded`. Prefer `<details>`. Background:
+  <https://www.smashingmagazine.com/2021/06/css-javascript-requirements-accessible-components/>
+- **Eleventy's hosted sparkline service** — the Eleventy docs themselves mark
+  it deprecated (<https://www.11ty.dev/docs/services/sparklines/>), and the
+  `sparkline-svg` package it points to was last released around seven years
+  ago. Use a build-time shortcode instead.
+
+---
+
+## 4. The idiom, and the honest-encoding cautions
+
+NOTE FROM KEN:  Sparkles are always fun, especially as little easter eggs. We could try inferring semantic word clusters or something. We do have the semantic search index to play with ...
+
+### Sparklines
+Tufte coined the term in *Beautiful Evidence* (2006) for a small, word-sized
+graphic meant to sit inline with text at the scale of a letter, not pulled out
+into a captioned figure.
+
+- **Where:** <https://www.edwardtufte.com/notebook/sparkline-theory-and-practice-edward-tufte/> · <https://www.edwardtufte.com/notebook/sparklines-history-by-tufte-1324-to-now/>
+- **Who:** Edward Tufte
+- **Fit:** The direct ancestor of the marks already here.
+
+### Sparklines in financial tables — one mark per row
+Tufte's proposed newspaper stock-table redesign: a sparkline per row, hundreds
+of thousands per page, exploiting print resolution.
+
+- **Where:** as above
+- **Fit:** A near-literal precedent for a tiny per-post mark in an index view
+  without it becoming a dashboard.
+
+### Data-ink ratio
+Erase non-data ink; erase redundant data ink. A test for whether a line is
+carrying information or just decorating.
+
+- **Where:** <https://jtr13.github.io/cc19/tuftes-principles-of-data-ink.html> (secondary summary; the 1983 book is the primary source)
+- **Who:** Edward Tufte
+
+### Small multiples
+The same graphic repeated, indexed by one changing variable, so the reader
+learns the chart once and then reads only the differences.
+
+- **Where:** <https://en.wikipedia.org/wiki/Small_multiple>
+- **Who:** Tufte coined the term; antecedents in Walker's census atlases and Muybridge
+
+### Cleveland & McGill's perceptual hierarchy — **the important one**
+Their 1984 study ranked how accurately people judge visual encodings: position
+on a common scale is most accurate, then length, then angle, with **area near
+the bottom**. This is the empirical basis for distrusting size-encoded marks.
+
+- **Where:** <https://creativeartsadventure.wordpress.com/2017/01/02/cleveland-mcgill-graphical-perception-theory-experimentation-and-application-to-the-development-of-graphical-methods/> (secondary summary; original in *JASA*)
+- **Who:** William S. Cleveland and Robert McGill
+
+### Isotype — repeat, don't resize
+Neurath and Arntz's rule: show quantity by repeating a same-sized icon rather
+than enlarging one, because enlarging conflates height, area and volume.
+
+- **Where:** <https://en.wikipedia.org/wiki/Isotype_(picture_language)>
+- **Who:** Otto Neurath (concept), Gerd Arntz (graphics)
+
+### Banking to 45°
+Cleveland's aspect-ratio rule: size a line chart so segments average roughly
+45°, which maximises judgement of rate-of-change. A rule of thumb, not a formula.
+
+- **Where:** <https://blogs.sas.com/content/iml/2016/01/20/banking-to-45-aspect-ratio-time-series.html>
+- **Who:** William S. Cleveland
+
+### Sparkline scale honesty
+Because a sparkline's vertical scale is invisible, readers assume adjacent
+sparklines share a scale — and a "flat" one may just be a large series
+compressed. Few's fix is a visible reference band.
+
+- **Where:** <https://www.perceptualedge.com/articles/visual_business_intelligence/best_practices_for_scaling_sparklines.pdf>
+- **Who:** Stephen Few
+
+### Tables beat charts at small n
+For a few hundred items, an aligned table is often faster and more precise than
+any chart.
+
+- **Where:** <https://verstaresearch.com/blog/try-using-tables-instead-of-charts/>
+- **Who:** Versta Research, citing Tufte
+
+### Data humanism — permission to be irregular
+Lupi and Posavec's *Dear Data* (2014–15): a year of hand-drawn weekly postcards
+of personal data, now in MoMA's collection. Lupi's "Data Humanism" manifesto
+argues against templated charts in favour of complexity and context.
+
+- **Where:** <http://giorgialupi.com/dear-data> · <http://giorgialupi.com/data-humanism-my-manifesto-for-a-new-data-wold> (the "wold" typo is the site's own)
+- **Who:** Giorgia Lupi and Stefanie Posavec
+- **Fit:** A counterweight to a strict grid — permission for one personal,
+  slightly irregular mark somewhere.
+
+### Engineering drawing conventions
+Title blocks in fixed positions, tolerance callouts, standardised line weights
+— a vocabulary built so information is unambiguous without prose. The register
+this site is named after.
+
+- **Where:** <https://www.mcgill.ca/engineeringdesign/step-step-design-process/basics-graphics-communication/drawing-format-and-elements> (McGill teaching resource; returns 403 to automated fetches, loads in a browser)
+- **Who:** Convention, codified in ISO/ASME drafting standards
+
+### Field-guide notation
+Peterson's field marks point at the distinguishing feature, paired with a
+same-scale range map — compact standardised marks for fast comparison across
+many similar entries.
+
+- **Where:** <https://en.wikipedia.org/wiki/Peterson_Field_Guides>
+- **Who:** Roger Tory Peterson
+
+### Word clouds
+Harris's argument: they conflate frequency with importance, encode magnitude
+through font size (the weak channel above), and strip context.
+
+- **Where:** <https://www.niemanlab.org/2011/10/word-clouds-considered-harmful/> (403 to automated fetches; live in a browser)
+- **Who:** Jacob Harris, writing for Nieman Journalism Lab
+
+---
+
+## 5. Where this research challenges what is already built
+
+Worth stating plainly rather than burying:
+
+**The month dots are size-encoded, and size is a weak channel.** Cleveland &
+McGill put area near the bottom of the accuracy hierarchy, and Isotype's whole
+rule is *repeat, don't resize*. By both, the stacked-tick strip that the dots
+replaced — where each entry was one countable tick — was the more honest
+encoding.
+
+Mitigations already in place: the dots scale by **area**, not diameter, which
+is the correct form of the compromise; and every month carries a tooltip and
+hidden text with the exact count, so the precise value is one hover away and
+always present for assistive tech.
+
+The dots were an explicit design choice for quietness over precision, and for
+an ambient mark that is not the primary way anyone reads the archive, that is
+a defensible trade. But it *is* a trade. If precision ever matters more than
+calm, repeating fixed-size ticks is the better-founded option.

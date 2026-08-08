@@ -13,7 +13,9 @@ Every field that templates read from YAML frontmatter across post, page, and dig
 | [`teaser`](#teaser) | Recommended | post, listing partials, base | Short description for meta, intro para, cards, OG description |
 | [`image`](#image) | Optional | post | Hero image path |
 | [`image_meta`](#image_meta) | Optional | post, base | Caption, credit, and alt text for the hero image |
-| [`topics`](#topics) | Optional | post, digesting | Display taxonomy (comma list below the date) |
+| [`topics`](#topics) | Optional | post, digesting | Subject taxonomy, controlled vocabulary (shown below the date) |
+| [`series`](#series) | Optional | post | Name of a multi-part series this post belongs to |
+| [`series_part`](#series_part) | Optional | post | This post's position in that series |
 | [`permalink`](#permalink) | Optional | all | Override the default output URL |
 | [`og_image`](#og_image) | Optional | base | Full-URL override for social card image |
 | [`og_title`](#og_title) | Optional | base | Override for OG/Twitter title |
@@ -25,7 +27,7 @@ Every field that templates read from YAML frontmatter across post, page, and dig
 | [`digest_link`](#digest_link) | Optional | digesting | URL for the "Learn more at the source" button |
 | [`href`](#href) | Optional | post | Wraps the hero image in a link |
 | [`org`](#org) | Optional | post | Organisation name for impact stories |
-| [`kens_status`](#kens_status) | Optional | — | Editorial workflow marker (not rendered) |
+| [`kens_status`](#kens_status) | Optional | — | Editorial workflow marker; `draft`/`final_draft` withhold the entry |
 | [`oldurl`](#oldurl) | Optional | — | Legacy Drupal URL (used for passthrough redirects) |
 | [`bodyClass`](#bodyclass) | Optional | base | Extra CSS class on `<body>` |
 | [`templateEngineOverride`](#templateengineoverride) | Optional | layouts | Force a specific template engine for the file |
@@ -156,12 +158,62 @@ image_meta:
 ```yaml
 topics:
   - web development
-  - eleventy
-  - static sites
+  - Eleventy
+  - static sites > incremental builds
 ```
 
-- Freeform display taxonomy. Shown as "Filed in: web development, eleventy, static sites" below the date.
-- Not used for collection filtering — purely presentational.
+**Use the controlled vocabulary.** The 31 approved topics and their definitions
+are in [`TOPIC_TAXONOMY.md`](./TOPIC_TAXONOMY.md). Pick 2–5, most specific
+first. Do not invent a new top-level topic without adding it there — the
+taxonomy was consolidated from 158 ad-hoc terms precisely because 73% of them
+had exactly one post and could not be browsed.
+
+**Hierarchical topics.** A topic may carry free-form detail after a `>`:
+
+```yaml
+  - AI > Claude Code
+  - cloud infrastructure > Cloudflare Workers
+```
+
+The part before `>` is the **parent** — it must be from the controlled
+vocabulary, and it is the only part that groups or counts. The part after is
+free-form detail; it displays but never forms a bucket. This is how you keep
+specificity without recreating a long tail of one-post topics.
+
+**Use `>` and not `:`.** YAML parses an unquoted `- a: b` list item as an
+object rather than a string, which would give a list of mixed types. Quoting
+would work but fails silently the day someone forgets, so the separator is a
+greater-than sign.
+
+- Not used for collection filtering — `tags` does that. Topics are subject
+  matter only.
+
+---
+
+### `series`
+
+```yaml
+series: Content Action Model
+series_part: 2
+```
+
+Groups an ordered, multi-part series. Renders as "Part 2 of 4 in Content
+Action Model" above the post body, with every part listed and linked.
+
+A series is deliberately **not** a topic: it is ordered, and a post belongs to
+exactly one. Topics have neither property, so squeezing a series into them
+loses the sequence.
+
+- Use the same `series` string, spelled identically, on every part.
+- The nav only renders when two or more posts share the name.
+
+---
+
+### `series_part`
+
+An integer giving reading order within the series. Ties fall back to date.
+Reading order need not match publication order — an introduction published the
+same day as an origin story can still be part 1.
 
 ---
 
@@ -291,8 +343,20 @@ org: EMBL
 kens_status: published
 ```
 
-- Editorial workflow marker. Not read by any layout template — it is for human/AI reviewers only.
-- Common value: `published`.
+- Editorial workflow marker, and a real gate on publication.
+- Vocabulary, in order: `draft` → `final_draft` → `ready_for_publication` → `published`. See [`CONTRIBUTING.md`](../CONTRIBUTING.md).
+- **`draft` and `final_draft` withhold the entry.** The page still renders at its
+  URL, so it can be opened and shared for review, but it is absent from every
+  collection (blog index, `/all/`, topics, digesting, featured), from the
+  sitemap and the RSS feed, and it carries `<meta name="robots" content="noindex,follow">`.
+  That noindex is also what keeps it out of Pagefind and out of the semantic
+  embedding corpus, so an unfinished post cannot become a "closest in meaning"
+  suggestion on a published one.
+- `ready_for_publication`, `published`, and an absent field all publish normally.
+  Most older posts have no field at all.
+- Because a draft is excluded from the embeddings, it cannot serve as an anchor
+  in `scripts/compute-story-lab.mjs`; the generator warns if a named anchor no
+  longer resolves.
 
 ---
 

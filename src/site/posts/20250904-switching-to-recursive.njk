@@ -14,9 +14,13 @@ tags:
   - posts
 topics:
   - typography
-  - variable fonts
   - performance
 ---
+
+<div class="kh-note-box">
+<span class="kh-note-box__label">Update (2026-07-30)</span>
+The site has since moved on to <a href="https://www.ibm.com/plex/">IBM Plex</a>. Recursive was a fun experiment and I'm glad I ran it, but this is my personal site: it's my playground, and I was ready for something new.
+</div>
 
 {% markdown %}
 
@@ -37,31 +41,35 @@ I chose to self‑host the WOFF2, it's a _not_ tiny 295 KB (roughly ~200 KB larg
 You're already here, so here's a quick before and after of the near drop in change:
 
 <article class="kh-bleed-out">
-  <div id="image-compare" style="max-width: 100%; height: 490px;">
-    <img src="/images/blog/font-change-now-alt.jpg" alt="Before: Now Alt" loading="lazy" />
-    <img src="/images/blog/font-change-recursive.jpg" alt="After: Recursive" loading="lazy" />
+  <div class="kh-compare" style="--kh-compare-split: 50%;">
+    <img class="kh-compare__img" src="/images/blog/font-change-now-alt.jpg" alt="The site set in Now Alt, before the change." loading="lazy" />
+    <img class="kh-compare__img kh-compare__img--after" src="/images/blog/font-change-recursive.jpg" alt="The same page set in Recursive, after the change." loading="lazy" />
+    <span class="kh-compare__label kh-compare__label--before" aria-hidden="true">Now Alt</span>
+    <span class="kh-compare__label kh-compare__label--after" aria-hidden="true">Recursive</span>
+    <span class="kh-compare__handle" aria-hidden="true"></span>
+    <input class="kh-compare__range" type="range" min="0" max="100" value="50" step="1" aria-label="Reveal more of the Recursive version" />
   </div>
-  <figcaption class="kh-text-body--3">Drag to compare: Now Alt (before) vs Recursive (after)</figcaption>
+  <figcaption class="kh-text-body--3">Drag to compare: Now Alt (before) vs Recursive (after). Keyboard: focus the slider and use the arrow keys.</figcaption>
 </article>
 
-<link rel="stylesheet" href="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.css">
-<script defer src="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.js"></script>
-<script defer>
-  window.addEventListener('DOMContentLoaded', function () {
-    var el = document.getElementById('image-compare');
-    if (el && window.ImageCompare) {
-      new ImageCompare(el, {
-        showLabels: true,
-        labelOptions: { before: 'Now Alt', after: 'Recursive', onHover: false },
-        controlColor: '#000000',
-        controlShadow: true,
-        startingPoint: 50,
-        smoothing: true,
-        smoothingAmount: 120,
-        fluidMode: true
-      }).mount();
-    }
-  });
+{# Kept deliberately small and local. This replaced image-compare-viewer from
+   unpkg -- 53 KB to do what a range input and a clip-path do here, and the
+   last third-party stylesheet on the site. The range input supplies pointer,
+   touch and keyboard interaction; this only mirrors its value into the custom
+   property the CSS reads. With no JavaScript the split stays at the inline
+   50% and the figure reads as a static before/after. #}
+<script>
+  (function () {
+    var figure = document.querySelector('.kh-compare');
+    if (!figure) return;
+    var range = figure.querySelector('.kh-compare__range');
+    if (!range) return;
+    var apply = function () {
+      figure.style.setProperty('--kh-compare-split', range.value + '%');
+    };
+    range.addEventListener('input', apply);
+    apply();
+  })();
 </script>
 
 ### A parting word for my old font

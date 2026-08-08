@@ -29,7 +29,7 @@ flowchart TD
 - **Usage (bandwidth):** https://vercel.com/kens-projects-2b306b90/~/usage
 - **Deployment protection:** disabled — production URL is public
 - **Auto-deploy:** Vercel GitHub App watches `main`; pushes trigger a new production build automatically
-- **Build command:** `yarn build` (clean → sass → eleventy → embeddings)
+- **Build command:** `yarn build` (bootstrap HTML → semantic data → final Eleventy)
 - **Output directory:** `build/`
 - **Config file:** `vercel.json` in repo root
 

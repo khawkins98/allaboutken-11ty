@@ -7,7 +7,10 @@ noindex: true
 ---
 
 <div data-pagefind-ignore>
-  <h1 id="search-heading">{{title}}</h1>
+  {#- Headline treatment, but NOT `--display`: this is a utility page where
+     the controls are the point, so a 42px display heading would push the
+     search field down the screen for no benefit. -#}
+  <h1 id="search-heading" class="kh-font-headline kh-text-heading--1">{{title}}</h1>
 
   <div class="kh-search-widget">
     <fieldset id="search-mode" class="kh-search-mode" hidden>
@@ -48,7 +51,7 @@ noindex: true
       <div id="semantic-section" hidden>
         <p>Search by describing what you're looking for in your own words.</p>
 
-        <p><small>This <a href="/posts/20260302-semantic-search-browser-embeddings/">searches by meaning</a>, not exact keywords -- and everything runs locally in your browser.</small></p>
+        <p><small>This <a href="/posts/20260302-semantic-search-browser-embeddings/">searches by meaning</a>, not exact keywords; everything runs locally in your browser.</small></p>
 
         <div class="kh-ask" aria-label="Semantic search conversation">
           <div class="kh-ask__conversation" id="ask-conversation" role="log" aria-live="polite" aria-relevant="additions">
@@ -86,9 +89,20 @@ noindex: true
   const semanticSection = document.getElementById('semantic-section');
   const modeRadios = modeFieldset.querySelectorAll('input[name="search_mode"]');
 
-  // Show the toggle (requires JS); visually hide the heading (tabs replace it)
+  // Show the toggle (requires JS). The heading STAYS.
+  //
+  // This used to add `kh-u-sr-only` to the h1 on the argument that the mode
+  // tabs replace it. They do not: tabs are a control, not a title, and with
+  // the h1 gone this was the only page on the site that opened with no
+  // heading -- two first-time readers independently described it as looking
+  // half-loaded or broken.
+  //
+  // On whether it still earns its place once results arrive: yes. It is the
+  // page's accessible name and the anchor for heading navigation, and a
+  // results list whose only headings are result titles has no outline. The
+  // real cost was its size, not its presence, so it is set at the normal
+  // heading scale here rather than the display scale other pages use.
   modeFieldset.removeAttribute('hidden');
-  document.getElementById('search-heading').classList.add('kh-u-sr-only');
 
   // Exposed on window for inline onclick fallback links
   window.setMode = setMode;
@@ -144,35 +158,77 @@ noindex: true
       return;
     }
 
-    resultsEl.innerHTML = '<p>Searching...</p>';
+    resultsEl.innerHTML = '<p class="kh-meta kh-search-status">Searching\u2026</p>';
 
     try {
       const pf = await initPagefind();
       const search = await pf.search(query);
 
-      if (search.results.length === 0) {
-        resultsEl.innerHTML = '<p>No results found.</p>';
+      // A relevance floor on the BEST score, not on each result.
+      //
+      // Pagefind matches fragments inside code and punctuation, so
+      // "zzzqqxnothing" returned a confident "3 results found" and "asdfgh"
+      // returned 92. Its scores are unbounded BM25-style, not 0-1, and a
+      // per-result filter cannot work: the nonsense top score (1.30) is higher
+      // than the legitimate tail of a real query ("drupal" bottoms out at
+      // 0.79). What separates them is how strong the BEST match is.
+      //
+      // Measured on this corpus -- real queries: geocities 4.68 (the weakest
+      // genuine one found), drupal 15.15, foveacast 17.28, lyra 47.03.
+      // Nonsense: zzzqqxnothing 1.30, asdfgh 1.85. 3.0 sits in the gap with
+      // room either side. Raise it if noise gets through; lower it if a real
+      // search starts coming back empty.
+      const MIN_TOP_SCORE = 3;
+      const kept = (search.results[0]?.score ?? 0) >= MIN_TOP_SCORE ? search.results : [];
+
+      if (kept.length === 0) {
+        resultsEl.innerHTML =
+          '<p class="kh-meta kh-search-status">No results for that.</p>' +
+          '<p class="kh-search-empty">Try <a href="#" onclick="setMode(\'semantic\'); return false;">searching by meaning</a> instead, ' +
+          'browse <a href="/directory/#subjects">by topic</a>, or open the <a href="/archive/">archive</a>.</p>';
         return;
       }
 
-      const toShow = search.results.slice(0, 10);
-      const fragments = await Promise.all(toShow.map(r => r.data()));
+      // Ten at a time, with a way to get the rest. It used to slice to ten and
+      // print "Showing 10 of 35" with nothing to click, so two thirds of the
+      // matches were simply unreachable.
+      const PAGE = 10;
+      const all = kept;
+      let shown = 0;
 
-      const total = search.results.length;
-      const shown = toShow.length;
-      const countText = total > shown
-        ? `Showing ${shown} of ${total} results.`
-        : `${total} result${total === 1 ? '' : 's'} found.`;
+      const renderCount = () => shown >= all.length
+        ? `${all.length} result${all.length === 1 ? '' : 's'} found.`
+        : `Showing ${shown} of ${all.length} results.`;
 
-      const html = fragments.map(item => `
+      const countEl = document.createElement('p');
+      countEl.className = 'kh-meta kh-search-count kh-search-status';
+      const listEl = document.createElement('div');
+      const moreEl = document.createElement('button');
+      moreEl.type = 'button';
+      moreEl.className = 'kh-button kh-button--sm kh-search-more';
+
+      async function showNext() {
+        moreEl.disabled = true;
+        const batch = all.slice(shown, shown + PAGE);
+        const fragments = await Promise.all(batch.map(r => r.data()));
+        listEl.insertAdjacentHTML('beforeend', fragments.map(item => `
         <article class="kh-search-result">
-          <a href="${esc(item.url)}"><h3>${esc(item.meta?.title || item.url)}</h3></a>
-          <p class="snippet">${item.excerpt}</p>
-          <p><code>${esc(item.url)}</code></p>
+          <a class="kh-search-result__link" href="${esc(item.url)}"><h3 class="kh-search-result__title">${esc(item.meta?.title || item.url)}</h3></a>
+          <p class="kh-search-result__snippet">${item.excerpt}</p>
+          <p class="kh-search-result__url">${esc(item.url)}</p>
         </article>
-      `).join('');
+      `).join(''));
+        shown += batch.length;
+        countEl.textContent = renderCount();
+        const remaining = all.length - shown;
+        moreEl.textContent = `Show ${Math.min(PAGE, remaining)} more`;
+        moreEl.hidden = remaining <= 0;
+        moreEl.disabled = false;
+      }
 
-      resultsEl.innerHTML = `<p>${countText}</p>` + html;
+      moreEl.addEventListener('click', showNext);
+      resultsEl.replaceChildren(countEl, listEl, moreEl);
+      await showNext();
     } catch (err) {
       console.error('Search failed:', err);
       resultsEl.innerHTML = '<p>Search is temporarily unavailable. Try <a href="https://duckduckgo.com/?q=site%3Aallaboutken.com">searching on DuckDuckGo</a> instead.</p>';

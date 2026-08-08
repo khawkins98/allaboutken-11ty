@@ -5,8 +5,7 @@ layout: layouts/base.njk
 templateEngineOverride: njk
 ---
 
-<div class="kh-grid-stylized">
-  <div></div>
+<div>
   <section class="kh-content kh-u-padding__top--800 kh-u-padding__bottom--200">
     <h1 class="kh-text-heading--1">{{title}}</h1>
     <p class="kh-intro__text">
@@ -20,14 +19,25 @@ templateEngineOverride: njk
   </section>
 </div>
 
-<section class="kh-grid-stylized kh-content kh-content--wide">
-  <span></span>
+<section class="kh-content kh-content--wide">
   <section>
     {% set stories = collections.impactStories or [] %}
     {% if stories.length %}
-      <table>
+      <div class="kh-section-head">
+        <h2 class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Impact record</h2>
+        <span class="kh-meta">{{ stories.length }} records &middot; figures as reported</span>
+      </div>
+      <div class="kh-table-scroll">
+      {#- `--stack` opts this table into becoming a list of cards below the md
+          breakpoint. As a five-column table on a phone it hid 209px of its
+          565px width inside the scroller: the What column collapsed to ~85px
+          and broke summaries into two-word lines, and the Topics chips were
+          sliced mid-word against the container edge, which reads as broken
+          rendering rather than as a hint to scroll. -#}
+      <table class="kh-table--spec kh-table--stack">
         <thead>
           <tr>
+            <th scope="col">Ref</th>
             <th scope="col">What</th>
             <th scope="col">When</th>
             <th scope="col">Who</th>
@@ -37,13 +47,20 @@ templateEngineOverride: njk
         <tbody>
           {%- for post in stories -%}
           <tr>
+            {# Stable ref from the shared filter (oldest = IS-01), not the
+               display order, so the number survives new stories being added.
+               The non-breaking hyphen keeps the ref on one line. #}
+            <td class="kh-table__id">{{ (collections.impactStories | impactStoryRef(post.url)) | replace('-', '&#8209;') | safe }}</td>
             <td>
               <a href="{{ post.url }}">{{ post.data.title | replace('Impact story: ', '') }}</a>
-              {% if post.data.teaser %}<br><small>{{ post.data.teaser | striptags }}</small>{% endif %}
+              {% if post.data.teaser %}<small class="kh-table__note">{{ post.data.teaser | striptags }}</small>{% endif %}
             </td>
-            <td>{{ post.date | dateDisplay('y') }}</td>
-            <td>{% if post.data.org %}{{ post.data.org }}{% else %}&mdash;{% endif %}</td>
-            <td>
+            {#- data-label supplies the column name once the header row is
+                hidden in the stacked view. Ref and What carry none: a title
+                does not need to be told it is a title. -#}
+            <td data-label="When">{{ post.date | dateDisplay('y') }}</td>
+            <td data-label="Who">{% if post.data.org %}{{ post.data.org }}{% else %}&mdash;{% endif %}</td>
+            <td data-label="Topics">
               {% if post.data.topics -%}
                 {% for t in post.data.topics %}<span class="kh-label">{{ t }}</span>{% endfor %}
               {%- endif %}
@@ -52,6 +69,7 @@ templateEngineOverride: njk
           {%- endfor -%}
         </tbody>
       </table>
+      </div>
     {% else %}
       <p>No impact stories yet.</p>
     {% endif %}

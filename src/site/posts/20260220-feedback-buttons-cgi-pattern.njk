@@ -2,14 +2,15 @@
 title: "Feedback buttons without JavaScript, using a 1990s web pattern"
 layout: layouts/post.njk
 teaser: "A Cloudflare Worker is just a CGI script, and that's exactly what a static site needs."
+featured: 5
+featured_note: "A pattern from the 1990s quietly doing a job most people now reach for JavaScript to solve."
 date: 2026-02-20
 tags:
   - posts
 topics:
   - web development
-  - static sites
-  - Cloudflare Workers
-  - retro web
+  - cloud infrastructure > Cloudflare Workers
+  - retro computing
 image: /blog/1990s-pc.jpg
 image_meta:
   text: "A 1990s desktop and its hit counter -- the original feedback system."
@@ -287,16 +288,16 @@ I'm not the first person to think of this. Two projects proved different halves 
 **[poll.fizzy.wtf](https://github.com/vberlier/poll)** is a Cloudflare Worker (written in Rust, MIT-licensed) that implements the redirect-count-redirect pattern with SVG result widgets. It's the 1994 web ring architecture applied to voting. No client-side JavaScript. Here's what using it looks like:
 
 ```html
-<a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=yes&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👍 Yes <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=yes" alt="Yes votes" style="display:inline;vertical-align:middle"></a>
-<a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=no&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👎 Not really <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=no" alt="No votes" style="display:inline;vertical-align:middle"></a>
+<a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=yes&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👍 Yes <img eleventy:ignore src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=yes" alt="Yes votes" style="display:inline;vertical-align:middle"></a>
+<a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=no&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👎 Not really <img eleventy:ignore src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=no" alt="No votes" style="display:inline;vertical-align:middle"></a>
 ```
 
 Try poll.fizzy.wtf live -- was this section of the post clear?
 
 {% endmarkdown %}
 <p>
-  <a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=yes&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👍 Yes <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=yes" alt="Yes votes" style="display:inline;vertical-align:middle"></a>
-  <a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=no&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👎 Not really <img src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=no" alt="No votes" style="display:inline;vertical-align:middle"></a>
+  <a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=yes&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👍 Yes <img eleventy:ignore src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=yes" alt="Yes votes" style="display:inline;vertical-align:middle"></a>
+  <a href="https://poll.fizzy.wtf/vote?allaboutken-feedback-post.standing-on-shoulders=no&redirect=https://www.allaboutken.com/posts/20260220-feedback-buttons-cgi-pattern/%23standing-on-shoulders" rel="nofollow" class="kh-button kh-button--sm">👎 Not really <img eleventy:ignore src="https://poll.fizzy.wtf/count?allaboutken-feedback-post.standing-on-shoulders=no" alt="No votes" style="display:inline;vertical-align:middle"></a>
 </p>
 {% markdown %}
 

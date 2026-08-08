@@ -24,20 +24,21 @@ eleventyExcludeFromCollections: true
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#f5f0e8">
+  <meta name="theme-color" content="#fffae1">
   <title>Image Generator — dev tool</title>
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/ken-favicon/assets/favicon-16x16.png">
   <link rel="stylesheet" href="/css/styles.css">
   <style>
     :root {
-      --cream: #f5f0e8;
-      --ink: #1a1a1a;
-      --amber: #c8860a;
-      --mid: #6b6b6b;
-      --border: #d0c8b8;
-      --code-bg: #eee8d8;
-      --mono: 'Courier New', monospace;
+      /* Mirrors the site tokens this page borrows via /css/styles.css. */
+      --cream: #fffae1;
+      --ink: #222;
+      --amber: #bf4a26;
+      --mid: #5b5e5a;
+      --border: #ded2a8;
+      --code-bg: #fdf5d6;
+      --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -57,10 +58,8 @@ eleventyExcludeFromCollections: true
       background: var(--amber);
       color: white;
       padding: 2px 8px;
-      border-radius: 3px;
       font-weight: 700;
       letter-spacing: 0.06em;
-      text-transform: uppercase;
     }
     .container { max-width: 1000px; margin: 0 auto; padding: 28px 24px; }
     .section { margin-bottom: 20px; }
@@ -70,14 +69,12 @@ eleventyExcludeFromCollections: true
       font-weight: 700;
       color: var(--mid);
       margin-bottom: 5px;
-      text-transform: uppercase;
       letter-spacing: 0.06em;
     }
     input[type=text], input[type=password], textarea, select {
       width: 100%;
       padding: 9px 12px;
       border: 1px solid var(--border);
-      border-radius: 4px;
       font-size: 0.95rem;
       background: white;
       color: var(--ink);
@@ -96,7 +93,6 @@ eleventyExcludeFromCollections: true
     button {
       cursor: pointer;
       border: none;
-      border-radius: 4px;
       font-weight: 600;
       padding: 9px 18px;
       font-size: 0.9rem;
@@ -118,7 +114,6 @@ eleventyExcludeFromCollections: true
       font-size: 0.72rem;
       background: var(--code-bg);
       border: 1px solid var(--border);
-      border-radius: 4px;
       padding: 6px 10px;
       color: var(--mid);
       white-space: nowrap;
@@ -134,7 +129,6 @@ eleventyExcludeFromCollections: true
     /* Advanced options */
     .advanced-details {
       border: 1px solid var(--border);
-      border-radius: 4px;
       padding: 10px 14px;
       background: white;
     }
@@ -143,7 +137,6 @@ eleventyExcludeFromCollections: true
       font-size: 0.78rem;
       font-weight: 700;
       color: var(--mid);
-      text-transform: uppercase;
       letter-spacing: 0.06em;
       user-select: none;
       list-style: none;
@@ -171,7 +164,7 @@ eleventyExcludeFromCollections: true
     .count-radio label {
       display: flex; align-items: center; justify-content: center;
       width: 44px; height: 36px;
-      border: 1px solid var(--border); border-radius: 4px;
+      border: 1px solid var(--border);
       font-size: 0.9rem; font-weight: 600; cursor: pointer;
       background: white; color: var(--ink);
       text-transform: none; letter-spacing: 0; margin-bottom: 0;
@@ -201,7 +194,6 @@ eleventyExcludeFromCollections: true
       border-left: 3px solid var(--amber);
       padding: 9px 14px;
       font-size: 0.85rem;
-      border-radius: 0 4px 4px 0;
       margin: 12px 0 0;
     }
     .status-bar.is-error { border-color: #c00; background: #fff0f0; color: #900; }
@@ -221,7 +213,6 @@ eleventyExcludeFromCollections: true
       font-family: var(--mono);
       font-size: 0.78rem;
       padding: 10px 14px;
-      border-radius: 4px;
       white-space: pre;
       overflow-x: auto;
       line-height: 1.5;
@@ -236,7 +227,6 @@ eleventyExcludeFromCollections: true
     .img-cell {
       position: relative;
       cursor: pointer;
-      border-radius: 5px;
       overflow: hidden;
       border: 2px solid transparent;
       background: var(--border);
@@ -253,7 +243,6 @@ eleventyExcludeFromCollections: true
       width: 28px; height: 28px;
       border: 3px solid var(--border);
       border-top-color: var(--amber);
-      border-radius: 50%;
       animation: spin 0.7s linear infinite;
     }
     .img-cell.is-selected { border-color: var(--amber); }
@@ -264,7 +253,6 @@ eleventyExcludeFromCollections: true
       background: var(--amber);
       color: white;
       width: 22px; height: 22px;
-      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -289,14 +277,12 @@ eleventyExcludeFromCollections: true
     /* Crop area */
     .crop-wrap {
       background: #111;
-      border-radius: 6px;
       padding: 16px;
       position: relative;
     }
     #crop-canvas {
       display: block;
       width: 100%;
-      border-radius: 3px;
       cursor: crosshair;
     }
     .crop-controls {
@@ -313,7 +299,7 @@ eleventyExcludeFromCollections: true
       gap: 6px 10px;
       margin-top: 10px;
     }
-    .adjust-label { font-size: 0.72rem; font-weight: 700; color: var(--mid); white-space: nowrap; text-transform: uppercase; letter-spacing: 0.05em; }
+    .adjust-label { font-size: 0.72rem; font-weight: 700; color: var(--mid); white-space: nowrap; letter-spacing: 0.05em; }
 
     /* Snippet */
     .snippet-wrap { margin-top: 16px; }
@@ -324,7 +310,6 @@ eleventyExcludeFromCollections: true
       font-family: var(--mono);
       font-size: 0.82rem;
       padding: 14px 16px;
-      border-radius: 5px;
       white-space: pre;
       overflow-x: auto;
       line-height: 1.6;
@@ -341,13 +326,13 @@ eleventyExcludeFromCollections: true
     .ref-row input { flex: 1; min-width: 0; }
     .ref-thumb {
       width: 48px; height: 48px; object-fit: cover;
-      border: 1px solid var(--border); border-radius: 3px;
+      border: 1px solid var(--border);
       flex-shrink: 0;
     }
     .ref-thumb-err {
       width: 48px; height: 48px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      border: 1px dashed var(--border); border-radius: 3px;
+      border: 1px dashed var(--border);
       font-size: 0.75rem; color: var(--mid); background: var(--code-bg);
     }
     .ref-remove {
@@ -358,7 +343,7 @@ eleventyExcludeFromCollections: true
 
     /* Tips & FAQ footer */
     .faq { max-width: 820px; margin: 48px auto 32px; padding: 0 24px; font-size: 0.78rem; color: var(--mid); line-height: 1.6; }
-    .faq h2 { font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.72rem; margin: 0 0 12px; color: var(--mid); }
+    .faq h2 { font-weight: 700; letter-spacing: 0.06em; font-size: 0.72rem; margin: 0 0 12px; color: var(--mid); }
     .faq dt { font-weight: 600; margin-top: 10px; }
     .faq dd { margin: 2px 0 0; }
     .faq a { color: var(--amber); }

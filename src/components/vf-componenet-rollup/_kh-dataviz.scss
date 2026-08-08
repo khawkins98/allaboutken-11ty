@@ -1,0 +1,743 @@
+@use './settings' as *;
+// Data marks
+// ----------
+// Micro-visualisations in the datasheet register: the twelve-month pulse
+// strip, the sequence rail, the length gauge, and topic tallies. All marks
+// are build-time data baked into markup (Nunjucks partials in
+// src/site/_includes/partials/); this file only dresses them. Flat by rule:
+// no radius, no shadow, hairlines and squares only.
+// Entry-type key (used by the pulse strip and sequence rail):
+//   article   — filled ink square   (#2b2b28)
+//   digesting — open blue square    (#3b6fb6)
+//   impact    — filled coral diamond (#bf4a26)
+// Type is always shape/position + colour together, never colour alone, and
+// every mark carries a text equivalent in the markup.
+@mixin kh-dataviz() {
+  // Mark ink. Matches the structural rule colour: articles are the document
+  // itself, so they are drawn in document ink.
+  --kh-viz-ink: #2b2b28;
+
+  // Corpus map. Static SVG, so it just needs containing and a sensible
+  // shrink on narrow screens.
+  .kh-map-figure {
+    display: block;
+    margin: 0 0 1rem;
+  }
+
+  .kh-map-scroll {
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule--strong);
+    overflow-x: auto;
+  }
+
+  // Scales to the container. The width/height attributes stay on the SVG so
+  // it keeps a sane intrinsic size with the stylesheet off.
+  .kh-map {
+    display: block;
+    height: auto;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .kh-map-figure figcaption {
+    display: block;
+    margin-top: 0.4rem;
+  }
+
+  .kh-map-details {
+    margin-bottom: 1rem;
+
+    > summary {
+      cursor: pointer;
+      font-family: var(--kh-font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 0.4rem 0;
+    }
+  }
+
+  .kh-map-details .kh-near__item {
+    gap: 0.75rem;
+  }
+
+  // Closest-in-meaning list. Hairline rows with the similarity stated in
+  // mono at the end; the number is a soft signal on an unfamiliar scale, so
+  // it is written rather than drawn.
+  // No top border: .kh-section-head above already closes with one, and the
+  // two together read as a double rule.
+  .kh-near {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+  }
+
+  .kh-near__item {
+    align-items: baseline;
+    border-bottom: 1px solid var(--kh-rule);
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+  }
+
+  .kh-near__score {
+    color: var(--kh-ink-muted);
+    flex: 0 0 auto;
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+  }
+
+  // Topic index bar. Length on a common scale, which Cleveland & McGill put
+  // near the top of the accuracy hierarchy; the count is stated as a number
+  // beside it, so the bar is a comparison aid rather than the only encoding.
+  .kh-topic-index__count {
+    font-family: var(--kh-font-mono);
+    padding-right: 1.5rem;
+    text-align: right;
+    white-space: nowrap;
+    width: 1%;
+  }
+
+  // Simple length bar, used on the stats page. Length on a common scale is
+  // the channel people judge most accurately, and the number is always
+  // printed beside it.
+  .kh-topic-index__bar {
+    width: 40%;
+  }
+
+  .kh-topic-bar {
+    background: var(--kh-ink-muted);
+    display: block;
+    height: 6px;
+    width: var(--kh-bar, 0%);
+  }
+
+  // Per-topic activity sparkline. A small multiple: same mark, same scale,
+  // one row per topic, so the reader learns it once and then reads only the
+  // differences between topics.
+  // Sparkline first, its value beside it, the label last: the mark and its
+  // number read as one unit, the way a chart and its legend do.
+  .kh-topic-index__spark {
+    padding-right: 1rem;
+    white-space: nowrap;
+    width: 1%;
+  }
+
+  // The column is deliberately narrow, so keep its head on one line.
+  .kh-table--spec th:has(.kh-spark__axis) {
+    white-space: nowrap;
+  }
+
+  .kh-spark {
+    display: inline-block;
+    vertical-align: bottom;
+  }
+
+  // Stated once in the column head rather than repeated on all 31 rows:
+  // every sparkline covers the same span, so per-row labels were redundant
+  // ink saying nothing that varied.
+  .kh-spark__axis {
+    color: var(--kh-ink-muted);
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    margin-left: 0.5em;
+    text-transform: none;
+  }
+
+  // Hierarchical topic detail. The parent is the controlled term and carries
+  // the tally; the child is free-form and sits quieter behind it.
+  .kh-topic-child {
+    color: var(--kh-ink-muted);
+  }
+
+  .kh-topic-child__sep {
+    margin: 0 0.3em;
+    opacity: 0.7;
+  }
+
+  // Register timeline. Marks on a rule, one slot per month, sized by area.
+  // Plain elements rather than SVG so each month is a real link with a
+  // native tooltip and a proper hit target.
+  // Every month since the first post is in the markup; the track scrolls and
+  // how many are on screen follows the container width, not a breakpoint.
+  .kh-timeline {
+    // Chronological, oldest left to newest right, opening on the recent end
+    // with no JavaScript.
+    // `direction: rtl` moves the scroll origin to the right edge. The DOM and
+    // the track stay ltr, so reading order, tab order and bidi are untouched;
+    // only where the scroller starts changes.
+    // This failed earlier and the reason is worth recording: Firefox
+    // mis-computes the scrollable overflow of a SHRINK-WRAPPED flex track
+    // (inline-flex, or width: max-content) inside an RTL scroller, giving
+    // maxScroll 100 where 900 was expected. An explicit width on the track
+    // avoids it completely, verified in Firefox, Chromium and WebKit. Hence
+    // --kh-track-width, set inline from the trackWidth filter.
+    direction: rtl;
+    margin: 0.25rem 0 1.5rem;
+    overflow-x: auto;
+    // Fade the older end so the strip reads as continuing past the edge.
+    mask-image: linear-gradient(to right, transparent 0, #000 3rem);
+    // NO SCROLLBAR. This is deliberate -- please do not "fix" it.
+    // A review flagged that with the bar hidden there is no obvious cue that
+    // the strip scrolls, and that the track is ~4,200px inside a ~1,300px
+    // window, so a mouse user might never reach the years before 2022. That
+    // is all true, and it was briefly changed to `scrollbar-width: thin` on
+    // the strength of it. The change was wrong.
+    // The strip is ambience, not a control. It is a small pleasure to notice
+    // and work out; a reader who never discovers it can scroll misses nothing,
+    // because the visible "Published by month" label above it links straight
+    // to /archive/, which is the same content in a form built for reading.
+    // Nothing is stranded behind the scroll. A scrollbar under an ornament
+    // makes it look like a component that failed to fit.
+    // If a hint is ever wanted, the answer is a hairline rather than a
+    // restored bar -- `scrollbar-width: thin` plus a 1px semi-transparent
+    // thumb, so it reads as a watermark instead of a control. The mask-image
+    // fade above already does most of that job.
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  // The one visible caption on the strip, and the way out of it: the marks
+  // link to a month in the archive, and this links to the archive itself.
+  .kh-timeline__label {
+    display: flex;
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+    gap: 0.75rem;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.15rem;
+  }
+
+  .kh-timeline__hint {
+    color: var(--kh-ink-muted);
+  }
+
+  .kh-timeline__track {
+    align-items: center;
+    // The rule is drawn as a background line rather than a border, so it can
+    // sit exactly on the marks' baseline while the padding below still gives
+    // the year captions room. A border-bottom would be pushed down by that
+    // padding and detach from the marks.
+    background-image: linear-gradient(var(--kh-rule), var(--kh-rule));
+    background-position: 0 calc(100% - 1.25rem);
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+    // Explicit width rather than any shrink-wrap: see .kh-timeline above.
+    // Set inline as --kh-track-width so the slot sizes below and the width
+    // calculation have one source of truth.
+    direction: ltr;
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 1.25rem;
+    width: var(--kh-track-width);
+  }
+
+  // Fixed slot width, so how many months are on screen follows the width of
+  // the container rather than a breakpoint: wide screens simply show more.
+  .kh-timeline__slot {
+    display: flex;
+    flex: 0 0 var(--kh-slot-width, 40px);
+    justify-content: center;
+    position: relative;
+  }
+
+  .kh-timeline__mark {
+    align-items: flex-end;
+    display: flex;
+    height: 22px;
+    justify-content: center;
+    position: relative;
+    text-decoration: none;
+    width: 100%;
+
+    // The one deliberate exception to the site's no-radius rule: a round
+    // mark reads as a point in time, where a square reads as a bar. Set
+    // --kh-mark-radius to e.g. 30% for squircles instead of full circles.
+    &::after {
+      background: var(--kh-ink-muted);
+      border-radius: var(--kh-mark-radius, 50%);
+      content: '';
+      display: block;
+      height: var(--kh-mark-size, 4px);
+      margin-bottom: calc(var(--kh-mark-size, 4px) / -2);
+      width: var(--kh-mark-size, 4px);
+    }
+  }
+
+  a.kh-timeline__mark:hover::after,
+  a.kh-timeline__mark:focus-visible::after {
+    background: var(--kh-color--coral);
+  }
+
+  // A month with nothing published is a bare tick on the rule, not a gap:
+  // the absence is data too.
+  .kh-timeline__mark--empty::after {
+    background: var(--kh-rule);
+    height: 3px;
+    margin-bottom: -1.5px;
+    width: 3px;
+  }
+
+  // The post's own month. The dot itself takes the accent -- a 3px tick below
+  // the rule was too quiet to find among ~180 marks, which is the one thing
+  // this state has to do. The tick stays as a second cue, because a
+  // single-entry month is only 4px across and colour alone is thin at that
+  // size.
+  .kh-timeline__slot--current .kh-timeline__mark::after {
+    background: var(--kh-color--coral);
+  }
+
+  .kh-timeline__slot--current .kh-timeline__mark::before {
+    background: var(--kh-color--coral);
+    bottom: -4px;
+    content: '';
+    height: 3px;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    width: 7px;
+  }
+
+  // A collapsed run of empty years. Wider than a month slot so the caption
+  // has room, and marked with a double tick so the break reads as elided
+  // time rather than as a very quiet month.
+  .kh-timeline__slot--gap {
+    // Wide enough that the centred range caption clears the neighbouring
+    // January label; a month-width slot made them collide.
+    flex: 0 0 6rem;
+  }
+
+  .kh-timeline__break {
+    align-items: center;
+    display: flex;
+    height: 22px;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+
+    &::before,
+    &::after {
+      background: var(--kh-rule);
+      content: '';
+      height: 9px;
+      position: absolute;
+      top: calc(50% + 6px);
+      transform: skewX(-18deg);
+      width: 1px;
+    }
+
+    &::before {
+      left: calc(50% - 3px);
+    }
+
+    &::after {
+      left: calc(50% + 3px);
+    }
+  }
+
+  .kh-timeline__year--gap {
+    color: var(--kh-ink-muted);
+  }
+
+  // Year axis: January carries the label, centred on its own slot so it
+  // reads as naming the month it sits under. A year that has not started
+  // has no slot, so it never appears.
+  .kh-timeline__year {
+    bottom: -1.15rem;
+    color: var(--kh-ink-muted);
+    display: none;
+    font-family: var(--kh-font-mono);
+    font-size: 10px;
+    left: 50%;
+    letter-spacing: 0.03em;
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  .kh-timeline__slot--year .kh-timeline__year,
+  .kh-timeline__slot--gap .kh-timeline__year {
+    display: block;
+  }
+
+  // Sequence rail (foot of a post). A hairline with typed marks riding it.
+  // On wide screens each stop becomes an architectural callout: a leader
+  // joins the exact position to a dated title above or below the datum line.
+  .kh-seq {
+    margin-bottom: 1rem;
+  }
+
+  // "Sequence" was the middle item here; the h3 above the rail says it now,
+  // so the caption is just the two direction cues.
+  .kh-seq__caption {
+    align-items: baseline;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+  }
+
+  .kh-seq__dir {
+    font-size: 10px;
+    text-transform: lowercase;
+  }
+
+  // Full width of its column. The 15rem cap made a seven-stop line huddle in
+  // the left quarter of the space, which read as a stray mark rather than as
+  // a run of time; spread out, the spacing between stops is itself legible.
+  // The caption above drops the same cap so "newer →" lands at the far end.
+  .kh-seq__track {
+    align-items: center;
+    display: flex;
+    height: 40px;
+    justify-content: space-between;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+
+    // The rail itself.
+    &::before {
+      background: var(--kh-rule);
+      content: '';
+      height: 1px;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 50%;
+    }
+  }
+
+  .kh-seq__item {
+    display: flex;
+    flex: 1 1 0;
+    margin: 0;
+    min-width: 0;
+  }
+
+  // The label is visible at the wide breakpoint. Keeping the whole callout
+  // as one link makes the label, leader and mark one generous target instead
+  // of asking a reader to hit a ten-pixel square.
+  .kh-seq__callout {
+    align-items: center;
+    color: var(--kh-viz-ink);
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    min-width: 40px;
+    position: relative;
+    text-decoration: none;
+    width: 100%;
+  }
+
+  // Below the wide breakpoint the rail becomes a plain vertical list.
+  // It used to hide the labels entirely and show seven bare 10px squares, so
+  // the site's main post-to-post navigation asked a reader to tap an
+  // unlabelled shape to discover where it went. The dates and titles were in
+  // the DOM the whole time, and the `title` attribute that carried them does
+  // not fire on touch at all. There is no room for a horizontal rail with
+  // labels on a phone, so it stops being a rail.
+  // Scoped to below the wide breakpoint. The `min-width: lg` block further
+  // down rebuilds the horizontal rail and does not reset every property set
+  // here, so these must not leak upwards.
+  @media (max-width: $kh-breakpoint--lg-down) {
+    .kh-seq__track {
+      display: block;
+      height: auto;
+
+      // The datum line only means anything when marks sit along it.
+      &::before {
+        content: none;
+      }
+    }
+
+    .kh-seq__item {
+      display: block;
+    }
+
+    .kh-seq__callout {
+      align-items: baseline;
+      display: flex;
+      gap: 0.6rem;
+      height: auto;
+      justify-content: flex-start;
+      min-height: 44px;
+      padding: 0.35rem 0;
+      text-align: left;
+    }
+
+    .kh-seq__label {
+      display: block;
+    }
+
+    .kh-seq__date {
+      color: var(--kh-ink-muted);
+      display: block;
+      font-family: var(--kh-font-mono);
+      font-size: 11px;
+      letter-spacing: 0.02em;
+    }
+
+    .kh-seq__title {
+      display: block;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .kh-seq__mark {
+      flex: 0 0 auto;
+      height: 12px;
+      width: 12px;
+    }
+
+    .kh-seq__leader {
+      display: none;
+    }
+  }
+
+  .kh-seq__mark {
+    align-items: center;
+    display: flex;
+    height: 24px;
+    justify-content: center;
+    position: relative;
+    width: 24px;
+
+    // The shape. Background masks the rail so open marks stay legible.
+    // 10px, not 8px. Below about 9px a filled square and an outlined one
+    // read as "two slightly different dots" rather than as two states, which
+    // is what made the rail look like random squares.
+    &::before {
+      background: var(--kh-viz-ink);
+      content: '';
+      height: 10px;
+      width: 10px;
+    }
+
+  }
+
+  .kh-seq__callout:not(.kh-seq__callout--current):hover .kh-seq__mark::before,
+  .kh-seq__callout:focus-visible .kh-seq__mark::before {
+    outline: 1px solid var(--kh-viz-ink);
+    outline-offset: 2px;
+  }
+
+  .kh-seq__mark--digesting::before {
+    background: #fffae1;
+    border: 1px solid var(--kh-color--blue);
+  }
+
+  .kh-seq__mark--impact::before {
+    background: var(--kh-color--coral);
+    height: 9px;
+    transform: rotate(45deg);
+    width: 9px;
+  }
+
+  // Filled coral, not an outline. An outline-only state disappeared among
+  // the filled article marks, so the one mark that answers "where am I" was
+  // the hardest of the seven to find.
+  .kh-seq__mark--current::before {
+    background: var(--kh-color--coral);
+    border: 0;
+    outline: 1px solid var(--kh-color--coral);
+    outline-offset: 2px;
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-seq__track {
+      height: 12rem;
+    }
+
+    .kh-seq__item,
+    .kh-seq__callout {
+      height: 100%;
+    }
+
+    .kh-seq__label {
+      color: var(--kh-viz-ink);
+      display: block;
+      left: 0.25rem;
+      padding: 0.35rem 0;
+      position: absolute;
+      right: 0.25rem;
+      text-align: left;
+    }
+
+    .kh-seq__item--above .kh-seq__label {
+      border-bottom: 1px solid var(--kh-rule);
+      bottom: calc(50% + 2.25rem);
+    }
+
+    .kh-seq__item--below .kh-seq__label {
+      border-top: 1px solid var(--kh-rule);
+      top: calc(50% + 2.25rem);
+    }
+
+    .kh-seq__date,
+    .kh-seq__title {
+      display: block;
+    }
+
+    .kh-seq__date {
+      color: var(--kh-ink-muted);
+      font-family: var(--kh-font-mono);
+      font-size: 10px;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.15rem;
+    }
+
+    .kh-seq__title {
+      display: -webkit-box;
+      font-size: 12px;
+      line-height: 1.3;
+      overflow: hidden;
+      text-wrap: pretty;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    // A slight lean keeps the leader from reading as a chart gridline. Its
+    // outer end meets the label rule; its inner end terminates at the mark.
+    .kh-seq__leader {
+      border-left: 1px solid var(--kh-rule--strong);
+      display: block;
+      height: 2.25rem;
+      left: 50%;
+      position: absolute;
+      transform: skewX(-14deg);
+      width: 1px;
+    }
+
+    .kh-seq__item--above .kh-seq__leader {
+      bottom: 50%;
+      transform-origin: bottom;
+    }
+
+    .kh-seq__item--below .kh-seq__leader {
+      top: 50%;
+      transform: skewX(14deg);
+      transform-origin: top;
+    }
+
+    .kh-seq__mark {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    // The key's swatches are inline decoration, not rail marks, so they must
+    // opt out of the rule above. Without this they take `position: absolute`,
+    // find no positioned ancestor anywhere in the key list, and resolve
+    // against <body> -- which is `position: relative`. All four then stack on
+    // the exact centre point of the document, landing on top of whatever
+    // paragraph happens to be there, while the key itself renders with no
+    // marks beside its labels.
+    // `transform: none` is not optional: a transform applies to a static
+    // element too, so the translate would still shift the swatches by half
+    // their own size.
+    .kh-seq__mark--key {
+      position: static;
+      transform: none;
+    }
+
+    .kh-seq__callout:not(.kh-seq__callout--current):hover .kh-seq__title,
+    .kh-seq__callout:focus-visible .kh-seq__title {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    .kh-seq__callout:focus-visible {
+      outline: none;
+    }
+
+    .kh-seq__callout:focus-visible .kh-seq__label {
+      outline: 1px solid var(--kh-viz-ink);
+      outline-offset: 2px;
+    }
+
+    .kh-seq__callout--current .kh-seq__date,
+    .kh-seq__callout--current .kh-seq__title {
+      color: var(--kh-color--coral);
+    }
+  }
+
+  // Key. States the encoding instead of leaving it to be discovered by
+  // hovering seven marks in turn.
+  .kh-seq__key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+  }
+
+  .kh-seq__key-item {
+    align-items: center;
+    color: var(--kh-ink-muted);
+    display: flex;
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+    gap: 0.35rem;
+    letter-spacing: 0.03em;
+  }
+
+  // In the key the mark is a swatch, not a target: no hit area, no hover.
+  .kh-seq__mark--key {
+    height: auto;
+    width: auto;
+
+  }
+
+  .kh-seq__mark--current.kh-seq__mark--key::before {
+    outline-offset: 1px;
+  }
+
+  // Length gauge (byline). A hairline cell: centre tick = corpus median,
+  // coral marker = this post's percentile rank.
+  .kh-length-gauge {
+    display: inline-block;
+    vertical-align: baseline;
+  }
+
+  .kh-length-gauge__track {
+    border: 1px solid var(--kh-rule);
+    display: inline-block;
+    height: 8px;
+    position: relative;
+    vertical-align: -1px;
+    width: 3.5rem;
+  }
+
+  .kh-length-gauge__mid {
+    background: var(--kh-rule);
+    bottom: 0;
+    height: 4px;
+    left: 50%;
+    position: absolute;
+    width: 1px;
+  }
+
+  .kh-length-gauge__marker {
+    background: var(--kh-color--coral);
+    bottom: 0;
+    left: clamp(0%, var(--kh-len, 50%), calc(100% - 2px));
+    position: absolute;
+    top: 0;
+    width: 2px;
+  }
+
+  // Topic tally (byline). The count is apparatus, so it wears coral.
+  .kh-topic-tally {
+    color: var(--kh-color--coral);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+}

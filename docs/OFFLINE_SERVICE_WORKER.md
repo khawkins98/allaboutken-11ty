@@ -4,7 +4,7 @@ Source files:
 
 - `src/site/sw.js` — service worker lifecycle, fetch handling, and cache updates
 - `src/site/scripts.js` — client-side service worker registration
-- `eleventy.js` — passthrough copy for `src/site/**/*.js` so `sw.js` is available at `/sw.js`
+- `config/eleventy/assets-and-search.js` — passthrough copy for `src/site/**/*.js` so `sw.js` is available at `/sw.js`
 
 ## Architecture summary
 

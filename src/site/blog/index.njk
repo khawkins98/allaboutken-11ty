@@ -8,21 +8,78 @@ pagination:
   alias: pagedPosts
 permalink: "/blog/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 }}/{% endif %}"
 ---
-{%- set siteConfig = siteConfig.siteInformation -%}
-<div class="kh-grid-stylized">
-  <div>
+{%- set isFirstPage = pagination.pageNumber == 0 -%}
+{%- set glance = collections.blogPosts | corpusStats -%}
+<section>
+  <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
+
+  {%- if isFirstPage %}
+  {#- Framing before the list. A bare reverse-chronological feed answers
+      "what's newest" and nothing else; a reader arriving cold has no way to
+      tell what the writing is for or whether it is still going. -#}
+  <div class="kh-content">
+    <p>Notes from building and running public-facing digital systems inside
+    complex organizations: platform and content architecture, design systems,
+    measurement that survives contact with reality, and how AI is changing
+    the work rather than replacing it. Some posts are worked-through
+    arguments; some are a fix I did not want to look up twice.</p>
+    <p>Written for practitioners. Nothing here is sponsored, and nothing is
+    written to a publishing schedule &mdash; the rhythm below is what it is.</p>
   </div>
-  <section>
-    <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
-    {% include "partials/search-box.njk" %}
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="start-here" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Start here</h2>
+    <span class="kh-meta">Picked, not ranked</span>
+  </div>
+  <div class="kh-content">
+    <p>If you only read a few, read these.</p>
+  </div>
+  {% include "partials/picked.njk" %}
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="pace" class="kh-text-heading--2"><span class="kh-section-number">2.0</span>Pace &amp; scale</h2>
+    <span class="kh-meta">Counted at build time</span>
+  </div>
+  {%- set glanceLabel = "blog posts" %}
+  {% include "partials/register-glance.njk" %}
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="subjects" class="kh-text-heading--2"><span class="kh-section-number">3.0</span>Recurring subjects</h2>
+    <span class="kh-meta">{{ collections.topics | length }} topics in all</span>
+  </div>
+  <div class="kh-content">
+    <p>The ones that come back most often. <a href="/directory/#subjects">The full index</a>
+    has the rest, with how each has risen and fallen by year.</p>
+  </div>
+  <ul class="kh-topic-chips">
+    {%- for t in collections.topics | limitItems(8) %}
+    <li class="kh-topic-chips__item">
+      <a class="kh-topic-chips__link" href="/topics/{{ t.slug }}/">{{ t.topic }}</a>
+      <span class="kh-topic-chips__count">{{ t.count }}</span>
+    </li>
+    {%- endfor %}
+  </ul>
+  {%- endif %}
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="posts" class="kh-text-heading--2"><span class="kh-section-number">{% if isFirstPage %}4.0{% else %}1.0{% endif %}</span>All posts</h2>
+    <span class="kh-meta">Newest first{% if not isFirstPage %} &middot; page {{ pagination.pageNumber + 1 }}{% endif %}</span>
+  </div>
+  {% include "partials/search-box.njk" %}
+
+  {#- The entry list is other entries' titles and teasers, so it is chrome by
+      the CLAUDE.md rule -- the same marker topic pages and the archive already
+      carry. Without it a search for "drupal" returned "All writing" (pages
+      /all/4/ and /all/5/) as results, competing with the articles themselves.
+      The page's own intro stays indexed, so it is still findable as a page. -#}
+  <div class="kh-datasheet-list" data-pagefind-ignore>
   {%- for post in pagedPosts -%}
     {% include "partials/post-summary.njk" %}
   {%- endfor -%}
+  </div>
 
   {% set pagerLabel = "Blog pagination" %}
   {% set pagerNewer = "Newer posts" %}
   {% set pagerOlder = "Older posts" %}
   {% include "partials/pager.njk" %}
-
-  </section>
-</div>
+</section>

@@ -1,0 +1,38 @@
+{# Who wrote this — the authorship column in an entry's closing apparatus.
+
+   The feedback question has already closed the reading column in the calling
+   layout. This note sits beside onward navigation in entry-foot.njk.
+
+   Pages without an entry -- indexes, topics, search, utility -- have no byline,
+   so the footer carries a short blurb instead. The homepage has neither: the
+   hero says it. See footer.njk.
+
+   Contact lives here because these are reply channels for this piece, not
+   profile links; the footer's "Elsewhere" column is the site-wide version for
+   pages that have no byline. #}
+<aside class="kh-author" data-pagefind-ignore>
+  <p class="kh-meta kh-author__label">Written by</p>
+  <div class="kh-author__body">
+    <p class="kh-author__name">Ken Hawkins</p>
+    {#- Carries the human-and-machine line: it is the differentiator, and it
+        should not be what gets dropped when bios are consolidated. -#}
+    <p class="kh-author__bio">Digital Platforms &amp; Audience Engagement Lead at
+    UNDRR in Bonn. I build public-facing systems that help complex organizations
+    reach, serve and learn from their audiences, and structure their content and
+    data to be usable by people and by the machines increasingly reading on
+    their behalf.</p>
+    {%- if comment != false %}
+    <p class="kh-author__invite">Thanks for reading. If you have a comment,
+    I&rsquo;d like to hear it.</p>
+    {%- endif %}
+    <p class="kh-author__links">
+      <a href="https://toot.io/@khawkins98" rel="me">Mastodon<span class="kh-u-show-for-large">&nbsp;@khawkins98@toot.io</span></a>
+      <span class="kh-author__sep" aria-hidden="true">&middot;</span>
+      <a href="https://www.linkedin.com/in/allaboutken">LinkedIn</a>
+      <span class="kh-author__sep" aria-hidden="true">&middot;</span>
+      <a href="mailto:khawkins98@gmail.com">Email</a>
+      <span class="kh-author__sep" aria-hidden="true">&middot;</span>
+      <a href="/cv">The long version</a>
+    </p>
+  </div>
+</aside>

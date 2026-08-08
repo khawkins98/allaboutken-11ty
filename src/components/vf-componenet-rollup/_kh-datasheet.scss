@@ -1,0 +1,1132 @@
+@use './settings' as *;
+
+// Datasheet register
+// ------------------
+// A small set of primitives that let a page speak in a technical-document
+// voice: numbered sections, mono micro-labels, hairline cells, and a spec
+// table. The mono register is IBM Plex Mono, already loaded for code.
+// These are opt-in classes; nothing here restyles an existing component.
+@mixin kh-datasheet() {
+  --kh-color--coral: #bf4a26;
+  --kh-rule: #ded2a8;
+  --kh-rule--strong: #2b2b28;
+  // Cells sit slightly LIGHTER than the graph-paper ground and are opaque,
+  // so type never lands on a gridline. The paper reads in the margins and
+  // between cells, which is where it belongs.
+  --kh-panel-bg: #fffdf3;
+  // Micro-type ink. The global grey (#707372) is only 4.6:1 on the sunlight
+  // ground — legally AA but squinty at 11–12px letterspaced mono caps.
+  // This darker grey clears 6:1 at the sizes the datasheet register uses.
+  --kh-ink-muted: #5b5e5a;
+
+  // Shared mono treatment: uppercase, letterspaced, small.
+  .kh-meta,
+  .kh-section-number,
+  .kh-table--spec th,
+  .kh-panel__label {
+    font-family: var(--kh-font-mono);
+  }
+
+  // A micro-label that annotates rather than titles. Sits above or beside
+  // content the way a caption sits under a figure.
+  .kh-meta {
+    color: var(--kh-ink-muted);
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+
+  .kh-meta--accent {
+    color: var(--kh-color--coral);
+  }
+
+  // Section numbers. Authored in the markup rather than generated, so the
+  // numbering survives with CSS off and stays under editorial control.
+  .kh-section-number {
+    color: var(--kh-color--coral);
+    font-size: 0.6em;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    margin-right: 0.6em;
+    vertical-align: 0.22em;
+  }
+
+  // Hairline panel. No radius, no shadow — the border is the whole idea.
+  .kh-panel {
+    background-color: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule--strong);
+    margin: var(--kh-stack-margin, 0) 0 1rem 0;
+  }
+
+  // Rows and cells divide a panel without doubling up borders.
+  .kh-panel__row + .kh-panel__row {
+    border-top: 1px solid var(--kh-rule);
+  }
+
+  .kh-panel__cell {
+    padding: 1rem 1.25rem;
+  }
+
+  .kh-panel__cell + .kh-panel__cell {
+    border-top: 1px solid var(--kh-rule);
+  }
+
+  .kh-panel__label {
+    color: var(--kh-color--coral);
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.35rem;
+  }
+
+  // Side-by-side cells once there's room; stacked below that.
+  @media (min-width: $kh-breakpoint--sm) {
+    .kh-panel__row {
+      display: grid;
+      grid-template-columns: var(--kh-panel-columns, 1fr 2fr);
+    }
+
+    .kh-panel__cell + .kh-panel__cell {
+      border-left: 1px solid var(--kh-rule);
+      border-top: 0;
+    }
+  }
+
+  // Spec table. The `kh-` prefix opts out of the default table styling in
+  // _kh-content.scss, so this is a clean slate rather than an override.
+  .kh-table--spec {
+    border-collapse: collapse;
+    font-size: 15px;
+    margin: var(--kh-stack-margin, 0) 0 1rem 0;
+    width: 100%;
+  }
+
+  .kh-table--spec th {
+    border-bottom: 1px solid var(--kh-rule--strong);
+    color: var(--kh-ink-muted);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 0.5rem 1rem 0.5rem 0;
+    text-align: left;
+    vertical-align: bottom;
+  }
+
+  .kh-table--spec td {
+    border-bottom: 1px solid var(--kh-rule);
+    padding: 1rem 1rem 1rem 0;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  // Inset from the frame on both edges; the old rules assumed no frame and
+  // ran the last column flush to the page.
+  .kh-table--spec th:first-child,
+  .kh-table--spec td:first-child {
+    padding-left: 1.25rem;
+  }
+
+  .kh-table--spec th:last-child,
+  .kh-table--spec td:last-child {
+    padding-right: 1.25rem;
+  }
+
+  // The final row's rule would double with the wrapper's border.
+  .kh-table--spec tr:last-child td {
+    border-bottom: 0;
+  }
+
+  // The part-number column: coral, mono, narrow.
+  .kh-table__id {
+    color: var(--kh-color--coral);
+    font-family: var(--kh-font-mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  // The chip is a pill everywhere else; in here a 9999px radius is the only
+  // curve on the page, so square it off.
+  // Chip geometry, shared. A reviewer counted five visual treatments of the
+  // same object across the site, so a reader could never learn that a shape
+  // means "subject". These now agree on face, size, tracking, radius and
+  // border weight; colour is the only thing left carrying meaning, and it
+  // carries exactly one distinction -- coral for a content TYPE, the rule
+  // colour for a TOPIC.
+  .kh-table--spec .kh-label,
+  .kh-datasheet-list .kh-summary__tab {
+    background: none;
+    border-radius: 0;
+    border-width: 1px;
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .kh-table--spec .kh-label {
+    border-color: var(--kh-rule);
+  }
+
+  .kh-table__note {
+    color: var(--kh-color--grey--darkest);
+    display: block;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 0.35rem;
+  }
+
+  // A spec table that stops being a table when there is no room for one.
+  // Opt-in via `.kh-table--stack`, because most spec tables are narrow enough
+  // to survive the scroller; this is for the wide ones where side-scrolling
+  // hides more than it shows.
+  // Each row becomes a bordered card, the header row is dropped, and the cells
+  // that need naming carry their column name in `data-label`. Ref and What
+  // deliberately have none.
+  @media (max-width: $kh-breakpoint--md-down) {
+    .kh-table--stack,
+    .kh-table--stack tbody,
+    .kh-table--stack tr,
+    .kh-table--stack td {
+      display: block;
+      width: auto;
+    }
+
+    // Visually gone, still announced: the header row is the only thing naming
+    // these columns for a screen reader that reads the table linearly.
+    .kh-table--stack thead {
+      clip-path: inset(50%);
+      height: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+
+    .kh-table--stack tr {
+      border-bottom: 1px solid var(--kh-rule--strong);
+      padding: 1rem 1.25rem;
+    }
+
+    .kh-table--stack tr:last-child {
+      border-bottom: 0;
+    }
+
+    // Cell padding is carried by the card now.
+    .kh-table--stack td,
+    .kh-table--stack td:first-child,
+    .kh-table--stack td:last-child {
+      border-bottom: 0;
+      padding: 0 0 0.5rem;
+    }
+
+    .kh-table--stack tr td:last-child {
+      padding-bottom: 0;
+    }
+
+    .kh-table--stack td[data-label]::before {
+      color: var(--kh-ink-muted);
+      content: attr(data-label);
+      display: block;
+      font-family: var(--kh-font-mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.15rem;
+    }
+
+    // The ref reads as the card's number, so it leads.
+    .kh-table--stack .kh-table__id {
+      font-size: 12px;
+      padding-bottom: 0.25rem;
+    }
+
+    // Nothing to scroll once the table is a stack, so drop the frame the
+    // scroller was drawing around it.
+    .kh-table-scroll:has(.kh-table--stack) {
+      border: 0;
+      overflow-x: visible;
+    }
+  }
+
+  // Tables are the one place horizontal overflow is likely; contain it
+  // rather than letting the page scroll sideways. The wrapper also carries
+  // the frame and fill, so the table reads as a filled cell like
+  // .kh-datasheet-list rather than sitting directly on the graph paper.
+  .kh-table-scroll {
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule--strong);
+    overflow-x: auto;
+  }
+
+  // Markdown tables get the scroller automatically (see config/eleventy/
+  // markdown.js) but not the frame: a content table already carries its own
+  // background and rules, so the datasheet border would double up around it.
+  // This variant contributes containment only.
+  .kh-table-scroll--content {
+    background: none;
+    border: 0;
+    margin-bottom: 1rem;
+  }
+
+  // Global header. This was a bordered strip of filled cells, on the argument
+  // that a masthead built from the same cells as the content belongs to the
+  // same document. In practice the box and the fill read as a chrome bar
+  // bolted on top of the sheet rather than as the top of it, and once the nav
+  // was promoted the container was competing with it for attention. Both are
+  // gone; a single rule underneath does the separating.
+  // That rule is 2px where every other hairline on the site is 1px. At 1px the
+  // masthead was divided from the page by exactly the line that divides one
+  // section from another, so it read as the first section rather than as the
+  // top of the sheet. Doubling it asserts the masthead without a box.
+  // Horizontal padding lives at 0 here AND in the later .kh-global-header rule
+  // in index.scss, which would otherwise win and inset the wordmark.
+  .kh-global-header {
+    align-items: stretch;
+    border-bottom: 2px solid var(--kh-rule--strong);
+    gap: 0;
+    margin-bottom: 2rem;
+    padding: 0;
+  }
+
+  // Flush left with the content column, and set above the nav.
+  // The `a.kh-logo` qualifier is doing real work. The wordmark carries BOTH
+  // `kh-logo` and `kh-navigation__link`, so `.kh-global-header
+  // .kh-navigation__link` (0,2,0) outranks a bare `.kh-logo` (0,1,0) and was
+  // silently holding the site's name at the nav's 14px with the nav's cell
+  // padding. Adding the element selector takes this to (0,2,1) so it wins
+  // regardless of source order.
+  .kh-global-header a.kh-logo {
+    align-items: center;
+    display: flex;
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+    padding: 0.9rem 0;
+  }
+
+  .kh-navigation {
+    display: flex;
+    margin-left: auto;
+  }
+
+  .kh-navigation__list {
+    display: flex;
+    height: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-navigation__item {
+    display: flex;
+  }
+
+  // The vertical rules between items went with the box. They were what made
+  // three links read as a row of toolbar buttons; spacing separates them
+  // perfectly well, and the active item now has a fill to distinguish it.
+  // The last item loses its right padding so the nav ends on the content
+  // edge rather than floating a cell's width short of it.
+  .kh-navigation__item:last-child .kh-navigation__link {
+    padding-right: 0;
+  }
+
+  // Navigation was set at 12px mono: the same register the site uses for ref
+  // numbers, captions and field labels. Navigation dressed as metadata reads
+  // as a utility toolbar, and that is what made the masthead feel secondary
+  // to the page beneath it. It now takes 14px at 600 -- the wordmark's own
+  // weight -- so the two ends of the masthead answer each other instead of
+  // one whispering across a gap at the other.
+  // These selectors are deliberately `.kh-global-header`-qualified. The base
+  // .kh-navigation__link rules in index.scss are emitted AFTER this mixin, so
+  // an equal-specificity rule here would lose the tie.
+  .kh-global-header .kh-navigation__link {
+    align-items: center;
+    display: flex;
+    font-family: var(--kh-font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 0.85rem 1.4rem;
+  }
+
+  // Hover is an ink underline, not a fill. The fill was `--kh-ground`, which
+  // is the page colour, so it produced a faintly-lighter ghost block with
+  // hard edges rather than a state. A 2px rule reads as deliberate and keeps
+  // coral for "you are here" -- the 3px coral inset used by `--section`.
+  .kh-global-header a.kh-navigation__link:hover,
+  .kh-global-header a.kh-navigation__link:focus-visible {
+    box-shadow: inset 0 -2px 0 var(--kh-rule--strong);
+    text-decoration: none;
+  }
+
+  // A filled cell rather than a tint. Coral text alone was a weak "you are
+  // here" among three otherwise identical cells, and it spent the accent
+  // colour on the one thing that did not need explaining.
+  // The `a` qualifier is load-bearing. `.kh-navigation__link:visited:hover` in
+  // index.scss is (0,3,0) like the class-only version of this rule and is
+  // emitted later, so it won the tie and painted the CURRENT nav item's label
+  // #54585a grey on the coral fill -- about 1.6:1, and the reason hovering the
+  // active item looked broken. Adding the element takes this to (0,3,1).
+  .kh-global-header a.kh-navigation__link--active,
+  .kh-global-header a.kh-navigation__link--active:visited,
+  .kh-global-header a.kh-navigation__link--active:hover,
+  .kh-global-header a.kh-navigation__link--active:visited:hover,
+  .kh-global-header a.kh-navigation__link--active:focus-visible {
+    background: var(--kh-color--coral);
+    box-shadow: none;
+    color: var(--kh-ground);
+    text-decoration: none;
+  }
+
+  // The weaker state: you are somewhere this item leads, not on it. A rule
+  // rather than a fill, so the masthead never claims you are on a page you
+  // are not.
+  .kh-global-header a.kh-navigation__link--section,
+  .kh-global-header a.kh-navigation__link--section:visited,
+  .kh-global-header a.kh-navigation__link--section:hover,
+  .kh-global-header a.kh-navigation__link--section:visited:hover {
+    box-shadow: inset 0 -3px 0 var(--kh-color--coral);
+    text-decoration: none;
+  }
+
+  // Sits under the related list, so it reads as a footnote to the numbers
+  // above rather than as another item in the list.
+  .kh-near__key {
+    max-width: 46ch;
+    text-wrap: pretty;
+  }
+
+  // Post masthead. Replaces the full-bleed yellow slab: same hairline
+  // grammar as .kh-section-head, with the byline data in the mono register.
+  .kh-post-head {
+    border-bottom: 1px solid var(--kh-rule--strong);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .kh-post-head .kh-post-title {
+    left: auto;
+    margin-top: 0;
+    padding: 0.5rem 0 0.75rem;
+  }
+
+  .kh-post-head .kh-breadcrumb {
+    margin-bottom: 0.5rem;
+  }
+
+  // Breadcrumb and document reference share the strap line: navigation on
+  // the left, the ref number flushed right like a drawing-number block.
+  .kh-post-head__strap {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: space-between;
+  }
+
+  // Now an <a> self-permalink, so the coral has to beat the global
+  // `a:link`/`a:visited` colour (0,1,1) that otherwise wins over a plain
+  // class; state the colour on the link states too.
+  .kh-doc-ref,
+  .kh-doc-ref:link,
+  .kh-doc-ref:visited,
+  .kh-doc-ref:hover,
+  .kh-doc-ref:focus-visible {
+    color: var(--kh-color--coral);
+  }
+
+  .kh-doc-ref {
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    white-space: nowrap;
+
+    // It is a self-permalink; underline it only on interaction so the resting
+    // datasheet register stays flat.
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+    }
+  }
+
+  .kh-post-meta {
+    display: block;
+  }
+
+  // One topic per line. Comma-separated, four hierarchical topics wrapped
+  // into a blob that broke mid-term, splitting a single link's text across
+  // two lines. Line-per-item also means the tally sits with the topic it
+  // counts instead of drifting to the start of the next line.
+  .kh-post-topics {
+    // `display: block` overrides the `inline-block` this inherits from
+    // .kh-meta; without it the list laid out inline and the three cells ran
+    // together as "career reflectionpersonal archive x10".
+    display: block;
+    list-style: none;
+    margin: 0.4rem 0 0;
+    padding: 0;
+  }
+
+  // Below the grid breakpoint the three cells sit on one wrapping line with a
+  // real gap between them, rather than collapsing into one string.
+  .kh-post-topics__item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.5rem;
+    margin: 0 0 0.15rem;
+    text-wrap: pretty;
+  }
+
+  // Three columns -- term, detail, count -- aligned down the rows, so the
+  // relationship is carried by position rather than by a chevron. The `>` is
+  // a storage convention; drawn as a breadcrumb it implied the second level
+  // was a place you could go, and a reviewer duly clicked it.
+  // The grid lives on the list and the items are `display: contents`, the
+  // same trick .kh-datasheet-list uses, so all rows share column widths.
+  @media (min-width: $kh-breakpoint--sm) {
+    .kh-post-topics {
+      column-gap: 1rem;
+      display: grid;
+      grid-template-columns: max-content max-content max-content;
+    }
+
+    .kh-post-topics__item {
+      display: contents;
+    }
+  }
+
+
+  // Series navigation. Same hairline grammar as the contents rail; sits
+  // above it so "where am I in this series" reads before "where am I in
+  // this post".
+  .kh-series {
+    margin-top: 1.5rem;
+  }
+
+  .kh-series__label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .kh-series__name {
+    color: var(--kh-color--coral);
+  }
+
+  .kh-series__list {
+    border-top: 1px solid var(--kh-rule--strong);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-series__item {
+    border-bottom: 1px solid var(--kh-rule);
+    display: flex;
+    gap: 0.75em;
+    line-height: 1.4;
+    padding: 0.5rem 0;
+  }
+
+  .kh-series__num {
+    color: var(--kh-color--coral);
+    flex: 0 0 auto;
+    font-family: var(--kh-font-mono);
+    font-size: 12px;
+    padding-top: 0.15em;
+  }
+
+  .kh-series__item--current .kh-series__title {
+    font-weight: 600;
+  }
+
+  // Contents rail. The post body spans two of the grid's three columns,
+  // which leaves the first column empty below the masthead. Rather than a
+  // dead margin, it carries the article's index: numbered h2 entries in the
+  // mono register, sticky on wide screens so the index rides along like a
+  // running head. Stacked, it sits between masthead and body as a plain
+  // table of contents.
+  .kh-post-rail {
+    margin-top: 1.75rem;
+  }
+
+  .kh-post-rail__label {
+    margin-bottom: 0.5rem;
+  }
+
+  .kh-post-rail__list {
+    border-top: 1px solid var(--kh-rule--strong);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-post-rail__item {
+    border-bottom: 1px solid var(--kh-rule);
+  }
+
+  .kh-post-rail__link {
+    color: inherit;
+    display: flex;
+    font-size: 15px;
+    gap: 0.75em;
+    line-height: 1.4;
+    padding: 0.55rem 0;
+    text-decoration: none;
+
+    &:hover .kh-post-rail__text,
+    &:focus-visible .kh-post-rail__text {
+      text-decoration: underline;
+    }
+  }
+
+  .kh-post-rail__num {
+    color: var(--kh-color--coral);
+    font-family: var(--kh-font-mono);
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    line-height: inherit;
+    padding-top: 0.1em;
+  }
+
+  // The rail sticks only on pages that have nothing bleeding into its column.
+  // It shares the left column with `.kh-bleed-out`, whose whole point is to
+  // bleed into exactly that space. Pinning the rail unconditionally was tried
+  // first -- sticky, opaque fill, `z-index: 3` over the bleed's 2, on the
+  // reasoning that a figure sliding under a pinned card reads as depth. That
+  // trade was wrong, and the case that broke it is instructive: when the
+  // bleed-out figure is a *screenshot of a page layout*, the region the card
+  // covers is the screenshot's own left column -- its masthead and title, the
+  // thing the figure exists to show. "The figure is much wider than the
+  // overlap, so nothing is lost" was true about area and false about content.
+  // So ask the page. `:has()` tests for a bleed anywhere in the article and
+  // drops the rail into normal flow when it finds one; the many posts without
+  // one keep their running index. Deliberately page-wide rather than
+  // per-figure: CSS cannot ask "will these two overlap while scrolling", and a
+  // rail that pins and unpins as figures pass would be worse than either
+  // steady state. The JS alternative -- hiding the rail on collision -- is
+  // cosmetic scripting, which this site does not spend.
+  // No opaque card here: with no bleed there is nothing to sit above, and the
+  // column below the rail is empty.
+  @media (min-width: $kh-breakpoint--md) {
+    .kh-grid:has(.kh-post-rail):not(:has(.kh-bleed-out)) .kh-post-rail {
+      position: sticky;
+      top: 1.5rem;
+    }
+  }
+
+  // Give anchored jumps (contents rail, heading permalinks) breathing room
+  // at the top of the viewport.
+  .kh-content :is(h2, h3, h4, h5, h6)[id] {
+    scroll-margin-top: 1.5rem;
+  }
+
+  // Section head: numbered title on the left, an annotation on the right,
+  // closed by a hairline. This is what makes a page scan as a document
+  // rather than a stack of blocks.
+  .kh-section-head {
+    align-items: baseline;
+    border-bottom: 1px solid var(--kh-rule--strong);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+
+    > :first-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Hero: the masthead of the document. A hairline frame rather than a
+  // colour band, with a mono strapline above the headline.
+  .kh-hero {
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule--strong);
+    margin-bottom: 2.5rem;
+  }
+
+  .kh-hero__body {
+    padding: 2rem 1.5rem 2.25rem;
+  }
+
+  // The lede repeats the role title; it should sit between the display
+  // headline and the prose, not compete with the headline. kh-text-heading--2
+  // would render it at 30px, so it is re-registered here as an intermediate
+  // step: prose-sized-plus, regular weight, slightly muted.
+  .kh-hero__lede {
+    color: var(--kh-color--grey--darkest);
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1.45;
+    max-width: 46ch;
+  }
+
+  // The hero splits into prose + a spec column once there's room. The spec
+  // column is what fills the right-hand void: label/value rows separated by
+  // hairlines, same grammar as .kh-panel. Below the breakpoint it stacks
+  // under the prose behind a horizontal rule.
+  .kh-hero__spec {
+    border-top: 1px solid var(--kh-rule);
+  }
+
+  .kh-hero__spec-row {
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 1rem 1.5rem;
+  }
+
+  .kh-hero__spec-row + .kh-hero__spec-row {
+    border-top: 1px solid var(--kh-rule);
+  }
+
+  @media (min-width: $kh-breakpoint--md) {
+    .kh-hero__layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 18rem;
+    }
+
+    .kh-hero__spec {
+      border-left: 1px solid var(--kh-rule);
+      border-top: 0;
+    }
+  }
+
+  // Post list as an outlined grid. Not a <table> — the content is a list of
+  // articles, not tabular data — but it reads as one: an outer frame, a
+  // header row, and every row divided into meta / body / media cells.
+  // The wrappers in post-summary.njk are `display: contents` elsewhere; here
+  // they become the cells, which is what lets the borders be continuous
+  // instead of drawn per text node.
+  .kh-datasheet-list {
+    --kh-list-columns: 1fr;
+
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule--strong);
+  }
+
+  .kh-datasheet-list__head {
+    display: none;
+  }
+
+  .kh-datasheet-list .kh-summary {
+    display: grid;
+    gap: 0;
+    grid-template-columns: var(--kh-list-columns);
+    margin-bottom: 0;
+    max-width: none;
+    position: static;
+  }
+
+  .kh-datasheet-list .kh-summary + .kh-summary {
+    border-top: 1px solid var(--kh-rule--strong);
+  }
+
+  .kh-datasheet-list .kh-summary__meta,
+  .kh-datasheet-list .kh-summary__body,
+  .kh-datasheet-list .kh-summary__media {
+    display: block;
+    padding: 1.15rem 1.25rem;
+  }
+
+  // Media cells are edge-to-edge; the image is the cell.
+  .kh-datasheet-list .kh-summary__media {
+    padding: 0;
+  }
+
+  // The base .kh-summary__image rule pins a 220px min/max width and a 30px
+  // right margin, which is wider than this cell. Unpin it so the image sizes
+  // to the column instead of overflowing it.
+  .kh-datasheet-list a.kh-summary__image,
+  .kh-datasheet-list img.kh-summary__image {
+    margin-right: 0;
+    max-width: none;
+    min-width: 0;
+    width: 100%;
+  }
+
+  // Stacked, the media cell is full width, so cap it or a single image
+  // outweighs the row it belongs to.
+  .kh-datasheet-list a.kh-summary__image {
+    display: block;
+    height: 100%;
+    max-height: 11rem;
+    min-height: 8rem;
+    overflow: hidden;
+  }
+
+  @media (min-width: $kh-breakpoint--md) {
+    .kh-datasheet-list a.kh-summary__image {
+      max-height: none;
+    }
+
+    // A datasheet never leaves a field blank; an empty figure cell gets an
+    // explicit em-dash the way an empty table field would. Desktop only:
+    // stacked, an empty media cell simply doesn't render as a row.
+    .kh-datasheet-list .kh-summary__media:empty {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+    }
+
+    .kh-datasheet-list .kh-summary__media:empty::before {
+      color: var(--kh-ink-muted);
+      content: '—';
+      font-family: var(--kh-font-mono);
+      font-size: 13px;
+    }
+  }
+
+  .kh-datasheet-list img.kh-summary__image {
+    aspect-ratio: auto;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  // Cells own their spacing, so the text inside sheds its margins.
+  .kh-datasheet-list .kh-summary__title,
+  .kh-datasheet-list .kh-summary__text,
+  .kh-datasheet-list .kh-summary__date {
+    margin: 0;
+  }
+
+  .kh-datasheet-list .kh-summary__title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+
+  // Dates join the data register rather than reading as prose.
+  .kh-datasheet-list .kh-summary__date {
+    color: var(--kh-ink-muted);
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+    letter-spacing: 0.035em;
+    line-height: 1.5;
+  }
+
+  // The Digesting badge was an absolutely-positioned rotated tab hanging off
+  // the left edge. In a grid it becomes an ordinary label inside its cell.
+  .kh-datasheet-list .kh-summary__tab {
+    border-color: var(--kh-color--coral);
+    border-style: solid;
+    color: var(--kh-color--coral);
+    display: inline-block;
+    margin-top: 0.6rem;
+    padding: 2px 6px;
+    position: static;
+    transform: none;
+  }
+
+  // The tinted highlight fights the grid; the coral label carries the
+  // distinction on its own.
+  .kh-datasheet-list .kh-summary--highlight {
+    background: none;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  @media (min-width: $kh-breakpoint--md) {
+    .kh-datasheet-list {
+      --kh-list-columns: 9.5rem minmax(0, 1fr) 13rem;
+    }
+
+    .kh-datasheet-list__head {
+      border-bottom: 1px solid var(--kh-rule--strong);
+      display: grid;
+      grid-template-columns: var(--kh-list-columns);
+    }
+
+    .kh-datasheet-list__head > * {
+      padding: 0.5rem 1.25rem;
+    }
+
+    .kh-datasheet-list__head > * + *,
+    .kh-datasheet-list .kh-summary__body,
+    .kh-datasheet-list .kh-summary__media {
+      border-left: 1px solid var(--kh-rule);
+    }
+  }
+
+  // Start here
+  // ----------
+  // The one chosen list on the site. Numbered like a spec so it reads as a
+  // deliberate sequence rather than a ranking; the note carries the reason.
+  .kh-picked {
+    border-top: 1px solid var(--kh-rule--strong);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-picked__item {
+    align-items: baseline;
+    background: var(--kh-panel-bg);
+    border-bottom: 1px solid var(--kh-rule);
+    display: grid;
+    gap: 0 1.25rem;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    padding: 0.9rem 1.25rem;
+  }
+
+  .kh-picked__num {
+    color: var(--kh-ink-muted);
+    font-family: var(--kh-font-mono);
+    font-size: 0.8125rem;
+  }
+
+  .kh-picked__link {
+    font-weight: 600;
+  }
+
+  .kh-picked__note {
+    color: var(--kh-ink-muted);
+    margin: 0.25rem 0 0;
+    max-width: 60ch;
+  }
+
+  .kh-picked__date {
+    text-align: right;
+  }
+
+  // Recurring subjects
+  // ------------------
+  // A ranked row, not a cloud: the count is stated rather than encoded as
+  // type size, which is the least accurately read channel there is.
+  .kh-topic-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-topic-chips__item {
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule);
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .kh-topic-chips__count {
+    color: var(--kh-ink-muted);
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+
+  // Feedback
+  // --------
+  // Sits directly after the final sentence in the article's reading column,
+  // before the full-width onward-navigation and authorship block. The count is
+  // a remote SVG whose value is
+  // unknown at build time, so it is labelled in the mono register rather than
+  // built into a sentence -- the old wording read "1 people found this useful"
+  // and no server-side plural is possible.
+  .kh-feedback {
+    border-top: 1px solid var(--kh-rule--strong);
+    margin: 2.5rem 0 0;
+    padding-top: 1rem;
+  }
+
+  .kh-feedback__label {
+    margin: 0 0 0.5rem;
+  }
+
+  .kh-feedback__body {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+  }
+
+  // Not .kh-button: that component is still keyed to the old blue and carries
+  // a 16px bottom margin. Same hairline grammar as .kh-panel instead, with the
+  // sun as the hover fill.
+  .kh-feedback__action {
+    align-items: center;
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule--strong);
+    color: inherit;
+    display: inline-flex;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
+    min-height: 40px;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    transition: background-color 125ms linear, transform 125ms linear;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--kh-color--sun);
+      color: inherit;
+      text-decoration: none;
+    }
+
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+
+  // Archive
+  // -------
+  // The dense index: date, title, kind. No teasers, no images -- /all/ is the
+  // one with those. Month headings carry the anchor the timeline marks point
+  // at, and scroll-margin keeps the target clear of the sticky header.
+  .kh-archive__month {
+    margin-top: 2rem;
+  }
+
+  .kh-archive__heading {
+    align-items: baseline;
+    border-bottom: 1px solid var(--kh-rule--strong);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    justify-content: space-between;
+    margin: 0 0 0.5rem;
+    padding-bottom: 0.35rem;
+    scroll-margin-top: 15vh;
+  }
+
+  .kh-archive__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-archive__item {
+    align-items: baseline;
+    border-bottom: 1px solid var(--kh-rule);
+    display: grid;
+    gap: 0.25rem 1rem;
+    grid-template-columns: 5rem minmax(0, 1fr) auto;
+    padding: 0.5rem 0;
+  }
+
+  .kh-archive__kind {
+    color: var(--kh-color--coral);
+  }
+
+  .kh-readnext > .kh-section-head:first-child {
+    margin-top: 0;
+  }
+
+  // Stacked, the byline needs space after the onward-reading column.
+  .kh-entry-foot .kh-author {
+    margin-top: 2.5rem;
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-entry-foot .kh-author {
+      margin-top: 0;
+    }
+  }
+
+  // Read next: a directory, not prose. The hairline top matches .kh-author's,
+  // so the two columns of the entry foot start on the same rule. Without it
+  // the left column simply began in mid-air -- most obvious on an entry with
+  // no related posts, where there is no section-head rule to stand in for one.
+  .kh-readnext {
+    border-top: 1px solid var(--kh-rule);
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+  }
+
+  // The architectural sequence drawing follows the two-column closure and
+  // owns a full-width rule. Seven labelled stops need the drawing-board width;
+  // in the old half-column each title collapsed into a stack of single words.
+  .kh-sequence {
+    border-top: 1px solid var(--kh-rule);
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+  }
+
+  .kh-sequence__head {
+    margin-top: 0;
+  }
+
+  // The foot of an entry, two columns once there is room: onward links left,
+  // byline right. No grid-area placement -- the DOM is already in this order,
+  // so tab order and screen-reader order match the screen.
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-entry-foot {
+      align-items: start;
+      display: grid;
+      gap: 0 3rem;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .kh-entry-foot .kh-readnext {
+      margin-top: 0;
+    }
+
+    .kh-entry-foot .kh-sequence {
+      grid-column: 1 / -1;
+    }
+
+    // Preserve the authorship column when the semantic computation honestly
+    // returns no neighbours; do not manufacture an empty left-hand panel just
+    // to make CSS Grid place the next item in column two.
+    .kh-entry-foot--no-related .kh-author {
+      grid-column: 2;
+    }
+  }
+
+  // Byline
+  // ------
+  // The article's authorship closure. Padding-top matches .kh-readnext so the
+  // first line of each column sits at the same height below its rule.
+  .kh-author {
+    border-left: 3px solid var(--kh-color--sun);
+    border-top: 1px solid var(--kh-rule);
+    padding: 1rem 0 1rem 1.25rem;
+  }
+
+  // Zero top margin: the mono label now sits directly above, so the old
+  // offset (which existed to align against the label column) would open a gap
+  // between a label and the thing it labels.
+  .kh-author__name {
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .kh-author__bio,
+  .kh-author__invite {
+    margin: 0.35rem 0 0;
+    max-width: 62ch;
+  }
+
+  .kh-author__links {
+    margin: 0.6rem 0 0;
+  }
+
+  .kh-author__sep {
+    color: var(--kh-ink-muted);
+    padding: 0 0.4rem;
+  }
+
+  // No label column. A 7rem track holding the words "Written by" left a wide
+  // empty gutter and squeezed the bio's measure at narrower widths, which read
+  // as layout for its own sake. The label stacks above the name instead.
+  .kh-author__label {
+    display: block;
+    margin: 0 0 0.15rem;
+  }
+
+  .kh-feedback__tally {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.5rem;
+  }
+
+
+}

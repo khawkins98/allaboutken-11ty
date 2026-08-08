@@ -1,8 +1,24 @@
 # Eleventy configuration reference
 
-Source file: `eleventy.js` at the repository root.
+Assembly file: `eleventy.js` at the repository root. Concern-specific
+registrations live in `config/eleventy/`.
 
-This document maps every plugin, server option, transform, filter, shortcode, passthrough rule, hook, collection, and the return config to its purpose and signature. Sections follow the order in which they appear in `eleventy.js`.
+This document maps every plugin, server option, transform, filter, shortcode,
+passthrough rule, hook, collection, and the return config to its purpose and
+signature. The split changes where the implementation lives, not the names
+available to templates.
+
+| Source | Responsibility |
+| --- | --- |
+| `eleventy.js` | Assembly, server options, common filters and return config |
+| `config/eleventy/images.js` | Image plugin and transform |
+| `config/eleventy/timeline.js` | Timeline, archive grouping and neighbourhood filters |
+| `config/eleventy/topic-visuals.js` | Topic helpers and sparkline shortcodes |
+| `config/eleventy/semantic-visuals.js` | Semantic SVG shortcodes |
+| `config/eleventy/stats.js` | Corpus statistics, series and length filters |
+| `config/eleventy/markdown.js` | Markdown library and markdown-backed shortcodes |
+| `config/eleventy/assets-and-search.js` | Passthrough rules, watching and Pagefind |
+| `config/eleventy/collections.js` | Collections |
 
 ---
 
@@ -201,6 +217,22 @@ Returns an integer word count computed from an HTML string. Strips `<script>`, `
 
 Returns a locale-formatted number string (e.g., `1,234`). Passes non-finite values back as strings.
 
+### `docRef`
+
+```njk
+{{ page | docRef }}  {# → "AAK-20260626" #}
+```
+
+Document reference for the post masthead. Derived from the dated file slug (`20260626-down-the-stack` → `AAK-20260626`); falls back to the post date (UTC) if the slug has no date prefix. Returns `null` on failure.
+
+### `impactStoryRef`
+
+```njk
+{{ collections.impactStories | impactStoryRef(page.url) }}  {# → "IS-07" #}
+```
+
+Stable part number for an impact story, shared by the `/work` spec table and the story's own masthead. Assigned in date-ascending order (oldest story = `IS-01`, ties broken by URL) so publishing a new story appends to the register instead of renumbering it. Returns `null` if the URL is not in the collection. Backdating a story before an existing one is the only thing that moves refs — don't.
+
 ---
 
 ## Section 5 — Markdown
@@ -256,6 +288,23 @@ Outputs a wrapper `<div class="kh-demo" data-pagefind-ignore>` so Pagefind never
 
 ---
 
+### `marginnote` / `pullquote` (paired)
+
+```njk
+{% marginnote %}A supporting citation with a [link](https://example.com).{% endmarginnote %}
+
+{% pullquote %}A short phrase lifted verbatim from the paragraph.{% endpullquote %}
+```
+
+Margin apparatus for posts. Both render their content as **inline markdown** (links, emphasis, code, `--` em dashes — no blank lines/paragraphs) inside an `<aside>`:
+
+- `marginnote` → `<aside class="kh-marginnote">`. Supplementary citations and context. Indexed and read by assistive tech — real content is allowed here.
+- `pullquote` → `<aside class="kh-pullquote" aria-hidden="true" data-pagefind-ignore>`. Repeats a phrase from the surrounding body, so it is hidden from screen readers and search. Never put unique content in one.
+
+Place the shortcode immediately after the paragraph it supports, inside the `{% markdown %}` block. On wide screens (≥1300px) both float into the right gutter beside the post body; below that (and in print) they render in the flow as hairline blocks. Raw `<aside class="kh-marginnote">` HTML still works for older posts. See the [component reference](../src/site/style-guide/components.njk) for the visual spec.
+
+---
+
 ### `ogImageUrl` (regular)
 
 ```njk
@@ -281,7 +330,7 @@ Used in `base.njk` to auto-generate `og:image` and `twitter:image` when no expli
 | `./src/site/**/*.js` | same relative path | All site JS files (scripts, service worker, semantic-search) |
 | `./src/components/ken-favicon/assets` | `assets/ken-favicon/assets/` | Favicon PNG/SVG/manifest files |
 | `./src/site/images` | `images/` | All post and page images (referenced as `/images/…` in templates) |
-| `./src/components/kh-font` | `assets/kh-font/` | Recursive variable font WOFF2 |
+| `./src/components/kh-font` | `assets/kh-font/` | IBM Plex Sans and Mono WOFF2 files |
 | `./src/site/**/*.html` | same relative path | Legacy Drupal redirect stubs |
 | `./src/site/**/*.txt` | same relative path | Downloadable text resources (starter kits, templates) |
 
@@ -299,7 +348,7 @@ config.on('eleventy.after', () => { ... });
 
 Runs `pagefind --site build --exclude-selectors "pre, code"` after every Eleventy build:
 
-- **Production** (`eleventy.js` with `ELEVENTY_ENV != 'development'`): runs synchronously with `execSync`; build fails if Pagefind fails.
+- **Production** (`ELEVENTY_ENV != 'development'`): runs synchronously with `execSync`; build fails if Pagefind fails.
 - **Development**: runs asynchronously with `exec` so dev rebuilds are not blocked. A reference to the child process is kept so overlapping rebuilds kill the previous run before starting a new one.
 
 The `--exclude-selectors "pre, code"` flag prevents code blocks from polluting keyword search results.

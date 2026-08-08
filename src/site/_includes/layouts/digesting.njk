@@ -4,12 +4,26 @@ pageClass: digesting
 templateEngineOverride: njk
 ---
 
+{#- The publishing strip, as on every other entry. Digesting notes are in the
+    same register and appear as marks in it, so a note that did not show the
+    strip could not show the reader where it sat -- and the archive page tells
+    readers the strip is at the top of every page. -#}
+{%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) %}
+{%- set pulseCurrentKey = date | dateDisplay('yyyy-LL') %}
+{% include "partials/pulse-strip.njk" %}
+
 <article class="kh-grid-stylized kh-u-margin__top--1200">
   <div></div>
   <div class="kh-content">
-    <p class="kh-breadcrumb"><a href="/digesting">← Digesting</a></p>
+    {#- Overridable, because this layout is not only used by digests. /ai/ is a
+        slash page on the same layout and was telling readers its parent was
+        Digesting, which it is not. -#}
+    <p class="kh-breadcrumb"><a href="{{ parentUrl | default('/digesting') }}">← {{ parentLabel | default('Digesting') }}</a></p>
     <h1 class="kh-font-headline kh-text-heading--1">{{title}}</h1>
-    <p><time datetime="{{ date }}" class="kh-summary__date">{{ date | dateDisplay }}</time>{% if topics %}<span class="kh-summary__author">Filed in: {{ topics | join(', ') }}</span>{% endif %}</p>
+    <p><time datetime="{{ date }}" class="kh-summary__date">{{ date | dateDisplay }}</time>{#- Parents only, and linked. Printing the raw strings leaked the storage
+    convention into the page: "content strategy > misinformation" was rendering
+    verbatim as though the ">" were part of the subject's name. -#}
+{% if topics %}<span class="kh-summary__author">Filed in: {%- for parent in topics | topicParents %}{% set topicSlug = collections.topics | topicPageSlug(parent) %} {% if topicSlug %}<a href="/topics/{{ topicSlug }}/">{{ parent }}</a>{% else %}{{ parent }}{% endif %}{{ "," if not loop.last }}{%- endfor %}</span>{% endif %}</p>
     {% if tags and ('note' in tags) %}
     <div class="kh-note-box">
       <span class="kh-note-box__label">Note:</span>
@@ -23,5 +37,14 @@ templateEngineOverride: njk
     <p>
       <a href="/digesting">More things I've been digesting</a>
     </p>
+    {%- if comment != false %}
+    {% include "partials/feedback.njk" %}
+    {%- endif %}
   </div>
 </article>
+
+{#- The same closing block as a full entry: byline, related entries
+    and the sequence rail. These pages used to carry the byline alone, so
+    arriving on a digesting note from a link was a dead end -- nothing related,
+    no position in the register, no way onward. -#}
+{% include "partials/entry-foot.njk" %}

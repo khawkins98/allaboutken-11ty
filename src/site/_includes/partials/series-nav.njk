@@ -1,0 +1,34 @@
+{# Series navigation — "Part 2 of 4" with the parts listed in order.
+
+   A series is a different axis from `topics`: it is ordered, and a post
+   belongs to exactly one. So it lives in its own frontmatter keys rather
+   than being squeezed into the topic list, which has neither property.
+
+   Expects, from the post's frontmatter:
+     series      — the series name, e.g. "Content Action Model"
+     series_part — this post's position, e.g. 2
+
+   Renders nothing when a post has no series. #}
+{%- if series -%}
+{%- set parts = collections.allContent | seriesPosts(series) -%}
+{%- if parts.length > 1 -%}
+<nav class="kh-series" aria-label="Posts in the {{ series }} series" data-pagefind-ignore>
+  <p class="kh-meta kh-series__label">
+    {%- for p in parts %}{% if p.url == page.url %}Part {{ loop.index }} of {{ parts.length }}{% endif %}{% endfor %}
+    in <span class="kh-series__name">{{ series }}</span>
+  </p>
+  <ol class="kh-series__list">
+    {%- for p in parts %}
+    <li class="kh-series__item{% if p.url == page.url %} kh-series__item--current{% endif %}">
+      <span class="kh-series__num" aria-hidden="true">{{ loop.index }}</span>
+      {%- if p.url == page.url %}
+      <span class="kh-series__title"><span class="kh-u-sr-only">Current: </span>{{ p.data.title }}</span>
+      {%- else %}
+      <a class="kh-series__title" href="{{ p.url | url }}">{{ p.data.title }}</a>
+      {%- endif %}
+    </li>
+    {%- endfor %}
+  </ol>
+</nav>
+{%- endif -%}
+{%- endif -%}

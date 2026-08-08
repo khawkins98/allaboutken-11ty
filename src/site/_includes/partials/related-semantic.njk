@@ -1,0 +1,44 @@
+{# Closest in meaning — neighbours derived from the semantic search vectors.
+
+   This is a different signal from the topic tags. Topics are editorial: what
+   I decided a post was filed under. These are computed from the embeddings
+   already generated for search, so they reflect what the writing is actually
+   about, and they surface pairings across sections that no shared tag links.
+
+   Renders nothing when a post has no neighbour above the similarity floor.
+   Roughly a third of entries are singular enough that they don't, which is
+   the honest outcome rather than a padded list. That share went UP when the
+   chrome leak was fixed: a lot of the old "similarity" was entries sharing
+   navigation boilerplate rather than sharing a subject.
+
+   Data: src/site/_data/related.json, written by scripts/compute-related.mjs. #}
+{%- set near = related[page.url] -%}
+{%- if near and near.length -%}
+{#- The block's own heading. There used to be a "Read next / By meaning, and
+    in sequence" header above this one, which said the same thing twice in a
+    row: two heading rules, two mono straplines, one idea. This is the h2 now
+    and the sequence rail carries a plain h3 beneath the list. -#}
+{#- "Suggested by similarity" rather than "By meaning, not by tag". The old
+    strapline assumed the reader knows the site has tags; they never see any.
+    The numbers below used to be explained only by a `title` tooltip, which
+    does not exist on touch at all -- so on a phone this block printed three
+    bare decimals and no way to find out what they were. The key says it in
+    the open, costs one line, and needs no JavaScript. -#}
+<div class="kh-section-head" data-pagefind-ignore>
+  <h2 id="related" class="kh-text-heading--2">Related posts</h2>
+  <span class="kh-meta">Suggested by similarity</span>
+</div>
+<ol class="kh-near" data-pagefind-ignore>
+  {%- for n in near %}
+  <li class="kh-near__item">
+    <a class="kh-near__link" href="{{ n.url | url }}">{{ n.title | safe }}</a>
+    {#- The score is stated rather than drawn. It is a soft signal on an
+        unfamiliar scale, so a bar would imply more precision than it has. -#}
+    <span class="kh-near__score" title="Cosine similarity of the entries' embeddings">{{ n.score }}</span>
+  </li>
+  {%- endfor %}
+</ol>
+<p class="kh-near__key kh-meta" data-pagefind-ignore>The number is how closely the
+writing matches, from 0 to 1. These are computed from the text, not chosen by
+hand, so treat them as a prompt rather than a verdict.</p>
+{%- endif -%}

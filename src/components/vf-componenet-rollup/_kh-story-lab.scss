@@ -1,0 +1,1129 @@
+@use './settings' as *;
+
+// Experimental corpus narratives. Kept in its own mixin so the entire lab can
+// be removed without teasing prototype rules out of the production dataviz.
+@mixin kh-story-lab() {
+  .kh-story-lab {
+    --kh-lab-ink: var(--kh-color--grey--darkest);
+    --kh-lab-link: var(--kh-color--sun--deep);
+    --kh-lab-context: color-mix(in srgb, var(--kh-color--blue) 8%, transparent);
+  }
+
+  .kh-lab-index {
+    border-block: 1px solid var(--kh-rule--strong);
+    margin-top: 2rem;
+    padding: 0.75rem 0;
+
+    ol {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      list-style-position: inside;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  // The lab is sorted into three bands -- Selected, How to distrust this,
+  // Workbench -- so that "kept for stewing" and "worth your time" stop looking
+  // identical. A band head is heavier than the section heads beneath it: a
+  // double rule above, and the letter badge sized up, so the grouping reads
+  // before any individual chart does.
+  .kh-lab-band {
+    border-top: 3px double var(--kh-rule--strong);
+    margin-top: 4rem;
+    padding-top: 1rem;
+
+    .kh-section-number {
+      font-size: 1.1em;
+    }
+  }
+
+  // Folded by default and left that way. The summary states the count, because
+  // a closed <details> otherwise hides how much is behind it.
+  .kh-lab-workbench {
+    margin-top: 1rem;
+
+    > summary {
+      border-block: 1px solid var(--kh-rule--strong);
+      cursor: pointer;
+      font-family: var(--kh-font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 0.6rem 0;
+    }
+
+  }
+
+  // Everything inside is provisional; hold it back a shade from the selected
+  // views so the distinction survives scrolling past the summary. A wrapper
+  // rather than `> :not(summary)`, which would repeat the rule on every one of
+  // the four views' many sibling elements.
+  .kh-lab-workbench__body {
+    border-left: 1px solid var(--kh-rule--strong);
+    margin-top: 1.5rem;
+    padding-left: 1.25rem;
+  }
+
+  .kh-lab-figure {
+    margin: 0 0 1.5rem;
+
+    figcaption {
+      margin-top: 0.4rem;
+    }
+  }
+
+  .kh-lab-axis,
+  .kh-lab-grid line,
+  .kh-trail__line {
+    stroke: var(--kh-rule--strong);
+  }
+
+  .kh-lab-arc__careers rect {
+    fill: var(--kh-lab-context);
+  }
+
+  .kh-lab-arc__careers rect:nth-of-type(even) {
+    fill: color-mix(in srgb, var(--kh-color--sun) 13%, transparent);
+  }
+
+  .kh-lab-arc__careers text,
+  .kh-lab-years text,
+  .kh-lab-grid text {
+    fill: var(--kh-ink-muted);
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+  }
+
+  .kh-lab-years text,
+  .kh-lab-grid text {
+    text-anchor: middle;
+  }
+
+  .kh-lab-arc__links path {
+    fill: none;
+    stroke: var(--kh-lab-link);
+    stroke-linecap: round;
+    stroke-opacity: 0.58;
+    stroke-width: 1.5;
+  }
+
+  // Generic chart tooltip, created by story-lab.js. `fixed`, because the
+  // charts it serves sit inside horizontally scrolling containers that would
+  // otherwise clip it. pointer-events: none so it can never sit between a
+  // finger and the shape underneath it.
+  .kh-lab-tip {
+    background: var(--kh-panel-bg);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--kh-lab-ink) 18%, transparent),
+      0 8px 24px color-mix(in srgb, var(--kh-lab-ink) 18%, transparent);
+    font-size: 13px;
+    line-height: 1.4;
+    max-width: min(22rem, calc(100vw - 1rem));
+    padding: 0.5rem 0.7rem;
+    pointer-events: none;
+    position: fixed;
+    z-index: 6;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  // Standing "this is a lab" caveat. A left rule in the accent rather than a
+  // tinted box: the page is already dense with panels and charts, and one more
+  // filled rectangle would read as another view rather than as a note about
+  // all of them.
+  .kh-lab-caveat {
+    border-left: 2px solid var(--kh-color--coral);
+    padding-left: 0.9rem;
+  }
+
+  // Near links: the sub-three-year hops. Ground texture, not narrative. They
+  // outnumber the returns roughly seven to one, so at the returns' weight the
+  // chart would read as a hairball and the six arcs that carry the section's
+  // argument would be lost in it. Thin and faint, they thicken where a burst
+  // of related writing happened, which is the cluster the returns arc over.
+  .kh-lab-arc__links--near path {
+    stroke-opacity: 0.22;
+    stroke-width: 1;
+  }
+
+  .kh-lab-arc__entries line {
+    stroke: var(--kh-lab-ink);
+    stroke-opacity: 0.7;
+    stroke-width: 1.5;
+  }
+
+  .kh-lab-lane-label {
+    fill: var(--kh-ink-muted);
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+  }
+
+  .kh-lab-practice__links path {
+    fill: none;
+    stroke: var(--kh-lab-link);
+    stroke-opacity: 0.42;
+    stroke-width: 1.25;
+  }
+
+  .kh-lab-practice__nodes circle {
+    fill: var(--kh-panel-bg);
+    stroke: var(--kh-lab-ink);
+    stroke-width: 1.5;
+  }
+
+  .kh-lab-practice__nodes rect {
+    fill: var(--kh-lab-link);
+  }
+
+  .kh-return-list {
+    list-style: none;
+    margin: 1.5rem 0;
+    padding: 0;
+  }
+
+  .kh-return {
+    align-items: center;
+    border-bottom: 1px solid var(--kh-rule);
+    display: grid;
+    gap: 0.35rem 1rem;
+    grid-template-columns: minmax(0, 1fr) minmax(5rem, 0.6fr) minmax(0, 1fr);
+    padding: 0.8rem 0;
+
+    > a:first-of-type {
+      text-align: right;
+    }
+
+    > a:last-of-type {
+      text-align: left;
+    }
+
+    > .kh-meta {
+      grid-column: 1 / -1;
+      text-align: center;
+    }
+  }
+
+  .kh-return__hop {
+    background: var(--kh-rule--strong);
+    display: block;
+    height: 1px;
+    position: relative;
+
+    &::before,
+    &::after {
+      background: var(--kh-lab-link);
+      content: '';
+      height: 7px;
+      position: absolute;
+      top: -3px;
+      width: 2px;
+    }
+
+    &::before { left: 0; }
+    &::after { right: 0; }
+
+    i {
+      border: 1px solid var(--kh-lab-link);
+      border-bottom: 0;
+      border-radius: 50% 50% 0 0;
+      display: block;
+      height: 12px;
+      inset: -12px 0 auto;
+      position: absolute;
+    }
+  }
+
+  .kh-trails {
+    border-top: 1px solid var(--kh-rule--strong);
+  }
+
+  .kh-lab-key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    list-style: none;
+    margin: 0 0 0.75rem;
+    padding: 0;
+
+    li {
+      align-items: center;
+      display: flex;
+      gap: 0.45rem;
+    }
+  }
+
+  .kh-lab-key__mark {
+    background: var(--kh-lab-ink);
+    display: inline-block;
+    height: 8px;
+    width: 8px;
+  }
+
+  .kh-lab-key__mark--impact {
+    background: var(--kh-color--sun--deep);
+    transform: rotate(45deg);
+  }
+
+  .kh-lab-key__mark--digesting {
+    background: transparent;
+    border: 1px solid var(--kh-color--blue);
+  }
+
+  .kh-trail {
+    border-bottom: 1px solid var(--kh-rule);
+    display: grid;
+    gap: 0.75rem 2rem;
+    grid-template-columns: minmax(12rem, 0.55fr) minmax(0, 1fr);
+    padding: 1rem 0;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  .kh-trail__plot {
+    align-self: center;
+    grid-column: 2;
+    grid-row: 1;
+    height: 18px;
+    position: relative;
+  }
+
+  .kh-trail__description {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  .kh-trail__line {
+    background: var(--kh-rule--strong);
+    height: 1px;
+    left: var(--kh-from);
+    position: absolute;
+    right: calc(100% - var(--kh-to));
+    top: 8px;
+  }
+
+  .kh-trail__node {
+    background: var(--kh-lab-ink);
+    height: 8px;
+    left: var(--kh-at);
+    position: absolute;
+    top: 4px;
+    transform: translateX(-50%);
+    width: 8px;
+  }
+
+  // An 8px dot is a fine mouse target and an impossible finger one. On coarse
+  // pointers a transparent pseudo-element widens the tap area to 44px without
+  // moving or resizing the mark itself. Not applied at all widths: on a mouse
+  // it would swallow hovers meant for the marks either side.
+  @media (hover: none) {
+    .kh-trail__node::after {
+      content: '';
+      inset: -18px;
+      position: absolute;
+    }
+  }
+
+  .kh-trail__node--impact {
+    background: var(--kh-color--sun--deep);
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .kh-trail__node--digesting {
+    background: transparent;
+    border: 1px solid var(--kh-color--blue);
+  }
+
+  .kh-trail__entries {
+    grid-column: 2;
+    grid-row: 2;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li + li {
+      margin-top: 0.25rem;
+    }
+  }
+
+  .kh-trail__score {
+    float: right;
+    font-variant-numeric: tabular-nums;
+    margin-left: 0.75rem;
+  }
+
+  .kh-lab-heatmap th:not(:first-child),
+  .kh-lab-heatmap td,
+  .kh-lab-pulses th:not(:first-child),
+  .kh-lab-pulses td {
+    text-align: center;
+  }
+
+  .kh-lab-heatmap td,
+  .kh-lab-pulses td {
+    background: color-mix(in srgb, var(--kh-color--blue) var(--kh-strength), transparent);
+  }
+
+  .kh-lab-heatmap td {
+    min-width: 5.5rem;
+
+    span,
+    small {
+      display: block;
+    }
+
+    span {
+      font-family: var(--kh-font-mono);
+    }
+
+    small {
+      color: var(--kh-ink-muted);
+    }
+  }
+
+  .kh-lab-pulses {
+    table-layout: fixed;
+
+    th:first-child {
+      min-width: 13rem;
+      text-align: left;
+    }
+
+    th:not(:first-child) {
+      font-size: 9px;
+      min-width: 2rem;
+      padding-inline: 0.2rem;
+      writing-mode: vertical-rl;
+    }
+
+    td {
+      font-family: var(--kh-font-mono);
+      height: 30px;
+      padding: 0.15rem;
+    }
+
+    b {
+      font-weight: 600;
+    }
+  }
+
+  .kh-lab-grid line {
+    stroke-opacity: 0.45;
+    stroke-width: 1;
+  }
+
+  .kh-lab-scatter__points circle {
+    fill: var(--kh-panel-bg);
+    stroke: var(--kh-lab-ink);
+    stroke-width: 1.5;
+  }
+
+  .kh-lab-scatter__points .is-cross-career {
+    fill: var(--kh-lab-link);
+    stroke: var(--kh-lab-link);
+  }
+
+  .kh-lab-scatter__points .is-companion {
+    opacity: 0.25;
+  }
+
+  .kh-domain-list,
+  .kh-passage-list {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+  }
+
+  .kh-domain-list {
+    border-top: 1px solid var(--kh-rule--strong);
+  }
+
+  .kh-domain {
+    align-items: center;
+    border-bottom: 1px solid var(--kh-rule);
+    display: grid;
+    gap: 0.4rem 1rem;
+    grid-template-columns: minmax(12rem, 0.65fr) minmax(8rem, 1fr) minmax(9rem, auto);
+    padding: 0.55rem 0;
+
+    > a {
+      overflow-wrap: anywhere;
+    }
+
+    > .kh-meta {
+      text-align: right;
+    }
+  }
+
+  .kh-domain__bar {
+    background: var(--kh-rule);
+    display: block;
+    height: 0.5rem;
+
+    i {
+      background: var(--kh-lab-link);
+      display: block;
+      height: 100%;
+      width: var(--kh-domain-width);
+    }
+  }
+
+  .kh-lab-suffix th:not(:first-child),
+  .kh-lab-suffix td {
+    text-align: center;
+  }
+
+  .kh-lab-suffix td {
+    background: color-mix(in srgb, var(--kh-color--blue) var(--kh-strength), transparent);
+    min-width: 7rem;
+
+    span,
+    small {
+      display: block;
+    }
+
+    span {
+      font-family: var(--kh-font-mono);
+    }
+
+    small {
+      color: var(--kh-ink-muted);
+    }
+  }
+
+  .kh-passage-list {
+    border-top: 1px solid var(--kh-rule--strong);
+  }
+
+  .kh-passage {
+    border-bottom: 1px solid var(--kh-rule);
+    padding: 1rem 0;
+
+    > .kh-meta {
+      display: block;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+  }
+
+  .kh-passage__pair {
+    align-items: center;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr) 7rem minmax(0, 1fr);
+
+    > div:not(.kh-passage__score) {
+      align-self: stretch;
+    }
+
+    p {
+      margin: 0.4rem 0 0;
+    }
+  }
+
+  .kh-passage__score {
+    color: var(--kh-ink-muted);
+    font-family: var(--kh-font-mono);
+    text-align: center;
+
+    i,
+    span {
+      display: block;
+    }
+
+    i {
+      color: var(--kh-lab-link);
+      font-style: normal;
+      margin: 0.2rem 0;
+    }
+  }
+
+  .kh-radial-comparison {
+    position: relative;
+  }
+
+  .kh-radial-radius-key {
+    margin: 0 0 0.5rem;
+    text-align: center;
+  }
+
+  .kh-radial-pair {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 1rem;
+  }
+
+  .kh-radial-panel {
+    margin: 0;
+
+    h3 {
+      margin-bottom: 0.25rem;
+      text-align: center;
+    }
+
+    figcaption {
+      margin-top: 0.25rem;
+      text-align: center;
+    }
+  }
+
+  .kh-radial {
+    display: block;
+    height: auto;
+    max-width: 100%;
+  }
+
+  .kh-radial__rings {
+    circle {
+      fill: none;
+      stroke: var(--kh-rule);
+      stroke-width: 1;
+    }
+
+    .kh-radial__degree-axis {
+      stroke: var(--kh-rule--strong);
+      stroke-width: 1;
+    }
+  }
+
+  .kh-radial__ring-labels {
+    pointer-events: none;
+
+    text {
+      fill: var(--kh-lab-ink);
+      font-family: var(--kh-font-mono);
+      font-size: 14px;
+      paint-order: stroke;
+      stroke: var(--kh-panel-bg);
+      stroke-linejoin: round;
+      stroke-width: 5px;
+    }
+  }
+
+  .kh-radial__edge-line,
+  .kh-radial__edge-hit {
+    fill: none;
+    stroke-linecap: round;
+  }
+
+  .kh-radial__edge-line {
+    stroke-width: 0.8;
+    transition-duration: 140ms;
+    transition-property: stroke-opacity, stroke-width;
+    transition-timing-function: ease-out;
+  }
+
+  .kh-radial__edge-hit {
+    pointer-events: stroke;
+    stroke: transparent;
+    stroke-width: 12;
+  }
+
+  .kh-radial__edge {
+    &.is-cross-group .kh-radial__edge-line {
+      stroke-opacity: 0.3;
+    }
+
+    &.is-ai .kh-radial__edge-line {
+      stroke: var(--kh-lab-link);
+      stroke-opacity: 0.78;
+      stroke-width: 1.15;
+    }
+
+    &.is-overlap .kh-radial__edge-line {
+      stroke-width: 1.6;
+    }
+
+    &:hover .kh-radial__edge-line,
+    &.is-highlighted .kh-radial__edge-line {
+      stroke-opacity: 1;
+      stroke-width: 2.25;
+    }
+  }
+
+  .kh-radial--authored .kh-radial__edge-line {
+    stroke: var(--kh-color--blue);
+    stroke-opacity: 0.2;
+  }
+
+  .kh-radial--semantic .kh-radial__edge-line {
+    stroke: var(--kh-lab-ink);
+    stroke-opacity: 0.1;
+  }
+
+  .kh-radial--semantic .kh-radial__edge.has-repeated-support .kh-radial__edge-line {
+    stroke-opacity: 0.22;
+    stroke-width: 1.15;
+  }
+
+  .kh-radial--semantic .kh-radial__edge.has-broad-support .kh-radial__edge-line {
+    stroke-opacity: 0.42;
+    stroke-width: 1.55;
+  }
+
+  .kh-radial--authored .kh-radial__edge.is-ai .kh-radial__edge-line,
+  .kh-radial--semantic .kh-radial__edge.is-ai .kh-radial__edge-line {
+    stroke: var(--kh-lab-link);
+    stroke-opacity: 0.78;
+  }
+
+  .kh-radial__node-mark {
+    fill: var(--kh-panel-bg);
+    stroke: var(--kh-lab-ink);
+    stroke-width: 1.2;
+    transition-duration: 140ms;
+    transition-property: fill, opacity, stroke, stroke-width;
+    transition-timing-function: ease-out;
+  }
+
+  .kh-radial__node.is-ai .kh-radial__node-mark {
+    fill: var(--kh-color--sun);
+    stroke: var(--kh-color--sun--deep);
+  }
+
+  .kh-radial__node-hit {
+    fill: transparent;
+    pointer-events: all;
+    stroke: none;
+  }
+
+  .kh-radial__node:focus-visible .kh-radial__node-mark,
+  .kh-radial__node.is-highlighted .kh-radial__node-mark {
+    stroke-width: 3;
+  }
+
+  .kh-radial__topic text {
+    cursor: default;
+    fill: var(--kh-lab-ink);
+    font-family: var(--kh-font-mono);
+    font-size: 14px;
+    transition-duration: 140ms;
+    transition-property: fill, opacity;
+    transition-timing-function: ease-out;
+  }
+
+  .kh-radial-comparison.has-highlight {
+    .kh-radial__edge:not(.is-highlighted) .kh-radial__edge-line {
+      stroke-opacity: 0.025;
+    }
+
+    .kh-radial__node:not(.is-highlighted, .is-related) .kh-radial__node-mark {
+      opacity: 0.12;
+    }
+
+    .kh-radial__topic:not(.is-highlighted, .is-related) text {
+      opacity: 0.25;
+    }
+
+    .kh-radial__edge.is-highlighted .kh-radial__edge-line {
+      stroke-opacity: 1;
+      stroke-width: 2.25;
+    }
+
+    .kh-radial__node.is-related .kh-radial__node-mark {
+      opacity: 0.72;
+      stroke-width: 1.8;
+    }
+
+    .kh-radial__node.is-highlighted .kh-radial__node-mark,
+    .kh-radial__topic.is-highlighted text {
+      opacity: 1;
+    }
+
+    .kh-radial__topic.is-highlighted text {
+      fill: var(--kh-lab-link);
+    }
+  }
+
+  .kh-radial-detail {
+    font-variant-numeric: tabular-nums;
+    margin: 0.75rem 0 0;
+    min-height: 2.5em;
+    text-align: center;
+  }
+
+  .kh-radial-timeline {
+    margin-top: 0.75rem;
+
+    svg {
+      display: block;
+      height: auto;
+      overflow: visible;
+      width: 100%;
+    }
+  }
+
+  .kh-radial-timeline__heading {
+    display: flex;
+    font-family: var(--kh-font-mono);
+    font-variant-numeric: tabular-nums;
+    justify-content: space-between;
+    margin: 0 0 0.2rem;
+  }
+
+  .kh-radial-timeline__baseline,
+  .kh-radial-timeline__trend,
+  .kh-radial-year__stem {
+    fill: none;
+    stroke: var(--kh-rule--strong);
+  }
+
+  .kh-radial-timeline__baseline {
+    stroke-width: 1;
+  }
+
+  .kh-radial-timeline__trend {
+    stroke: var(--kh-ink-muted);
+    stroke-width: 1.5;
+  }
+
+  .kh-radial-year {
+    transition-duration: 140ms;
+    transition-property: opacity;
+    transition-timing-function: ease-out;
+  }
+
+  .kh-radial-year__stem {
+    stroke-width: 1;
+  }
+
+  .kh-radial-year__mark {
+    fill: var(--kh-panel-bg);
+    stroke: var(--kh-lab-ink);
+    stroke-width: 1.4;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition-duration: 140ms;
+    transition-property: fill, stroke, transform;
+    transition-timing-function: ease-out;
+  }
+
+  .kh-radial-year text {
+    fill: var(--kh-ink-muted);
+    font-family: var(--kh-font-mono);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kh-radial-year__count {
+    opacity: 0.7;
+  }
+
+  .kh-radial-comparison.has-highlight .kh-radial-timeline {
+    .kh-radial-timeline__trend {
+      opacity: 0.2;
+    }
+
+    .kh-radial-year:not(.is-highlighted, .is-related) {
+      opacity: 0.14;
+    }
+
+    .kh-radial-year.is-related {
+      opacity: 0.55;
+    }
+
+    .kh-radial-year.is-highlighted {
+      opacity: 1;
+
+      .kh-radial-year__mark {
+        fill: var(--kh-color--sun);
+        stroke: var(--kh-color--sun--deep);
+        transform: scale(1.55);
+      }
+
+      text {
+        fill: var(--kh-lab-ink);
+      }
+    }
+  }
+
+  .kh-radial-tooltip {
+    background: var(--kh-panel-bg);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--kh-lab-ink) 18%, transparent),
+      0 8px 24px color-mix(in srgb, var(--kh-lab-ink) 18%, transparent);
+    max-width: min(22rem, calc(100% - 1rem));
+    opacity: 0;
+    padding: 0.65rem 0.8rem;
+    pointer-events: none;
+    position: absolute;
+    transform: translateY(4px);
+    transition-duration: 140ms;
+    transition-property: opacity, transform;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+    z-index: 3;
+
+    strong {
+      display: block;
+      text-wrap: pretty;
+    }
+
+    &.is-pair {
+      max-width: min(34rem, calc(100% - 1rem));
+      width: 34rem;
+    }
+
+    .kh-radial-tooltip__entries {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    &.is-pair .kh-radial-tooltip__entries {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .kh-radial-tooltip__entry {
+      min-width: 0;
+    }
+
+    &.is-pair .kh-radial-tooltip__entry + .kh-radial-tooltip__entry {
+      border-inline-start: 1px solid color-mix(in srgb, var(--kh-lab-ink) 18%, transparent);
+      margin-inline-start: 0.8rem;
+      padding-inline-start: 0.8rem;
+    }
+
+    .kh-radial-tooltip__label,
+    .kh-radial-tooltip__meta {
+      color: var(--kh-ink-muted);
+      display: block;
+      font-family: var(--kh-font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kh-radial-tooltip__label {
+      margin-bottom: 0.25rem;
+    }
+
+    .kh-radial-tooltip__meta {
+      border-top: 1px solid color-mix(in srgb, var(--kh-lab-ink) 18%, transparent);
+      margin-top: 0.25rem;
+      padding-top: 0.45rem;
+    }
+
+    &.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .kh-radial-year:nth-of-type(even):not(.is-highlighted) .kh-radial-year__label {
+      opacity: 0;
+    }
+
+    .kh-radial-tooltip.is-pair .kh-radial-tooltip__entries {
+      grid-template-columns: 1fr;
+    }
+
+    .kh-radial-tooltip.is-pair .kh-radial-tooltip__entry + .kh-radial-tooltip__entry {
+      border-inline-start: 0;
+      border-top: 1px solid color-mix(in srgb, var(--kh-lab-ink) 18%, transparent);
+      margin-block-start: 0.5rem;
+      margin-inline-start: 0;
+      padding-block-start: 0.5rem;
+      padding-inline-start: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kh-radial__edge-line,
+    .kh-radial__node-mark,
+    .kh-radial__topic text,
+    .kh-radial-year,
+    .kh-radial-year__mark,
+    .kh-radial-tooltip {
+      transition: none;
+    }
+  }
+
+  .kh-topic-sparks {
+    margin: 0 0 1.5rem;
+
+    .kh-map-scroll {
+      background: var(--kh-lab-ink);
+    }
+
+    svg {
+      display: block;
+      height: auto;
+      min-width: 56rem;
+      width: 100%;
+    }
+
+    figcaption {
+      margin-top: 0.5rem;
+      min-height: 1.5em;
+    }
+  }
+
+  .kh-topic-sparks__years {
+    line {
+      stroke: var(--kh-panel-bg);
+      stroke-opacity: 0.1;
+      stroke-width: 1;
+    }
+
+    text {
+      fill: var(--kh-panel-bg);
+      fill-opacity: 0.72;
+      font-family: var(--kh-font-mono);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  .kh-topic-sparks__area {
+    fill: var(--kh-lab-ink);
+  }
+
+  .kh-topic-sparks__line {
+    fill: none;
+    stroke: var(--kh-panel-bg);
+    stroke-linejoin: round;
+    stroke-width: 2.5;
+    transition-duration: 140ms;
+    transition-property: opacity, stroke, stroke-width;
+    transition-timing-function: ease-out;
+  }
+
+  .kh-topic-sparks__post {
+    fill: var(--kh-lab-ink);
+    stroke: var(--kh-panel-bg);
+    stroke-width: 1.25;
+    transition-duration: 140ms;
+    transition-property: fill, opacity, stroke, transform;
+    transition-timing-function: ease-out;
+  }
+
+  .kh-topic-sparks__label,
+  .kh-topic-sparks__total {
+    fill: var(--kh-panel-bg);
+    font-family: var(--kh-font-mono);
+    font-size: 12px;
+  }
+
+  .kh-topic-sparks__total {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kh-topic-sparks.has-highlight .kh-topic-sparks__series:not(.is-highlighted) {
+    .kh-topic-sparks__line,
+    .kh-topic-sparks__post,
+    text {
+      opacity: 0.16;
+    }
+  }
+
+  .kh-topic-sparks__series:hover,
+  .kh-topic-sparks__series:focus-visible,
+  .kh-topic-sparks__series.is-highlighted {
+    .kh-topic-sparks__line {
+      stroke: var(--kh-color--sun);
+      stroke-width: 3.5;
+    }
+
+    .kh-topic-sparks__post {
+      fill: var(--kh-color--sun);
+      stroke: var(--kh-color--sun);
+    }
+
+    text {
+      fill: var(--kh-color--sun);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kh-topic-sparks__line,
+    .kh-topic-sparks__post {
+      transition: none;
+    }
+  }
+
+  .kh-lab-citation {
+    font-family: var(--kh-font-mono);
+    margin-inline-start: 0.12em;
+  }
+
+  .kh-lab-sources {
+    border-top: 1px solid var(--kh-rule--strong);
+    padding-top: 1rem;
+
+    li {
+      padding-inline-start: 0.35rem;
+    }
+
+    li + li {
+      margin-top: 0.5rem;
+    }
+
+    li:target {
+      background: color-mix(in srgb, var(--kh-color--sun) 18%, transparent);
+    }
+  }
+
+  @media (max-width: $kh-breakpoint--sm) {
+    .kh-return {
+      grid-template-columns: 1fr;
+
+      > a:first-of-type,
+      > a:last-of-type,
+      > .kh-meta {
+        text-align: left;
+      }
+
+      > .kh-meta {
+        grid-column: auto;
+      }
+    }
+
+    .kh-return__hop {
+      margin: 0.5rem 0;
+    }
+
+    .kh-trail {
+      display: block;
+
+      h3,
+      .kh-trail__plot {
+        margin-bottom: 0.75rem;
+      }
+    }
+
+    .kh-domain {
+      grid-template-columns: minmax(0, 1fr) auto;
+
+      .kh-domain__bar {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+
+      > .kh-meta {
+        text-align: right;
+      }
+    }
+
+    .kh-passage__pair {
+      grid-template-columns: 1fr;
+    }
+
+    .kh-passage__score,
+    .kh-passage > .kh-meta {
+      text-align: left;
+    }
+
+    .kh-passage__score i {
+      display: none;
+    }
+
+    .kh-radial-pair {
+      grid-template-columns: 1fr;
+    }
+  }
+}

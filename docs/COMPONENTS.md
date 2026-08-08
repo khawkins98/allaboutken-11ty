@@ -8,7 +8,7 @@ Custom styles and static UI assets live under `src/components/`.
 | --- | --- | --- |
 | `src/components/vf-componenet-rollup/` | Main Sass entry and style system | Compiled to `build/css/styles.css` by `yarn sass` / `yarn dev` |
 | `src/components/kh-ambience/` | Decorative ambient background SCSS mixin | Imported into the rollup entrypoint |
-| `src/components/kh-font/` | Self-hosted Recursive font files | Copied to `build/assets/kh-font/` via passthrough |
+| `src/components/kh-font/` | Self-hosted IBM Plex font files | Copied to `build/assets/kh-font/` via passthrough |
 | `src/components/ken-favicon/assets/` | Favicon/manifest assets | Copied to `build/assets/ken-favicon/assets/` via passthrough |
 
 > `vf-componenet-rollup` is intentionally misspelled for path stability. Do not rename it.
@@ -53,13 +53,13 @@ Templates consume component output mainly via class names and static assets:
 
 1. Add/update SCSS in `src/components/` (usually via `index.scss` imports or inline module styles).
 2. Use `kh-` prefix for class naming, matching existing conventions.
-3. If component needs static assets, place them under an existing passthrough path or add a passthrough rule in `eleventy.js`.
+3. If component needs static assets, place them under an existing passthrough path or add a passthrough rule in `config/eleventy/assets-and-search.js`.
 4. Add markup in templates/partials under `src/site/`.
 
 ## Build requirements and checks
 
 - `yarn dev`: local Sass watch + Eleventy dev server.
 - `yarn lint:css`: stylelint for SCSS/CSS changes.
-- `yarn build`: full production build (includes Sass + Eleventy + embeddings).
+- `yarn build`: full production build (bootstrap HTML, semantic data, final Eleventy).
 
 For broader CSS architecture constraints, see [`CSS_ARCHITECTURE.md`](CSS_ARCHITECTURE.md). For Eleventy passthrough details, see [`ELEVENTY_CONFIG.md`](ELEVENTY_CONFIG.md).

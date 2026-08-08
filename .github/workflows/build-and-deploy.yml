@@ -7,6 +7,7 @@ on:
     paths: [
       "src/**",
       "scripts/**",
+      "config/eleventy/**",
       "eleventy.js",
       "package.json",
       "yarn.lock",
@@ -50,9 +51,16 @@ jobs:
         continue-on-error: true
       - name: Build site 🔧
         run: yarn build
-      # Reports broken internal links/anchors in the build output. Non-blocking
-      # for now (like lint:css) until the existing catalog is confirmed clean;
-      # drop continue-on-error to make it a hard gate.
+      # Hard gate. The catalog is clean (12,686 internal links, 0 broken), so
+      # the "non-blocking until confirmed clean" caveat this step used to carry
+      # has been met.
+      #
+      # It is a gate rather than a report because of what it catches. A build
+      # once shipped 48 pages whose every listing thumbnail pointed at
+      # `/.11ty/image/?src=…`, the dev-server endpoint, which 404s in
+      # production -- `failOnError: false` turns a transient image-transform
+      # failure into a broken URL rather than a failed build. The link checker
+      # DOES detect those (verified), but `continue-on-error` meant CI went
+      # green anyway and two first-time readers found them instead.
       - name: Validate internal links 🔗
         run: yarn lint:links
-        continue-on-error: true

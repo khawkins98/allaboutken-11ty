@@ -1,89 +1,28 @@
 /**
  * Eleventy configuration — allaboutken-11ty
  *
- * Sections (in order):
- *   1. Plugins        — eleventyImageTransformPlugin (responsive image transforms)
- *   2. Server options — dev-server live-reload and HTTPS stubs
- *   3. Transforms     — fixImageSrcToAbsolute (rewrite build-time img paths)
- *   4. Filters        — dateDisplay, limitItems, ensureTrailingSlash, rssDate,
- *                       rssLastUpdatedDate, emdash, htmlToAbsoluteUrls,
- *                       sanitizeFeedHtml, wordCount, formatNumber
- *   5. Markdown       — markdown-it with heading anchors + emdash plugin;
- *                       `markdown` paired shortcode
- *   6. Shortcodes     — codeAndDemo (paired), ogImageUrl
- *   7. Passthrough    — JS files, favicon assets, images, fonts, legacy HTML
- *   8. Pagefind hook  — post-build keyword-search index (async in dev, sync in prod)
- *   9. Collections    — impactStories, blogPosts, allContent
- *  10. Return config  — dir, templateFormats, template engine overrides
+ *
+ * Keep this root file as the assembly point: server options, broadly useful
+ * filters and the returned directory/template configuration remain visible
+ * here. Concern-specific registrations live in config/eleventy/. Each module
+ * exports one registration function and preserves the public filter,
+ * shortcode and collection names used by templates.
  */
 
 const { DateTime } = require('luxon');
-const Path         = require('path');
-const { execSync, exec } = require('child_process');
-const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
-// const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
+const { registerImagePlugin, registerImageTransform } = require('./config/eleventy/images');
+const registerTimeline = require('./config/eleventy/timeline');
+const registerTopicVisuals = require('./config/eleventy/topic-visuals');
+const registerSemanticVisuals = require('./config/eleventy/semantic-visuals');
+const registerStats = require('./config/eleventy/stats');
+const registerMarkdown = require('./config/eleventy/markdown');
+const registerCollections = require('./config/eleventy/collections');
+const registerAssetsAndSearch = require('./config/eleventy/assets-and-search');
 
 module.exports = function(config) {
   const isDev = process.env.ELEVENTY_ENV === 'development';
-  // Transform <img>/<picture> in HTML to responsive images at build time
-  config.addPlugin(eleventyImageTransformPlugin, {
-    outputDir: "./build/img/",
-    urlPath: "/img/",
-    widths: [320, 600, 900, 1280],
-    formats: ["avif", "webp", "jpeg", "gif"],
-    transformOnRequest: isDev,
-    // Do not fail the entire build on a single image error (e.g., 404 remote)
-    failOnError: false,
-    // Preserve animation for GIF/WEBP when resizing/encoding
-    sharpOptions: {
-      animated: true
-    },
-    sharpWebpOptions: {
-      animated: true
-    },
-    sharpGifOptions: {
-      reoptimise: true
-    },
-    // Deterministic file names: <dir-token>-<base-name>-<width>.<format>
-    filenameFormat: function filenameFormat(id, src, width, format) {
-      try {
-        let baseName = '';
-        let dirToken = '';
-        if (typeof src === 'string') {
-          if (src.startsWith('http://') || src.startsWith('https://')) {
-            const u = new URL(src);
-            baseName = Path.basename(u.pathname) || u.hostname;
-            const parts = (u.pathname || '').split('/').filter(Boolean);
-            dirToken = parts.length > 1 ? parts[parts.length - 2] : '';
-          } else {
-            baseName = Path.basename(src);
-            const parentDir = Path.basename(Path.dirname(src));
-            dirToken = parentDir;
-          }
-        }
-        baseName = String(baseName || 'image').replace(/\.[a-z0-9]+$/i, '');
-        const safe = baseName
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/^-+|-+$/g, '');
-        const dirSafe = String(dirToken || '')
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/^-+|-+$/g, '');
-        const name = dirSafe ? `${dirSafe}-${safe}` : safe;
-        return `${name}-${width}.${format}`;
-      } catch (e) {
-        return `${id}-${width}.${format}`;
-      }
-    },
-    htmlOptions: {
-      img: {
-        decoding: "async",
-        loading: "lazy",
-        sizes: "100vw"
-      }
-    }
-  });
+  const isBootstrap = process.env.ELEVENTY_BOOTSTRAP === '1';
+  registerImagePlugin(config, isDev);
   config.setServerOptions({
     showVersion: true,
     liveReload: true,
@@ -108,17 +47,7 @@ module.exports = function(config) {
     encoding: "utf-8",
   });
 
-  // Fix any image src paths that were rewritten to input filesystem paths.
-  // Ensures URLs point to passthrough-copied /images/ in output.
-  config.addTransform("fixImageSrcToAbsolute", (content, outputPath) => {
-    try {
-      if (typeof content !== 'string') return content;
-      if (!outputPath || !outputPath.endsWith('.html')) return content;
-      return content.replace(/src="(?:\.\.\/)*src\/site\/images\//g, 'src="/images/');
-    } catch (e) {
-      return content;
-    }
-  });
+  registerImageTransform(config);
 
   // Filters
   // https://www.11ty.io/docs/filters/
@@ -218,251 +147,79 @@ module.exports = function(config) {
     }
   });
 
-  // // Estimate reading time in minutes at ~225 words per minute (min 1)
-  // config.addFilter("readingTime", (content, wpm = 225) => {
-  //   try {
-  //     const words = config.getFilter("wordCount")(content);
-  //     const perMinute = Number(wpm) > 0 ? Number(wpm) : 225;
-  //     const minutes = Math.max(1, Math.ceil(words / perMinute));
-  //     return minutes;
-  //   } catch (e) {
-  //     return 1;
-  //   }
-  // });
-
-  // Configure Markdown-It with anchor IDs for headings and use it globally
-  const markdownIt = require('markdown-it');
-  const markdownItAnchor = require('markdown-it-anchor');
-
-  // Plugin to convert double hyphens to em dashes in Markdown text tokens
-  const emdashPlugin = (md) => {
-    md.core.ruler.after('inline', 'emdash', (state) => {
-      state.tokens.forEach((blockToken) => {
-        if (blockToken.type !== 'inline' || !Array.isArray(blockToken.children)) return;
-        blockToken.children.forEach((token) => {
-          if (token.type === 'text') {
-            token.content = token.content.replace(/--/g, '—');
-          }
-        });
-      });
-    });
-  };
-
-  const md = markdownIt({ html: true, linkify: true }).use(markdownItAnchor, {
-    // Add ids to all heading levels so we can deep-link
-    level: [1, 2, 3, 4, 5, 6],
-    // Create clean ASCII slugs: remove punctuation/specials, collapse spaces to '-'
-    slugify: (s) => (
-      (s || '')
-        .toString()
-        .toLowerCase()
-        .normalize('NFKD')
-        .replace(/[\u0300-\u036f]/g, '') // strip combining marks
-        .replace(/&amp;/g, 'and')
-        .replace(/[^a-z0-9\s-]/g, '') // drop punctuation and specials (e.g. ?!@():’–)
-        .replace(/[\s_-]+/g, '-')
-        .replace(/^-+|-+$/g, '')
-    ),
-
-    // Append a discrete '#' permalink link to the end of the heading content
-    permalink: (slug, opts, state, index) => {
-      try {
-        const inlineToken = state.tokens[index + 1];
-        if (!inlineToken || !Array.isArray(inlineToken.children)) return;
-        // Create a small '#' anchor link that is the only clickable element
-        const linkOpen = new state.Token('link_open', 'a', 1);
-        linkOpen.attrs = [
-          ['href', `#${slug}`],
-          ['class', 'kh-anchor'],
-          ['aria-label', 'Permalink to this heading']
-        ];
-        const textToken = new state.Token('text', '', 0);
-        textToken.content = '#';
-        const linkClose = new state.Token('link_close', 'a', -1);
-
-        inlineToken.children.push(linkOpen, textToken, linkClose);
-      } catch (e) {
-        // no-op
-      }
-    }
-  }).use(emdashPlugin);
-
-  // Use for Eleventy's markdown engine (for .md files and markdown in templates)
-  config.setLibrary('md', md);
-  // Paired shortcode to render inline markdown blocks consistently
-  config.addPairedShortcode('markdown', (content) => md.render(content || ''));
-
-  // Paired shortcode: render escaped code and a live demo from the same HTML snippet
-  // Usage (place outside of a {% markdown %} block):
-  // {% codeAndDemo 'html' %}
-  // <form>...</form>
-  // <script>...</script>
-  // {% endcodeAndDemo %}
-  config.addPairedShortcode('codeAndDemo', (content, lang = 'html') => {
-    const snippet = String(content || '');
-    const escapeHtml = (s) => (
-      String(s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-    );
-    const escaped = escapeHtml(snippet);
-    return [
-      '<div class="kh-demo" data-pagefind-ignore>',
-      `<pre><code class="language-${lang}">${escaped}</code></pre>`,
-      '<div class="kh-demo__live">',
-      snippet,
-      '</div>',
-      '</div>'
-    ].join('');
-  });
-
-  // Shortcode to generate Eleventy screenshot service URL for dynamic OG images
-  // Usage: {% ogImageUrl %}
-  config.addShortcode('ogImageUrl', function() {
-    // Build the social card URL for this page
-    const socialCardUrl = `https://www.allaboutken.com/social${this.page.url}`;
-    // URI encode the URL for the screenshot service
-    const encodedUrl = encodeURIComponent(socialCardUrl);
-    // Return the screenshot service URL with opengraph size (1200x630)
-    return `https://v1.screenshot.11ty.dev/${encodedUrl}/opengraph/`;
-  });
-
-  // Removed custom codeblock tag; posts now use fenced code blocks in markdown.
-
-  // config.addFilter("makeLowercase", function(value) {
-  //   value = value || '';
-  //   return value.toLowerCase();
-  // });
-
-  // config.addFilter("spaceToDashes", function(value) {
-  //   value = value || '';
-  //   return value.replace(/\s+/g, '-').toLowerCase();
-  // });
-
-  // Shortcodes
-  // https://www.11ty.io/docs/shortcodes/
-  // nunjucks
-  // {% sampleShortcode "firstName", "lastName" %}
-  // handlebars
-  // {{ sampleShortcode "firstName" "lastName" }}
-  // config.addShortcode("sampleShortcode", function(firstName, lastName) {
-  //   return 'hi ' + firstName + lastName;
-  // });
-
-  // config.addNunjucksTag("uppercase", function(nunjucksEngine) {
-  //   return new function() {
-  //     this.tags = ["uppercase"];
-  //
-  //     this.parse = function(parser, nodes, lexer) {
-  //       var tok = parser.nextToken();
-  //
-  //       var args = parser.parseSignature(null, true);
-  //       parser.advanceAfterBlockEnd(tok.value);
-  //
-  //       return new nodes.CallExtensionAsync(this, "run", args);
-  //     };
-  //
-  //     this.run = function(context, myStringArg, callback) {
-  //       let ret = new nunjucksEngine.runtime.SafeString(
-  //         myStringArg.toUpperCase()
-  //       );
-  //       callback(null, ret);
-  //     };
-  //   }();
-  // });
-
-  // copy js files
-  config.addPassthroughCopy("./src/site/**/*.js");
-  // pass through favicon assets
-  config.addPassthroughCopy({ "./src/components/ken-favicon/assets": "assets/ken-favicon/assets" });
-
-  // pass some assets right through
-  config.addPassthroughCopy("./src/site/images");
-
-  // Copy local Recursive font assets to build
-  config.addPassthroughCopy({ "./src/components/kh-font": "assets/kh-font" });
-  // mostly needed for redirecting from old drupal urls
-  config.addPassthroughCopy("./src/site/**/*.html");
-  // downloadable text resources (starter kits, templates)
-  config.addPassthroughCopy("./src/site/**/*.txt");
-
-  // Watch source images for changes
-  config.addWatchTarget("./src/site/images");
-
-  // Post-build: generate Pagefind search index
-  let pagefindChild = null;
-  config.on('eleventy.after', () => {
-    const cmd = 'pagefind --site build --exclude-selectors "pre, code"';
-    if (isDev) {
-      // Kill any previous run so overlapping builds don't corrupt the index
-      if (pagefindChild) {
-        pagefindChild.kill();
-        pagefindChild = null;
-      }
-      // Run in background so dev rebuilds aren't blocked
-      pagefindChild = exec(cmd, (err) => {
-        pagefindChild = null;
-        if (err && !err.killed) console.error('Pagefind index build failed');
-      });
-      pagefindChild.stdout?.pipe(process.stdout);
-      pagefindChild.stderr?.pipe(process.stderr);
-    } else {
-      try {
-        execSync(cmd, { stdio: 'inherit' });
-      } catch (e) {
-        console.error('Pagefind index build failed');
-      }
-    }
-  });
-
-  // Collections
-  function getTagArray(item) {
-    const tags = item.data?.tags || [];
-    return Array.isArray(tags) ? tags : [tags];
-  }
-
-  config.addCollection('impactStories', (collectionApi) => {
+  // Extract h2 headings (id + text) from rendered content for the post
+  // contents rail. Depends on the markdown-it-anchor ids added below; the
+  // trailing '#' permalink anchor is stripped from the visible text.
+  config.addFilter("tocEntries", (content) => {
     try {
-      return collectionApi.getAll()
-        .filter((item) => getTagArray(item).includes('impact-stories'))
-        .sort((a, b) => b.date - a.date);
+      const html = String(content || '');
+      const entries = [];
+      const re = /<h2[^>]*\sid="([^"]+)"[^>]*>([\s\S]*?)<\/h2>/gi;
+      let match;
+      while ((match = re.exec(html)) !== null) {
+        const text = match[2]
+          .replace(/<a[^>]*class="kh-anchor"[\s\S]*?<\/a>/gi, ' ')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/&amp;/g, '&')
+          .replace(/[\s\n\r\t]+/g, ' ')
+          .trim();
+        if (match[1] && text) entries.push({ id: match[1], text });
+      }
+      return entries;
     } catch (e) {
       return [];
     }
   });
 
-  config.addCollection('blogPosts', (collectionApi) => {
+  // Document reference for the post masthead, in the datasheet register.
+  // Blog posts derive it from the dated file slug (`20260626-down-the-stack`
+  // -> `AAK-20260626`), falling back to the post date if a slug ever lacks
+  // the prefix. Stable because slugs are permalinks and never renamed.
+  config.addFilter("docRef", (page) => {
     try {
-      return collectionApi.getAll()
-        .filter((item) => {
-          const tags = getTagArray(item);
-          return tags.includes('posts')
-            && !tags.includes('case-studies')
-            && !tags.includes('impact-stories');
-        })
-        .sort((a, b) => b.date - a.date);
+      const m = /^(\d{8})(?:-|$)/.exec((page && page.fileSlug) || '');
+      if (m) return `AAK-${m[1]}`;
+      const d = new Date(page && page.date);
+      if (!isNaN(d)) {
+        const pad = (n) => String(n).padStart(2, '0');
+        return `AAK-${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}`;
+      }
+      return null;
     } catch (e) {
-      return [];
+      return null;
     }
   });
 
-  config.addCollection('allContent', (collectionApi) => {
+  // Impact stories carry an `IS-nn` part number, shared between the /work
+  // spec table and the story's own masthead so the register row and the
+  // document it points to can never disagree. Numbers are assigned in
+  // date-ASCENDING order (oldest story = IS-01) so new work appends to the
+  // register instead of renumbering it -- the impactStories collection
+  // itself is newest-first for display. The only way an existing ref moves
+  // is backdating a story before another; don't do that.
+  config.addFilter("impactStoryRef", (stories, url) => {
     try {
-      return collectionApi.getAll()
-        .filter((item) => {
-          const tags = getTagArray(item);
-          return tags.includes('posts') || tags.includes('digesting');
-        })
-        .sort((a, b) => b.date - a.date);
+      const ordered = (stories || []).slice().sort((a, b) => (
+        (a.date - b.date) || String(a.url).localeCompare(String(b.url))
+      ));
+      const i = ordered.findIndex((p) => p.url === url);
+      return i === -1 ? null : `IS-${String(i + 1).padStart(2, '0')}`;
     } catch (e) {
-      return [];
+      return null;
     }
   });
 
-  // Image transforms run on-request in dev; no separate watcher is required
+  registerTimeline(config);
+  registerTopicVisuals(config);
+  registerSemanticVisuals(config);
+  registerStats(config);
 
-  // If you have other `addPlugin` calls, it’s important that UpgradeHelper is added last.
+  registerMarkdown(config);
+
+  registerAssetsAndSearch(config, isDev, isBootstrap);
+
+  registerCollections(config);
+
   return {
     dir: {
       input: "src/site",

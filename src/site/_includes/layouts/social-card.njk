@@ -4,12 +4,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-      /* Load Recursive font from site */
+      /* Load IBM Plex from site. font-display: block so the screenshotter
+         never captures a fallback-font frame. */
       @font-face {
-        font-family: 'Recursive';
-        src: url('https://www.allaboutken.com/assets/kh-font/Recursive_VF_1.085--subset-GF_latin_basic.woff2') format('woff2');
-        font-weight: 300 800;
-        font-style: oblique -15deg 0deg;
+        font-family: 'IBM Plex Sans';
+        src: url('https://www.allaboutken.com/assets/kh-font/IBMPlexSans-Regular.woff2') format('woff2');
+        font-weight: 400;
+        font-display: block;
+      }
+
+      @font-face {
+        font-family: 'IBM Plex Sans';
+        src: url('https://www.allaboutken.com/assets/kh-font/IBMPlexSans-SemiBold.woff2') format('woff2');
+        font-weight: 600;
+        font-display: block;
+      }
+
+      @font-face {
+        font-family: 'IBM Plex Mono';
+        src: url('https://www.allaboutken.com/assets/kh-font/IBMPlexMono-Regular.woff2') format('woff2');
+        font-weight: 400;
         font-display: block;
       }
 
@@ -25,9 +39,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #fbf6ef;
-        font-family: 'Recursive', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        padding: 60px;
+        background: #fffae1;
+        font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        padding: 48px;
         overflow: hidden;
         {% if image %}
         background-image: url('https://www.allaboutken.com/images{{ image }}');
@@ -36,37 +50,64 @@
         {% endif %}
       }
 
+      /* Hairline frame rather than accent bars. 2px, not 1px: the card is
+         routinely scaled to a thumbnail and a hairline vanishes there. */
       .card {
-        background: {% if image %}rgba(251, 246, 239, 0.95){% else %}#fbf6ef{% endif %};
-        padding: 60px;
+        background: {% if image %}rgba(255, 250, 225, 0.94){% else %}#fffae1{% endif %};
+        border: 2px solid #2b2b28;
         width: 100%;
         height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        border-bottom: 8px solid #f49e17;
-        position: relative;
         {% if image %}
-        backdrop-filter: blur(2px);
+        backdrop-filter: blur(3px);
         {% endif %}
       }
 
-      /* Orange accent bar at top */
-      .card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 8px;
-        background: #f49e17;
+      /* Mono straps top and bottom, in the same grammar as the site header. */
+      .strap {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 22px 44px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 22px;
+        font-weight: 400;
+        letter-spacing: 0.04em;
+      }
+
+      .strap--top {
+        border-bottom: 2px solid #ded2a8;
+      }
+
+      .strap--bottom {
+        border-top: 2px solid #ded2a8;
+        margin-top: auto;
+      }
+
+      .strap__mark {
+        color: #bf4a26;
+      }
+
+      .strap__meta {
+        color: #5b5e5a;
+      }
+
+      .body {
+        padding: 52px 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+        min-height: 0;
       }
 
       .title {
         font-size: 64px;
-        font-weight: 800;
-        font-variation-settings: 'wght' 800, 'MONO' 0, 'CASL' 1;
-        line-height: 1.2;
+        font-weight: 600;
+        letter-spacing: -0.025em;
+        line-height: 1.1;
         color: #222;
         margin-bottom: 24px;
         display: -webkit-box;
@@ -76,52 +117,35 @@
       }
 
       .description {
-        font-size: 32px;
+        font-size: 30px;
         line-height: 1.45;
-        font-weight: 300;
-        color: #222;
-        margin-bottom: auto;
+        font-weight: 400;
+        color: #373a36;
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
 
-      .footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 48px;
-        padding-top: 32px;
-        border-top: 2px solid #e0d8ca;
-      }
-
-      .site {
-        font-size: 28px;
-        font-weight: 800;
-        font-variation-settings: 'wght' 800, 'MONO' 1, 'CASL' 0;
-        color: #222;
-        letter-spacing: -0.5px;
-      }
-
-      .author {
-        font-size: 24px;
-        font-weight: 500;
-        color: #707372;
-      }
     </style>
   </head>
   <body>
     <div class="card">
-      <div>
+      <div class="strap strap--top">
+        <span class="strap__mark">AllAboutKen.com</span>
+        <span class="strap__meta">{{ siteConfig.siteInformation.author }}</span>
+      </div>
+      <div class="body">
         <h1 class="title">{{ title | safe }}</h1>
         {% if teaser or siteConfig.siteInformation.short_description %}
         <p class="description">{{ (teaser or siteConfig.siteInformation.short_description) | safe }}</p>
         {% endif %}
       </div>
-      <div class="footer">
-        <div class="site">AllAboutKen.com</div>
-        <div class="author">{{ siteConfig.siteInformation.author }}</div>
+      <div class="strap strap--bottom">
+        {#- Only dated content shows a date; the homepage's 2018 frontmatter date
+            on a card would read as a stale site. -#}
+        <span class="strap__meta">{% if cardPage.date and cardPage.data.tags and ('posts' in cardPage.data.tags) %}{{ cardPage.date | dateDisplay }}{% endif %}</span>
+        <span class="strap__meta">Digital platforms &amp; audience engagement</span>
       </div>
     </div>
   </body>

@@ -1,0 +1,133 @@
+---
+title: "A fresh coat of paint and making information actionable for 24 years"
+layout: layouts/post.njk
+teaser: "From early 2000s information design to semantic maps in 2026, the tools changed; my interest in how information connects did not."
+date: 2026-08-08
+tags:
+  - posts
+topics:
+  - career reflection > personal archive
+  - data visualization > corpus storytelling
+  - static sites > personal publishing
+  - content strategy > digital preservation
+kens_status: published
+image: /blog/20years-rating-our-schools.jpg
+image_meta:
+  text: 'Rating our schools, November 2006: the stars, the shading and the grouping by district were an attempt to make it answerable at a glance. It was a real find-replace joy.'
+  credit: 'Own work.'
+  altext: 'The top of a newspaper page headed "Rating our schools". A key reads five stars for Excellent down to one star for Unsatisfactory, and three columns of tables list schools by district, each row rated in stars for improvement and for absolute scores across 2003 to 2006.'
+---
+
+{% markdown %}
+
+Over the last months, I've been reflecting on my career, how I position what it is I do and how I use this site to communicate it. ("Person who is good at translating between technical and non-technical stakeholders" is a useful skill, but not what I do, nor a marketable term.) I decided to scratch that itch by looking through some of my old online presences, the websites and the photo archives, expecting mostly nostalgia. But I found new clarity on the same question I work on now: how should information be arranged so someone can find it, understand it and connect it to something else?
+
+The record I can recover runs from 2002 to 2026. The tools changed from static HTML and Flash to content models, semantic embeddings and server-rendered SVG. Reading it back gave this blog a structure it has always needed.
+
+## Brace yourself for some meditative navel gazing
+
+My first website was a GeoCities page I made in high school around 1997. I may never find it again. My memory is that I first edited HTML in HotDog, a Windows editor [released in 1995](https://www.webdesignmuseum.org/software/hotdog-1-0-in-1995).
+
+What I remember is not the page but the reaction. A friend (Melissa, who I don't think I've spoken to since graduation) and I found it genuinely mind-bending that we could make a thing and have it be *there*, addressable by anyone, without asking permission or paying a gatekeeper.
+
+The first substantial site I can recover is Environmental Media. The Wayback Machine kept a [2002 snapshot of the site](https://web.archive.org/web/20020120145620/https://envmedia.com/), which I built in 2001 with search, Flash video and an online shop. The implementation is very much of its time; the interest in helping people navigate different kinds of information is less so.
+
+An [October 2002 snapshot of Stuffed in a Box](https://web.archive.org/web/20021012212136/http://www.stuffedinabox.com/) preserves a mostly "Coming Soon" site for my tiny web-design service. By April 2003, an [online résumé](https://web.archive.org/web/20030425093346/http://www.stuffedinabox.com/portfolio/resume/index.htm) listed Stuffed in a Box Design as a self-owned business and used proper em dashes — way before AI killed being a cool kid who knew how to.
+
+The blog arrived on [5 September 2003](https://web.archive.org/web/20050206010037/http://www.stuffedinabox.com/archives/000004.html). Its first post, "I've done and will do," promised observations about newspapers, infographics, technology, politics and history. A post the following September admitted that it had been nearly a year since the last one, but the intended subjects are recognizable.
+
+Flickr supplies more breadcrumbs, two of them a month apart. In November 2006 I posted [a newspaper page I had laid out](https://www.flickr.com/photos/khawkins04/301936689/): every school in five South Carolina districts, rated across four years of state report cards.
+
+South Carolina published words rather than numbers: excellent, good, average, below average, unsatisfactory, for every school, four years running. Words do not stack up. You cannot skim two hundred of them and come away with a shape. Stars you can count, and counting is what a parent looking for their own school actually does.
+
+A month later I uploaded [a close-up of a pinched letterform](https://www.flickr.com/photos/khawkins04/337710045/): I was already stopping to admire ink traps in 2006. Something I found myself dwelling on again twelve years later, [when considering fonts for digital data](/posts/20180319-data-font-for-life-sciences.html).
+
+The next many years would be consumed by [TheDigitel.com](https://www.TheDigitel.com), an excellent if poorly timed idea for hyperlocal news that I co-founded (2008 was bad for the entire economy, advertiser budgets included). I won't digress into that; it is a full-on post of its own.
+
+## Reading the archive instead of scrolling it
+
+I finally parted ways with TheDigitel in 2011, taking a job offer in Germany, and resurfaced writing on this site in 2013. It now contains roughly a hundred entries written on and off across different jobs, tools and versions of the site. That is a mineable pool: enough to compare topics and surface passages that resemble one another. It is also enough for a conventional reverse-chronological blog to hide most of what is there.
+
+This 2026 redesign began with typography, graph paper and a more technical datasheet vocabulary. Posts gained document references. The [archive gained a timeline](/archive/), while [topic pages](/directory/#subjects) and small activity charts made it possible to browse by subject rather than only by publication date.
+
+<article class="kh-bleed-out">
+  <div class="kh-compare" style="--kh-compare-split: 50%;">
+    <img class="kh-compare__img" src="/images/blog/oldsite-post-masthead.jpg" alt="The old head of the same entry: a site navigation bar, a back link, then the title reversed out of a wide yellow band, with the date, word count and a comma-separated list of tags beneath it." loading="lazy" />
+    <img class="kh-compare__img kh-compare__img--after" src="/images/blog/newsite-post-masthead.jpg" alt="The new head of the same entry: a row of dots marking every month since 2013, a document reference reading Ref AAK-20260330, the title, then the date, word count, a small length gauge, and three topics each with a count." loading="lazy" />
+    <span class="kh-compare__label kh-compare__label--before" aria-hidden="true">Before</span>
+    <span class="kh-compare__label kh-compare__label--after" aria-hidden="true">After</span>
+    <span class="kh-compare__handle" aria-hidden="true"></span>
+    <input class="kh-compare__range" type="range" min="0" max="100" value="50" step="1" aria-label="Reveal more of the new layout" />
+  </div>
+  <figcaption class="kh-text-body--3">The same entry, before and after. The head now reads like a datasheet: a document reference, a length gauge against the corpus median, and topics with the number of other entries filed under each. Drag to compare, or focus the slider and use the arrow keys.</figcaption>
+</article>
+
+{# Mirrors the range input's value into the custom property the CSS reads;
+   the range itself supplies pointer, touch and keyboard interaction. With no
+   JavaScript the split stays at the inline 50% and this reads as a static
+   before/after, which is why the value is set inline rather than here.
+   `querySelectorAll` because a post may carry more than one comparison --
+   the earlier font post's copy of this script assumed a single instance. #}
+<script>
+  (function () {
+    document.querySelectorAll('.kh-compare').forEach(function (figure) {
+      var range = figure.querySelector('.kh-compare__range');
+      if (!range) return;
+      var apply = function () {
+        figure.style.setProperty('--kh-compare-split', range.value + '%');
+      };
+      range.addEventListener('input', apply);
+      apply();
+    });
+  })();
+</script>
+
+A blog normally asks, "What did I publish most recently?" A register asks, "What is here, and how does one thing relate to another?"
+
+The newest entry is not necessarily the best way into the work. A [2017 post about information architecture](/posts/20170723-corporate-design-through-ia.html) leads more naturally to a [2026 argument about content delivery](/posts/20260327-content-architecture-shipping-container/) than to whatever happened to be published between them. A [type experiment from 2018](/posts/20180319-data-font-for-life-sciences.html) makes more sense beside later work on [data fonts](/posts/20260512-datatype-data-font-inside-out/) and [embedded SVG text](/posts/20260429-svgomg-font/).
+
+<figure class="kh-bleed-out">
+  <a href="/stats/story-lab/#returns"><img src="/images/blog/newsite-story-lab-returns.jpg" alt="A chronological arc diagram from 2013 to 2026 over four career bands labeled DRS, EMBL-EBI, EMBL and UNDRR. Tall arcs connect entries at least three years apart; the tallest reach from 2017 and 2018 across to 2025 and 2026, and most marks cluster near 2026." class="kh-figure__image" /></a>
+  <figcaption class="kh-figure__caption">The same pairs, drawn. Each tall arc joins two entries at least three years apart: the 2017 information-architecture post reaching the 2026 content-delivery argument, the 2018 data-font experiment reaching later font work. Height is the years between two entries, never strength. <a href="/stats/story-lab/#returns">The Story Lab</a> has the interactive version.</figcaption>
+</figure>
+
+My little demo that I've called the "[Corpus Story Lab](/stats/story-lab/)" tests those readings. One view stacks every topic as its own line, so it is possible to see when each was active and which ones came back. Another view assembles "biographies" from a few editorial anchor posts and the entries closest to them in meaning.
+
+<figure class="kh-bleed-out">
+  <a href="/stats/story-lab/"><img src="/images/blog/newsite-story-lab-joyplot.jpg" alt="A ridgeline chart on a dark ground: one offset line per topic, stacked from cloud infrastructure at the top down to search at the bottom, each tracing that topic's activity from 2013 to 2026 with its entry total at the right. Most lines are flat until a spike near 2026; AI totals 19." class="kh-figure__image" /></a>
+  <figcaption class="kh-figure__caption">Every topic as its own line, offset and overlapping, after Kevin Marks's <em>The Joy of Sparks</em>. Each row is normalized to its own peak, so height compares timing and shape within a row and never volume between rows; the number at the right is that topic's total in the semantic corpus the lab draws on, which runs smaller than the full <a href="/directory/#subjects">topic index</a>. <a href="/stats/story-lab/">The Story Lab</a> has the interactive version.</figcaption>
+</figure>
+
+That typography biography currently begins with writing from 2017 and 2018. The Flickr photograph shows why the larger archive matters: the visualization is not wrong, but its corpus is incomplete.
+
+<figure class="kh-bleed-out">
+  <a href="/stats/story-lab/#biographies"><img src="/images/blog/newsite-story-lab-biographies.jpg" alt="Three stacked biography trails, each a labeled row with a small dotted timeline: 'Typography and data', 'Rebuilding and preserving a personal site' and 'Reusable systems at organizational scale'. Each row lists its linked entries by year with a similarity score, and every timeline's marks cluster toward the recent end." class="kh-figure__image" /></a>
+  <figcaption class="kh-figure__caption">Three assembled biographies, each a row with its own small timeline. The "Typography and data" trail begins in 2017, so the 2006 ink-trap photograph is nowhere in it; the archive the lab reads only starts in 2013. Notice how every trail's marks bunch toward the recent end. <a href="/stats/story-lab/#biographies">The Story Lab</a> has the interactive version.</figcaption>
+</figure>
+
+## Similarity, meaningfully
+
+This site has a [semantic search index](/posts/20260302-semantic-search-browser-embeddings/) which I've used to connect repeated language and adjacent subject matter. It does not show that one idea caused another, that an employer shaped a topic, or even that I consciously remembered an older post while writing a newer one. It also only knows what I have published here: drafts, navigation and everything off-site never enter it, so its totals sit below the topic counts and the decade before 2013 barely registers. The map is candid about its own gaps, and that turns out to be the useful part.
+
+Compounding this, much of the meaning I'd like to draw from still lives elsewhere:
+
+- more than a thousand photographs in [my Flickr archive](https://www.flickr.com/photos/khawkins04/), which should not remain their only home;
+- writing published through employers, projects and publications that now lives on sites I do not control;
+- small tools and experiments spread across [my GitHub repositories](https://github.com/khawkins98);
+- older versions of this site preserved unevenly in Git history and the Wayback Machine.
+
+The role I want for this site is an index across them: photographs, projects and recovered articles, each carrying its date, its original context and a link back to where it first appeared.
+
+Photography is the part I most want to bring back as an active practice, not only a rescue operation. The current archive is heavily weighted toward words and software.
+
+The site has been rebuilt several times, each migration about the machinery: [Drupal](https://web.archive.org/web/20150725050631/http://work.allaboutken.com/), [Gulp](/posts/20170725-site-update.html), [Panini](/posts/20180210-zurb-panini-2-migration.html), [Eleventy](/posts/20200713-moving-from-panini-to-eleventy/), then a [much simpler Eleventy stack](/posts/20250831-site-overhaul-eleventy-v3/). This rebuild started with a question about myself instead: how to say what I do without reaching for "person who translates between technical and non-technical people," which is a real skill and a hopeless title.
+
+I have settled, for now, on Digital Platforms & Audience Engagement Lead, but the longer winded, and truer, version is the through line the record keeps showing me: not a platform, not a publishing habit, but repeated efforts to make information legible, navigable, impactful and connected, for the people reading it and increasingly for the machines reading on their behalf.
+
+The fresh coat of paint is fun. The datasheet vocabulary, the timeline and the Story Lab are there to make this collection legible, not just recent.
+
+Twenty years ago I turned two hundred words the state would not add up into a column of stars a parent could count at a glance. This is the same move, pointed at myself: taking a career that only ever arrived one post at a time and arranging it so the shape is finally countable. That is why the archive is worth keeping: enough context to see the shape, and enough structure to keep following it.
+
+I look forward to refining this, and hopefully that refines me.
+
+{% endmarkdown %}

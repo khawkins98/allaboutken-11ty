@@ -3,6 +3,9 @@
 @use './kh-content' as kh-content;
 @use './settings' as *;
 @use './semantic-search' as semantic-search;
+@use './kh-datasheet' as kh-datasheet;
+@use './kh-dataviz' as kh-dataviz;
+@use './kh-story-lab' as kh-story-lab;
 @use '../kh-ambience/kh-ambience' as kh-ambience;
 
 html {
@@ -23,11 +26,32 @@ body:has(#kh-css-toggle:checked) {
   @include normalize.kh-normalize();
   @include kh-content.kh-vf-content();
   @include semantic-search.semantic-search-styles();
+  @include kh-datasheet.kh-datasheet();
+  @include kh-dataviz.kh-dataviz();
+  @include kh-story-lab.kh-story-lab();
   --kh-color--grey: #707372;
   --kh-color--grey--darkest: #373a36;
   --kh-color--blue: #3b6fb6;
   --kh-color--blue--dark: #193f90;
-  --kh-color--orange: #f49e17;
+  // Sunlight yellow, re-keyed from the old orange (#f49e17).
+  // --sun is the fill/border tone; --sun--deep is the only one safe for text
+  // on a light ground; --yellow--dark is the deeper band tone.
+  // Ground + graph paper. Swap --kh-ground/--kh-grid-ink together for the
+  // drafting-blue variant: #eef3f7 with rgb(120 150 175 / 20%).
+  --kh-ground: #fffae1;
+  --kh-grid-size: 26px;
+  --kh-grid-size--major: 130px; // every 5th line
+  // These two are the dial for how present the paper is. The ratio between
+  // them is what keeps the two tiers legible as tiers -- roughly 1:1.6 -- so
+  // change them together rather than one at a time.
+  --kh-grid-ink: rgb(196 168 88 / 5%);
+  --kh-grid-ink--major: rgb(196 168 88 / 8%);
+  --kh-color--sun: #ffd21e;
+  --kh-color--sun--deep: #8f6600;
+  --kh-color--yellow--dark: #f0b429;
+  --kh-color--orange: var(--kh-color--sun); // deprecated alias
+  --kh-font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --kh-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   --kh-body-width: 81.25em;
   --kh-page-grid-gap: 1rem;
   --kh-grid-stylized-module--prime: 16rem;
@@ -36,9 +60,23 @@ body:has(#kh-css-toggle:checked) {
     --kh-page-grid-gap: 2rem;
   }
 
-  font-family: 'Recursive', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--kh-font-sans);
   position: relative;
-  background: #fbf6ef;
+  // Graph-paper ground. Two repeating gradients rather than an image, so it
+  // costs nothing and stays crisp at any zoom. --kh-grid-size and
+  // --kh-grid-ink are the two dials; set --kh-grid-ink to transparent to
+  // switch the texture off entirely.
+  background-color: var(--kh-ground);
+  // Two tiers, like real graph paper: a fine grid, with a heavier line every
+  // fifth one. Major layers are listed first so they sit above the minor.
+  background-image:
+    repeating-linear-gradient(to right, var(--kh-grid-ink--major) 0 1px, transparent 1px var(--kh-grid-size--major)),
+    repeating-linear-gradient(to bottom, var(--kh-grid-ink--major) 0 1px, transparent 1px var(--kh-grid-size--major)),
+    repeating-linear-gradient(to right, var(--kh-grid-ink) 0 1px, transparent 1px var(--kh-grid-size)),
+    repeating-linear-gradient(to bottom, var(--kh-grid-ink) 0 1px, transparent 1px var(--kh-grid-size));
+  // Scrolls with the page: fixed made the paper feel like a backdrop behind
+  // the content rather than the sheet the content is drawn on.
+  background-attachment: scroll;
   color: #222;
   display: block;
   font-size: 16px;
@@ -48,17 +86,24 @@ body:has(#kh-css-toggle:checked) {
   padding: 0 1em;
 
   button {
-    font-family: 'Recursive', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-family: var(--kh-font-sans);
   }
 
   em {
-    font-variation-settings: 'slnt' -10, 'MONO' 0, 'CASL' 1;
+    font-style: italic;
   }
 
   img {
     display: block;
     height: auto;
     max-width: 100%;
+  }
+
+  /* Text selection in the sun yellow — a small survival of the old colour
+     key now that the bands are gone. */
+  ::selection {
+    background: var(--kh-color--sun);
+    color: #222;
   }
 
   /* Visual affordance for elements with a title tooltip */
@@ -99,15 +144,16 @@ body:has(#kh-css-toggle:checked) {
     width: 1em;
   }
 
-  /* Headline and code font helpers using Recursive variable axes */
+  /* Headline and code font helpers. Plex has no variable axes, so these
+     select a declared weight rather than dialling one in. */
   .kh-font-headline {
-    font-family: 'Recursive', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    font-variation-settings: 'wght' 800, 'MONO' 0, 'CASL' 1;
+    font-family: var(--kh-font-sans);
+    font-weight: 600;
+    letter-spacing: -0.015em;
   }
 
   .kh-font-code {
-    font-family: 'Recursive', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-    font-variation-settings: 'MONO' 1, 'CASL' 0, 'slnt' 0, 'CRSV' 0;
+    font-family: var(--kh-font-mono);
   }
 
   .kh-content a:focus,
@@ -153,16 +199,41 @@ body:has(#kh-css-toggle:checked) {
     }
 
     .kh-bleed-out {
-      margin-left: -50%;
-      margin-right: -50%;
+      margin-left: -46%;
+      margin-right: 0;
     }
   }
 
   @media (width >= 767px) {
+    // Bleeds LEFT only, into the contents rail.
+    // It used to bleed both ways at -30%/-50%, which scrolled the whole page
+    // sideways at every mid-range width -- measured 86px at 800, 138px at
+    // 900, 161px at 1024. This pre-dates the screenshots that made it
+    // obvious; the Recursive post's comparison slider had the same overflow.
+    // The cause is that the reading column sits right of centre in the
+    // three-column grid, so a symmetric percentage of the CONTAINER says
+    // nothing about the room actually beside it: there is a wide rail to the
+    // left and almost nothing to the right. Bleeding only into the rail uses
+    // the space that exists. Verified 390 to 1800: no overflow at any width,
+    // and the figure still reaches 817px against a ~667px measure.
     .kh-bleed-out {
-      margin-left: -30%;
-      margin-right: -30%;
+      margin-left: -22%;
+      margin-right: 0;
     }
+  }
+
+  // A bleed-out reaches into the left rail, where the contents index is
+  // `position: sticky` -- which makes it a positioned element that paints
+  // above static content, so the rail's links showed through the figure.
+  // Positioning the figure and giving it the page ground puts it on top and
+  // occludes cleanly rather than letting two things share the same pixels.
+  // Not applied to `.kh-figure`: that is `display: grid` with three columns,
+  // so combining the two squeezed the image into a third of the measure. A
+  // full-bleed screenshot is a bare `<figure class="kh-bleed-out">`.
+  .kh-bleed-out {
+    background: var(--kh-ground);
+    position: relative;
+    z-index: 2;
   }
 
   @media (max-width: $kh-breakpoint--md-down) {
@@ -225,10 +296,20 @@ body:has(#kh-css-toggle:checked) {
       flex: 0 0 49.183%;
     }
 
+    // `grid-template-columns` is only declared from 600px up, so below that
+    // this was a grid with one implicit `auto` column. An auto track sizes to
+    // its MAX-content and will not shrink below its min-content, so the column
+    // grew to 569px inside a 313px phone viewport and the page scrolled
+    // sideways -- on /ai/, both style-guide pages and any post using this
+    // layout. The container was the overflow, not anything in it.
+    // `minmax(0, 1fr)` is the fix rather than plain `1fr`: a `1fr` track still
+    // takes min-content as its automatic minimum, which is what let a long
+    // word or a wide table push it open in the first place.
     .kh-grid-stylized {
       align-items: start;
       display: grid;
       gap: var(--kh-page-grid-gap);
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .kh-grid-stylized .kh-grid {
@@ -298,7 +379,6 @@ body:has(#kh-css-toggle:checked) {
     line-height: 1;
     padding: 4px 8px;
     text-decoration: none;
-    text-transform: uppercase;
   }
 
   /* Compact label for categorization chips */
@@ -306,7 +386,7 @@ body:has(#kh-css-toggle:checked) {
     align-items: center;
     background-color: #f5f5f4;
     border: 1px solid var(--kh-color--grey, #707372);
-    border-radius: 9999px;
+    border-radius: 0;
     color: inherit;
     display: inline-flex;
     font-size: 12px;
@@ -317,46 +397,80 @@ body:has(#kh-css-toggle:checked) {
     white-space: nowrap;
   }
 
+  // Datasheet register. This was a blue-bordered, blue-labelled button from
+  // the old Visual Framework -- the last piece of browser-chrome blue on the
+  // site, and conspicuously out of place next to hairline rules, mono labels
+  // and the coral accent. It is now a hairline cell like everything else:
+  // ink on the panel fill, mono label, no radius.
+  // The custom properties are kept and re-pointed rather than removed, so the
+  // existing per-context overrides (the search widget, chiefly) still work.
   .kh-button {
-    --kh-button__color__background--default: var(--kh-color--grey);
-    --kh-button__color__background--default-dark: var(--kh-color--grey--darkest);
-    --kh-button-background-color: #fafafa;
-    --kh-button-border-color: var(--kh-color--blue);
-    --kh-button-shadow-background-color: var(--kh-color--blue--dark);
+    --kh-button__color__background--default: var(--kh-panel-bg);
+    --kh-button-background-color: var(--kh-panel-bg);
+    --kh-button-border-color: var(--kh-rule--strong);
     align-self: center;
     appearance: none;
     backface-visibility: hidden;
     background-color: var(--kh-button-background-color, var(--kh-button__color__background--default));
-    border: 4px solid var(--kh-button-border-color, var(--kh-button__color__background--default));
-    border-radius: 4px;
-    box-shadow: 8px 8px 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)), -5px -5px rgb(0 0 0 / 0%);
-    color: var(--kh-color--blue);
+    border: 1px solid var(--kh-button-border-color, var(--kh-button__color__background--default));
+    border-radius: 0;
+    color: #222;
     cursor: pointer;
     display: inline-block;
-    font-weight: 700;
+    font-family: var(--kh-font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
     line-height: 1;
     margin: 0 16px 16px 0;
     outline: 0;
-    padding: 12px 24px;
+    padding: 0.85rem 1.4rem;
     position: relative;
     text-align: center;
     text-decoration: none;
-    transform: translate(0, 0);
-    transition: all linear 125ms;
+    transition: background-color linear 125ms, color linear 125ms;
+  }
+
+  // The offset "3D" shadow and the slide-on-press are gone; the button now
+  // signals state by inverting instead of moving.
+  // Inverts to the accent on hover, the same coral fill the current nav item
+  // uses, so "this is actionable" and "you are here" share one visual idea.
+  .kh-button:focus,
+  .kh-button:hover {
+    --kh-button-background-color: var(--kh-color--coral);
+    --kh-button-border-color: var(--kh-color--coral);
+
+    color: var(--kh-ground);
+    text-decoration: none;
   }
 
   .kh-button:active {
-    box-shadow: 0 0 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)), 2px 2px 2px rgb(30 30 30 / 12.5%), -5px -5px rgb(0 0 0 / 0%);
-    transform: translate(8px, 8px) translateZ(1px);
+    --kh-button-background-color: var(--kh-rule--strong);
+    --kh-button-border-color: var(--kh-rule--strong);
+
+    color: var(--kh-ground);
   }
 
-  .kh-button:focus,
-  .kh-button:hover {
-    --kh-button-border-color: var(--kh-color--blue);
-    box-shadow: 4px 4px 0 var(--kh-button-shadow-background-color, var(--kh-button__color__background--default-dark)), 2px 2px 4px rgb(30 30 30 / 25%), -5px -5px rgb(0 0 0 / 0%);
-    text-decoration: none;
-    transform: translate(4px, 4px);
-    transition: all linear 125ms;
+  // Primary. The base button is the outline; this is the one action a page
+  // wants you to take. `.kh-button--secondary` was in the markup but never
+  // defined, so a page with three CTAs rendered three identical peers and led
+  // with none of them.
+  // Coral fill, matching the current nav cell and the button hover state, so
+  // the accent means one thing throughout: this is the live one.
+  .kh-button--primary,
+  .kh-button--primary:visited {
+    --kh-button-background-color: var(--kh-color--coral);
+    --kh-button-border-color: var(--kh-color--coral);
+
+    color: var(--kh-ground);
+  }
+
+  .kh-button--primary:focus,
+  .kh-button--primary:hover {
+    --kh-button-background-color: var(--kh-rule--strong);
+    --kh-button-border-color: var(--kh-rule--strong);
+
+    color: var(--kh-ground);
   }
 
   .kh-button--sm {
@@ -428,7 +542,7 @@ body:has(#kh-css-toggle:checked) {
   @media (min-width: $kh-breakpoint--md) {
     .kh-post--text:not(:has(.kh-figure)) {
       // padding-top: 25rem;
-      background-color: #fbf6ef;
+      background-color: #fffae1;
       padding-left: 2rem;
       padding-top: 2rem;
     }
@@ -475,6 +589,15 @@ body:has(#kh-css-toggle:checked) {
     > *:last-child {
       margin-bottom: 0;
     }
+  }
+
+  /* Structural wrappers in post-summary.njk. Transparent by default so the
+     existing grid rules below still see date/title/text as direct children;
+     .kh-datasheet-list promotes them to real cells. */
+  .kh-summary__meta,
+  .kh-summary__body,
+  .kh-summary__media {
+    display: contents;
   }
 
   .kh-summary__author {
@@ -534,7 +657,7 @@ body:has(#kh-css-toggle:checked) {
   .kh-summary--highlight {
     background: rgba(244, 158, 23, 0.1);
     padding: 1rem;
-    border-radius: 4px;
+    border-radius: 0;
   }
 
   .kh-summary__tab {
@@ -543,15 +666,14 @@ body:has(#kh-css-toggle:checked) {
     top: 0.25rem;
     transform-origin: left top;
     transform: rotate(-90deg) translateX(-100%);
-    background: var(--kh-color--orange);
-    color: #fff;
+    background: var(--kh-color--sun);
+    color: #3a2c00;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.05em;
-    text-transform: uppercase;
     text-decoration: none;
     padding: 3px 8px;
-    border-radius: 3px 3px 0 0;
+    border-radius: 0;
     white-space: nowrap;
     line-height: 1;
   }
@@ -602,11 +724,17 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
+  // Layout only. The masthead's own look lives in the datasheet mixin.
+  // No horizontal padding: this rule is emitted after that mixin, so the
+  // `padding: 12px 16px` it used to carry silently beat the `padding: 0`
+  // there, insetting the wordmark from the rule beneath it by 16px and
+  // stopping the nav short of the other end. The masthead should sit on the
+  // same left and right edges as the content column it sits above.
   .kh-global-header {
     display: flex;
     flex-wrap: wrap;
     gap: var(--kh-page-grid-gap);
-    padding: 12px 16px;
+    padding: 0;
   }
 
   @media (min-width: $kh-breakpoint--lg) {
@@ -616,27 +744,107 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-footer {
+    border-top: 1px solid var(--kh-rule--strong);
     max-width: calc(100% - (var(--context-margin--inline, 0px) * 1)); // kh-body padding offset
     padding-bottom: 1.5rem;
     padding-top: 24px;
     text-wrap: balance;
 
+    // The 8px orange band is replaced by the hairline above; kh-u-fullbleed
+    // still supplies a ::before, so suppress it rather than restyle it.
     &::before {
-      background-color: var(--kh-color--orange) !important;
-      height: 8px !important;
+      display: none;
     }
   }
-  @media (max-width: $kh-breakpoint--lg-down) {
-    .kh-footer__links > * {
-      margin-right: 1rem;
+  // Footer navigation, grouped by kind.
+  // This was one flat row of six links spanning five different kinds -- legal,
+  // meta, primary content, a profile, a subscribe action and a UI control --
+  // with no relationship expressed between them. Columns with mono
+  // micro-labels put the structure back and match the datasheet register used
+  // on /blog, /all and /stats.
+  // The byline column needs a paragraph measure; the link columns do not. A
+  // plain auto-fit would give all five the same width and set the bio at a
+  // ~9rem measure, which is unreadable. So: one wide column, then as many
+  // link columns as fit.
+  .kh-footer__nav {
+    display: grid;
+    gap: 1.5rem 2rem;
+    grid-template-columns: 1fr;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: $kh-breakpoint--md) {
+    // With the blurb: one wide column for the paragraph, four narrow ones for
+    // links. A plain auto-fit would set the blurb at a ~9rem measure.
+    .kh-footer__nav {
+      grid-template-columns: minmax(15rem, 1.4fr) repeat(4, minmax(7rem, 1fr));
+    }
+
+    // Without it -- on entries, which carry a full byline above -- the four
+    // link columns share the width evenly instead of inheriting the wide
+    // first track meant for prose.
+    .kh-footer__nav--links {
+      grid-template-columns: repeat(4, minmax(7rem, 1fr));
     }
   }
 
-  @media (min-width: $kh-breakpoint--lg) {
-    .kh-footer__links {
-      display: inline-flex;
-      gap: 1rem;
+  // Landmark wrapper only; the groups stay direct grid children.
+  .kh-footer__groups {
+    display: contents;
+  }
+
+  .kh-footer__name {
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .kh-footer__bio {
+    margin: 0.35rem 0 0;
+    max-width: 42ch;
+  }
+
+  .kh-footer__bio-links {
+    margin: 0.5rem 0 0;
+  }
+
+  .kh-footer__sep {
+    color: var(--kh-ink-muted);
+    padding: 0 0.35rem;
+  }
+
+  .kh-footer__label {
+    border-bottom: 1px solid var(--kh-rule);
+    margin: 0 0 0.5rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .kh-footer__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    > li + li {
+      margin-top: 0.3rem;
     }
+  }
+
+  // Controls, not destinations. RSS and the CSS toggle both DO something
+  // rather than going somewhere, so they sit below the nav behind a rule
+  // instead of being the fifth and sixth items in a list of links.
+  .kh-footer__controls {
+    border-top: 1px solid var(--kh-rule);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+  }
+
+  .kh-footer__control {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .kh-intro__heading {
@@ -723,9 +931,13 @@ body:has(#kh-css-toggle:checked) {
     text-wrap: balance;
   }
 
+  // Heading weights are 600, not 500: the static Plex faces are 400/600 only,
+  // so a declared 500 silently resolves to Regular and headings lose their
+  // weight contrast with body copy. (Recursive's variable axis used to make
+  // 500 real.)
   .kh-text-heading--2 {
     font-size: 30px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.333;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
     text-wrap: balance;
@@ -733,7 +945,7 @@ body:has(#kh-css-toggle:checked) {
 
   // Highlight anchor-linked headings
   :is(h1, h2, h3, h4, h5, h6):target {
-    border-left: 4px solid var(--kh-color--orange);
+    border-left: 3px solid var(--kh-color--coral);
     padding-left: 0.5em;
   }
 
@@ -758,7 +970,7 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-text-heading--3 {
     font-size: 27px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.333;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
     text-wrap: balance;
@@ -806,7 +1018,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-u-background-color--yellow--dark {
-    background-color: #ffb81c;
+    background-color: var(--kh-color--yellow--dark);
   }
 
   .kh-u-margin__bottom--200 {
@@ -843,7 +1055,7 @@ body:has(#kh-css-toggle:checked) {
     background: #000;
     color: #fff;
     padding: .5rem 1rem;
-    border-radius: .25rem;
+    border-radius: 0;
     transform: translateY(-120%);
     transition: transform .2s ease;
     z-index: 1000;
@@ -872,7 +1084,7 @@ body:has(#kh-css-toggle:checked) {
     background-color: #fafafa;
     background-color: var(--box-background-color);
     box-sizing: border-box;
-    border-bottom: 4px solid;
+    border-bottom: 1px solid var(--kh-rule--strong);
     display: block;
     padding: var(--kh-box-padding);
     width: 100%;
@@ -886,33 +1098,46 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
+  // The two `.kh-cluster > *` rules that used to live here are gone. They were
+  // the pre-`gap` negative-margin gutter technique, and they had stopped
+  // working long before they were removed: they depended on
+  // `--kh-cluster-margin`, which is defined only on `.kh-badges` -- not a
+  // cluster -- and nowhere else. With the variable undefined,
+  // `calc(var(--kh-cluster-margin) / 2)` is invalid at computed-value time, so
+  // both declarations resolved to `margin: 0 !important` on every child and
+  // grandchild of every cluster.
+  // That is worse than dead code. It silently won every specificity contest
+  // against any spacing set inside a cluster item, which is exactly how
+  // "AI27" in the directory became unfixable until the cause was found. All
+  // real spacing already came from `gap` on .kh-cluster itself.
+  // The rules also set `display: flex` on each child, making every `<a>` in a
+  // cluster a flex container for no stated reason. All ten usages in the site
+  // are a flat row of links; `display: flex; flex-wrap: wrap; gap` is the
+  // whole requirement.
+  // What survives is the one part that was actually load-bearing: a cluster
+  // owns the spacing BETWEEN its items, so an item's own outer margin has to
+  // stand down or it adds to the gap. `.kh-button` carries
+  // `margin: 0 16px 16px 0`, which would otherwise widen every button row.
+  // Plain `margin: 0`, no `!important`, and children only -- so anything
+  // nested inside an item can still space itself.
   .kh-cluster > * {
-    align-items: var(--kh-cluster-alignment, center);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    margin: calc(var(--kh-cluster-margin) / 2 * -1) !important;
+    margin: 0;
   }
 
-  .kh-cluster > * > * {
-    flex: var(--kh-cluster__item--flex);
-    margin: 1rem;
-    margin: calc(var(--kh-cluster-margin) / 2) !important;
-  }
-
-  // Display styling for expressive headlines
+  // Display styling for expressive headlines. Recursive drove this from its
+  // variable axes (a thin, slanted, cursive lead-in); Plex has no axes, so
+  // the contrast now comes from size and tracking against a single weight.
   .kh-font-headline--display {
-    --kh-headline-display-color: var(--kh-color--orange);
-    font-size: 60px !important;
-    letter-spacing: -1px;
+    font-size: clamp(2.25rem, 6vw, 3.75rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
   }
 
   // When we have two display headlines, make the first one bigger
   .kh-font-headline--display:has(+ .kh-font-headline--display) {
-    font-size: 80px !important;
-    font-variation-settings: 'wght' 100, 'MONO' 0, 'CASL' 1, 'slnt' -8, 'CRSV' 1;
-    padding-bottom: 1rem;
-    padding-top: 2rem;
+    font-size: clamp(2.75rem, 8vw, 5rem);
+    padding-bottom: 0.5rem;
   }
 
   .kh-form__item > * {
@@ -949,21 +1174,15 @@ body:has(#kh-css-toggle:checked) {
     display: inline-block;
   }
 
-  .kh-badges img,
-  .kh-badges svg {
+  // Badges are all <img> now -- the remote 88x31 PNGs plus the self-hosted
+  // Eleventy GIF. The inline-SVG badge these rules also covered no longer
+  // exists, so the `svg` half of the selector and its `.badge-text` label
+  // styling went with it.
+  .kh-badges img {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
     height: auto;
     max-width: 100%;
-  }
-
-  .kh-badges svg .badge-text {
-    dominant-baseline: middle;
-    text-anchor: middle;
-    font-family: 'Recursive', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-    font-variation-settings: 'MONO' 1, 'CASL' 0, 'slnt' 0, 'CRSV' 0, 'wght' 800;
-    font-size: 12px;
-    fill: #fff;
   }
 
   .kh-grid {
@@ -1010,22 +1229,25 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-logo {
-    font-variation-settings: 'wght' 800, 'MONO' 1, 'CASL' 0;
+    font-family: var(--kh-font-mono);
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
   .kh-note-box {
     text-wrap: balance;
-    background: #fff;
-    border: 4px solid var(--kh-color--orange);
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule--strong);
+    border-left: 3px solid var(--kh-color--sun);
     display: block;
-    font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 500, 'slnt' -6, 'CRSV' 0;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
     padding: 0.75rem 1rem;
   }
 
   .kh-note-box__label {
     display: inline-block;
-    font-variation-settings: 'MONO' 1, 'CASL' 1, 'wght' 800, 'slnt' -80, 'CRSV' 1;
+    font-style: italic;
+    font-weight: 600;
   }
 
   .kh-navigation {
@@ -1136,7 +1358,6 @@ body:has(#kh-css-toggle:checked) {
       position: relative;
       top: 2rem;
       left: -2rem;
-      font-variation-settings: 'slnt' -10, 'MONO' 0, 'CASL' 1;
       opacity: 0.8;
     }
 
@@ -1147,7 +1368,7 @@ body:has(#kh-css-toggle:checked) {
       // keep some space for the left border so it stays crisp
       inset: 2rem -1rem 1rem 0.65rem;
       z-index: -1;
-      border-radius: 6px;
+      border-radius: 0;
       transform: rotate(-0.5deg);
 
       // Fallback: use rgba of the brand yellow
@@ -1170,7 +1391,7 @@ body:has(#kh-css-toggle:checked) {
     text-align: center;
     padding: 1.5rem 1rem;
     background: var(--kh-color--yellow--lightest);
-    border-radius: 4px;
+    border-radius: 0;
     transition: transform 0.2s ease;
 
     &:hover {
@@ -1184,7 +1405,6 @@ body:has(#kh-css-toggle:checked) {
     font-weight: 700;
     line-height: 1;
     color: var(--kh-color--text);
-    font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 700, 'slnt' 0, 'CRSV' 0.5;
   }
 
   .kh-metric__label {
@@ -1262,7 +1482,7 @@ body:has(#kh-css-toggle:checked) {
     padding: 0.75rem 1rem;
     font-weight: 600;
     font-size: 1.1rem;
-    box-shadow: 0 -6px 0 var(--kh-color--blue--dark); // 3D accent above banner
+    border-top: 6px solid var(--kh-color--blue--dark); // flat accent above banner
     animation: kh-banner-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both,
       kh-banner-out 0.4s 15s ease-in forwards;
   }
@@ -1318,244 +1538,10 @@ body:has(#kh-css-toggle:checked) {
     color: inherit;
   }
 
-  // Floating "was this helpful?" thumb — bottom-right, no JS, no count.
-  // Composition: a promotional text card + a starburst badge with 👍.
-  // Same href as the footer button (.../up/{page}); Worker redirects back to
-  // #thanks, which triggers the kh-feedback-thanks toast and hides this widget.
-  // Wrapper stacks the upvote card on top and the secondary "learn" link
-  // below it, so the link reads as a separate action and can't be confused
-  // with the upvote click target.
-  .kh-floating-thumb {
-    position: fixed;
-    z-index: 900;
-    right: max(1rem, env(safe-area-inset-right));
-    bottom: max(1rem, env(safe-area-inset-bottom));
-    display: inline-flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.4rem;
-    color: inherit;
-    max-width: min(360px, calc(100vw - 2rem));
-  }
-
-  // The upvote action — burst + text laid out horizontally inside one anchor.
-  .kh-floating-thumb__action {
-    display: inline-flex;
-    align-items: center;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  // Secondary link below the card. Visually quieter (smaller, plain text) so
-  // it doesn't compete with the upvote CTA, but with a clear underlined hover
-  // state so it's discoverable as a separate action.
-  .kh-floating-thumb__learn {
-    font-size: 0.78rem;
-    font-weight: 500;
-    color: var(--kh-color--blue);
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 3px;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    transition: text-decoration-color 0.15s ease, color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
-
-    &:hover,
-    &:focus-visible {
-      color: var(--kh-color--blue--dark);
-      text-decoration-color: var(--kh-color--orange);
-      background-color: rgba(#fff, 0.7);
-    }
-  }
-
-  // Default (desktop): show the long text, hide the icon.
-  .kh-floating-thumb__learn-icon {
-    display: none;
-  }
-
-  .kh-floating-thumb__text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    background: var(--kh-color--blue);
-    border-radius: 14px;
-    padding: 0.7rem 1rem 0.7rem 1.8rem; // left padding leaves room for burst overlap
-    box-shadow: 0 4px 0 var(--kh-color--orange);
-  }
-
-  .kh-floating-thumb__lead {
-    font-weight: 700;
-    font-size: 1rem;
-    color: #fff;
-    line-height: 1.15;
-  }
-
-  .kh-floating-thumb__sub {
-    font-size: 0.78rem;
-    font-weight: 500;
-    color: rgba(#fff, 0.92);
-    line-height: 1.35;
-  }
-
-  // CSS-only 12-point starburst, flat orange fill with a dark-blue stroke.
-  // The stroke is faked by stacking two clipped layers: the burst element
-  // is filled in the stroke colour, and ::before is inset by the stroke
-  // width and re-clipped with the same polygon to reveal the inner fill.
-  // clip-path polygon points alternate outer (50%) and inner (35%) radius.
-  $kh-burst-clip: polygon(
-    50% 0%, 59.06% 16.19%,
-    75% 6.7%, 74.75% 25.25%,
-    93.3% 25%, 83.81% 40.94%,
-    100% 50%, 83.81% 59.06%,
-    93.3% 75%, 74.75% 74.75%,
-    75% 93.3%, 59.06% 83.81%,
-    50% 100%, 40.94% 83.81%,
-    25% 93.3%, 25.25% 74.75%,
-    6.7% 75%, 16.19% 59.06%,
-    0% 50%, 16.19% 40.94%,
-    6.7% 25%, 25.25% 25.25%,
-    25% 6.7%, 40.94% 16.19%
-  );
-
-  .kh-floating-thumb__burst {
-    position: relative;
-    z-index: 1; // sit above text card so the star edges poke over the border
-    flex: 0 0 auto;
-    width: 84px;
-    height: 84px;
-    margin-right: -1.4rem; // overlap into the text card
-    background: var(--kh-color--orange); // stroke colour
-    clip-path: $kh-burst-clip;
-    display: grid;
-    place-items: center;
-    transform: rotate(-8deg);
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.12));
-
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 3px; // stroke thickness
-      background: var(--kh-color--yellow--dark, #ffb81c);
-      clip-path: $kh-burst-clip;
-    }
-  }
-
-  .kh-floating-thumb__icon {
-    position: relative;
-    z-index: 1; // above the ::before inner fill
-    width: 36px;
-    height: 36px;
-    color: #fff;
-    stroke-width: 2.2;
-    transform: rotate(8deg); // counter-rotate so icon stays upright vs. tilted burst
-  }
-
-  // Scope the wobble to the action anchor only — moving onto the learn link
-  // unhovers the action, which lets the existing transition revert the burst.
-  .kh-floating-thumb__action:hover .kh-floating-thumb__burst,
-  .kh-floating-thumb__action:focus-visible .kh-floating-thumb__burst {
-    transform: rotate(8deg) scale(1.08);
-  }
-
-  .kh-floating-thumb__action:hover .kh-floating-thumb__icon,
-  .kh-floating-thumb__action:focus-visible .kh-floating-thumb__icon {
-    transform: rotate(-8deg);
-  }
-
-  // While the user is clicking and the browser is round-tripping to the
-  // Cloudflare worker, spin the burst. Pure CSS: :active is held by browsers
-  // during a link's navigation phase; :focus:not(:focus-visible) extends the
-  // spin through mouse-induced focus on browsers that drop :active early.
-  // The page navigates away on click, so the state naturally clears on return.
-  .kh-floating-thumb__action:active .kh-floating-thumb__burst,
-  .kh-floating-thumb__action:focus:not(:focus-visible) .kh-floating-thumb__burst {
-    animation: kh-floating-thumb-spin 0.7s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  }
-
-  @keyframes kh-floating-thumb-spin {
-    from {
-      transform: rotate(0deg) scale(1.05);
-    }
-
-    to {
-      transform: rotate(360deg) scale(1.05);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .kh-floating-thumb__action:active .kh-floating-thumb__burst,
-    .kh-floating-thumb__action:focus:not(:focus-visible) .kh-floating-thumb__burst {
-      animation: none;
-      transform: rotate(-8deg) scale(0.96);
-    }
-  }
-
-  // Mobile: drop the text card; the starburst is the playful, tappable bit.
-  // The "Learn about..." link collapses to a small circular "?" badge so it
-  // doesn't dominate the bottom-right corner. Keeps a11y via aria-label.
-  @media (max-width: 600px) {
-    .kh-floating-thumb__text {
-      display: none;
-    }
-
-    .kh-floating-thumb__burst {
-      margin-right: 0;
-      width: 72px;
-      height: 72px;
-    }
-
-    .kh-floating-thumb__icon {
-      width: 30px;
-      height: 30px;
-    }
-
-    .kh-floating-thumb__learn-text {
-      display: none;
-    }
-
-    .kh-floating-thumb__learn {
-      position: relative;
-      z-index: 2; // sit above the burst's drop shadow + clipped fill
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      margin-top: -2.15rem; // tuck up so it overlaps the burst's lower-right spike
-      padding: 0;
-      border: 2px solid var(--kh-color--blue);
-      border-radius: 999px;
-      background: #fafafa;
-      text-decoration: none;
-      font-weight: 700;
-      line-height: 1;
-
-      &:hover,
-      &:focus-visible {
-        background: var(--kh-color--blue);
-        color: #fff;
-        text-decoration: none;
-      }
-    }
-
-    .kh-floating-thumb__learn-icon {
-      display: inline-block;
-      font-size: 0.95rem;
-    }
-  }
-
-  // Once the user has clicked (URL has #thanks), hide the floating widget so
-  // it doesn't pester them. The kh-feedback-thanks toast covers the confirmation.
-  &:has(#thanks:target) .kh-floating-thumb {
-    display: none;
-  }
 
   .kh-details {
-    border: 4px solid var(--kh-color--blue);
-    border-radius: 4px;
-    box-shadow: 6px 6px 0 var(--kh-color--blue--dark);
+    border: 1px solid var(--kh-rule--strong);
+    border-radius: 0;
     padding: 0.75rem 1rem;
     margin: 1.5rem 0;
     background-color: #fafafa;
@@ -1603,9 +1589,8 @@ body:has(#kh-css-toggle:checked) {
   .kh-pager__link {
     display: inline-block;
     padding: 8px 12px;
-    border: 4px solid var(--kh-color--blue);
-    border-radius: 4px;
-    box-shadow: 4px 4px 0 var(--kh-color--blue--dark);
+    border: 1px solid var(--kh-rule--strong);
+    border-radius: 0;
     background-color: #fafafa;
     color: var(--kh-color--blue);
     text-decoration: none;
@@ -1616,7 +1601,8 @@ body:has(#kh-css-toggle:checked) {
     margin-bottom: 1rem;
 
     &:hover {
-      box-shadow: 2px 2px 0 var(--kh-color--blue--dark);
+      background-color: var(--kh-color--blue);
+      color: #fff;
       transform: translate(2px, 2px);
     }
   }
@@ -1626,7 +1612,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-pager__link--current {
-    background-color: var(--kh-color--orange);
+    background-color: var(--kh-color--sun);
   }
 
   @media print {
@@ -1664,14 +1650,132 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
-  /* Self-hosted Recursive variable font */
+  /* Before/after comparison slider. Replaces image-compare-viewer, which was
+     loaded from unpkg by the Recursive post: 53 KB, almost all of it core-js
+     polyfills for browsers that no longer exist, to do what a range input and
+     a clip-path do here. It was also the last third-party stylesheet on the
+     site and the only remaining source of radius and shadow, which is why the
+     rules it replaced were four `!important` overrides.
+
+     The control IS a range input, deliberately: that gets pointer dragging,
+     touch, and keyboard arrow keys from the platform rather than from a
+     pointermove handler. It is transparent and laid over the whole figure.
+
+     Without JavaScript the split stays wherever the inline custom property
+     puts it, so the figure reads as a static before/after rather than
+     breaking. Without CSS both images simply stack. */
+  .kh-compare {
+    --kh-compare-split: 50%;
+    display: grid;
+    position: relative;
+  }
+
+  /* The grid child is a <picture>, not the <img>: the Eleventy image
+     transform wraps every <img src> it processes. Both are targeted so the
+     figure survives whether or not the transform ran. */
+  .kh-compare > picture,
+  .kh-compare > .kh-compare__img {
+    grid-area: 1 / 1;
+  }
+
+  .kh-compare__img {
+    display: block;
+    height: auto;
+    width: 100%;
+  }
+
+  /* Clipped from the left, so the after image occupies everything to the
+     right of the split. */
+  .kh-compare__img--after {
+    clip-path: inset(0 0 0 var(--kh-compare-split));
+  }
+
+  .kh-compare__handle {
+    background: var(--kh-color--sun);
+    grid-area: 1 / 1;
+    justify-self: start;
+    margin-left: calc(var(--kh-compare-split) - 1px);
+    pointer-events: none;
+    width: 2px;
+    z-index: 2;
+  }
+
+  .kh-compare__label {
+    align-self: end;
+    background: var(--kh-ground);
+    border: 1px solid var(--kh-rule--strong);
+    color: #222;
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+    grid-area: 1 / 1;
+    letter-spacing: 0.04em;
+    margin: 0.75rem;
+    padding: 0.15rem 0.4rem;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .kh-compare__label--before {
+    justify-self: start;
+  }
+
+  .kh-compare__label--after {
+    justify-self: end;
+  }
+
+  /* Invisible but fully operable: the native control does the work, the
+     images above are the visible state. */
+  .kh-compare__range {
+    appearance: none;
+    background: transparent;
+    cursor: col-resize;
+    grid-area: 1 / 1;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    width: 100%;
+    z-index: 3;
+  }
+
+  .kh-compare__range:focus-visible {
+    opacity: 1;
+    outline: 2px solid var(--kh-color--sun);
+    outline-offset: 2px;
+  }
+
+  /* Self-hosted IBM Plex. Static faces: Plex ships no variable build, so each
+     weight is its own file. Only Sans 400 and Mono 400 are preloaded; the
+     other two arrive on demand. font-weight 700 resolves to SemiBold 600 —
+     the nearest declared weight — rather than synthesising a faux bold. */
   @font-face {
-    font-family: 'Recursive';
-    src: url('/assets/kh-font/Recursive_VF_1.085--subset-GF_latin_basic.woff2') format('woff2');
-    // src: url('/assets/kh-font/Recursive.woff2') format('woff2');
-    // src: url(https://fonts.gstatic.com/s/recursive/v43/8vIk7wMr0mhh-RQChyHEH06JlTRq_gukbQr6Mk1QmnhkyU8G_X-dm23WO1ysrvuO.woff2) format('woff2');
-    font-weight: 300 800;
-    font-style: oblique -15deg 0deg; /* maps to slnt axis */
+    font-family: 'IBM Plex Sans';
+    src: url('/assets/kh-font/IBMPlexSans-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'IBM Plex Sans';
+    src: url('/assets/kh-font/IBMPlexSans-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'IBM Plex Sans';
+    src: url('/assets/kh-font/IBMPlexSans-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'IBM Plex Mono';
+    src: url('/assets/kh-font/IBMPlexMono-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
     font-display: swap;
   }
 }

@@ -1,0 +1,56 @@
+---
+title: Archive
+teaser: "Everything by month, newest first — the destination for the timeline's marks."
+layout: layouts/base.njk
+permalink: /archive/
+---
+{%- set months = collections.allContent | groupByMonth -%}
+{%- set stats = collections.allContent | corpusStats -%}
+<section>
+  <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
+
+  <div class="kh-content">
+    <p>Every entry by the month it was published, newest first. This is the
+    dense index: titles and dates, nothing else. For summaries and images use
+    <a href="/all/">all writing</a>; to browse by subject use
+    <a href="/directory/#subjects">topics</a>.</p>
+    <p>The marks in the strip at the top of every page link here. A month with
+    five entries has no single &ldquo;the&rdquo; post, so a mark points at its
+    month rather than at whichever entry happened to be newest.</p>
+  </div>
+
+  <div class="kh-section-head kh-u-margin__top--1200">
+    <h2 id="index" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>By month</h2>
+    <span class="kh-meta">{{ stats.entries | formatNumber }} entries &middot; {{ months | length }} months</span>
+  </div>
+
+  {#- Each month's id matches the pulseMonths key ('yyyy-LL'), so the mark's
+      href and this anchor are the same string. `scroll-margin-top` on the
+      heading keeps the target clear of the sticky header. -#}
+  {%- for m in months %}
+  <div class="kh-archive__month">
+    <h3 id="{{ m.key }}" class="kh-archive__heading">
+      {{ m.label }}
+      <span class="kh-meta kh-archive__count">{{ m.items | length }}{{ ' entry' if m.items | length == 1 else ' entries' }}</span>
+    </h3>
+    {#- Every entry's title, on one page. Chrome by the CLAUDE.md rule, and
+        the clearest case of it on the site: without the marker this page is
+        nine chunks of other people's headlines in the semantic corpus and a
+        competitor to the entries themselves in search. -#}
+    <ul class="kh-archive__list" data-pagefind-ignore>
+      {%- for item in m.items %}
+      {%- set itemTags = item.data.tags or [] %}
+      <li class="kh-archive__item">
+        <span class="kh-meta kh-archive__date">{{ item.date | dateDisplay('dd LLL') }}</span>
+        <a class="kh-archive__link" href="{{ item.url | url }}">{{ item.data.title }}</a>
+        {%- if 'digesting' in itemTags %}
+        <span class="kh-meta kh-archive__kind">Digesting</span>
+        {%- elif 'impact-stories' in itemTags %}
+        <span class="kh-meta kh-archive__kind">Impact story</span>
+        {%- endif %}
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+  {%- endfor %}
+</section>

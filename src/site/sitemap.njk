@@ -4,8 +4,12 @@ permalink: sitemap.xml
 <?xml version="1.0" encoding="UTF-8"?>
 {%- set siteConfig = siteConfig.siteInformation -%}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {#- `collections.all` is Eleventy's own and cannot be filtered in
+      collections.js, so the draft and noindex checks have to happen here.
+      Listing a page in the sitemap while its own markup says noindex is a
+      contradiction search engines are entitled to distrust. -#}
   {%- for page in collections.all %}
-  {%- if page.data.layout %}
+  {%- if page.data.layout and not page.data.noindex and not (page.data.kens_status in ['draft', 'final_draft']) %}
   <url>
     <loc>{{ siteConfig.url }}{{ page.url }}</loc>
     {%- if page.date %}

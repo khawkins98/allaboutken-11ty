@@ -59,12 +59,14 @@ Source of truth for local commands and script behavior in this repository.
 
 ### `yarn build`
 
-- Runs: `yarn clean && yarn sass && yarn eleventy && yarn embeddings`.
+- Runs a bootstrap Eleventy pass, generates embeddings and the derived related,
+  semantic-map and Story Lab data, then runs a final Eleventy pass.
 - This is the production build path used for full validation.
 - Expected outputs include:
   - compiled CSS in `build/css/`
   - site HTML/assets in `build/`
   - semantic search vectors in `build/semantic-search/vectors.json`
+  - ignored derived data in `src/site/_data/{related,semanticMap,storyLab}.json`
 
 ### `yarn dev`
 

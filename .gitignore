@@ -16,3 +16,8 @@ temp
 .wrangler
 worker/node_modules
 .gstack/
+
+# Rebuilt between the bootstrap and final Eleventy passes.
+src/site/_data/related.json
+src/site/_data/semanticMap.json
+src/site/_data/storyLab.json

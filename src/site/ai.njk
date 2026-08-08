@@ -1,6 +1,8 @@
 ---
 title: AI in my workflow
 layout: layouts/digesting.njk
+parentUrl: /directory/
+parentLabel: Directory
 teaser: 'These are my <code>/ai</code> notes on how I use (or do not use) AI here. The format is inspired by the <a href="https://slashpages.net/">slash pages</a> idea.'
 date: 2025-09-29
 templateEngineOverride: njk, md
@@ -25,8 +27,10 @@ These are my <code>/ai</code> notes on how I use (or don't use) AI here. The for
 <h2>First, some recent writing on AI</h2>
 <ul>
 {% set count = 0 %}
-{% for post in collections.all | reverse %}
-  {% if post.data.topics and 'AI' in post.data.topics and post.url != page.url %}
+{% for post in collections.all | published | reverse %}
+  {#- Match on the parent, not the raw string: `AI > Claude Code` is an AI post
+      and an `in` test against the unsplit list silently missed it. -#}
+  {% if post.data.topics and 'AI' in (post.data.topics | topicParents) and post.url != page.url %}
     {% if count < 6 %}
       <li><a href="{{ post.url }}">{{ post.data.title }}</a></li>
       {% set count = count + 1 %}

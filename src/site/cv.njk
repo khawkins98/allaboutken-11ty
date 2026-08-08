@@ -28,9 +28,14 @@ active_path: front
    <small class="kh-summary__date">{{ location }}</small></p>
 {% endmacro -%}
 
-{# Section header #}
-{%- macro sectionHeader(title) %}
-<h2 class="kh-badge kh-badge--outline kh-u-margin__bottom--600 kh-u-margin__top--1200">{{ title }}</h2>
+{#- Section header. The same `.kh-section-head` -- hairline rule plus a coral
+    section number -- that every other page uses. It was a boxed outline badge,
+    a device found nowhere else on the site, which made the CV read as its own
+    design era. -#}
+{%- macro sectionHeader(num, title) %}
+<div class="kh-section-head kh-u-margin__top--1200">
+  <h2 class="kh-text-heading--2"><span class="kh-section-number">{{ num }}</span>{{ title }}</h2>
+</div>
 {% endmacro -%}
 
 <div class="kh-u-show-for-print-only">
@@ -39,14 +44,15 @@ active_path: front
 
 {{ contactInfoPrint | safe }}
 
-<div class="kh-grid-stylized kh-u-background-color--yellow--dark kh-u-fullbleed">
+{#- Datasheet masthead rather than the full-bleed yellow slab, so the CV
+    belongs to the same document as the rest of the site. The wordmark pair
+    was two responsive variants of the same line; one line wraps by itself. -#}
+<div class="kh-grid-stylized">
   <div></div>
-  <section class="kh-content kh-u-padding__bottom--200 kh-u-padding__top--800">
+  <section class="kh-content kh-u-padding__bottom--200">
     <div class="kh-u-do-not-print">
-      <h1 class="kh-font-headline kh-font-headline--display kh-u-margin__bottom--200 kh-u-show-for-mobile-only">Ken <br/> Hawkins.</span></h1>
-      <h1 class="kh-font-headline kh-font-headline--display kh-u-margin__bottom--200 kh-u-show-for-medium-up">Ken Hawkins.</span></h1>
-      <h2 class="kh-font-headline kh-font-headline--display kh-text-heading--1 kh-u-padding__top--500 kh-u-padding__bottom--400">{{subtitle}}</h2>
-
+      <p class="kh-font-headline kh-font-headline--display kh-u-margin__bottom--200">Ken Hawkins.</p>
+      <h2 class="kh-font-headline kh-text-heading--2 kh-u-padding__bottom--400">{{subtitle}}</h2>
     </div>
   </section>
 </div>
@@ -58,7 +64,7 @@ active_path: front
 
     {#- Executive Summary - Shows on both screen and print -#}
     <p>
-      I architect and deliver working systems that make the web faster, more accessible, and measurable for complex, multicultural organizations — grounded in content architecture, structured data, and context engineering. Current achievements at UNDRR: 50–70% faster delivery, 20% cost savings, 40% engagement increases across a 24+ domain ecosystem.
+      I architect and deliver working systems that make the web faster, more accessible, and measurable for complex, multicultural organizations — grounded in content architecture, structured data, and context engineering. Current achievements at UNDRR: 50–70% faster delivery, 20% cost savings, 40% engagement increases across a 15+ domain ecosystem.
     </p>
     <p>
       With 20+ years building platforms, design systems, and content architectures for UN, science, and media organizations while managing distributed teams across Geneva, Bangkok, Bonn, New York, and Manila. My journalism background provides deadline discipline and audience-first clarity that pure technologists often lack — I translate between executives, developers, and users to ship solutions that solve real problems.
@@ -69,9 +75,9 @@ active_path: front
 
     {#- CTAs - Screen only -#}
     <p class="kh-cluster kh-u-margin__top--600 kh-u-do-not-print">
-      <a href="mailto:khawkins98@gmail.com" class="kh-button">Get in Touch</a>
-      <a href="/work/" class="kh-button kh-button--secondary">View Case Studies</a>
-      <a href="javascript:window.print()" class="kh-button kh-button--secondary">Download PDF</a>
+      <a href="mailto:khawkins98@gmail.com" class="kh-button kh-button--primary">Get in touch</a>
+      <a href="/work/" class="kh-button">View case studies</a>
+      <a href="javascript:window.print()" class="kh-button">Download PDF</a>
     </p>
   </section>
 </div>
@@ -80,7 +86,7 @@ active_path: front
 <div class="kh-grid-stylized kh-u-padding__top--600 kh-u-padding__bottom--400">
   <div></div>
   <section>
-    <h2 class="kh-badge kh-badge--outline kh-u-margin__bottom--600">Impact at a Glance</h2>
+    {{ sectionHeader('1.0', 'Impact at a glance') }}
     <div class="kh-metrics-grid">
       <div class="kh-metric">
         <span class="kh-metric__number">50–70%</span>
@@ -95,7 +101,7 @@ active_path: front
         <span class="kh-metric__label">Engagement increase</span>
       </div>
       <div class="kh-metric">
-        <span class="kh-metric__number">24+</span>
+        <span class="kh-metric__number">15+</span>
         <span class="kh-metric__label">Domain ecosystem</span>
       </div>
       <div class="kh-metric">
@@ -110,11 +116,11 @@ active_path: front
   </section>
 </div>
 
-{#- Career Snapshot Section -#}
+{#- Career snapshot section -#}
 <div class="kh-grid-stylized kh-u-padding__top--600 kh-u-padding__bottom--600">
   <div></div>
   <section>
-    <h2 class="kh-badge kh-badge--outline kh-u-margin__bottom--600">Career Snapshot</h2>
+    {{ sectionHeader('2.0', 'Career snapshot') }}
     <div class="kh-career-snapshot">
       <ul class="kh-snapshot-list">
         <li><strong>Core value:</strong> Strategic bridge-builder who translates between executive vision, technical implementation, and user needs — building working systems, not just strategies</li>
@@ -151,7 +157,7 @@ active_path: front
 {% markdown %}
 
 
-{{ sectionHeader('Professional Experience') }}
+{{ sectionHeader('3.0', 'Professional experience') }}
 
 <section class="kh-grid-stylized kh-u-margin__bottom--600">
   <div>
@@ -226,7 +232,7 @@ As lead architect and advocate, I guided adoption across diverse technical envir
 - **Design system foundation**: [Established reusable pattern libraries and interface standards](/work/2019/impact-story-embl-visual-framework/) that evolved into the Visual Framework
 - **Cross-team facilitation**: Enhanced collaboration workflows between UX designers, developers, and content teams
 - **Footer & directory**: [Created dynamic footer and web component directory](/work/2021/impact-story-embl-footer-directory/) for cross-site navigation
-- **Content strategy**: [Developed flexible content architecture](/work/2021/impact-story-embl-dynamic-online/) enabling rapid deployment of new properties
+- **Content strategy**: [Developed flexible content architecture](/work/2021/impact-story-ending-platform-lock-in/) enabling rapid deployment of new properties
 
 <div class="ken-link--print">
 
@@ -339,7 +345,7 @@ Co-founded TheDigitel.com in 2009 to revolutionize newspaper methodology for the
 
 {# Core Capabilities #}
 <div id="experience" data-magellan-target="experience"></div>
-{{ sectionHeader('Core Capabilities') }}
+{{ sectionHeader('4.0', 'Core capabilities') }}
 
 <section class="kh-grid-stylized kh-u-margin__bottom--600">
   <h2 class="kh-text-heading--2">Strategic Bridge-Building & Systems Thinking</h2>
@@ -364,7 +370,7 @@ Co-founded TheDigitel.com in 2009 to revolutionize newspaper methodology for the
 - **Platform transformation strategy**: Architect multi-domain digital ecosystems through Drupal, Azure, and custom development — balancing performance, cost, and organizational capacity
 - **AI integration leadership**: Position organizations as industry leaders through structured metadata strategies (RDF/SKOS pipelines, [machine-actionable content models](/posts/20250912-knowledge-over-data/)), with a [context-first approach](/posts/20250919-smart-ai-integration-context-first/)
 - **Performance engineering**: Deliver measurable improvements through Core Web Vitals optimization, accessibility compliance (WCAG 2.1 AA), and infrastructure tuning
-- **Component architecture**: Standardize development practices across distributed teams using design system frameworks (Fractal, [Eleventy](/posts/20250831-site-overhaul-eleventy-v3.html), npm ecosystem)
+- **Component architecture**: Standardize development practices across distributed teams using design system frameworks (Fractal, [Eleventy](/posts/20250831-site-overhaul-eleventy-v3/), npm ecosystem)
 - **Data-driven optimization**: Implement analytics frameworks (GA4, Looker Studio, Power BI) measuring AI-driven referral traffic, user behavior shifts, and content effectiveness
 
 {% endmarkdown %}
@@ -422,7 +428,7 @@ Co-founded TheDigitel.com in 2009 to revolutionize newspaper methodology for the
 
 {# {{ position('Education, collaboration, speaking') }} #}
 
-{{ sectionHeader('Education, speaking & community') }}
+{{ sectionHeader('5.0', 'Education, speaking & community') }}
 
 <section class="kh-grid-stylized kh-u-margin__bottom--600">
   <div>

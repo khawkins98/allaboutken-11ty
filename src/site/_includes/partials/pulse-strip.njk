@@ -1,0 +1,75 @@
+{# Register timeline — twelve months as marks on a rule.
+   Expects:
+     pulse           — array from the pulseMonths filter (12 slots)
+     pulseCurrentKey — 'yyyy-MM' of the current post, if any (marks its month)
+
+   Every month since the first post is rendered. The track scrolls
+   horizontally with the scrollbar hidden, starting at the most recent end;
+   how many months are on screen follows the container width rather than a
+   breakpoint.
+
+   Plain HTML and CSS, no SVG and no JavaScript: each month with entries is
+   an <a>, so it gets a native tooltip on hover and goes somewhere on click.
+   Empty months are a bare tick, not a link.
+
+   Encoding: mark size is scaled by AREA (side = 4 x sqrt(count), capped),
+   because sizing by side length would make a busy month look four times
+   heavier rather than twice. These marks are the one deliberate exception
+   to the site's no-radius rule: a circle reads as a point in time where a
+   square reads as a bar. See .kh-timeline in _kh-dataviz.scss.
+
+   Type is deliberately NOT encoded here. The strip this replaced stacked
+   article/digest/impact ticks, which made it read as a chart to study
+   rather than an ambient stamp. Counts by type stay in the tooltip. #}
+{%- if pulse and pulse.length -%}
+{#- 35-odd month links sit between the skip link and the page content, so
+    the strip needs its own bypass or keyboard users tab through the whole
+    archive to reach the first heading. -#}
+<a class="kh-u-sr-only kh-skip-link" href="#kh-after-timeline" data-pagefind-ignore>Skip publishing timeline</a>
+{#- The strip used to carry no visible label, on the argument that the marks
+    should be noticed and worked out rather than announced. Two independent
+    first-time-visitor reviews both stopped at it: one called it "the mystery
+    dot strip", the other said it "looks like decoration". Neither worked out
+    what it was, and its only explanation lives on /archive/ -- which you
+    reach by clicking a dot you have not understood yet.
+
+    One quiet mono line fixes that and doubles as the way out. It sits
+    OUTSIDE the scroller, or it would scroll away with the track. -#}
+<p class="kh-timeline__label" data-pagefind-ignore><a href="/archive/">Published by month</a> <span class="kh-timeline__hint" aria-hidden="true">&larr; earlier</span></p>
+<nav class="kh-timeline" aria-label="Publishing timeline" data-pagefind-ignore>
+  <p class="kh-u-sr-only">Entries published each month since the first post.</p>
+  <ol class="kh-timeline__track" style="--kh-track-width: {{ pulse | trackWidth }}px">
+    {%- for m in pulse %}
+    {%- if m.gap %}
+    {#- A run of years with nothing published, collapsed to one break rather
+        than scrolled through. Caption comes from _data/timelineGaps.json. -#}
+    <li class="kh-timeline__slot kh-timeline__slot--gap" title="{{ m.label }}{% if m.caption %} — {{ m.caption }}{% else %} — no entries{% endif %}">
+      <span class="kh-timeline__break" aria-hidden="true"></span>
+      <span class="kh-timeline__year kh-timeline__year--gap" aria-hidden="true">{{ m.label }}</span>
+      <span class="kh-u-sr-only">{{ m.label }}: no entries.{% if m.caption %} {{ m.caption }}{% endif %}</span>
+    </li>
+    {%- else %}
+    {#- The mark points at the month in the archive, not at one entry. It used
+        to link to whichever entry that month was newest, which quietly hid the
+        other four behind a mark whose entire encoding is "there are five
+        things here". The id on the archive heading is this same key. -#}
+    {%- set tip = m.longLabel ~ ' — ' ~ m.total ~ (' entry' if m.total == 1 else ' entries') %}
+    <li class="kh-timeline__slot{% if m.yearStart %} kh-timeline__slot--year{% endif %}{% if pulseCurrentKey and m.key == pulseCurrentKey %} kh-timeline__slot--current{% endif %}" data-year="{{ m.year }}">
+      {%- if m.total and m.url %}
+      <a class="kh-timeline__mark" href="/archive/#{{ m.key }}" style="--kh-mark-size: {{ m.size }}px" title="{{ tip }}">
+        <span class="kh-u-sr-only">{{ m.longLabel }}: {{ m.total }}{{ ' entry' if m.total == 1 else ' entries' }}.</span>
+      </a>
+      {%- else %}
+      <span class="kh-timeline__mark kh-timeline__mark--empty" title="{{ m.longLabel }} — no entries">
+        <span class="kh-u-sr-only">{{ m.longLabel }}: no entries.</span>
+      </span>
+      {%- endif %}
+      <span class="kh-timeline__year" aria-hidden="true">{{ m.year }}</span>
+    </li>
+    {%- endif %}
+    {%- endfor %}
+  </ol>
+  <p class="kh-u-sr-only">Range: {{ pulse[0].label }} to {{ (pulse | last).label }}.</p>
+</nav>
+<span id="kh-after-timeline" tabindex="-1"></span>
+{%- endif -%}

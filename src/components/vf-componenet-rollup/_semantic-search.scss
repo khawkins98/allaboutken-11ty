@@ -1,71 +1,153 @@
 @use './settings' as *;
 
 @mixin semantic-search-styles() {
-  // Search widget: connected tabs + panel
+  // Search widget: a mode strip sitting on a hairline panel. The old
+  // treatment was a 4px blue box floated in 4rem of padding; this puts it in
+  // the same grammar as the global header's nav cells.
   .kh-search-widget {
+    // Bounded to the reading measure: the panel's hairlines and the result
+    // rules should terminate at the same edge as the snippet text, not run
+    // on past it to a full-bleed border.
+    margin-bottom: 3rem;
+    max-width: 48rem;
+    padding: 0;
     position: relative;
-    padding: 4rem;
-    padding-bottom: 6rem;
   }
 
   .kh-search-widget__panel {
-    border: 4px solid var(--kh-color--blue);
-    border-radius: 0 4px 4px 4px;
-    box-shadow: 6px 6px 0 var(--kh-color--blue--dark);
-    background: #fafafa;
+    background: var(--kh-panel-bg);
+    border: 1px solid var(--kh-rule--strong);
     padding: 1.5rem;
   }
 
-  // No-JS fallback: full border-radius when tabs are hidden
-  .kh-search-widget:not(:has(.kh-search-mode:not([hidden]))) .kh-search-widget__panel {
-    border-radius: 4px;
-  }
-
+  // Mode tabs: a cell strip whose bottom edge is the panel's top edge, so the
+  // two read as one object without faking a join.
   .kh-search-mode {
-    border: none;
-    padding: 0;
-    margin: 0;
+    border: 1px solid var(--kh-rule--strong);
+    border-bottom: 0;
     display: flex;
     gap: 0;
+    margin: 0;
+    padding: 0;
     position: relative;
+    width: fit-content;
     z-index: 1;
   }
 
   .kh-search-mode__option {
+    background: transparent;
+    border: 0;
+    color: var(--kh-ink-muted);
     cursor: pointer;
-    padding: 8px 16px;
-    border: 4px solid var(--kh-color--blue);
-    margin-right: -4px;
-    margin-bottom: -4px;
-    font-size: .9rem;
-    font-weight: 700;
-    background: #fafafa;
+    font-family: var(--kh-font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.035em;
+    padding: 0.6rem 1.1rem;
 
-    &:first-of-type {
-      border-radius: 4px 0 0 0;
-    }
-
-    &:last-of-type {
-      border-radius: 0 4px 0 0;
+    & + & {
+      border-left: 1px solid var(--kh-rule);
     }
 
     input {
-      position: absolute;
-      opacity: 0;
-      width: 0;
       height: 0;
+      opacity: 0;
+      position: absolute;
+      width: 0;
     }
 
     &:has(input:focus-visible) {
-      outline: 3px solid var(--kh-color--orange);
-      outline-offset: -3px;
+      outline: 2px solid var(--kh-color--sun);
+      outline-offset: -2px;
     }
 
     &:has(input:checked) {
-      background: #fafafa;
-      color: var(--kh-color--blue);
-      border-bottom-color: #fafafa;
+      background: var(--kh-panel-bg);
+      color: var(--kh-color--coral);
     }
+  }
+
+  // The panel is already at the measure, so the inner content wrapper must
+  // not re-clamp it or the rules stop short of the panel edge.
+  .kh-search-widget .kh-search-client-side,
+  .kh-search-widget #search-results {
+    max-width: none;
+    width: 100%;
+  }
+
+  // Keyword results as datasheet rows: hairline-separated, title in the
+  // headline register, the URL demoted to a mono meta line.
+  .kh-search-count {
+    border-bottom: 1px solid var(--kh-rule--strong);
+    display: block;
+    margin: 0 0 0.25rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .kh-search-result {
+    border-bottom: 1px solid var(--kh-rule);
+    padding: 1.1rem 0;
+  }
+
+  // Underlined like every other link on the site. It was `text-decoration:
+  // none`, which switched the site's link language off on the one page whose
+  // whole job is clicking through -- a result title rendered as a plain
+  // heading, while the only underlined thing nearby was the mono URL, which
+  // is not the link.
+  .kh-search-result__link {
+    text-decoration-color: var(--kh-color--blue);
+    text-decoration-line: underline;
+    text-underline-offset: 2px;
+  }
+
+  .kh-search-result:hover,
+  .kh-search-result:focus-within {
+    background: var(--kh-panel-bg);
+  }
+
+  // The empty and loading lines share the count line's treatment, so the
+  // three states of one region look like one component.
+  .kh-search-status {
+    border-bottom: 1px solid var(--kh-rule--strong);
+    display: block;
+    margin: 0 0 0.25rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .kh-search-empty {
+    margin: 0.75rem 0 0;
+  }
+
+  .kh-search-more {
+    margin-top: 1rem;
+  }
+
+  .kh-search-result__title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .kh-search-result__snippet {
+    margin: 0.4rem 0 0;
+  }
+
+  .kh-search-result__url {
+    color: var(--kh-ink-muted);
+    font-family: var(--kh-font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    margin: 0.45rem 0 0;
+    overflow-wrap: anywhere;
+  }
+
+  // Pagefind wraps matches in <mark>; keep it in the sunlight key.
+  .kh-search-result mark {
+    background: var(--kh-color--sun);
+    color: inherit;
+    padding: 0 0.15em;
   }
 
   // Semantic search chat-bubble UI (.kh-ask*)
@@ -79,7 +161,7 @@
   .kh-ask__message {
     max-width: 85%;
     padding: 0.75rem 1rem;
-    border-radius: 1rem;
+    border-radius: 0;
     line-height: 1.5;
   }
 
@@ -100,7 +182,7 @@
     align-self: flex-end;
     background: var(--kh-color--blue);
     color: #fff;
-    border-bottom-right-radius: 0.25rem;
+    border-bottom-right-radius: 0;
   }
 
   .kh-ask__message--user a {
@@ -110,9 +192,7 @@
   .kh-ask__message--system {
     align-self: flex-start;
     background: #fff;
-    border: 1px solid #e0ddd8;
-    border-bottom-left-radius: 0.25rem;
-    box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+    border: 1px solid var(--kh-rule);
   }
 
   .kh-ask__message--status {
@@ -131,7 +211,7 @@
     height: 6px;
     margin-top: 0.5rem;
     border: none;
-    border-radius: 3px;
+    border-radius: 0;
     overflow: hidden;
     appearance: none;
   }
@@ -139,17 +219,17 @@
   /* stylelint-disable selector-pseudo-element-no-unknown */
   .kh-ask__message--status progress::-webkit-progress-bar {
     background: #e0ddd8;
-    border-radius: 3px;
+    border-radius: 0;
   }
 
   .kh-ask__message--status progress::-webkit-progress-value {
     background: var(--kh-color--blue);
-    border-radius: 3px;
+    border-radius: 0;
   }
 
   .kh-ask__message--status progress::-moz-progress-bar {
     background: var(--kh-color--blue);
-    border-radius: 3px;
+    border-radius: 0;
   }
   /* stylelint-enable selector-pseudo-element-no-unknown */
 
@@ -189,20 +269,28 @@
     margin-top: 0.75rem;
   }
 
-  // Shared search form layout (keyword + semantic)
+  // Shared search form layout (keyword + semantic). Field and button share a
+  // single hairline row rather than floating apart.
   .kh-search-widget__form {
+    align-items: stretch;
     display: flex;
-    gap: 0.5rem;
-    align-items: flex-start;
+    gap: 0;
+    margin: 0.5rem 0 1rem;
   }
 
   .kh-search-widget__form .kh-form__input {
+    background: #fff;
+    border: 1px solid var(--kh-rule--strong);
     flex: 1;
+    margin: 0;
     min-width: 0;
+    padding: 0.7rem 0.9rem;
   }
 
   .kh-search-widget__form .kh-button {
+    border-left: 0;
     flex-shrink: 0;
+    margin: 0;
   }
 
   .kh-search-widget__form .kh-button__icon {
@@ -211,8 +299,7 @@
 
   @media (max-width: $kh-breakpoint--sm) {
     .kh-search-widget {
-      padding: 0.5rem;
-      padding-bottom: 2rem;
+      padding: 0;
     }
 
     .kh-search-widget__panel {

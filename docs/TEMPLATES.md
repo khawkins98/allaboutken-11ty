@@ -51,7 +51,7 @@ templateEngineOverride: njk
 {{ orgIntro(org) }}
 ```
 
-### 4) Use paired shortcodes from `eleventy.js`
+### 4) Use paired shortcodes registered from `config/eleventy/markdown.js`
 
 ```njk
 {% markdown %}

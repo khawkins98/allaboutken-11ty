@@ -16,7 +16,7 @@ permalink: /style-guide/editorial/
 
     <aside class="kh-note-box">
       <span class="kh-note-box__label">Related</span>
-      This page covers <em>voice, tone, and when</em> to reach for a pattern. For the live visual reference (what each pattern looks like, all class names, and live demos), see the <a href="/style-guide/components/">Component reference</a>.
+      This page covers <em>voice, tone, and when</em> to reach for a pattern. For the live visual reference (what each pattern looks like, all class names, and live demos), see the <a href="/style-guide/components/">Component reference</a>. The words that appear <em>inside</em> components — section names, straplines, the keys that explain a number — are editorial and live here, under <a href="#interface-vocabulary">Interface vocabulary</a>; the rules for setting them are in <a href="/style-guide/components/#micro-copy">Labels and micro-copy</a>.
     </aside>
 
 {% markdown %}
@@ -249,6 +249,36 @@ Consistent casing and formatting for proper nouns and technical terms:
 - **Compound modifiers**: hyphenate when used as adjectives ("front-end development"), not as nouns ("the front end")
 - **Acronyms**: spell out on first use, then abbreviate ("Content Management System (CMS)")
 
+### Interface vocabulary
+
+The words in the interface are editorial decisions, not design decisions, and
+they belong to this guide rather than to the components one. The rule is **one
+name per thing**, and the name is the one used here.
+
+This matters because it drifts silently. The same page was at one point called
+*Work* in the footer, *Project notes* on the homepage, *Impact stories* in a
+link, and *My work and impact* in its own heading — four names for one
+destination, none of them wrong on its own. Two first-time readers each
+reported believing they were separate sections.
+
+Two levels, and they are allowed to differ from each other:
+
+| Level | Name | Where it appears |
+| --- | --- | --- |
+| Section | **Blog** | nav, footer, panels, `/blog/` |
+| Section | **Digesting** | nav, footer, panels, `/digesting/` |
+| Section | **Work** | nav, footer, panels, `/work/` |
+| Entry type | **blog post** | prose, chips |
+| Entry type | **digesting entry** | prose, chips |
+| Entry type | **impact story** | prose, chips, the `IS-` reference prefix |
+
+So an impact story lives in Work. That is one noun for the place and one for
+the thing, which reads correctly in both directions; what is not allowed is a
+third noun for either.
+
+When adding a section, add its row here first. When renaming one, this table
+and `grep` are the migration plan.
+
 ### Rhythm and pacing
 
 Good writing has varied rhythm. A few principles:
@@ -279,9 +309,11 @@ image_meta:
 date: YYYY-MM-DD
 tags:
   - posts
-topics:
-  - keyword one
-  - keyword two
+topics:              # controlled vocabulary — see docs/TOPIC_TAXONOMY.md
+  - content strategy
+  - AI > Claude Code # optional free-form detail after '>'
+series: Name         # optional: only for multi-part series
+series_part: 2
 via: 'https://example.com/source'  # optional: source attribution
 kens_status: draft  # draft | final_draft | ready_for_publication
 ---
@@ -365,13 +397,59 @@ See the [live note-box example](/style-guide/components/#note-boxes) in the comp
 
 ---
 
+## Topics and series
+
+`tags` decides which collection a post lands in (`posts`, `note`, `digesting`,
+`impact-stories`). `topics` is what the post is *about*. They are different
+things; do not put subject matter in `tags`.
+
+**Pick 2–5 topics from the controlled vocabulary**, most specific first. The 31
+approved topics live in `docs/TOPIC_TAXONOMY.md`. Don't invent a new top-level
+topic on the fly: the taxonomy was consolidated from 158 ad-hoc terms because
+73% of them had exactly one post, which made the whole set unbrowsable.
+
+**When a topic is too broad, add detail after a `>`** rather than inventing a
+new top-level term:
+
+```yaml
+topics:
+  - AI > Claude Code
+  - typography > OpenType ligatures
+```
+
+The parent is the controlled term and is the only part that groups or counts.
+The child is free-form and displays after it in a quieter tone. This is how to
+be specific without recreating a long tail of one-post topics.
+
+Use `>`, never `:`. YAML reads an unquoted `- a: b` as an object, not a string.
+
+**For a multi-part series, use `series` and `series_part`**, not a shared
+topic:
+
+```yaml
+series: Content Action Model
+series_part: 2
+```
+
+That renders "Part 2 of 4 in Content Action Model" with every part linked. A
+series is ordered and exclusive; topics are neither, so a shared topic would
+lose the sequence.
+
+---
+
 ## Margin notes
 
-Use `kh-marginnote` for supplementary citations, supporting evidence, and secondary references that enrich the argument without interrupting the main flow. On desktop they float into the right margin (Tufte-style); on mobile they render as block-level asides. See the [live margin-note example](/style-guide/components/#margin-notes) in the component reference.
+Use a margin note for supplementary citations, supporting evidence, and secondary references that enrich the argument without interrupting the main flow. On desktop they float into the right margin (Tufte-style); on mobile they render as block-level asides. See the [live margin-note example](/style-guide/components/#margin-notes) in the component reference.
 
-```html
-<aside class="kh-marginnote">Gergely Orosz <a href="https://example.com">reports</a> practitioners saying AI now writes the majority of their production code.</aside>
+Write them with the {%raw%}`{% marginnote %}`{%endraw%} shortcode, which renders inline markdown — so ordinary link syntax works:
+
+```njk
+{%raw%}{% marginnote %}Gergely Orosz [reports](https://example.com) practitioners saying AI now writes the majority of their production code.{% endmarginnote %}{%endraw%}
 ```
+
+For a short phrase lifted from the body copy, {%raw%}`{% pullquote %}`{%endraw%} works the same way and sits in the same margin, one register up.
+
+Raw `<aside class="kh-marginnote">` HTML still works and existing posts using it are fine, but the shortcode is preferred for anything new.
 
 **When to use:**
 
@@ -387,8 +465,8 @@ Use `kh-marginnote` for supplementary citations, supporting evidence, and second
 
 **Guidelines:**
 
-- Use raw HTML (`<aside class="kh-marginnote">`) inside {%raw%}`{% markdown %}`{%endraw%} blocks. Links must use `<a href="">` tags, not markdown link syntax.
-- Place a blank line before and after the aside
+- Use the {%raw%}`{% marginnote %}`{%endraw%} shortcode. Links use ordinary markdown syntax; the shortcode renders them.
+- Place a blank line before and after the note
 - Keep margin notes to 1--2 sentences
 - In citation-heavy sections (3+ references in a paragraph), move the supplementary ones to margin notes and keep only the strongest evidence inline
 
@@ -546,7 +624,7 @@ Before publishing any content, verify:
 - [ ] No trailing whitespace or inconsistent spacing
 - [ ] Blank line after every heading before the next paragraph
 - [ ] Warm closing restating main point and inviting feedback
-- [ ] Frontmatter complete: title, teaser, date, layout, tags, topics
+- [ ] Frontmatter complete: title, teaser, date, layout, tags, topics (from the controlled vocabulary)
 - [ ] Markdown polished: correct heading levels, fenced code, consistent formatting
 - [ ] Length is within target for content type (blog 800 – 1,500; impact 600 – 1,200; digesting 200 – 500)
 - [ ] If over 2,000 words: is it earning that length, or should it split into parts?
