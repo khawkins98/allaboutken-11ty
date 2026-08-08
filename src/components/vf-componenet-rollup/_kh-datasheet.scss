@@ -426,12 +426,30 @@
     justify-content: space-between;
   }
 
-  .kh-doc-ref {
+  // Now an <a> self-permalink, so the coral has to beat the global
+  // `a:link`/`a:visited` colour (0,1,1) that otherwise wins over a plain
+  // class; state the colour on the link states too.
+  .kh-doc-ref,
+  .kh-doc-ref:link,
+  .kh-doc-ref:visited,
+  .kh-doc-ref:hover,
+  .kh-doc-ref:focus-visible {
     color: var(--kh-color--coral);
+  }
+
+  .kh-doc-ref {
     font-family: var(--kh-font-mono);
     font-size: 11px;
     letter-spacing: 0.04em;
+    text-decoration: none;
     white-space: nowrap;
+
+    // It is a self-permalink; underline it only on interaction so the resting
+    // datasheet register stays flat.
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+    }
   }
 
   .kh-post-meta {

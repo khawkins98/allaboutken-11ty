@@ -29,7 +29,7 @@ templateEngineOverride: njk
         {% else %}
           <a href="/blog">← Blog</a>
         {% endif %}
-        {% if docRef %}<span class="kh-doc-ref">Ref {{ docRef }}</span>{% endif %}
+        {% if docRef %}<a class="kh-doc-ref" href="{{ page.url }}" title="Permalink to this entry">Ref {{ docRef }}</a>{% endif %}
       </p>
       <h1 class="kh-font-headline kh-post-title kh-text-heading--1">{{title}}</h1>
       <p class="kh-meta kh-post-meta" data-pagefind-ignore>
