@@ -1,0 +1,44 @@
+% Proof of concept: verifies a plain article-class document compiles cleanly
+% before investing time in the full cadi-framework paper. Compile with
+% `pdflatex minimal.tex` or upload to Overleaf.
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+
+\title{Toolchain Check: LaTeX to PDF for Zenodo Deposit}
+\author{%
+  Ken Hawkins\thanks{Independent Researcher.} \\
+  \href{https://orcid.org/0009-0009-6728-2237}{ORCID: 0009-0009-6728-2237}
+}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document exists only to confirm that a plain \texttt{article}-class
+LaTeX source compiles to a PDF suitable for upload to Zenodo, with an
+author block that carries an ORCID identifier. If this builds cleanly,
+the same structure is reused in \texttt{latex/cadi-framework/main.tex}.
+\end{abstract}
+
+\section{Purpose}
+
+Before formatting a full paper, confirm the basics: title, author,
+ORCID link, abstract, a section, and a reference all render correctly
+and the PDF opens without errors.
+
+\section{Sample reference}
+
+A minimal citation, formatted by hand rather than via BibTeX for this
+proof of concept: Kohavi, Longbotham et al., ``Controlled experiments
+on the web: survey and practical guide,'' \emph{Data Mining and
+Knowledge Discovery}, 2009.
+
+\section{Next step}
+
+Once this compiles and looks right, move to
+\texttt{latex/cadi-framework/main.tex} for the real pilot content.
+
+\end{document}
