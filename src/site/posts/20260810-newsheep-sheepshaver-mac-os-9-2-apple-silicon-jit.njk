@@ -1,0 +1,88 @@
+---
+title: 'NewSheep: forking SheepShaver to boot New World Mac OS 9.2 on Apple Silicon + JIT'
+layout: layouts/post.njk
+teaser: 'A fork of SheepShaver itself, not QEMU, reaches a Mac OS 9.2 desktop on Apple Silicon through the New World path, with a native JIT.'
+date: 2026-08-10
+tags:
+  - posts
+topics:
+  - retro computing > emulation
+  - open source
+  - project management
+kens_status: ready_for_publication
+image: /blog/siliconsheep-mac-library.png
+image_meta:
+  text: "SiliconSheep managing three virtual Macs, with a freshly installed Mac OS 9.2.2 selected."
+  credit: "Own work."
+  altext: "A macOS app window titled SiliconSheep. A Mac Library sidebar lists three virtual machines: My Mac running System 7 to 9.0.4, NewWorld 9.2.1 Soak, and Mac OS 9.2.2 Fresh Dogfood. The selected machine shows Start, Configure and Actions buttons, a thumbnail of a purple Mac OS 9 Finder desktop, and a status panel reading Ready to start."
+---
+
+{% markdown %}
+
+Six weeks ago I wrote [a note about going down the stack](/posts/20260626-down-the-stack/): SheepShaver booted Mac OS 9.0.4 on Apple Silicon with a native <abbr title="Just-In-Time compilation">JIT</abbr>, and 9.2 was the thing I still could not do. That post ended with "I think I could crack 9.2, too."
+
+It boots.
+
+> **tl;dr**
+>
+> - A fork of SheepShaver, not QEMU, reaches a settled Mac OS 9.2.1 Finder desktop through the genuine New World <abbr title="Read-Only Memory">ROM</abbr> boot path with the ARM64 JIT on, against one verified baseline and three accepted ROM identities
+> - The project has a name, NewSheep, and a launcher, SiliconSheep, that can install 9.2.2 from its own installer media and boot the result
+> - Boot is 28.3 seconds on the verified baseline, and sub-10 with a newer technique I am still validating; no measured comparison against UTM exists yet
+> - Photoshop 7.0.1, Ultra Pinball and AppleWorks are driven under automation, not just launched
+> - It only gets exercised on my machine and my use case, so if this is your kind of thing I would like to hear from you
+
+[New World](https://web.archive.org/web/20041011114718/http://developer.apple.com/technotes/tn/tn1167.html) is the boot firmware Apple shipped from [1998/9](https://en.wikipedia.org/wiki/Power_Macintosh_G3#Blue_and_White) onward. The earlier ["Old World" ROM](https://en.wikipedia.org/wiki/Old_World_ROM) was mostly a library the operating system called into; New World expects to find a real machine underneath it, and goes looking. And as I lamented in [my last post](/posts/20260626-down-the-stack/), getting New World working has been a much bigger challenge.
+
+In the end I've made a hybrid between QEMU and SheepShaver, hopefully landing the best of both worlds and not the worst of both. I think it is a good foundation to build on.
+
+Running Mac OS 9.2 on an Apple Silicon Mac is not itself news. [UTM](https://mac.getutm.app/) has done it for a while, and if you just want 9.2 today, that is still the sensible route. But QEMU underneath UTM simulates a whole Macintosh, every chip the original had, which is why it feels like a 300 MHz G3. NewSheep preserves SheepShaver's method: patch the ROM, run guest threads as host threads, treat guest memory as pointer arithmetic into the host's address space. It is much faster and much less general. NewSheep's new thing is to provide a "just enough" hardware layer.
+
+## What's done so far
+
+The fork has a name now, NewSheep, because at some point "the macemu JIT branch" stopped describing it. Same chain as before ([cebix](https://github.com/cebix/macemu) → [kanjitalk755](https://github.com/kanjitalk755/macemu) → [rcarmo](https://github.com/rcarmo/macemu-jit) → this).
+
+**A real install lifecycle.** You can now take your New World ROM and a 9.2.2 installer ISO you own, create a virtual machine, initialize a blank disk in Drive Setup, run Install Mac OS, shut down properly from the Special menu, and boot the thing you just installed. Yay! (9.2.2 is what the installer produces; 9.2.1 is the version with the verified boot baseline behind it.)
+
+**A launcher that behaves like a product.** SiliconSheep is a desktop app, built with Tauri, that owns virtual machines as first-class objects: create, import an existing 9.2.2 system disk, preflight, launch, and an embedded Console for the guest display rather than SheepShaver's raw window.
+
+**Testing that runs the whole operating system.** An end-to-end harness drives the guest over <abbr title="Virtual Network Computing">VNC</abbr>, waits for the Finder to actually settle rather than merely appear, injects input, and makes Mac OS run its own shutdown. Without it I would not trust any of the claims in this post.
+
+**Real applications, driven.** Three of them are exercised rather than merely launched: Photoshop 7.0.1 opens a generated TIFF and applies an Unsharp Mask; Ultra Pinball takes gameplay input in a verified game window; AppleWorks gets a turn too.
+
+**A 3D detour.** (3-D-tour?) I spent two weeks on ATI Rage 128 acceleration, and it got further than I expected. Deus Ex launches, gets through its splash screen and renders actual geometry.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/deus-ex-splash-mac-os-9.jpg" alt="The Deus Ex splash screen with Ion Storm, Eidos, Westlake Interactive and Aspyr logos, reading Loading objects, running in a window on a Mac OS 9 desktop with hard disk icons down the right edge." />
+  <figcaption class="kh-figure__caption">Deus Ex loading under Mac OS 9.2.2.</figcaption>
+</figure>
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/rage128-3d-geometry.png" alt="A dark, untextured three-dimensional shape rendered in shades of grey and near-black against a black background, filling an otherwise empty emulator window." />
+  <figcaption class="kh-figure__caption">Geometry rendering through the Rage 128 path. Untextured and very dark. Not done yet.</figcaption>
+</figure>
+
+## How fast is it, and what is still missing
+
+Boot on the verified baseline is 28.3 seconds. A newer technique gets it under 10, reliably, though I am still validating that one. Either way it is not yet as quick as Old World 9.0.4 feels, and I have not really pushed the JIT optimizations.
+
+Sound, networking and printing are there, and buggy. I have not got to Final Cut Pro 3, which was the whole punchline of the last post. This is an incremental update, not an everything-has-landed post.
+
+## If this is your kind of thing
+
+I am one person, one machine, one way of using it. I develop on an M5 MacBook Air with 32 GB, and I test the paths I already know about. My use case is almost certainly missing something, and I have no way of finding out what from where I am sitting.
+
+So if you have an Apple Silicon Mac, any interest in classic Mac OS, and you read the above with some enthusiasm, I would like to hear from you. (This could be made to work on ARM Linux, but I'm not ready to pivot to that yet.)
+
+Two practical notes. You would be building from source, so this is an evening rather than a download. And a lot of this was built with AI partners, in the [working pattern I wrote about earlier this year](/posts/20260420-let-ai-worry-about-the-code/), which is not to everyone's taste and worth knowing before you spend that evening on it.
+
+<p class="kh-cluster">
+  <a class="kh-button" href="mailto:khawkins98@gmail.com?subject=NewSheep%20%E2%80%94%20I'd%20like%20to%20help&amp;body=Hi%20Ken%2C%0A%0AI%20read%20the%20Mac%20OS%209.2.1%20post%20and%20I%20would%20like%20to%20help.%0A%0AMy%20setup%0A-%20Mac%20(chip%20and%20model%2C%20e.g.%20MacBook%20Pro%20M2%20Max)%3A%0A-%20RAM%3A%0A-%20macOS%20version%3A%0A-%20GitHub%20username%3A%0A%0AWhat%20I%20would%20use%20Mac%20OS%209%20for%3A%0A%0AMac%20OS%20media%20and%20ROMs%20I%20already%20have%3A%0A%0AAnything%20else%20worth%20knowing%3A%0A%0A(For%20the%20avoidance%20of%20doubt%3A%20I%20know%20this%20is%20early%20and%20will%20break%20in%20ways%20you%0Ahave%20not%20seen%2C%20I%20am%20happy%20just%20reporting%20what%20I%20find%2C%20and%20I%20am%20fine%20with%20the%0Afact%20that%20a%20lot%20of%20it%20was%20built%20with%20AI%20assistance.)%0A">Get in touch</a>
+</p>
+
+That opens a pre-filled message; fill in what you can and delete the rest. I will give you access to the pre-release GitHub repo.
+
+Reporting what you find is the whole of it. Contributing code back is welcome and not expected.
+
+I am going to keep pushing this forward either way. It will get further, and be better made, with other people's input.
+
+{% endmarkdown %}
