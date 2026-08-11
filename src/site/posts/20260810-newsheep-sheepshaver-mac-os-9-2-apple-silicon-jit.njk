@@ -14,7 +14,7 @@ image: /blog/siliconsheep-mac-library.png
 image_meta:
   text: "SiliconSheep managing three virtual Macs, with a freshly installed Mac OS 9.2.2 selected."
   credit: "Own work."
-  altext: "A macOS app window titled SiliconSheep. A Mac Library sidebar lists three virtual machines: My Mac running System 7 to 9.0.4, NewWorld 9.2.1 Soak, and Mac OS 9.2.2 Fresh Dogfood. The selected machine shows Start, Configure and Actions buttons, a thumbnail of a purple Mac OS 9 Finder desktop, and a status panel reading Ready to start."
+  altext: "A macOS app window titled SiliconSheep. A Mac Library sidebar lists three virtual machines. The selected machine shows Start, Configure and Actions buttons, a thumbnail of a purple Mac OS 9 Finder desktop, and a status panel reading Ready to start."
 ---
 
 {% markdown %}
@@ -41,11 +41,11 @@ Running Mac OS 9.2 on an Apple Silicon Mac is not itself news. [UTM](https://mac
 
 The fork has a name now, NewSheep, because at some point "the macemu JIT branch" stopped describing it. Same chain as before ([cebix](https://github.com/cebix/macemu) → [kanjitalk755](https://github.com/kanjitalk755/macemu) → [rcarmo](https://github.com/rcarmo/macemu-jit) → this).
 
-**A real install lifecycle.** You can now take your New World ROM and a 9.2.2 installer ISO you own, create a virtual machine, initialize a blank disk in Drive Setup, run Install Mac OS, shut down properly from the Special menu, and boot the thing you just installed. Yay! (9.2.2 is what the installer produces; 9.2.1 is the version with the verified boot baseline behind it.)
+**A real install lifecycle.** You can now take your New World ROM and a 9.2.2 installer ISO you own, create a virtual machine, initialize a blank disk in Drive Setup, run Install Mac OS, shut down properly from the Special menu, and boot the thing you just installed. Yay!
 
-**A launcher that behaves like a product.** SiliconSheep is a desktop app, built with Tauri, that owns virtual machines as first-class objects: create, import an existing 9.2.2 system disk, preflight, launch, and an embedded Console for the guest display rather than SheepShaver's raw window.
+**A launcher that behaves like a product.** SiliconSheep is a desktop app, built with Tauri, that owns virtual machines as first-class objects: create, import an existing system disk, preflight, launch, and an embedded Console for the guest display rather than SheepShaver's raw window.
 
-**Testing that runs the whole operating system.** An end-to-end harness drives the guest over <abbr title="Virtual Network Computing">VNC</abbr>, waits for the Finder to actually settle rather than merely appear, injects input, and makes Mac OS run its own shutdown. Without it I would not trust any of the claims in this post.
+**Testing that runs the whole operating system.** An end-to-end harness drives the guest over <abbr title="Virtual Network Computing">VNC</abbr>, waits for the Finder to actually settle rather than merely appear, injects input, and makes Mac OS run its own shutdown.
 
 **Real applications, driven.** Three of them are exercised rather than merely launched: Photoshop 7.0.1 opens a generated TIFF and applies an Unsharp Mask; Ultra Pinball takes gameplay input in a verified game window; AppleWorks gets a turn too.
 
@@ -63,7 +63,7 @@ The fork has a name now, NewSheep, because at some point "the macemu JIT branch"
 
 ## How fast is it, and what is still missing
 
-Boot on the verified baseline is 28.3 seconds. A newer technique gets it under 10, reliably, though I am still validating that one. Either way it is not yet as quick as Old World 9.0.4 feels, and I have not really pushed the JIT optimizations.
+My 9.2 boots under 10 seconds. But it is not yet as quick as Old World 9.0.4 feels, and I have not really pushed the JIT optimizations. I fully expect to get this faster.
 
 Sound, networking and printing are there, and buggy. I have not got to Final Cut Pro 3, which was the whole punchline of the last post. This is an incremental update, not an everything-has-landed post.
 
