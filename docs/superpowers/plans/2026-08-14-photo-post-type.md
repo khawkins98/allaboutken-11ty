@@ -169,9 +169,18 @@ templateEngineOverride: njk
   <div class="kh-photo__caption kh-content">
     <p class="kh-breadcrumb" data-pagefind-ignore><a href="/photos/">← Photographs</a></p>
     <h1 class="kh-font-headline kh-text-heading--1">{{ title }}</h1>
+    {#- Parents only, and linked when a topic page exists, matching
+        digesting.njk. Without this a topic page would list the photograph
+        while the photograph never linked back. -#}
     <p class="kh-meta" data-pagefind-ignore>
       <time datetime="{{ date }}">{{ date | dateDisplay }}</time>
       {%- if photo_meta and photo_meta.place %} &middot; {{ photo_meta.place }}{% endif %}
+      {%- if topics %} &middot; Filed in:
+        {%- for parent in topics | topicParents %}
+        {%- set topicSlug = collections.topics | topicPageSlug(parent) %}
+        {% if topicSlug %}<a href="/topics/{{ topicSlug }}/">{{ parent }}</a>{% else %}{{ parent }}{% endif %}{{ "," if not loop.last }}
+        {%- endfor %}
+      {%- endif %}
     </p>
     {% if image_meta and image_meta.text %}
     <p class="kh-photo__text">{{ image_meta.text | safe }}</p>
@@ -894,11 +903,22 @@ Expected: at least `1`. A `0` means the entry was excluded from the corpus; chec
 
 - [ ] **Step 6: Confirm the grid did not reach the corpus as chrome**
 
+`vectors.json` is `{model, dimension, version, chunks[]}` where each chunk is `{url, title, snippet, embedding}`. The requirement is that no chunk belonging to `/photos/` repeats the photo entry's own title; the page's own intro is meant to be indexed, so a plain grep for the intro text would fail on correct code.
+
 ```bash
-grep -c "Occasional frames" build/semantic-search/vectors.json
+python3 - <<'PY'
+import json
+d = json.load(open('build/semantic-search/vectors.json'))
+leaked = [c for c in d['chunks']
+          if c['url'].startswith('/photos/')
+          and 'eclipse evening' in c.get('snippet', '')]
+print('leaked chunks:', len(leaked))
+intro = [c for c in d['chunks'] if c['url'].startswith('/photos/')]
+print('/photos/ chunks total:', len(intro))
+PY
 ```
 
-Expected: `0` for the grid's repeated entry text. The page's own intro may appear, which is intended; what must not appear is a chunk listing other entries' places and dates.
+Expected: `leaked chunks: 0`, and `/photos/ chunks total:` at least 1. A leak greater than zero means the `data-pagefind-ignore` on the grid is missing or is being defeated. A total of 0 means the page is not indexed at all, which is a different bug: check it is not marked `noindex`.
 
 - [ ] **Step 7: Final visual pass**
 
