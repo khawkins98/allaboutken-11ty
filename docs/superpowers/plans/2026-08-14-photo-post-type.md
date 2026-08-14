@@ -559,6 +559,65 @@ Expected: at least `1`.
 
 Run `yarn dev` and open `http://localhost:8080/photos/` and the entry page. Check three things: the grid is a single column on a narrow window and three across on a wide one; the photograph on the entry page is wider than the caption text below it; and toggling the CSS checkbox in the footer off leaves a readable, unstyled page.
 
+- [ ] **Step 6b: Stop the grid caption rendering as link text**
+
+Found in the visual pass: the date and place under each thumbnail render underlined, so a cell reads as an image with two stacked links beneath it rather than as a picture with a caption.
+
+The cause is a cascade collision, not a missing rule. The stylesheet already carries `.kh-photo-grid__cell a { text-decoration: none; }`, but `styles.css` also carries a global `body:has(#kh-css-toggle:checked) a:not([class*=kh-])` rule that sets an underline. Both selectors compute to the same specificity, and the global one appears later in the file, so it wins.
+
+That `:not([class*=kh-])` is the site's own opt-out convention: an anchor carrying a `kh-` class is excluded from default link styling by design. The grid's anchor has no class at all, which is why it was caught. So the fix is to use the convention rather than to escalate specificity.
+
+In `src/site/photos/index.njk`, give the anchor a class:
+
+```njk
+        <a href="{{ photo.url | url }}" class="kh-photo-grid__link">
+```
+
+Then in `src/components/vf-componenet-rollup/_kh-photos.scss`, retarget the two rules that referenced the bare descendant anchor. Change:
+
+```scss
+  .kh-photo-grid__cell a {
+    display: block;
+    text-decoration: none;
+  }
+```
+
+to:
+
+```scss
+  .kh-photo-grid__link {
+    display: block;
+    text-decoration: none;
+  }
+```
+
+and change:
+
+```scss
+  .kh-photo-grid__cell picture,
+  .kh-photo-grid__img {
+```
+
+to:
+
+```scss
+  .kh-photo-grid__link picture,
+  .kh-photo-grid__img {
+```
+
+Do NOT reach for `!important` or for a longer selector chain. Adding the class removes this cell from the global rule's reach entirely, which is what the convention is for, and it leaves the next person a selector that says what it styles.
+
+- [ ] **Step 6c: Confirm the caption is no longer underlined**
+
+```bash
+yarn sass && yarn eleventy
+grep -c "kh-photo-grid__link" build/photos/index.html
+grep -c "kh-photo-grid__link" build/css/styles.css
+grep -c "kh-photo-grid__cell a" build/css/styles.css
+```
+
+Expected: the first two are at least 1, and the third is `0`. A non-zero third result means an old selector survived and the two rules now disagree about what they target.
+
 - [ ] **Step 7: Lint the stylesheet**
 
 ```bash
