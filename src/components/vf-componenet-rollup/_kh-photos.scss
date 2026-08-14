@@ -24,7 +24,7 @@
     }
   }
 
-  .kh-photo-grid__cell a {
+  .kh-photo-grid__link {
     display: block;
     text-decoration: none;
   }
@@ -33,7 +33,7 @@
   // <picture><source><img></picture>, so the direct child of the link may be
   // either. Both are targeted, or the layout depends on whether the transform
   // ran that build.
-  .kh-photo-grid__cell picture,
+  .kh-photo-grid__link picture,
   .kh-photo-grid__img {
     display: block;
     width: 100%;

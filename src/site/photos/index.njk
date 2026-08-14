@@ -20,7 +20,7 @@ layout: layouts/base.njk
     <ul class="kh-photo-grid" data-pagefind-ignore>
     {%- for photo in collections.photos %}
       <li class="kh-photo-grid__cell">
-        <a href="{{ photo.url | url }}">
+        <a href="{{ photo.url | url }}" class="kh-photo-grid__link">
           {#- Guarded rather than `photo.data.image_meta.altext or ''`: Nunjucks
               throws on an attribute lookup through an undefined object, so an
               entry without image_meta would break the whole grid. -#}
