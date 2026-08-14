@@ -625,6 +625,65 @@ to:
   {%- for post in collections.feedEntries | limitItems(10) %}
 ```
 
+- [ ] **Step 2b: Put the photograph itself into the feed entry**
+
+Without this, a photo entry reaches subscribers as a title and two sentences about a picture they cannot see, which defeats the reason for putting photographs in the feed at all.
+
+The cause: `<content>` is built from `post.templateContent`, which is the entry's own body *before* the layout wraps it. A photograph's image lives in frontmatter and is rendered by `photo.njk`, so it is never part of `templateContent`. Blog posts do not hit this, because the images in their feed entries are inline in the markdown body.
+
+Immediately before the `<content type="html">` line, add:
+
+```njk
+  {#- A photograph's image is frontmatter rendered by the layout, so it is
+      absent from `templateContent`. Without this block the feed carries an
+      entry about a picture with no picture in it. Scoped to photo entries so
+      that what existing subscribers receive for a blog post is unchanged --
+      widening it to every entry's hero image is a separate decision about
+      other people's inboxes, not a detail of this change. -#}
+  {%- set photoBody %}
+    {%- if post.data.image and 'photos' in post.data.tags %}
+    {%- set photoAlt = post.data.image_meta.altext if post.data.image_meta else '' %}
+    <p><img src="/images{{ post.data.image }}" alt="{{ photoAlt }}" /></p>
+    {%- if post.data.image_meta and post.data.image_meta.text %}
+    <p>{{ post.data.image_meta.text | safe }}</p>
+    {%- endif %}
+    {%- endif %}
+  {%- endset %}
+```
+
+Then change the content line from:
+
+```njk
+    <content type="html">{{ post.templateContent | sanitizeFeedHtml | htmlToAbsoluteUrls(metadata.id) }}</content>
+```
+
+to:
+
+```njk
+    <content type="html">{{ (photoBody + post.templateContent) | sanitizeFeedHtml | htmlToAbsoluteUrls(metadata.id) }}</content>
+```
+
+Two things make this safe. `sanitizeFeedHtml` strips scripts, styles and inline handlers but preserves `<img>`, so the tag survives. And `htmlToAbsoluteUrls` rewrites the `/images/...` path to a full URL, which a feed reader needs; do not hand-write the domain.
+
+- [ ] **Step 2c: Assert the photograph reaches the feed entry**
+
+```bash
+yarn sass && yarn eleventy
+python3 - <<'PY'
+import re
+x = open('build/rss.xml', encoding='utf-8').read()
+e = re.search(r'<entry>(?:(?!</entry>).)*?Bundeskunsthalle.*?</entry>', x, re.S)
+assert e, 'photo entry not found in feed'
+body = e.group(0)
+print('has img:', 'img src=' in body or '&lt;img' in body)
+print('absolute url:', 'https://www.allaboutken.com/images/' in body)
+PY
+```
+
+Expected: both `True`. `has img: False` means Step 2b's block did not run; check the `'photos' in post.data.tags` condition against the entry's actual frontmatter, which sets `tags` as a scalar string rather than a list.
+
+Also confirm a blog post's feed entry is unchanged by this: pick any recent post entry in `build/rss.xml` and check it did not gain an image it did not have before.
+
 - [ ] **Step 3: Build and assert the photograph is in the feed**
 
 ```bash
