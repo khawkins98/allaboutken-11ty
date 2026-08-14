@@ -56,7 +56,22 @@ metadata:
     {% endfor %}
     {% endif %}
     <summary type="html">{{ ((post.data.teaser | striptags) or (post.templateContent | striptags)) | escape }}</summary>
-    <content type="html">{{ post.templateContent | sanitizeFeedHtml | htmlToAbsoluteUrls(metadata.id) }}</content>
+    {#- A photograph's image is frontmatter rendered by the layout, so it is
+        absent from `templateContent`. Without this block the feed carries an
+        entry about a picture with no picture in it. Scoped to photo entries so
+        that what existing subscribers receive for a blog post is unchanged --
+        widening it to every entry's hero image is a separate decision about
+        other people's inboxes, not a detail of this change. -#}
+    {%- set photoBody %}
+      {%- if post.data.image and 'photos' in post.data.tags %}
+      {%- set photoAlt = post.data.image_meta.altext if post.data.image_meta else '' %}
+      <p><img src="/images{{ post.data.image }}" alt="{{ photoAlt }}" /></p>
+      {%- if post.data.image_meta and post.data.image_meta.text %}
+      <p>{{ post.data.image_meta.text | safe }}</p>
+      {%- endif %}
+      {%- endif %}
+    {%- endset %}
+    <content type="html">{{ (photoBody + post.templateContent) | sanitizeFeedHtml | htmlToAbsoluteUrls(metadata.id) }}</content>
   </entry>
   {%- endfor %}
 </feed>
