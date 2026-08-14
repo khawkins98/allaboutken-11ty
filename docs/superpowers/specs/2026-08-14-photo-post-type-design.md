@@ -48,9 +48,27 @@ photo_meta:
 ```
 
 `image` and `image_meta` are reused verbatim from the post model, so the
-existing image transform, the build-time `/images/` prefix rewrite and the
-Schema.org block keep working with no changes. Note the CLAUDE.md rule: the
-frontmatter value is `/blog/…`, never `/images/blog/…`.
+build-time `/images/` prefix rewrite keeps working with no changes. Note the
+CLAUDE.md rule: the frontmatter value is `/blog/…`, never `/images/blog/…`.
+
+Two corrections to this section, made after implementation and kept here rather
+than quietly edited away, because both were wrong in the same direction: they
+assumed reusing a field meant inheriting everything attached to it.
+
+**The Schema.org block does not come along.** An earlier draft of this document
+claimed it did. It does not: the JSON-LD lives in `post.njk`, not in
+`base.njk`, so a layout that does not include it emits no structured data.
+Photo pages therefore have none. Digesting entries have none either, so the
+code is at least consistent, but a `Photograph` or `ImageObject` block is
+genuine follow-up work rather than something this design delivered.
+
+**The image transform does not process the hero either.** It rewrites `<img>`
+tags in listing contexts, but hero images on entry pages are untouched, which
+is true of every hero on the site and predates this work. It matters more here
+than elsewhere because a photograph's hero *is* the page, so the entry layout
+sets explicit `width`/`height` attributes to reserve space. Those are the
+current photograph's intrinsic dimensions, hardcoded; a second photograph of a
+different size needs them changed.
 
 `photo_meta` is new and entirely optional. `place` is the only field read
 outside the entry page: the grid prints it under each thumbnail. `taken` and
@@ -187,6 +205,20 @@ Source for the first entry: `~/Downloads/Photos/IMG_0072.heic`, 2.9 MB,
 - `docs/TEMPLATES.md`: add `layouts/photo.njk`.
 - `CLAUDE.md`: record that the feed is now a merged collection and no longer
   the raw `posts` tag, so nobody re-derives why.
+
+## Known untested: the second photograph
+
+Every check in this design passes with exactly one photograph in the
+collection, which means a set of behaviours is untested by construction rather
+than by oversight:
+
+- the grid's two- and three-column layouts, since one item cannot fill them
+- the `max-width` cap on the entry image, which is this photograph's width
+- the entry image's hardcoded `width`/`height` attributes
+- the feed's ordering of two photographs sharing a date
+
+None of these is a reason to hold the first entry. All of them are the first
+thing to look at when the second one lands.
 
 ## Verification
 
