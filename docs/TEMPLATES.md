@@ -11,9 +11,10 @@ Page templates live in `src/site/`. Layouts and shared fragments are resolved fr
 | Base | `src/site/_includes/layouts/base.njk` | Most pages | Global `<head>`, OG/Twitter tags, header, footer, scripts, ambience partial |
 | Post | `src/site/_includes/layouts/post.njk` | Long-form posts and impact stories | Wraps content in article structure, hero image, JSON-LD, feedback block |
 | Digesting | `src/site/_includes/layouts/digesting.njk` | Digest entries and selected standalone pages | Lightweight article layout with digest source link support |
+| Photo | `src/site/_includes/layouts/photo.njk` | Single-photograph entries | Image at full grid width, caption, place and camera details below; listed at `/photos/` |
 | Social card | `src/site/_includes/layouts/social-card.njk` | `/social/*` pages | Screenshot-service target for OG images |
 
-`post.njk` and `digesting.njk` both use `layout: layouts/base.njk`, so `base.njk` is the shared foundation.
+`post.njk`, `digesting.njk` and `photo.njk` all use `layout: layouts/base.njk`, so `base.njk` is the shared foundation.
 
 ## Common partials and macros
 

@@ -59,7 +59,7 @@ here with a definition.
   All 31 topics have 3 or more posts. Every post has 2–5 topics, most
   specific first.
 
-## The controlled vocabulary (31 topics)
+## The controlled vocabulary (32 topics)
 
 | Topic | Definition | Post count |
 |---|---|---|
@@ -94,6 +94,7 @@ here with a definition.
 | digital transformation | Organizational digital transformation and change management. | 3 |
 | retro computing | Vintage/retro computing, emulation, legacy hardware. | 3 |
 | search | Site search and semantic search. | 3 |
+| photography | Photographs published as entries in their own right, rather than illustrations for a written piece. | 1 |
 
 ## Old → new mapping (all 158 original strings)
 

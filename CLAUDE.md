@@ -207,6 +207,19 @@ Two consequences that are easy to miss:
   the unmatched-anchor warning on every build. Add the anchor when the post
   publishes.
 
+### The feed reads a merged collection, not the `posts` tag
+`feed.njk` used to iterate `collections.posts`, Eleventy's own tag collection.
+That is why digesting notes have never appeared in RSS: nobody decided it, the
+tag decided it. Photographs were meant to go out to subscribers and are not
+blog posts, so the feed now reads `collections.feedEntries`, an explicit merged
+collection of `posts` plus `photos` registered in `config/eleventy/collections.js`.
+
+Two consequences. Adding a content type to the feed is now a one-line change in
+one place, which is the point. And `feedEntries` is sorted newest-first at
+registration, unlike a tag collection, so the `reverse` filter that used to sit
+in the template must not come back -- with it, the feed emits the ten oldest
+entries on the site.
+
 ### Story-lab anchors match on the exact title string
 `semanticTrailSpecs` in `scripts/compute-story-lab.mjs` finds its anchor
 entries by exact title. Retitle a post and it drops out of its biography; the

@@ -13,6 +13,7 @@ Every field that templates read from YAML frontmatter across post, page, and dig
 | [`teaser`](#teaser) | Recommended | post, listing partials, base | Short description for meta, intro para, cards, OG description |
 | [`image`](#image) | Optional | post | Hero image path |
 | [`image_meta`](#image_meta) | Optional | post, base | Caption, credit, and alt text for the hero image |
+| [`photo_meta`](#photo_meta) | Optional | photo | Place, capture time, and camera details for a photograph |
 | [`topics`](#topics) | Optional | post, digesting | Subject taxonomy, controlled vocabulary (shown below the date) |
 | [`series`](#series) | Optional | post | Name of a multi-part series this post belongs to |
 | [`series_part`](#series_part) | Optional | post | This post's position in that series |
@@ -98,6 +99,7 @@ tags: posts
   | `digesting` | `allContent` | Included in all-content stream |
   | `case-studies` | neither `blogPosts` nor `impactStories` | Excluded from the main blog listing |
   | `note` | — | Shows a "short-form note" banner in the post body |
+  | `photos` | `photos`, `allContent`, `feedEntries` | A photograph; uses `layouts/photo.njk`, listed at `/photos/`, excluded from the blog listing |
 
 - A page tagged `posts` + `impact-stories` appears under `/work/` breadcrumb but **not** in the blog listing.
 
@@ -150,6 +152,22 @@ image_meta:
 - `altext` (or `alt`) → used for `<img alt="...">` in `layouts/post.njk`; both are checked and `altext` takes precedence.
 - `alt` (only) is used for `og:image:alt` and `twitter:image:alt` in `layouts/base.njk`.
 - For Ken's own photos use: `credit: "Own work."` (not "Photo by Ken Hawkins").
+
+---
+
+### `photo_meta`
+
+```yaml
+photo_meta:
+  place: "Bundeskunsthalle, Bonn"
+  taken: "12 August 2026, 19:03"
+  camera: "iPhone 13 mini &middot; &fnof;/1.6 &middot; 1/5556 &middot; 5.1 mm &middot; ISO 50"
+```
+
+- Only read by `layouts/photo.njk` and the `/photos/` grid.
+- `place` is the only field used outside the entry page: the grid prints it under each thumbnail.
+- `taken` carries the precise time, which `date` does not. Sorting and every collection use `date`, so the two never compete.
+- `camera` is display-only. Use HTML entities rather than literal glyphs so the ƒ-stop renders reliably.
 
 ---
 
