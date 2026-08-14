@@ -113,7 +113,7 @@ topics:
   - photography
 image: /blog/bundeskunsthalle-roof-eclipse-evening.jpg
 image_meta:
-  text: "The roof lawn of the Kunst- und Ausstellungshalle der Bundesrepublik Deutschland, Bonn. The two glass cones are the building's Lichttürme; behind them the government quarter, with the Bundesnetzagentur at centre and the Langer Eugen, the UN building, at left."
+  text: "The roof lawn of the Kunst- und Ausstellungshalle der Bundesrepublik Deutschland, Bonn. The two cones are the building's Lichttürme, mosaic below and glass above; behind them the government quarter, with the Bundesnetzagentur at centre and the Langer Eugen, the UN building, at left."
   credit: "Own work."
   altext: "Black and white photograph of a rooftop lawn crowded with people sitting and standing in low evening sun. Two tall glass and stone cones rise at the right. Behind, a wide office block with a grid of windows and a slimmer tower carrying a circular emblem, against a near-black sky."
 photo_meta:
