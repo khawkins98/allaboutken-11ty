@@ -1,0 +1,80 @@
+@use './settings' as *;
+
+// Photographs
+// -----------
+// Two surfaces: the thumbnail grid at /photos/, and the single-photo entry
+// page. On the entry page the image is the content rather than an illustration
+// of it, so it spans the full grid instead of sitting in the reading column
+// the way post.njk's hero does.
+@mixin kh-photos() {
+  .kh-photo-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0;
+    margin: 2rem 0 0;
+    list-style: none;
+
+    @media (min-width: $kh-breakpoint--sm) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: $kh-breakpoint--lg) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .kh-photo-grid__cell a {
+    display: block;
+    text-decoration: none;
+  }
+
+  // The image transform rewrites a processed <img> into
+  // <picture><source><img></picture>, so the direct child of the link may be
+  // either. Both are targeted, or the layout depends on whether the transform
+  // ran that build.
+  .kh-photo-grid__cell picture,
+  .kh-photo-grid__img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .kh-photo-grid__meta {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .kh-photo-grid__date,
+  .kh-photo-grid__place {
+    display: block;
+  }
+
+  .kh-photo-grid__place {
+    color: var(--kh-color--grey--darkest);
+  }
+
+  // Entry page. Capped at intrinsic width so a 2000px source is never upscaled
+  // on a wide display.
+  .kh-photo__figure {
+    margin: 0 0 1.5rem;
+  }
+
+  .kh-photo__figure picture,
+  .kh-photo__img {
+    display: block;
+    width: 100%;
+    max-width: 2000px;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .kh-photo__caption {
+    max-width: 42rem;
+  }
+
+  .kh-photo__tech {
+    margin-top: 1.5rem;
+  }
+}
