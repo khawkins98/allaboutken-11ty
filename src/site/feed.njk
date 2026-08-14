@@ -14,7 +14,7 @@ metadata:
   <subtitle>{{ siteConfig.short_description }}</subtitle>
   <link href="{{ metadata.url }}" rel="self"/>
   <link href="{{ siteConfig.url }}"/>
-  <updated>{{ collections.posts | published | rssLastUpdatedDate }}</updated>
+  <updated>{{ collections.feedEntries | rssLastUpdatedDate }}</updated>
   <id>{{ metadata.id | ensureTrailingSlash }}</id>
   <logo>{{ metadata.id }}/assets/ken-favicon/assets/android-chrome-512x512.png</logo>
   <icon>{{ metadata.id }}/assets/ken-favicon/assets/favicon-32x32.png</icon>
@@ -22,9 +22,13 @@ metadata:
     <name>{{ siteConfig.author }}</name>
     <email>{{ siteConfig.email }}</email>
   </author>
-  {#- A feed entry cannot be unsent. Drafts are filtered before the slice, not
-      after, so an unfinished post cannot push a published one out of the ten. -#}
-  {%- for post in collections.posts | published | reverse | limitItems(10) %}
+  {#- A merged collection of blog posts and photographs, sorted newest first in
+      collections.js, rather than the raw `posts` tag. Digesting notes stay out.
+      No `reverse` here: unlike Eleventy's tag collections, feedEntries is
+      already newest-first. Drafts are filtered in the collection, before this
+      slice rather than after, so an unfinished entry cannot push a published
+      one out of the ten. -#}
+  {%- for post in collections.feedEntries | limitItems(10) %}
   {%- set absolutePostUrl %}{{ metadata.id }}{{ post.url }}{% endset %}
   <entry>
     <title>{{ post.data.title }}</title>
