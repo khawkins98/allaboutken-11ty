@@ -10,6 +10,7 @@
 //   article   — filled ink square   (#2b2b28)
 //   digesting — open blue square    (#3b6fb6)
 //   impact    — filled coral diamond (#bf4a26)
+//   photo     — filled grey square  (#373a36)
 // Type is always shape/position + colour together, never colour alone, and
 // every mark carries a text equivalent in the markup.
 @mixin kh-dataviz() {
@@ -536,6 +537,12 @@
     height: 9px;
     transform: rotate(45deg);
     width: 9px;
+  }
+
+  // Filled grey square: distinct from article's ink fill and digesting's open
+  // outline without inventing a new shape or a fourth accent colour.
+  .kh-seq__mark--photo::before {
+    background: var(--kh-color--grey--darkest);
   }
 
   // Filled coral, not an outline. An outline-only state disappeared among

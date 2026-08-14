@@ -66,9 +66,13 @@ for (const file of readdirSync(POSTS).filter((name) => /\.(njk|md)$/.test(name))
   const tags = blockList(frontmatter, 'tags');
   const topics = blockList(frontmatter, 'topics');
   const series = unquote((frontmatter.match(/^series:\s*(.+)$/m) || [])[1] || '');
+  // Mirrors khEntryType in config/eleventy/timeline.js -- the pulse strip and
+  // this lab's views are two independent implementations of one
+  // classification, and must agree on every entry's type.
   const kind = file.includes('impact-story') || tags.includes('impact-stories')
     ? 'impact'
-    : tags.includes('digesting') ? 'digesting' : 'article';
+    : tags.includes('digesting') ? 'digesting'
+      : tags.includes('photos') ? 'photo' : 'article';
   sourceByTitle.set(titleKey(title), { date, file, tags, topics, series, kind, source });
 }
 

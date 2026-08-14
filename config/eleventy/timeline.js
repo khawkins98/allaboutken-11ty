@@ -12,12 +12,13 @@ module.exports = function registerTimeline(config) {
   // pulse strip, the sequence rail, the length gauge, and topic tallies.
   // Everything is computed at build time and baked into markup — no JS.
 
-  // Classify a collection item into the register's three entry types.
-  // Notes are a flavour of article, not a fourth type.
+  // Classify a collection item into the register's four entry types.
+  // Notes are a flavour of article, not a fifth type.
   function khEntryType(item) {
     const tags = getTagArray(item);
     if (tags.includes('impact-stories')) return 'impact';
     if (tags.includes('digesting')) return 'digesting';
+    if (tags.includes('photos')) return 'photo';
     return 'article';
   }
 
