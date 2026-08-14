@@ -721,8 +721,10 @@ git commit -m "feature: include photographs in the RSS feed"
 ### Task 6: Register surfaces
 
 **Files:**
-- Modify: `src/site/all/index.njk:21-31` (intro) and `:47-72` (Sections panel)
+- Modify: `src/site/all/index.njk` — frontmatter `teaser`, intro paragraph, Sections panel
 - Modify: `src/site/_includes/footer.njk:56-62`
+- Modify: `src/site/directory.njk` — the "Writing" panel's first row
+- Modify: `src/site/stats.njk` — the Method list
 
 **Interfaces:**
 - Consumes: `collections.photos` from Task 3; the `/photos/` page from Task 4.
@@ -791,6 +793,82 @@ In `src/site/_includes/footer.njk`, in the "Writing & making" list, add a Photos
         <li><a href="/photos/">Photographs</a></li>
 ```
 
+- [ ] **Step 3b: The same panel on `/directory/`**
+
+`src/site/directory.njk` carries a second hand-built copy of the same three-column panel, on the page that presents itself as the site's map of everything. Leaving it stale is worse than an omission: the section heading above it reads `{{ collections.allContent | length }} entries in total`, and `allContent` now includes photographs, so the page would count photographs in its total while no cell accounts for them.
+
+In its "Writing" panel, change the first row's track count from:
+
+```njk
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr">
+```
+
+to:
+
+```njk
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr 1fr">
+```
+
+Change ONLY the first row, the one containing the Blog, Digesting and Work cells. The second row in that same panel also declares three tracks and is a different set of cells; leave it alone.
+
+Then add a fourth cell after the Work cell in that first row:
+
+```njk
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Photos</span>
+        <a href="/photos/">Photographs</a>
+        <span class="kh-meta kh-u-margin__top--200">{{ collections.photos | length }} entries</span>
+      </div>
+```
+
+- [ ] **Step 3c: The stale enumerations in prose**
+
+Two sentences elsewhere still name three kinds of thing.
+
+First, the `teaser` in the frontmatter of `src/site/all/index.njk`, which is this page's meta description and its social-card description. Change:
+
+```yaml
+teaser: "Everything in one place — blog posts, digesting bookmarks, and impact stories."
+```
+
+to:
+
+```yaml
+teaser: "Everything in one place: blog posts, digesting bookmarks, impact stories, and photographs."
+```
+
+The em dash becomes a colon, per the site's preference for `;` `:` `,` `.` over em dashes.
+
+Second, `src/site/stats.njk`, in the Method list. Change:
+
+```njk
+      <li>Entries are everything in the writing register: blog posts, digesting notes and project notes. Pages like this one are not counted.</li>
+```
+
+to:
+
+```njk
+      <li>Entries are everything in the writing register: blog posts, digesting notes, impact stories and photographs. Pages like this one are not counted.</li>
+```
+
+Note this sentence was already inaccurate before photographs existed: it said "project notes", which is not one of this site's content types. Photographs now enter `allContent` and are therefore counted by every figure on that page, so the sentence has to name them.
+
+- [ ] **Step 3d: Assert the two panels agree**
+
+```bash
+yarn sass && yarn eleventy
+grep -c "/photos/" build/directory/index.html
+python3 - <<'PY'
+import re
+for page in ('all', 'directory'):
+    h = open(f'build/{page}/index.html', encoding='utf-8').read()
+    rows = re.findall(r'--kh-panel-columns:\s*([^"]+)"', h)
+    print(page, 'panel track declarations:', rows)
+PY
+```
+
+Expected: the `/photos/` count on `/directory/` is at least 2, the panel cell plus the footer link. And the first panel row on each page declares four tracks. A row still declaring three tracks while carrying four cells is the silent misalignment this step exists to catch.
+
 - [ ] **Step 4: Build and assert both surfaces**
 
 ```bash
@@ -809,7 +887,8 @@ Run `yarn dev`, open `/all/`, and narrow the window. The panel was built for thr
 - [ ] **Step 6: Commit**
 
 ```bash
-git add src/site/all/index.njk src/site/_includes/footer.njk
+git add src/site/all/index.njk src/site/_includes/footer.njk \
+        src/site/directory.njk src/site/stats.njk
 git commit -m "feature: add photographs to the register and footer"
 ```
 
