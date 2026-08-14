@@ -65,7 +65,7 @@ metadata:
     {%- set photoBody %}
       {%- if post.data.image and 'photos' in post.data.tags %}
       {%- set photoAlt = post.data.image_meta.altext if post.data.image_meta else '' %}
-      <p><img src="/images{{ post.data.image }}" alt="{{ photoAlt }}" /></p>
+      <p><img src="/images{{ post.data.image | url }}" alt="{{ photoAlt }}" /></p>
       {%- if post.data.image_meta and post.data.image_meta.text %}
       <p>{{ post.data.image_meta.text | safe }}</p>
       {%- endif %}

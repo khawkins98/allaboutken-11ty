@@ -19,8 +19,13 @@ templateEngineOverride: njk
       transform rewrites a processed <img> into <picture><source><img></picture>
       -- a class on the <img> is then a level too deep to position. -#}
   <figure class="kh-photo__figure">
+    {#- width/height are this image's own intrinsic size, hardcoded because the
+        eleventy-img transform does not process this tag (site-wide, not fixed
+        here). They must change with the image; without them the browser
+        reserves no space and the full-width hero shifts the page as it loads. -#}
     <img class="kh-photo__img" src="/images{{ image | url }}"
          alt="{{ image_meta.altext or image_meta.alt or '' }}"
+         width="2000" height="1500"
          decoding="async" fetchpriority="high">
   </figure>
 

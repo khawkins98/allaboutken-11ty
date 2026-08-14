@@ -46,6 +46,16 @@
     font-size: 0.85rem;
   }
 
+  // The cell's primary label: the grid thumbnail is decorative (alt=""), so
+  // this is the only place a sighted reader sees what the photograph is.
+  // No colour override -- it reads as a title, in the link's own colour,
+  // while the date and place beneath it stay meta-grey.
+  .kh-photo-grid__title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
   .kh-photo-grid__date,
   .kh-photo-grid__place {
     display: block;
@@ -55,8 +65,10 @@
     color: var(--kh-color--grey--darkest);
   }
 
-  // Entry page. Capped at intrinsic width so a 2000px source is never upscaled
-  // on a wide display.
+  // Entry page. Capped at 2000px, this photograph's own intrinsic width, so it
+  // is never upscaled on a wide display. That is a per-image assumption, not a
+  // rule derived from any photograph's actual size: a future 3000px or
+  // portrait photograph will need this value revisited, silently otherwise.
   .kh-photo__figure {
     margin: 0 0 1.5rem;
   }
