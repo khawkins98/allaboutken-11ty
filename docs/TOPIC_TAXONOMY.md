@@ -57,7 +57,11 @@ here with a definition.
   literal string in the source file, which is what I audited against.)
 - **After:** 31 distinct topics across all 100 posts. **Zero singletons.**
   All 31 topics have 3 or more posts. Every post has 2–5 topics, most
-  specific first.
+  specific first. (This is a historical record of that reconciliation, not
+  the current state: `photography` was added later as a deliberate singleton
+  for the photograph content type, bringing the vocabulary to 32 topics. The
+  "zero singletons" claim describes the count at the time of the
+  reconciliation, not now.)
 
 ## The controlled vocabulary (32 topics)
 

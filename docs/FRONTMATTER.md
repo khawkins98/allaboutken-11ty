@@ -61,6 +61,7 @@ layout: layouts/post.njk
   | `layouts/post.njk` | Blog posts and impact stories |
   | `layouts/base.njk` | Standalone pages |
   | `layouts/digesting.njk` | "Digesting" short-form entries |
+  | `layouts/photo.njk` | Photograph entries |
 
 ---
 
@@ -99,7 +100,7 @@ tags: posts
   | `digesting` | `allContent` | Included in all-content stream |
   | `case-studies` | neither `blogPosts` nor `impactStories` | Excluded from the main blog listing |
   | `note` | — | Shows a "short-form note" banner in the post body |
-  | `photos` | `photos`, `allContent`, `feedEntries` | A photograph; uses `layouts/photo.njk`, listed at `/photos/`, excluded from the blog listing |
+  | `photos` | `photos`, `allContent`, `feedEntries`, `topics` | A photograph; uses `layouts/photo.njk`, listed at `/photos/`, excluded from the blog listing |
 
 - A page tagged `posts` + `impact-stories` appears under `/work/` breadcrumb but **not** in the blog listing.
 
