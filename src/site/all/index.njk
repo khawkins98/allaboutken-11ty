@@ -19,13 +19,13 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
       The three sections below are genuinely different kinds of writing and
       a reader has no way to know that from titles alone. -#}
   <div class="kh-content">
-    <p>Every entry on the site in one register, newest first. Three kinds of
+    <p>Every entry on the site in one register, newest first. Four kinds of
     thing sit here together: <strong>blog posts</strong>, which are written
     pieces; <strong>digesting</strong> entries, which are something I read
-    plus what I took from it; and <strong>impact stories</strong>, which are
-    write-ups of work I actually shipped. They are mixed here on purpose
-    &mdash; if you would rather keep them apart, the three links below do
-    that.</p>
+    plus what I took from it; <strong>impact stories</strong>, which are
+    write-ups of work I actually shipped; and <strong>photographs</strong>.
+    They are mixed here on purpose &mdash; if you would rather keep them
+    apart, the links below do that.</p>
     <p>New here? <a href="/blog/#start-here">Start with the picked posts</a>
     rather than the top of this list; newest is not the same as best.</p>
   </div>
@@ -45,7 +45,7 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
     <span class="kh-meta">{{ collections.allContent | length }} entries in total</span>
   </div>
   <div class="kh-panel">
-    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr">
+    <div class="kh-panel__row" style="--kh-panel-columns: 1fr 1fr 1fr 1fr">
       <div class="kh-panel__cell">
         <span class="kh-panel__label">Blog</span>
         <a href="/blog/">Longer pieces &amp; notes</a>
@@ -60,6 +60,11 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
         <span class="kh-panel__label">Work</span>
         <a href="/work/">Impact stories</a>
         <span class="kh-meta kh-u-margin__top--200">{{ collections.impactStories | length }} entries</span>
+      </div>
+      <div class="kh-panel__cell">
+        <span class="kh-panel__label">Photos</span>
+        <a href="/photos/">Photographs</a>
+        <span class="kh-meta kh-u-margin__top--200">{{ collections.photos | length }} entries</span>
       </div>
     </div>
     <div class="kh-panel__row" style="--kh-panel-columns: 1fr">
