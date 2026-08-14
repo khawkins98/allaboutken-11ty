@@ -1,0 +1,63 @@
+---
+layout: layouts/base.njk
+pageClass: photos
+templateEngineOverride: njk
+---
+
+{#- The publishing strip, as on every other entry. A photograph is a mark in
+    the register like any other, so it shows where it sits. -#}
+{%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) %}
+{%- set pulseCurrentKey = date | dateDisplay('yyyy-LL') %}
+{% include "partials/pulse-strip.njk" %}
+
+<article class="kh-photo kh-u-margin__top--1200">
+  {#- The photograph is the content, not an illustration of it, so it spans the
+      full grid rather than sitting in the narrower reading column the way
+      post.njk's hero does. Capped at intrinsic width so it is never upscaled.
+
+      `> picture` is targeted alongside the image class because the image
+      transform rewrites a processed <img> into <picture><source><img></picture>
+      -- a class on the <img> is then a level too deep to position. -#}
+  <figure class="kh-photo__figure">
+    <img class="kh-photo__img" src="/images{{ image | url }}"
+         alt="{{ image_meta.altext or image_meta.alt or '' }}"
+         decoding="async" fetchpriority="high">
+  </figure>
+
+  <div class="kh-photo__caption kh-content">
+    <p class="kh-breadcrumb" data-pagefind-ignore><a href="/photos/">← Photographs</a></p>
+    <h1 class="kh-font-headline kh-text-heading--1">{{ title }}</h1>
+    {#- Parents only, and linked when a topic page exists, matching
+        digesting.njk. Without this a topic page would list the photograph
+        while the photograph never linked back. -#}
+    <p class="kh-meta" data-pagefind-ignore>
+      <time datetime="{{ date }}">{{ date | dateDisplay }}</time>
+      {%- if photo_meta and photo_meta.place %} &middot; {{ photo_meta.place }}{% endif %}
+      {%- if topics %} &middot; Filed in:
+        {%- for parent in topics | topicParents %}
+        {%- set topicSlug = collections.topics | topicPageSlug(parent) %}
+        {% if topicSlug %}<a href="/topics/{{ topicSlug }}/">{{ parent }}</a>{% else %}{{ parent }}{% endif %}{{ "," if not loop.last }}
+        {%- endfor %}
+      {%- endif %}
+    </p>
+    {% if image_meta and image_meta.text %}
+    <p class="kh-photo__text">{{ image_meta.text | safe }}</p>
+    {% endif %}
+    {{ content | safe }}
+    {#- Apparatus, not content: the credit and the exposure line would otherwise
+        be indexed as body text and surface as search excerpts. -#}
+    <p class="kh-meta kh-photo__tech" data-pagefind-ignore>
+      {%- if image_meta and image_meta.credit %}{{ image_meta.credit | safe }}{% endif %}
+      {%- if photo_meta and photo_meta.camera %} {{ photo_meta.camera | safe }}{% endif %}
+      {%- if photo_meta and photo_meta.taken %} &middot; {{ photo_meta.taken }}{% endif %}
+    </p>
+    <p><a href="/photos/">More photographs</a></p>
+    {%- if comment != false %}
+    {% include "partials/feedback.njk" %}
+    {%- endif %}
+  </div>
+</article>
+
+{#- The same closing block as every other entry: byline, related entries and
+    the sequence rail, so a photograph reached from a link is not a dead end. -#}
+{% include "partials/entry-foot.njk" %}

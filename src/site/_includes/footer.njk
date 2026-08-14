@@ -21,7 +21,7 @@
   {#- /privacy/ uses the post layout but suppresses the entry foot, so it has
       no byline despite the layout suggesting otherwise -- it needs the blurb
       like any other utility page. -#}
-  {%- set hasByline = layout in ["layouts/post.njk", "layouts/digesting.njk"] and page.url != "/privacy/" -%}
+  {%- set hasByline = layout in ["layouts/post.njk", "layouts/digesting.njk", "layouts/photo.njk"] and page.url != "/privacy/" -%}
   {%- set showBlurb = page.url != "/" and not hasByline -%}
   <div class="kh-footer__nav{% if not showBlurb %} kh-footer__nav--links{% endif %}">
     {%- if showBlurb %}
