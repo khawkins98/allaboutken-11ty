@@ -761,6 +761,7 @@ git commit -m "feature: add photographs to the register and footer"
 **Files:**
 - Modify: `docs/FRONTMATTER.md`
 - Modify: `docs/TEMPLATES.md`
+- Modify: `docs/TOPIC_TAXONOMY.md`
 - Modify: `CLAUDE.md`
 
 **Interfaces:**
@@ -823,7 +824,31 @@ to:
 `post.njk`, `digesting.njk` and `photo.njk` all use `layout: layouts/base.njk`, so `base.njk` is the shared foundation.
 ```
 
-- [ ] **Step 5: Record the feed change in CLAUDE.md**
+- [ ] **Step 5: Record the new topic in the taxonomy**
+
+`docs/TOPIC_TAXONOMY.md` instructs that a new parent topic must be recorded there with a definition. The photo entry introduces `photography`, which is a new parent, so without this the taxonomy doc drifts out of sync the moment this branch merges.
+
+Its controlled-vocabulary table is sorted by post count, descending, so a one-entry topic goes at the bottom of the table. Add:
+
+```markdown
+| photography | Photographs published as entries in their own right, rather than illustrations for a written piece. | 1 |
+```
+
+Then update the heading, which carries a hard-coded count. Change:
+
+```markdown
+## The controlled vocabulary (31 topics)
+```
+
+to:
+
+```markdown
+## The controlled vocabulary (32 topics)
+```
+
+Note the count in that heading is maintained by hand and the post counts in the table are a snapshot, not generated. You are adding one row and bumping one number; do not attempt to recompute the other counts.
+
+- [ ] **Step 6: Record the feed change in CLAUDE.md**
 
 Add a new section to `CLAUDE.md`, in the Gotchas run, after the `kens_status` section:
 
@@ -843,10 +868,10 @@ in the template must not come back -- with it, the feed emits the ten oldest
 entries on the site.
 ```
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
-git add docs/FRONTMATTER.md docs/TEMPLATES.md CLAUDE.md
+git add docs/FRONTMATTER.md docs/TEMPLATES.md docs/TOPIC_TAXONOMY.md CLAUDE.md
 git commit -m "feature: document the photo content type"
 ```
 
