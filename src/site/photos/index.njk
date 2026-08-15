@@ -26,8 +26,8 @@ layout: layouts/base.njk
               full scene description still lives on the entry page's image. -#}
           <img class="kh-photo-grid__img" src="/images{{ photo.data.image | url }}"
                alt="" loading="lazy" decoding="async">
+          <span class="kh-photo-grid__title">{{ photo.data.title }}</span>
           <span class="kh-photo-grid__meta">
-            <span class="kh-photo-grid__title">{{ photo.data.title }}</span>
             <span class="kh-photo-grid__date">{{ photo.date | dateDisplay }}</span>
             {%- if photo.data.photo_meta and photo.data.photo_meta.place %}
             <span class="kh-photo-grid__place">{{ photo.data.photo_meta.place }}</span>

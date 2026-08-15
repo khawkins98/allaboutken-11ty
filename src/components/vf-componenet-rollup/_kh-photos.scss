@@ -40,20 +40,20 @@
     height: auto;
   }
 
-  .kh-photo-grid__meta {
-    display: block;
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
-  }
-
   // The cell's primary label: the grid thumbnail is decorative (alt=""), so
-  // this is the only place a sighted reader sees what the photograph is.
-  // No colour override -- it reads as a title, in the link's own colour,
-  // while the date and place beneath it stay meta-grey.
+  // this is the only place a sighted reader sees what the photograph is. It
+  // sits outside `__meta` rather than inside it, which is why it needs no
+  // font-size of its own: nested, it inherited the meta size and then had to
+  // undo it.
   .kh-photo-grid__title {
     display: block;
-    font-size: 1rem;
+    margin-top: 0.5rem;
     font-weight: 700;
+  }
+
+  .kh-photo-grid__meta {
+    display: block;
+    font-size: 0.85rem;
   }
 
   .kh-photo-grid__date,
@@ -65,10 +65,7 @@
     color: var(--kh-color--grey--darkest);
   }
 
-  // Entry page. Capped at 2000px, this photograph's own intrinsic width, so it
-  // is never upscaled on a wide display. That is a per-image assumption, not a
-  // rule derived from any photograph's actual size: a future 3000px or
-  // portrait photograph will need this value revisited, silently otherwise.
+  // Entry page.
   .kh-photo__figure {
     margin: 0 0 1.5rem;
   }
@@ -101,11 +98,10 @@
     margin: 0 auto;
   }
 
-  // No max-width here on purpose. The caption sits inside `kh-grid-stylized`
-  // in the layout, so the column width comes from the same place every other
-  // entry's does. A local cap would quietly diverge from the rest of the site
-  // the first time that grid changed.
-
+  // The caption column has no rule here at all: it sits inside
+  // `kh-grid-stylized` in the layout, so its width comes from the same place
+  // every other entry's does. A local cap would quietly diverge from the rest
+  // of the site the first time that grid changed.
   .kh-photo__tech {
     margin-top: 1.5rem;
   }

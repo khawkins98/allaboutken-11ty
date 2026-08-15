@@ -1,6 +1,5 @@
 ---
 layout: layouts/base.njk
-pageClass: photos
 templateEngineOverride: njk
 ---
 
@@ -10,14 +9,10 @@ templateEngineOverride: njk
 {%- set pulseCurrentKey = date | dateDisplay('yyyy-LL') %}
 {% include "partials/pulse-strip.njk" %}
 
-<article class="kh-photo kh-u-margin__top--1200">
-  {#- The photograph is the content, not an illustration of it, so it spans the
-      full grid rather than sitting in the narrower reading column the way
-      post.njk's hero does. Capped at intrinsic width so it is never upscaled.
-
-      `> picture` is targeted alongside the image class because the image
-      transform rewrites a processed <img> into <picture><source><img></picture>
-      -- a class on the <img> is then a level too deep to position. -#}
+<article class="kh-u-margin__top--1200">
+  {#- The photograph is the content, not an illustration of it, so the figure
+      sits outside the reading column below, spanning the full grid the way
+      post.njk's hero does not. Sizing lives in _kh-photos.scss. -#}
   <figure class="kh-photo__figure">
     {#- width/height are this image's own intrinsic size, hardcoded because the
         eleventy-img transform does not process this tag (site-wide, not fixed
@@ -37,7 +32,7 @@ templateEngineOverride: njk
       the one thing here that genuinely wants the full width. -#}
   <div class="kh-grid-stylized">
     <div></div>
-    <div class="kh-photo__caption kh-content">
+    <div class="kh-content">
     <p class="kh-breadcrumb" data-pagefind-ignore><a href="/photos/">← Photos</a></p>
     <h1 class="kh-font-headline kh-text-heading--1">{{ title }}</h1>
     {#- Parents only, and linked when a topic page exists, matching
@@ -54,7 +49,7 @@ templateEngineOverride: njk
       {%- endif %}
     </p>
     {% if image_meta and image_meta.text %}
-    <p class="kh-photo__text">{{ image_meta.text | safe }}</p>
+    <p>{{ image_meta.text | safe }}</p>
     {% endif %}
     {{ content | safe }}
     {#- Apparatus, not content: the credit and the exposure line would otherwise
