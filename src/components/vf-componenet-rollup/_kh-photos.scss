@@ -101,9 +101,10 @@
     margin: 0 auto;
   }
 
-  .kh-photo__caption {
-    max-width: 42rem;
-  }
+  // No max-width here on purpose. The caption sits inside `kh-grid-stylized`
+  // in the layout, so the column width comes from the same place every other
+  // entry's does. A local cap would quietly diverge from the rest of the site
+  // the first time that grid changed.
 
   .kh-photo__tech {
     margin-top: 1.5rem;

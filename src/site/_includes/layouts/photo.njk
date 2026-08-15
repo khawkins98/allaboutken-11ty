@@ -29,7 +29,15 @@ templateEngineOverride: njk
          decoding="async" fetchpriority="high">
   </figure>
 
-  <div class="kh-photo__caption kh-content">
+  {#- The caption sits in the same reading column every other entry uses, via
+      the same `kh-grid-stylized` wrapper and empty leading div that
+      digesting.njk has. It was previously a plain block, which pinned the text
+      to the page's left edge under a centred photograph; the mismatch read as
+      a bug. The figure stays outside this wrapper, because the photograph is
+      the one thing here that genuinely wants the full width. -#}
+  <div class="kh-grid-stylized">
+    <div></div>
+    <div class="kh-photo__caption kh-content">
     <p class="kh-breadcrumb" data-pagefind-ignore><a href="/photos/">← Photos</a></p>
     <h1 class="kh-font-headline kh-text-heading--1">{{ title }}</h1>
     {#- Parents only, and linked when a topic page exists, matching
@@ -67,6 +75,7 @@ templateEngineOverride: njk
     {%- if comment != false %}
     {% include "partials/feedback.njk" %}
     {%- endif %}
+    </div>
   </div>
 </article>
 
