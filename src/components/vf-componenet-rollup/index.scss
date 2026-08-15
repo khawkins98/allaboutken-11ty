@@ -33,6 +33,16 @@ body:has(#kh-css-toggle:checked) {
   --kh-color--grey--darkest: #373a36;
   --kh-color--blue: #3b6fb6;
   --kh-color--blue--dark: #193f90;
+  // Body text. This was read in three places and defined in none, so those
+  // declarations were invalid at computed-value time and resolved to `unset`.
+  // `color` inherits, so `unset` meant `inherit`, which happened to land on
+  // roughly this value anyway -- the rules looked right by luck rather than by
+  // rule. #222 is the value already hardcoded elsewhere in this file.
+  --kh-color--text: #222;
+  // Derived from --kh-color--sun below rather than picked, so the metric tiles
+  // stay in the palette if the sun tone is ever re-keyed. Same fix as above:
+  // read once, defined nowhere, so the tiles had no fill at all.
+  --kh-color--yellow--lightest: rgb(255 210 30 / 18%);
   // Sunlight yellow, re-keyed from the old orange (#f49e17).
   // --sun is the fill/border tone; --sun--deep is the only one safe for text
   // on a light ground; --yellow--dark is the deeper band tone.
@@ -196,11 +206,6 @@ body:has(#kh-css-toggle:checked) {
   @media (min-width: $kh-breakpoint--lg) {
     .kh-u-show-for-medium-only {
       display: none !important;
-    }
-
-    .kh-bleed-out {
-      margin-left: -46%;
-      margin-right: 0;
     }
   }
 
@@ -730,12 +735,9 @@ body:has(#kh-css-toggle:checked) {
   // there, insetting the wordmark from the rule beneath it by 16px and
   // stopping the nav short of the other end. The masthead should sit on the
   // same left and right edges as the content column it sits above.
-  .kh-global-header {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--kh-page-grid-gap);
-    padding: 0;
-  }
+  // .kh-global-header is declared once, in _kh-datasheet.scss. A second copy
+  // lived here and silently beat it, because this file @includes the partial
+  // mixins above and then emits its own rules.
 
   @media (min-width: $kh-breakpoint--lg) {
     .kh-intro__heading {
@@ -1250,23 +1252,11 @@ body:has(#kh-css-toggle:checked) {
     font-weight: 600;
   }
 
-  .kh-navigation {
-    display: block;
-    margin-left: auto;
-  }
-
-  .kh-navigation__item {
-    display: inline-flex;
-  }
-
-  .kh-navigation__list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--kh-page-grid-gap);
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
+  // .kh-navigation, __list and __item are declared once, in
+  // _kh-datasheet.scss, alongside the rest of the masthead's visual register.
+  // Copies here silently beat them for the same reason as .kh-global-header
+  // above: this file emits after the mixins it includes. The nav was rendering
+  // as `display: block` with `inline-flex` items and no full-height cells.
 
   .kh-stack > * + * {
     --kh-stack-margin: 1rem;
@@ -1428,7 +1418,7 @@ body:has(#kh-css-toggle:checked) {
 
     li {
       padding: 0.75rem 0;
-      border-bottom: 1px solid var(--kh-color--grey--lightest);
+      border-bottom: 1px solid var(--kh-rule);
       line-height: 1.6;
 
       &:last-child {
@@ -1573,7 +1563,7 @@ body:has(#kh-css-toggle:checked) {
   .kh-pager {
     margin-top: 2rem;
     padding-top: 1.5rem;
-    border-top: 1px solid var(--kh-color--grey--lightest);
+    border-top: 1px solid var(--kh-rule);
   }
 
   .kh-pager__list {

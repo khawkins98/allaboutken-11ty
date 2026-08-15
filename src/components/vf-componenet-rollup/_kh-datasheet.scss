@@ -281,11 +281,18 @@
   // masthead was divided from the page by exactly the line that divides one
   // section from another, so it read as the first section rather than as the
   // top of the sheet. Doubling it asserts the masthead without a box.
-  // Horizontal padding lives at 0 here AND in the later .kh-global-header rule
-  // in index.scss, which would otherwise win and inset the wordmark.
+  // The masthead is owned here, in one rule. It used to be declared in both
+  // this file and index.scss, and because index.scss @includes these mixins
+  // before emitting its own rules, the copy there won every time. The comment
+  // that used to sit here duplicated `padding: 0` into both files to work
+  // around that; `gap: 0` was not duplicated, so the masthead carried a gap
+  // this rule had explicitly asked it not to have. `display` and `flex-wrap`
+  // came back from the index.scss copy when it was deleted.
   .kh-global-header {
     align-items: stretch;
     border-bottom: 2px solid var(--kh-rule--strong);
+    display: flex;
+    flex-wrap: wrap;
     gap: 0;
     margin-bottom: 2rem;
     padding: 0;
@@ -313,6 +320,8 @@
 
   .kh-navigation__list {
     display: flex;
+    flex-wrap: wrap;
+    gap: var(--kh-page-grid-gap);
     height: 100%;
     list-style: none;
     margin: 0;
