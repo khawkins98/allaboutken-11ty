@@ -39,6 +39,11 @@ body:has(#kh-css-toggle:checked) {
   // roughly this value anyway -- the rules looked right by luck rather than by
   // rule. #222 is the value already hardcoded elsewhere in this file.
   --kh-color--text: #222;
+  // Visited links. This existed as two different purples for one semantic
+  // state: #563d82 in six places and #734595 in one, the latter on the global
+  // visited underline, so a visited link's underline and its text disagreed.
+  // Unified on the majority value.
+  --kh-color--visited: #563d82;
   // Derived from --kh-color--sun below rather than picked, so the metric tiles
   // stay in the palette if the sun tone is ever re-keyed. Same fix as above:
   // read once, defined nowhere, so the tiles had no fill at all.
@@ -125,18 +130,27 @@ body:has(#kh-css-toggle:checked) {
     text-underline-offset: 0.125em;
   }
 
-  a,
-  a:not([class*='kh-']) {
+  // These are the site's global link defaults and apply to EVERY link,
+  // including `kh-` components, which then override what they need.
+  // They used to read `a, a:not([class*='kh-'])`. The bare `a` already matches
+  // everything the `:not()` matches, so the second half never selected
+  // anything the first had not already taken: it announced a `kh-` opt-out
+  // that it did not implement. Compare `_kh-content.scss`, which uses
+  // `:not([class*='kh-'])` correctly 43 times, always as the sole selector --
+  // there it genuinely lets a component escape the editorial-prose defaults.
+  // Dropping the bare `a` instead would make the opt-out real, but it would
+  // change the appearance of every `kh-` link on the site and is a design
+  // decision, not a cleanup. Left as a global default, stated honestly.
+  a {
     color: #333;
-    text-decoration-color: #3b6fb6;
+    text-decoration-color: var(--kh-color--blue);
     text-decoration-line: underline;
     text-underline-offset: 2px;
   }
 
-  a:visited,
-  a:not([class*='kh-']):visited {
+  a:visited {
     color: #333;
-    text-decoration-color: #734595;
+    text-decoration-color: var(--kh-color--visited);
     text-decoration-line: underline;
   }
 
@@ -179,19 +193,26 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
-  @media (max-width: $kh-breakpoint--lg) {
+  // The three max-width queries below use the `-down` variants (599/845/1023)
+  // rather than the breakpoints themselves. With `max-width: $kh-breakpoint--sm`
+  // and the `min-width: $kh-breakpoint--sm` query further down, a viewport of
+  // exactly 600px matched BOTH, so `show-for-medium-up` and `show-for-mobile-only`
+  // were hidden at the same time. Same off-by-one at md and lg. `_settings.scss`
+  // defines the `-down` variants for exactly this, and the rest of this file
+  // already uses them correctly.
+  @media (max-width: $kh-breakpoint--lg-down) {
     .kh-u-show-for-large {
       display: none !important;
     }
   }
 
-  @media (max-width: $kh-breakpoint--md) {
+  @media (max-width: $kh-breakpoint--md-down) {
     .kh-u-show-for-medium-only {
       display: none !important;
     }
   }
 
-  @media (max-width: $kh-breakpoint--sm) {
+  @media (max-width: $kh-breakpoint--sm-down) {
     .kh-u-show-for-medium-up {
       display: none !important;
     }
@@ -523,7 +544,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-figure__caption {
-    color: #373a36;
+    color: var(--kh-color--grey--darkest);
     font-weight: 500;
     line-height: 1.71;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -547,7 +568,7 @@ body:has(#kh-css-toggle:checked) {
   @media (min-width: $kh-breakpoint--md) {
     .kh-post--text:not(:has(.kh-figure)) {
       // padding-top: 25rem;
-      background-color: #fffae1;
+      background-color: var(--kh-ground);
       padding-left: 2rem;
       padding-top: 2rem;
     }
@@ -606,7 +627,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-summary__author {
-    color: #707372;
+    color: var(--kh-color--grey);
     font-size: 13px;
     font-style: italic;
     font-weight: 400;
@@ -621,7 +642,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-summary__date {
-    color: #707372;
+    color: var(--kh-color--grey);
     font-size: 13px;
     font-weight: 400;
     line-height: 1.57;
@@ -640,21 +661,21 @@ body:has(#kh-css-toggle:checked) {
     color: #333;
     text-decoration: none;
     text-decoration: underline;
-    text-decoration-color: #3b6fb6;
+    text-decoration-color: var(--kh-color--blue);
 
     &:hover {
       border-bottom: none;
-      color: #193f90;
+      color: var(--kh-color--blue--dark);
       text-decoration: underline;
     }
 
     &:visited {
       border-bottom: none;
-      color: #563d82;
+      color: var(--kh-color--visited);
     }
 
     &:visited:hover {
-      color: #563d82;
+      color: var(--kh-color--visited);
       text-decoration: underline;
     }
   }
@@ -867,23 +888,23 @@ body:has(#kh-css-toggle:checked) {
 
     > a:not([class*='kh-']) {
       border-bottom: none;
-      color: #3b6fb6;
+      color: var(--kh-color--blue);
       text-decoration: none;
     }
 
     > a:not([class*='kh-']):hover {
       border-bottom: none;
-      color: #193f90;
+      color: var(--kh-color--blue--dark);
       text-decoration: underline;
     }
 
     > a:not([class*='kh-']):visited {
       border-bottom: none;
-      color: #563d82;
+      color: var(--kh-color--visited);
     }
 
     > a:not([class*='kh-']):visited:hover {
-      color: #563d82;
+      color: var(--kh-color--visited);
       text-decoration: underline;
     }
 
@@ -918,7 +939,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-text-body--3 {
-    color: #373a36;
+    color: var(--kh-color--grey--darkest);
     font-size: 16px;
     font-weight: 500;
     line-height: 1.71;
@@ -1075,7 +1096,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-u-text-color--grey {
-    color: #707372;
+    color: var(--kh-color--grey);
   }
 
   .kh-box {
@@ -1210,22 +1231,22 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-link {
     border-bottom: none;
-    color: #3b6fb6;
+    color: var(--kh-color--blue);
     text-decoration: none;
 
     &:hover {
       border-bottom: none;
-      color: #193f90;
+      color: var(--kh-color--blue--dark);
       text-decoration: underline;
     }
 
     &:visited {
       border-bottom: none;
-      color: #563d82;
+      color: var(--kh-color--visited);
     }
 
     &:visited:hover {
-      color: #563d82;
+      color: var(--kh-color--visited);
       text-decoration: underline;
     }
   }

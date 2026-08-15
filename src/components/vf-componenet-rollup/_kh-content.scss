@@ -36,7 +36,7 @@
   code {
     background: #fff;
     border-radius: 0;
-    color: #373a36;
+    color: var(--kh-color--grey--darkest);
     font-family: var(--kh-font-mono);
     font-weight: 400;
     padding-bottom: 0.25rem;
@@ -68,7 +68,7 @@
     position: relative;
     background: var(--kh-panel-bg);
     border-radius: 0;
-    color: #373a36;
+    color: var(--kh-color--grey--darkest);
     border: 1px solid var(--kh-rule);
     border-left: 3px solid var(--kh-color--coral);
     overflow: auto;
@@ -256,7 +256,7 @@
   }
 
   small:not([class*='kh-']) {
-    color: #373a36;
+    color: var(--kh-color--grey--darkest);
     display: inline;
     font-size: 13px;
     font-weight: 400;
