@@ -207,6 +207,35 @@ Two consequences that are easy to miss:
   the unmatched-anchor warning on every build. Add the anchor when the post
   publishes.
 
+### The feed reads a merged collection, not the `posts` tag
+`feed.njk` used to iterate `collections.posts`, Eleventy's own tag collection.
+That is why digesting notes have never appeared in RSS: nobody decided it, the
+tag decided it. Photographs were meant to go out to subscribers and are not
+blog posts, so the feed now reads `collections.feedEntries`, an explicit merged
+collection of `posts` plus `photos` registered in `config/eleventy/collections.js`.
+
+Two consequences. Adding a content type to the feed is now a one-line change in
+one place, which is the point. And `feedEntries` is sorted newest-first at
+registration, unlike a tag collection, so the `reverse` filter that used to sit
+in the template must not come back -- with it, the feed emits the ten oldest
+entries on the site.
+
+**Membership and images are two separate mechanisms, and only one of them is
+the collection.** `<content>` is built from `post.templateContent`, which is an
+entry's own body *before* its layout runs. A photograph's image is frontmatter
+rendered by `photo.njk`, so it is not in `templateContent` at all: a photo entry
+reached subscribers as a title and two sentences about a picture they could not
+see. `feed.njk` therefore splices the image and caption in itself, in a
+`photoBody` block gated on `'photos' in post.data.tags`, re-reading
+`post.data.image` and `image_meta` by hand.
+
+So `feedEntries` decides *whether* an entry is in the feed; that hardcoded tag
+check decides whether its image is. Rename the `photos` tag, add a fifth content
+type whose image lives in frontmatter, or refactor how membership is computed,
+and the two drift apart. Nothing errors when they do -- the entry still ships,
+just silently text-only. Blog posts do not hit this because the images in their
+feed entries are inline in the markdown body, which *is* `templateContent`.
+
 ### Story-lab anchors match on the exact title string
 `semanticTrailSpecs` in `scripts/compute-story-lab.mjs` finds its anchor
 entries by exact title. Retitle a post and it drops out of its biography; the

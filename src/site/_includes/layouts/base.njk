@@ -121,7 +121,7 @@
               to a screen-reader user standing on the CV is simply false; the
               underline is a wayfinding hint for people who can see it, not a
               claim about which page this is. -#}
-          {%- set inWriting = page.url.startsWith('/all') or page.url.startsWith('/blog') or page.url.startsWith('/digesting') or page.url.startsWith('/work') or page.url.startsWith('/posts') %}
+          {%- set inWriting = page.url.startsWith('/all') or page.url.startsWith('/blog') or page.url.startsWith('/digesting') or page.url.startsWith('/work') or page.url.startsWith('/posts') or page.url.startsWith('/photos') %}
           <li class="kh-navigation__item">
             <a href="/all/" class="kh-navigation__link{% if page.url == '/all/' %} kh-navigation__link--active{% elif inWriting %} kh-navigation__link--section{% endif %}"{% if page.url == '/all/' %} aria-current="page"{% endif %}>Writing</a>
           </li>

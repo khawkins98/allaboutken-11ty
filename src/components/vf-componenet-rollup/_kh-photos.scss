@@ -1,0 +1,108 @@
+@use './settings' as *;
+
+// Photographs
+// -----------
+// Two surfaces: the thumbnail grid at /photos/, and the single-photo entry
+// page. On the entry page the image is the content rather than an illustration
+// of it, so it spans the full grid instead of sitting in the reading column
+// the way post.njk's hero does.
+@mixin kh-photos() {
+  .kh-photo-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0;
+    margin: 2rem 0 0;
+    list-style: none;
+
+    @media (min-width: $kh-breakpoint--sm) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: $kh-breakpoint--lg) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .kh-photo-grid__link {
+    display: block;
+    text-decoration: none;
+  }
+
+  // The image transform rewrites a processed <img> into
+  // <picture><source><img></picture>, so the direct child of the link may be
+  // either. Both are targeted, or the layout depends on whether the transform
+  // ran that build.
+  .kh-photo-grid__link picture,
+  .kh-photo-grid__img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  // The cell's primary label: the grid thumbnail is decorative (alt=""), so
+  // this is the only place a sighted reader sees what the photograph is. It
+  // sits outside `__meta` rather than inside it, which is why it needs no
+  // font-size of its own: nested, it inherited the meta size and then had to
+  // undo it.
+  .kh-photo-grid__title {
+    display: block;
+    margin-top: 0.5rem;
+    font-weight: 700;
+  }
+
+  .kh-photo-grid__meta {
+    display: block;
+    font-size: 0.85rem;
+  }
+
+  .kh-photo-grid__date,
+  .kh-photo-grid__place {
+    display: block;
+  }
+
+  .kh-photo-grid__place {
+    color: var(--kh-color--grey--darkest);
+  }
+
+  // Entry page.
+  .kh-photo__figure {
+    margin: 0 0 1.5rem;
+  }
+
+  .kh-photo__figure picture {
+    display: block;
+  }
+
+  // A photograph should never be taller than the window: a portrait frame
+  // otherwise pushes its own caption, and every word about it, below the fold.
+  // The 12rem subtracted from the viewport is the chrome above the image, the
+  // masthead and the publishing strip. A plain 100vh caps the image correctly
+  // and still runs past the fold, because the image does not start at the top
+  // of the window.
+
+  // `width: auto` rather than `width: 100%` is what makes this work for any
+  // image without naming its size. The intrinsic width becomes the natural
+  // ceiling, so nothing upscales, and the two max- rules take over whichever
+  // way the frame is shaped: max-width binds on a landscape image in a narrow
+  // window, max-height on a portrait one in a short window. This replaced a
+  // hardcoded `max-width: 2000px`, which was the first photograph's width
+  // wearing the label "intrinsic" and would have silently meant something
+  // different for the second.
+  .kh-photo__img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: calc(100vh - 12rem);
+    height: auto;
+    margin: 0 auto;
+  }
+
+  // The caption column has no rule here at all: it sits inside
+  // `kh-grid-stylized` in the layout, so its width comes from the same place
+  // every other entry's does. A local cap would quietly diverge from the rest
+  // of the site the first time that grid changed.
+  .kh-photo__tech {
+    margin-top: 1.5rem;
+  }
+}

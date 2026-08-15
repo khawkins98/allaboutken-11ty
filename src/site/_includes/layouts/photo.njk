@@ -1,0 +1,79 @@
+---
+layout: layouts/base.njk
+templateEngineOverride: njk
+---
+
+{#- The publishing strip, as on every other entry. A photograph is a mark in
+    the register like any other, so it shows where it sits. -#}
+{%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) %}
+{%- set pulseCurrentKey = date | dateDisplay('yyyy-LL') %}
+{% include "partials/pulse-strip.njk" %}
+
+<article class="kh-u-margin__top--1200">
+  {#- The photograph is the content, not an illustration of it, so the figure
+      sits outside the reading column below, spanning the full grid the way
+      post.njk's hero does not. Sizing lives in _kh-photos.scss. -#}
+  <figure class="kh-photo__figure">
+    {#- width/height are this image's own intrinsic size, hardcoded because the
+        eleventy-img transform does not process this tag (site-wide, not fixed
+        here). They must change with the image; without them the browser
+        reserves no space and the full-width hero shifts the page as it loads. -#}
+    <img class="kh-photo__img" src="/images{{ image | url }}"
+         alt="{{ image_meta.altext or image_meta.alt or '' }}"
+         width="2000" height="1500"
+         decoding="async" fetchpriority="high">
+  </figure>
+
+  {#- The caption sits in the same reading column every other entry uses, via
+      the same `kh-grid-stylized` wrapper and empty leading div that
+      digesting.njk has. It was previously a plain block, which pinned the text
+      to the page's left edge under a centred photograph; the mismatch read as
+      a bug. The figure stays outside this wrapper, because the photograph is
+      the one thing here that genuinely wants the full width. -#}
+  <div class="kh-grid-stylized">
+    <div></div>
+    <div class="kh-content">
+    <p class="kh-breadcrumb" data-pagefind-ignore><a href="/photos/">← Photos</a></p>
+    <h1 class="kh-font-headline kh-text-heading--1">{{ title }}</h1>
+    {#- Parents only, and linked when a topic page exists, matching
+        digesting.njk. Without this a topic page would list the photograph
+        while the photograph never linked back. -#}
+    <p class="kh-meta" data-pagefind-ignore>
+      <time datetime="{{ date }}">{{ date | dateDisplay }}</time>
+      {%- if photo_meta and photo_meta.place %} &middot; {{ photo_meta.place }}{% endif %}
+      {%- if topics %} &middot; Filed in:
+        {%- for parent in topics | topicParents %}
+        {%- set topicSlug = collections.topics | topicPageSlug(parent) %}
+        {% if topicSlug %}<a href="/topics/{{ topicSlug }}/">{{ parent }}</a>{% else %}{{ parent }}{% endif %}{{ "," if not loop.last }}
+        {%- endfor %}
+      {%- endif %}
+    </p>
+    {% if image_meta and image_meta.text %}
+    <p>{{ image_meta.text | safe }}</p>
+    {% endif %}
+    {{ content | safe }}
+    {#- Apparatus, not content: the credit and the exposure line would otherwise
+        be indexed as body text and surface as search excerpts. -#}
+    <p class="kh-meta kh-photo__tech" data-pagefind-ignore>
+      {%- if image_meta and image_meta.credit %}{{ image_meta.credit | safe }}{% endif %}
+      {%- if photo_meta and photo_meta.camera %} {{ photo_meta.camera | safe }}{% endif %}
+      {%- if photo_meta and photo_meta.taken %} &middot; {{ photo_meta.taken }}{% endif %}
+      {#- Latitude and longitude are two frontmatter fields rather than one
+          "lat, lon" string because Nunjucks has no `split` filter here, so a
+          single string could be printed but never taken apart to build the
+          map URL. Two fields also leave the numbers machine-readable. -#}
+      {%- if photo_meta and photo_meta.lat and photo_meta.lon %} &middot;
+      <a href="https://www.openstreetmap.org/?mlat={{ photo_meta.lat }}&amp;mlon={{ photo_meta.lon }}#map=17/{{ photo_meta.lat }}/{{ photo_meta.lon }}">{{ photo_meta.lat }}, {{ photo_meta.lon }}</a>
+      {%- endif %}
+    </p>
+    <p><a href="/photos/">More photos</a></p>
+    {%- if comment != false %}
+    {% include "partials/feedback.njk" %}
+    {%- endif %}
+    </div>
+  </div>
+</article>
+
+{#- The same closing block as every other entry: byline, related entries and
+    the sequence rail, so a photograph reached from a link is not a dead end. -#}
+{% include "partials/entry-foot.njk" %}

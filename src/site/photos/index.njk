@@ -1,0 +1,41 @@
+---
+title: Photos
+teaser: "Occasional pictures of whatever I like. Trying something new here in August 2026, more to come."
+date: 2026-08-12 12:00:00
+layout: layouts/base.njk
+---
+<div class="kh-grid-stylized">
+  <div>
+  </div>
+  <section>
+    <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{ title }}</h1>
+    <p class="kh-text-body--3">Occasional pictures of whatever I like. Trying
+    something new here in August 2026, more to come.</p>
+
+    {#- The grid prints other entries' titles and places, which makes it chrome
+        under the CLAUDE.md rule, the same marker /all/ and the topic pages
+        carry. Without it a search for "Bonn" returns this index competing with
+        the photograph itself. The intro above stays indexed, so /photos/ is
+        still findable as a page. -#}
+    <ul class="kh-photo-grid" data-pagefind-ignore>
+    {%- for photo in collections.photos %}
+      <li class="kh-photo-grid__cell">
+        <a href="{{ photo.url | url }}" class="kh-photo-grid__link">
+          {#- alt="" because the thumbnail is decorative in this context: the
+              link's own text (the title span below) names the photograph. The
+              full scene description still lives on the entry page's image. -#}
+          <img class="kh-photo-grid__img" src="/images{{ photo.data.image | url }}"
+               alt="" loading="lazy" decoding="async">
+          <span class="kh-photo-grid__title">{{ photo.data.title }}</span>
+          <span class="kh-photo-grid__meta">
+            <span class="kh-photo-grid__date">{{ photo.date | dateDisplay }}</span>
+            {%- if photo.data.photo_meta and photo.data.photo_meta.place %}
+            <span class="kh-photo-grid__place">{{ photo.data.photo_meta.place }}</span>
+            {%- endif %}
+          </span>
+        </a>
+      </li>
+    {%- endfor %}
+    </ul>
+  </section>
+</div>

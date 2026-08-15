@@ -86,7 +86,14 @@ I ship systems that deliver impact. I understand technology and human organizati
         <span class="kh-meta">Article</span>
         <span class="kh-meta">Figure</span>
       </div>
-    {%- for post in collections.allContent | limitItems(10) -%}
+    {#- Photographs are held back from the homepage deliberately. They are a new
+        and so far very small kind of entry, and this list is the first thing a
+        visitor reads; one photograph among ten pieces of writing showcases it
+        before there is anything to showcase. They remain in `allContent`, so
+        /all/, /archive/ and /directory/ all still carry them, and they are
+        reachable from the footer. Revisit when there are enough to stand as a
+        body of work rather than as a single frame. -#}
+    {%- for post in collections.allContent | withoutTag('photos') | limitItems(10) -%}
     {% include "partials/post-summary.njk" %}
     {%- endfor -%}
     </div>

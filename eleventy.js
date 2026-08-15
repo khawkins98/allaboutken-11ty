@@ -67,6 +67,20 @@ module.exports = function(config) {
     return n < 0 ? array.slice(n) : array.slice(0, n);
   });
 
+  // Drop every item carrying a tag, without building a second collection for
+  // it. Used by the homepage to keep photographs out of "Recent writing" while
+  // leaving them in `allContent` itself, which /all/, /archive/ and /directory/
+  // all still read. Filtering here rather than in the collection is the whole
+  // point: the exclusion is one surface's editorial choice, not a fact about
+  // the entry.
+  config.addFilter("withoutTag", (items, tag) => {
+    if (!Array.isArray(items)) return items;
+    return items.filter((item) => {
+      const tags = item?.data?.tags || [];
+      return !(Array.isArray(tags) ? tags : [tags]).includes(tag);
+    });
+  });
+
   // Ensure trailing slash on URLs for canonical IDs
   config.addFilter("ensureTrailingSlash", (value) => {
     const v = String(value || '');

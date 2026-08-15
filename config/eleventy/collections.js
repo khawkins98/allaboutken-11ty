@@ -55,6 +55,37 @@ module.exports = function registerCollections(config) {
     }
   });
 
+  // Photographs are a fourth kind of entry. They live in src/site/posts/ like
+  // digesting notes and are distinguished only by tag and layout, so the
+  // permalink, the pulse strip and the sequence rail all work unchanged.
+  config.addCollection('photos', (collectionApi) => {
+    try {
+      return published(collectionApi.getAll())
+        .filter((item) => getTagArray(item).includes('photos'))
+        .sort((a, b) => b.date - a.date);
+    } catch (e) {
+      return [];
+    }
+  });
+
+  // The feed used to iterate `collections.posts`, Eleventy's own tag
+  // collection, which is why digesting notes have never been in it. Photographs
+  // are meant to go out to subscribers but are not blog posts, so the feed now
+  // reads from an explicit merged collection instead of from a raw tag. If you
+  // later want digests in the feed, this is the one place to add them.
+  config.addCollection('feedEntries', (collectionApi) => {
+    try {
+      return published(collectionApi.getAll())
+        .filter((item) => {
+          const tags = getTagArray(item);
+          return tags.includes('posts') || tags.includes('photos');
+        })
+        .sort((a, b) => b.date - a.date);
+    } catch (e) {
+      return [];
+    }
+  });
+
   // Topics grouped by PARENT, so `AI > Claude Code` counts under AI. Only
   // topics with enough entries to be worth browsing get a page; the taxonomy
   // was consolidated precisely so that a topic index is not mostly singletons.
@@ -85,7 +116,7 @@ module.exports = function registerCollections(config) {
       published(collectionApi.getAll())
         .filter((item) => {
           const tags = getTagArray(item);
-          return tags.includes('posts') || tags.includes('digesting');
+          return tags.includes('posts') || tags.includes('digesting') || tags.includes('photos');
         })
         .forEach((item) => {
           const topics = (item.data && item.data.topics) || [];
@@ -136,7 +167,7 @@ module.exports = function registerCollections(config) {
       return published(collectionApi.getAll())
         .filter((item) => {
           const tags = getTagArray(item);
-          return tags.includes('posts') || tags.includes('digesting');
+          return tags.includes('posts') || tags.includes('digesting') || tags.includes('photos');
         })
         .sort((a, b) => b.date - a.date);
     } catch (e) {
