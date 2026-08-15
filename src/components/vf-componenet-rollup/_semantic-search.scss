@@ -271,14 +271,38 @@
 
   // Shared search form layout (keyword + semantic). Field and button share a
   // single hairline row rather than floating apart.
-  .kh-search-widget__form {
+  // Two search controls share one treatment: the semantic widget on /search/,
+  // and the inline box `partials/search-box.njk` puts on /all/, /blog/,
+  // /digesting/ and the topic pages. They were diverging -- the inline one fell
+  // through to the generic `.kh-form__input` padding and `.kh-button`'s
+  // `align-self: center`, so it rendered as an oversized rounded field with a
+  // small button floating beside it, next to a datasheet-register listing.
+  // The declarations are grouped rather than duplicated. The flex container is
+  // a different element in each (the form itself for the widget, `__item` for
+  // the inline box, since that is what wraps the input and button), which is
+  // why the selectors are not simply one class.
+  .kh-search-widget__form,
+  .kh-form--search .kh-form__item {
     align-items: stretch;
     display: flex;
     gap: 0;
+  }
+
+  // Widget only: the inline form carries its own bottom margin in the markup.
+  .kh-search-widget__form {
     margin: 0.5rem 0 1rem;
   }
 
-  .kh-search-widget__form .kh-form__input {
+  // Inline form only. The widget is bounded by its panel's 48rem measure; this
+  // one sits on a full-width listing, and without a cap the `flex: 1` field
+  // spans the entire content width and strands the button at the far edge.
+  // It is a control, not a banner.
+  .kh-form--search {
+    max-width: 26rem;
+  }
+
+  .kh-search-widget__form .kh-form__input,
+  .kh-form--search .kh-form__input {
     background: #fff;
     border: 1px solid var(--kh-rule--strong);
     flex: 1;
@@ -287,7 +311,11 @@
     padding: 0.7rem 0.9rem;
   }
 
-  .kh-search-widget__form .kh-button {
+  // `align-self: stretch` overrides the `center` on `.kh-button`, which is what
+  // left the button short of the input's height.
+  .kh-search-widget__form .kh-button,
+  .kh-form--search .kh-button {
+    align-self: stretch;
     border-left: 0;
     flex-shrink: 0;
     margin: 0;
