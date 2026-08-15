@@ -21,6 +21,7 @@
     "lint:css:fix": "stylelint \"src/**/*.scss\" \"src/**/*.css\" --fix",
     "lint:links": "node scripts/check-links.mjs",
     "lint:css-vars": "node scripts/check-css-vars.mjs",
+    "lint:overflow": "node scripts/check-overflow.mjs",
     "related": "node scripts/compute-related.mjs",
     "semantic-map": "node scripts/compute-semantic-map.mjs",
     "story-lab": "node scripts/compute-story-lab.mjs",
