@@ -33,6 +33,21 @@ body:has(#kh-css-toggle:checked) {
   --kh-color--grey--darkest: #373a36;
   --kh-color--blue: #3b6fb6;
   --kh-color--blue--dark: #193f90;
+  // Body text. This was read in three places and defined in none, so those
+  // declarations were invalid at computed-value time and resolved to `unset`.
+  // `color` inherits, so `unset` meant `inherit`, which happened to land on
+  // roughly this value anyway -- the rules looked right by luck rather than by
+  // rule. #222 is the value already hardcoded elsewhere in this file.
+  --kh-color--text: #222;
+  // Visited links. This existed as two different purples for one semantic
+  // state: #563d82 in six places and #734595 in one, the latter on the global
+  // visited underline, so a visited link's underline and its text disagreed.
+  // Unified on the majority value.
+  --kh-color--visited: #563d82;
+  // Derived from --kh-color--sun below rather than picked, so the metric tiles
+  // stay in the palette if the sun tone is ever re-keyed. Same fix as above:
+  // read once, defined nowhere, so the tiles had no fill at all.
+  --kh-color--yellow--lightest: rgb(255 210 30 / 18%);
   // Sunlight yellow, re-keyed from the old orange (#f49e17).
   // --sun is the fill/border tone; --sun--deep is the only one safe for text
   // on a light ground; --yellow--dark is the deeper band tone.
@@ -115,18 +130,27 @@ body:has(#kh-css-toggle:checked) {
     text-underline-offset: 0.125em;
   }
 
-  a,
-  a:not([class*='kh-']) {
+  // These are the site's global link defaults and apply to EVERY link,
+  // including `kh-` components, which then override what they need.
+  // They used to read `a, a:not([class*='kh-'])`. The bare `a` already matches
+  // everything the `:not()` matches, so the second half never selected
+  // anything the first had not already taken: it announced a `kh-` opt-out
+  // that it did not implement. Compare `_kh-content.scss`, which uses
+  // `:not([class*='kh-'])` correctly 43 times, always as the sole selector --
+  // there it genuinely lets a component escape the editorial-prose defaults.
+  // Dropping the bare `a` instead would make the opt-out real, but it would
+  // change the appearance of every `kh-` link on the site and is a design
+  // decision, not a cleanup. Left as a global default, stated honestly.
+  a {
     color: #333;
-    text-decoration-color: #3b6fb6;
+    text-decoration-color: var(--kh-color--blue);
     text-decoration-line: underline;
     text-underline-offset: 2px;
   }
 
-  a:visited,
-  a:not([class*='kh-']):visited {
+  a:visited {
     color: #333;
-    text-decoration-color: #734595;
+    text-decoration-color: var(--kh-color--visited);
     text-decoration-line: underline;
   }
 
@@ -169,19 +193,26 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
-  @media (max-width: $kh-breakpoint--lg) {
+  // The three max-width queries below use the `-down` variants (599/845/1023)
+  // rather than the breakpoints themselves. With `max-width: $kh-breakpoint--sm`
+  // and the `min-width: $kh-breakpoint--sm` query further down, a viewport of
+  // exactly 600px matched BOTH, so `show-for-medium-up` and `show-for-mobile-only`
+  // were hidden at the same time. Same off-by-one at md and lg. `_settings.scss`
+  // defines the `-down` variants for exactly this, and the rest of this file
+  // already uses them correctly.
+  @media (max-width: $kh-breakpoint--lg-down) {
     .kh-u-show-for-large {
       display: none !important;
     }
   }
 
-  @media (max-width: $kh-breakpoint--md) {
+  @media (max-width: $kh-breakpoint--md-down) {
     .kh-u-show-for-medium-only {
       display: none !important;
     }
   }
 
-  @media (max-width: $kh-breakpoint--sm) {
+  @media (max-width: $kh-breakpoint--sm-down) {
     .kh-u-show-for-medium-up {
       display: none !important;
     }
@@ -196,11 +227,6 @@ body:has(#kh-css-toggle:checked) {
   @media (min-width: $kh-breakpoint--lg) {
     .kh-u-show-for-medium-only {
       display: none !important;
-    }
-
-    .kh-bleed-out {
-      margin-left: -46%;
-      margin-right: 0;
     }
   }
 
@@ -518,7 +544,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-figure__caption {
-    color: #373a36;
+    color: var(--kh-color--grey--darkest);
     font-weight: 500;
     line-height: 1.71;
     margin: var(--kh-stack-margin, 0) 0 var(--kh-text-margin--bottom, 16px) 0;
@@ -542,7 +568,7 @@ body:has(#kh-css-toggle:checked) {
   @media (min-width: $kh-breakpoint--md) {
     .kh-post--text:not(:has(.kh-figure)) {
       // padding-top: 25rem;
-      background-color: #fffae1;
+      background-color: var(--kh-ground);
       padding-left: 2rem;
       padding-top: 2rem;
     }
@@ -601,7 +627,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-summary__author {
-    color: #707372;
+    color: var(--kh-color--grey);
     font-size: 13px;
     font-style: italic;
     font-weight: 400;
@@ -616,7 +642,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-summary__date {
-    color: #707372;
+    color: var(--kh-color--grey);
     font-size: 13px;
     font-weight: 400;
     line-height: 1.57;
@@ -635,21 +661,21 @@ body:has(#kh-css-toggle:checked) {
     color: #333;
     text-decoration: none;
     text-decoration: underline;
-    text-decoration-color: #3b6fb6;
+    text-decoration-color: var(--kh-color--blue);
 
     &:hover {
       border-bottom: none;
-      color: #193f90;
+      color: var(--kh-color--blue--dark);
       text-decoration: underline;
     }
 
     &:visited {
       border-bottom: none;
-      color: #563d82;
+      color: var(--kh-color--visited);
     }
 
     &:visited:hover {
-      color: #563d82;
+      color: var(--kh-color--visited);
       text-decoration: underline;
     }
   }
@@ -730,12 +756,9 @@ body:has(#kh-css-toggle:checked) {
   // there, insetting the wordmark from the rule beneath it by 16px and
   // stopping the nav short of the other end. The masthead should sit on the
   // same left and right edges as the content column it sits above.
-  .kh-global-header {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--kh-page-grid-gap);
-    padding: 0;
-  }
+  // .kh-global-header is declared once, in _kh-datasheet.scss. A second copy
+  // lived here and silently beat it, because this file @includes the partial
+  // mixins above and then emits its own rules.
 
   @media (min-width: $kh-breakpoint--lg) {
     .kh-intro__heading {
@@ -865,23 +888,23 @@ body:has(#kh-css-toggle:checked) {
 
     > a:not([class*='kh-']) {
       border-bottom: none;
-      color: #3b6fb6;
+      color: var(--kh-color--blue);
       text-decoration: none;
     }
 
     > a:not([class*='kh-']):hover {
       border-bottom: none;
-      color: #193f90;
+      color: var(--kh-color--blue--dark);
       text-decoration: underline;
     }
 
     > a:not([class*='kh-']):visited {
       border-bottom: none;
-      color: #563d82;
+      color: var(--kh-color--visited);
     }
 
     > a:not([class*='kh-']):visited:hover {
-      color: #563d82;
+      color: var(--kh-color--visited);
       text-decoration: underline;
     }
 
@@ -916,7 +939,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-text-body--3 {
-    color: #373a36;
+    color: var(--kh-color--grey--darkest);
     font-size: 16px;
     font-weight: 500;
     line-height: 1.71;
@@ -1073,7 +1096,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-u-text-color--grey {
-    color: #707372;
+    color: var(--kh-color--grey);
   }
 
   .kh-box {
@@ -1208,22 +1231,22 @@ body:has(#kh-css-toggle:checked) {
 
   .kh-link {
     border-bottom: none;
-    color: #3b6fb6;
+    color: var(--kh-color--blue);
     text-decoration: none;
 
     &:hover {
       border-bottom: none;
-      color: #193f90;
+      color: var(--kh-color--blue--dark);
       text-decoration: underline;
     }
 
     &:visited {
       border-bottom: none;
-      color: #563d82;
+      color: var(--kh-color--visited);
     }
 
     &:visited:hover {
-      color: #563d82;
+      color: var(--kh-color--visited);
       text-decoration: underline;
     }
   }
@@ -1250,23 +1273,11 @@ body:has(#kh-css-toggle:checked) {
     font-weight: 600;
   }
 
-  .kh-navigation {
-    display: block;
-    margin-left: auto;
-  }
-
-  .kh-navigation__item {
-    display: inline-flex;
-  }
-
-  .kh-navigation__list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--kh-page-grid-gap);
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
+  // .kh-navigation, __list and __item are declared once, in
+  // _kh-datasheet.scss, alongside the rest of the masthead's visual register.
+  // Copies here silently beat them for the same reason as .kh-global-header
+  // above: this file emits after the mixins it includes. The nav was rendering
+  // as `display: block` with `inline-flex` items and no full-height cells.
 
   .kh-stack > * + * {
     --kh-stack-margin: 1rem;
@@ -1428,7 +1439,7 @@ body:has(#kh-css-toggle:checked) {
 
     li {
       padding: 0.75rem 0;
-      border-bottom: 1px solid var(--kh-color--grey--lightest);
+      border-bottom: 1px solid var(--kh-rule);
       line-height: 1.6;
 
       &:last-child {
@@ -1573,7 +1584,7 @@ body:has(#kh-css-toggle:checked) {
   .kh-pager {
     margin-top: 2rem;
     padding-top: 1.5rem;
-    border-top: 1px solid var(--kh-color--grey--lightest);
+    border-top: 1px solid var(--kh-rule);
   }
 
   .kh-pager__list {
