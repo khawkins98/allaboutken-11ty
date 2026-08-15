@@ -73,11 +73,26 @@
     margin: 0 0 1.5rem;
   }
 
-  .kh-photo__figure picture,
+  .kh-photo__figure picture {
+    display: block;
+  }
+
+  // A photograph should never be taller than the window: a portrait frame
+  // otherwise pushes its own caption, and every word about it, below the fold.
+
+  // `width: auto` rather than `width: 100%` is what makes this work for any
+  // image without naming its size. The intrinsic width becomes the natural
+  // ceiling, so nothing upscales, and the two max- rules take over whichever
+  // way the frame is shaped: max-width binds on a landscape image in a narrow
+  // window, max-height on a portrait one in a short window. This replaced a
+  // hardcoded `max-width: 2000px`, which was the first photograph's width
+  // wearing the label "intrinsic" and would have silently meant something
+  // different for the second.
   .kh-photo__img {
     display: block;
-    width: 100%;
-    max-width: 2000px;
+    width: auto;
+    max-width: 100%;
+    max-height: 100vh;
     height: auto;
     margin: 0 auto;
   }
