@@ -79,6 +79,10 @@
 
   // A photograph should never be taller than the window: a portrait frame
   // otherwise pushes its own caption, and every word about it, below the fold.
+  // The 12rem subtracted from the viewport is the chrome above the image, the
+  // masthead and the publishing strip. A plain 100vh caps the image correctly
+  // and still runs past the fold, because the image does not start at the top
+  // of the window.
 
   // `width: auto` rather than `width: 100%` is what makes this work for any
   // image without naming its size. The intrinsic width becomes the natural
@@ -92,7 +96,7 @@
     display: block;
     width: auto;
     max-width: 100%;
-    max-height: 100vh;
+    max-height: calc(100vh - 12rem);
     height: auto;
     margin: 0 auto;
   }
