@@ -272,6 +272,12 @@
     border: 1px solid var(--kh-color--blue);
   }
 
+  // Filled grey, matching the treatment `.kh-seq__mark--photo` uses on the
+  // sequence rail, so a photograph reads the same wherever it is marked.
+  .kh-lab-key__mark--photo {
+    background: var(--kh-color--grey--darkest);
+  }
+
   .kh-trail {
     border-bottom: 1px solid var(--kh-rule);
     display: grid;
@@ -344,6 +350,14 @@
   .kh-trail__node--digesting {
     background: transparent;
     border: 1px solid var(--kh-color--blue);
+  }
+
+  // Same story as --digesting above: dynamic, and unexercised until a
+  // photograph lands in a trail. It exists because `compute-story-lab.mjs` now
+  // returns `photo` as a fourth kind; without this rule a photograph would draw
+  // as an article and the trail would quietly misreport what it contains.
+  .kh-trail__node--photo {
+    background: var(--kh-color--grey--darkest);
   }
 
   .kh-trail__entries {
