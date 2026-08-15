@@ -151,11 +151,6 @@
     color: var(--kh-ink-muted);
   }
 
-  .kh-topic-child__sep {
-    margin: 0 0.3em;
-    opacity: 0.7;
-  }
-
   // Register timeline. Marks on a rule, one slot per month, sized by area.
   // Plain elements rather than SVG so each month is a real link with a
   // native tooltip and a proper hit target.
@@ -528,7 +523,7 @@
   }
 
   .kh-seq__mark--digesting::before {
-    background: #fffae1;
+    background: var(--kh-ground);
     border: 1px solid var(--kh-color--blue);
   }
 

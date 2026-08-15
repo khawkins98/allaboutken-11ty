@@ -335,6 +335,12 @@
     transform: translateX(-50%) rotate(45deg);
   }
 
+  // Looks unused to a static scan of the built HTML, and is not: the class is
+  // built dynamically in stats-story-lab.njk as `kh-trail__node--{{ node.kind }}`
+  // from the `kind` computed in scripts/compute-story-lab.mjs. Today's trails
+  // only contain `article` and `impact` nodes, so this variant is unexercised
+  // rather than dead, and it applies the moment a digesting entry lands in a
+  // trail. Do not delete it on the strength of a coverage report.
   .kh-trail__node--digesting {
     background: transparent;
     border: 1px solid var(--kh-color--blue);
