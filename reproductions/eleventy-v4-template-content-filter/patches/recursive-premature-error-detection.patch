@@ -1,7 +1,7 @@
 diff --git a/node_modules/@11ty/eleventy/src/Errors/ErrorUtil.js b/node_modules/@11ty/eleventy/src/Errors/ErrorUtil.js
 --- a/node_modules/@11ty/eleventy/src/Errors/ErrorUtil.js
 +++ b/node_modules/@11ty/eleventy/src/Errors/ErrorUtil.js
-@@ -59,11 +59,37 @@ export default class ErrorUtil {
+@@ -59,11 +59,38 @@ export default class ErrorUtil {
  	static isPrematureTemplateContentError(e) {
 -		// TODO the rest of the template engines
 -		return (
@@ -11,6 +11,7 @@ diff --git a/node_modules/@11ty/eleventy/src/Errors/ErrorUtil.js b/node_modules/
 -				e?.originalError?.originalError instanceof TemplateContentPrematureUseError) || // Liquid
 -			e?.message?.includes("TemplateContentPrematureUseError") // Nunjucks
 -		);
++		let rootError = e;
 +		let pending = [e];
 +		let seen = new Set();
 +
@@ -25,7 +26,8 @@ diff --git a/node_modules/@11ty/eleventy/src/Errors/ErrorUtil.js b/node_modules/
 +
 +			if (
 +				error instanceof TemplateContentPrematureUseError ||
-+				error?.message?.includes("TemplateContentPrematureUseError")
++				// Preserve the legacy Nunjucks fallback without matching unrelated nested messages.
++				(error === rootError && error?.message?.includes("TemplateContentPrematureUseError"))
 +			) {
 +				return true;
 +			}
@@ -34,8 +36,7 @@ diff --git a/node_modules/@11ty/eleventy/src/Errors/ErrorUtil.js b/node_modules/
 +				pending.push(error.cause);
 +			}
 +
-+			// Preserve the existing Liquid-specific guard while allowing it at
-+			// any depth in the Error.cause graph.
++			// Liquid requires this guarded non-standard path instead of Error.cause.
 +			if (
 +				["RenderError", "UndefinedVariableError"].includes(error?.originalError?.name) &&
 +				error?.originalError?.originalError

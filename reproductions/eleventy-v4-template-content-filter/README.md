@@ -49,7 +49,9 @@ Liquid behavior that core deliberately retained in PR 3651.
 
 Unlike a simple `error.cause || error.originalError` loop, this keeps both
 eligible branches available rather than silently discarding one when both are
-present. After applying it to the installed Eleventy package:
+present. The legacy Nunjucks message fallback is limited to the root error, so
+unrelated nested errors that merely mention the class name are not mistaken for
+Eleventy's retry signal. After applying it to the installed Eleventy package:
 
 ```bash
 patch -p1 < patches/recursive-premature-error-detection.patch
