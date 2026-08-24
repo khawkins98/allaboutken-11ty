@@ -11,7 +11,8 @@ Tested on 24 August 2026 with Node 24.18.0, Yarn 1.22.22 and
 
 - Pinned `@11ty/eleventy` to `4.0.0-alpha.10` rather than using the moving
   `canary` tag.
-- Raised the declared Node minimum from 18 to 20. Eleventy 4 requires Node 20.
+- Raised the declared Node minimum from 18 to 22.15. Alpha.8 raised Eleventy
+  4's minimum from Node 20.19 to 22.15.
 - No template syntax has been changed yet.
 
 ## Resolved locally: collection `templateContent` inside Nunjucks filters
