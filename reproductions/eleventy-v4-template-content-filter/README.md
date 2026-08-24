@@ -41,9 +41,15 @@ The build succeeds but incorrectly prints `Rendered words: 0`.
 ## Proposed fix
 
 `patches/recursive-premature-error-detection.patch` changes
-`ErrorUtil.isPrematureTemplateContentError()` to walk nested `cause` and
-`originalError` links with cycle protection. After applying it to the installed
-Eleventy package:
+`ErrorUtil.isPrematureTemplateContentError()` to walk the complete nested
+`cause` graph with cycle protection. At every depth it also preserves
+Eleventy's existing guarded Liquid `originalError.originalError` handling. It
+does not follow arbitrary `originalError` properties, which would broaden the
+Liquid behavior that core deliberately retained in PR 3651.
+
+Unlike a simple `error.cause || error.originalError` loop, this keeps both
+eligible branches available rather than silently discarding one when both are
+present. After applying it to the installed Eleventy package:
 
 ```bash
 patch -p1 < patches/recursive-premature-error-detection.patch
@@ -56,3 +62,7 @@ The expected successful output is `Rendered words: 6`.
 This patch is intentionally a diagnostic proposal, not a vendored project
 dependency. Upstream may prefer a shared recursive error-unwrapping helper or
 to preserve the original retry signal at the Nunjucks boundary.
+
+Relevant precedent: <https://github.com/11ty/buildawesome/pull/3651> added the
+first-level `Error.cause` check and intentionally retained the Liquid-specific
+name guards.
