@@ -10,7 +10,7 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
 ---
 {%- set siteConfig = siteConfig.siteInformation -%}
 {%- set isFirstPage = pagination.pageNumber == 0 -%}
-{%- set glance = collections.allContent | corpusStats -%}
+{%- set glance = corpusStats.allContent -%}
 <section>
   <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
 

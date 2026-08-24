@@ -10,7 +10,7 @@
   "author": "Ken Hawkins <khawkins98@gmail.com> (https://www.allaboutken.com/)",
   "main": "eleventy.js",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "clean": "rm -rf build",
@@ -26,7 +26,8 @@
     "semantic-map": "node scripts/compute-semantic-map.mjs",
     "story-lab": "node scripts/compute-story-lab.mjs",
     "embeddings": "node scripts/generate-embeddings.mjs",
-    "build": "export NODE_OPTIONS=--no-deprecation && yarn clean && yarn sass && yarn eleventy:bootstrap && yarn embeddings && yarn related && yarn semantic-map && yarn story-lab && yarn eleventy && yarn lint:css-vars && echo '🏋 Build completed'",
+    "corpus-stats": "node scripts/compute-corpus-stats.mjs",
+    "build": "export NODE_OPTIONS=--no-deprecation && yarn clean && yarn sass && yarn eleventy:bootstrap && yarn corpus-stats && yarn embeddings && yarn related && yarn semantic-map && yarn story-lab && yarn eleventy && yarn lint:css-vars && echo '🏋 Build completed'",
     "dev": "export NODE_OPTIONS=--no-deprecation && concurrently -k \"sass --load-path src/components --watch --poll src/components/vf-componenet-rollup/index.scss:build/css/styles.css\" \"ELEVENTY_ENV=development eleventy --serve --config=eleventy.js\"",
     "start": "yarn dev",
     "test": "bash .githooks/test-commit-msg-hooks.sh",
@@ -34,7 +35,7 @@
     "update-components": "yarn upgrade-interactive --latest"
   },
   "dependencies": {
-    "@11ty/eleventy": "^3.1.6",
+    "@11ty/eleventy": "4.0.0-alpha.10",
     "luxon": "^3.7.2",
     "markdown-it": "^15.0.0",
     "markdown-it-anchor": "^9.2.1"

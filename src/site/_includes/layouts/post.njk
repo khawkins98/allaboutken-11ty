@@ -4,6 +4,8 @@ pageClass: posts
 templateEngineOverride: njk
 ---
 
+{% if tags and ('impact-stories' in tags) %}<!-- kh-entry-kind:impact-story -->{% elif tags and ('posts' in tags) %}<!-- kh-entry-kind:blog -->{% endif %}
+<!-- kh-entry-date:{{ date | dateDisplay('yyyy-LL-dd') }} -->
 {%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) %}
 {%- set pulseCurrentKey = date | dateDisplay('yyyy-LL') %}
 {% include "partials/pulse-strip.njk" %}
@@ -119,7 +121,7 @@ templateEngineOverride: njk
       {% if teaser -%}
       <p class="kh-text-body--1">{{ teaser | emdash | safe }}</p>
       {%- endif %}
-      {{ content | safe }}
+      <!-- kh-entry-content:start -->{{ content | safe }}<!-- kh-entry-content:end -->
     </div>
     {#- Feedback belongs to the reading column: it asks about the sentence the
         reader just finished, before attention shifts to authorship or onward

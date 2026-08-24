@@ -55,7 +55,8 @@ module.exports = function(config) {
 
   // Add any utility filters
   config.addFilter("dateDisplay", (dateObj, format = "d LLL y") => {
-    return DateTime.fromJSDate(dateObj, {
+    const date = dateObj instanceof Date ? dateObj : new Date(dateObj);
+    return DateTime.fromJSDate(date, {
       zone: "utc"
     }).toFormat(format);
   });

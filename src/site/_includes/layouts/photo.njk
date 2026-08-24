@@ -3,6 +3,8 @@ layout: layouts/base.njk
 templateEngineOverride: njk
 ---
 
+<!-- kh-entry-kind:photo -->
+<!-- kh-entry-date:{{ date | dateDisplay('yyyy-LL-dd') }} -->
 {#- The publishing strip, as on every other entry. A photograph is a mark in
     the register like any other, so it shows where it sits. -#}
 {%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) %}
@@ -51,7 +53,7 @@ templateEngineOverride: njk
     {% if image_meta and image_meta.text %}
     <p>{{ image_meta.text | safe }}</p>
     {% endif %}
-    {{ content | safe }}
+    <!-- kh-entry-content:start -->{{ content | safe }}<!-- kh-entry-content:end -->
     {#- Apparatus, not content: the credit and the exposure line would otherwise
         be indexed as body text and surface as search excerpts. -#}
     <p class="kh-meta kh-photo__tech" data-pagefind-ignore>

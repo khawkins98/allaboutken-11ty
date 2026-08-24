@@ -1,0 +1,31 @@
+diff --git a/node_modules/@11ty/eleventy/src/Errors/ErrorUtil.js b/node_modules/@11ty/eleventy/src/Errors/ErrorUtil.js
+--- a/node_modules/@11ty/eleventy/src/Errors/ErrorUtil.js
++++ b/node_modules/@11ty/eleventy/src/Errors/ErrorUtil.js
+@@ -59,11 +59,19 @@ export default class ErrorUtil {
+ 	static isPrematureTemplateContentError(e) {
+-		// TODO the rest of the template engines
+-		return (
+-			e instanceof TemplateContentPrematureUseError ||
+-			e?.cause instanceof TemplateContentPrematureUseError || // Custom (per Node-convention)
+-			(["RenderError", "UndefinedVariableError"].includes(e?.originalError?.name) &&
+-				e?.originalError?.originalError instanceof TemplateContentPrematureUseError) || // Liquid
+-			e?.message?.includes("TemplateContentPrematureUseError") // Nunjucks
+-		);
++		let error = e;
++		let seen = new Set();
++
++		while (error && !seen.has(error)) {
++			if (
++				error instanceof TemplateContentPrematureUseError ||
++				error?.message?.includes("TemplateContentPrematureUseError")
++			) {
++				return true;
++			}
++
++			seen.add(error);
++			error = error.cause || error.originalError;
++		}
++
++		return false;
+ 	}
+ }

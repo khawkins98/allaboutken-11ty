@@ -10,7 +10,7 @@ This guide covers local setup for developing `allaboutken-11ty`.
 | Yarn | Yarn 1.x (`1.22.22` pinned via `packageManager`) | `package.json` |
 | Git | Current stable | Local workflow + hooks |
 
-`package.json` also declares `engines.node: >=18`, but local and CI are standardized on Node 22.
+`package.json` also declares `engines.node: >=20`, as required by the Eleventy 4 alpha, but local and CI are standardized on Node 22.
 
 ## Initial setup
 

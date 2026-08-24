@@ -1,0 +1,16 @@
+{
+  "name": "eleventy-v4-template-content-filter-reproduction",
+  "private": true,
+  "version": "1.0.0",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "eleventy --config=eleventy.js",
+    "build:control": "ELEVENTY_REPRO_CONTROL=1 eleventy --config=eleventy.js"
+  },
+  "dependencies": {
+    "@11ty/eleventy": "4.0.0-alpha.10"
+  }
+}

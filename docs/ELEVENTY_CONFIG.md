@@ -15,7 +15,7 @@ available to templates.
 | `config/eleventy/timeline.js` | Timeline, archive grouping and neighbourhood filters |
 | `config/eleventy/topic-visuals.js` | Topic helpers and sparkline shortcodes |
 | `config/eleventy/semantic-visuals.js` | Semantic SVG shortcodes |
-| `config/eleventy/stats.js` | Corpus statistics, series and length filters |
+| `config/eleventy/stats.js` | Timeline sizing, series and length filters |
 | `config/eleventy/markdown.js` | Markdown library and markdown-backed shortcodes |
 | `config/eleventy/assets-and-search.js` | Passthrough rules, watching and Pagefind |
 | `config/eleventy/collections.js` | Collections |

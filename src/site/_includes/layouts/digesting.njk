@@ -4,6 +4,8 @@ pageClass: digesting
 templateEngineOverride: njk
 ---
 
+{% if tags and ('digesting' in tags) %}<!-- kh-entry-kind:digesting -->{% endif %}
+<!-- kh-entry-date:{{ date | dateDisplay('yyyy-LL-dd') }} -->
 {#- The publishing strip, as on every other entry. Digesting notes are in the
     same register and appear as marks in it, so a note that did not show the
     strip could not show the reader where it sat -- and the archive page tells
@@ -30,7 +32,7 @@ templateEngineOverride: njk
       I'm getting more active by writing shorter form, more informal updates like this one.
     </div>
     {% endif %}
-    {{ content | safe }}
+    <!-- kh-entry-content:start -->{{ content | safe }}<!-- kh-entry-content:end -->
     {% if digest_link %}
     <p class="kh-text-body--2"><a href="{{ digest_link }}" class="kh-button">Learn more at the source</a></p>
     {% endif %}

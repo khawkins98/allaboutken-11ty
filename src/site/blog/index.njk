@@ -9,7 +9,7 @@ pagination:
 permalink: "/blog/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 }}/{% endif %}"
 ---
 {%- set isFirstPage = pagination.pageNumber == 0 -%}
-{%- set glance = collections.blogPosts | corpusStats -%}
+{%- set glance = corpusStats.blogPosts -%}
 <section>
   <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
 
