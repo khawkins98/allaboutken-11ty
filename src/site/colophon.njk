@@ -2,7 +2,7 @@
 title: Colophon
 layout: layouts/digesting.njk
 date: 2025-09-10
-lastUpdated: 2026-03-03
+lastUpdated: 2026-08-27
 templateEngineOverride: njk
 ---
 
@@ -22,7 +22,7 @@ This site is built and published with a small, readable stack and a bias for fle
 
 ## Stack
 
-- **Static site generator**: [Eleventy (11ty) v3](https://www.11ty.dev/)
+- **Static site generator**: [Eleventy (11ty) v4](https://www.11ty.dev/)
 - **Language & tooling**: Node.js (Yarn scripts), Nunjucks templates, Markdown via Markdown‑It with `markdown-it-anchor`
 - **Styles**: Sass compiled to a single CSS file; custom utility classes; normalize; type set in IBM Plex Sans and IBM Plex Mono
   - Previously used the EMBL Visual Framework (VF) and Gulp; the [migration to a simpler Eleventy v3 stack is documented here](/posts/20250831-site-overhaul-eleventy-v3).
@@ -38,7 +38,7 @@ This site is built and published with a small, readable stack and a bias for fle
 - **Source code**: [`github.com/khawkins98/allaboutken-11ty`](https://github.com/khawkins98/allaboutken-11ty/)
 - **Images**: [Eleventy Image plugin](https://www.11ty.dev/docs/plugins/image) ([Sharp](https://sharp.pixelplumbing.com/) under the hood) configured to [generate deterministic, token‑based filenames](/posts/20250907-deterministic-image-filenames)
 - **Social sharing images**: Auto‑generated OpenGraph/Twitter cards using [Eleventy's Screenshot Service](https://www.11ty.dev/docs/services/opengraph/) — dynamically captures styled HTML pages as 1200×630px images
-- **Build command**: `yarn build` → compiles Sass, runs Eleventy, processes images, builds search index
+- **Build command**: `yarn build` → compiles Sass, runs the two-pass Eleventy build, processes images, derives corpus data and builds the search indexes
 
 ## How closest-in-meaning works
 

@@ -5,7 +5,7 @@ layout: layouts/base.njk
 permalink: /archive/
 ---
 {%- set months = collections.allContent | groupByMonth -%}
-{%- set stats = collections.allContent | corpusStats -%}
+{%- set stats = corpusStats.allContent -%}
 <section>
   <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
 

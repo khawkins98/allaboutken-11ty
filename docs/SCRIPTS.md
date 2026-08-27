@@ -9,6 +9,7 @@ Source of truth for local commands and script behavior in this repository.
 | `yarn dev` | Run local development server | Day-to-day authoring and preview |
 | `yarn build` | Run full production build | Pre-push validation and CI parity |
 | `yarn embeddings` | Regenerate semantic-search vectors | After content/model changes that affect embeddings |
+| `yarn corpus-stats` | Derive corpus statistics from bootstrap HTML | After the bootstrap Eleventy pass; normally run by `yarn build` |
 | `yarn lint:css` | Lint SCSS/CSS files | Before committing style changes |
 | `yarn lint:links` | Validate internal links in `build/` | After a build, to catch broken internal links/anchors |
 | `yarn test` | Test commit-message normalization and validation | After changing files in `.githooks/` |
@@ -57,16 +58,30 @@ Source of truth for local commands and script behavior in this repository.
 - Intended to run after Eleventy has produced the site output.
 - Caches the downloaded MiniLM model under `.cache/transformers` (set via `env.cacheDir`). CI restores this directory between runs so the model is not re-downloaded from HuggingFace every build.
 
+### `yarn corpus-stats`
+
+- Runs `scripts/compute-corpus-stats.mjs` after the bootstrap Eleventy pass.
+- Reads the rendered entry bodies marked by the entry layouts and writes
+  `src/site/_data/corpusStats.json` for the final Eleventy pass.
+- Reproduces the former `templateContent` word-count behavior without reading
+  collection content during Nunjucks rendering.
+- Excludes draft/noindex entries and keeps separate summaries for all content
+  and blog posts.
+- The output is ignored derived data. Run `yarn build` once before `yarn dev`
+  after a fresh checkout if the statistics panels are needed in local preview.
+
 ### `yarn build`
 
-- Runs a bootstrap Eleventy pass, generates embeddings and the derived related,
-  semantic-map and Story Lab data, then runs a final Eleventy pass.
+- Runs a bootstrap Eleventy pass, generates corpus statistics, embeddings and
+  the derived related, semantic-map and Story Lab data, then runs a final
+  Eleventy pass.
 - This is the production build path used for full validation.
 - Expected outputs include:
   - compiled CSS in `build/css/`
   - site HTML/assets in `build/`
   - semantic search vectors in `build/semantic-search/vectors.json`
-  - ignored derived data in `src/site/_data/{related,semanticMap,storyLab}.json`
+  - ignored derived data in
+    `src/site/_data/{corpusStats,related,semanticMap,storyLab}.json`
 
 ### `yarn dev`
 

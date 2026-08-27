@@ -4,8 +4,8 @@ teaser: "How much there is, when it was written, and how long it runs."
 layout: layouts/base.njk
 permalink: /stats/
 ---
-{%- set stats = collections.allContent | corpusStats -%}
-{%- set years = collections.allContent | statsByYear -%}
+{%- set stats = corpusStats.allContent -%}
+{%- set years = stats.years -%}
 <section>
   <h1 class="kh-font-headline kh-font-headline--display kh-text-heading--1">{{title}}</h1>
 

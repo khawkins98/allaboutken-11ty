@@ -14,7 +14,7 @@ code between modules; templates depend on those names as the public API.
 | `timeline.js` | Archive grouping, register timeline and sequence neighbourhood |
 | `topic-visuals.js` | Hierarchical topic helpers and topic/month sparklines |
 | `semantic-visuals.js` | Static semantic map, matrix, arc and force SVG shortcodes |
-| `stats.js` | Corpus/year statistics, series navigation and length framing |
+| `stats.js` | Timeline sizing, series navigation and length framing |
 | `markdown.js` | Markdown-it setup and markdown-backed shortcodes |
 | `assets-and-search.js` | Passthrough copies, image watch target and Pagefind hook |
 | `collections.js` | Blog, impact-story, featured, topic and combined collections |

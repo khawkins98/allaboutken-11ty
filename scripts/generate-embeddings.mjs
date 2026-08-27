@@ -19,8 +19,9 @@
  */
 
 import { pipeline, env } from '@huggingface/transformers';
-import { readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, statSync } from 'fs';
 import { join, relative } from 'path';
+import { findHtmlFiles } from './lib/find-html-files.mjs';
 
 // Cache downloaded model files in a stable, repo-local directory so CI can
 // restore them between builds (see actions/cache in build-and-deploy.yml).
@@ -50,22 +51,6 @@ const SKIP_PATTERNS = [
   /\/img\//,
   /\/assets\//,
 ];
-
-/**
- * Recursively find all HTML files in a directory.
- */
-function findHtmlFiles(dir, files = []) {
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry);
-    const stat = statSync(full);
-    if (stat.isDirectory()) {
-      findHtmlFiles(full, files);
-    } else if (entry.endsWith('.html')) {
-      files.push(full);
-    }
-  }
-  return files;
-}
 
 /**
  * Extract text content from HTML, stripping tags.

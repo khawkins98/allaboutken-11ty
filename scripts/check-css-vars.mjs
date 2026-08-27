@@ -24,20 +24,11 @@
  * Reads that carry a fallback -- `var(--x, 1rem)` -- are always fine and are
  * not matched here.
  */
-import { readFileSync, readdirSync, statSync } from 'fs';
-import { join } from 'path';
+import { readFileSync } from 'fs';
+import { findHtmlFiles } from './lib/find-html-files.mjs';
 
 const CSS = 'build/css/styles.css';
 const BUILD = 'build';
-
-function htmlFiles(dir, out = []) {
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry);
-    if (statSync(full).isDirectory()) htmlFiles(full, out);
-    else if (entry.endsWith('.html')) out.push(full);
-  }
-  return out;
-}
 
 const css = readFileSync(CSS, 'utf-8');
 
@@ -50,7 +41,7 @@ const unresolved = [...read].filter((name) => !definedInCss.has(name));
 // Second chance: set from an inline style attribute in any built page.
 const setInline = new Set();
 if (unresolved.length) {
-  for (const file of htmlFiles(BUILD)) {
+  for (const file of findHtmlFiles(BUILD)) {
     const html = readFileSync(file, 'utf-8');
     for (const name of unresolved) {
       if (!setInline.has(name) && html.includes(`${name}:`)) setInline.add(name);
