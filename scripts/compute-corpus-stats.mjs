@@ -8,22 +8,14 @@
  * around each entry's rendered body.
  */
 
-import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
-import { dirname, join } from 'path';
+import { mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { dirname } from 'path';
+import { findHtmlFiles } from './lib/find-html-files.mjs';
 
 const BUILD_DIR = 'build';
 const OUTPUT_FILE = 'src/site/_data/corpusStats.json';
 const BODY_START = '<!-- kh-entry-content:start -->';
 const BODY_END = '<!-- kh-entry-content:end -->';
-
-function findHtmlFiles(dir, files = []) {
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry);
-    if (statSync(full).isDirectory()) findHtmlFiles(full, files);
-    else if (entry.endsWith('.html')) files.push(full);
-  }
-  return files;
-}
 
 function getMatch(html, pattern, label, file) {
   const match = html.match(pattern);
@@ -135,10 +127,18 @@ if (!allContent || !blogPosts) {
   throw new Error('compute-corpus-stats: no marked entry pages found; run the bootstrap build first');
 }
 
+// post.njk serves both regular posts and impact stories. Keep its length
+// gauge population aligned with that layout rather than the narrower blog set.
+const postLengths = entries
+  .filter((entry) => entry.kind === 'blog' || entry.kind === 'impact-story')
+  .map((entry) => entry.words)
+  .sort((a, b) => a - b);
+
 const output = {
   generated: 'from rendered bootstrap entry bodies',
   allContent,
-  blogPosts
+  blogPosts,
+  postLengths
 };
 
 mkdirSync(dirname(OUTPUT_FILE), { recursive: true });

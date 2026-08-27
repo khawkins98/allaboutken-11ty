@@ -14,8 +14,9 @@
  * Exits non-zero if any broken internal link is found. Run after `yarn eleventy`.
  */
 
-import { readFileSync, readdirSync, statSync, existsSync } from 'fs';
+import { readFileSync, statSync, existsSync } from 'fs';
 import { join, relative, dirname, resolve, extname } from 'path';
+import { findHtmlFiles } from './lib/find-html-files.mjs';
 
 const BUILD_DIR = 'build';
 
@@ -37,15 +38,6 @@ function proxiedPrefixes() {
   }
 }
 const PROXIED = proxiedPrefixes();
-
-function findHtmlFiles(dir, files = []) {
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry);
-    if (statSync(full).isDirectory()) findHtmlFiles(full, files);
-    else if (entry.endsWith('.html')) files.push(full);
-  }
-  return files;
-}
 
 // Extract href="..." and src="..." values (single or double quoted).
 // Strips <script>/<style> first so JS template strings (e.g. `${item.url}`)

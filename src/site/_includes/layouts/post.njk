@@ -40,7 +40,7 @@ templateEngineOverride: njk
         </time>
         {%- set words = content | wordCount %}
         &middot; {{ words | formatNumber }} words
-        {%- set lengthStats = words | lengthFrame %}
+        {%- set lengthStats = words | lengthFrame(corpusStats.postLengths) %}
         {% include "partials/length-gauge.njk" %}
       </p>
       {#- Topics get a line each, not a comma-separated run.

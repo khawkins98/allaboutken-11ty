@@ -1,8 +1,3 @@
-const Fs = require('fs');
-const Path = require('path');
-
-const projectRoot = Path.resolve(__dirname, '../..');
-
 module.exports = function registerStats(config) {
   // Total pixel width of the timeline track. Firefox mis-computes the
   // scrollable overflow of a shrink-wrapped flex track inside an RTL
@@ -34,44 +29,12 @@ module.exports = function registerStats(config) {
     }
   });
 
-  // Word-count corpus for the length gauge: every file in posts/ whose
-  // frontmatter carries the `posts` tag (articles + impact stories — the same
-  // population that renders through post.njk). Counted from raw source with
-  // tags stripped, which tracks the rendered count closely enough to place a
-  // post on a percentile scale. Computed once per build.
-  let khLengthCorpus = null;
-  function khGetLengthCorpus() {
-    if (khLengthCorpus) return khLengthCorpus;
-    const counts = [];
+  // Place a word count on the rendered post corpus: percentile rank plus the
+  // median. The corpus is derived between the two Eleventy passes, keeping
+  // this gauge on the same counting basis as the statistics pages.
+  config.addFilter('lengthFrame', (words, lengths) => {
     try {
-      const dir = Path.join(projectRoot, 'src/site/posts');
-      for (const f of Fs.readdirSync(dir)) {
-        if (!/\.(njk|md)$/.test(f)) continue;
-        const raw = Fs.readFileSync(Path.join(dir, f), 'utf8');
-        const m = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/.exec(raw);
-        if (!m) continue;
-        const fm = m[1];
-        if (!/^tags:\s*posts\s*$/m.test(fm) && !/^\s*-\s*posts\s*$/m.test(fm)) continue;
-        const body = m[2]
-          .replace(/{%[\s\S]*?%}/g, ' ')
-          .replace(/{{[\s\S]*?}}/g, ' ')
-          .replace(/<[^>]+>/g, ' ')
-          .replace(/\s+/g, ' ')
-          .trim();
-        if (body) counts.push(body.split(/\s+/).length);
-      }
-    } catch (e) {
-      // fall through with whatever was gathered
-    }
-    counts.sort((a, b) => a - b);
-    khLengthCorpus = counts;
-    return counts;
-  }
-
-  // Place a word count on the corpus: percentile rank plus the median.
-  config.addFilter('lengthFrame', (words) => {
-    try {
-      const corpus = khGetLengthCorpus();
+      const corpus = Array.isArray(lengths) ? lengths : [];
       if (!corpus.length) return null;
       const n = Number(words) || 0;
       const below = corpus.filter((c) => c < n).length;
