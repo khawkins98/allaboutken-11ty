@@ -61,13 +61,13 @@ permalink: /style-guide/components/
 {% markdown %}
 ## Colors
 
-Design tokens defined as CSS custom properties on the body. The site uses a warm paper background (`#fffae1`) with dark text (`#222`) and blue accents.
+Design tokens defined as CSS custom properties on the body. The site uses a near-white paper background (`#fbfbfa`) with dark text (`#222`), blue links and an orange accent.
 {% endmarkdown %}
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
       <div>
-        <div style="background: #fffae1; border: 1px solid #d0d0ce; height: 60px;"></div>
-        <small>Page background<br><code>#fffae1</code></small>
+        <div style="background: #fbfbfa; border: 1px solid #d0d0ce; height: 60px;"></div>
+        <small>Page background<br><code>#fbfbfa</code></small>
       </div>
       <div>
         <div style="background: #222; height: 60px;"></div>
@@ -94,12 +94,12 @@ Design tokens defined as CSS custom properties on the body. The site uses a warm
         <small>Visited links<br><code>#734595</code></small>
       </div>
       <div>
-        <div style="background: #ffd21e; height: 60px;"></div>
+        <div style="background: #f49e17; height: 60px;"></div>
         <small>Sun (accent)<br><code>--kh-color--sun</code></small>
       </div>
       <div>
-        <div style="background: #f0b429; height: 60px;"></div>
-        <small>Yellow dark<br><code>#f0b429</code></small>
+        <div style="background: #d97706; height: 60px;"></div>
+        <small>Yellow dark<br><code>#d97706</code></small>
       </div>
       <div>
         <div style="background: #fafafa; border: 1px solid #d0d0ce; height: 60px;"></div>
@@ -201,7 +201,7 @@ deliberately. The whole register is flat by rule — no radius, no shadow, the
 hairline *is* the decoration.
 
 Three colours do the work: `--kh-rule--strong` for structural borders,
-`--kh-rule` for internal dividers, and `--kh-color--coral` for apparatus
+`--kh-rule` for internal dividers, and `--kh-color--apparatus` for apparatus
 (numbers, labels, reference IDs).
 
 ### Micro-labels and section numbers
@@ -227,7 +227,7 @@ than a stack of blocks.
 
 `.kh-panel` is a hairline box. `.kh-panel__row` divides it, `.kh-panel__cell`
 subdivides a row into columns (side by side from the `sm` breakpoint, stacked
-below), and `.kh-panel__label` is the coral mono caption inside a cell.
+below), and `.kh-panel__label` is the muted mono caption inside a cell.
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}
@@ -283,7 +283,7 @@ the page scroll sideways. Used by `/work`.
 | `.kh-hero` / `.kh-hero__spec` | homepage | Hairline masthead with a label/value spec column |
 | `.kh-datasheet-list` | homepage | Post list as an outlined grid; promotes the `display: contents` wrappers in `post-summary.njk` to real cells |
 | `.kh-global-header` | every page | Masthead as a strip of bordered nav cells |
-| `.kh-post-head` / `.kh-doc-ref` | post pages | Hairline masthead, mono byline, coral reference number |
+| `.kh-post-head` / `.kh-doc-ref` | post pages | Hairline masthead, mono byline, apparatus-colour reference number |
 | `.kh-post-rail` | post pages | Sticky numbered contents index in the left margin |
 | `.kh-compare` | Recursive post | Before/after image slider. The control is a real `<input type="range">`, so pointer, touch and keyboard all come from the platform; JS only mirrors its value into `--kh-compare-split`, which a `clip-path` reads. With no JS the split stays where the inline custom property puts it |
 
@@ -406,20 +406,20 @@ colour together, never colour alone.
 
 <p><span class="kh-seq__mark" style="display: inline-flex; vertical-align: middle;"></span> <span class="kh-meta">article — filled ink square</span></p>
 <p><span class="kh-seq__mark kh-seq__mark--digesting" style="display: inline-flex; vertical-align: middle;"></span> <span class="kh-meta">digesting — open blue square</span></p>
-<p><span class="kh-seq__mark kh-seq__mark--impact" style="display: inline-flex; vertical-align: middle;"></span> <span class="kh-meta">impact story — coral diamond</span></p>
+<p><span class="kh-seq__mark kh-seq__mark--impact" style="display: inline-flex; vertical-align: middle;"></span> <span class="kh-meta">impact story — apparatus-colour diamond</span></p>
 
 {% markdown %}
 ### The marks
 
 | Mark | Where | Encoding |
 |------|-------|----------|
-| Pulse strip (`partials/pulse-strip.njk`, `pulseMonths` filter) | post masthead | Twelve months, one 2px tick per entry — counts are countable, not just proportional. Ticks stack articles / digesting / impact bottom-up; a coral tick below the baseline marks this post's month. |
-| Sequence rail (`partials/sequence-mark.njk`, `neighbourhood` filter) | post foot | This entry and up to three neighbours either side on a hairline, oldest left. At wide viewports, alternating leader lines join each mark to its dated, linked title; narrow viewports retain the compact rail. The current entry wears a filled coral mark and a plain-text label. |
-| Length gauge (`partials/length-gauge.njk`, `lengthFrame` filter) | post byline | Coral marker at this post's percentile rank among all `posts`-tagged entries; centre tick is the median. Position is the only encoding. |
+| Pulse strip (`partials/pulse-strip.njk`, `pulseMonths` filter) | post masthead | Twelve months, one 2px tick per entry — counts are countable, not just proportional. Ticks stack articles / digesting / impact bottom-up; an apparatus-colour tick below the baseline marks this post's month. |
+| Sequence rail (`partials/sequence-mark.njk`, `neighbourhood` filter) | post foot | This entry and up to three neighbours either side on a hairline, oldest left. At wide viewports, alternating leader lines join each mark to its dated, linked title; narrow viewports retain the compact rail. The current entry wears a filled apparatus-colour mark and a plain-text label. |
+| Length gauge (`partials/length-gauge.njk`, `lengthFrame` filter) | post byline | Apparatus-colour marker at this post's percentile rank among all `posts`-tagged entries; centre tick is the median. Position is the only encoding. |
 | Topic tally (`topicTally` filter) | post byline | `×N` after a topic: how many entries share it. A ranked list with honest numbers, not a word cloud. |
 
 Colours are the register's own: ink `#2b2b28` for articles, link blue
-`#3b6fb6` for digesting, coral `#bf4a26` for impact stories and for
+`#3b6fb6` for digesting, apparatus `#1c5a9c` for impact stories and for
 apparatus (the current-month tick, the gauge marker, tallies). SVG fills are
 hardcoded in the partials because presentation attributes can't read CSS
 custom properties — keep them in sync with `_kh-dataviz.scss`.
@@ -513,7 +513,7 @@ Yellow-bordered callout boxes for asides, updates, and contextual information. T
 {% markdown %}
 ## Margin notes and pull-quotes
 
-Tufte-inspired supplementary asides, set in the datasheet register: a hairline top rule and a coral mono micro-label (`NOTE` / `QUOTE`). On a post page the left rail carries the document's index (masthead + contents); margin apparatus takes the opposite gutter, beside the paragraph it supports. On desktop (≥ 1300px) they float into the right margin past the post body; below that — and in print — they render in the flow as hairline blocks. Use notes for supporting citations, secondary references, and context that enriches the argument without interrupting the main flow.
+Tufte-inspired supplementary asides, set in the datasheet register: a hairline top rule and an apparatus-colour mono micro-label (`NOTE` / `QUOTE`). On a post page the left rail carries the document's index (masthead + contents); margin apparatus takes the opposite gutter, beside the paragraph it supports. On desktop (≥ 1300px) they float into the right margin past the post body; below that — and in print — they render in the flow as hairline blocks. Use notes for supporting citations, secondary references, and context that enriches the argument without interrupting the main flow.
 
 Author with the paired shortcodes inside `{%raw%}{% markdown %}{%endraw%}` blocks — content is rendered as inline markdown, so markdown links, emphasis, code, and `--` em dashes all work (no blank lines):
 
@@ -614,7 +614,7 @@ Add the `open` attribute to show the content expanded on page load:
 
 ### Standard blockquote
 
-Inside `.kh-content`, bare blockquotes sit on the panel tint inside a hairline, with a coral rule down the left edge:
+Inside `.kh-content`, bare blockquotes sit on the panel tint inside a hairline, with an apparatus-colour rule down the left edge:
 {% endmarkdown %}
 
 {% codeAndDemo 'html' %}
@@ -1112,7 +1112,7 @@ Explicit three-column layout. Collapses to single column below 846px. Use `.kh-g
 {% codeAndDemo 'html' %}
 <div class="kh-grid kh-grid__col-3" style="--kh-page-grid-gap: 1rem;">
   <div class="kh-grid__col--span-1" style="background: #d0d0ce; padding: 1rem;">Span 1</div>
-  <div class="kh-grid__col--span-2" style="background: #f0b429; padding: 1rem;">Span 2 (wider)</div>
+  <div class="kh-grid__col--span-2" style="background: #d97706; padding: 1rem;">Span 2 (wider)</div>
 </div>
 {% endcodeAndDemo %}
 
@@ -1125,7 +1125,7 @@ A left gutter (`16rem` on desktop) with main content to the right. This page and
 {% codeAndDemo 'html' %}
 <div class="kh-grid-stylized" style="border: 2px dashed #d0d0ce; padding: 1rem;">
   <div style="background: #d0d0ce; padding: 1rem; text-align: center;">← Gutter (16rem)</div>
-  <div style="background: #f0b429; padding: 1rem;">Main content area</div>
+  <div style="background: #d97706; padding: 1rem;">Main content area</div>
 </div>
 {% endcodeAndDemo %}
 
@@ -1278,7 +1278,11 @@ weights below exist:
 There is no 500. Declaring `font-weight: 500` resolves to Regular 400, which
 silently flattens a heading to body weight — use 600 for emphasis. `font-weight: 700`
 resolves to SemiBold 600. There is no bold italic; browsers synthesise one for
-`<em><strong>`. See [`docs/FONTS.md`](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/FONTS.md).
+`<em><strong>`.
+
+Mono is 400 only. There is no SemiBold Mono file, so `font-weight: 600` on mono
+type produced a synthesised bold — a visibly fuzzy masthead. `font-synthesis-weight: none`
+now renders any such rule at 400 instead. See [`docs/FONTS.md`](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/FONTS.md).
 {% endmarkdown %}
 
   </div>
@@ -1459,7 +1463,7 @@ The ambient background effects are disabled entirely under `@media (prefers-cont
 
 | Class | Effect |
 |-------|--------|
-| `.kh-u-background-color--yellow--dark` | Background `#f0b429` |
+| `.kh-u-background-color--yellow--dark` | Background `#d97706` |
 
 ### Links
 
@@ -1497,15 +1501,15 @@ All custom properties are scoped to `body:has(#kh-css-toggle:checked)`:
 | `--kh-color--grey--darkest` | `#373a36` |
 | `--kh-color--blue` | `#3b6fb6` |
 | `--kh-color--blue--dark` | `#193f90` |
-| `--kh-color--sun` | `#ffd21e` |
-| `--kh-color--sun--deep` | `#8f6600` |
-| `--kh-color--yellow--dark` | `#f0b429` |
-| `--kh-color--coral` | `#bf4a26` |
+| `--kh-color--sun` | `#f49e17` |
+| `--kh-color--sun--deep` | `#8a4b06` |
+| `--kh-color--yellow--dark` | `#d97706` |
+| `--kh-color--apparatus` | `#1c5a9c` |
 | `--kh-ink-muted` | `#5b5e5a` |
-| `--kh-rule` | `#ded2a8` |
+| `--kh-rule` | `#dcdcd8` |
 | `--kh-rule--strong` | `#2b2b28` |
-| `--kh-panel-bg` | `#fdf5d6` |
-| `--kh-color--orange` | alias of `--kh-color--sun`, deprecated |
+| `--kh-panel-bg` | `#ffffff` |
+| `--kh-color--orange` | alias of `--kh-color--sun` |
 
 ### Layout properties
 

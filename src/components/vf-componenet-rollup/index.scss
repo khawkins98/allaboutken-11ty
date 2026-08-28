@@ -49,24 +49,34 @@ body:has(#kh-css-toggle:checked) {
   // Derived from --kh-color--sun below rather than picked, so the metric tiles
   // stay in the palette if the sun tone is ever re-keyed. Same fix as above:
   // read once, defined nowhere, so the tiles had no fill at all.
-  --kh-color--yellow--lightest: rgb(255 210 30 / 18%);
-  // Sunlight yellow, re-keyed from the old orange (#f49e17).
-  // --sun is the fill/border tone; --sun--deep is the only one safe for text
-  // on a light ground; --yellow--dark is the deeper band tone.
-  // Ground + graph paper. Swap --kh-ground/--kh-grid-ink together for the
-  // drafting-blue variant: #eef3f7 with rgb(120 150 175 / 20%).
-  --kh-ground: #fffae1;
+  --kh-color--yellow--lightest: rgb(244 158 23 / 15%);
+  // The accent. Re-keyed back to the brand orange (#f49e17) from the sunlight
+  // yellow (#ffd21e) it briefly became: on a near-white ground the yellow
+  // carried the whole page into butter, which is not the register this site
+  // wants. The token names still say `sun` because 19 call sites do; the value
+  // is orange. --sun is the fill/border tone; --sun--deep is the only one safe
+  // for text on a light ground; --yellow--dark is the deeper band tone.
+  // Ground + graph paper. The ground is near-white and only faintly warm --
+  // the warmth now lives in the accent, not the paper. Swap
+  // --kh-ground/--kh-grid-ink together for the drafting-blue variant: #eef3f7
+  // with rgb(120 150 175 / 20%).
+  --kh-ground: #fbfbfa;
   --kh-grid-size: 26px;
   --kh-grid-size--major: 130px; // every 5th line
   // These two are the dial for how present the paper is. The ratio between
   // them is what keeps the two tiers legible as tiers -- roughly 1:1.6 -- so
   // change them together rather than one at a time.
-  --kh-grid-ink: rgb(196 168 88 / 5%);
-  --kh-grid-ink--major: rgb(196 168 88 / 8%);
-  --kh-color--sun: #ffd21e;
-  --kh-color--sun--deep: #8f6600;
-  --kh-color--yellow--dark: #f0b429;
-  --kh-color--orange: var(--kh-color--sun); // deprecated alias
+  // Neutral grey, not gold. On the old cream ground a warm gridline was
+  // invisible; on near-white it would read as a yellow stain. Dialled down
+  // from 5%/8% as well, because the same ink is more legible against white
+  // than it was against cream. The 1:1.6 ratio between the two tiers is
+  // preserved -- that is what keeps them reading as tiers.
+  --kh-grid-ink: rgb(120 120 112 / 3.2%);
+  --kh-grid-ink--major: rgb(120 120 112 / 5.2%);
+  --kh-color--sun: #f49e17;
+  --kh-color--sun--deep: #8a4b06;
+  --kh-color--yellow--dark: #d97706;
+  --kh-color--orange: var(--kh-color--sun); // alias; the value is orange again
   --kh-font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   --kh-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   --kh-body-width: 81.25em;
@@ -78,6 +88,15 @@ body:has(#kh-css-toggle:checked) {
   }
 
   font-family: var(--kh-font-sans);
+  // Never let the browser fake a weight. Plex Mono is loaded at 400 and only
+  // 400 -- there is no SemiBold file -- so every `font-weight: 600` on mono
+  // type was being synthesised: the glyphs smeared sideways, which read as a
+  // fuzzy masthead next to crisp body copy. Plex Sans has a real 600, so it
+  // never needed synthesis and loses nothing here. This is the guard as well
+  // as the fix: a future 600 on mono now renders as 400 rather than silently
+  // going blurry again. Style synthesis is left alone, so a faux italic still
+  // works where no italic face exists.
+  font-synthesis-weight: none;
   position: relative;
   // Graph-paper ground. Two repeating gradients rather than an image, so it
   // costs nothing and stays crisp at any zoom. --kh-grid-size and
@@ -428,10 +447,12 @@ body:has(#kh-css-toggle:checked) {
   // Datasheet register. This was a blue-bordered, blue-labelled button from
   // the old Visual Framework -- the last piece of browser-chrome blue on the
   // site, and conspicuously out of place next to hairline rules, mono labels
-  // and the coral accent. It is now a hairline cell like everything else:
+  // and the apparatus accent. It is now a hairline cell like everything else:
   // ink on the panel fill, mono label, no radius.
   // The custom properties are kept and re-pointed rather than removed, so the
   // existing per-context overrides (the search widget, chiefly) still work.
+  // NB: font-weight below is 400 -- see the note on font-synthesis-weight at
+  // the top of this file. Mono has no bold face to reach for.
   .kh-button {
     --kh-button__color__background--default: var(--kh-panel-bg);
     --kh-button-background-color: var(--kh-panel-bg);
@@ -447,7 +468,7 @@ body:has(#kh-css-toggle:checked) {
     display: inline-block;
     font-family: var(--kh-font-mono);
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 400;
     letter-spacing: 0.02em;
     line-height: 1;
     margin: 0 16px 16px 0;
@@ -461,14 +482,16 @@ body:has(#kh-css-toggle:checked) {
 
   // The offset "3D" shadow and the slide-on-press are gone; the button now
   // signals state by inverting instead of moving.
-  // Inverts to the accent on hover, the same coral fill the current nav item
+  // Inverts to the accent on hover, the same orange fill the current nav item
   // uses, so "this is actionable" and "you are here" share one visual idea.
+  // Dark ink on the orange rather than a knockout: 7.39:1 against 4.97:1, and
+  // it keeps the apparatus colour out of the fill business entirely.
   .kh-button:focus,
   .kh-button:hover {
-    --kh-button-background-color: var(--kh-color--coral);
-    --kh-button-border-color: var(--kh-color--coral);
+    --kh-button-background-color: var(--kh-color--sun);
+    --kh-button-border-color: var(--kh-color--sun);
 
-    color: var(--kh-ground);
+    color: var(--kh-color--text);
     text-decoration: none;
   }
 
@@ -483,14 +506,14 @@ body:has(#kh-css-toggle:checked) {
   // wants you to take. `.kh-button--secondary` was in the markup but never
   // defined, so a page with three CTAs rendered three identical peers and led
   // with none of them.
-  // Coral fill, matching the current nav cell and the button hover state, so
+  // Orange fill, matching the current nav cell and the button hover state, so
   // the accent means one thing throughout: this is the live one.
   .kh-button--primary,
   .kh-button--primary:visited {
-    --kh-button-background-color: var(--kh-color--coral);
-    --kh-button-border-color: var(--kh-color--coral);
+    --kh-button-background-color: var(--kh-color--sun);
+    --kh-button-border-color: var(--kh-color--sun);
 
-    color: var(--kh-ground);
+    color: var(--kh-color--text);
   }
 
   .kh-button--primary:focus,
@@ -576,26 +599,26 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
-  .kh-navigation__link {
+  // Navigation opts OUT of the visited state, deliberately. Everywhere else on
+  // the site a visited link is worth knowing about; in the masthead it is not
+  // -- you have been to your own nav, and greying the items you have used
+  // makes the chrome look progressively more disabled the longer someone
+  // spends here. It also stranded them at #54585a, lighter than the #333 they
+  // start at. So :visited is folded into the base and hover states rather than
+  // given a shade of its own.
+  .kh-navigation__link,
+  .kh-navigation__link:visited {
     border-bottom: none;
     color: #333;
     text-decoration: none;
   }
 
   .kh-navigation__link:focus,
-  .kh-navigation__link:hover {
+  .kh-navigation__link:hover,
+  .kh-navigation__link:visited:focus,
+  .kh-navigation__link:visited:hover {
     border-bottom: none;
     color: #222;
-    text-decoration: underline;
-  }
-
-  .kh-navigation__link:visited {
-    border-bottom: none;
-    color: #54585a;
-  }
-
-  .kh-navigation__link:visited:hover {
-    color: #54585a;
     text-decoration: underline;
   }
 
@@ -970,7 +993,7 @@ body:has(#kh-css-toggle:checked) {
 
   // Highlight anchor-linked headings
   :is(h1, h2, h3, h4, h5, h6):target {
-    border-left: 3px solid var(--kh-color--coral);
+    border-left: 3px solid var(--kh-color--apparatus);
     padding-left: 0.5em;
   }
 
@@ -1253,9 +1276,12 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
+  // 400, because that is the only Plex Mono face there is. The emphasis comes
+  // from size and letterspacing instead; at 1.35rem the wordmark still leads
+  // the masthead comfortably.
   .kh-logo {
     font-family: var(--kh-font-mono);
-    font-weight: 600;
+    font-weight: 400;
     letter-spacing: -0.02em;
   }
 
@@ -1758,8 +1784,19 @@ body:has(#kh-css-toggle:checked) {
 
   /* Self-hosted IBM Plex. Static faces: Plex ships no variable build, so each
      weight is its own file. Only Sans 400 and Mono 400 are preloaded; the
-     other two arrive on demand. font-weight 700 resolves to SemiBold 600 —
-     the nearest declared weight — rather than synthesising a faux bold. */
+     other two arrive on demand.
+
+     For SANS this is complete: font-weight 700 resolves to SemiBold 600 — the
+     nearest declared weight — rather than synthesising a faux bold.
+
+     For MONO it is not, and that is the trap. There is one face, 400, and no
+     SemiBold file exists in kh-font/. Asking mono for 600 does NOT fall back
+     to 400; the browser fakes the bold by smearing the glyphs, which is
+     invisible in code review and looks like a rendering bug in the browser.
+     Every mono rule is therefore 400, and `font-synthesis-weight: none` at the
+     top of this file makes that structural rather than a convention. If a
+     bold mono is ever genuinely wanted, add IBMPlexMono-SemiBold.woff2 (~40KB)
+     and declare it here; do not just raise the number. */
   @font-face {
     font-family: 'IBM Plex Sans';
     src: url('/assets/kh-font/IBMPlexSans-Regular.woff2') format('woff2');

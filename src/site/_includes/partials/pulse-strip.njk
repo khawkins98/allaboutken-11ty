@@ -34,8 +34,15 @@
     reach by clicking a dot you have not understood yet.
 
     One quiet mono line fixes that and doubles as the way out. It sits
-    OUTSIDE the scroller, or it would scroll away with the track. -#}
-<p class="kh-timeline__label" data-pagefind-ignore><a href="/archive/">Published by month</a> <span class="kh-timeline__hint" aria-hidden="true">&larr; earlier</span></p>
+    OUTSIDE the scroller, or it would scroll away with the track.
+
+    The wrapper puts the label beside the track rather than above it. Stacked,
+    the strip cost two bands of vertical space at the very top of every post
+    for what is ambience; beside it, the whole thing is one band. It falls
+    back to stacked below the md breakpoint, where there is no room for
+    both. -#}
+<div class="kh-timeline-strip">
+<p class="kh-timeline__label" data-pagefind-ignore><a href="/archive/">Timeline of posts</a></p>
 <nav class="kh-timeline" aria-label="Publishing timeline" data-pagefind-ignore>
   <p class="kh-u-sr-only">Entries published each month since the first post.</p>
   <ol class="kh-timeline__track" style="--kh-track-width: {{ pulse | trackWidth }}px">
@@ -71,5 +78,6 @@
   </ol>
   <p class="kh-u-sr-only">Range: {{ pulse[0].label }} to {{ (pulse | last).label }}.</p>
 </nav>
+</div>
 <span id="kh-after-timeline" tabindex="-1"></span>
 {%- endif -%}

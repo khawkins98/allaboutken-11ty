@@ -7,14 +7,21 @@
 // table. The mono register is IBM Plex Mono, already loaded for code.
 // These are opt-in classes; nothing here restyles an existing component.
 @mixin kh-datasheet() {
-  --kh-color--coral: #bf4a26;
-  --kh-rule: #ded2a8;
+  // Document apparatus, and only that: section numbers, reference numbers,
+  // rail numbers, "you are here".
+  // Was a burnt orange (#bf4a26, then #9c3a1c). Now a deep blue at 7.02:1 on
+  // the white panel -- it needs the headroom, because it is spent almost
+  // entirely on 11-12px letterspaced mono where anything near 4.5 goes thin.
+  --kh-color--apparatus: #1c5a9c;
+  // Neutral hairline. This was a tan (#ded2a8) keyed to the cream ground; with
+  // the ground near-white it read as a dingy yellow-grey rather than a rule.
+  --kh-rule: #dcdcd8;
   --kh-rule--strong: #2b2b28;
   // Cells sit slightly LIGHTER than the graph-paper ground and are opaque,
   // so type never lands on a gridline. The paper reads in the margins and
   // between cells, which is where it belongs.
-  --kh-panel-bg: #fffdf3;
-  // Micro-type ink. The global grey (#707372) is only 4.6:1 on the sunlight
+  --kh-panel-bg: #ffffff;
+  // Micro-type ink. The global grey (#707372) is only 4.6:1 on a light
   // ground — legally AA but squinty at 11–12px letterspaced mono caps.
   // This darker grey clears 6:1 at the sizes the datasheet register uses.
   --kh-ink-muted: #5b5e5a;
@@ -39,13 +46,13 @@
   }
 
   .kh-meta--accent {
-    color: var(--kh-color--coral);
+    color: var(--kh-color--apparatus);
   }
 
   // Section numbers. Authored in the markup rather than generated, so the
   // numbering survives with CSS off and stays under editorial control.
   .kh-section-number {
-    color: var(--kh-color--coral);
+    color: var(--kh-color--apparatus);
     font-size: 0.6em;
     font-weight: 500;
     letter-spacing: 0.03em;
@@ -73,8 +80,12 @@
     border-top: 1px solid var(--kh-rule);
   }
 
+  // Muted ink, not accent. These are labels, not marks: the Directory alone
+  // stacks seven of them, and in the apparatus colour they were the loudest text
+  // on a page whose actual content they annotate. It now means one thing --
+  // apparatus -- rather than five.
   .kh-panel__label {
-    color: var(--kh-color--coral);
+    color: var(--kh-ink-muted);
     display: block;
     font-size: 11px;
     letter-spacing: 0.04em;
@@ -138,9 +149,9 @@
     border-bottom: 0;
   }
 
-  // The part-number column: coral, mono, narrow.
+  // The part-number column: apparatus colour, mono, narrow.
   .kh-table__id {
-    color: var(--kh-color--coral);
+    color: var(--kh-color--apparatus);
     font-family: var(--kh-font-mono);
     font-size: 13px;
     letter-spacing: 0.04em;
@@ -153,7 +164,7 @@
   // same object across the site, so a reader could never learn that a shape
   // means "subject". These now agree on face, size, tracking, radius and
   // border weight; colour is the only thing left carrying meaning, and it
-  // carries exactly one distinction -- coral for a content TYPE, the rule
+  // carries exactly one distinction -- the apparatus colour for a content TYPE, the rule
   // colour for a TOPIC.
   .kh-table--spec .kh-label,
   .kh-datasheet-list .kh-summary__tab {
@@ -288,13 +299,16 @@
   // around that; `gap: 0` was not duplicated, so the masthead carried a gap
   // this rule had explicitly asked it not to have. `display` and `flex-wrap`
   // came back from the index.scss copy when it was deleted.
+  // No bottom rule. The 2px ink line under the masthead was the last piece of
+  // heavy chrome above the content; the 2rem of air below the nav separates it
+  // perfectly well. Note that the active item's fill and the `--section` inset
+  // were drawn against that line -- they still read, but they now sit in open
+  // space rather than on a strip.
   .kh-global-header {
     align-items: stretch;
-    border-bottom: 2px solid var(--kh-rule--strong);
     display: flex;
     flex-wrap: wrap;
     gap: 0;
-    margin-bottom: 2rem;
     padding: 0;
   }
 
@@ -305,12 +319,21 @@
   // silently holding the site's name at the nav's 14px with the nav's cell
   // padding. Adding the element selector takes this to (0,2,1) so it wins
   // regardless of source order.
+  // The wordmark, not the nav, sets the masthead's height. `.kh-global-header`
+  // is `align-items: stretch` and the nav items are full-height flex children,
+  // so a nav link's own vertical padding does nothing once the logo's box is
+  // taller -- which it was, by some margin: 1.35rem of type inheriting the
+  // body's 1.7 line-height is a 37px line box before any padding at all. That
+  // is why trimming the link padding alone left the cells at 65px.
+  // So: an explicit tight line-height on the wordmark, and half the padding on
+  // both sides of the masthead.
   .kh-global-header a.kh-logo {
     align-items: center;
     display: flex;
     font-size: 1.35rem;
     letter-spacing: -0.02em;
-    padding: 0.9rem 0;
+    line-height: 1.2;
+    padding: 0.35rem 0;
   }
 
   .kh-navigation {
@@ -318,10 +341,15 @@
     margin-left: auto;
   }
 
+  // Half the page grid gap. The space between two nav items is the gap PLUS
+  // both items' inline padding, so at the full 2rem gap the four links were
+  // sitting ~4.8rem apart and reading as four separate objects rather than
+  // one masthead. Halving the gap and the padding together takes that to
+  // ~2.4rem without touching the cells' height.
   .kh-navigation__list {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--kh-page-grid-gap);
+    gap: calc(var(--kh-page-grid-gap) / 2);
     height: 100%;
     list-style: none;
     margin: 0;
@@ -344,48 +372,65 @@
   // Navigation was set at 12px mono: the same register the site uses for ref
   // numbers, captions and field labels. Navigation dressed as metadata reads
   // as a utility toolbar, and that is what made the masthead feel secondary
-  // to the page beneath it. It now takes 14px at 600 -- the wordmark's own
-  // weight -- so the two ends of the masthead answer each other instead of
-  // one whispering across a gap at the other.
+  // to the page beneath it.
+  // It is now Plex SANS at 600, where the rest of the masthead stays mono.
+  // Sans is the only family here with a real bold face, so the nav can carry
+  // weight without the synthesised smear that mono's single 400 forced. The
+  // family split is deliberate rather than a compromise: the mono wordmark
+  // reads as the document's stamp, the sans nav as the thing you operate.
+  // 600 is the heaviest face that exists -- see docs/FONTS.md. Setting 700 or
+  // 800 here does NOT get you heavier type; it resolves back to this same
+  // SemiBold. Going genuinely heavier means adding IBMPlexSans-Bold.woff2.
+  // Letterspacing drops to 0: the 0.02em was there to open up mono caps-ish
+  // micro-type, and on sans semibold at 14px it reads as loose rather than
+  // deliberate. Put it back if you disagree.
   // These selectors are deliberately `.kh-global-header`-qualified. The base
   // .kh-navigation__link rules in index.scss are emitted AFTER this mixin, so
   // an equal-specificity rule here would lose the tie.
   .kh-global-header .kh-navigation__link {
     align-items: center;
     display: flex;
-    font-family: var(--kh-font-mono);
+    font-family: var(--kh-font-sans);
     font-size: 14px;
     font-weight: 600;
-    letter-spacing: 0.02em;
-    padding: 0.85rem 1.4rem;
+    letter-spacing: 0;
+    padding: 0.35rem 0.7rem;
   }
 
   // Hover is an ink underline, not a fill. The fill was `--kh-ground`, which
   // is the page colour, so it produced a faintly-lighter ghost block with
-  // hard edges rather than a state. A 2px rule reads as deliberate and keeps
-  // coral for "you are here" -- the 3px coral inset used by `--section`.
+  // hard edges rather than a state. A 2px rule reads as deliberate and leaves
+  // the apparatus colour to "you are here" -- the 3px inset used by
+  // `--section`.
   .kh-global-header a.kh-navigation__link:hover,
   .kh-global-header a.kh-navigation__link:focus-visible {
     box-shadow: inset 0 -2px 0 var(--kh-rule--strong);
     text-decoration: none;
   }
 
-  // A filled cell rather than a tint. Coral text alone was a weak "you are
-  // here" among three otherwise identical cells, and it spent the accent
-  // colour on the one thing that did not need explaining.
+  // A filled cell rather than a tint. Apparatus-coloured text alone was a weak
+  // "you are here" among three otherwise identical cells, and it spent the
+  // accent on the one thing that did not need explaining.
+  // The fill is the orange under dark ink (7.39:1), not the apparatus colour
+  // under a white knockout. Yellow-orange cannot be text on a light ground at
+  // all -- #f49e17 is 2.1:1 on white -- so a fill is the only place it can
+  // carry meaning, and dark-on-orange beats a knockout on the site's most
+  // prominent chip.
   // The `a` qualifier is load-bearing. `.kh-navigation__link:visited:hover` in
   // index.scss is (0,3,0) like the class-only version of this rule and is
-  // emitted later, so it won the tie and painted the CURRENT nav item's label
-  // #54585a grey on the coral fill -- about 1.6:1, and the reason hovering the
-  // active item looked broken. Adding the element takes this to (0,3,1).
+  // emitted later, so it wins the tie. It used to paint the CURRENT nav item's
+  // label #54585a grey on the fill -- about 1.6:1, and the reason hovering the
+  // active item looked broken. The masthead no longer has a visited state at
+  // all, but the specificity trap is unchanged: adding the element selector
+  // takes this to (0,3,1).
   .kh-global-header a.kh-navigation__link--active,
   .kh-global-header a.kh-navigation__link--active:visited,
   .kh-global-header a.kh-navigation__link--active:hover,
   .kh-global-header a.kh-navigation__link--active:visited:hover,
   .kh-global-header a.kh-navigation__link--active:focus-visible {
-    background: var(--kh-color--coral);
+    background: var(--kh-color--sun);
     box-shadow: none;
-    color: var(--kh-ground);
+    color: var(--kh-color--text);
     text-decoration: none;
   }
 
@@ -396,7 +441,7 @@
   .kh-global-header a.kh-navigation__link--section:visited,
   .kh-global-header a.kh-navigation__link--section:hover,
   .kh-global-header a.kh-navigation__link--section:visited:hover {
-    box-shadow: inset 0 -3px 0 var(--kh-color--coral);
+    box-shadow: inset 0 -3px 0 var(--kh-color--apparatus);
     text-decoration: none;
   }
 
@@ -435,7 +480,7 @@
     justify-content: space-between;
   }
 
-  // Now an <a> self-permalink, so the coral has to beat the global
+  // Now an <a> self-permalink, so the apparatus colour has to beat the global
   // `a:link`/`a:visited` colour (0,1,1) that otherwise wins over a plain
   // class; state the colour on the link states too.
   .kh-doc-ref,
@@ -443,7 +488,7 @@
   .kh-doc-ref:visited,
   .kh-doc-ref:hover,
   .kh-doc-ref:focus-visible {
-    color: var(--kh-color--coral);
+    color: var(--kh-color--apparatus);
   }
 
   .kh-doc-ref {
@@ -521,7 +566,7 @@
   }
 
   .kh-series__name {
-    color: var(--kh-color--coral);
+    color: var(--kh-color--apparatus);
   }
 
   .kh-series__list {
@@ -540,7 +585,7 @@
   }
 
   .kh-series__num {
-    color: var(--kh-color--coral);
+    color: var(--kh-color--apparatus);
     flex: 0 0 auto;
     font-family: var(--kh-font-mono);
     font-size: 12px;
@@ -592,7 +637,7 @@
   }
 
   .kh-post-rail__num {
-    color: var(--kh-color--coral);
+    color: var(--kh-color--apparatus);
     font-family: var(--kh-font-mono);
     font-size: 12px;
     letter-spacing: 0.03em;
@@ -822,9 +867,9 @@
   // The Digesting badge was an absolutely-positioned rotated tab hanging off
   // the left edge. In a grid it becomes an ordinary label inside its cell.
   .kh-datasheet-list .kh-summary__tab {
-    border-color: var(--kh-color--coral);
+    border-color: var(--kh-color--apparatus);
     border-style: solid;
-    color: var(--kh-color--coral);
+    color: var(--kh-color--apparatus);
     display: inline-block;
     margin-top: 0.6rem;
     padding: 2px 6px;
@@ -832,7 +877,7 @@
     transform: none;
   }
 
-  // The tinted highlight fights the grid; the coral label carries the
+  // The tinted highlight fights the grid; the apparatus label carries the
   // distinction on its own.
   .kh-datasheet-list .kh-summary--highlight {
     background: none;
@@ -1022,7 +1067,7 @@
   }
 
   .kh-archive__kind {
-    color: var(--kh-color--coral);
+    color: var(--kh-color--apparatus);
   }
 
   .kh-readnext > .kh-section-head:first-child {
