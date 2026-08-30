@@ -300,16 +300,33 @@
   // this rule had explicitly asked it not to have. `display` and `flex-wrap`
   // came back from the index.scss copy when it was deleted.
   // No bottom rule. The 2px ink line under the masthead was the last piece of
-  // heavy chrome above the content; the 2rem of air below the nav separates it
+  // heavy chrome above the content; the air below the nav separates it
   // perfectly well. Note that the active item's fill and the `--section` inset
   // were drawn against that line -- they still read, but they now sit in open
   // space rather than on a strip.
+  // The air below it is NOT a margin on the header, because how much is
+  // wanted depends on what follows. A page that opens on an h1 (/search/,
+  // /directory/, /archive/, /work/) needs a real gap or the heading meets the
+  // wordmark at exactly the same y. A page that opens on the timeline strip
+  // needs much less: the strip is ambient, it carries its own margins, and a
+  // full gap above it leaves the masthead floating clear of the page.
+  // So the gap lives on `main` and is dialled down when a strip is present.
+  // This matters more since the masthead lost ~28px of height -- the same
+  // 2rem reads larger against a 37px header than it did against a 65px one.
   .kh-global-header {
     align-items: stretch;
     display: flex;
     flex-wrap: wrap;
     gap: 0;
     padding: 0;
+  }
+
+  main {
+    padding-top: 2rem;
+  }
+
+  main:has(.kh-timeline-strip) {
+    padding-top: 0.5rem;
   }
 
   // Flush left with the content column, and set above the nav.
