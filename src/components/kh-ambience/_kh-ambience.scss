@@ -17,6 +17,26 @@ $kh-ambience-sun-angle: 80deg; // Sun angle at bottom of page
 $kh-ambience-start-blinds-opacity: 0.9; // Blinds opacity at top of page
 $kh-ambience-end-blinds-opacity: 0.3; // Blinds opacity at bottom of page
 
+// How the layer meets the page. This one property changes what the slats ARE.
+//   plus-lighter — the gradient is ADDED. The slats are light falling on the
+//                  page, and the colours below read as light.
+//   hard-light   — per channel: source below 0.5 multiplies, above 0.5
+//                  screens. Every colour below is under 0.5, so they all
+//                  multiply: the slats become SHADOW cast on the page.
+// The warm tint survives the switch either way, because a colour low in blue
+// adds yellow light under plus-lighter and subtracts blue under multiply.
+// What does NOT survive is the contrast guarantee -- see the note on
+// #kh-dappled-light below.
+$kh-ambience-blend: hard-light;
+
+// Colour of the slats.
+// Warmth comes from holding the red and green channels and dropping the blue,
+// so the effect reads as sunlight rather than as a neutral grey scrim.
+// Keep the two in step; the ratio between them is the slat's own gradient.
+// For a colder, north-facing light, raise the blue channel back toward the red.
+$kh-ambience-light: rgb(84 80 58 / 66%); // was rgb(80 80 80 / 66%)
+$kh-ambience-light--bright: rgb(122 117 86 / 60%); // was rgb(117 117 117 / 60%)
+
 // Static values (constant throughout scroll)
 $kh-ambience-leaves-opacity: 0.07; // Leaves opacity on desktop
 $kh-ambience-leaves-opacity-mobile: 0.03; // Leaves opacity on mobile
@@ -59,7 +79,13 @@ body:has(#kh-css-toggle:checked) {
     z-index: 1; // Above content but pointer-events: none means no interaction blocking
     pointer-events: none; // Don't interfere with interactions
     overflow: hidden;
-    mix-blend-mode: plus-lighter;
+    // NB: this layer sits ABOVE the content (z-index: 1), so it blends over
+    // text as well as over the page. Under `plus-lighter` that could only
+    // brighten the ground beneath dark type, so contrast was safe by
+    // construction. Under a darkening mode like `hard-light` it is not: the
+    // ground goes down while the ink stays put, so muted greys lose headroom.
+    // Re-check contrast after changing $kh-ambience-blend.
+    mix-blend-mode: $kh-ambience-blend;
 
     // Scroll-driven animation: shift sun angle and opacity as user scrolls
     // https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline
@@ -81,7 +107,22 @@ body:has(#kh-css-toggle:checked) {
     opacity: $kh-ambience-leaves-opacity; // 0.07
     will-change: transform filter; // Optimize for animation
 
-    // Use leaves.svg (converted from Sunlit repository) with distortion filter
+    // Use leaves.svg (converted from Sunlit repository) with distortion filter.
+    // The leaves are tinted IN THE FILE, not with a CSS filter: the four fills
+    // in its <style> block are a warm ramp --
+    //   #c9bb84 straw / #91804f golden olive / #5c4d2c brown / #33291a deep
+    // -- replacing the neutral greys #9f9f9f / #616161 / #313131 / #080808.
+    // Note the darkest is a warm brown, NOT black. Warming the greys by the
+    // proportional rule used for the slats (drop blue ~27%) does nothing at
+    // the dark end, because 27% of 8 is nothing: #080808 stayed black and the
+    // silhouette still read as solid black blocks. A ramp has to be picked,
+    // not scaled. Under hard-light everything below 0.5 luminance multiplies,
+    // so lifting the dark end also makes the leaves less heavy on the page.
+    // Done in the file because this element
+    // already carries an SVG filter plus a blur, and Firefox drops the SVG
+    // filter for performance -- a sepia/hue-rotate chain would add cost to the
+    // most expensive layer on the page for something the source can state
+    // outright. If the leaves ever need to go cold again, edit the SVG.
     background-image: url('/images/ambience-leaves.svg');
     background-size: cover;
     background-position: center;
@@ -134,7 +175,7 @@ body:has(#kh-css-toggle:checked) {
     height: 100%;
 
     // Use CSS custom property for sun-angle animation (slat dimensions are static)
-    background: repeating-linear-gradient(calc(var(--ambience-sun-angle, 80deg) + 120deg), transparent, transparent 89px, rgb(80 80 80 / 66%) 89px, rgb(117 117 117 / 60%) 167px);
+    background: repeating-linear-gradient(calc(var(--ambience-sun-angle, 80deg) + 120deg), transparent, transparent 89px, #{$kh-ambience-light} 89px, #{$kh-ambience-light--bright} 167px);
 
     mask-image: linear-gradient(to bottom right, transparent, white);
   }

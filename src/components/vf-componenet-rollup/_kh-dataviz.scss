@@ -9,7 +9,7 @@
 // Entry-type key (used by the pulse strip and sequence rail):
 //   article   — filled ink square   (#2b2b28)
 //   digesting — open blue square    (#3b6fb6)
-//   impact    — filled coral diamond (#bf4a26)
+//   impact    — filled apparatus-colour diamond
 //   photo     — filled grey square  (#373a36)
 // Type is always shape/position + colour together, never colour alone, and
 // every mark carries a text equivalent in the markup.
@@ -181,7 +181,7 @@
     // the strength of it. The change was wrong.
     // The strip is ambience, not a control. It is a small pleasure to notice
     // and work out; a reader who never discovers it can scroll misses nothing,
-    // because the visible "Published by month" label above it links straight
+    // because the visible "Timeline of posts" label beside it links straight
     // to /archive/, which is the same content in a form built for reading.
     // Nothing is stranded behind the scroll. A scrollbar under an ornament
     // makes it look like a component that failed to fit.
@@ -196,19 +196,46 @@
     }
   }
 
+  // Label beside the track rather than stacked above it. The strip is
+  // ambience sitting at the very top of every post, and stacked it was
+  // spending two vertical bands on that; side by side it costs one.
+  // `min-width: 0` on the scroller is load-bearing: without it the flex item
+  // is sized by its (~4,200px) content and the track stops scrolling.
+  .kh-timeline-strip {
+    display: flex;
+    gap: 1rem;
+
+    .kh-timeline {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+  }
+
   // The one visible caption on the strip, and the way out of it: the marks
   // link to a month in the archive, and this links to the archive itself.
   .kh-timeline__label {
     display: flex;
+    flex: 0 0 auto;
     font-family: var(--kh-font-mono);
     font-size: 11px;
-    gap: 0.75rem;
     letter-spacing: 0.04em;
+    // Sits on the rule the marks stand on, not on the top of the box: the
+    // track carries 1.25rem of padding below the rule for the year captions,
+    // so centring the flex row would float the label above the line.
     margin: 0 0 0.15rem;
+    padding-top: 0.9rem;
+    white-space: nowrap;
   }
 
-  .kh-timeline__hint {
-    color: var(--kh-ink-muted);
+  // No room for both below md; back to stacked, which is what it was.
+  @media (max-width: $kh-breakpoint--md-down) {
+    .kh-timeline-strip {
+      display: block;
+    }
+
+    .kh-timeline__label {
+      padding-top: 0;
+    }
   }
 
   .kh-timeline__track {
@@ -253,8 +280,12 @@
     // The one deliberate exception to the site's no-radius rule: a round
     // mark reads as a point in time, where a square reads as a bar. Set
     // --kh-mark-radius to e.g. 30% for squircles instead of full circles.
+    // Near-black, not the muted grey these used to be. At 4-10px a grey dot
+    // reads as a smudge; the ink makes the strip look drawn rather than
+    // faded, and it widens the gap to the empty-month ticks, which stay on
+    // --kh-rule. The three tiers are now absence / published / current.
     &::after {
-      background: var(--kh-ink-muted);
+      background: var(--kh-color--text);
       border-radius: var(--kh-mark-radius, 50%);
       content: '';
       display: block;
@@ -266,7 +297,7 @@
 
   a.kh-timeline__mark:hover::after,
   a.kh-timeline__mark:focus-visible::after {
-    background: var(--kh-color--coral);
+    background: var(--kh-color--apparatus);
   }
 
   // A month with nothing published is a bare tick on the rule, not a gap:
@@ -284,11 +315,11 @@
   // single-entry month is only 4px across and colour alone is thin at that
   // size.
   .kh-timeline__slot--current .kh-timeline__mark::after {
-    background: var(--kh-color--coral);
+    background: var(--kh-color--apparatus);
   }
 
   .kh-timeline__slot--current .kh-timeline__mark::before {
-    background: var(--kh-color--coral);
+    background: var(--kh-color--apparatus);
     bottom: -4px;
     content: '';
     height: 3px;
@@ -528,7 +559,7 @@
   }
 
   .kh-seq__mark--impact::before {
-    background: var(--kh-color--coral);
+    background: var(--kh-color--apparatus);
     height: 9px;
     transform: rotate(45deg);
     width: 9px;
@@ -540,13 +571,13 @@
     background: var(--kh-color--grey--darkest);
   }
 
-  // Filled coral, not an outline. An outline-only state disappeared among
+  // Filled in the apparatus colour, not an outline. An outline-only state disappeared among
   // the filled article marks, so the one mark that answers "where am I" was
   // the hardest of the seven to find.
   .kh-seq__mark--current::before {
-    background: var(--kh-color--coral);
+    background: var(--kh-color--apparatus);
     border: 0;
-    outline: 1px solid var(--kh-color--coral);
+    outline: 1px solid var(--kh-color--apparatus);
     outline-offset: 2px;
   }
 
@@ -666,7 +697,7 @@
 
     .kh-seq__callout--current .kh-seq__date,
     .kh-seq__callout--current .kh-seq__title {
-      color: var(--kh-color--coral);
+      color: var(--kh-color--apparatus);
     }
   }
 
@@ -703,7 +734,7 @@
   }
 
   // Length gauge (byline). A hairline cell: centre tick = corpus median,
-  // coral marker = this post's percentile rank.
+  // apparatus-colour marker = this post's percentile rank.
   .kh-length-gauge {
     display: inline-block;
     vertical-align: baseline;
@@ -728,7 +759,7 @@
   }
 
   .kh-length-gauge__marker {
-    background: var(--kh-color--coral);
+    background: var(--kh-color--apparatus);
     bottom: 0;
     left: clamp(0%, var(--kh-len, 50%), calc(100% - 2px));
     position: absolute;
@@ -736,9 +767,9 @@
     width: 2px;
   }
 
-  // Topic tally (byline). The count is apparatus, so it wears coral.
+  // Topic tally (byline). The count is apparatus, so it wears the apparatus colour.
   .kh-topic-tally {
-    color: var(--kh-color--coral);
+    color: var(--kh-color--apparatus);
     font-size: 10px;
     letter-spacing: 0.04em;
   }

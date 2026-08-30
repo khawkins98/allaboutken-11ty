@@ -70,7 +70,7 @@
     border-radius: 0;
     color: var(--kh-color--grey--darkest);
     border: 1px solid var(--kh-rule);
-    border-left: 3px solid var(--kh-color--coral);
+    border-left: 3px solid var(--kh-color--apparatus);
     overflow: auto;
   }
 
@@ -375,7 +375,7 @@
     /* The micro-label that files the aside in the datasheet register.
        Generated, so it never doubles up in the CSS-free view. */
     &::before {
-      color: var(--kh-color--coral);
+      color: var(--kh-color--apparatus);
       display: block;
       font-family: var(--kh-font-mono);
       font-size: 10px;

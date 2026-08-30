@@ -18,6 +18,18 @@ is a separate static file):
 
 `font-weight: 700` resolves to SemiBold 600, the nearest declared weight.
 
+**Mono has one face, and only one.** There is no `IBMPlexMono-SemiBold.woff2`.
+Asking Plex Mono for 600 or 700 does not fall back to 400 -- the browser
+synthesises the bold by smearing the glyphs, which reads as a blurry masthead
+next to crisp Sans body copy and is invisible in code review. This was live on
+the wordmark, the navigation and the buttons.
+
+Every mono rule is therefore 400, and `font-synthesis-weight: none` in
+`index.scss` makes that structural: a stray 600 on mono now renders as 400
+instead of going quietly fuzzy. Style synthesis is untouched, so faux italics
+still work. If a bold mono is ever genuinely wanted, add the SemiBold file
+(~40KB) and declare an `@font-face` for it -- do not just raise the number.
+
 ## How font assets reach production
 
 Eleventy passthrough copies the whole font directory into the build output:
