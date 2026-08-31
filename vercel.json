@@ -41,6 +41,36 @@
       "source": "/pinment/",
       "destination": "/pinment/index.html",
       "permanent": false
+    },
+    {
+      "source": "/PDF-A-go-slim",
+      "destination": "/PDF-A-go-slim/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/PDF-A-go-slim/",
+      "destination": "/PDF-A-go-slim/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/svgomg-font",
+      "destination": "/svgomg-font/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/svgomg-font/",
+      "destination": "/svgomg-font/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/Foveacast",
+      "destination": "/Foveacast/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/Foveacast/",
+      "destination": "/Foveacast/index.html",
+      "permanent": false
     }
   ],
   "rewrites": [
@@ -51,6 +81,18 @@
     {
       "source": "/pinment/:path*",
       "destination": "https://khawkins98.github.io/pinment/:path*"
+    },
+    {
+      "source": "/PDF-A-go-slim/:path*",
+      "destination": "https://khawkins98.github.io/PDF-A-go-slim/:path*"
+    },
+    {
+      "source": "/svgomg-font/:path*",
+      "destination": "https://khawkins98.github.io/svgomg-font/:path*"
+    },
+    {
+      "source": "/Foveacast/:path*",
+      "destination": "https://khawkins98.github.io/Foveacast/:path*"
     }
   ]
 }
