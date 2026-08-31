@@ -87,6 +87,9 @@ The redirect-to-index-html approach is necessary because Vercel's directory-inde
 |-------------|---------------------|------|
 | `/PDF-A-go-go/` | `https://khawkins98.github.io/PDF-A-go-go/` | [khawkins98/PDF-A-go-go](https://github.com/khawkins98/PDF-A-go-go) |
 | `/pinment/` | `https://khawkins98.github.io/pinment/` | [khawkins98/pinment](https://github.com/khawkins98/pinment) |
+| `/PDF-A-go-slim/` | `https://khawkins98.github.io/PDF-A-go-slim/` | [khawkins98/PDF-A-go-slim](https://github.com/khawkins98/PDF-A-go-slim) |
+| `/svgomg-font/` | `https://khawkins98.github.io/svgomg-font/` | [khawkins98/svgomg-font](https://github.com/khawkins98/svgomg-font) |
+| `/Foveacast/` | `https://khawkins98.github.io/Foveacast/` | [khawkins98/Foveacast](https://github.com/khawkins98/Foveacast) |
 
 ---
 

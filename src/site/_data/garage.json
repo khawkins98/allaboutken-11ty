@@ -18,5 +18,35 @@
     "description": "A browser bookmarklet for pinning comments to a live webpage and sharing the annotations as a single URL. No backend, no accounts.",
     "image": "/blog/pinment-share-modal.jpg",
     "image_alt": "Pinment startup modal overlaying a webpage, showing options to start annotating, paste a share URL, or import from JSON."
+  },
+  {
+    "name": "PDF-A-go-slim",
+    "path": "/PDF-A-go-slim/",
+    "repo": "https://github.com/khawkins98/PDF-A-go-slim",
+    "post": "/posts/20260216-introducing-pdf-a-go-slim/",
+    "status": "stable",
+    "description": "A PDF optimizer that runs entirely in the browser. Eight optimization passes, three presets, and nothing ever leaves your machine.",
+    "image": "/blog/pdf-a-go-slim-main.jpg",
+    "image_alt": "PDF-A-go-slim application header with drop zone and status bar reading Saved 78.5 percent, 7.9 MB to 1.7 MB."
+  },
+  {
+    "name": "SVGOMG-Font",
+    "path": "/svgomg-font/",
+    "repo": "https://github.com/khawkins98/svgomg-font",
+    "post": "/posts/20260429-svgomg-font/",
+    "status": "stable",
+    "description": "Stop converting SVG text to outlines. Drop an SVG in and get it back with the font subsetted to the characters in use and embedded, so the text stays readable, searchable and translatable.",
+    "image": "/blog/svgomg-font-ui.jpg",
+    "image_alt": "SVGOMG-Font's split-screen comparison slider, showing the same headline in a broken serif fallback on the left and in the embedded Playwrite DE SAS typeface on the right."
+  },
+  {
+    "name": "Foveacast",
+    "path": "/Foveacast/",
+    "repo": "https://github.com/khawkins98/Foveacast",
+    "post": "/posts/20260503-foveacast/",
+    "status": "active",
+    "description": "Predicted attention heatmaps for any interface. Drop in a screenshot and see where a typical user is likely to look, with the model running locally in your browser.",
+    "image": "/blog/foveacast-analysis-report.jpg",
+    "image_alt": "Foveacast Analysis Report view showing a predicted attention heatmap overlaid on a web page, with a rule-of-thirds grid showing attention share per region."
   }
 ]

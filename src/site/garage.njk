@@ -44,7 +44,7 @@ This is my "virtual garage". Not everything makes it here -- some projects are t
   {% endif %}
   <p class="kh-summary__text">{{ project.description }}</p>
   <p class="kh-cluster">
-    <a href="{{ project.post }}">Read the post</a>
+    {% if project.post %}<a href="{{ project.post }}">Read the post</a>{% endif %}
     <a href="{{ project.repo }}">Source on GitHub</a>
   </p>
 </article>
@@ -52,7 +52,7 @@ This is my "virtual garage". Not everything makes it here -- some projects are t
 </section>
 
 {% markdown %}
-Only two of [my projects](https://github.com/khawkins98?tab=repositories) are here so far. I've just done this in May 2026 and am letting it stew for a couple of weeks before bringing more across.
+Five of [my projects](https://github.com/khawkins98?tab=repositories) are here so far. I'm bringing them across in small batches rather than all at once, so that each one's links, embeds and older entrypoints can be checked before the next lot moves.
 {% endmarkdown %}
 
 {% markdown %}
