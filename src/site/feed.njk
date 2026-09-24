@@ -34,7 +34,7 @@ metadata:
     <title>{{ post.data.title }}</title>
     <link href="{{ absolutePostUrl }}"/>
     <published>{{ post.date | rssDate }}</published>
-    <updated>{{ post.date | rssDate }}</updated>
+    <updated>{{ (post.data.updated or post.date) | rssDate }}</updated>
     <id>{{ absolutePostUrl | ensureTrailingSlash }}</id>
     <author>
       <name>{{ siteConfig.author }}</name>
@@ -64,7 +64,7 @@ metadata:
         other people's inboxes, not a detail of this change. -#}
     {%- set photoBody %}
       {%- if post.data.image and 'photos' in post.data.tags %}
-      {%- set photoAlt = post.data.image_meta.altext if post.data.image_meta else '' %}
+      {%- set photoAlt = (post.data.image_meta.altext or post.data.image_meta.alt) if post.data.image_meta else '' %}
       <p><img src="/images{{ post.data.image | url }}" alt="{{ photoAlt }}" /></p>
       {%- if post.data.image_meta and post.data.image_meta.text %}
       <p>{{ post.data.image_meta.text | safe }}</p>

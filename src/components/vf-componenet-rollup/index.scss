@@ -1016,6 +1016,16 @@ body:has(#kh-css-toggle:checked) {
     }
   }
 
+  // The smallest heading step. The CV's employer line is an <h3> under the
+  // role's <h2>; it was an <h4> (skipping a level) with this class, which
+  // then did not exist, so it rendered with the browser's own h4 defaults.
+  // These reproduce them, so fixing the outline changed nothing visible.
+  .kh-text-heading--4 {
+    font-size: 1em;
+    font-weight: 700;
+    margin-block: 1.33em;
+  }
+
   .kh-text-heading--3 {
     font-size: 27px;
     font-weight: 600;
@@ -1180,6 +1190,12 @@ body:has(#kh-css-toggle:checked) {
     font-weight: 600;
     letter-spacing: -0.03em;
     line-height: 1.02;
+  }
+
+  // Lines of a display headline set inside an <h1> are spans (a <div> is
+  // not allowed in a heading), so they need block display to stack.
+  span.kh-font-headline--display {
+    display: block;
   }
 
   // When we have two display headlines, make the first one bigger

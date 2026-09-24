@@ -9,6 +9,7 @@ yarn dev          # Development server (Sass watch + Eleventy --serve)
 yarn build        # Full build (bootstrap HTML → semantic data → final Eleventy)
 yarn lint:css     # Lint SCSS files
 yarn lint:links   # Validate internal links/anchors in build/ (run after a build)
+yarn lint:images  # Fail if any raster image skipped the transform (run after a build)
 ```
 
 ## Gotchas
@@ -45,6 +46,20 @@ hard gate in CI for exactly this reason; it previously ran with
 `continue-on-error: true` and went green while the images were broken.
 
 If you see it: rebuild, then check `grep -rl "\.11ty/image" build --include="*.html"`.
+
+### The other silent image failure leaves nothing broken behind
+`failOnError: false` has a second outcome: the plugin throws, swallows it, and
+leaves the `<img>` exactly as written, still pointing at the full-size source
+under `/images/`. No `/.11ty/image/` URL, no 404, so `lint:links` passes.
+Every post hero and garage card shipped this way for a year because the
+plugin defaults sat under `htmlOptions.img` instead of `htmlOptions.imgAttributes`,
+so any tag without its own `width` or `loading` failed on "Missing sizes".
+
+`yarn lint:images` (a CI gate) catches it: any JPEG/PNG/WebP still on
+`/images/` in `build/` fails. To find out *why* a tag was skipped, set
+`failOnError: true` locally and rebuild. Genuine pass-throughs (SVG, a huge
+animated GIF over sharp's pixel limit) take `eleventy:ignore` — the real
+attribute, not an invented `data-` one.
 
 ### Live remote images must carry `eleventy:ignore`
 The image transform treats *any* `<img src>` as a source image, including

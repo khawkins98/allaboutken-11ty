@@ -76,7 +76,7 @@ module.exports = function registerTopicVisuals(config) {
         const x = i * w;
         if (!p.count) {
           // Absence is data: a baseline tick, not a gap.
-          return `<rect x="${x}" y="${h - 1}" width="${w - gap}" height="1" fill="#ded2a8"></rect>`;
+          return `<rect x="${x}" y="${h - 1}" width="${w - gap}" height="1" fill="#dcdcd8"></rect>`;
         }
         const bh = Math.max(2, Math.round((p.count / peak) * h));
         return `<rect x="${x}" y="${h - bh}" width="${w - gap}" height="${bh}" fill="#5b5e5a"></rect>`;
@@ -110,7 +110,7 @@ module.exports = function registerTopicVisuals(config) {
       const bars = list.map((m, i) => {
         const x = i * w;
         if (!m.words) {
-          return `<rect x="${x}" y="${h - 1}" width="${w - gap}" height="1" fill="#ded2a8"></rect>`;
+          return `<rect x="${x}" y="${h - 1}" width="${w - gap}" height="1" fill="#dcdcd8"></rect>`;
         }
         const bh = Math.max(2, Math.round((m.words / peak) * h));
         return `<rect x="${x}" y="${h - bh}" width="${w - gap}" height="${bh}" fill="#5b5e5a"></rect>`;

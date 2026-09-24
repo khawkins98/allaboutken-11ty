@@ -1,66 +1,63 @@
-// This is the "Offline copy of pages" service worker
-const CACHE = "pwabuilder-offline";
+// Offline reading for pages already visited, with /offline/ as the fallback.
+//
+// Scope is deliberately narrow: same-origin page navigations only. Everything
+// else (CSS, images, fonts, the HuggingFace model, analytics) goes straight to
+// the network with no interception. The PWABuilder boilerplate this replaced
+// cached every GET forever, cross-origin included, so the ~23 MB embedding
+// model was stored twice (Transformers.js already caches it) and the cache
+// never shrank.
+//
+// Bump VERSION to discard every cached page on the next visit.
+const VERSION = "v2";
+const CACHE = `kh-pages-${VERSION}`;
+const OFFLINE_URL = "/offline/";
+const MAX_PAGES = 50;
 
-// TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "index.html";
-const offlineFallbackPage = "index.html";
-
-// Install stage sets up the index page (home page) in the cache and opens a new cache
-self.addEventListener("install", function (event) {
-  console.log("[PWA Builder] Install Event processing");
-
+self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE).then(function (cache) {
-      console.log("[PWA Builder] Cached offline page during install");
-      return cache.add(offlineFallbackPage);
-    })
+    caches.open(CACHE).then((cache) => cache.add(OFFLINE_URL))
   );
-  // Activate the new service worker as soon as it's finished installing
   self.skipWaiting();
 });
 
-// Ensure the newly activated service worker takes control of the page ASAP
-self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
-});
-
-// If any fetch fails, it will look for the request in the cache and serve it from there first
-self.addEventListener("fetch", function (event) {
-  if (event.request.method !== "GET") return;
-
-  event.respondWith(
-    fetch(event.request)
-      .then(function (response) {
-        console.log("[PWA Builder] add page to offline cache: " + response.url);
-
-        // If request was success, add or update it in the cache
-        event.waitUntil(updateCache(event.request, response.clone()));
-
-        return response;
-      })
-      .catch(function (error) {
-        console.log("[PWA Builder] Network request Failed. Serving content from cache: " + error);
-        return fromCache(event.request);
-      })
+// Drop every other cache this origin's worker ever made, including the old
+// "pwabuilder-offline" one.
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
-function fromCache(request) {
-  // Check to see if you have it in the cache
-  // Return response
-  // If not in the cache, then return error page
-  return caches.open(CACHE).then(function (cache) {
-    return cache.match(request).then(function (matching) {
-      if (!matching || matching.status === 404) {
-        return Promise.reject("no-match");
-      }
+self.addEventListener("fetch", (event) => {
+  const { request } = event;
+  if (request.mode !== "navigate" || new URL(request.url).origin !== self.location.origin) return;
 
-      return matching;
-    });
-  });
-}
+  // Network first: a reader online always gets the current page. The cached
+  // copy is only for when the network fails.
+  event.respondWith(
+    fetch(request)
+      .then((response) => {
+        if (response.ok) {
+          const copy = response.clone();
+          event.waitUntil(caches.open(CACHE).then((cache) => cache.put(request, copy).then(() => trim(cache))));
+        }
+        return response;
+      })
+      .catch(() =>
+        caches.open(CACHE).then((cache) =>
+          cache.match(request).then((hit) => hit || cache.match(OFFLINE_URL))
+        )
+      )
+  );
+});
 
-function updateCache(request, response) {
-  return caches.open(CACHE).then(function (cache) {
-    return cache.put(request, response);
+// Keep the most recent MAX_PAGES pages plus the offline page. Cache keys come
+// back in insertion order, so the oldest are first.
+function trim(cache) {
+  return cache.keys().then((keys) => {
+    const pages = keys.filter((k) => new URL(k.url).pathname !== OFFLINE_URL);
+    return Promise.all(pages.slice(0, Math.max(0, pages.length - MAX_PAGES)).map((k) => cache.delete(k)));
   });
 }

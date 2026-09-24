@@ -3,6 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social card: {{ title | striptags }}</title>
+    {#- Screenshot source for og:image, not a destination. The screenshot
+        service ignores robots; search engines should not. #}
+    <meta name="robots" content="noindex">
     <style>
       /* Load IBM Plex from site. font-display: block so the screenshotter
          never captures a fallback-font frame.

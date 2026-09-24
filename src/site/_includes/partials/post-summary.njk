@@ -2,12 +2,13 @@
 {%- set isDigesting = ('digesting' in tags) -%}
 {%- set isNote = ('note' in tags) -%}
 {%- set isImpactStory = ('impact-stories' in tags) -%}
+{%- set isPhoto = ('photos' in tags) -%}
 {#- The __meta / __body / __media wrappers are `display: contents` by default,
     so this markup flattens to exactly what it was before. Inside
     `.kh-datasheet-list` they become real grid cells with hairline borders. -#}
 <article class="kh-summary kh-summary--news{% if isDigesting %} kh-summary--highlight{% endif %}">
   <div class="kh-summary__meta">
-    <div class="kh-summary__date">{{ post.date | dateDisplay }}{% if isImpactStory %} | <a href="/work">Impact story</a>{% elif isNote %} | Note post{% endif %}</div>
+    <div class="kh-summary__date">{{ post.date | dateDisplay }}{% if isImpactStory %} | <a href="/work">Impact story</a>{% elif isNote %} | Note post{% elif isPhoto %} | <a href="/photos/">Photograph</a>{% endif %}</div>
     {% if isDigesting %}<a href="/digesting" class="kh-summary__tab">Digesting</a>{% endif %}
   </div>
   <div class="kh-summary__body">

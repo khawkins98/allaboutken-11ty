@@ -35,7 +35,7 @@ templateEngineOverride: njk
       </p>
       <h1 class="kh-font-headline kh-post-title kh-text-heading--1">{{title}}</h1>
       <p class="kh-meta kh-post-meta" data-pagefind-ignore>
-        <time datetime="{{ date }}">
+        <time datetime="{{ date | dateDisplay('yyyy-MM-dd') }}">
           {% if isImpactStory %}{{ date | dateDisplay('y') }}{% else %}{{ date | dateDisplay }}{% endif %}
         </time>
         {%- set words = content | wordCount %}
@@ -100,7 +100,7 @@ templateEngineOverride: njk
     {% if image %}
     <figure class="kh-figure">
       {% if href %}<a href="{{ href }}">{% endif %}
-      <img class="kh-figure__image kh-figure__image--lead" src="/images{{ image | url }}" alt="{{ image_meta.altext or image_meta.alt or '' }}" decoding="async" fetchpriority="high">
+      <img class="kh-figure__image kh-figure__image--lead" src="/images{{ image | url }}" alt="{{ image_meta.altext or image_meta.alt or '' }}" loading="eager" decoding="async" fetchpriority="high" sizes="(min-width: 81.25em) 1040px, (min-width: 846px) 75vw, 100vw">
       {% if href %}</a>{% endif %}
       {% if image_meta and image_meta.credit %}
       <small class="kh-figure__credit">{{ image_meta.credit | safe }}</small>

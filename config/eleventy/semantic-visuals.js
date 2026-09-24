@@ -15,7 +15,7 @@ module.exports = function registerSemanticVisuals(config) {
       const edges = (map.edges || []).map((e) => {
         const a = map.nodes[e.a]; const b = map.nodes[e.b];
         if (!a || !b) return '';
-        return `<line x1="${px(a)}" y1="${py(a)}" x2="${px(b)}" y2="${py(b)}" stroke="#a89257" stroke-opacity="0.5" stroke-width="1"></line>`;
+        return `<line x1="${px(a)}" y1="${py(a)}" x2="${px(b)}" y2="${py(b)}" stroke="#5b5e5a" stroke-opacity="0.5" stroke-width="1"></line>`;
       }).join('');
       const dots = map.nodes.map((n) => {
         const r = 3 + Math.min(4, (n.degree || 0) * 0.5);
@@ -52,8 +52,8 @@ module.exports = function registerSemanticVisuals(config) {
       for (let k = 1; k < n; k += 1) {
         if (ord[k].topic !== ord[k - 1].topic) {
           const at = k * cell - 0.5;
-          rules += `<line x1="0" y1="${at}" x2="${size}" y2="${at}" stroke="#ded2a8" stroke-width="1"></line>`
-            + `<line x1="${at}" y1="0" x2="${at}" y2="${size}" stroke="#ded2a8" stroke-width="1"></line>`;
+          rules += `<line x1="0" y1="${at}" x2="${size}" y2="${at}" stroke="#dcdcd8" stroke-width="1"></line>`
+            + `<line x1="${at}" y1="0" x2="${at}" y2="${size}" stroke="#dcdcd8" stroke-width="1"></line>`;
         }
       }
       return `<svg class="kh-map kh-matrix" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" `
@@ -81,7 +81,7 @@ module.exports = function registerSemanticVisuals(config) {
         const r = (x2 - x1) / 2;
         const o = Math.min(0.8, 0.25 + (e.s - map.edgeMin) * 1.6).toFixed(2);
         return `<path d="M ${x1.toFixed(1)} ${base} A ${r.toFixed(1)} ${Math.min(r, base - 6).toFixed(1)} 0 0 1 ${x2.toFixed(1)} ${base}" `
-          + `fill="none" stroke="#a89257" stroke-opacity="${o}" stroke-width="1"><title>${esc(`${map.nodes[e.a].title} + ${map.nodes[e.b].title} (${e.s})`)}</title></path>`;
+          + `fill="none" stroke="#5b5e5a" stroke-opacity="${o}" stroke-width="1"><title>${esc(`${map.nodes[e.a].title} + ${map.nodes[e.b].title} (${e.s})`)}</title></path>`;
       }).join('');
       const dots = ord.map((o, k) => {
         const nd = map.nodes[o.i];
@@ -90,7 +90,7 @@ module.exports = function registerSemanticVisuals(config) {
       }).join('');
       return `<svg class="kh-map" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" `
         + `aria-label="Arc diagram: ${plural(n, 'entry', 'entries')} on a line in topic order, with an arc for each of the ${plural((map.edges || []).length, 'link')}."><g>${arcs}</g>`
-        + `<line x1="10" y1="${base}" x2="${w - 10}" y2="${base}" stroke="#ded2a8" stroke-width="1"></line><g>${dots}</g></svg>`;
+        + `<line x1="10" y1="${base}" x2="${w - 10}" y2="${base}" stroke="#dcdcd8" stroke-width="1"></line><g>${dots}</g></svg>`;
     } catch (e) { return ''; }
   });
 
@@ -114,7 +114,7 @@ module.exports = function registerSemanticVisuals(config) {
         // signal; its exact weight is not worth reading off a line.
         const o = Math.min(0.85, 0.3 + (e.s - map.edgeMin) * 1.8).toFixed(2);
         return `<line x1="${px(a)}" y1="${py(a)}" x2="${px(b)}" y2="${py(b)}" `
-          + `stroke="#a89257" stroke-opacity="${o}" stroke-width="1"></line>`;
+          + `stroke="#5b5e5a" stroke-opacity="${o}" stroke-width="1"></line>`;
       }).join('');
 
       const dots = map.nodes.map((n) => {

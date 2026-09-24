@@ -39,16 +39,16 @@ Transforms `<img>` and `<picture>` tags in rendered HTML output into responsive 
 | `outputDir` | `./build/img/` | Where generated image files are written |
 | `urlPath` | `/img/` | URL prefix for `<source srcset>` paths |
 | `widths` | `[320, 600, 900, 1280]` | Responsive breakpoints in pixels |
-| `formats` | `["avif", "webp", "jpeg", "gif"]` | Output formats; GIF preserved for animation |
+| `formats` | `["avif", "webp", "auto"]` | Output formats; `auto` keeps the source format as the `<img>` fallback (JPEG, PNG, animated GIF) |
 | `transformOnRequest` | `isDev` | Skip transform in dev; process on every request instead |
 | `failOnError` | `false` | Build continues if a single image fails (e.g., 404 remote) |
 | `sharpOptions.animated` | `true` | Preserves animation in GIF/WebP |
 | `sharpWebpOptions.animated` | `true` | Preserves animation when encoding to WebP |
 | `sharpGifOptions.reoptimise` | `true` | Re-optimises GIF frames to reduce file size |
 | `filenameFormat` | function | Deterministic names: `{dir}-{base}-{width}.{format}` |
-| `htmlOptions.img.decoding` | `"async"` | Adds `decoding="async"` to all `<img>` |
-| `htmlOptions.img.loading` | `"lazy"` | Adds `loading="lazy"` to all `<img>` |
-| `htmlOptions.img.sizes` | `"100vw"` | Default `sizes` attribute |
+| `htmlOptions.imgAttributes.decoding` | `"async"` | Adds `decoding="async"` to all `<img>` |
+| `htmlOptions.imgAttributes.loading` | `"lazy"` | Adds `loading="lazy"` to all `<img>`; above-the-fold heroes override with `loading="eager"` |
+| `htmlOptions.imgAttributes.sizes` | `"100vw"` | Default `sizes` attribute; override per tag with `sizes` or `eleventy:sizes` |
 
 **Filename format:** `{parent-dir-token}-{base-name}-{width}.{format}`, e.g., `blog-my-hero-900.avif`. For remote images the hostname/path segment is used as the dir token.
 

@@ -1,16 +1,15 @@
 ---
-title: Offline!
-subtitle: No homepage, yet.
-date: 2018-08-22 12:24:50
-layout: layouts/post.njk
-templateEngineOverride: njk, md
+title: Offline
+layout: layouts/base.njk
+noindex: true
 ---
 
-{# {% render '@vf-intro', {"vf_intro_phase": "alpha", "vf_intro_heading": siteConfig.siteInformation.title,
-  "vf_intro_lede": siteConfig.siteInformation.short_description,
-  "vf_intro_text": [
-    "☝️ that also means dynamic building of just the CSS and JS you need."
-  ]
-} %} #}
-
-Oh noes
+<div data-pagefind-ignore>
+<section class="kh-grid-stylized kh-stack">
+  <div></div>
+  <div>
+  <h1 class="kh-intro__heading">You are offline</h1>
+  <p class="kh-intro__text">This page is not available without a connection. Pages you have already read on this site still open offline; anything else will load once you are back online.</p>
+  </div>
+</section>
+</div>

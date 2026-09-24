@@ -7,7 +7,10 @@ function registerImagePlugin(config, isDev) {
     outputDir: "./build/img/",
     urlPath: "/img/",
     widths: [320, 600, 900, 1280],
-    formats: ["avif", "webp", "jpeg", "gif"],
+    // "auto" keeps the source format as the <img> fallback: JPEG stays JPEG,
+    // PNG stays PNG and an animated GIF stays a GIF. A fixed ["jpeg", "gif"]
+    // tail made the fallback for every PNG a 256-colour GIF.
+    formats: ["avif", "webp", "auto"],
     transformOnRequest: isDev,
     // Do not fail the entire build on a single image error (e.g., 404 remote)
     failOnError: false,
@@ -53,8 +56,13 @@ function registerImagePlugin(config, isDev) {
         return `${id}-${width}.${format}`;
       }
     },
+    // The key is `imgAttributes`. It was `img` until 2026-09, which
+    // eleventy-img never reads: every <img> without its own width or
+    // loading attribute then failed on "Missing sizes", and failOnError:false
+    // left it untransformed with no /.11ty/image/ URL for lint:links to see.
+    // Heroes above the fold override `loading` with "eager".
     htmlOptions: {
-      img: {
+      imgAttributes: {
         decoding: "async",
         loading: "lazy",
         sizes: "100vw"
