@@ -1,16 +1,8 @@
-// This is the "Offline copy of pages" service worker
+// Offline reading for visited pages; see sw.js for what it does and does not cache.
 if ('serviceWorker' in navigator) {
-  // Always attempt to register; the browser will update existing registrations as needed
-  navigator.serviceWorker
-    .register('/sw.js', {
-      scope: '/',
-    })
-    .then(function (reg) {
-      console.log('[PWA Builder] Service worker has been registered for scope: ' + reg.scope);
-    })
-    .catch(function (err) {
-      console.error('[PWA Builder] Service worker registration failed:', err);
-    });
+  navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function (err) {
+    console.error('Service worker registration failed:', err);
+  });
 }
 
 // Timeline: bring the current entry's month into view.
