@@ -1182,6 +1182,12 @@ body:has(#kh-css-toggle:checked) {
     line-height: 1.02;
   }
 
+  // Lines of a display headline set inside an <h1> are spans (a <div> is
+  // not allowed in a heading), so they need block display to stack.
+  span.kh-font-headline--display {
+    display: block;
+  }
+
   // When we have two display headlines, make the first one bigger
   .kh-font-headline--display:has(+ .kh-font-headline--display) {
     font-size: clamp(2.75rem, 8vw, 5rem);

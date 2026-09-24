@@ -39,7 +39,7 @@ This is my "virtual garage". Not everything makes it here -- some projects are t
   </h2>
   {% if project.image %}
   <a href="{{ project.path }}" class="kh-summary__image">
-    <img src="/images{{ project.image }}" alt="{{ project.image_alt or project.name }}">
+    <img src="/images{{ project.image }}" alt="{{ project.image_alt or project.name }}" eleventy:widths="300,600" sizes="220px">
   </a>
   {% endif %}
   <p class="kh-summary__text">{{ project.description }}</p>
@@ -52,7 +52,7 @@ This is my "virtual garage". Not everything makes it here -- some projects are t
 </section>
 
 {% markdown %}
-Five of [my projects](https://github.com/khawkins98?tab=repositories) are here so far. I'm bringing them across in small batches rather than all at once, so that each one's links, embeds and older entrypoints can be checked before the next lot moves.
+So far {{ garage | length }} of [my projects](https://github.com/khawkins98?tab=repositories) are here. I'm bringing them across in small batches rather than all at once, so that each one's links, embeds and older entrypoints can be checked before the next lot moves.
 {% endmarkdown %}
 
 {% markdown %}

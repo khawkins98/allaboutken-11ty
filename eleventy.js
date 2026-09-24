@@ -89,7 +89,8 @@ module.exports = function(config) {
     return v.endsWith('/') ? v : v + '/';
   });
   config.addFilter("rssDate", (dateObj) => {
-    return DateTime.fromJSDate(dateObj, { zone: "utc" }).toISO();
+    const date = dateObj instanceof Date ? dateObj : new Date(dateObj);
+    return DateTime.fromJSDate(date, { zone: "utc" }).toISO();
   });
   config.addFilter("rssLastUpdatedDate", (posts) => {
     if (!Array.isArray(posts) || posts.length === 0) return DateTime.now().toISO();
@@ -246,9 +247,8 @@ module.exports = function(config) {
       "njk", "md",
       "css", "js"
     ],
-    htmlTemplateEngine : ["njk", "md"],
+    htmlTemplateEngine : "njk",
     markdownTemplateEngine : "njk",
-    passthroughFileCopy: true,
     // pathPrefix: "/vf-eleventy/" // if your site is deployed to a sub-url, otherwise comment out
   };
 };

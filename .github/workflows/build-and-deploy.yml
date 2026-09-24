@@ -64,3 +64,9 @@ jobs:
       # green anyway and two first-time readers found them instead.
       - name: Validate internal links 🔗
         run: yarn lint:links
+
+      # The other silent image failure: a tag the transform skipped entirely,
+      # left pointing at its full-size source. Nothing 404s, so the link check
+      # above passes; this is what catches it.
+      - name: Check images were transformed 🖼️
+        run: yarn lint:images

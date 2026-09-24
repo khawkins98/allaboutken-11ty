@@ -16,14 +16,14 @@ templateEngineOverride: njk
       sits outside the reading column below, spanning the full grid the way
       post.njk's hero does not. Sizing lives in _kh-photos.scss. -#}
   <figure class="kh-photo__figure">
-    {#- width/height are this image's own intrinsic size, hardcoded because the
-        eleventy-img transform does not process this tag (site-wide, not fixed
-        here). They must change with the image; without them the browser
-        reserves no space and the full-width hero shifts the page as it loads. -#}
+    {#- The transform stamps the intrinsic width/height itself, so the
+        browser reserves space without them being hardcoded here. A `width`
+        attribute would also pin the transform to that single output width. -#}
     <img class="kh-photo__img" src="/images{{ image | url }}"
          alt="{{ image_meta.altext or image_meta.alt or '' }}"
-         width="2000" height="1500"
-         decoding="async" fetchpriority="high">
+         eleventy:widths="600,900,1280,1600,2000"
+         sizes="(min-width: 81.25em) 1300px, 100vw"
+         loading="eager" decoding="async" fetchpriority="high">
   </figure>
 
   {#- The caption sits in the same reading column every other entry uses, via
@@ -41,7 +41,7 @@ templateEngineOverride: njk
         digesting.njk. Without this a topic page would list the photograph
         while the photograph never linked back. -#}
     <p class="kh-meta" data-pagefind-ignore>
-      <time datetime="{{ date }}">{{ date | dateDisplay }}</time>
+      <time datetime="{{ date | dateDisplay('yyyy-MM-dd') }}">{{ date | dateDisplay }}</time>
       {%- if photo_meta and photo_meta.place %} &middot; {{ photo_meta.place }}{% endif %}
       {%- if topics %} &middot; Filed in:
         {%- for parent in topics | topicParents %}

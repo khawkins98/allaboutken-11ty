@@ -6,6 +6,9 @@ pagination:
   data: collections.allContent
   size: 15
   alias: pagedPosts
+  # Same reason as topics/topic.njk: without it only page 1 reaches
+  # collections.all, so pages 2+ had no social card and no sitemap entry.
+  addAllPagesToCollections: true
 permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 }}/{% endif %}"
 ---
 {%- set siteConfig = siteConfig.siteInformation -%}

@@ -22,7 +22,7 @@ templateEngineOverride: njk
         Digesting, which it is not. -#}
     <p class="kh-breadcrumb"><a href="{{ parentUrl | default('/digesting') }}">← {{ parentLabel | default('Digesting') }}</a></p>
     <h1 class="kh-font-headline kh-text-heading--1">{{title}}</h1>
-    <p><time datetime="{{ date }}" class="kh-summary__date">{{ date | dateDisplay }}</time>{#- Parents only, and linked. Printing the raw strings leaked the storage
+    <p><time datetime="{{ date | dateDisplay('yyyy-MM-dd') }}" class="kh-summary__date">{{ date | dateDisplay }}</time>{#- Parents only, and linked. Printing the raw strings leaked the storage
     convention into the page: "content strategy > misinformation" was rendering
     verbatim as though the ">" were part of the subject's name. -#}
 {% if topics %}<span class="kh-summary__author">Filed in: {%- for parent in topics | topicParents %}{% set topicSlug = collections.topics | topicPageSlug(parent) %} {% if topicSlug %}<a href="/topics/{{ topicSlug }}/">{{ parent }}</a>{% else %}{{ parent }}{% endif %}{{ "," if not loop.last }}{%- endfor %}</span>{% endif %}</p>
@@ -36,9 +36,11 @@ templateEngineOverride: njk
     {% if digest_link %}
     <p class="kh-text-body--2"><a href="{{ digest_link }}" class="kh-button">Learn more at the source</a></p>
     {% endif %}
+    {%- if not parentUrl %}
     <p>
       <a href="/digesting">More things I've been digesting</a>
     </p>
+    {%- endif %}
     {%- if comment != false %}
     {% include "partials/feedback.njk" %}
     {%- endif %}
