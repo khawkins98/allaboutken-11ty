@@ -28,6 +28,7 @@ Use this page as the entry point for repository documentation. It maps each doc 
 | [`COMPONENTS.md`](COMPONENTS.md) | Component directory structure and Sass/asset build wiring | Contributors editing UI components and styles | You are adding/changing SCSS modules, assets, or component markup |
 | [`DEVELOPMENT_SETUP.md`](DEVELOPMENT_SETUP.md) | Local environment setup, Node/Yarn baseline, and troubleshooting | New contributors and maintainers | You need a reliable local dev environment or need to fix setup issues quickly |
 | [`OFFLINE_SERVICE_WORKER.md`](OFFLINE_SERVICE_WORKER.md) | Offline/service-worker runtime behavior, caching, and update safety notes | Contributors touching service worker behavior or static asset delivery | You are changing `sw.js`, registration flow, or offline cache strategy |
+| [`CITATION_WORKFLOW.md`](CITATION_WORKFLOW.md) | LaTeX-to-DOI workflow for depositing posts on Zenodo, linked to ORCID | Author (Ken) adapting a post for citation | You are converting a post to LaTeX or depositing it on Zenodo |
 
 ## Suggested read paths
 
