@@ -1542,10 +1542,10 @@ luxon@^3.7.2:
   resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.7.2.tgz#d697e48f478553cca187a0f8436aff468e3ba0ba"
   integrity sha512-vtEhXh/gNjI9Yg1u4jX/0YVPMvxzHuGgCm6tC5kZyb08yjGWGnqAjGJvcXbqQR2P3MyMEFnRbpcdFS6PBcLqew==
 
-markdown-it-anchor@^9.2.1:
-  version "9.2.1"
-  resolved "https://registry.yarnpkg.com/markdown-it-anchor/-/markdown-it-anchor-9.2.1.tgz#0df1665838d1003f234feed6e864ede30734c203"
-  integrity sha512-p6APiLJDFAW2GEvaavDvhIBn7jrX2jLv77NkBGgNacFTurbORYc4pyYySg/mI6mpR6cHQuAtzKtmqgQr4K8dsQ==
+markdown-it-anchor@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/markdown-it-anchor/-/markdown-it-anchor-10.0.0.tgz#53e199afb8a29e7e31ed9fb7c598a86ea200e681"
+  integrity sha512-Q8g7Z6OBdH3eXF0lujFqukIxUvgCDZcjzCrJxmD6QiEzU1HWR9fVN+Bf6gxmM+0yrPFs+jUw8gNjLmUQqt6Eew==
 
 markdown-it@^14.2.0:
   version "14.3.0"
