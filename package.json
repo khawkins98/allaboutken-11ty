@@ -39,7 +39,7 @@
     "@11ty/eleventy": "4.0.0-alpha.10",
     "luxon": "^3.7.2",
     "markdown-it": "^15.0.2",
-    "markdown-it-anchor": "^9.2.1"
+    "markdown-it-anchor": "^10.0.0"
   },
   "resolutions": {
     "adm-zip": "^0.6.1",
