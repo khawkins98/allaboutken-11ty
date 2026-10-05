@@ -1,0 +1,113 @@
+---
+title: "Using AI to bring a Storybook design system into Figma"
+layout: layouts/post.njk
+teaser: "AI helped build a native Figma kit from existing components, but fonts, layout and preserving designer edits needed real application checks."
+date: 2026-10-05
+tags:
+  - posts
+topics:
+  - AI
+  - design systems
+  - developer tools > Figma
+kens_status: draft
+---
+
+{# Editorial follow-up: add a reviewed screenshot of the native kit or its
+   published consumer, with accurate alt text and attribution. Keep the post
+   at draft until the remaining editorial and technical reviews are complete.
+   Source-access gate: the Mangrove GitHub PR, branch-document and research
+   comment URLs returned 404 to unauthenticated HTTP checks on 5 October 2026.
+   Evidence was read from the local checkout and authenticated GitHub API.
+   Verify public access or replace these links with accessible evidence before
+   publication; Storybook and story.to.design links returned 200. #}
+
+{% markdown %}
+
+The most useful test of our AI-assisted Figma port was changing a spacing token from 30 to 32, publishing it, and checking whether someone else's edited design survived. It did, within the fixture we tested. Restoring the token returned the measured consumer fields to their baseline too.
+
+Getting to that small change required considerably more work than drawing a button.
+
+I used coding agents to help bring [Mangrove, UNDRR's design system](https://mangrove.undrr.org/), from its existing component source and Storybook into a native Figma kit. The result has reusable components, editable properties, variables and styles. It is an exploratory kit with a bounded published core, and the [implementation and evidence remain in a draft pull request](https://github.com/unisdr/undrr-mangrove/pull/1319).
+
+> **tl;dr**
+>
+> - AI helped translate source tokens and component rules into a repeatable Figma importer.
+> - The difficult work was matching actual rendering and preserving component identities and designer edits through updates.
+> - Real browser and Figma checks caught mistakes that our mocks accepted.
+> - I now favour keeping a small maintenance path and preserving the larger construction toolkit for occasional use.
+
+## What we actually automated
+
+Storybook gave us examples to inspect, but this wasn't a universal converter that fetched every story and recreated it. We built a source-aware exporter and a Figma development plugin:
+
+```text
+YAML tokens + SCSS + component source
+                 |
+      source-derived Figma recipes
+                 |
+        generated JSON + plugin
+                 |
+   native variables, styles and components
+```
+
+Mangrove supports five brands through shared component structure. A button should be one component with brand values supplied by variable modes, rather than five separately maintained drawings. The exporter preserves token aliases where Figma can represent them, translates dimensions, and records source references for derived values.
+
+Recipes describe component anatomy: frames, text, nested instances, variant properties and bindings. The plugin constructs those objects through Figma's API. Designers can then insert a Button, edit its Label, choose a state, and use it in their own layout.
+
+That distinction matters. A captured webpage can provide an editable picture of a component. A kit also needs useful properties, sensible resizing and predictable updates. We automated parts of that second job, with explicit limits per family.
+
+## Where AI helped
+
+The work crosses several kinds of source: YAML tokens, React markup, Sass selectors, font declarations and Figma's object model. Coding agents could read across those files, write translation helpers, build mock environments and repeat narrowly scoped checks after a correction.
+
+That was particularly useful for the less glamorous parts: finding the source of a literal dimension, following an alias through a brand override, and making sure a repeated import updated existing objects instead of creating another set beside them. The exporter owns values and source references; the plugin owns construction. Keeping that boundary made corrections easier to locate.
+
+I also found the written evidence useful. Each family could accumulate a record of what had been checked, which edits worked, and which cases remained unsupported. A passing default state didn't quietly become a claim about every brand, width or script.
+
+The process fits what I've previously described as [AI work needing project management](/posts/20250923-effective-ai-work-is-project-management/): give the agent a bounded task, a source of truth and an observable result. Here, “build a Text input” became “build these states, expose these properties, retain these identities, and compare these edited consumers.”
+
+## The browser and Figma disagree in small, consequential ways
+
+The [project's learnings](https://github.com/unisdr/undrr-mangrove/blob/spike/figma-token-bridge/examples/figma-plugin/LEARNINGS.md) are full of details that would be easy to miss in a screenshot of the whole kit.
+
+**Opacity nearly erased a control.** CSS expressed the disabled ComboBox opacity as `0.55`. Native Figma node opacity also uses a fraction, but the bound opacity variable uses a percentage. Our first helper supplied `0.55` where the variable needed `55`, producing a rendered node opacity of `0.0055`. A permissive mock accepted the operation; real Figma exposed the mistake.
+
+**Font declarations weren't enough.** Some components requested weight 600, while the bundled font families didn't have a 600 face. Inspecting the rendered browser fonts established which Bold face was actually selected. Figma then needed that exact family and style to load. Even matching names didn't prove we had the same font-file version or identical wrapping.
+
+**Inherited line height changed the answer.** Small help text inherited a computed 24px body line height. Applying 150% to its own 12.5px font size would produce 18.75px instead. TextInput had a different inherited rule from Normalize. A plausible interpretation of the design tokens would have drawn the wrong component.
+
+**Focus rings needed native rendering checks.** A shadow-based representation didn't produce the intended spread on an unfilled outlined button. We used native stroke decorations for that case. Correct numbers in the recipe did not establish that the ring appeared correctly on the bound shape.
+
+These were translation problems, not failures to generate enough code. More variants would have multiplied the mistakes. Measuring one bounded example and fixing its representation was more useful.
+
+## Updating the kit is harder than creating it
+
+Creating a fresh component lets you choose every layer and property. Updating a component means respecting what already exists: its stable identity, published links, nested instances and the edits designers have made.
+
+Recreating a component that looks identical can still break the library relationship. Updating the right component can still reset a label or apply the wrong text style. We needed checks for both structure and visible results, followed by repeat imports and plugin restarts.
+
+In the [published Professional checkpoint](https://github.com/unisdr/undrr-mangrove/blob/spike/figma-token-bridge/examples/figma-plugin/PAID-KIT-STATUS.md), the bounded release contains 25 construction families and 297 variants, including supporting families. A separate desktop/mobile resource-page example uses 56 remotely linked instances. That is evidence of an actual consumer workflow, rather than only a catalogue of component mains.
+
+We changed the UNDRR spacing token, published the collection update, and accepted it in the consumer. Spacing and geometry changed while the captured text edits, visibility, variants, modes and component keys remained intact. Restoration passed the independent field comparisons too.
+
+That establishes a published **token update** for the tested fixture. Published component recipe-rebuild propagation is still a separate open check. So are uncoached novice tasks, broader brand rendering and font/raster equivalence. A longer label also collided with a fixed Table divider: the kit's useful default did not establish arbitrary content handling.
+
+Mocks helped us investigate control flow and guard against regressions. They couldn't establish Figma's layout engine, actual font rendering or whether a designer could find the right component without coaching.
+
+## The automation grew large enough to need its own scope review
+
+At the checkpoint we reviewed, the PR added about 77,000 lines. Roughly 33,000 were tests and developer audits; another 40,000 were plugin and exporter code. Generated JSON and plugin bundles were already ignored. The size largely came from construction and validation machinery.
+
+That prompted a useful question: how much of this do we need to keep maintaining?
+
+There are existing tools. [story.to.design](https://story.to.design/docs/extend-stories) generates Figma variants from Storybook and offers [reviewed updates](https://story.to.design/docs/updates). Its [variable support](https://story.to.design/docs/variables) includes aliases and theme modes. It overlaps substantially with our work, although we haven't tested its fit for our existing identities and edited consumers. A paid ongoing service also needs to make sense for how often we would use it.
+
+For this kit, I'm leaning towards a largely one-off construction effort with occasional returns. Broad token changes, major redesigns and substantial new families justify tooling. Small visual changes can be maintained manually; behavioural code changes may require no Figma change at all.
+
+We've recorded a [planned split in the PR](https://github.com/unisdr/undrr-mangrove/pull/1319#issuecomment-5993683966): extract a reduced token/style maintenance path, and retain the complete builder, diagnostics and experiment history on a branch with a reproducible checkpoint. That extraction hasn't happened yet.
+
+The ownership rule needs to survive it. If someone manually edits a generated component main, we must either reflect that change in its recipe or mark the family as manually maintained and exclude it from future rebuilds. Preserving instance overrides doesn't grant permission to overwrite the component they inherit from.
+
+AI made it practical to attempt this port and to build the checks around it. The browser, Figma and real edited consumers supplied the answers when the generated implementation looked convincing but behaved differently. If you've maintained a kit this way, I'd be interested in where you draw the boundary between occasional generation and manual design work.
+
+{% endmarkdown %}
