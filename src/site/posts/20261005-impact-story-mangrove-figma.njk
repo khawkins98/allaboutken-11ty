@@ -1,0 +1,90 @@
+---
+title: "Bridging design and development with Mangrove's Figma kit"
+layout: layouts/post.njk
+teaser: "UNDRR's coded design system lacked a designer's working kit. I used its structured source to connect the two without starting again."
+date: 2026-10-05
+tags:
+  - posts
+  - impact-stories
+topics:
+  - design systems
+  - information architecture
+  - AI
+org: UNDRR
+permalink: /work/2026/impact-story-mangrove-figma/
+kens_status: draft
+---
+
+{# Editorial follow-up: add a reviewed screenshot showing the published kit,
+   an edited linked instance and the desktop/mobile example. Add accurate alt
+   text and attribution. Human novice acceptance and adoption outcomes remain
+   unmeasured; do not promote the draft's enabled capabilities into rollout
+   claims. Mangrove GitHub source links returned anonymous HTTP 404s on
+   5 October 2026. Local source and authenticated API evidence were available;
+   verify public access or provide accessible evidence before publication. #}
+
+{% from "partials/orgs.njk" import orgIntro %}
+
+{% markdown %}
+
+**Shared foundations** | **Editable design** | **Maintainable boundaries**
+
+{{ orgIntro(org) }}
+
+Mangrove had evolved into a working [Storybook design system for UNDRR](https://mangrove.undrr.org/), but it lacked a Figma kit. That gap was hurting adoption: designers could inspect implemented components, yet couldn't use the same library to compose their own designs.
+
+I used Mangrove's structured tokens and component source to build a native Figma kit with coding agents. My role was to define the connection between those representations, decide what designers should be able to edit, and establish checks of rendering, identity preservation and edited instances. A limited core is now published in a pilot, with an editable page example and a tested token-update route.
+
+## What was keeping the teams apart?
+
+**The system existed in the developers' tools.** Storybook documented the components, states and implementation. UX designers needed reusable assets in their own working environment. A reference they could look at was different from a library they could design with.
+
+Mangrove also serves five brands through shared structure. A kit needed to represent the theme values and component rules without creating five unrelated sets of drawings. Otherwise the design and implementation would acquire separate definitions of the same system.
+
+The intended collaboration is concrete: UX can compose and review layouts; frontend developers can relate those designs to implemented components; content practitioners can discuss actual labels, help text and content limits. Shared names and supported properties give those conversations an anchor. That was the reason to build the bridge, rather than simply generate more assets.
+
+## Why build an importer instead of adopting another kit?
+
+**I considered adaptation as well as construction.** A React Aria starter kit or another existing library could supply useful foundations. I would still need to reconcile its styling, anatomy and properties with Mangrove. An abstract wireframe kit could help with composition, but leave the theme layers and final component behaviour to interpretation.
+
+Existing import plugins were another route. [story.to.design already generates variants from Storybook](https://story.to.design/docs/extend-stories). I didn't establish that those tools were incapable of meeting the need; adaptation cost, fit and ongoing service cost were questions to assess.
+
+Mangrove offered another starting point: its rules already existed as structured data and code. I wanted to test whether agents could help write the translation into Figma, making use of that investment instead of redrawing every component.
+
+## How did I connect the two systems?
+
+**I kept the implemented system as the source of truth.** YAML tokens supply brand values and aliases. Component markup and SCSS supply anatomy, typography and layout rules. Source-aware recipes translate those rules into a generated JSON document; a development plugin builds native Figma variables, styles and components.
+
+A Button makes the connection visible. Its colours and spacing bind to variables; brand values live in modes; its Label is an editable property; its state is a variant. A designer can insert it into a page while retaining a link to the shared library. The importer updates existing identities instead of replacing the component with an identical-looking copy.
+
+**AI helped implement the translation and its checks.** Agents could follow a token alias through source files, write construction helpers and exercise repeat imports in mocks. I set bounded tasks: expose these properties, retain these identities, then inspect a narrow or long-content example in real Figma. Storybook and browser measurements supplied references; this wasn't a universal story-to-canvas converter.
+
+I also separated source-owned component structure from designer-owned instance edits. That ownership decision became as important as matching colours: an update that resets someone's label is a broken workflow even if the new component looks correct.
+
+## What did real application checks reveal?
+
+**A successful script wasn't sufficient evidence.** The disabled ComboBox nearly disappeared because a source opacity of `0.55` was supplied to a bound variable that needed `55`. Native node opacity uses a fraction; the variable uses a percentage. A permissive mock accepted the mistake. Actual Figma inspection exposed it, and the correction changed both the conversion and the regression check.
+
+Typography had similar traps. A requested CSS weight didn't prove which font face the browser rendered. Small help text inherited a computed 24px line height; applying 150% to its own font size would have produced different geometry. I used rendered browser measurements and native checks to refine the representation.
+
+Content exposed another limit: a longer Table-cell label collided with a fixed divider. An editable property doesn't guarantee that every length of content will fit. These findings belong in the kit's supported-use guidance, where designers and content practitioners can see them.
+
+## What can the pilot now demonstrate?
+
+**The published core can be used outside its source file.** Its reusable components and supporting parts total 297 variants. A separate desktop/mobile resource-page example uses 56 remotely linked instances, with edited labels, optional content and page-owned notes. Designers using the published library don't need to install the development importer.
+
+**A source token update reaches that example without losing the tested edits.** I changed UNDRR spacing from 30 to 32 through the importer, published the collection and accepted the update in the example file. Layout changed while captured text, visibility, variants, modes and component keys remained intact. Restoring the token returned the measured fields to their baseline.
+
+Figma performs that propagation through its native variables. The integration check established that the importer retained the identities and bindings needed for it to work. Published component-rebuild propagation remains a separate open check, alongside novice usability, broader brand rendering and font equivalence.
+
+This is a working pilot, not a measured adoption improvement. The next evidence should come from people composing designs without coaching, finding the right assets and maintaining them through real changes.
+
+## What would I maintain differently?
+
+**AI made a large experiment feasible, and made its scope worth questioning.** The reviewed PR added about 77,000 lines, including roughly 33,000 lines of tests and developer audits. The recipes also became another representation of the components alongside JSX and SCSS.
+
+I chose a narrower ongoing commitment: a reduced token/style maintenance path and concise guidance, with the full construction toolkit retained for occasional new families or major redesigns. That [split is planned, not yet implemented](https://github.com/unisdr/undrr-mangrove/pull/1319#issuecomment-5993683966). Small manual changes need an ownership policy so a later rebuild doesn't overwrite them.
+
+This extends the same approach I used to [put analytics into editorial workflows](/work/2026/impact-story-undrr-analytics-overlay-mcp/): preserve a shared model, then expose it where people actually work. Here the shared model is design data and component rules. The contribution is making those rules available across disciplines, with clear limits and a maintenance responsibility the team can understand.
+
+{% endmarkdown %}
