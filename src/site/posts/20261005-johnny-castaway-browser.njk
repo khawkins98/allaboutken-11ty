@@ -1,0 +1,123 @@
+---
+title: "Rebuilding Johnny Castaway for the browser"
+layout: layouts/post.njk
+teaser: "A browser remake exposed the scripts, story clock and scene director behind a screensaver I remembered from childhood."
+date: 2026-10-05
+tags:
+  - posts
+topics:
+  - retro computing > Johnny Castaway
+  - JavaScript
+  - open source
+  - AI
+kens_status: draft
+image: /blog/johnny-castaway-octopus.png
+image_meta:
+  text: "An ambitious fishing trip ends with Johnny up the palm tree and an octopus on the beach."
+  credit: "Screenshot from johnny_web. Original Johnny Castaway artwork by Dynamix / Sierra On-Line."
+  altext: "Johnny clings halfway up a palm tree while a red octopus sits below him on a tiny island, with a raft beside the shore and blue sea beyond."
+---
+
+{% markdown %}
+
+[Johnny Castaway now runs in my browser tab](https://khawkins98.github.io/johnny_web/). I first met him in 1993 or '94, during a summer break visit to my dad's office. On a Windows 3.1 PC, a little man fished, slept, built a raft and got into trouble on an island whenever nobody was using the computer. I kept watching to see what he'd do next.
+
+I found him again decades later, along with the work others had done to preserve and revive the screensaver. An emulator could run the original, but opening one for a few minutes with Johnny missed the casual pleasure of seeing him appear in the corner of a screen.
+
+So I built on an earlier JavaScript port. I wanted to leave the island running in a tab, and to understand what made it tick: which scenes were scripted, how the story advanced, and how I could check the remake against the original program.
+
+> **tl;dr**
+>
+> - Johnny's island combines scripted gags and weighted random choices with an eleven-day story that advances at most one step per calendar day.
+> - The browser port builds on earlier reverse-engineering work and reads the original game resources.
+> - Running the original Windows program under instrumentation provides reference traces; separate rendering “goldens” catch changes in the port.
+
+If you have never seen Johnny in action, [Nostalgia Nerd's look at the screensaver](https://www.youtube.com/watch?v=E5lxiTJGqHw) is a good place to start. You can see what the fuss is about without setting up my browser version.
+
+{% endmarkdown %}
+
+<aside class="kh-video">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/E5lxiTJGqHw" title="Nostalgia Nerd on the Johnny Castaway screensaver" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</aside>
+
+{% markdown %}
+
+## The island keeps its own appointments
+
+Johnny fishes, reads, sleeps, builds things, and encounters visitors. In the screenshot above, a fishing trip has left him clinging to the palm tree while an octopus occupies the beach. That is quite a lot for a program whose job is to appear when you stop using the computer.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/johnny-castaway-moonlight.png" alt="Johnny sleeps beneath a palm tree on a small island at night. A full moon and stars light the blue sky, with a bright reflection stretching across the sea." />
+  <figcaption class="kh-figure__caption">A quieter moment: Johnny asleep under the moon, captured in Enhanced mode.</figcaption>
+  <small class="kh-figure__credit">Screenshot from johnny_web. Original artwork by Dynamix / Sierra On-Line.</small>
+</figure>
+
+Jeff Tunnell, who helped create Johnny Castaway, [described its basic rhythm](https://jefftunnell.com/johnny-castaway-common-questions/):
+
+> “So it generally runs a little loop that is interrupted by random events.”
+
+The variety has two layers. Within a day, the program chooses among eligible scenes using weighted randomness. Across days, it follows an [eleven-day story](https://github.com/khawkins98/johnny_web/blob/main/docs/story-over-time.md), with particular events tied to particular days.
+
+Playing a day's key scene unlocks the next one. When the calendar date changes, the saved day moves one step towards that unlocked day. It doesn't skip ahead to catch up with every day you've been away, and day eleven wraps back to day one. The browser port keeps this progress in local storage.
+
+The tide follows a separate half-hour clock; holiday decorations follow calendar dates. The raft's progress, the island's position, and whether a sequence plays by day or night also belong to the program's scene planning.
+
+That longer rhythm is part of what I wanted to bring back. You can watch a gag, leave, and return to a world with a little continuity. It is a story designed to be encountered in passing.
+
+## Inside a gag, and between gags
+
+The original files contain artwork, sound, and small programs describing the animations. They use the **Dynamix Game Development System**, or DGDS. The browser engine, which I've called Bottle DGDS, decodes those resources and runs their instructions in JavaScript.
+
+There are two useful levels to understand:
+
+- **ADS scripts coordinate a gag.** They start and stop animations, make choices, and wait for other actions to finish.
+- **TTM scripts perform the animation.** They load images, draw sprite frames, wait, play sounds, and loop or finish.
+
+The [“Eight Arm Menace” scene flow](https://github.com/khawkins98/johnny_web/blob/main/docs/scene-flows/FISHING.ADS.md#eight-arm-menace-fishingads-tag-3) makes that concrete: Johnny gets his pole, casts it, reels in a heavy catch, and reaches the octopus gag. Several animations can be active together. Their order and timing determine whether the result reads as one coherent joke.
+
+Choosing which gag comes next is another job. The original Windows executable had a director around those scripts. It chose an eligible final scene, filled in compatible everyday scenes before it, and arranged Johnny's walks between their starting and ending positions. The browser port reconstructs that [scene-selection behaviour](https://github.com/khawkins98/johnny_web/blob/main/docs/johnny-host-behavior.md) separately from the script interpreter.
+
+That distinction exposed a gap in the earlier web host: it could decode and play scenes that ordinary playback never selected. The files were there, but the director needed reconstructing. Decoding another animation would not tell the program what to play next.
+
+## Asking the original what it actually does
+
+I started with [Alexandre Fontoura's Castaway](https://github.com/xesf/castaway), which already had a JavaScript foundation for decoding the resources. Jérémie Guillaume's [Johnny Reborn](https://github.com/jno6809/jc_reborn), Hans Milling's [C# remake](https://github.com/nivs1978/Johnny-Castaway-Open-Source), and the [ScummVM DGDS engine](https://github.com/scummvm/scummvm/tree/master/engines/dgds) provided further findings and behavioural references. This project owes a great deal to that work.
+
+Decoding the files gives you instructions to interpret. Examining the executable helps recover the rules around them. An interpretation can still be wrong in ways that look plausible on screen.
+
+The useful reference is the original program running. The project's [capture tools](https://github.com/khawkins98/johnny_web/blob/main/tools/faithfulness-oracle/METHODOLOGY.md) use Windows 3.1 inside a patched DOSBox-X. The patch lets the harness isolate a gag and record its animation threads over time. The captures use the same game-data version as the browser port, so differences aren't caused by comparing two releases.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/johnny-castaway-developer-tools.png" alt="The Developer Tools panel beside Johnny fishing. FISHING.ADS and EIGHT ARM MENACE are selected, with controls for the simulated day, single-scene playback, saved story progress, and downloading a JSONL trace." />
+  <figcaption class="kh-figure__caption">Replaying “Eight Arm Menace” on demand. The developer panel selects a scene and exports a trace for investigation.</figcaption>
+  <small class="kh-figure__credit">Screenshot from johnny_web. Original artwork by Dynamix / Sierra On-Line.</small>
+</figure>
+
+I compare the two versions in four steps:
+
+1. Run the same gag in the original program several times, allowing for its random branches.
+2. Turn those recordings into reference fingerprints: which animation threads are active together, their peak count, and their lifespans.
+3. Run the browser engine and compare its timeline against those references.
+4. Investigate differences, with visual checks where the traces don't settle the question.
+
+One finding was particularly revealing. Treating random branches equally made a fishing sequence exit about three times too often. The original data assigns different weights. Both versions could display a plausible fishing trip and reach an ending; the frequency of the choices was wrong.
+
+Timing has similar traps. How long an animation is allowed to run is separate from how long each frame should wait. Confusing those clocks changes how actions overlap, even when the individual drawings are correct.
+
+There is a second kind of reference in the project: [rendering goldens](https://github.com/khawkins98/johnny_web/blob/main/test/render-goldens.mjs). These replay selected fragile sequences with repeatable inputs and save compact fingerprints of the drawing operations and resulting pixels. A later code change that alters the output makes the check fail, so the difference can be reviewed.
+
+The original-program recordings help establish what the port should do. The goldens preserve reviewed behaviour in the port, including any mistake that made it into the baseline. Neither check proves that every pixel, sound, or random path is correct. The [coverage report](https://github.com/khawkins98/johnny_web/blob/main/docs/oracle-coverage.md) records the comparisons and their gaps.
+
+I used AI heavily in the implementation, reverse-engineering, and testing. The running original gave that work something concrete to answer to. A convincing explanation of an instruction became a hypothesis to check against a trace, rather than a result to accept on its own.
+
+## Back on the island
+
+The [browser version](https://khawkins98.github.io/johnny_web/) offers Classic and Enhanced playback. Classic keeps the native scale, static clouds and original waves; Enhanced adds responsive scaling and moving clouds and waves. The original Dynamix and Sierra artwork, sound, and gags are still the reason to watch.
+
+You need to supply the original data. The [README](https://github.com/khawkins98/johnny_web#readme) links the supported floppy archive; drop its ZIP or extracted `.ima` into the page and the app imports the resources into browser storage.
+
+Like my [recent Mac OS 9 work](/posts/20260810-newsheep-sheepshaver-mac-os-9-2-apple-silicon-jit/), this started with wanting to spend time with old software again. Johnny's small island turned out to have enough machinery to keep me occupied long after I had him running.
+
+I'd love to hear which gag you remember, or where you first saw him. I still like having that little man getting on with his day in the corner of a screen.
+
+{% endmarkdown %}
