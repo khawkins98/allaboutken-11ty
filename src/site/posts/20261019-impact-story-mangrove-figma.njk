@@ -1,0 +1,101 @@
+---
+title: "Bridging design and development with Mangrove's structured Figma kit"
+layout: layouts/post.njk
+teaser: "Design systems flounder when Figma kits are treated as visual stickers. Here is how structured content schemas turned Storybook into a living Figma kit."
+date: 2026-10-19
+tags:
+  - posts
+  - impact-stories
+topics:
+  - design systems
+  - information architecture
+  - AI
+org: UNDRR
+permalink: /work/2026/impact-story-mangrove-figma/
+kens_status: published
+image: /blog/mangrove-figma-library-overview.png
+image_meta:
+  text: "The Mangrove Figma library in use — component task catalogue, living button variants, and token-bound text styles compiled from Storybook schemas. Own work."
+  credit: "Own work."
+  altext: "Screenshot of the Mangrove Figma library showing the component catalogue organized by task (Actions, Forms and selection, Content and data, Navigation and disclosure) alongside component reference variants and design token text styles."
+---
+
+{% from "partials/orgs.njk" import orgIntro %}
+
+{% markdown %}
+
+**Structured content** | **Semantic scale** | **Interactive fidelity**
+
+{{ orgIntro(org) }}
+
+Most design systems suffer from a quiet divergence between disciplines. A design team maintains a Figma kit filled with visual stickers, while engineers maintain production logic in code. Over time, those two universes drift apart into brittle catalogues of static pictures rather than interactive systems.
+
+At UNDRR, Mangrove took a fundamentally different architectural path. As I have explored before, [Mangrove is primarily a content architecture masquerading as a design system](/posts/20260327-content-architecture-shipping-container/). I structured our content schemas directly into [Storybook](https://mangrove.undrr.org/): explicit props, content limits, semantic tokens, and brand overrides for five distinct digital properties (including UNDRR, PreventionWeb, and MCR2030).
+
+Putting structure first gave me the leverage to automate what is usually manual toil. Because our components were defined by content contracts rather than arbitrary visuals, I used AI coding agents and custom plugins to translate Storybook's structured models into an interactive Figma design kit. Instead of drawing hundreds of ad-hoc shapes, I compiled a 297-variant library across 396 symbols that preserved component hierarchy, multi-brand themes, and real editorial presets.
+
+## Why do conventional Figma kits fall out of sync?
+
+**Static artboards cannot capture dynamic content contracts.** When a Figma component is treated as a visual drawing, it ignores the operational constraints that govern real websites where content overflows containers and editors toggle unexpected fields. Without an underlying content model, a UI kit is just a sticker sheet that quickly falls behind production code.
+
+**Multi-brand scale makes manual drawing impossible.** Mangrove serves five distinct organizational brands, each requiring its own typography, palette, and spacing rules over shared component structures. Drawing five separate visual libraries by hand would have multiplied maintenance fivefold, guaranteeing drift. The Figma library had to reflect the same five-brand theming architecture that powered our CSS variable overrides in code.
+
+**Interactivity requires semantic structure, not ad-hoc variants.** A card is not simply a box with arbitrary text; it carries specific content states. In Mangrove, components like the Book Card have strict editorial presets: `Default`, `NoImage`, `NoLink`, and `ButtonOnly`. When components are rooted in explicit content schemas, designers can toggle between supported configurations without breaking layout rules or inventing unsupported combinations.
+
+{% endmarkdown %}
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/mangrove-figma-card-presets-and-brand-tags.png" alt="Figma canvas showing Horizontal Book Card component presets (Default, NoImage, NoLink, ButtonOnly) alongside layer panels displaying Tag integration across MCR2030 and PreventionWeb brands">
+  <figcaption class="kh-figure__caption">Structure over stickers: explicit editorial presets for the Horizontal Book Card alongside multi-brand Tag tokens in Figma. Own work.</figcaption>
+</figure>
+{% markdown %}
+
+## How did structured Storybook models become the bridge?
+
+**I treated the implemented codebase as the single source of truth.** Storybook was already documenting our tokens, component schemas, and content rules across primitive tokens, markup templates, and realistic story permutations. Rather than adapting a generic third-party starter kit or relying entirely on off-the-shelf tools like [story.to.design](https://story.to.design/docs/extend-stories), I set out to compile Mangrove's existing data directly into Figma.
+
+{% endmarkdown %}
+<div id="mangrove-interactive-map" class="kh-bleed-out" data-pagefind-ignore>
+  <figure>
+    <img eleventy:ignore class="kh-figure__image" src="/images/blog/mangrove-figma-architecture-map.svg" alt="Architecture map showing the four-tier pipeline: Code and Storybook source feeding a Variable Set of 540 tokens across 5 brand modes, compiling into a Figma library of 396 symbols and validating against a 56-instance consuming pilot">
+    <figcaption class="kh-figure__caption">The code-to-canvas pipeline: from Storybook schemas and 540 token variables to a 396-symbol Figma library. Own work.</figcaption>
+  </figure>
+</div>
+<script src="/mangrove-map.js" defer></script>
+{% markdown %}
+
+**AI coding agents acted as translators between schema and canvas.** Writing a Figma plugin from scratch to construct nested Auto Layout components, bind variables, and wire up variant properties is notoriously tedious. I directed coding agents to trace tokens across our repository, generate component construction recipes, and write the import plugin. Because the input was rigorous structured data rather than vague design prompts, the agents could reliably produce precise Figma node trees with correct padding, layout directions, and variable bindings.
+
+**I separated component architecture from design-time edits.** Component structure, auto-layout constraints, and brand token modes belong strictly to the system. The specific copy, selected presets, and visibility toggles in an inserted instance belong to the designer. Enforcing this ownership boundary ensured that when the underlying library received an update, local editorial work was never wiped out.
+
+## What did real-world application checks catch?
+
+**A passing automated test masked an invisible control.** In automated headless runs, our disabled ComboBox component appeared technically sound, but in Figma, it was completely invisible. The conversion logic had passed an opacity value of `0.55` directly into a Figma variable field that expected a percentage integer of `55`. Inspecting the rendered node in Figma immediately caught what the simulated unit tests missed, allowing me to fix both the converter and the test harness.
+
+**Inherited typography revealed browser rendering discrepancies.** A component's requested font weight in code does not guarantee which font face the operating system renders. Furthermore, small auxiliary help text inherited a fixed line-height from parent containers that a simple percentage conversion distorted in Figma. I compared browser measurements with Figma text boxes, calibrating line-height overrides to match actual DOM behavior.
+
+**Real content boundaries collided with layout assumptions.** While stress-testing our Table component with authentic disaster risk data, longer cell labels collided with fixed divider lines. This made it clear that simply making text fields editable wasn't enough; the container needed flexible wrapping rules and documented editorial limits. I recorded that boundary directly in the component guidance for content practitioners and designers alike.
+
+## What can the multi-brand pilot demonstrate?
+
+**A production library now powers independent design files.** The pilot library generates 297 component variants across button modes, form controls, navigation, and content cards. To validate the kit in practice, I built a desktop and mobile resource-page example using 56 linked component instances. The test file incorporates customized headings, optional metadata blocks, and local designer notes, proving that product teams can compose complex pages without installing the importer plugin.
+
+{% endmarkdown %}
+<figure class="kh-bleed-out">
+  <img eleventy:ignore class="kh-figure__image" src="/images/blog/mangrove-figma-brand-token-matrix.svg" alt="Five-brand token matrix showing comparison of UNDRR, DELTA Resilience, IRP, MCR2030, and PreventionWeb, highlighting 87.2% token invariance alongside edge cases caught during real-world validation">
+  <figcaption class="kh-figure__caption">Five brands, one token engine: 87.2% of tokens remain invariant across properties, while brand modes adapt color, radius, and soft surfaces without breaking layout. Own work.</figcaption>
+</figure>
+{% markdown %}
+
+**A live token update verified systemic propagation.** To test resilience against change, I modified a core UNDRR spacing variable from 30 pixels to 32 pixels in code and re-published the library. When I accepted the update in the pilot design file, the layout adjusted seamlessly. Every edited title, toggled preset, brand setting, and instance override survived intact; restoring the value returned the measured fields to their baseline.
+
+**Interoperability validated the content architecture.** Because the components were generated from shared schemas, switching between UNDRR, PreventionWeb, and MCR2030 brand modes reshuffled colors, typography, and corner treatments instantly. The content structure remained unshakeable because the underlying shipping container had been standardized first.
+
+## How do you balance automated generation with maintenance debt?
+
+**Code generation brings its own maintenance obligations.** The reviewed pull request introduced roughly 77,000 lines of code, including around 33,000 lines of construction recipes, test suites, and developer audits. While the generator successfully proved that code-to-Figma pipelines can produce high-fidelity kits, maintaining an elaborate compiler pipeline alongside active product code represents substantial ongoing overhead.
+
+**I chose a smaller ongoing commitment.** Instead of maintaining an all-in-one generator indefinitely, I decided to keep automated sync for lightweight tokens and styles, while reserving full structural component generation for major version overhauls or new component introductions. The [code split remains pending](https://github.com/unisdr/undrr-mangrove/pull/1319#issuecomment-5993683966), and manual edits need an ownership policy before a later rebuild.
+
+**The bridge is a shared model across different working environments.** As with my work to [put analytics into editorial workflows](/work/2026/impact-story-undrr-analytics-overlay-mcp/), the real unlock was carrying existing domain rules into the environment where another discipline works. Lots of teams can draw a Figma kit or publish a Storybook. What made this work durable was grounding both in structured content and semantic models from day one, giving designers, developers, and AI agents a common vocabulary that scales.
+
+{% endmarkdown %}

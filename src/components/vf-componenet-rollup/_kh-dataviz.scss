@@ -773,4 +773,241 @@
     font-size: 10px;
     letter-spacing: 0.04em;
   }
+
+  // Interactive Flow Visualization (Visual Cinnamon inspired)
+  .kh-flow-viz {
+    background: #FAF7F0;
+    border: 1px solid #E5DEC9;
+    border-radius: 8px;
+    box-sizing: border-box;
+    margin: 2rem 0;
+    padding: 1.25rem;
+    position: relative;
+    width: 100%;
+
+    * {
+      box-sizing: border-box;
+    }
+
+    &__toolbar {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    &__label {
+      font-family: var(--kh-font-sans);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    &__filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    &__stage {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+    }
+  }
+
+  .kh-flow-btn {
+    background: #FFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+    color: #334155;
+    cursor: pointer;
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+    padding: 3px 10px;
+    transition: all 0.2s ease;
+
+    &:hover,
+    &--active {
+      background: #004F91;
+      border-color: #004F91;
+      color: #FFF;
+    }
+  }
+
+  .kh-flow-node {
+    cursor: pointer;
+    outline: none;
+    transition: opacity 0.2s ease;
+
+    rect.kh-flow-node-box {
+      fill: #FFF;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.04));
+      stroke: #E2D8C3;
+      stroke-width: 1.2px;
+    }
+
+    &--dimmed {
+      opacity: 0.15;
+    }
+
+    &--active rect.kh-flow-node-box {
+      stroke: #004F91;
+      stroke-width: 2.2px;
+    }
+  }
+
+  .kh-flow-path {
+    cursor: pointer;
+    fill-opacity: 0.22;
+    stroke-opacity: 0.38;
+    stroke-width: 1.5px;
+    transition: fill-opacity 0.25s ease, stroke-opacity 0.25s ease, stroke-width 0.25s ease;
+
+    &:hover,
+    &--highlight {
+      fill-opacity: 0.7;
+      stroke-opacity: 0.95;
+      stroke-width: 2.5px;
+    }
+
+    &--dimmed {
+      fill-opacity: 0.03;
+      stroke-opacity: 0.05;
+    }
+  }
+
+  .kh-flow-header-text {
+    fill: #64748B;
+    font-family: var(--kh-font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .kh-flow-node-title {
+    fill: #0F172A;
+    font-family: var(--kh-font-sans);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .kh-flow-node-sub {
+    fill: #475569;
+    font-family: var(--kh-font-sans);
+    font-size: 11.5px;
+  }
+
+  .kh-flow-node-count {
+    font-family: var(--kh-font-mono);
+    font-size: 11.5px;
+    font-weight: 700;
+  }
+
+  .kh-flow-badge-text {
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .kh-flow-detail {
+    background: #FFF;
+    border: 1px solid #E2D8C3;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+    margin-top: 1rem;
+    padding: 1rem 1.25rem;
+
+    @media (min-width: 680px) {
+      align-items: center;
+      grid-template-columns: 1fr auto;
+    }
+
+    &__header {
+      align-items: center;
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 0.4rem;
+    }
+
+    &__tag {
+      border-radius: 4px;
+      font-family: var(--kh-font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 2px 7px;
+      text-transform: uppercase;
+    }
+
+    &__close {
+      background: none;
+      border: none;
+      color: #64748B;
+      cursor: pointer;
+      font-family: var(--kh-font-mono);
+      font-size: 11px;
+      padding: 2px 4px;
+
+      &:hover {
+        color: #0F172A;
+      }
+    }
+
+    &__title {
+      font-family: var(--kh-font-sans);
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.25;
+      margin: 0 0 4px;
+    }
+
+    &__desc {
+      color: #475569;
+      font-size: 12px;
+      line-height: 1.45;
+      margin: 0;
+      max-width: 520px;
+    }
+
+    &__metrics {
+      border-top: 1px solid #F1F5F9;
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(3, 1fr);
+      padding-top: 0.75rem;
+
+      @media (min-width: 680px) {
+        border-left: 1px solid #F1F5F9;
+        border-top: none;
+        padding-left: 1.25rem;
+        padding-top: 0;
+      }
+    }
+  }
+
+  .kh-flow-metric {
+    &__num {
+      color: #0F172A;
+      display: block;
+      font-family: var(--kh-font-mono);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    &__label {
+      color: #64748B;
+      display: block;
+      font-size: 9.5px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+  }
 }
+
