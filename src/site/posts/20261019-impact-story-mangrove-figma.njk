@@ -80,10 +80,12 @@ Putting structure first gave me the leverage to automate what is usually manual 
 **A production library now powers independent design files.** The pilot library generates 297 component variants across button modes, form controls, navigation, and content cards. To validate the kit in practice, I built a desktop and mobile resource-page example using 56 linked component instances. The test file incorporates customized headings, optional metadata blocks, and local designer notes, proving that product teams can compose complex pages without installing the importer plugin.
 
 {% endmarkdown %}
-<figure class="kh-bleed-out">
-  <img eleventy:ignore class="kh-figure__image" src="/images/blog/mangrove-figma-brand-token-matrix.svg" alt="Five-brand token matrix showing comparison of UNDRR, DELTA Resilience, IRP, MCR2030, and PreventionWeb, highlighting 87.2% token invariance alongside edge cases caught during real-world validation">
-  <figcaption class="kh-figure__caption">Five brands, one token engine: 87.2% of tokens remain invariant across properties, while brand modes adapt color, radius, and soft surfaces without breaking layout. Own work.</figcaption>
-</figure>
+<div id="mangrove-brand-studio" class="kh-bleed-out" data-pagefind-ignore>
+  <figure>
+    <img eleventy:ignore class="kh-figure__image" src="/images/blog/mangrove-figma-brand-token-matrix.svg" alt="Five-brand token matrix showing comparison of UNDRR, DELTA Resilience, IRP, MCR2030, and PreventionWeb, highlighting 87.2% token invariance alongside edge cases caught during real-world validation">
+    <figcaption class="kh-figure__caption">Five brands, one token engine: 87.2% of tokens remain invariant across properties, while brand modes adapt color, radius, and soft surfaces without breaking layout. Own work.</figcaption>
+  </figure>
+</div>
 {% markdown %}
 
 **A live token update verified systemic propagation.** To test resilience against change, I modified a core UNDRR spacing variable from 30 pixels to 32 pixels in code and re-published the library. When I accepted the update in the pilot design file, the layout adjusted seamlessly. Every edited title, toggled preset, brand setting, and instance override survived intact; restoring the value returned the measured fields to their baseline.
