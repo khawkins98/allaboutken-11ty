@@ -1,7 +1,8 @@
 ---
-title: "Bridging design and development with Mangrove's structured Figma kit"
+title: "Triangulating a Figma kit from content schemas, tokens and Storybook"
 layout: layouts/post.njk
-teaser: "Design systems flounder when Figma kits are treated as visual stickers. Here is how structured content schemas turned Storybook into a living Figma kit."
+teaser: "Most Figma kits retell a design system's story and drift. Ours could be checked against three sources that already agreed, so it only had to translate."
+description: "How structured content schemas and design tokens, combined in Storybook, let a plugin triangulate Mangrove's Figma library as a translation rather than a second implementation."
 date: 2026-10-19
 tags:
   - posts
@@ -15,89 +16,392 @@ permalink: /work/2026/impact-story-mangrove-figma/
 kens_status: published
 image: /blog/mangrove-figma-library-overview.png
 image_meta:
-  text: "The Mangrove Figma library in use — component task catalogue, living button variants, and token-bound text styles compiled from Storybook schemas. Own work."
+  text: "The Mangrove Figma library in use — component task catalogue, living button variants, and token-bound text styles translated from Storybook, the structured content schemas and the design tokens. Own work."
   credit: "Own work."
   altext: "Screenshot of the Mangrove Figma library showing the component catalogue organized by task (Actions, Forms and selection, Content and data, Navigation and disclosure) alongside component reference variants and design token text styles."
 ---
 
 {% from "partials/orgs.njk" import orgIntro %}
 
+<!--
+  ==============================================================================
+  NARRATIVE INTENT & VISUALIZATION HANDOFF BRIEF (FOR NEXT AGENT)
+  ==============================================================================
+
+  1. CORE THESIS: TRIANGULATION, NOT A PIPELINE
+  ---------------------------------------------
+  Earlier drafts of this post framed the work as a linear 3-step pipeline
+  (Storybook -> Token Engine -> Figma). That missed what is actually novel here.
+
+  The real story is a four-level TRIANGULATION exercise across two lineages:
+    - Level 1A: Structured content schemas (Truth, peer 1)
+      We had already done the hard work of aligning content across UNDRR's
+      websites for syndication. We defined what a card, a hero, or a landing
+      page is *made of* (fields, optionality, length limits, presets) —
+      structure, not appearance. Because content structure was already settled,
+      design becomes an *enablement layer* on top of it rather than the place
+      where components get defined.
+      *Terminology rule*: Always call these "structured content schemas"
+      (never "Storybook schemas").
+    - Level 1B: Design tokens (Truth, peer 2)
+      Merged across 5 UNDRR brands (UNDRR, PreventionWeb, MCR2030, DELTA
+      Resilience, IRP) into one engine of 540 tokens (188 colors, 348 dimensions,
+      4 fonts). 471 tokens (87.2%) form an invariant shared core; 69 (12.8%)
+      carry brand-specific overrides (color, radius, soft surfaces, hero spacing).
+      Schemas and tokens are independent peers: neither depends on the other.
+    - Level 2: Storybook (Where the two truths combine into web patterns)
+      Each Storybook pattern combines a structured content schema + design tokens
+      + layout rules (e.g. `HorizontalBookCard` with `Default`, `NoImage`,
+      `NoLink`, `ButtonOnly` presets, verified by `cardGeometryChecks.js`).
+      Storybook is the working web reference, not the underlying authority.
+    - Level 3: Figma library via importer plugin (Translation via triangulation)
+      Figma comes from a different lineage (Auto Layout, variables, variant
+      properties). Rather than redrawing components by eye or copying screenshots
+      from the nearest step, our AI-assisted plugin reaches back into ALL THREE
+      predecessors — reading field lists & presets from the structured content
+      schemas, binding Figma variables from the design tokens, and checking
+      layout geometry against Storybook — to compile 297 component variants
+      across 396 symbols.
+
+  Because the truth was already defined and agreed upon, Figma is not a second
+  implementation that can drift on its own; it is a *translation* of the same
+  story. It is still real work to translate (~77k lines in the PR), which is why
+  we keep ongoing automated sync lightweight (tokens/styles) and reserve full
+  structural regeneration for major versions.
+
+  2. HOW THE BUGS PROVE THE TRIANGULATION MODEL
+  ---------------------------------------------
+  Every bug caught during real-world verification sat on one specific edge of
+  the triangle where two sources disagreed:
+    - Edge A (Tokens <-> Figma): `0.55` opacity token passed into a Figma field
+      expecting a `0–100` percentage, turning 55% into 0.55% and making the
+      disabled ComboBox invisible.
+    - Edge B (Storybook DOM <-> Figma): Browser-inherited `line-height` on small
+      auxiliary help text drifting when converted via a naive percentage in Figma.
+    - Edge C (Content schema <-> Layout): Real disaster risk data in the Table
+      colliding with fixed dividers, proving editable text wasn't enough without
+      documented schema length limits and wrapping rules in both Storybook & Figma.
+
+  3. SCROLLYTELLING / DATA-DRIVEN ANIMATION BRIEF (SECTIONS 2–5)
+  --------------------------------------------------------------
+  Right now, Sections 2, 3, 4, and 5 each contain an inline SVG narrative mockup
+  (`SCROLLY STAGE 1` through `SCROLLY STAGE 4`) showing the four progressive
+  states of the triangulation diagram.
+
+  Goal for the visualization pass:
+    - Evolve these four stages into a cohesive, data-driven, scroll-choreographed
+      experience (e.g. D3.js, Three.js, or fluid SVG/Canvas morphing inspired by
+      Nadieh Bremer's *Searching for Birds* — https://searchingforbirds.visualcinnamon.com/).
+    - As the reader scrolls down the page, they should watch the architecture
+      assemble and triangulate step by step:
+        * Stage 1 ("Where did the truth come from?"): The two peer truth nodes
+          (Structured content schemas & Design tokens) materialize on the left.
+        * Stage 2 ("How did Storybook bring the two together?"): Both truth
+          nodes flow into Storybook (`schema + tokens + layout`).
+        * Stage 3 ("How does Figma triangulate between all three?"): Figma
+          appears on the right (visually distinct lineage) and sends three
+          triangulation arcs back to Storybook, Content schemas, and Design tokens.
+        * Stage 4 ("What happened when the sources disagreed?"): The three
+          disagreement edges light up in turn as the reader scrolls past each
+          bug paragraph.
+    - Note on existing code & assets:
+        * `src/site/mangrove-map.js` and `src/components/vf-componenet-rollup/_kh-dataviz.scss`
+          currently house both an earlier 3-column ribbon prototype (`initFluidPipeline`,
+          present in JS/SCSS for reuse or replacement) and the active interactive
+          Brand Morpher Studio (`initBrandStudio` mounted at `#mangrove-brand-studio`
+          in Section 6).
+        * Keep `#mangrove-brand-studio` in Section 6 ("What does the translation
+          prove?") as the hands-on proof that holding the structured content
+          schema fixed while swapping brand token modes changes appearance
+          (e.g. MCR2030's 32px pill button, PreventionWeb's soft teal surface)
+          without breaking layout.
+        * Guardrails: Scope all CSS under `body:has(#kh-css-toggle:checked)`,
+          put `data-pagefind-ignore` on all interactive/diagram chrome so it
+          never leaks into Pagefind or vector embeddings, use `.kh-bleed-out`
+          (never `.kh-figure` inside `.kh-content`), and verify with
+          `yarn lint:css`, `yarn lint:links`, and `yarn lint:images`.
+  ==============================================================================
+-->
+
 {% markdown %}
 
-**Structured content** | **Semantic scale** | **Interactive fidelity**
+**Truth defined first** | **Translation, not reimplementation** | **Disagreements become bugs**
 
 {{ orgIntro(org) }}
 
-Most design systems suffer from a quiet divergence between disciplines. A design team maintains a Figma kit filled with visual stickers, while engineers maintain production logic in code. Over time, those two universes drift apart into brittle catalogues of static pictures rather than interactive systems.
+**Most Figma kits retell the design system's story in a second language.** A design team draws the components, engineers build them, and the two versions drift because nothing ties one to the other. Every correction has to be made twice, by different people, from memory.
 
-At UNDRR, Mangrove took a fundamentally different architectural path. As I have explored before, [Mangrove is primarily a content architecture masquerading as a design system](/posts/20260327-content-architecture-shipping-container/). I structured our content schemas directly into [Storybook](https://mangrove.undrr.org/): explicit props, content limits, semantic tokens, and brand overrides for five distinct digital properties (including UNDRR, PreventionWeb, and MCR2030).
+**Mangrove's Figma library is a translation instead.** The story was already told: in the structured content schemas that define what a component is made of, in the design tokens that define how it looks in each of UNDRR's five brands, and in [Storybook](https://mangrove.undrr.org/), where the two combine into working web patterns. I built a Figma plugin that reads all three and rebuilds the patterns as a 297-variant library across 396 symbols.
 
-Putting structure first gave me the leverage to automate what is usually manual toil. Because our components were defined by content contracts rather than arbitrary visuals, I used AI coding agents and custom plugins to translate Storybook's structured models into an interactive Figma design kit. Instead of drawing hundreds of ad-hoc shapes, I compiled a 297-variant library across 396 symbols that preserved component hierarchy, multi-brand themes, and real editorial presets.
+**Translating is still work, but it is not a different story.** When Figma disagreed with one of its sources, that was a bug with an address, not a matter of taste.
 
-## Why do conventional Figma kits fall out of sync?
+## Where did the truth come from?
 
-**Static artboards cannot capture dynamic content contracts.** When a Figma component is treated as a visual drawing, it ignores the operational constraints that govern real websites where content overflows containers and editors toggle unexpected fields. Without an underlying content model, a UI kit is just a sticker sheet that quickly falls behind production code.
+**We had already done the hard part, for a different reason.** UNDRR syndicates content across its websites, and syndication only works when every site agrees what a card, a hero or a landing page is *made of*: which fields it has, which are optional, how long they can run. That is structure, not appearance, and the team had settled it before Figma was in scope. (I've written about this as [Mangrove being a content architecture that happens to ship a design system](/posts/20260327-content-architecture-shipping-container/).)
 
-**Multi-brand scale makes manual drawing impossible.** Mangrove serves five distinct organizational brands, each requiring its own typography, palette, and spacing rules over shared component structures. Drawing five separate visual libraries by hand would have multiplied maintenance fivefold, guaranteeing drift. The Figma library had to reflect the same five-brand theming architecture that powered our CSS variable overrides in code.
+**The design tokens are the second source of truth, and a peer.** I merged the tokens from UNDRR, PreventionWeb, MCR2030, DELTA Resilience and IRP into one engine of 540 tokens. 471 of them, 87.2%, are a shared core; the remaining 69 are where the brands differ: colour, radius, a soft surface here, hero spacing there.
 
-**Interactivity requires semantic structure, not ad-hoc variants.** A card is not simply a box with arbitrary text; it carries specific content states. In Mangrove, components like the Book Card have strict editorial presets: `Default`, `NoImage`, `NoLink`, and `ButtonOnly`. When components are rooted in explicit content schemas, designers can toggle between supported configurations without breaking layout rules or inventing unsupported combinations.
+**Neither source depends on the other.** A schema says nothing about colour, and a token says nothing about whether a card has an image. Because the content structure was well understood, design could become an **enablement layer** on top of it rather than the place where components get defined.
 
 {% endmarkdown %}
-<figure class="kh-figure">
-  <img class="kh-figure__image" src="/images/blog/mangrove-figma-card-presets-and-brand-tags.png" alt="Figma canvas showing Horizontal Book Card component presets (Default, NoImage, NoLink, ButtonOnly) alongside layer panels displaying Tag integration across MCR2030 and PreventionWeb brands">
-  <figcaption class="kh-figure__caption">Structure over stickers: explicit editorial presets for the Horizontal Book Card alongside multi-brand Tag tokens in Figma. Own work.</figcaption>
+<!--
+  SCROLLY STAGE 1 (section "Where did the truth come from?"):
+  Narrative intent: Establish the two independent sources of truth on the far
+  left before any rendering environment (Storybook or Figma) enters the picture.
+  Visual state:
+    - Only the two truth nodes exist: "Structured content schemas" (top-left,
+      representing field structure, optionality, presets, and editorial limits
+      for cards, heroes, landing pages) and "Design tokens" (bottom-left,
+      representing the 540 tokens across 5 UNDRR brands: 471 / 87.2% shared
+      core vs 69 / 12.8% brand-specific overrides).
+    - They fade in together at equal size and visual weight, joined by a dotted
+      vertical "peers" link with no arrowhead: neither feeds the other.
+    - No Storybook or Figma node is drawn yet, not even as a ghost.
+-->
+<figure class="kh-bleed-out" data-pagefind-ignore>
+  <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-1-title mg-stage-1-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
+    <title id="mg-stage-1-title">Stage 1: the two sources of truth</title>
+    <desc id="mg-stage-1-desc">Two boxes on the left: structured content schemas above, design tokens below, joined by a dotted line marked peers. Nothing else is drawn yet.</desc>
+    <rect x="20" y="40" width="150" height="56" rx="6"/>
+    <rect x="20" y="184" width="150" height="56" rx="6"/>
+    <line x1="95" y1="96" x2="95" y2="184" stroke-dasharray="2 5"/>
+    <g fill="currentColor" stroke="none" text-anchor="middle">
+      <text x="95" y="64" font-weight="bold">Content schemas</text>
+      <text x="95" y="84" font-size="12">what it is made of</text>
+      <text x="95" y="208" font-weight="bold">Design tokens</text>
+      <text x="95" y="228" font-size="12">540 · 87.2% shared</text>
+      <text x="108" y="145" font-size="12" text-anchor="start">peers</text>
+    </g>
+  </svg>
+  <figcaption class="kh-figure__caption">Two sources of truth, defined independently: structured content schemas say what a component is made of; design tokens say how it looks in each brand. Own work.</figcaption>
 </figure>
 {% markdown %}
 
-## How did structured Storybook models become the bridge?
+## How did Storybook bring the two together?
 
-**I treated the implemented codebase as the single source of truth.** Storybook was already documenting our tokens, component schemas, and content rules across primitive tokens, markup templates, and realistic story permutations. Rather than adapting a generic third-party starter kit or relying entirely on off-the-shelf tools like [story.to.design](https://story.to.design/docs/extend-stories), I set out to compile Mangrove's existing data directly into Figma.
+**Each Storybook pattern is a schema plus tokens plus layout.** It is the first place the two truths meet, and the first place they can be seen working together in a browser.
+
+**`HorizontalBookCard` shows the three parts cleanly.** Its fields and editorial presets (`Default`, `NoImage`, `NoLink`, `ButtonOnly`) come from the structured content schema. Its colour, type and spacing come from the tokens. Its layout is the part Storybook adds, and `cardGeometryChecks.js` checks that the boxes land where they should.
+
+**Storybook is the reference, not the authority.** It shows the pattern working, but it gets its facts from the two layers below it. That distinction mattered once Figma arrived.
 
 {% endmarkdown %}
-<div id="mangrove-interactive-map" class="kh-bleed-out" data-pagefind-ignore>
+<!--
+  SCROLLY STAGE 2 (section "How did Storybook bring the two together?"):
+  Narrative intent: Show how the two independent truths combine inside Storybook
+  to form working web patterns, with layout as the only new ingredient.
+  Visual state:
+    - The two truth nodes stay anchored on the left.
+    - A "Storybook" node appears in the centre.
+    - Two solid arrows/streams draw in FROM each truth node INTO Storybook
+      (Structured content schemas -> Storybook; Design tokens -> Storybook).
+    - Storybook is labelled "schema + tokens + layout" ("layout" is the only
+      thing Storybook adds, verified by `cardGeometryChecks.js`).
+    - Optional detail: surface `HorizontalBookCard` (4 presets) or the 68
+      Storybook component families as internal detail on hover/scroll.
+    - Figma is still absent.
+-->
+<figure class="kh-bleed-out" data-pagefind-ignore>
+  <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-2-title mg-stage-2-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
+    <title id="mg-stage-2-title">Stage 2: Storybook combines the two</title>
+    <desc id="mg-stage-2-desc">The two truth boxes on the left each send an arrow into a Storybook box in the centre, labelled schema plus tokens plus layout.</desc>
+    <defs>
+      <marker id="mg-stage-2-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" stroke="none"/></marker>
+    </defs>
+    <rect x="20" y="40" width="150" height="56" rx="6"/>
+    <rect x="20" y="184" width="150" height="56" rx="6"/>
+    <rect x="245" y="112" width="150" height="56" rx="6"/>
+    <line x1="95" y1="96" x2="95" y2="184" stroke-dasharray="2 5"/>
+    <line x1="170" y1="72" x2="243" y2="128" marker-end="url(#mg-stage-2-arrow)"/>
+    <line x1="170" y1="208" x2="243" y2="152" marker-end="url(#mg-stage-2-arrow)"/>
+    <g fill="currentColor" stroke="none" text-anchor="middle">
+      <text x="95" y="64" font-weight="bold">Content schemas</text>
+      <text x="95" y="84" font-size="12">what it is made of</text>
+      <text x="95" y="208" font-weight="bold">Design tokens</text>
+      <text x="95" y="228" font-size="12">how it looks</text>
+      <text x="320" y="136" font-weight="bold">Storybook</text>
+      <text x="320" y="156" font-size="12">schema + tokens + layout</text>
+    </g>
+  </svg>
+  <figcaption class="kh-figure__caption">Storybook is where the two truths meet: each web pattern combines a structured content schema and the tokens, and adds only the layout. Own work.</figcaption>
+</figure>
+{% markdown %}
+
+## How does Figma triangulate between all three?
+
+**Figma comes from a different lineage.** Its component model (Auto Layout, variables, variant properties) does not map one-to-one onto HTML and CSS, so a kit copied from Storybook screenshots inherits the look and loses the structure.
+
+**So the plugin reads all three sources, not just the nearest one.** It takes field lists and presets from the structured content schemas, binds values to Figma variables generated from the tokens, and uses the Storybook patterns as the layout reference. I wrote it with AI coding agents. That worked because the input was structured data with a checkable answer: the agents traced tokens through the repository and generated construction recipes, and every recipe could be compared against its sources.
+
+**Nothing in the library is invented in Figma.** A designer switching the Book Card from `Default` to `NoImage` is choosing a preset the schema already allows, not drawing a new variant.
+
+{% endmarkdown %}
+<figure class="kh-bleed-out">
+  <img class="kh-figure__image" src="/images/blog/mangrove-figma-card-presets-and-brand-tags.png" alt="Figma canvas showing Horizontal Book Card component presets (Default, NoImage, NoLink, ButtonOnly) alongside layer panels displaying Tag integration across MCR2030 and PreventionWeb brands">
+  <figcaption class="kh-figure__caption">The schema's presets for the Horizontal Book Card, translated into Figma variant properties, alongside brand-specific Tag tokens. Own work.</figcaption>
+</figure>
+<!--
+  SCROLLY STAGE 3 (section "How does Figma triangulate between all three?"):
+  Narrative intent: Reveal the full triangulation model. Figma is of a different
+  lineage (canvas/Auto Layout/variables vs DOM/CSS), so it cannot just scrape
+  Storybook's surface; the plugin reaches back into all three predecessors.
+  Visual state:
+    - A "Figma" node (297 variants · 396 symbols across 34 component sets)
+      appears on the right, visually distinct (heavier stroke or distinct badge
+      to signal its different lineage).
+    - Three DASHED "plugin reads" arcs draw out from Figma, one at a time:
+        1. Straight left to Storybook (layout reference & DOM geometry)
+        2. Arcing over the top to Structured content schemas (fields, presets,
+           content limits)
+        3. Arcing underneath to Design tokens (variable bindings across 5 brands)
+    - The earlier solid arrows (truth -> Storybook) remain visible at lower
+      opacity so the four-node triangle is legible at a glance.
+    - This is the primary climax state of the diagram; Stage 4 is an inspection
+      mode of this exact geometry.
+-->
+<figure class="kh-bleed-out" data-pagefind-ignore>
+  <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-3-title mg-stage-3-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
+    <title id="mg-stage-3-title">Stage 3: Figma triangulates between all three</title>
+    <desc id="mg-stage-3-desc">A Figma box on the right has three dashed lines, labelled plugin reads, reaching back to Storybook, to the content schemas and to the design tokens.</desc>
+    <defs>
+      <marker id="mg-stage-3-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" stroke="none"/></marker>
+    </defs>
+    <rect x="20" y="40" width="150" height="56" rx="6"/>
+    <rect x="20" y="184" width="150" height="56" rx="6"/>
+    <rect x="245" y="112" width="150" height="56" rx="6"/>
+    <rect x="470" y="112" width="150" height="56" rx="6" stroke-width="3"/>
+    <g opacity="0.45">
+      <line x1="95" y1="96" x2="95" y2="184" stroke-dasharray="2 5"/>
+      <line x1="170" y1="72" x2="243" y2="128" marker-end="url(#mg-stage-3-arrow)"/>
+      <line x1="170" y1="208" x2="243" y2="152" marker-end="url(#mg-stage-3-arrow)"/>
+    </g>
+    <g stroke-dasharray="7 5">
+      <line x1="470" y1="140" x2="397" y2="140" marker-end="url(#mg-stage-3-arrow)"/>
+      <path d="M545 112 C545 30, 300 20, 172 56" marker-end="url(#mg-stage-3-arrow)"/>
+      <path d="M545 168 C545 250, 300 260, 172 224" marker-end="url(#mg-stage-3-arrow)"/>
+    </g>
+    <g fill="currentColor" stroke="none" text-anchor="middle">
+      <text x="95" y="64" font-weight="bold">Content schemas</text>
+      <text x="95" y="84" font-size="12">fields, presets</text>
+      <text x="95" y="208" font-weight="bold">Design tokens</text>
+      <text x="95" y="228" font-size="12">variables</text>
+      <text x="320" y="136" font-weight="bold">Storybook</text>
+      <text x="320" y="156" font-size="12">layout reference</text>
+      <text x="545" y="136" font-weight="bold">Figma</text>
+      <text x="545" y="156" font-size="12">297 variants · 396 symbols</text>
+      <text x="380" y="36" font-size="12">plugin reads</text>
+    </g>
+  </svg>
+  <figcaption class="kh-figure__caption">Figma, from a different lineage, is rebuilt by a plugin that checks each component against all three sources rather than copying the nearest one. Own work.</figcaption>
+</figure>
+{% markdown %}
+
+## What happened when the sources disagreed?
+
+**Triangulation turns a mismatch into a located bug.** With three sources, a wrong result points at one edge where two of them stopped agreeing. The three clearest examples each sat on a different edge.
+
+**Tokens against Figma: an invisible disabled control.** The disabled ComboBox looked fine in automated headless runs and was invisible in Figma. The converter had passed the opacity token `0.55` into a Figma field that expected a percentage, so 55% became 0.55%. Inspecting the real node caught what the simulated tests missed, and I fixed both the converter and the test harness.
+
+**Storybook against Figma: line-height that drifted.** Small help text inherited a fixed line-height from its parent container in the browser, and a straight percentage conversion distorted it in Figma. I measured the browser's text boxes against Figma's and calibrated the overrides to match the DOM.
+
+**Content schema against layout: a Table that ran out of room.** Stress-testing the Table with real disaster risk data, longer cell labels ran into fixed divider lines. Editable text was not enough; the schema needed documented limits and the container needed wrapping rules. I wrote the limit into the component guidance, so it now applies in Storybook and Figma alike.
+
+{% endmarkdown %}
+<!--
+  SCROLLY STAGE 4 (section "What happened when the sources disagreed?"):
+  Narrative intent: Demonstrate why triangulation is diagnostic — when two
+  sources disagree, the mismatch is isolated to a single edge of the triangle
+  rather than becoming an ambiguous visual argument.
+  Visual state:
+    - Same four-node geometry as Stage 3, with non-active edges dimmed.
+    - Three edges light up in burnt orange (`#c2410c`) in turn as the reader
+      scrolls past each paragraph (and can also be clicked/hovered directly):
+        1. Tokens <-> Figma (lower arc): "0.55 opacity read as 0.55%"
+           (disabled ComboBox invisible in Figma despite passing headless run)
+        2. Storybook <-> Figma (centre horizontal line): "inherited line-height"
+           (auxiliary help text distorted by straight percentage conversion)
+        3. Content schemas <-> Storybook layout (upper-left arrow): "Table limits"
+           (real disaster risk labels colliding with fixed dividers -> led to
+           documented character/wrapping rules in both Storybook and Figma)
+    - Ends with all three diagnostic edges illuminated together.
+-->
+<figure class="kh-bleed-out" data-pagefind-ignore>
+  <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-4-title mg-stage-4-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
+    <title id="mg-stage-4-title">Stage 4: each bug sits on one edge</title>
+    <desc id="mg-stage-4-desc">The same triangle with three edges highlighted: tokens to Figma labelled 0.55 opacity, Storybook to Figma labelled line-height, and content schemas to Storybook layout labelled Table limits.</desc>
+    <rect x="20" y="40" width="150" height="56" rx="6"/>
+    <rect x="20" y="184" width="150" height="56" rx="6"/>
+    <rect x="245" y="112" width="150" height="56" rx="6"/>
+    <rect x="470" y="112" width="150" height="56" rx="6" stroke-width="3"/>
+    <g opacity="0.3">
+      <line x1="95" y1="96" x2="95" y2="184" stroke-dasharray="2 5"/>
+      <line x1="170" y1="208" x2="243" y2="152"/>
+      <path d="M545 112 C545 30, 300 20, 172 56" stroke-dasharray="7 5"/>
+    </g>
+    <g stroke="#c2410c" stroke-width="4">
+      <line x1="170" y1="72" x2="243" y2="128"/>
+      <line x1="470" y1="140" x2="397" y2="140"/>
+      <path d="M545 168 C545 250, 300 260, 172 224"/>
+    </g>
+    <g fill="currentColor" stroke="none" text-anchor="middle">
+      <text x="95" y="64" font-weight="bold">Content schemas</text>
+      <text x="95" y="208" font-weight="bold">Design tokens</text>
+      <text x="320" y="136" font-weight="bold">Storybook</text>
+      <text x="545" y="136" font-weight="bold">Figma</text>
+    </g>
+    <g fill="#c2410c" stroke="none" font-size="12" font-weight="bold" text-anchor="middle">
+      <text x="236" y="92">Table limits</text>
+      <text x="432" y="128">line-height</text>
+      <text x="380" y="268">0.55 opacity read as 0.55%</text>
+    </g>
+  </svg>
+  <figcaption class="kh-figure__caption">Every bug the translation found sat on one edge of the triangle, where two sources stopped agreeing. Own work.</figcaption>
+</figure>
+{% markdown %}
+
+## What does the translation prove?
+
+**The structure holds while the tokens change.** Switching a component between brand modes changes colour, type and corner treatments without touching its fields or presets. That is the 87.2% shared core doing its job.
+
+{% endmarkdown %}
+<!--
+  INTERACTIVE PROOF WIDGET (section "What does the translation prove?"):
+  Mounted at `#mangrove-brand-studio` via `src/site/mangrove-map.js` (`initBrandStudio`).
+  Narrative role: Let the reader experience the separation between the two peer
+  truths firsthand. By toggling across the 5 brand token modes (UNDRR,
+  PreventionWeb, MCR2030, DELTA Resilience, IRP) and the 4 editorial presets
+  from the `HorizontalBookCard` structured content schema (`Default`, `NoImage`,
+  `NoLink`, `ButtonOnly`), the reader sees that design works as an enablement
+  layer — reshaping colours, surfaces, and MCR2030's 32px pill buttons while
+  the content structure and `cardGeometryChecks.js` assertions hold firm.
+  The `<figure>` inside serves as the progressive-enhancement fallback for
+  non-JS environments and RSS readers.
+-->
+<div id="mangrove-brand-studio" class="kh-bleed-out" data-pagefind-ignore>
   <figure>
-    <img eleventy:ignore class="kh-figure__image" src="/images/blog/mangrove-figma-architecture-map.svg" alt="Architecture map showing the four-tier pipeline: Code and Storybook source feeding a Variable Set of 540 tokens across 5 brand modes, compiling into a Figma library of 396 symbols and validating against a 56-instance consuming pilot">
-    <figcaption class="kh-figure__caption">The code-to-canvas pipeline: from Storybook schemas and 540 token variables to a 396-symbol Figma library. Own work.</figcaption>
+    <img eleventy:ignore class="kh-figure__image" src="/images/blog/mangrove-figma-brand-token-matrix.svg" alt="Five-brand token matrix showing comparison of UNDRR, DELTA Resilience, IRP, MCR2030, and PreventionWeb, highlighting 87.2% token invariance alongside edge cases caught during real-world validation">
+    <figcaption class="kh-figure__caption">Same structured content schema, different tokens: 471 of 540 tokens (87.2%) are shared across five brands, while brand modes adapt colour, radius and surfaces without breaking layout. Own work.</figcaption>
   </figure>
 </div>
 <script src="/mangrove-map.js" defer></script>
 {% markdown %}
 
-**AI coding agents acted as translators between schema and canvas.** Writing a Figma plugin from scratch to construct nested Auto Layout components, bind variables, and wire up variant properties is notoriously tedious. I directed coding agents to trace tokens across our repository, generate component construction recipes, and write the import plugin. Because the input was rigorous structured data rather than vague design prompts, the agents could reliably produce precise Figma node trees with correct padding, layout directions, and variable bindings.
+**A token change carries through to designers' work.** I changed a core UNDRR spacing token from 30px to 32px in code and republished the library. In a pilot file built from 56 linked instances, a resource page at desktop and mobile widths, the layout updated and every edited title, toggled preset and instance override survived. Restoring the value returned the measured fields to their baseline.
 
-**I separated component architecture from design-time edits.** Component structure, auto-layout constraints, and brand token modes belong strictly to the system. The specific copy, selected presets, and visibility toggles in an inserted instance belong to the designer. Enforcing this ownership boundary ensured that when the underlying library received an update, local editorial work was never wiped out.
+**Designers don't need the plugin to use the library.** The pilot was composed entirely from the published library, with custom headings and local notes.
 
-## What did real-world application checks catch?
+## What does a translation cost?
 
-**A passing automated test masked an invisible control.** In automated headless runs, our disabled ComboBox component appeared technically sound, but in Figma, it was completely invisible. The conversion logic had passed an opacity value of `0.55` directly into a Figma variable field that expected a percentage integer of `55`. Inspecting the rendered node in Figma immediately caught what the simulated unit tests missed, allowing me to fix both the converter and the test harness.
+**Not a second story, but not free either.** The reviewed pull request added roughly 77,000 lines, about 33,000 of them construction recipes, test suites and audits. That is a real maintenance obligation sitting next to active product code.
 
-**Inherited typography revealed browser rendering discrepancies.** A component's requested font weight in code does not guarantee which font face the operating system renders. Furthermore, small auxiliary help text inherited a fixed line-height from parent containers that a simple percentage conversion distorted in Figma. I compared browser measurements with Figma text boxes, calibrating line-height overrides to match actual DOM behavior.
+**I chose a smaller ongoing commitment.** Automated sync stays for tokens and styles, which are cheap to keep current. Full structural regeneration is reserved for major versions and new components. The [code split is still pending](https://github.com/unisdr/undrr-mangrove/pull/1319#issuecomment-5993683966).
 
-**Real content boundaries collided with layout assumptions.** While stress-testing our Table component with authentic disaster risk data, longer cell labels collided with fixed divider lines. This made it clear that simply making text fields editable wasn't enough; the container needed flexible wrapping rules and documented editorial limits. I recorded that boundary directly in the component guidance for content practitioners and designers alike.
+**Ownership has to be explicit.** Structure, Auto Layout constraints and brand modes belong to the system; copy, chosen presets and visibility toggles in an instance belong to the designer. Manual edits to the library itself still need a policy before the next rebuild, or the translation starts turning into a second story after all.
 
-## What can the multi-brand pilot demonstrate?
+## Why did this work?
 
-**A production library now powers independent design files.** The pilot library generates 297 component variants across button modes, form controls, navigation, and content cards. To validate the kit in practice, I built a desktop and mobile resource-page example using 56 linked component instances. The test file incorporates customized headings, optional metadata blocks, and local designer notes, proving that product teams can compose complex pages without installing the importer plugin.
+**The truth was defined before the translation started.** If the schemas and tokens had been vague, the plugin would have had nothing to triangulate against and the agents nothing to be checked against. The syndication work had already done that, for reasons that had nothing to do with Figma.
 
-{% endmarkdown %}
-<div id="mangrove-brand-studio" class="kh-bleed-out" data-pagefind-ignore>
-  <figure>
-    <img eleventy:ignore class="kh-figure__image" src="/images/blog/mangrove-figma-brand-token-matrix.svg" alt="Five-brand token matrix showing comparison of UNDRR, DELTA Resilience, IRP, MCR2030, and PreventionWeb, highlighting 87.2% token invariance alongside edge cases caught during real-world validation">
-    <figcaption class="kh-figure__caption">Five brands, one token engine: 87.2% of tokens remain invariant across properties, while brand modes adapt color, radius, and soft surfaces without breaking layout. Own work.</figcaption>
-  </figure>
-</div>
-{% markdown %}
-
-**A live token update verified systemic propagation.** To test resilience against change, I modified a core UNDRR spacing variable from 30 pixels to 32 pixels in code and re-published the library. When I accepted the update in the pilot design file, the layout adjusted seamlessly. Every edited title, toggled preset, brand setting, and instance override survived intact; restoring the value returned the measured fields to their baseline.
-
-**Interoperability validated the content architecture.** Because the components were generated from shared schemas, switching between UNDRR, PreventionWeb, and MCR2030 brand modes reshuffled colors, typography, and corner treatments instantly. The content structure remained unshakeable because the underlying shipping container had been standardized first.
-
-## How do you balance automated generation with maintenance debt?
-
-**Code generation brings its own maintenance obligations.** The reviewed pull request introduced roughly 77,000 lines of code, including around 33,000 lines of construction recipes, test suites, and developer audits. While the generator successfully proved that code-to-Figma pipelines can produce high-fidelity kits, maintaining an elaborate compiler pipeline alongside active product code represents substantial ongoing overhead.
-
-**I chose a smaller ongoing commitment.** Instead of maintaining an all-in-one generator indefinitely, I decided to keep automated sync for lightweight tokens and styles, while reserving full structural component generation for major version overhauls or new component introductions. The [code split remains pending](https://github.com/unisdr/undrr-mangrove/pull/1319#issuecomment-5993683966), and manual edits need an ownership policy before a later rebuild.
-
-**The bridge is a shared model across different working environments.** As with my work to [put analytics into editorial workflows](/work/2026/impact-story-undrr-analytics-overlay-mcp/), the real unlock was carrying existing domain rules into the environment where another discipline works. Lots of teams can draw a Figma kit or publish a Storybook. What made this work durable was grounding both in structured content and semantic models from day one, giving designers, developers, and AI agents a common vocabulary that scales.
+**Each discipline gets the same story in its own environment.** It is the same move as [putting analytics into editorial workflows](/work/2026/impact-story-undrr-analytics-overlay-mcp/): carry the domain rules to where another discipline already works, rather than asking them to come to you. Designers get Figma, developers get Storybook, and both are reading from the same structured content schemas and tokens.
 
 {% endmarkdown %}

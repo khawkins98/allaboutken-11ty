@@ -557,8 +557,8 @@
     container.innerHTML = `
       <div class="kh-brand-studio">
         <div class="kh-brand-studio__header">
-          <h3 class="kh-brand-studio__title">Interactive Component Contract &amp; Brand Morpher Studio</h3>
-          <p class="kh-brand-studio__subtitle">Watch how Storybook’s <code>HorizontalBookCard</code> schema morphs live across brand token modes while preserving 100% of container layout rules and auto-layout bounds.</p>
+          <h3 class="kh-brand-studio__title">Same structured content schema, different tokens</h3>
+          <p class="kh-brand-studio__subtitle">Switch brand token modes and editorial presets on <code>HorizontalBookCard</code>: the tokens change how it looks while the structured content schema and layout rules stay intact.</p>
         </div>
 
         <div class="kh-brand-studio__controls">
