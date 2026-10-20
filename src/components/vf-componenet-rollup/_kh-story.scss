@@ -136,8 +136,27 @@
 
     // A figure that lines up with the scrolly graphic column, so an image
     // between regions shares the diagram's left and right edges.
+    // The image takes the graphic column and its caption sits in the step
+    // column beside it, read the same way as the scrolly prose. The image
+    // transform wraps <img> in <picture>, so place both.
     .kh-story__body > .kh-story__graphic-col {
-      padding-left: calc(var(--kh-story-steps) + 3rem);
+      align-items: center;
+      column-gap: 3rem;
+      display: grid;
+      grid-template-columns: var(--kh-story-steps) minmax(0, 1fr);
+
+      > picture,
+      > img {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      > figcaption {
+        font-size: 1rem;
+        grid-column: 1;
+        grid-row: 1;
+        margin: 0;
+      }
     }
   }
 
