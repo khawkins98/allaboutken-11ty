@@ -37,7 +37,7 @@
         btnFont: '14px', // font-size.button 0.875rem
         btnPadding: '10px 15px', // padding.button = spacing.100 spacing.150
         tagLabel: 'GAR2022 PUBLICATION',
-        intro: 'UNDRR is the default. The other four brands are small sets of changes on top of it.',
+        intro: 'UNDRR is the default. The other brands are small sets of changes on top of it.',
         changes: [
           { label: 'Brand colour', value: '#004f91', swatch: '#004f91' },
           { label: 'Button hover', value: '#3372a7', swatch: '#3372a7' },
@@ -81,24 +81,17 @@
         btnFont: '14px',
         btnPadding: '10px 20px', // padding.button = spacing.100 spacing.200
         tagLabel: 'POLICY BRIEF',
+        // ILLUSTRATIVE, not shipped: DELTA's real card keeps the standard
+        // arrangement. It is here to show the third axis: the same content
+        // and tokens, laid out differently, because layout belongs to
+        // Storybook (and so Figma), not to the schema.
+        layout: 'title-first',
+        intro: 'An illustrative example: the same content, arranged differently. Layout is decided in Storybook and carried into Figma; the schema only says which fields exist.',
         changes: [
+          { label: 'Layout', value: 'title above the image (illustrative)' },
           { label: 'Brand colour', value: '#004f91, the same blue as UNDRR', swatch: '#004f91' },
           { label: 'Button hover', value: '#106cb8', swatch: '#106cb8' },
           { label: 'Button padding', value: 'wider: 10px × 20px' },
-          { label: 'Other cards', value: 'light grey #f2f2f2 (not this publication card)', swatch: '#f2f2f2' },
-        ],
-      },
-      irp: {
-        id: 'irp',
-        name: 'IRP',
-        primary: '#0F78BF', // irp.yaml brand.primary
-        btnRadius: '5px',
-        btnFont: '14px',
-        btnPadding: '10px 15px',
-        tagLabel: 'RECOVERY PLATFORM',
-        changes: [
-          { label: 'Brand colour', value: '#0f78bf', swatch: '#0f78bf' },
-          { label: 'Button hover', value: '#0d67a3', swatch: '#0d67a3' },
         ],
       },
     };
@@ -146,7 +139,7 @@
       <div class="kh-brand-studio">
         <div class="kh-brand-studio__header">
           <h3 class="kh-brand-studio__title">Hold the content, swap the brand</h3>
-          <p class="kh-brand-studio__subtitle">Switch brands and presets on the Book Card. The brand settings change how it looks; its fields and layout stay the same.</p>
+          <p class="kh-brand-studio__subtitle">Switch brands on the Book Card. The content stays the same throughout: brand settings change how it looks, and Storybook decides how it is laid out.</p>
         </div>
 
         <div class="kh-brand-studio__demo">
@@ -158,17 +151,6 @@
                 <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn" aria-pressed="false" data-brand="pweb"><span class="kh-brand-dot" style="background: #0A6969;"></span>PreventionWeb</button>
                 <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn" aria-pressed="false" data-brand="mcr"><span class="kh-brand-dot" style="background: #591A61;"></span>MCR2030</button>
                 <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn" aria-pressed="false" data-brand="delta"><span class="kh-brand-dot" style="background: #004F91;"></span>DELTA</button>
-                <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn" aria-pressed="false" data-brand="irp"><span class="kh-brand-dot" style="background: #0F78BF;"></span>IRP</button>
-              </div>
-            </div>
-
-            <div class="kh-brand-studio__group" role="group" aria-labelledby="kh-bs-preset-label">
-              <span class="kh-brand-studio__label" id="kh-bs-preset-label">Preset</span>
-              <div class="kh-brand-studio__pills">
-                <button type="button" class="kh-brand-studio__pill kh-brand-studio__preset-btn kh-brand-studio__preset-btn--active" aria-pressed="true" data-preset="default">Default</button>
-                <button type="button" class="kh-brand-studio__pill kh-brand-studio__preset-btn" aria-pressed="false" data-preset="noimage">No image</button>
-                <button type="button" class="kh-brand-studio__pill kh-brand-studio__preset-btn" aria-pressed="false" data-preset="nolink">No link</button>
-                <button type="button" class="kh-brand-studio__pill kh-brand-studio__preset-btn" aria-pressed="false" data-preset="buttononly">Button only</button>
               </div>
             </div>
           </div>
@@ -227,7 +209,9 @@
     const inspectorBrand = container.querySelector('#inspector-brand');
 
     let currentBrand = 'undrr';
-    let currentPreset = 'default';
+    // The preset toggles were removed: the studio makes one point (hold the
+    // content, swap the brand). The default preset stays as the fixed case.
+    const currentPreset = 'default';
 
     function renderInspector() {
       const b = brands[currentBrand];
@@ -255,6 +239,13 @@
       liveCard.style.setProperty('--live-btn-padding', b.btnPadding);
       liveCard.style.setProperty('--live-tag-color', b.primary);
 
+      const titleFirst = b.layout === 'title-first';
+      liveCard.classList.toggle('kh-live-card--title-first', titleFirst);
+      // Title-first shows only the cover's coloured band as a banner,
+      // letterboxed in the brand colour so the icon stays whole.
+      const coverSvg = liveVisual.querySelector('svg');
+      coverSvg.setAttribute('viewBox', titleFirst ? '0 0 160 85' : '0 0 160 240');
+      liveVisual.style.background = titleFirst ? b.primary : '';
       liveTag.textContent = b.tagLabel;
       liveSvgBanner.setAttribute('fill', b.primary);
 
@@ -279,7 +270,9 @@
       }
 
       liveAssertionBadge.textContent = p.showImage 
-        ? `cardGeometryChecks.js: ALL ASSERTIONS PASSING (1:1.414 ratio, 0px border bleed, ${b.name} tokens bound)`
+        ? (b.layout === 'title-first'
+          ? `cardGeometryChecks.js: ALL ASSERTIONS PASSING (title-first layout, same fields, ${b.name} tokens bound)`
+          : `cardGeometryChecks.js: ALL ASSERTIONS PASSING (1:1.414 ratio, 0px border bleed, ${b.name} tokens bound)`)
         : `cardGeometryChecks.js: PASS (Content reflows to clientWidth: 520px, 0px image delta)`;
 
       renderInspector();
@@ -296,21 +289,6 @@
         btn.classList.add('kh-brand-studio__brand-btn--active');
         btn.setAttribute('aria-pressed', 'true');
         currentBrand = btn.dataset.brand;
-        updateCard();
-      });
-    });
-
-    // Preset buttons
-    const presetBtns = container.querySelectorAll('.kh-brand-studio__preset-btn');
-    presetBtns.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        presetBtns.forEach((p) => {
-          p.classList.remove('kh-brand-studio__preset-btn--active');
-          p.setAttribute('aria-pressed', 'false');
-        });
-        btn.classList.add('kh-brand-studio__preset-btn--active');
-        btn.setAttribute('aria-pressed', 'true');
-        currentPreset = btn.dataset.preset;
         updateCard();
       });
     });

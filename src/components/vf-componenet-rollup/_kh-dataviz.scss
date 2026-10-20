@@ -807,11 +807,14 @@
     @media (min-width: $kh-breakpoint--lg) {
       column-gap: 3rem;
       display: grid;
+      // Words in the step column, everything you look at or read values
+      // from (toggles, card, badge, "what changes") in the graphic column,
+      // as with the scrolly diagram.
       grid-template-areas:
         'header demo'
-        'inspector demo';
+        '.      inspector';
       grid-template-columns: var(--kh-story-steps, 20rem) minmax(0, 1fr);
-      grid-template-rows: auto 1fr;
+      grid-template-rows: auto auto;
       max-width: none;
       row-gap: 1.75rem;
     }
@@ -974,6 +977,7 @@
       font-size: 15px;
       grid-area: inspector;
       line-height: 1.5;
+      max-width: 34rem;
       padding: 0.8rem 0.95rem 0.9rem;
     }
 
@@ -1056,6 +1060,45 @@
     @media (min-width: $kh-breakpoint--sm) {
       flex-direction: row;
       gap: 0;
+    }
+
+    // Illustrative alternative arrangement (DELTA in the studio): the title
+    // leads and the cover becomes a cropped banner. Same elements, same
+    // order in the DOM; only the layout changes.
+    &--title-first {
+      flex-direction: column;
+      gap: 0.6rem;
+
+      @media (min-width: $kh-breakpoint--sm) {
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+
+      .kh-live-card__content {
+        display: contents;
+      }
+
+      .kh-live-card__tag { order: 1; }
+      .kh-live-card__title { order: 2; }
+
+      .kh-live-card__visual {
+        order: 3;
+        width: 100%;
+
+        svg {
+          height: 7.5rem;
+        }
+
+        @media (min-width: $kh-breakpoint--sm) {
+          width: 100%;
+        }
+      }
+
+      .kh-live-card__summary { order: 4; }
+      .kh-live-card__btn {
+        align-self: flex-start;
+        order: 5;
+      }
     }
 
     // Sized by its 160x240 cover, not stretched to the text beside it.
