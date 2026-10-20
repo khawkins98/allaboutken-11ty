@@ -670,11 +670,14 @@
   // the cover and stages 1-2, BORN at stage 3 (precipitating in with the
   // cover's arrival animation, drifting at full amplitude on the Figma
   // side), then pulled into their cluster as the reads draw (3.1, full).
-  .kh-sv-dots[data-dots='cloud'] .kh-sv__dot--F,
-  .kh-sv-dots[data-dots='c1'] .kh-sv__dot--F,
-  .kh-sv-dots[data-dots='c2'] .kh-sv__dot--F,
-  .kh-sv-dots[data-dots='settled'] .kh-sv__dot--F,
-  .kh-sv-dots[data-dots='spread'] .kh-sv__dot--F {
+  // Doubled class (.kh-sv__dot.kh-sv__dot--F) so this outranks the later
+  // "unclaimed dots" opacity and the is-arriving entrance, which tied with
+  // it and let all 297 show on the cover.
+  .kh-sv-dots[data-dots='cloud'] .kh-sv__dot.kh-sv__dot--F,
+  .kh-sv-dots[data-dots='c1'] .kh-sv__dot.kh-sv__dot--F,
+  .kh-sv-dots[data-dots='c2'] .kh-sv__dot.kh-sv__dot--F,
+  .kh-sv-dots[data-dots='settled'] .kh-sv__dot.kh-sv__dot--F,
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot.kh-sv__dot--F {
     --kh-drift: 0;
     animation: none;
     opacity: 0;
@@ -717,8 +720,7 @@
   // Not yet gathered: scattered and quiet. The variants' drift (settled,
   // spread) is quieter still: not a cluster yet, not in the story yet.
   .kh-sv-dots[data-dots='cloud'] .kh-sv__dot,
-  .kh-sv-dots[data-dots='c1'] .kh-sv__dot:not(.kh-sv__dot--S),
-  .kh-sv-dots[data-dots='c2'] .kh-sv__dot--F {
+  .kh-sv-dots[data-dots='c1'] .kh-sv__dot:not(.kh-sv__dot--S) {
     opacity: 0.4;
   }
 
