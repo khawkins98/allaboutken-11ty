@@ -21,8 +21,10 @@
   .kh-scrolly--enhanced {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    // Small: the last step drops its gap (below), so this only has to keep
-    // the pinned graphic on screen while the final paragraph is read.
+    // Small: breathing room after the region. It does not extend the pin
+    // (sticky stops at the content box); on a phone the band leaves as the
+    // last paragraph's bottom slides under it, which is when it is read.
+    // Wide: the room for the pin is on the steps column, see below.
     padding-bottom: 6vh;
 
     .kh-scrolly__static {
@@ -77,7 +79,7 @@
   // shown in the graphic) needs the same scroll time as a paragraph. On
   // narrow screens the visible in-prose definition carries that gap instead.
   @media (min-width: $kh-breakpoint--lg) {
-    .kh-scrolly--enhanced .kh-scrolly__lead {
+    .kh-scrolly--enhanced [data-scrolly-lead] {
       margin-bottom: 38vh;
     }
   }
@@ -97,11 +99,23 @@
       column-gap: 2.5rem;
       grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
       margin-left: -22%;
+      padding-bottom: 0;
     }
 
+    // The pinned graphic runs from 10vh to 90vh and its sticky range ends
+    // at the region's CONTENT box, so padding on the region does nothing for
+    // the pin; the steps column is what sets the row height, so the room
+    // goes here. With no room the last paragraph of every region triggered
+    // its stage (top at 55vh) when the graphic had already been pushed
+    // 45-80px off the top: the climax of region B (the full triangle, checks
+    // on) and the ending of region C (edits kept) were only ever seen
+    // sliding away. 32vh keeps the graphic pinned until the final
+    // paragraph's top is about a third of the way up the screen: close to
+    // the 38vh every other step gets.
     .kh-scrolly--enhanced > .kh-scrolly__steps {
       grid-column: 1;
       grid-row: 1;
+      padding-bottom: 32vh;
       padding-top: 0;
     }
 
@@ -263,11 +277,23 @@
     transition-delay: calc(var(--d, 0s) + 0.6s);
   }
 
+  // Already on before this stage (the script sets `is-held`): the entry
+  // stagger is for arriving, so a restyle in place is immediate. Lines,
+  // heads, labels and checks all change colour or weight together.
+  .kh-sv__el.is-on.is-held {
+    transition-delay: 0s;
+  }
+
+  // Travelling pulse (stage 5). The dash is 4% of the path and the gap is
+  // longer than the whole path, so only one dash exists at a time; it runs
+  // from just before the start to just past the end. The old `0.04 0.96`
+  // pattern put a second dash exactly at the path end, whose round cap sat
+  // as a green dot under the Figma box before the arrow had arrived.
   .kh-sv__pulse {
     fill: none;
     stroke: var(--kh-sv-good);
-    stroke-dasharray: 0.04 0.96;
-    stroke-dashoffset: 1;
+    stroke-dasharray: 0.04 2;
+    stroke-dashoffset: 0.1;
     stroke-linecap: round;
     stroke-width: 11;
   }
@@ -279,11 +305,11 @@
 
   @keyframes kh-sv-pulse {
     from {
-      stroke-dashoffset: 1;
+      stroke-dashoffset: 0.1;
     }
 
     to {
-      stroke-dashoffset: 0;
+      stroke-dashoffset: -1.1;
     }
   }
 
@@ -466,6 +492,16 @@
     // No callouts in the narrow band, so no leaders to them either.
     .kh-sv__leader {
       display: none;
+    }
+
+    // The band is width-limited on a phone (scale ~0.66), where the natural
+    // 13.5-unit labels rendered at 9px. Free-standing labels (the reads, the
+    // bug flags, the dot counts) have room to grow, so give them a 10.5px
+    // floor; box titles and subtitles are sized by their boxes and stay.
+    // Not higher: "independent" (the peers label) runs to within a few units
+    // of the Storybook box at this size.
+    .kh-sv__label {
+      font-size: max(13.5px, calc(10.5px / var(--kh-sv-s, 1)));
     }
   }
 

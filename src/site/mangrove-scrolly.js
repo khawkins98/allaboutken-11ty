@@ -373,18 +373,30 @@
     });
   }
 
+  // Keys that were on in the stage last applied to each SVG. An element that
+  // stays on across a stage change is `is-held`: its entry delay (--d, the
+  // draw-in stagger) is dropped, so a restyle (dim, fault, good, strong)
+  // lands at once. Without this, the Storybook read line kept its 1.4s
+  // stagger when it turned orange in 4.2, so its "line-height" label was
+  // orange a second before the line was; and it stayed orange for 1.4s into
+  // stage 5, the healthy-change stage.
+  const prevOn = new WeakMap();
+
   function applyStage(svg, stageId) {
     const spec = STAGES[stageId] || {};
     const sets = {};
     ['on', 'dim', 'faint', 'strong', 'fault', 'good'].forEach((m) => {
       sets[m] = new Set(spec[m] || []);
     });
+    const was = prevOn.get(svg) || new Set();
+    prevOn.set(svg, sets.on);
     svg.setAttribute('data-stage', stageId);
 
     svg.querySelectorAll('[data-k]').forEach((el) => {
       const k = el.dataset.k;
       const on = sets.on.has(k);
       el.classList.toggle('is-on', on);
+      el.classList.toggle('is-held', on && was.has(k));
       if (el.classList.contains('kh-sv__reveal')) return;
       el.classList.toggle('is-dim', on && sets.dim.has(k));
       el.classList.toggle('is-faint', on && sets.faint.has(k));
@@ -666,7 +678,10 @@
       const heading = section.querySelector(':scope > h2, :scope > h3');
       const lead = ids.length > paras.length && heading ? ids.shift() : null;
       if (lead) {
-        heading.classList.add('kh-scrolly__lead');
+        // A data attribute, not a `kh-` class: _kh-content.scss styles
+        // heading permalinks with `h2:not([class*='kh-'])`, so a class here
+        // stripped the anchor's styling from this one heading.
+        heading.setAttribute('data-scrolly-lead', '');
         steps.push({ el: heading, anchor: section, stage: lead });
       }
       paras.forEach((p, i) => {
