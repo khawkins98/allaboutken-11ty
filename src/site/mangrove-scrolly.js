@@ -60,8 +60,10 @@
       dim: ['peers', 'peersLbl', 'stS', 'stT'],
       strong: ['rdS', 'rdT', 'rdSB'],
     },
+    // The three checks stay from 3.2: "all three were checked, now..." The
+    // schema check leaves at 4.1, where the other two mean "these agreed".
     4: {
-      on: [...TRIANGLE, 'rdS', 'rdT', 'rdSB'],
+      on: [...TRIANGLE, 'rdS', 'rdT', 'rdSB', 'ckS', 'ckT', 'ckSB'],
       dim: ['peers', 'peersLbl', 'stS', 'stT', 'rdS', 'rdT', 'rdSB', 'sS', 'sT', 'sSB', 'sF'],
     },
     4.1: {
@@ -169,19 +171,27 @@
 
   // `draw` paths are revealed with a mask so dashed and dotted lines can
   // draw in too. `head` adds an arrowhead at the path end once drawn.
+  // Accessibility: the SVG is exposed as a group whose only semantic content
+  // is the "Explain:" buttons (boxes, check discs, dot groups). Everything
+  // else is drawing and is aria-hidden; the definitions these buttons open
+  // are the prose asides' text, which assistive tech already reads in the
+  // prose, so only the opened popup is linked (aria-describedby), never the
+  // static callout copies. Buttons enter the tab order only while visible
+  // (see syncFocusables).
+  const btn = (name) => `role="button" tabindex="-1" aria-label="Explain: ${name}"`;
   const node = (k, n, title, extra = '') => `
-    <g class="kh-sv__el kh-sv__node${extra}" data-k="${k}">
+    <g class="kh-sv__el kh-sv__node${extra}" data-k="${k}" ${btn(title)}>
       <rect class="kh-sv__box" x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="6"/>
-      <text class="kh-sv__title" x="${cx(n)}" y="${n.y + 26}">${title}</text>
+      <text class="kh-sv__title" x="${cx(n)}" y="${n.y + 26}" aria-hidden="true">${title}</text>
     </g>`;
   const sub = (k, n, text, extra = '') =>
-    `<text class="kh-sv__el kh-sv__sub${extra}" data-k="${k}" x="${cx(n)}" y="${n.y + 47}">${text}</text>`;
+    `<text class="kh-sv__el kh-sv__sub${extra}" data-k="${k}" x="${cx(n)}" y="${n.y + 47}" aria-hidden="true">${text}</text>`;
   const line = (k, d, cls, { head = false, delay = 0, mid = '' } = {}) =>
     `<path class="kh-sv__el kh-sv__line ${cls}" data-k="${k}" data-draw${head ? ' data-head' : ''}${mid ? ` data-mid-head="${mid}"` : ''} style="--d:${delay}s" d="${d}"/>`;
   const label = (k, x, y, text, { cls = '', anchor = 'middle', delay = 0 } = {}) =>
-    `<text class="kh-sv__el kh-sv__label ${cls}" data-k="${k}" x="${x}" y="${y}" text-anchor="${anchor}" style="--d:${delay}s">${text}</text>`;
-  const check = (k, x, y, delay = 0) => `
-    <g class="kh-sv__el kh-sv__check" data-k="${k}" style="--d:${delay}s" transform="translate(${x} ${y})">
+    `<text class="kh-sv__el kh-sv__label ${cls}" data-k="${k}" x="${x}" y="${y}" text-anchor="${anchor}" style="--d:${delay}s" aria-hidden="true">${text}</text>`;
+  const check = (k, x, y, name, delay = 0) => `
+    <g class="kh-sv__el kh-sv__check" data-k="${k}" style="--d:${delay}s" transform="translate(${x} ${y})" ${btn(name)}>
       <circle class="kh-sv__check-hit" r="19"/>
       <circle class="kh-sv__check-disc" r="11.5"/>
       <path d="M-5 0.5 L-1.5 4 L5 -3.5"/>
@@ -210,9 +220,9 @@
   function buildSvg(id) {
     const dots = buildDots();
     return `
-<svg class="kh-sv" id="${id}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+<svg class="kh-sv" id="${id}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Diagram: the sources the Figma library is derived from. Each box can be explained." tabindex="-1" focusable="false">
   <defs>${'' /* masks appended by JS */}</defs>
-  <g class="kh-sv__lines">
+  <g class="kh-sv__lines" aria-hidden="true">
     ${line('peers', P.peers, 'kh-sv__line--peers', { delay: 0.35 })}
     ${line('stS', P.stS, 'kh-sv__line--stream', { head: true })}
     ${line('stT', P.stT, 'kh-sv__line--stream', { head: true })}
@@ -226,11 +236,11 @@
     <path class="kh-sv__el kh-sv__pulse" data-k="g5T" pathLength="1" d="${P.g5T}"/>
     <path class="kh-sv__el kh-sv__pulse" data-k="g5arc" pathLength="1" d="${P.g5arc}"/>
   </g>
-  <g class="kh-sv__el kh-sv__dots" data-k="dots">${dots}</g>
+  <g class="kh-sv__el kh-sv__dots" data-k="dots" aria-hidden="true">${dots}</g>
   ${label('dotsLbl', 200, 222, '471 shared · 87.2%', { anchor: 'start', cls: 'kh-sv__dotlbl--shared', delay: 0.6 })}
   ${label('dotsLbl', 520, 222, '69 by brand', { anchor: 'end', cls: 'kh-sv__label--brand kh-sv__dotlbl--brand', delay: 0.9 })}
-  <rect class="kh-sv__el kh-sv__hit" data-k="dots" data-dots="shared" x="196" y="206" width="246" height="160"/>
-  <rect class="kh-sv__el kh-sv__hit" data-k="dots" data-dots="brand" x="446" y="206" width="80" height="160"/>
+  <rect class="kh-sv__el kh-sv__hit" data-k="dots" data-dots="shared" x="196" y="206" width="246" height="160" ${btn('the 471 shared variables')}/>
+  <rect class="kh-sv__el kh-sv__hit" data-k="dots" data-dots="brand" x="446" y="206" width="80" height="160" ${btn('the 69 brand-specific variables')}/>
   ${label('dotsLbl', 200, 384, 'Each dot is one of 540 Figma variables', { anchor: 'start', cls: 'kh-sv__label--quiet', delay: 1 })}
   ${node('nS', N.S, 'Content schemas')}
   ${node('nT', N.T, 'Design tokens', ' kh-sv__rise')}
@@ -246,7 +256,7 @@
   ${label('lbF5', N.F.x + N.F.w, N.F.y + N.F.h + 20, 'edits kept', { anchor: 'end', cls: 'kh-sv__label--flag', delay: 1.2 })}
   ${label('peersLbl', 90, 194, 'peers,', { anchor: 'start', delay: 0.45 })}
   ${label('peersLbl', 90, 210, 'independent', { anchor: 'start', delay: 0.45 })}
-  <g class="kh-sv__el kh-sv__chip" data-k="chip" style="--d:0.9s">
+  <g class="kh-sv__el kh-sv__chip" data-k="chip" style="--d:0.9s" aria-hidden="true">
     <rect x="${N.SB.x + N.SB.w - 70}" y="${N.SB.y - 34}" width="74" height="24" rx="12"/>
     <text x="${N.SB.x + N.SB.w - 33}" y="${N.SB.y - 17.5}">+ layout</text>
   </g>
@@ -256,9 +266,9 @@
   ${label('lb4T', 318, 394, '0.55 read as 0.55%', { cls: 'kh-sv__label--flag', delay: 1 })}
   ${label('lb4SB', 357, 160, 'line-height', { cls: 'kh-sv__label--flag', delay: 0.5 })}
   ${label('fixLbl', 357, 250, 'the limit flows down', { cls: 'kh-sv__label--fix', delay: 1.6 })}
-  ${check('ckS', N.S.x + N.S.w, N.S.y, 0)}
-  ${check('ckT', N.T.x + N.T.w, N.T.y, 0.15)}
-  ${check('ckSB', N.SB.x + N.SB.w, N.SB.y + N.SB.h, 0.3)}
+  ${check('ckS', N.S.x + N.S.w, N.S.y, 'the check against the content schema', 0)}
+  ${check('ckT', N.T.x + N.T.w, N.T.y, 'the check against the design tokens', 0.15)}
+  ${check('ckSB', N.SB.x + N.SB.w, N.SB.y + N.SB.h, 'the check against Storybook', 0.3)}
 </svg>`;
   }
 
@@ -404,6 +414,26 @@
       el.classList.toggle('is-fault', on && sets.fault.has(k));
       el.classList.toggle('is-good', on && sets.good.has(k));
     });
+    syncFocusables(svg);
+  }
+
+  // Tab order follows the stage: only buttons that are on screen now (on,
+  // and not faded to near-invisible) are reachable; the rest sit at -1 and
+  // come back when their stage does. Only the region whose graphic is
+  // actually on screen takes part (`data-live`, set by update()): the other
+  // regions keep their end states off screen, and a Tab landing in one of
+  // those would scroll the page back to it and flip the stage under the
+  // reader. Narrow screens keep the tap popups but stay out of the tab
+  // order: the 44vh band has no room for a popup beside a focus ring. A
+  // focused button that just left the stage is blurred so focus never rests
+  // on something invisible.
+  function syncFocusables(svg) {
+    const live = wide.matches && svg.dataset.live === '1';
+    svg.querySelectorAll('[role="button"]').forEach((el) => {
+      const reachable = live && el.classList.contains('is-on') && !el.classList.contains('is-faint');
+      el.setAttribute('tabindex', reachable ? '0' : '-1');
+      if (!reachable && document.activeElement === el) el.blur();
+    });
   }
 
   // Callouts are copies of the post's definition asides, so the copy lives in
@@ -423,6 +453,9 @@
     if (!asides.length) return;
     const layer = document.createElement('div');
     layer.className = 'kh-scrolly__callouts';
+    // Copies of the prose asides: hidden from assistive tech, which has
+    // the originals.
+    layer.setAttribute('aria-hidden', 'true');
     asides.forEach((aside) => {
       const key = aside.dataset.define;
       const place = CALLOUTS[key];
@@ -580,25 +613,72 @@
       tip.style.top = `${c.y}px`;
     };
 
+    // The popup is linked to the button that opened it from the keyboard
+    // (aria-describedby), so a screen reader hears the explanation on focus
+    // and nothing else: the tip is otherwise plain content that nothing
+    // points at, and the static callout cards stay aria-hidden.
+    tip.id = `${svg.id}-tip`;
+    let described = null; // element carrying aria-describedby
+    let viaKeyboard = false;
+    let lastShown = null;
+
     const hide = () => {
       openId = null;
+      viaKeyboard = false;
       tip.classList.remove('is-on');
       delete svg.dataset.dotFocus;
+      if (described) {
+        described.removeAttribute('aria-describedby');
+        described = null;
+      }
     };
 
-    const show = (t) => {
+    const show = (t, keyboard = false) => {
       const d = t && t.classList.contains('is-on') ? describe(t) : null;
       if (!d) {
         hide();
         return;
       }
       openId = d.id;
+      viaKeyboard = keyboard;
+      lastShown = d;
       tip.innerHTML = `<span class="kh-scrolly__callout-term">${d.term}</span><span class="kh-scrolly__callout-text">${d.html}</span>`;
       if (d.dots) svg.dataset.dotFocus = d.dots;
       else delete svg.dataset.dotFocus;
       place(d);
       tip.classList.add('is-on');
+      if (described && described !== t) described.removeAttribute('aria-describedby');
+      described = null;
+      if (keyboard) {
+        t.setAttribute('aria-describedby', tip.id);
+        described = t;
+      }
     };
+
+    // Keyboard: focus opens, blur closes, Escape closes and leaves focus on
+    // the button, Enter/Space toggle. Focus arrives on the pinned graphic,
+    // which is fully on screen, so tabbing does not scroll the page.
+    svg.addEventListener('focusin', (e) => {
+      const t = targetOf(e.target);
+      if (t && t.matches('[role="button"]')) show(t, true);
+    });
+    svg.addEventListener('focusout', (e) => {
+      if (!svg.contains(e.relatedTarget)) hide();
+    });
+    svg.addEventListener('keydown', (e) => {
+      const t = targetOf(e.target);
+      if (!t) return;
+      if (e.key === 'Escape') {
+        if (openId) {
+          e.preventDefault();
+          hide();
+        }
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (openId) hide();
+        else show(t, true);
+      }
+    });
 
     // One delegated handler for every target: pointerover reaches the
     // innermost target, so a check disc beats the box it sits on.
@@ -626,7 +706,14 @@
     document.addEventListener('pointerdown', (e) => {
       if (openId && !targetOf(e.target)) hide();
     }, { passive: true });
-    window.addEventListener('scroll', () => { if (openId) hide(); }, { passive: true });
+    // A hover popup closes on scroll; a keyboard one follows its button
+    // (the graphic is pinned, so it rarely moves) rather than vanishing
+    // under the reader's hands.
+    window.addEventListener('scroll', () => {
+      if (!openId) return;
+      if (viaKeyboard && lastShown) place(lastShown);
+      else hide();
+    }, { passive: true });
     return () => {
       current = null;
       hide();
@@ -660,8 +747,11 @@
   regions.forEach((region, r) => {
     const graphic = document.createElement('div');
     graphic.className = 'kh-scrolly__graphic';
+    // Not aria-hidden: the SVG's "Explain:" buttons are real controls, and
+    // focusable content inside an aria-hidden subtree is a WCAG failure.
+    // The drawing itself is hidden piece by piece in buildSvg, and the
+    // callout layer below.
     graphic.hidden = true;
-    graphic.setAttribute('aria-hidden', 'true');
     graphic.setAttribute('data-pagefind-ignore', '');
     graphic.innerHTML = buildSvg(`kh-sv-${r}`);
     region.appendChild(graphic);
@@ -755,6 +845,14 @@
         inst.hideTip();
       }
       syncCallout(inst);
+      // Live = the graphic is wholly on screen (pinned, or in flow but
+      // visible), so focusing a button in it cannot scroll the page.
+      const g = inst.svg.parentNode.getBoundingClientRect();
+      const live = g.top >= -2 && g.bottom <= window.innerHeight + 2 ? '1' : '0';
+      if (inst.svg.dataset.live !== live) {
+        inst.svg.dataset.live = live;
+        syncFocusables(inst.svg);
+      }
     });
   }
 
@@ -777,7 +875,12 @@
     update();
   }
 
-  if (wide.addEventListener) wide.addEventListener('change', observe);
+  if (wide.addEventListener) {
+    wide.addEventListener('change', () => {
+      observe();
+      instances.forEach((inst) => syncFocusables(inst.svg));
+    });
+  }
   window.addEventListener('resize', () => window.requestAnimationFrame(update), { passive: true });
   // The observer band is a few pixels tall, so a step can enter it while its
   // top is still just below the trigger line; with no further crossing,

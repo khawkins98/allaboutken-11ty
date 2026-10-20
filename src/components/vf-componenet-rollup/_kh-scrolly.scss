@@ -697,6 +697,18 @@
     cursor: help;
   }
 
+  // Keyboard focus on an "Explain:" button (box, check disc, dot group):
+  // the page's dashed ring, drawn round the element's box. Mouse focus
+  // shows nothing, as elsewhere on the site.
+  .kh-sv [role='button'] {
+    outline: none;
+  }
+
+  .kh-sv [role='button']:focus-visible {
+    outline: 1px dashed rgb(0 0 0 / 60%);
+    outline-offset: 4px;
+  }
+
   // Wireframe: structure, not appearance. Grey hairlines, mono labels, no
   // colour; dashed slots are optional.
   .kh-scrolly__wire {
