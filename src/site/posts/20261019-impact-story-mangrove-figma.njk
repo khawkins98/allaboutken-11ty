@@ -145,7 +145,6 @@ image_meta:
 <div class="kh-scrolly" data-scrolly-initial="cover" data-scrolly-cover=".kh-story__cover">
 <div class="kh-scrolly__steps">
 <p class="kh-scrolly__cover-note" hidden>Each dot is one thing the plugin reads or writes. As the story names them, they gather: the content schemas, the 540 brand variables (69 of them set per brand, in blue), the 25 component families, and, last, the 297 component variants.</p>
-<p class="kh-story-themes"><strong>One change, everywhere</strong> | <strong>Designers' edits kept</strong> | <strong>Mismatches with an address</strong></p>
 {{ orgIntro(org) }}
 <!--
   OPENING BEATS. The dots start scattered (the first frame on load, no
@@ -182,7 +181,7 @@ image_meta:
 
 {% endmarkdown %}
 </div>
-<div class="kh-scrolly__section" data-scrolly-steps="1 1.1 1.2"><div class="kh-scrolly__section" data-scrolly-steps="1 1.1 1.2">
+<div class="kh-scrolly__section" data-scrolly-steps="1 1.1 1.2">
 {% markdown %}
 
 ## Where did the truth come from?
@@ -238,7 +237,7 @@ image_meta:
   BRAND STUDIO (stage 1.3). Its heading and intro are prose here, in the step
   column; the live studio (built by mangrove-map.js into #mangrove-brand-studio)
   is a panel shown in the graphic column while this stage is active. The
-  <figure> inside it is the no-JS / RSS fallback. Narrow screens show the
+  short paragraph inside it is the no-JS / RSS fallback. Narrow screens show the
   studio in the flow, with the band released.
 -->
 <div class="kh-scrolly__section" data-scrolly-steps="1.3">
@@ -246,13 +245,10 @@ image_meta:
 <p>Switch brands on the Book Card. The content stays the same throughout: brand settings change how it looks, and Storybook decides how it is laid out.</p>
 </div>
 <div id="mangrove-brand-studio" class="kh-scrolly__panel" data-scrolly-panel="studio" data-pagefind-ignore>
-  <figure>
-    <img eleventy:ignore class="kh-figure__image" src="/images/blog/mangrove-figma-brand-token-matrix.svg" alt="Five-brand token matrix comparing UNDRR, DELTA Resilience, IRP, MCR2030 and PreventionWeb, showing that 471 of 540 variables are shared">
-    <figcaption class="kh-figure__caption">Hold the schema, swap the tokens: 471 of 540 Figma variables (87.2%) are the same in all five brands, and the brand modes change colour, radius and surfaces without changing what the card is made of. Own work.</figcaption>
-  </figure>
+  <p class="kh-scrolly__panel-fallback">The interactive brand switcher needs JavaScript. In short: 471 of 540 Figma variables (87.2%) are the same in all five brands; the rest change colour, corners and button sizing without changing what the card is made of.</p>
 </div>
 <script src="/mangrove-map.js" defer></script>
-<div class="kh-scrolly__section" data-scrolly-steps="2 2.05 2.1"><div class="kh-scrolly__section" data-scrolly-steps="2 2.05 2.1">
+<div class="kh-scrolly__section" data-scrolly-steps="2 2.05 2.1">
 {% markdown %}
 
 ## What does Storybook add?
@@ -309,7 +305,7 @@ image_meta:
   </svg>
   <figcaption class="kh-figure__caption">Storybook is where the two sources meet. It takes fields from the schema and values from the tokens, and adds the layout. Own work.</figcaption>
 </figure>
-<div class="kh-scrolly__section" data-scrolly-steps="3 3.1 3.2"><div class="kh-scrolly__section" data-scrolly-steps="3 3.1 3.2">
+<div class="kh-scrolly__section" data-scrolly-steps="3 3.1 3.2">
 {% markdown %}
 
 ## How is the Figma library built?
@@ -390,7 +386,7 @@ image_meta:
   </div>
   <figcaption class="kh-figure__caption">The schema's four Book Card presets as Figma variant properties, next to brand-specific Tag tokens. Own work.</figcaption>
 </figure>
-<div class="kh-scrolly__section" data-scrolly-steps="4 4.1 4.2 4.3"><div class="kh-scrolly__section" data-scrolly-steps="4 4.1 4.2 4.3">
+<div class="kh-scrolly__section" data-scrolly-steps="4 4.1 4.2 4.3">
 {% markdown %}
 
 ## What happened when the sources disagreed?
@@ -456,7 +452,7 @@ image_meta:
   </svg>
   <figcaption class="kh-figure__caption">Two bugs sat on the lines between a source and Figma. The third sat in a source itself, and its fix flowed down to Storybook and Figma. Own work.</figcaption>
 </figure>
-<div class="kh-scrolly__section" data-scrolly-steps="5 5.1"><div class="kh-scrolly__section" data-scrolly-steps="5 5.1">
+<div class="kh-scrolly__section" data-scrolly-steps="5 5.1">
 {% markdown %}
 
 ## What did a token change prove?

@@ -268,24 +268,6 @@
     transition-duration: 0.3s;
   }
 
-  // Design tokens rise into place beside the schemas when their paragraph
-  // arrives, rather than appearing with the schemas as a pair.
-  .kh-sv__rise {
-    transform: translateY(70px);
-    transition: opacity 0.6s ease, color 0.45s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-
-  .kh-sv__rise.is-on {
-    transform: none;
-    transition-duration: 0.3s, 0.3s, 0.5s;
-  }
-
-  // On the way out it fades in place and only drops back once invisible:
-  // sliding away while visible left lines pointing at an empty spot.
-  .kh-sv__rise:not(.is-on) {
-    transition: opacity 0.6s ease, color 0.45s ease, transform 0s linear 0.6s;
-  }
-
   // Anything that labels or decorates a line or box leaves faster than the
   // thing it belongs to, so it is never left floating on its own.
   .kh-sv__label:not(.is-on),

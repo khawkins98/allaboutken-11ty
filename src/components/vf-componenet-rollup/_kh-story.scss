@@ -101,7 +101,6 @@
   }
 
   .kh-story__body > .kh-bleed-out,
-  .kh-story__body > .kh-story__graphic-col,
   .kh-story__body > .kh-scrolly--enhanced {
     box-sizing: border-box;
     margin-left: calc((100% - var(--kh-story-wide)) / 2);
@@ -116,17 +115,6 @@
     background: none;
     margin-bottom: 3rem;
     margin-top: 3rem;
-  }
-
-  // Optional one-line strap of result themes at the top of the body: reads
-  // as the last line of the cover.
-  .kh-story-themes {
-    color: var(--kh-color--grey--darkest);
-    font-family: var(--kh-font-mono);
-    font-size: 0.8rem;
-    letter-spacing: 0.04em;
-    text-align: center;
-    text-transform: uppercase;
   }
 
   // The cover adopted into a scrolly region's step column (the script moves
@@ -158,10 +146,6 @@
     font-size: clamp(1.1rem, 1.5vw, 1.3rem);
     margin: 0 0 1.25rem;
     max-width: none;
-  }
-
-  .kh-scrolly--enhanced .kh-story-themes {
-    text-align: left;
   }
 
   // Inside the region the closing chain is the graphic's final state, so the
@@ -223,46 +207,6 @@
       column-gap: 3rem;
       grid-template-columns: var(--kh-story-steps) minmax(0, 1fr);
     }
-
-    // A figure that lines up with the scrolly graphic column, so an image
-    // between regions shares the diagram's left and right edges.
-    // The image takes the graphic column and its caption sits in the step
-    // column beside it, read the same way as the scrolly prose. The image
-    // transform wraps <img> in <picture>, so place both.
-    .kh-story__body > .kh-story__graphic-col {
-      align-items: center;
-      column-gap: 3rem;
-      display: grid;
-      grid-template-columns: var(--kh-story-steps) minmax(0, 1fr);
-
-      > picture,
-      > img {
-        grid-column: 2;
-        grid-row: 1;
-      }
-
-      > figcaption {
-        font-size: 1rem;
-        grid-column: 1;
-        grid-row: 1;
-        margin: 0;
-      }
-    }
-  }
-
-  .kh-story__body > .kh-story__graphic-col {
-    margin-bottom: 3rem;
-    margin-top: 3rem;
-  }
-
-  // Never upscale a screenshot past its pixels. The column is often wider
-  // than the largest variant the image transform makes (it never upscales,
-  // so a 685px source tops out at its 600w variant), and stretching blurs
-  // UI text. A figure sets --kh-story-native to that width; the image then
-  // sits at native size, left-aligned in the column.
-  .kh-story__body > .kh-story__graphic-col img {
-    height: auto;
-    max-width: min(100%, var(--kh-story-native, 100%));
   }
 
   // Images fill their track: a plate the wide track, a figure the column.
