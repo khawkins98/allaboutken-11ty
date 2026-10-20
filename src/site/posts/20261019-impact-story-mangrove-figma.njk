@@ -24,7 +24,7 @@ image_meta:
 ---
 {% from "partials/orgs.njk" import orgIntro %}
 
-<!--
+{#
   ==============================================================================
   NARRATIVE BRIEF (2026-10-19, structure revised 2026-10-20 for the single
   persistent graphic). Read this before touching visuals.
@@ -124,9 +124,9 @@ image_meta:
     src/site/mangrove-map.js is live. The five static figures and the closing
     <ol> stay in the markup as the no-JS, CSS-off and RSS version.
   ==============================================================================
--->
+#}
 
-<!--
+{#
   THE REGION. One .kh-scrolly for the whole body. src/site/mangrove-scrolly.js
   builds one SVG, inserts it as .kh-scrolly__graphic and pins it beside the
   prose from the cover to the closing figures. data-scrolly-cover names the
@@ -141,12 +141,12 @@ image_meta:
   figures (.kh-scrolly__static) stay in the markup as the no-JS, CSS-off and
   RSS fallback; enhanced CSS hides them. .kh-scrolly__define asides hold the
   term definitions (edit the copy here, nowhere else).
--->
+#}
 <div class="kh-scrolly" data-scrolly-initial="cover" data-scrolly-cover=".kh-story__cover">
 <div class="kh-scrolly__steps">
 <p class="kh-scrolly__cover-note" hidden>Each dot is one thing the plugin reads or writes. As the story names them, they gather: the content schemas, the 540 brand variables (69 of them set per brand, in blue), the 25 component families, and, last, the 297 component variants.</p>
 {{ orgIntro(org) }}
-<!--
+{#
   OPENING BEATS. The dots start scattered (the first frame on load, no
   animation) and gather as the story names them: the schemas with the
   second paragraph (c1), the brand variables and component families with
@@ -154,7 +154,7 @@ image_meta:
   Figma side through "Why isn't this a solved problem?" (w). Figma itself
   is not exposed until stage 3. Short step gaps: these are reading
   paragraphs, not diagram beats.
--->
+#}
 <div class="kh-scrolly__section" data-scrolly-steps="c0 c1 c2 c2" data-scrolly-short>
 {% markdown %}
 
@@ -202,7 +202,7 @@ image_meta:
 
 {% endmarkdown %}
 </div>
-<!--
+{#
   SCROLLY STAGE 1 -- "Where did the truth come from?"
   Intent: two independent sources of truth exist before any rendering
   environment does.
@@ -215,7 +215,7 @@ image_meta:
       shared core and 69 splitting off by brand. This is the one place in the
       story where the 87.2% is shown rather than stated.
   The brand studio follows directly as the hands-on version of this stage.
--->
+#}
 <figure class="kh-bleed-out kh-scrolly__static" data-pagefind-ignore>
   <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-1-title mg-stage-1-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
     <title id="mg-stage-1-title">Stage 1: two independent sources of truth</title>
@@ -233,13 +233,13 @@ image_meta:
   </svg>
   <figcaption class="kh-figure__caption">Two sources of truth, defined independently: schemas say what a component is made of; tokens say how it looks in each brand. Own work.</figcaption>
 </figure>
-<!--
+{#
   BRAND STUDIO (stage 1.3). Its heading and intro are prose here, in the step
   column; the live studio (built by mangrove-map.js into #mangrove-brand-studio)
   is a panel shown in the graphic column while this stage is active. The
   short paragraph inside it is the no-JS / RSS fallback. Narrow screens show the
   studio in the flow, with the band released.
--->
+#}
 <div class="kh-scrolly__section" data-scrolly-steps="1.3">
 <h3>Hold the content, swap the brand</h3>
 <p>Switch brands on the Book Card. The content stays the same throughout: brand settings change how it looks, and Storybook decides how it is laid out.</p>
@@ -265,7 +265,7 @@ image_meta:
 
 {% endmarkdown %}
 </div>
-<!--
+{#
   SCROLLY STAGE 2 -- "What does Storybook add?"
   Intent: the two peers combine in Storybook; layout is the only new
   ingredient.
@@ -280,7 +280,7 @@ image_meta:
       If that colour coding is used, carry it through every later stage: it is
       how the reader will recognise which source a bug belongs to in stage 4.
     - Figma still absent.
--->
+#}
 <figure class="kh-bleed-out kh-scrolly__static" data-pagefind-ignore>
   <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-2-title mg-stage-2-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
     <title id="mg-stage-2-title">Stage 2: Storybook adds layout</title>
@@ -320,7 +320,7 @@ image_meta:
 
 {% endmarkdown %}
 </div>
-<!--
+{#
   SCROLLY STAGE 3 -- "How is the Figma library built?"  (CLIMAX STATE)
   Intent: the full triangle. Figma, from a different lineage, is located by
   reading each fixed point for the one thing it owns.
@@ -337,7 +337,7 @@ image_meta:
       meeting at a point. That IS the metaphor; it is worth getting right.
   Stage 4 and stage 5 are both modes of this exact geometry. Do not move nodes
   after this point.
--->
+#}
 <figure class="kh-bleed-out kh-scrolly__static" data-pagefind-ignore>
   <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-3-title mg-stage-3-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
     <title id="mg-stage-3-title">Stage 3: the plugin reads all three sources</title>
@@ -375,11 +375,11 @@ image_meta:
   </svg>
   <figcaption class="kh-figure__caption">The plugin asks each source the one question it owns, so Figma is located by three fixed points rather than copied from the nearest one. Own work.</figcaption>
 </figure>
-<!--
+{#
   The Figma result (stage 3.3): a panel in the graphic column, caption in the
   step column. The source PNG is only 685px wide, so it is capped at its
   600w variant (--kh-story-native) rather than upscaled.
--->
+#}
 <figure class="kh-scrolly__panel-fig" data-scrolly-stage="3.3" style="--kh-story-native: 600px">
   <div class="kh-scrolly__panel" data-scrolly-panel="figma">
     <img class="kh-figure__image" src="/images/blog/mangrove-figma-card-presets-and-brand-tags.png" alt="Figma canvas showing Horizontal Book Card component presets (Default, NoImage, NoLink, ButtonOnly) alongside layer panels displaying Tag integration across MCR2030 and PreventionWeb brands">
@@ -401,7 +401,7 @@ image_meta:
 
 {% endmarkdown %}
 </div>
-<!--
+{#
   SCROLLY STAGE 4 -- "What happened when the sources disagreed?"
   Intent: a mismatch has an address. Then the turn: sometimes the address is
   a source, not an edge.
@@ -419,7 +419,7 @@ image_meta:
        a source is the thing that was wrong; make it visibly different from
        1 and 2 (node vs edge).
   End state: two orange edges plus one orange node.
--->
+#}
 <figure class="kh-bleed-out kh-scrolly__static" data-pagefind-ignore>
   <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-4-title mg-stage-4-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
     <title id="mg-stage-4-title">Stage 4: two bugs on edges, one in a source</title>
@@ -463,7 +463,7 @@ image_meta:
 
 {% endmarkdown %}
 </div>
-<!--
+{#
   SCROLLY STAGE 5 -- "What did a token change prove?"  (RESOLUTION)
   Intent: the flow reverses. Until now Figma reached back to read its sources;
   here a change starts at a source and arrives in a designer's file intact.
@@ -477,7 +477,7 @@ image_meta:
     - Optional: the pulse runs back on "restore" to show the baseline returns.
   Use a colour distinct from stage 4's orange: this is a healthy change, not
   a fault.
--->
+#}
 <figure class="kh-bleed-out kh-scrolly__static" data-pagefind-ignore>
   <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-5-title mg-stage-5-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
     <title id="mg-stage-5-title">Stage 5: a token change flows through to Figma</title>
@@ -512,10 +512,10 @@ image_meta:
   </svg>
   <figcaption class="kh-figure__caption">The flow reverses: a spacing token changed at the source reached a designer's pilot file, and their edits survived. Own work.</figcaption>
 </figure>
-<!--
+{#
   Cost and reflection: ordinary prose over a resting diagram (stage 6). On
   narrow screens the band is released for this stretch.
--->
+#}
 <div class="kh-scrolly__section" data-scrolly-steps="6" data-scrolly-plain>
 {% markdown %}
 

@@ -121,6 +121,9 @@ module.exports = function(config) {
   config.addFilter("sanitizeFeedHtml", (content) => {
     const html = String(content || '');
     return html
+      // drop HTML comments: authoring notes left in a post are not for
+      // subscribers (template comments should use {# #}, but this is the net)
+      .replace(/<!--[\s\S]*?-->/g, '')
       // remove script/style/link/iframe blocks
       .replace(/<script[\s\S]*?<\/script>/gi, '')
       .replace(/<style[\s\S]*?<\/style>/gi, '')

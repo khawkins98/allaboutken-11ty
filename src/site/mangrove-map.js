@@ -96,40 +96,6 @@
       },
     };
 
-    const presets = {
-      default: {
-        id: 'default',
-        title: 'Default (Bali GP2022 Fixture)',
-        showImage: true,
-        showLink: true,
-        showButton: true,
-        desc: 'Canonical publication teaser: 160×240 complete cover artwork, content tag, 2-line title, body, and action button.'
-      },
-      noimage: {
-        id: 'noimage',
-        title: 'Without an Image',
-        showImage: false,
-        showLink: true,
-        showButton: true,
-        desc: 'Content-only mode: image collapses, content container fills full card width, passing checkPhotoCardEdges assertions.'
-      },
-      nolink: {
-        id: 'nolink',
-        title: 'Without a Link',
-        showImage: true,
-        showLink: false,
-        showButton: false,
-        desc: 'Static educational archive: headline and container are unlinked, button CTA is hidden, metadata stays intact.'
-      },
-      buttononly: {
-        id: 'buttononly',
-        title: 'Button Only',
-        showImage: true,
-        showLink: false,
-        showButton: true,
-        desc: 'Isolated action mode: card background is unlinked, primary action button handles the single interaction target.'
-      }
-    };
 
     // The studio's heading and intro are prose in the post (the step that
     // brings this panel up); this is the interactive part only: controls,
@@ -197,16 +163,14 @@
     const liveVisual = container.querySelector('#live-card-visual');
     const liveTag = container.querySelector('#live-card-tag');
     const liveTitle = container.querySelector('#live-card-title');
-    const liveBtn = container.querySelector('#live-card-btn');
     const liveSvgBanner = container.querySelector('#live-svg-banner');
     const liveAssertionBadge = container.querySelector('#live-assertion-badge');
     const inspectorContent = container.querySelector('#inspector-content');
     const inspectorBrand = container.querySelector('#inspector-brand');
 
+    // One point only: hold the content, swap the brand. The card always
+    // shows its default preset (cover, linked title, button).
     let currentBrand = 'undrr';
-    // The preset toggles were removed: the studio makes one point (hold the
-    // content, swap the brand). The default preset stays as the fixed case.
-    const currentPreset = 'default';
 
     function renderInspector() {
       const b = brands[currentBrand];
@@ -226,7 +190,6 @@
 
     function updateCard() {
       const b = brands[currentBrand];
-      const p = presets[currentPreset];
 
       liveCard.style.setProperty('--live-btn-bg', b.primary);
       liveCard.style.setProperty('--live-btn-radius', b.btnRadius);
@@ -244,31 +207,13 @@
       liveTag.textContent = b.tagLabel;
       liveSvgBanner.setAttribute('fill', b.primary);
 
-      if (p.showImage) {
-        liveVisual.style.display = 'block';
-      } else {
-        liveVisual.style.display = 'none';
-      }
+      // A preview, not a destination: show the linked state without a dead
+      // link (it used to be href="javascript:void(0)").
+      liveTitle.innerHTML = '<span class="kh-live-card__title-link">Global Assessment Report on Disaster Risk Reduction</span>';
 
-      if (p.showButton) {
-        liveBtn.style.display = 'inline-block';
-      } else {
-        liveBtn.style.display = 'none';
-      }
-
-      if (p.showLink) {
-        // A preview, not a destination: show the linked state without a dead
-        // link (it used to be href="javascript:void(0)").
-        liveTitle.innerHTML = '<span class="kh-live-card__title-link">Global Assessment Report on Disaster Risk Reduction</span>';
-      } else {
-        liveTitle.textContent = 'Global Assessment Report on Disaster Risk Reduction';
-      }
-
-      liveAssertionBadge.textContent = p.showImage 
-        ? (b.layout === 'title-first'
-          ? `cardGeometryChecks.js: ALL ASSERTIONS PASSING (title-first layout, same fields, ${b.name} tokens bound)`
-          : `cardGeometryChecks.js: ALL ASSERTIONS PASSING (1:1.414 ratio, 0px border bleed, ${b.name} tokens bound)`)
-        : `cardGeometryChecks.js: PASS (Content reflows to clientWidth: 520px, 0px image delta)`;
+      liveAssertionBadge.textContent = titleFirst
+        ? `cardGeometryChecks.js: ALL ASSERTIONS PASSING (title-first layout, same fields, ${b.name} tokens bound)`
+        : `cardGeometryChecks.js: ALL ASSERTIONS PASSING (1:1.414 ratio, 0px border bleed, ${b.name} tokens bound)`;
 
       renderInspector();
     }
