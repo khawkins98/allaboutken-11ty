@@ -55,6 +55,9 @@
   );
 
   flows.forEach((flow) => {
+    // Inside an enhanced scrolly region the chain is the pinned graphic's
+    // closing state and the <ol> is hidden; nothing here to draw.
+    if (flow.closest('.kh-scrolly--enhanced')) return;
     const steps = flow.querySelectorAll('.kh-story-flow__step');
     steps.forEach((step, i) => step.style.setProperty('--i', i));
     flow.style.setProperty('--kh-flow-n', steps.length);

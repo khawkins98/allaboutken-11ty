@@ -777,72 +777,32 @@
   // Interactive Brand Studio (mangrove-map.js, #mangrove-brand-studio)
   // ------------------------------------------------------------------
   // Flat on the page ground, in the scrolly diagram's language: no panel.
-  // Wide (>= lg): the same two tracks as a scrolly region (_kh-story.scss),
-  // step column + 3rem + graphic column, so its edges line up with the
-  // diagram above and below. Heading and "what changes" sit in the step
-  // column; controls, the live card and its check sit in the graphic column.
-  // Narrow: one column in reading order, aligned to the reading measure.
-  // The card is framed like a diagram node (2px dark, rounded); the
-  // "what changes" list is a callout card with a dark term pill; the toggles
-  // are the same pill, dark when pressed and outlined when not.
-  // Its host is a .kh-bleed-out, which paints an opaque ground for plates.
-  // The studio is flat on the grid paper like the diagram, so clear it.
-  .kh-bleed-out:has(> .kh-brand-studio) {
-    background: none;
-  }
-
+  // The studio is the interactive part only (toggles, the live card and its
+  // check, "what changes"); its heading and intro are prose in the story's
+  // step column. It sits in a scrolly panel: in the flow on narrow screens,
+  // over the pinned graphic on wide ones (see _kh-scrolly.scss), so it is
+  // one column either way. The card is framed like a diagram node (2px
+  // dark, rounded); the "what changes" list is a callout card with a dark
+  // term pill; the toggles are the same pill, dark when pressed and outlined
+  // when not.
   .kh-brand-studio {
     color: var(--kh-color--text);
     display: flex;
     flex-direction: column;
     font-family: var(--kh-font-sans);
-    gap: 1.5rem;
+    gap: 1.25rem;
     margin: 0 auto;
     max-width: var(--kh-story-measure, 39rem);
+    width: 100%;
 
     * {
       box-sizing: border-box;
-    }
-
-    @media (min-width: $kh-breakpoint--lg) {
-      column-gap: 3rem;
-      display: grid;
-      // Words in the step column, everything you look at or read values
-      // from (toggles, card, badge, "what changes") in the graphic column,
-      // as with the scrolly diagram.
-      grid-template-areas:
-        'header demo'
-        '.      inspector';
-      grid-template-columns: var(--kh-story-steps, 20rem) minmax(0, 1fr);
-      grid-template-rows: auto auto;
-      max-width: none;
-      row-gap: 1.75rem;
-    }
-
-    &__header {
-      grid-area: header;
-    }
-
-    // Matches the prose h3 (27px / 600): the static Plex faces are 400/600.
-    &__title {
-      color: var(--kh-color--text);
-      font-size: 27px;
-      font-weight: 600;
-      line-height: 1.333;
-      margin: 0 0 0.75rem;
-    }
-
-    &__subtitle {
-      font-size: 1.125rem;
-      line-height: 1.6;
-      margin: 0;
     }
 
     &__demo {
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
-      grid-area: demo;
       min-width: 0;
     }
 
@@ -971,13 +931,11 @@
 
     // "What changes": a callout card, as in the diagram.
     &__inspector {
-      align-self: start;
+      align-self: stretch;
       background: var(--kh-ground);
       border: 1px solid var(--kh-color--text);
       font-size: 15px;
-      grid-area: inspector;
       line-height: 1.5;
-      max-width: 34rem;
       padding: 0.8rem 0.95rem 0.9rem;
     }
 

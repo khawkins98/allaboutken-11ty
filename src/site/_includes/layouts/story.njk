@@ -17,14 +17,28 @@ templateEngineOverride: njk
       - Body content written as a sequence of top-level blocks. Each one sits
         in a single centred reading column unless it is:
           .kh-scrolly              -- a scroll-driven region; spans the page
-                                      once its script adds .kh-scrolly--enhanced
+                                      once its script adds .kh-scrolly--enhanced.
+                                      A region may be the WHOLE body (one
+                                      graphic pinned from the cover to the
+                                      close): give it data-scrolly-cover with
+                                      a selector for the cover below, and the
+                                      script adopts the cover into the region's
+                                      step column, leaving no-JS and RSS readers
+                                      the plain title page. Blocks inside such
+                                      a region that belong in the graphic
+                                      column (an interactive, a screenshot)
+                                      carry data-scrolly-panel; see
+                                      _kh-scrolly.scss.
           .kh-bleed-out            -- a full-width plate (screenshot,
                                       interactive, wide figure)
           .kh-story-themes         -- optional one-line strap of result themes,
                                       styled as part of the opening
           .kh-story-flow           -- optional closing chain of figures (an
                                       <ol> of node boxes joined by arrows);
-                                      /story-flow.js counts them in
+                                      /story-flow.js counts them in, unless the
+                                      chain sits inside an enhanced region, where
+                                      the region's graphic is the ending and the
+                                      <ol> is the RSS / no-JS version
       - Any script the regions need, loaded by the post itself.
 
     What it changes relative to post.njk:
@@ -33,9 +47,11 @@ templateEngineOverride: njk
       - `image` is shown as a closing plate after the body rather than as a
         lead screenshot above it. To close on something AFTER the plate (a
         final visual), set `story_plate: body` and place the plate in the
-        body with {% include "partials/story-plate.njk" %}; everything then
-        sits in the body, so the RSS feed carries it too. `image` still
-        feeds listings, thumbnails and the JSON-LD either way.
+        body, either with {% include "partials/story-plate.njk" %} or with
+        your own figure built from `image` / `image_meta` (a region may want
+        it as a panel); everything then sits in the body, so the RSS feed
+        carries it too. `image` still feeds listings, thumbnails and the
+        JSON-LD either way.
       - Date, word count, topics, ref and contents move to a colophon at the
         end, ahead of the entry foot.
 

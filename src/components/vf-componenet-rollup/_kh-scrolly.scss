@@ -2,13 +2,21 @@
 
 // Scrollytelling: sticky graphic + scrolling prose steps
 // -------------------------------------------------------
-// Used by the Mangrove impact story (src/site/mangrove-scrolly.js). Every
-// class styled here is either `.kh-scrolly--enhanced` or something the script
-// itself adds, so without JS the region is plain prose with its static
-// figures inline. And the whole mixin sits inside the CSS-toggle scope, so
-// with the toggle off the JS-built graphic keeps its `hidden` attribute and
-// never shows. Pinning is native `position: sticky`; the script only flips
-// classes. All motion is CSS transitions, dropped under reduced motion.
+// Used by the Mangrove impact story (src/site/mangrove-scrolly.js): one
+// region, one graphic pinned beside the prose from the cover to the closing
+// figures. Every class styled here is either `.kh-scrolly--enhanced` or
+// something the script itself adds, so without JS the region is plain prose
+// with its static figures inline. And the whole mixin sits inside the
+// CSS-toggle scope, so with the toggle off the JS-built graphic keeps its
+// `hidden` attribute and never shows. Pinning is native `position: sticky`;
+// the script only flips classes. All motion is CSS transitions, dropped
+// under reduced motion.
+// Panels (`[data-scrolly-panel]`: the brand studio, the screenshots) stay in
+// the prose flow, so reading order and tab order are the document's. On
+// wide screens the active one is `position: fixed` at exactly the pinned
+// graphic's place (the script publishes --kh-scrolly-gx/-gw from the
+// graphic's box) and the diagram steps back; the others are hidden and
+// `inert`. Narrow screens show them in the flow and slide the band away.
 
 // Wide (>= lg): prose in a narrower left column, graphic pinned right. On
 // its own the region bleeds left like `.kh-bleed-out` to find the room;
@@ -38,6 +46,8 @@
     }
   }
 
+  // `transition`: narrow screens slide the band away (is-released, below)
+  // for a stretch of plain prose or a panel in the flow.
   .kh-scrolly--enhanced > .kh-scrolly__graphic {
     background: var(--kh-ground);
     border-bottom: 1px solid var(--kh-rule);
@@ -49,6 +59,7 @@
     padding: 0.5rem 0;
     position: sticky;
     top: 0;
+    transition: transform 0.4s ease;
     z-index: 4;
   }
 
@@ -92,6 +103,42 @@
 
   .kh-scrolly__step.kh-scrolly__step--last {
     margin-bottom: 0;
+  }
+
+  // Ordinary prose over one resting stage: normal spacing, no dimming.
+  .kh-scrolly__step.kh-scrolly__step--plain {
+    margin-bottom: 1.25rem;
+    opacity: 1;
+  }
+
+  // Reading paragraphs that still step the graphic (the opening beats):
+  // a shorter gap than a diagram beat, and no dimming.
+  .kh-scrolly__step.kh-scrolly__step--short {
+    margin-bottom: 12vh;
+    opacity: 1;
+  }
+
+  // The cover note (shown by the script; `hidden` in the markup, since it
+  // describes the enhanced graphic only).
+  .kh-scrolly__cover-note {
+    color: var(--kh-color--grey--darkest);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: -1.5rem 0 2rem;
+  }
+
+  // Narrow: the band slides away for a stretch of plain prose or a panel in
+  // the flow, and comes back for the next stage.
+  .kh-scrolly--enhanced > .kh-scrolly__graphic.is-released {
+    transform: translateY(-100%);
+  }
+
+  // A panel's figure: in the flow, caption as the step. On wide screens the
+  // image is lifted out (below); here it is simply a figure.
+  .kh-scrolly__panel img {
+    display: block;
+    height: auto;
+    max-width: min(100%, var(--kh-story-native, 100%));
   }
 
   // Narrow: svh, not vh. On a phone the address bar collapsing grows vh by
@@ -139,6 +186,55 @@
       height: 80vh;
       padding: 0;
       top: 10vh;
+      transition: none;
+    }
+
+    .kh-scrolly--enhanced > .kh-scrolly__graphic.is-released {
+      transform: none;
+    }
+
+    // The diagram steps back while a panel shows; the panel takes the
+    // graphic's exact box (the script publishes it) and the pointer.
+    .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-sv,
+    .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-scrolly__callouts {
+      transition: opacity 0.35s ease;
+    }
+
+    .kh-scrolly--enhanced > .kh-scrolly__graphic.is-panel .kh-sv,
+    .kh-scrolly--enhanced > .kh-scrolly__graphic.is-panel .kh-scrolly__callouts {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .kh-scrolly--enhanced .kh-scrolly__panel {
+      align-items: stretch;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      height: 80vh;
+      justify-content: center;
+      left: var(--kh-scrolly-gx, 50%);
+      margin: 0;
+      opacity: 0;
+      overflow: auto;
+      pointer-events: none;
+      position: fixed;
+      top: 10vh;
+      transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+      visibility: hidden;
+      width: var(--kh-scrolly-gw, 45%);
+      z-index: 5;
+    }
+
+    .kh-scrolly--enhanced .kh-scrolly__panel.is-on {
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 0.35s ease 0.25s, visibility 0s linear 0.25s;
+      visibility: visible;
+    }
+
+    .kh-scrolly--enhanced .kh-scrolly__panel img {
+      margin: 0 auto;
     }
   }
 
@@ -442,24 +538,178 @@
     stroke-width: 2.75;
   }
 
-  // Stage 1: the token node resolves into its 540 tokens, then folds back.
+  // The dots. Each sits at the origin and is placed by --x/--y (set by the
+  // script per layout); --dl is a per-dot stagger set once at build. Size
+  // changes are a scale in the same transform: `r` is an attribute, because
+  // Firefox ignores it as a CSS property.
+  //   cloud    the cover's scatter (one frame, then travel)
+  //   settled  clusters in the four box regions; a named cluster (its box
+  //            is drawn, data-named) drops to a faint texture under it
+  //   spread   the 540 laid out beside the tokens box (stage 1.1)
+  //   chain    regrouped under the closing figures
   .kh-sv__dot {
+    --kh-dot-s: 1;
     fill: currentColor;
-    opacity: 0.5;
-    transform: translate(var(--kh-sv-dx, 0), var(--kh-sv-dy, 0)) scale(0.2);
+    opacity: 0.82;
+    transform: translate(var(--x, 0), var(--y, 0)) scale(calc(var(--kh-dot-s) * var(--kh-dot-m, 1)));
     transform-box: fill-box;
     transform-origin: center;
-    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.2s ease;
-    transition-delay: calc(var(--kh-sv-i, 0) * 1ms), 0s;
+    transition: transform 1.5s cubic-bezier(0.22, 0.8, 0.25, 1) var(--dl, 0s), opacity 0.6s ease, fill 0.5s ease;
+  }
+
+  .kh-sv.is-jump .kh-sv__dot {
+    transition: none;
   }
 
   .kh-sv__dot--brand {
     fill: var(--kh-color--blue);
+  }
+
+  // Not yet gathered: scattered and quiet. The variants' drift (settled,
+  // spread) is quieter still: not a cluster yet, not in the story yet.
+  .kh-sv[data-dots='cloud'] .kh-sv__dot,
+  .kh-sv[data-dots='c1'] .kh-sv__dot:not(.kh-sv__dot--S),
+  .kh-sv[data-dots='c2'] .kh-sv__dot--F {
+    opacity: 0.4;
+  }
+
+  .kh-sv[data-dots='settled'] .kh-sv__dot--F {
+    opacity: 0.22;
+  }
+
+  // While a cluster is being explained, the others step back.
+  .kh-sv[data-cluster-focus] .kh-sv__dot {
+    opacity: 0.12;
+  }
+
+  .kh-sv[data-cluster-focus='S'] .kh-sv__dot--S,
+  .kh-sv[data-cluster-focus='T'] .kh-sv__dot--T,
+  .kh-sv[data-cluster-focus='B'] .kh-sv__dot--B,
+  .kh-sv[data-cluster-focus='F'] .kh-sv__dot--F {
+    opacity: 0.9;
+  }
+
+  .kh-sv[data-named~='S'] .kh-sv__dot--S,
+  .kh-sv[data-named~='T'] .kh-sv__dot--T,
+  .kh-sv[data-named~='B'] .kh-sv__dot--B,
+  .kh-sv[data-named~='F'] .kh-sv__dot--F {
+    --kh-dot-s: 0.8;
+    opacity: 0.07;
+  }
+
+  // Spread: the 540 at reading size, the other clusters stepping back.
+  .kh-sv[data-dots='spread'] .kh-sv__dot--T {
+    --kh-dot-s: 1.7;
+    opacity: 0.5;
+  }
+
+  .kh-sv[data-dots='spread'] .kh-sv__dot--T.kh-sv__dot--brand {
     opacity: 1;
   }
 
-  .kh-sv__dots.is-on .kh-sv__dot {
-    transform: none;
+  .kh-sv[data-dots='spread'] .kh-sv__dot--B,
+  .kh-sv[data-dots='spread'] .kh-sv__dot--F {
+    opacity: 0.1;
+  }
+
+  // The 56 linked instances exist only in the close.
+  .kh-sv:not([data-dots='chain']) .kh-sv__dot--K,
+  .kh-sv__dotcopy {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .kh-sv[data-dots='chain'] .kh-sv__dot--S {
+    opacity: 0;
+  }
+
+  .kh-sv[data-dots='chain'] .kh-sv__dot--T {
+    --kh-dot-s: 0.38;
+    opacity: 0.75;
+  }
+
+  .kh-sv[data-dots='chain'] .kh-sv__dot--B {
+    --kh-dot-s: 1.1;
+    opacity: 0.85;
+  }
+
+  .kh-sv[data-dots='chain'] .kh-sv__dot--F {
+    opacity: 0.7;
+  }
+
+  .kh-sv[data-dots='chain'] .kh-sv__dot--K {
+    --kh-dot-s: 1.1;
+    fill: var(--kh-sv-good);
+    opacity: 0.95;
+    transition-delay: 1.2s;
+  }
+
+  // The other four brands' blocks of 540 (pattern-filled), once the first
+  // has arrived.
+  .kh-sv[data-dots='chain'] .kh-sv__dotcopy {
+    opacity: 0.75;
+    transition-delay: var(--d, 1.3s);
+  }
+
+  .kh-sv__ptdot {
+    fill: var(--kh-color--text);
+  }
+
+  // Cluster labels on the cover: quiet, and gone when the box names them.
+  .kh-sv__label--cover {
+    fill: var(--kh-color--grey--darkest);
+    font-size: min(12.5px, calc(13.5px / var(--kh-sv-s, 1)));
+  }
+
+  // The closing figures: boxes draw themselves in (pathLength 1), then the
+  // number, its unit as a dark pill, and the sub-label. The last figure is
+  // the healthy-change green at its 4px weight, as in the diagram.
+  .kh-sv__chbox {
+    fill: var(--kh-ground);
+    stroke: currentColor;
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 1;
+    stroke-width: 2;
+    transition: stroke-dashoffset 0s linear 0.6s;
+  }
+
+  .kh-sv__chain.is-on .kh-sv__chbox {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.7s ease-in-out var(--d, 0s);
+  }
+
+  .kh-sv__chain--good .kh-sv__chbox {
+    stroke-width: 4;
+  }
+
+  .kh-sv__num {
+    fill: currentColor;
+    font-size: min(28px, calc(30px / var(--kh-sv-s, 1)));
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-anchor: middle;
+  }
+
+  .kh-sv__pill rect {
+    fill: currentColor;
+  }
+
+  .kh-sv__pill text {
+    fill: var(--kh-ground);
+    font-size: min(11.5px, calc(12.5px / var(--kh-sv-s, 1)));
+    font-weight: 700;
+    text-anchor: middle;
+  }
+
+  .kh-sv__chsub {
+    fill: var(--kh-color--grey--darkest);
+    font-size: min(11px, calc(12px / var(--kh-sv-s, 1)));
+    text-anchor: middle;
+  }
+
+  .kh-sv__line--chain {
+    stroke-width: 2;
   }
 
   // Dot groups can be hovered: the whole group (block or column, with its
@@ -517,6 +767,13 @@
       margin-bottom: 24svh;
     }
 
+    // A panel in the flow sits right under the step that introduces it,
+    // not a step-gap below.
+    .kh-scrolly--enhanced .kh-scrolly__section + .kh-scrolly__panel {
+      margin-top: calc(1.5rem - 24vh);
+      margin-top: calc(1.5rem - 24svh);
+    }
+
     // No callouts in the narrow band, so no leaders to them either.
     .kh-sv__leader {
       display: none;
@@ -530,6 +787,31 @@
     // of the Storybook box at this size.
     .kh-sv__label {
       font-size: max(13.5px, calc(10.5px / var(--kh-sv-s, 1)));
+    }
+
+    .kh-sv__label--cover {
+      font-size: max(12.5px, calc(9.5px / var(--kh-sv-s, 1)));
+    }
+
+    // Four figures across a 390px band: the pills keep a readable floor,
+    // the sub-labels step aside (the <ol> below carries them on narrow).
+    .kh-sv__pill text {
+      font-size: max(11.5px, calc(8.5px / var(--kh-sv-s, 1)));
+    }
+
+    .kh-sv__chsub {
+      display: none;
+    }
+
+    // Dots are drawn a third larger in the band. The four pattern copies of
+    // the 540 (the close's 2,700) are grey bars at this scale, so the band
+    // shows the one real block; the <ol> below carries the figure.
+    .kh-sv {
+      --kh-dot-m: 1.3;
+    }
+
+    .kh-sv__dotcopy {
+      display: none;
     }
   }
 
@@ -729,7 +1011,18 @@
     visibility: visible;
   }
 
-  // Boxes you can hover for a definition.
+  // Boxes you can hover for a definition. Only boxes, check discs and hit
+  // areas take the pointer: text, lines and anything not on would otherwise
+  // sit over a hit area and swallow the hover (an off-stage label did).
+  .kh-sv text,
+  .kh-sv__lines,
+  .kh-sv__chip,
+  .kh-sv__dots,
+  .kh-sv__chain,
+  .kh-sv__el:not(.is-on) {
+    pointer-events: none;
+  }
+
   .kh-sv__node.is-on {
     cursor: help;
   }
@@ -827,7 +1120,11 @@
     .kh-sv__line,
     .kh-sv__reveal,
     .kh-sv__box,
-    .kh-sv__dot {
+    .kh-sv__chbox,
+    .kh-sv__dot,
+    .kh-sv__dotcopy,
+    .kh-scrolly__panel,
+    .kh-scrolly--enhanced > .kh-scrolly__graphic {
       transition: none;
     }
 

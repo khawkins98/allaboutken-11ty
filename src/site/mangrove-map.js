@@ -131,17 +131,12 @@
       }
     };
 
-    // Layout (see _kh-dataviz.scss): on wide screens the studio shares the
-    // scrolly regions' grid. Heading and "what changes" sit in the step
-    // column; the controls and the card sit in the graphic column. Narrow
-    // screens stack in reading order: heading, controls, card, changes.
+    // The studio's heading and intro are prose in the post (the step that
+    // brings this panel up); this is the interactive part only: controls,
+    // the live card and its check, then "what changes". One column; the
+    // scrolly engine places the panel (see _kh-scrolly.scss).
     container.innerHTML = `
       <div class="kh-brand-studio">
-        <div class="kh-brand-studio__header">
-          <h3 class="kh-brand-studio__title">Hold the content, swap the brand</h3>
-          <p class="kh-brand-studio__subtitle">Switch brands on the Book Card. The content stays the same throughout: brand settings change how it looks, and Storybook decides how it is laid out.</p>
-        </div>
-
         <div class="kh-brand-studio__demo">
           <div class="kh-brand-studio__controls">
             <div class="kh-brand-studio__group" role="group" aria-labelledby="kh-bs-brand-label">

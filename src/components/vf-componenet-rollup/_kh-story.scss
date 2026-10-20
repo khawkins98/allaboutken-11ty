@@ -21,7 +21,9 @@
     // sideways scroll. Capped at 78rem so the margins stay balanced on wide
     // screens instead of the graphic running to the viewport edge.
     --kh-story-wide: calc(100vw - 2rem);
-    --kh-story-steps: clamp(20rem, 28vw, 23rem);
+    // The step column carries the whole story beside the pinned graphic, so
+    // it is a touch wider than a caption column: about 48 characters.
+    --kh-story-steps: clamp(21rem, 31vw, 26rem);
   }
 
   // Cover: breadcrumb + ref, title, dek, one meta line, centred as a title
@@ -127,9 +129,93 @@
     text-transform: uppercase;
   }
 
+  // The cover adopted into a scrolly region's step column (the script moves
+  // it there, see data-scrolly-cover): a left-aligned title page beside the
+  // graphic's opening state. Everything the centred cover did with the wide
+  // track is undone, since the column is the measure now.
+  .kh-scrolly--enhanced .kh-story__cover {
+    margin: 0 0 2.5rem;
+    max-width: none;
+    padding: 0;
+    text-align: left;
+
+    &::after {
+      margin: 1.5rem 0 0;
+      max-width: none;
+    }
+  }
+
+  .kh-scrolly--enhanced .kh-story__strap {
+    margin: 0 0 2rem;
+    width: auto;
+  }
+
+  .kh-scrolly--enhanced .kh-story__title {
+    font-size: clamp(2rem, 3.2vw, 2.9rem);
+  }
+
+  .kh-scrolly--enhanced .kh-story__dek {
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+    margin: 0 0 1.25rem;
+    max-width: none;
+  }
+
+  .kh-scrolly--enhanced .kh-story-themes {
+    text-align: left;
+  }
+
+  // Inside the region the closing chain is the graphic's final state, so the
+  // <ol> (kept for RSS and no-JS) and the note it carries step aside; the
+  // title and caption stay as the closing step's text.
+  .kh-scrolly--enhanced .kh-story-flow {
+    text-align: left;
+
+    .kh-story-flow__note {
+      display: none;
+    }
+
+    .kh-figure__caption {
+      margin: 0.75rem 0 0;
+    }
+  }
+
+  // Wide: the pinned graphic is the chain. Narrow: the band shows it small
+  // (numbers and units), and the <ol> stays as the legible version below.
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-scrolly--enhanced .kh-story-flow .kh-story-flow__chain {
+      display: none;
+    }
+  }
+
+  @media (max-width: $kh-breakpoint--lg-down) {
+    .kh-scrolly--enhanced .kh-story-flow .kh-story-flow__chain {
+      margin: 1.5rem 0;
+    }
+  }
+
+  .kh-scrolly--enhanced .kh-story__plate .kh-figure__caption {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .kh-scrolly--enhanced .kh-story-flow__title {
+    margin-bottom: 0.75rem;
+  }
+
   @media (min-width: $kh-breakpoint--lg) {
     .kh-story {
       --kh-story-wide: min(100vw - 6rem, 78rem);
+    }
+
+    // The cover fills a screen beside the constellation, title centred on
+    // the graphic's height.
+    .kh-scrolly--enhanced .kh-story__cover {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 70vh;
+      padding-top: 10vh;
     }
 
     // Steps + graphic as one centred composition on the wide track.
@@ -184,6 +270,12 @@
   .kh-story__body > figure img {
     height: auto;
     width: 100%;
+  }
+
+  // Inside an enhanced region the plate is a panel; its image keeps the
+  // panel's cap rather than filling the (fixed) panel's width blindly.
+  .kh-scrolly--enhanced .kh-story__plate img {
+    width: auto;
   }
 
   // The lead image, moved from the opening to a closing plate.

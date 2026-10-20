@@ -1,21 +1,39 @@
-// Mangrove impact story: scroll-driven triangulation diagram.
+// Mangrove impact story: one persistent scroll-driven diagram, cover to close.
 //
-// Progressive enhancement over the five static <svg> figures in
-// 20261019-impact-story-mangrove-figma.njk. Without this script (or with the
-// site CSS toggle off) the reader gets those figures inline, unchanged.
+// Progressive enhancement over the five static <svg> figures and the closing
+// <ol> in 20261019-impact-story-mangrove-figma.njk. Without this script (or
+// with the site CSS toggle off) the reader gets those inline, unchanged.
 //
 // How it works
-//   - Each `.kh-scrolly` region gets ONE shared SVG, built here, inserted as
-//     `.kh-scrolly__graphic` (with the `hidden` attribute, which only the
-//     toggle-scoped CSS overrides, so CSS-off readers never see it).
+//   - The post body is ONE `.kh-scrolly` region. It gets one SVG, built here,
+//     inserted as `.kh-scrolly__graphic` (with the `hidden` attribute, which
+//     only the toggle-scoped CSS overrides, so CSS-off readers never see it)
+//     and pinned beside the prose for the whole story.
+//   - The page's cover (layouts/story.njk renders it above the body) is
+//     adopted into the region's step column (`data-scrolly-cover`), so the
+//     title page sits beside the opening constellation on wide screens while
+//     no-JS and RSS readers keep the plain cover.
+//   - The diagram has three lives. COVER: a constellation of dots, each one a
+//     real thing the plugin reads or writes (540 Figma variables, 69 of them
+//     brand-specific; 297 variants; 25 families; the schemas as an unnumbered
+//     cluster), scattered (seeded) across the graphic on load. Scrolling
+//     gathers them in story order: schemas, then variables and families,
+//     then a faint drift of variants on the Figma side; Figma itself is not
+//     exposed until its section. BODY: the boxes draw themselves around the
+//     clusters as the sections name them, and the stages play (sources,
+//     Storybook, Figma reads all three, faults, token change). CLOSE: the
+//     triangle crossfades to the flow of numbers and the dots regroup under
+//     the figures they honestly count.
 //   - Each `.kh-scrolly__section[data-scrolly-steps]` lists one stage per
-//     paragraph, e.g. "4 4.1 4.2 4.3". Paragraph N drives stage N (extra
-//     paragraphs reuse the last stage). If it lists one MORE stage than it
-//     has paragraphs, the first stage is a lead step owned by the heading.
-//   - An IntersectionObserver watches a thin band across the viewport; any
-//     step crossing it triggers a recompute of "last step whose top is above
-//     the trigger line". That stage's spec (STAGES below) sets classes on the
-//     SVG's keyed elements; CSS transitions do all of the motion.
+//     paragraph, e.g. "4 4.1 4.2 4.3". If it lists one MORE stage than it has
+//     paragraphs, the first stage is a lead step owned by the heading. A
+//     section with `data-scrolly-plain` is ordinary prose over one resting
+//     stage. Any element with `data-scrolly-stage` is a step on its own.
+//   - Panels: an element with `data-scrolly-panel` (the brand studio, the two
+//     screenshots) stays in the prose flow for reading and tab order, and is
+//     shown position:fixed over the pinned graphic while a stage names it.
+//   - A single update() path reads step positions (with hysteresis) and sets
+//     the stage; CSS transitions do all of the motion.
 //
 // No dependencies. Pinning is CSS (`position: sticky`).
 (() => {
@@ -30,6 +48,8 @@
   const HEAD_LAG = 0.5;
   const W = 540;
   const H = 400;
+  const wide = window.matchMedia('(min-width: 1024px)');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   // ------------------------------------------------------------------------
   // Stage specs. Each key names elements in the SVG (data-k). Unlisted keys
@@ -38,19 +58,38 @@
   // (its text comes from the post's .kh-scrolly__define asides). A callout's
   // leader line is NOT a stage key: card and leader share one switch (see
   // syncCallout), so neither can show without the other.
+  //   dots     the dot layout (see LAYOUT): cloud, c1, c2, settled, spread,
+  //            full, chain. Default settled.
+  //   panel    a data-scrolly-panel shown in place of the diagram.
+  //   release  narrow screens: the band slides away for this stage.
+  //   chain    the closing state: the triangle leaves, the figures draw.
+  // Which clusters are "named" (their box is drawn, so their dots drop to a
+  // faint texture under it) follows from which node keys are on.
   // ------------------------------------------------------------------------
   const SOURCES = ['nS', 'nT', 'sS', 'sT'];
   const TRIANGLE = [...SOURCES, 'peers', 'peersLbl', 'nSB', 'sSB', 'stS', 'stT', 'nF', 'sF'];
   const READS = ['rdS', 'lbS', 'rdT', 'lbT', 'rdSB', 'lbSB'];
+  const LOW = ['peers', 'peersLbl', 'stS', 'stT'];
+  const REST = {
+    on: [...TRIANGLE, 'rdS', 'rdT', 'rdSB'],
+    dim: [...LOW, 'rdS', 'rdT', 'rdSB', 'sS', 'sT', 'sSB', 'sF'],
+  };
+  const CHAIN = ['ch1', 'ch2', 'ch3', 'ch4', 'ca1', 'ca2', 'ca3', 'chNote'];
 
   const STAGES = {
-    0: {},
+    // The opening: scattered, then gathering as the paragraphs name things.
+    cover: { on: [], dots: 'cloud' },
+    c0: { on: [], dots: 'cloud' },
+    c1: { on: [], dots: 'c1' },
+    c2: { on: [], dots: 'c2' },
+    w: { on: [] },
     // Schemas arrive alone; tokens rise in with their own paragraph (1.1).
     1: { on: ['nS', 'sS'], define: 'nS' },
-    1.1: { on: [...SOURCES, 'dots', 'dotsLbl'], define: 'nT' },
+    1.1: { on: [...SOURCES, 'dots', 'dotsLbl'], define: 'nT', dots: 'spread' },
     // Keeps the token definition: nothing in 1.2 needs that space (the peers
-    // label sits left of it), so it stays until the region ends.
+    // label sits left of it), so it stays until the studio takes over.
     1.2: { on: [...SOURCES, 'peers', 'peersLbl'], define: 'nT' },
+    1.3: { on: [...SOURCES, 'peers', 'peersLbl'], panel: 'studio', release: true },
     // Storybook's definition first; the "+ layout" chip pops on the next
     // paragraph (2.05) so the two never compete.
     2: { on: [...SOURCES, 'peers', 'peersLbl', 'nSB', 'sSB', 'stS', 'stT'], define: 'nSB' },
@@ -59,46 +98,66 @@
       on: [...SOURCES, 'peers', 'peersLbl', 'nSB', 'sSB', 'stS', 'stT', 'chip'],
       strong: ['sS', 'sT', 'sSB'],
     },
-    3: { on: TRIANGLE, dim: ['peers', 'peersLbl', 'stS', 'stT'], define: 'nF' },
-    3.1: { on: [...TRIANGLE, ...READS], dim: ['peers', 'peersLbl', 'stS', 'stT'] },
+    // Figma: the variants come forward into their box as it draws.
+    3: { on: TRIANGLE, dim: LOW, define: 'nF', dots: 'full' },
+    3.1: { on: [...TRIANGLE, ...READS], dim: LOW, dots: 'full' },
     3.2: {
       on: [...TRIANGLE, ...READS, 'ckS', 'ckT', 'ckSB'],
-      dim: ['peers', 'peersLbl', 'stS', 'stT'],
+      dim: LOW,
       strong: ['rdS', 'rdT', 'rdSB'],
+      dots: 'full',
+    },
+    3.3: {
+      on: [...TRIANGLE, ...READS, 'ckS', 'ckT', 'ckSB'],
+      dim: LOW,
+      strong: ['rdS', 'rdT', 'rdSB'],
+      panel: 'figma',
+      release: true,
+      dots: 'full',
     },
     // The three checks stay from 3.2: "all three were checked, now..." The
     // schema check leaves at 4.1, where the other two mean "these agreed".
     4: {
       on: [...TRIANGLE, 'rdS', 'rdT', 'rdSB', 'ckS', 'ckT', 'ckSB'],
-      dim: ['peers', 'peersLbl', 'stS', 'stT', 'rdS', 'rdT', 'rdSB', 'sS', 'sT', 'sSB', 'sF'],
+      dim: [...LOW, 'rdS', 'rdT', 'rdSB', 'sS', 'sT', 'sSB', 'sF'],
+      dots: 'full',
     },
     4.1: {
       on: [...TRIANGLE, 'rdS', 'rdT', 'rdSB', 'lb4T', 'ckT', 'ckSB'],
-      dim: ['peers', 'peersLbl', 'stS', 'stT', 'rdS', 'rdSB', 'sS', 'sT', 'sSB', 'sF'],
+      dim: [...LOW, 'rdS', 'rdSB', 'sS', 'sT', 'sSB', 'sF'],
       fault: ['rdT', 'lb4T'],
+      dots: 'full',
     },
     4.2: {
       on: [...TRIANGLE, 'rdS', 'rdT', 'rdSB', 'lb4T', 'lb4SB'],
-      dim: ['peers', 'peersLbl', 'stS', 'stT', 'rdS', 'sS', 'sT', 'sF'],
+      dim: [...LOW, 'rdS', 'sS', 'sT', 'sF'],
       fault: ['rdT', 'lb4T', 'rdSB', 'lb4SB'],
       strong: ['sSB'],
+      dots: 'full',
     },
     4.3: {
       on: [...TRIANGLE.filter((k) => k !== 'sS'), 'rdS', 'rdT', 'rdSB', 'lb4T', 'lb4SB', 'sS4', 'fix', 'fixLbl'],
-      dim: ['peers', 'peersLbl', 'stS', 'stT', 'rdS', 'sT', 'sSB', 'sF'],
+      dim: [...LOW, 'rdS', 'sT', 'sSB', 'sF'],
       fault: ['rdT', 'lb4T', 'rdSB', 'lb4SB', 'nS', 'sS4'],
+      dots: 'full',
     },
     5: {
       on: ['nS', 'nT', 'nSB', 'nF', 'sS', 'sSB', 'sT5', 'sF5', 'lbF5', 'peers', 'stS', 'rdS', 'rdSB', 'g5T', 'g5arc'],
       dim: ['peers', 'stS', 'rdS', 'rdSB', 'sS', 'sSB'],
       good: ['nT', 'sT5', 'g5T', 'g5arc', 'lbF5'],
+      dots: 'full',
     },
     5.1: {
       on: ['nS', 'nT', 'nSB', 'nF', 'sS', 'sSB', 'sT5', 'sF5', 'lbF5', 'peers', 'stS', 'rdS', 'rdSB', 'g5T', 'g5arc'],
       dim: ['peers', 'stS', 'sS', 'sSB'],
       faint: ['rdS', 'rdSB'],
       good: ['nT', 'sT5', 'g5T', 'g5arc', 'lbF5'],
+      dots: 'full',
     },
+    // Cost and reflection: the whole picture at rest.
+    6: { ...REST, release: true, dots: 'full' },
+    6.5: { ...REST, panel: 'plate', release: true, dots: 'full' },
+    7: { on: CHAIN, good: ['ch4', 'ca3'], dots: 'chain', chain: true },
   };
 
   // ------------------------------------------------------------------------
@@ -114,6 +173,15 @@
     F: { x: 392, y: 170, w: 144, h: 60 },
   };
   const cx = (n) => n.x + n.w / 2;
+
+  // Closing chain: four figures in a row. The sub-labels are the post's own
+  // (see the .kh-story-flow <ol>), so the two never drift.
+  const CH = [
+    { k: 'ch1', x: 6, y: 150, w: 116, h: 70, num: '2,700', label: 'brand values', pw: 82, sub: '5 brands × 540 variables' },
+    { k: 'ch2', x: 144, y: 150, w: 116, h: 70, num: '110', label: 'styles', pw: 46, sub: '102 text, 8 effects' },
+    { k: 'ch3', x: 282, y: 150, w: 116, h: 70, num: '297', label: 'variants', pw: 58, sub: 'in 25 component families' },
+    { k: 'ch4', x: 420, y: 150, w: 116, h: 70, num: '56', label: 'linked instances', pw: 108, sub: 'every edit kept', good: true },
+  ];
 
   // Term callouts. Position is in viewBox units: (x, y) is the callout's
   // anchor corner (tl = top-left, bl = bottom-left, br = bottom-right), `w`
@@ -138,6 +206,27 @@
   //   checks: the check-mark discs; copy depends on the stage, with
   //           `default` used for any stage not listed.
   const EXPLAINERS = {
+    // The formed clusters, before a box names them. `aside` prepends the
+    // post's own definition of that term (the .kh-scrolly__define copy).
+    clusters: {
+      S: {
+        term: 'Content schemas',
+        aside: 'nS',
+        text: 'The dots here stand for those agreed lists, one for each kind of content UNDRR\'s sites share. The story never counts them, so this cluster shows where they sit in the picture, not how many there are.',
+      },
+      T: {
+        term: '540 brand variables',
+        text: 'Each dot is one of the 540 variables the plugin generates from the brand settings: a colour, a type size, a spacing value, with a value for each of the five brands. 471 are the same in every brand; the 69 in blue are where the brands differ.',
+      },
+      B: {
+        term: '25 component families',
+        text: 'Each dot is one family of components, such as the Book Card with its four presets or the Button with its sizes and states. Storybook is where each family is built and laid out.',
+      },
+      F: {
+        term: '297 component variants',
+        text: 'Each dot is one variant of a component: one component in one of its states or presets. There are 297 of them, across the 25 families. Where they end up is the rest of the story.',
+      },
+    },
     dots: {
       shared: {
         term: '471 shared',
@@ -175,6 +264,123 @@
     },
   };
 
+  // ------------------------------------------------------------------------
+  // Dots. One circle per real thing, in groups:
+  //   S  the content schemas (an unnumbered cluster: the post never counts
+  //      them, so the cluster is labelled without a number);
+  //   T  540 Figma variables, the last 69 brand-specific (blue);
+  //   B  25 component families;
+  //   F  297 variants;
+  //   K  56 linked instances, in the close only (they are instances placed in
+  //      a designer's file, not a subset of the 297, so they are new dots).
+  // Every dot sits at the origin and is placed by a CSS transform from two
+  // custom properties, so a layout change is one style write per dot and CSS
+  // does the travel; the radius is an attribute (Firefox ignores `r` in CSS),
+  // and size changes are a scale factor in the same transform.
+  // ------------------------------------------------------------------------
+  const COUNTS = { S: 12, T: 540, B: 25, F: 297, K: 56 };
+  const SHARED = 471;
+
+  // Seeded so the cover is the same frame every time (social screenshots).
+  function mulberry32(a) {
+    return () => {
+      a |= 0;
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  const rng = mulberry32(20261019);
+
+  const grid = (i, x0, y0, rows, gap) => ({ x: x0 + Math.floor(i / rows) * gap, y: y0 + (i % rows) * gap });
+  const gridRow = (i, x0, y0, cols, gap) => ({ x: x0 + (i % cols) * gap, y: y0 + Math.floor(i / cols) * gap });
+
+  // Full: a cluster inside each box region, so the box can be drawn around
+  // it. The 540 fill the tokens box; the 297 fill Figma's.
+  const full = (g, i) => {
+    if (g === 'S') return grid(i, 55, 62, 2, 10);
+    if (g === 'T') return gridRow(i, 10, 304, 36, 4);
+    if (g === 'B') return grid(i, 237, 184, 5, 8);
+    if (g === 'F') return gridRow(i, 400, 184, 33, 4);
+    return chain('K', i);
+  };
+  // The variants before Figma is in the story: a loose, faint drift on the
+  // Figma side, not yet a cluster.
+  const driftRng = mulberry32(297);
+  const DRIFT = [];
+  for (let i = 0; i < COUNTS.F; i += 1) DRIFT.push({ x: 336 + driftRng() * 196, y: 36 + driftRng() * 330 });
+  // Settled: the three sources formed; the variants still adrift.
+  const settled = (g, i) => (g === 'F' ? DRIFT[i] : full(g, i));
+  // Opening beats: schemas first (c1), then variables and families (c2).
+  const c1 = (g, i) => (g === 'S' || g === 'K' ? full(g, i) : CLOUD[g][i]);
+  const c2 = (g, i) => (g === 'F' ? CLOUD[g][i] : full(g, i));
+  // Spread (stage 1.1): the 540 laid out beside the tokens box, 471 shared
+  // in one block and 69 brand-specific split off to the right.
+  const spread = (g, i) => {
+    if (g !== 'T') return settled(g, i);
+    const brand = i >= SHARED;
+    const j = brand ? i - SHARED : i;
+    return grid(j, brand ? 480 : 204, 238, 16, 8);
+  };
+  // Chain (the close): under the figure each group honestly counts.
+  //   T  under "2,700 brand values": one block of 540, which the SVG shows
+  //      five times over (<use>), one per brand: 2,700 marks.
+  //   B  under "297 variants": a row of 25, the families...
+  //   F  ...and the 297 themselves beneath them.
+  //   K  under "56 linked instances".
+  //   S  nothing counts them; they leave.
+  const chain = (g, i) => {
+    if (g === 'T') return gridRow(i, 10, 252, 48, 2.25);
+    if (g === 'B') return gridRow(i, 285.5, 254, 25, 4.5);
+    if (g === 'F') return gridRow(i, 287, 266, 27, 4);
+    if (g === 'K') return gridRow(i, 450, 256, 14, 4.4);
+    return full('S', i);
+  };
+  // The first frame: scattered across the whole graphic, seeded so it is the
+  // same picture every time.
+  const cloud = () => ({ x: 6 + rng() * 528, y: 14 + rng() * 372 });
+  const CLOUD = {};
+  Object.keys(COUNTS).forEach((g) => {
+    CLOUD[g] = [];
+    for (let i = 0; i < COUNTS[g]; i += 1) CLOUD[g].push(g === 'K' ? chain('K', i) : cloud());
+  });
+  const LAYOUT = { cloud: (g, i) => CLOUD[g][i], c1, c2, settled, spread, full, chain };
+  // Which clusters have formed in each layout (so can be labelled, hovered).
+  const FORMED = { cloud: [], c1: ['S'], c2: ['S', 'T', 'B'], settled: ['S', 'T', 'B', 'F'], spread: ['S'], full: ['S', 'T', 'B', 'F'], chain: [] };
+
+  function buildDots(id) {
+    const dot = (g, i) => {
+      const cls = ['kh-sv__dot', `kh-sv__dot--${g}`];
+      if (g === 'T' && i >= SHARED) cls.push('kh-sv__dot--brand');
+      const dl = (rng() * 0.6).toFixed(2);
+      const c0 = CLOUD[g][i];
+      return `<circle class="${cls.join(' ')}" data-g="${g}" data-i="${i}" cx="0" cy="0" r="1.5" style="--dl:${dl}s;--x:${c0.x.toFixed(1)}px;--y:${c0.y.toFixed(1)}px"/>`;
+    };
+    let out = '';
+    Object.keys(COUNTS).forEach((g) => {
+      out += `<g class="kh-sv__dotgroup kh-sv__dotgroup--${g}" id="${id}-d${g}">`;
+      for (let i = 0; i < COUNTS[g]; i += 1) out += dot(g, i);
+      out += '</g>';
+    });
+    // Four more blocks of 540 for the close, one per brand, below the one
+    // the real dots travel to. These do not travel, so they are a dot
+    // pattern (one circle per 2.25-unit cell, phased to the real grid)
+    // clipped to exactly 540 cells: eleven full rows and twelve of the
+    // twelfth. (<use> copies of the group were tried; a <use> does not
+    // follow the clones' CSS-variable transforms.)
+    const c = chain('T', 0);
+    const gap = 2.25;
+    out += `<pattern id="${id}-pt" x="${(c.x - gap / 2).toFixed(3)}" y="${(c.y - gap / 2).toFixed(3)}" width="${gap}" height="${gap}" patternUnits="userSpaceOnUse"><circle class="kh-sv__ptdot" cx="${gap / 2}" cy="${gap / 2}" r="0.57"/></pattern>`;
+    for (let b = 1; b < 5; b += 1) {
+      const top = c.y - gap / 2 + b * 13 * gap;
+      out += `<g class="kh-sv__dotcopy" style="--d:${(1.3 + b * 0.1).toFixed(1)}s" fill="url(#${id}-pt)">`
+        + `<rect x="${(c.x - gap / 2).toFixed(3)}" y="${top.toFixed(3)}" width="${48 * gap}" height="${11 * gap}"/>`
+        + `<rect x="${(c.x - gap / 2).toFixed(3)}" y="${(top + 11 * gap).toFixed(3)}" width="${12 * gap}" height="${gap}"/></g>`;
+    }
+    return out;
+  }
+
   // `draw` paths are revealed with a mask so dashed and dotted lines can
   // draw in too. `head` adds an arrowhead at the path end once drawn.
   // Accessibility: the SVG is exposed as a group whose only semantic content
@@ -187,7 +393,7 @@
   const btn = (name) => `role="button" tabindex="-1" aria-label="Explain: ${name}"`;
   const node = (k, n, title, extra = '') => `
     <g class="kh-sv__el kh-sv__node${extra}" data-k="${k}" ${btn(title)}>
-      <rect class="kh-sv__box" x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="6"/>
+      <rect class="kh-sv__box" pathLength="1" x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="6"/>
       <text class="kh-sv__title" x="${cx(n)}" y="${n.y + 26}" aria-hidden="true">${title}</text>
     </g>`;
   const sub = (k, n, text, extra = '') =>
@@ -201,6 +407,13 @@
       <circle class="kh-sv__check-hit" r="19"/>
       <circle class="kh-sv__check-disc" r="11.5"/>
       <path d="M-5 0.5 L-1.5 4 L5 -3.5"/>
+    </g>`;
+  const chainBox = (c, i) => `
+    <g class="kh-sv__el kh-sv__chain${c.good ? ' kh-sv__chain--good' : ''}" data-k="${c.k}" style="--d:${(0.5 + i * 0.35).toFixed(2)}s" aria-hidden="true">
+      <rect class="kh-sv__chbox" pathLength="1" x="${c.x}" y="${c.y}" width="${c.w}" height="${c.h}" rx="6"/>
+      <text class="kh-sv__num" data-num="${c.num}" x="${c.x + c.w / 2}" y="${c.y + 34}">${c.num}</text>
+      <g class="kh-sv__pill"><rect x="${c.x + c.w / 2 - c.pw / 2}" y="${c.y + 42}" width="${c.pw}" height="18" rx="9"/><text x="${c.x + c.w / 2}" y="${c.y + 55}">${c.label}</text></g>
+      <text class="kh-sv__chsub" x="${c.x + c.w / 2}" y="${c.y + c.h + 18}">${c.sub}</text>
     </g>`;
 
   const P = {
@@ -221,10 +434,13 @@
     fix: 'M157 90 L253 200 L320 213 L385 213',
     g5T: 'M157 310 L222 235',
     g5arc: 'M158 350 C300 392, 432 350, 432 238',
+    // Chain arrows, each ~7 units short of the next figure.
+    ca1: 'M124 185 L135 185',
+    ca2: 'M262 185 L273 185',
+    ca3: 'M400 185 L411 185',
   };
 
   function buildSvg(id) {
-    const dots = buildDots();
     return `
 <svg class="kh-sv" id="${id}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Diagram: the sources the Figma library is derived from. Each box can be explained." tabindex="-1" focusable="false">
   <defs>${'' /* masks appended by JS */}</defs>
@@ -238,23 +454,33 @@
     ${line('fix', P.fix, 'kh-sv__line--fix', { head: true, delay: 0.6, mid: '222,165' })}
     ${line('g5T', P.g5T, 'kh-sv__line--good', { head: true })}
     ${line('g5arc', P.g5arc, 'kh-sv__line--good', { head: true, delay: 0.3 })}
+    ${line('ca1', P.ca1, 'kh-sv__line--chain', { head: true, delay: 1.1 })}
+    ${line('ca2', P.ca2, 'kh-sv__line--chain', { head: true, delay: 1.45 })}
+    ${line('ca3', P.ca3, 'kh-sv__line--chain', { head: true, delay: 1.8 })}
     ${Object.keys(CALLOUTS).map((k) => `<path class="kh-sv__leader" data-leader="${k}" style="--kh-co-delay:${CALLOUTS[k].delay ?? CALLOUT_DELAY}s" d="${CALLOUTS[k].ld}"/>`).join('')}
     <path class="kh-sv__el kh-sv__pulse" data-k="g5T" pathLength="1" d="${P.g5T}"/>
     <path class="kh-sv__el kh-sv__pulse" data-k="g5arc" pathLength="1" d="${P.g5arc}"/>
   </g>
-  <g class="kh-sv__el kh-sv__dots" data-k="dots" aria-hidden="true">${dots}</g>
+  <g class="kh-sv__dots" aria-hidden="true">${buildDots(id)}</g>
+  ${label('cvS', N.S.x + 4, N.S.y + N.S.h + 16, 'content schemas', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1.4 })}
+  ${label('cvT', N.T.x + 4, N.T.y + N.T.h + 16, '540 Figma variables, 69 by brand', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1.5 })}
+  ${label('cvB', cx(N.SB), N.SB.y + N.SB.h + 16, '25 component families', { cls: 'kh-sv__label--cover', delay: 1.6 })}
+  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--cluster" data-k="hitS" data-cluster="S" x="${N.S.x}" y="${N.S.y}" width="${N.S.w}" height="${N.S.h + 20}" ${btn('the content schemas')}/>
+  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--cluster" data-k="hitT" data-cluster="T" x="${N.T.x}" y="${N.T.y}" width="${N.T.w}" height="${N.T.h + 20}" ${btn('the 540 brand variables')}/>
+  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--cluster" data-k="hitB" data-cluster="B" x="${N.SB.x}" y="${N.SB.y}" width="${N.SB.w}" height="${N.SB.h + 20}" ${btn('the 25 component families')}/>
+  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--cluster" data-k="hitF" data-cluster="F" x="336" y="36" width="200" height="330" ${btn('the 297 component variants')}/>
   ${label('dotsLbl', 200, 222, '471 shared · 87.2%', { anchor: 'start', cls: 'kh-sv__dotlbl--shared', delay: 0.6 })}
   ${label('dotsLbl', 520, 222, '69 by brand', { anchor: 'end', cls: 'kh-sv__label--brand kh-sv__dotlbl--brand', delay: 0.9 })}
   <rect class="kh-sv__el kh-sv__hit" data-k="dots" data-dots="shared" x="196" y="206" width="246" height="160" ${btn('the 471 shared variables')}/>
   <rect class="kh-sv__el kh-sv__hit" data-k="dots" data-dots="brand" x="446" y="206" width="80" height="160" ${btn('the 69 brand-specific variables')}/>
   ${label('dotsLbl', 200, 384, 'Each dot is one of 540 Figma variables', { anchor: 'start', cls: 'kh-sv__label--quiet', delay: 1 })}
   ${node('nS', N.S, 'Content schemas')}
-  ${node('nT', N.T, 'Design tokens', ' kh-sv__rise')}
+  ${node('nT', N.T, 'Design tokens')}
   ${node('nSB', N.SB, 'Storybook')}
   ${node('nF', N.F, 'Figma', ' kh-sv__node--figma')}
   ${sub('sS', N.S, 'the content it holds')}
   ${sub('sS4', N.S, 'no length limit', ' kh-sv__sub--flag')}
-  ${sub('sT', N.T, 'colour, type, spacing', ' kh-sv__rise')}
+  ${sub('sT', N.T, 'colour, type, spacing')}
   ${sub('sT5', N.T, '30px → 32px', ' kh-sv__sub--flag')}
   ${sub('sSB', N.SB, 'the page layout')}
   ${sub('sF', N.F, '297 variants')}
@@ -275,33 +501,9 @@
   ${check('ckS', N.S.x + N.S.w, N.S.y, 'the check against the content schema', 0)}
   ${check('ckT', N.T.x + N.T.w, N.T.y, 'the check against the design tokens', 0.15)}
   ${check('ckSB', N.SB.x + N.SB.w, N.SB.y + N.SB.h, 'the check against Storybook', 0.3)}
+  ${CH.map(chainBox).join('')}
+  ${label('chNote', 270, 396, 'about 77,000 lines of code, 33,000 of them tests and audits', { cls: 'kh-sv__label--quiet', delay: 2.2 })}
 </svg>`;
-  }
-
-  // 540 Figma variables (generated from the tokens) as dots: 471 shared in one block, 69 brand-specific split off
-  // to the right. Column-major so the shared block fills left to right. Each
-  // dot starts collapsed onto the Design tokens node and travels out.
-  function buildDots() {
-    const rows = 16;
-    const gap = 8;
-    const x0 = 204;
-    const y0 = 238;
-    const shared = 471;
-    const total = 540;
-    const origin = { x: cx(N.T), y: N.T.y + N.T.h / 2 };
-    let out = '';
-    for (let i = 0; i < total; i += 1) {
-      const brand = i >= shared;
-      const j = brand ? i - shared : i;
-      const col = Math.floor(j / rows);
-      const row = j % rows;
-      const x = (brand ? 480 : x0) + col * gap;
-      const y = y0 + row * gap;
-      const dx = Math.round(origin.x - x);
-      const dy = Math.round(origin.y - y);
-      out += `<circle class="kh-sv__dot${brand ? ' kh-sv__dot--brand' : ''}" cx="${x}" cy="${y}" r="2.6" style="--kh-sv-dx:${dx}px;--kh-sv-dy:${dy}px;--kh-sv-i:${i}"/>`;
-    }
-    return out;
   }
 
   // Masks reveal each drawable line from its start; arrowheads sit at the end
@@ -389,6 +591,9 @@
     });
   }
 
+  // ------------------------------------------------------------------------
+  // Applying a stage
+  // ------------------------------------------------------------------------
   // Keys that were on in the stage last applied to each SVG. An element that
   // stays on across a stage change is `is-held`: its entry delay (--d, the
   // draw-in stagger) is dropped, so a restyle (dim, fault, good, strong)
@@ -397,16 +602,46 @@
   // orange a second before the line was; and it stayed orange for 1.4s into
   // stage 5, the healthy-change stage.
   const prevOn = new WeakMap();
+  const NAMED = { nS: 'S', nT: 'T', nSB: 'B', nF: 'F' };
 
-  function applyStage(svg, stageId) {
+  function placeDots(inst, layout) {
+    if (inst.svg.dataset.dots === layout) return;
+    const fn = LAYOUT[layout];
+    inst.dots.forEach((d) => {
+      const p = fn(d.dataset.g, Number(d.dataset.i));
+      d.style.setProperty('--x', `${p.x.toFixed(1)}px`);
+      d.style.setProperty('--y', `${p.y.toFixed(1)}px`);
+    });
+    inst.svg.dataset.dots = layout;
+  }
+
+  function applyStage(inst, stageId) {
+    const { svg } = inst;
     const spec = STAGES[stageId] || {};
     const sets = {};
     ['on', 'dim', 'faint', 'strong', 'fault', 'good'].forEach((m) => {
       sets[m] = new Set(spec[m] || []);
     });
+    // A cluster's label shows while it is unnamed and the dots are settled
+    // in their regions; it leaves when its box is drawn around it.
+    const named = [];
+    Object.keys(NAMED).forEach((k) => {
+      if (sets.on.has(k)) named.push(NAMED[k]);
+    });
+    const layout = spec.dots || 'settled';
+    // A formed, unnamed cluster carries its label and answers a hover; the
+    // variants' drift has no label (Figma is not in the story yet) but can
+    // be asked about.
+    (FORMED[layout] || []).forEach((g) => {
+      if (named.includes(g)) return;
+      if (g !== 'F') sets.on.add(`cv${g}`);
+      sets.on.add(`hit${g}`);
+    });
     const was = prevOn.get(svg) || new Set();
     prevOn.set(svg, sets.on);
     svg.setAttribute('data-stage', stageId);
+    svg.dataset.named = named.join(' ');
+    svg.classList.toggle('is-chain', !!spec.chain);
 
     svg.querySelectorAll('[data-k]').forEach((el) => {
       const k = el.dataset.k;
@@ -420,21 +655,70 @@
       el.classList.toggle('is-fault', on && sets.fault.has(k));
       el.classList.toggle('is-good', on && sets.good.has(k));
     });
+
+    placeDots(inst, layout);
+    syncPanels(inst, spec);
+    syncChain(inst, spec);
     syncFocusables(svg);
+  }
+
+  // Panels: the named one shows over the graphic (wide) and the diagram
+  // steps back; the others are hidden and, on wide screens, `inert`, so a
+  // hidden studio's buttons are not in the tab order. On narrow screens the
+  // panels are in the prose flow and the band slides away for them.
+  function syncPanels(inst, spec) {
+    const panel = spec.panel || '';
+    const g = inst.svg.parentNode;
+    g.classList.toggle('is-panel', !!panel && wide.matches);
+    g.classList.toggle('is-released', !wide.matches && !!spec.release);
+    inst.svg.dataset.panel = wide.matches ? panel : '';
+    inst.panels.forEach((p) => {
+      const on = p.dataset.scrollyPanel === panel;
+      p.classList.toggle('is-on', on);
+      p.inert = wide.matches && !on;
+    });
+  }
+
+  // The closing figures count up on arrival (not under reduced motion) and
+  // sit at their final values otherwise, including on the way back out.
+  const fmt = new Intl.NumberFormat('en-US');
+  function syncChain(inst, spec) {
+    inst.timers.forEach(clearTimeout);
+    inst.timers = [];
+    inst.svg.querySelectorAll('.kh-sv__num[data-num]').forEach((el, i) => {
+      const finalText = el.dataset.num;
+      if (!spec.chain || reduce.matches) {
+        el.textContent = finalText;
+        return;
+      }
+      el.textContent = '0';
+      inst.timers.push(setTimeout(() => countUp(inst, el, finalText), 800 + i * 350));
+    });
+  }
+  function countUp(inst, el, finalText) {
+    const target = Number(finalText.replace(/[^\d]/g, ''));
+    const start = performance.now();
+    const tick = (now) => {
+      if (!inst.svg.classList.contains('is-chain')) return;
+      const t = Math.min(1, (now - start) / 900);
+      const eased = 1 - (1 - t) ** 3;
+      el.textContent = t < 1 ? fmt.format(Math.round(target * eased)) : finalText;
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
   }
 
   // Tab order follows the stage: only buttons that are on screen now (on,
   // and not faded to near-invisible) are reachable; the rest sit at -1 and
-  // come back when their stage does. Only the region whose graphic is
-  // actually on screen takes part (`data-live`, set by update()): the other
-  // regions keep their end states off screen, and a Tab landing in one of
-  // those would scroll the page back to it and flip the stage under the
-  // reader. Narrow screens keep the tap popups but stay out of the tab
-  // order: the 44vh band has no room for a popup beside a focus ring. A
-  // focused button that just left the stage is blurred so focus never rests
-  // on something invisible.
+  // come back when their stage does. Only while the graphic is actually on
+  // screen (`data-live`, set by update()) and showing the diagram rather
+  // than a panel: a Tab landing in an off-screen graphic would scroll the
+  // page and flip the stage under the reader. Narrow screens keep the tap
+  // popups but stay out of the tab order: the 44vh band has no room for a
+  // popup beside a focus ring. A focused button that just left the stage is
+  // blurred so focus never rests on something invisible.
   function syncFocusables(svg) {
-    const live = wide.matches && svg.dataset.live === '1';
+    const live = wide.matches && svg.dataset.live === '1' && !svg.dataset.panel;
     svg.querySelectorAll('[role="button"]').forEach((el) => {
       const reachable = live && el.classList.contains('is-on') && !el.classList.contains('is-faint');
       el.setAttribute('tabindex', reachable ? '0' : '-1');
@@ -442,6 +726,9 @@
     });
   }
 
+  // ------------------------------------------------------------------------
+  // Callouts
+  // ------------------------------------------------------------------------
   // Callouts are copies of the post's definition asides, so the copy lives in
   // one place (the markup). The copies are aria-hidden with the rest of the
   // graphic; the asides stay in the prose for assistive tech (visually
@@ -487,12 +774,8 @@
   }
 
   // Hover (and tap) tooltips on the node boxes: the same definition text as
-  // the asides, without the wireframe. Only for nodes visible in the current
-  // stage, and never for a node whose stage callout is already showing.
+  // the asides, without the wireframe.
   function definitionParts(region, key) {
-    // Each term is defined once, in the region where it first appears, but
-    // its box is hoverable in every later region: look it up document-wide,
-    // preferring this region's copy.
     const sel = `.kh-scrolly__define[data-define="${key}"]`;
     const aside = region.querySelector(sel) || document.querySelector(sel);
     if (!aside) return null;
@@ -509,7 +792,7 @@
   // the least of what is currently drawn (other boxes, checks, labels, the
   // chip, the dots). Ties go to the side with the most free space. The caret
   // points at the box edge midpoint, clamped to stay on the card.
-  const OBSTACLES = '.kh-sv__node.is-on rect, .kh-sv__check.is-on, .kh-sv__label.is-on, .kh-sv__sub.is-on, .kh-sv__chip.is-on, .kh-sv__dots.is-on, .kh-sv__head.is-on';
+  const OBSTACLES = '.kh-sv__node.is-on rect, .kh-sv__check.is-on, .kh-sv__label.is-on, .kh-sv__sub.is-on, .kh-sv__chip.is-on, .kh-sv__dotgroup, .kh-sv__head.is-on';
   function overlap(a, b) {
     const w = Math.min(a.right, b.right) - Math.max(a.left, b.left);
     const h = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
@@ -543,10 +826,18 @@
         // box always answers a hover and the two never show at once.
         return def && { id: `node:${key}`, anchor: t.querySelector('rect'), term: def.term, html: def.html, own: [t], yields: graphic.dataset.callout === key ? key : '' };
       }
+      if (t.matches('.kh-sv__hit--cluster')) {
+        const g = t.dataset.cluster;
+        const copy = EXPLAINERS.clusters[g];
+        const def = copy.aside ? definitionParts(region, copy.aside) : null;
+        const html = `${def ? `${def.html} ` : ''}${copy.text}`;
+        const own = [t, svg.querySelector(`.kh-sv__dotgroup--${g}`), svg.querySelector(`[data-k="cv${g}"]`)].filter(Boolean);
+        return { id: `cluster:${g}`, anchor: t, term: copy.term, html, own, cluster: g };
+      }
       if (t.matches('.kh-sv__hit')) {
         const group = t.dataset.dots;
         const copy = EXPLAINERS.dots[group];
-        const own = [...svg.querySelectorAll('.kh-sv__hit, .kh-sv__dots, [data-k="dotsLbl"]')];
+        const own = [...svg.querySelectorAll('.kh-sv__hit, .kh-sv__dotgroup, [data-k="dotsLbl"]')];
         // Anchored on the group's label, not the whole block: around the
         // block every side is crowded, but below the label is the group's
         // own dot field, which may be covered.
@@ -579,7 +870,7 @@
           let w = 1;
           if (el.matches('rect')) w = 20;
           else if (el.matches('.kh-sv__check')) w = 6;
-          else if (el.matches('.kh-sv__dots')) w = 0.3;
+          else if (el.matches('.kh-sv__dotgroup')) w = 0.3;
           if (el.closest('.is-dim, .is-faint')) w *= 0.4;
           return { r: rel(el.getBoundingClientRect()), w };
         });
@@ -641,6 +932,7 @@
       tip.classList.remove('is-on');
       setYield('');
       delete svg.dataset.dotFocus;
+      delete svg.dataset.clusterFocus;
       if (described) {
         described.removeAttribute('aria-describedby');
         described = null;
@@ -648,7 +940,7 @@
     };
 
     const show = (t, keyboard = false) => {
-      const d = t && t.classList.contains('is-on') ? describe(t) : null;
+      const d = t && t.classList.contains('is-on') && !svg.dataset.panel ? describe(t) : null;
       if (!d) {
         hide();
         return;
@@ -659,6 +951,8 @@
       tip.innerHTML = `<span class="kh-scrolly__callout-term">${d.term}</span><span class="kh-scrolly__callout-text">${d.html}</span>`;
       if (d.dots) svg.dataset.dotFocus = d.dots;
       else delete svg.dataset.dotFocus;
+      if (d.cluster) svg.dataset.clusterFocus = d.cluster;
+      else delete svg.dataset.clusterFocus;
       setYield(d.yields || '');
       place(d);
       tip.classList.add('is-on');
@@ -723,8 +1017,7 @@
     }, { passive: true });
     // A hover popup closes on scroll; a keyboard one follows its button
     // (the graphic is pinned, so it rarely moves) rather than vanishing
-    // under the reader's hands.
-    // Called from update(), the one scroll path, not from its own listener.
+    // under the reader's hands. Called from update(), the one scroll path.
     const onScroll = () => {
       if (!openId) return;
       if (viaKeyboard && lastShown) place(lastShown);
@@ -739,12 +1032,17 @@
 
   // Keep the callout layer exactly over the drawn viewBox: the SVG letterboxes
   // (preserveAspectRatio meet), so percentages of the layer are viewBox units.
-  function placeLayer(svg) {
-    const layer = svg.parentNode.querySelector('.kh-scrolly__callouts');
-    if (!layer) return;
-    // SVG elements have no offsetLeft/Top; measure against the graphic box.
+  // The same measurement publishes the graphic's column to the region, which
+  // the fixed panels use to sit exactly over it.
+  function placeLayer(inst) {
+    const { svg, region } = inst;
+    const graphic = svg.parentNode;
     const box = svg.getBoundingClientRect();
-    const host = svg.parentNode.getBoundingClientRect();
+    const host = graphic.getBoundingClientRect();
+    region.style.setProperty('--kh-scrolly-gx', `${host.left.toFixed(1)}px`);
+    region.style.setProperty('--kh-scrolly-gw', `${host.width.toFixed(1)}px`);
+    const layer = graphic.querySelector('.kh-scrolly__callouts');
+    if (!layer) return;
     const w = box.width;
     const h = box.height;
     if (!w || !h) return;
@@ -758,10 +1056,22 @@
   // ------------------------------------------------------------------------
   // Regions and steps
   // ------------------------------------------------------------------------
-  const wide = window.matchMedia('(min-width: 1024px)');
   const instances = [];
 
   regions.forEach((region, r) => {
+    const stepsCol = region.querySelector('.kh-scrolly__steps') || region;
+    // Adopt the page cover into the step column, so the title page sits
+    // beside the opening state of the graphic.
+    const coverSel = region.dataset.scrollyCover;
+    const cover = coverSel ? document.querySelector(coverSel) : null;
+    if (cover && !region.contains(cover)) {
+      cover.setAttribute('data-scrolly-adopted', '');
+      stepsCol.insertBefore(cover, stepsCol.firstChild);
+    }
+    region.querySelectorAll('.kh-scrolly__cover-note[hidden]').forEach((el) => {
+      el.hidden = false;
+    });
+
     const graphic = document.createElement('div');
     graphic.className = 'kh-scrolly__graphic';
     // Not aria-hidden: the SVG's "Explain:" buttons are real controls, and
@@ -780,6 +1090,8 @@
     region.querySelectorAll('.kh-scrolly__section[data-scrolly-steps]').forEach((section) => {
       const ids = section.dataset.scrollySteps.trim().split(/\s+/);
       const paras = section.querySelectorAll(':scope > p');
+      const plain = section.hasAttribute('data-scrolly-plain');
+      const short = section.hasAttribute('data-scrolly-short');
       // One more stage than paragraphs: the first belongs to the heading (a
       // "lead" step, e.g. a definition placed straight under the heading).
       const heading = section.querySelector(':scope > h2, :scope > h3');
@@ -793,20 +1105,39 @@
       }
       paras.forEach((p, i) => {
         p.classList.add('kh-scrolly__step');
+        if (plain) p.classList.add('kh-scrolly__step--plain');
+        if (short) p.classList.add('kh-scrolly__step--short');
         // The first step of a section starts at the section top, so the
         // heading above it already counts as part of that step.
         steps.push({ el: p, anchor: i === 0 && !lead ? section : p, stage: ids[Math.min(i, ids.length - 1)] });
       });
     });
-
+    // Figures and other blocks that are steps in their own right.
+    region.querySelectorAll('[data-scrolly-stage]').forEach((el) => {
+      el.classList.add('kh-scrolly__step');
+      steps.push({ el, anchor: el, stage: el.dataset.scrollyStage });
+    });
+    // Document order, whatever order they were found in.
+    steps.sort((a, b) => (a.el.compareDocumentPosition(b.el) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
     if (steps.length) steps[steps.length - 1].el.classList.add('kh-scrolly__step--last');
 
-    const initial = region.dataset.scrollyInitial || '0';
+    const panels = [...region.querySelectorAll('[data-scrolly-panel]')];
+    const dots = [...svg.querySelectorAll('.kh-sv__dot')];
+    const initial = region.dataset.scrollyInitial || 'cover';
+    const inst = {
+      region, svg, steps, panels, dots, initial, current: null, active: null, layer: graphic.querySelector('.kh-scrolly__callouts'), tips, timers: [],
+    };
+    instances.push(inst);
+
     region.classList.add('kh-scrolly--enhanced');
     // Masks and arrowheads need layout-free geometry only, so the SVG can be
     // decorated while the graphic is still `hidden`.
     decorate(svg);
-    applyStage(svg, initial);
+    // The first frame is the scattered cloud (positions written at build),
+    // so nothing moves on load; scrolling does the gathering.
+    svg.dataset.dots = 'cloud';
+    inst.current = initial;
+    applyStage(inst, initial);
     // Publish the rendered scale so CSS can cap label sizes: scaled up to
     // fill a wide column, 17px labels rendered at ~26px and out-shouted the
     // prose. The cap only ever shrinks text; on small screens it scales down.
@@ -815,28 +1146,19 @@
         const { width, height } = entry.contentRect;
         if (!width || !height) return;
         svg.style.setProperty('--kh-sv-s', Math.min(width / W, height / H).toFixed(3));
-        placeLayer(svg);
+        placeLayer(inst);
       }).observe(svg);
     }
-    instances.push({ region, svg, steps, initial, current: initial, active: null, layer: graphic.querySelector('.kh-scrolly__callouts'), tips });
   });
 
   // The ONE switch for a stage callout: its card and its leader line are
   // turned on and off together, from the same condition, with the same
-  // delay. The condition: wide layout and the current stage defines a term.
-  // It used to also wait for the graphic to pin; at reading speed (about
-  // 600px/s) that wait plus the entry delay outlasted every stage's scroll
-  // window, so the callouts never appeared unless the reader stopped. The
-  // callout layer moves with the graphic, so one that is already up while
-  // the graphic slides into place is just part of the picture.
+  // delay. The condition: wide layout and the current stage defines a term
+  // this region has a card for.
   function syncCallout(inst) {
     if (!inst.layer) return;
     const g = inst.svg.parentNode;
     const spec = STAGES[inst.current] || {};
-    // Only a term this region has a card for: every SVG carries leader
-    // paths for all four terms, but region B starts in state 1.2 (which
-    // keeps the token definition) with no token aside of its own, and lit
-    // the leader to nowhere.
     const has = spec.define && inst.layer.querySelector(`.kh-scrolly__callout[data-define="${spec.define}"]`);
     const key = wide.matches && has ? spec.define : '';
     if (key === (g.dataset.callout || '')) return;
@@ -894,7 +1216,7 @@
       }
       if (stage !== inst.current) {
         inst.current = stage;
-        applyStage(inst.svg, stage);
+        applyStage(inst, stage);
         inst.tips.reset();
       }
       syncCallout(inst);
@@ -932,12 +1254,19 @@
   if (wide.addEventListener) {
     wide.addEventListener('change', () => {
       observe();
-      instances.forEach((inst) => syncFocusables(inst.svg));
+      // Panels, the band release and the tab order all depend on the layout.
+      instances.forEach((inst) => {
+        applyStage(inst, inst.current);
+        placeLayer(inst);
+      });
     });
   }
   window.addEventListener('resize', () => {
     refreshRef();
-    window.requestAnimationFrame(update);
+    window.requestAnimationFrame(() => {
+      instances.forEach(placeLayer);
+      update();
+    });
   }, { passive: true });
   // The observer band is a few pixels tall, so a step can enter it while its
   // top is still just below the trigger line; with no further crossing,
