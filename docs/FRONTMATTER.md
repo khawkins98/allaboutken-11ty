@@ -157,6 +157,19 @@ image_meta:
 
 ---
 
+### `story_plate`
+
+```yaml
+story_plate: body
+```
+
+- Only read by `layouts/story.njk`. Absent (the default), the layout shows `image` as a closing plate after the body.
+- `body` tells the layout not to render the plate, because the post places it itself with `{% include "partials/story-plate.njk" %}`. Use it when a story needs to close on something *after* the plate, such as a final `.kh-story-flow` visual.
+- Placing the plate in the body also puts the plate, and anything after it, in the RSS feed, which carries only the body (`templateContent`).
+- `image` and `image_meta` keep working as usual for listings, thumbnails and JSON-LD.
+
+---
+
 ### `photo_meta`
 
 ```yaml

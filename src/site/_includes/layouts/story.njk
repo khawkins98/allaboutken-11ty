@@ -22,13 +22,20 @@ templateEngineOverride: njk
                                       interactive, wide figure)
           .kh-story-themes         -- optional one-line strap of result themes,
                                       styled as part of the opening
+          .kh-story-flow           -- optional closing chain of figures (an
+                                      <ol> of node boxes joined by arrows);
+                                      /story-flow.js counts them in
       - Any script the regions need, loaded by the post itself.
 
     What it changes relative to post.njk:
       - Opening is a cover: breadcrumb + ref, title, teaser as the dek, one
         meta line. No pulse strip, no rail, no topic tallies.
       - `image` is shown as a closing plate after the body rather than as a
-        lead screenshot above it.
+        lead screenshot above it. To close on something AFTER the plate (a
+        final visual), set `story_plate: body` and place the plate in the
+        body with {% include "partials/story-plate.njk" %}; everything then
+        sits in the body, so the RSS feed carries it too. `image` still
+        feeds listings, thumbnails and the JSON-LD either way.
       - Date, word count, topics, ref and contents move to a colophon at the
         end, ahead of the entry foot.
 
@@ -66,14 +73,9 @@ templateEngineOverride: njk
   <div class="kh-content kh-story__body">
     <!-- kh-entry-content:start -->{{ content | safe }}<!-- kh-entry-content:end -->
 
-    {% if image %}
-    <figure class="kh-bleed-out kh-story__plate">
-      <img class="kh-figure__image" src="/images{{ image | url }}" alt="{{ image_meta.altext or image_meta.alt or '' }}" loading="lazy" decoding="async" sizes="(min-width: 81.25em) 1268px, 100vw">
-      {% if image_meta and image_meta.text %}
-      <figcaption class="kh-figure__caption">{{ image_meta.text | safe }}</figcaption>
-      {% endif %}
-    </figure>
-    {% endif %}
+    {#- `story_plate: body` means the post places the plate itself (see
+        partials/story-plate.njk), so it can close on something after it. -#}
+    {% if story_plate != 'body' %}{% include "partials/story-plate.njk" %}{% endif %}
 
     {%- if comment != false %}
     {% include "partials/feedback.njk" %}

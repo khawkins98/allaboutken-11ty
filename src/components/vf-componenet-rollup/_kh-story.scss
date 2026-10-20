@@ -107,7 +107,11 @@
     width: var(--kh-story-wide);
   }
 
+  // The global .kh-bleed-out paints the page ground to occlude the sticky
+  // contents rail of ordinary posts. The story layout has no rail, so let
+  // plates and figures sit on the grid paper like everything else.
   .kh-story__body > .kh-bleed-out {
+    background: none;
     margin-bottom: 3rem;
     margin-top: 3rem;
   }
@@ -177,6 +181,242 @@
     margin-left: auto;
     margin-right: auto;
     max-width: var(--kh-story-measure);
+  }
+
+  // Closing chain of figures (.kh-story-flow): an <ol> of node boxes joined
+  // by arrows, in the scrolly diagram's language (2px dark rounded boxes,
+  // dark term pills, green for a healthy change). The markup is the whole
+  // visual; arrows are pseudo-elements, so with CSS off or in RSS it reads
+  // as a plain numbered list. Narrow: one column, arrows pointing down.
+  // Wide: one row, arrows pointing right. Arrow tips stop
+  // --kh-flow-clear short of the next box's border, never under it.
+  // /story-flow.js adds --armed (hidden start state) and .is-in (play);
+  // without it, or under reduced motion, the final state simply shows.
+  .kh-story-flow {
+    --kh-flow-gap: 3rem;
+    --kh-flow-clear: 7px;
+    --kh-flow-head: 14px;
+    --kh-flow-good: #15803d; // as --kh-sv-good in _kh-scrolly.scss
+    font-family: var(--kh-font-sans);
+    text-align: center;
+  }
+
+  .kh-story__body .kh-story-flow__title {
+    font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 auto 2rem;
+    text-wrap: balance;
+  }
+
+  .kh-story__body .kh-story-flow__chain {
+    display: grid;
+    gap: var(--kh-flow-gap);
+    grid-template-columns: minmax(0, 22rem);
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-story__body .kh-story-flow__step {
+    --kh-flow-bw: 2px;
+    --kh-flow-ink: var(--kh-color--text);
+    align-items: center;
+    background: var(--kh-ground);
+    border: var(--kh-flow-bw) solid var(--kh-flow-ink);
+    border-radius: 6px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 1.25rem 1rem 1.35rem;
+    position: relative;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  // The healthy-change node: the scrolly's green, at its 4px "is-good" weight.
+  .kh-story__body .kh-story-flow__step--good {
+    --kh-flow-bw: 4px;
+    --kh-flow-ink: var(--kh-flow-good);
+  }
+
+  .kh-story-flow__figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .kh-story-flow__num {
+    color: var(--kh-flow-ink);
+    display: block;
+    font-size: clamp(2.6rem, 4.2vw, 3.6rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  // The unit as a term pill, like the diagram's callout terms.
+  .kh-story-flow__label {
+    background: var(--kh-flow-ink);
+    border-radius: 999px;
+    color: var(--kh-ground);
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0.75rem 0 0.7rem;
+    padding: 0.2rem 0.75rem 0.25rem;
+  }
+
+  .kh-story__body .kh-story-flow__sub {
+    color: var(--kh-color--grey--darkest);
+    font-size: 0.92rem;
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+
+  // Arrow into every step but the first: shaft (::before) + head (::after),
+  // placed in the gap above (narrow) or to the left (wide). Offsets are from
+  // this box's padding edge, so its own border width is part of the sum.
+  .kh-story-flow__step + .kh-story-flow__step::before,
+  .kh-story-flow__step + .kh-story-flow__step::after {
+    background: var(--kh-flow-ink);
+    content: '';
+    left: 50%;
+    position: absolute;
+  }
+
+  .kh-story-flow__step + .kh-story-flow__step::before {
+    height: calc(var(--kh-flow-gap) - 2 * var(--kh-flow-clear) - var(--kh-flow-head) + 1px);
+    top: calc(0px - var(--kh-flow-bw) - var(--kh-flow-gap) + var(--kh-flow-clear));
+    transform: translateX(-50%);
+    transform-origin: 50% 0;
+    width: 2px;
+  }
+
+  .kh-story-flow__step + .kh-story-flow__step::after {
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    height: var(--kh-flow-head);
+    margin-left: -6px;
+    top: calc(0px - var(--kh-flow-bw) - var(--kh-flow-clear) - var(--kh-flow-head));
+    width: 12px;
+  }
+
+  .kh-story__body .kh-story-flow__note {
+    color: var(--kh-color--grey--darkest);
+    font-family: var(--kh-font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    margin: 1.75rem auto 0;
+  }
+
+  .kh-story-flow .kh-figure__caption {
+    margin: 1rem auto 0;
+    max-width: var(--kh-story-measure);
+    text-align: left;
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-story-flow {
+      --kh-flow-gap: 3.5rem;
+    }
+
+    .kh-story__body .kh-story-flow__chain {
+      grid-auto-columns: minmax(0, 1fr);
+      grid-auto-flow: column;
+      grid-template-columns: none;
+      justify-content: stretch;
+    }
+
+    .kh-story-flow__step + .kh-story-flow__step::before {
+      height: 2px;
+      left: calc(0px - var(--kh-flow-bw) - var(--kh-flow-gap) + var(--kh-flow-clear));
+      top: 50%;
+      transform: translateY(-50%);
+      transform-origin: 0 50%;
+      width: calc(var(--kh-flow-gap) - 2 * var(--kh-flow-clear) - var(--kh-flow-head) + 1px);
+    }
+
+    .kh-story-flow__step + .kh-story-flow__step::after {
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      height: 12px;
+      left: calc(0px - var(--kh-flow-bw) - var(--kh-flow-clear) - var(--kh-flow-head));
+      margin: -6px 0 0;
+      top: 50%;
+      width: var(--kh-flow-head);
+    }
+  }
+
+  // Draw-in, left to right (top to bottom when stacked). Each step's --i is
+  // set by the script; its arrow draws first, then the box arrives.
+  .kh-story-flow--armed {
+    .kh-story-flow__step {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition-delay: calc(var(--i, 0) * 0.55s + 0.3s);
+    }
+
+    .kh-story-flow__step::before {
+      scale: 0 1;
+      transition: scale 0.35s ease-in-out;
+      transition-delay: calc(var(--i, 0) * 0.55s);
+    }
+
+    .kh-story-flow__step::after {
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      transition-delay: calc(var(--i, 0) * 0.55s + 0.3s);
+    }
+
+    .kh-story-flow__note,
+    .kh-figure__caption {
+      opacity: 0;
+      transition: opacity 0.6s ease calc(var(--kh-flow-n, 4) * 0.55s + 0.4s);
+    }
+  }
+
+  @media (max-width: $kh-breakpoint--lg-down) {
+    .kh-story-flow--armed .kh-story-flow__step::before {
+      scale: 1 0;
+    }
+  }
+
+  .kh-story-flow--armed.is-in {
+    .kh-story-flow__step {
+      opacity: 1;
+      transform: none;
+    }
+
+    .kh-story-flow__step::before {
+      scale: 1 1;
+    }
+
+    .kh-story-flow__step::after,
+    .kh-story-flow__note,
+    .kh-figure__caption {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kh-story-flow--armed {
+      .kh-story-flow__step,
+      .kh-story-flow__step::before,
+      .kh-story-flow__step::after,
+      .kh-story-flow__note,
+      .kh-figure__caption {
+        opacity: 1;
+        scale: none;
+        transform: none;
+        transition: none;
+      }
+    }
   }
 
   // Colophon: the apparatus post.njk puts up front, gathered at the end.

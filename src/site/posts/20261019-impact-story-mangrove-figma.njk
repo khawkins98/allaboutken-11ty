@@ -14,6 +14,8 @@ topics:
 org: UNDRR
 permalink: /work/2026/impact-story-mangrove-figma/
 kens_status: published
+# The post places the image plate itself, so the closing flow can follow it.
+story_plate: body
 image: /blog/mangrove-figma-library-overview.png
 image_meta:
   text: "The Mangrove Figma library in use — component task catalogue, living button variants, and token-bound text styles derived from Storybook, the structured content schemas and the design tokens. Own work."
@@ -501,3 +503,32 @@ image_meta:
 **Each discipline gets the same story in its own tool.** Designers get Figma and developers get Storybook, both reading from the same content rules and brand settings: the same move as [putting analytics into editorial workflows](/work/2026/impact-story-undrr-analytics-overlay-mcp/).
 
 {% endmarkdown %}
+{#- Closing: the screenshot plate, then the flow of numbers as the final
+    element. `story_plate: body` (frontmatter) stops the layout drawing the
+    plate after the body, so both sit here and both reach RSS. Figures are a
+    point-in-time record of the reviewed checkpoint: do not update them. -#}
+{% include "partials/story-plate.njk" %}
+<figure class="kh-bleed-out kh-story-flow" aria-labelledby="mg-flow-title">
+  <p class="kh-story-flow__title" id="mg-flow-title">What one shared truth reaches</p>
+  <ol class="kh-story-flow__chain">
+    <li class="kh-story-flow__step">
+      <p class="kh-story-flow__figure"><strong class="kh-story-flow__num">2,700</strong> <span class="kh-story-flow__label">brand values</span></p>
+      <p class="kh-story-flow__sub">5 brands × 540 Figma variables (471 shared, 69 by brand)</p>
+    </li>
+    <li class="kh-story-flow__step">
+      <p class="kh-story-flow__figure"><strong class="kh-story-flow__num">110</strong> <span class="kh-story-flow__label">styles</span></p>
+      <p class="kh-story-flow__sub">102 text, 8 effects</p>
+    </li>
+    <li class="kh-story-flow__step">
+      <p class="kh-story-flow__figure"><strong class="kh-story-flow__num">297</strong> <span class="kh-story-flow__label">variants</span></p>
+      <p class="kh-story-flow__sub">in 25 component families</p>
+    </li>
+    <li class="kh-story-flow__step kh-story-flow__step--good">
+      <p class="kh-story-flow__figure"><strong class="kh-story-flow__num">56</strong> <span class="kh-story-flow__label">linked instances</span></p>
+      <p class="kh-story-flow__sub">in a designer's pilot file, every edit kept through a token change</p>
+    </li>
+  </ol>
+  <p class="kh-story-flow__note">Built with about 77,000 lines of code, 33,000 of them tests and audits.</p>
+  <figcaption class="kh-figure__caption">Each step is derived, not drawn: the brand values, styles and component variants all come from the same sources, and a designer's page built from them kept its edits when one of those sources changed. Own work.</figcaption>
+</figure>
+<script src="/story-flow.js" defer></script>

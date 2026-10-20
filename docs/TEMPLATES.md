@@ -10,7 +10,7 @@ Page templates live in `src/site/`. Layouts and shared fragments are resolved fr
 | --- | --- | --- | --- |
 | Base | `src/site/_includes/layouts/base.njk` | Most pages | Global `<head>`, OG/Twitter tags, header, footer, scripts, ambience partial |
 | Post | `src/site/_includes/layouts/post.njk` | Long-form posts and impact stories | Wraps content in article structure, hero image, JSON-LD, feedback block |
-| Story | `src/site/_includes/layouts/story.njk` | Scroll-driven entries built around `.kh-scrolly` regions | Quiet cover, one centred reading column, full-width scrolly regions and plates, `image` as a closing plate, colophon (date, words, topics, ref, contents) at the end. Header comment lists what a post must provide |
+| Story | `src/site/_includes/layouts/story.njk` | Scroll-driven entries built around `.kh-scrolly` regions | Quiet cover, one centred reading column, full-width scrolly regions and plates, `image` as a closing plate (or placed in the body with `partials/story-plate.njk` when `story_plate: body`), colophon (date, words, topics, ref, contents) at the end. Header comment lists what a post must provide |
 | Digesting | `src/site/_includes/layouts/digesting.njk` | Digest entries and selected standalone pages | Lightweight article layout with digest source link support |
 | Photo | `src/site/_includes/layouts/photo.njk` | Single-photograph entries | Image at full grid width, caption, place and camera details below; listed at `/photos/` |
 | Social card | `src/site/_includes/layouts/social-card.njk` | `/social/*` pages | Screenshot-service target for OG images |
@@ -27,6 +27,7 @@ Page templates live in `src/site/`. Layouts and shared fragments are resolved fr
 | Post summary card | `src/site/_includes/partials/post-summary.njk` | Home, Blog, All |
 | Pager | `src/site/_includes/partials/pager.njk` | Paginated index pages |
 | Organization intro macro | `src/site/_includes/partials/orgs.njk` | Imported by impact-story posts |
+| Story plate | `src/site/_includes/partials/story-plate.njk` | `layouts/story.njk`, or a story body that sets `story_plate: body` |
 
 ## Nunjucks patterns used in this repo
 
