@@ -169,6 +169,16 @@
     margin-top: 3rem;
   }
 
+  // Never upscale a screenshot past its pixels. The column is often wider
+  // than the largest variant the image transform makes (it never upscales,
+  // so a 685px source tops out at its 600w variant), and stretching blurs
+  // UI text. A figure sets --kh-story-native to that width; the image then
+  // sits at native size, left-aligned in the column.
+  .kh-story__body > .kh-story__graphic-col img {
+    height: auto;
+    max-width: min(100%, var(--kh-story-native, 100%));
+  }
+
   // Images fill their track: a plate the wide track, a figure the column.
   .kh-story__plate img,
   .kh-story__body > figure img {
