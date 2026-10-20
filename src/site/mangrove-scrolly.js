@@ -31,8 +31,9 @@
   // Stage specs. Each key names elements in the SVG (data-k). Unlisted keys
   // are hidden. `dim`, `faint`, `strong`, `fault`, `good` are modifiers on
   // keys that are on. `define` names the term callout shown with that stage
-  // (its text comes from the post's .kh-scrolly__define asides); `ld*` keys
-  // are the leader lines joining a callout to its node.
+  // (its text comes from the post's .kh-scrolly__define asides). A callout's
+  // leader line is NOT a stage key: card and leader share one switch (see
+  // syncCallout), so neither can show without the other.
   // ------------------------------------------------------------------------
   const SOURCES = ['nS', 'nT', 'sS', 'sT'];
   const TRIANGLE = [...SOURCES, 'peers', 'peersLbl', 'nSB', 'sSB', 'stS', 'stT', 'nF', 'sF'];
@@ -41,18 +42,18 @@
   const STAGES = {
     0: {},
     // Schemas arrive alone; tokens rise in with their own paragraph (1.1).
-    1: { on: ['nS', 'sS', 'ldS'], define: 'nS' },
-    1.1: { on: [...SOURCES, 'dots', 'dotsLbl', 'ldT'], define: 'nT' },
+    1: { on: ['nS', 'sS'], define: 'nS' },
+    1.1: { on: [...SOURCES, 'dots', 'dotsLbl'], define: 'nT' },
     1.2: { on: [...SOURCES, 'peers', 'peersLbl'] },
     // Storybook's definition first; the "+ layout" chip pops on the next
     // paragraph (2.05) so the two never compete.
-    2: { on: [...SOURCES, 'peers', 'peersLbl', 'nSB', 'sSB', 'stS', 'stT', 'ldSB'], define: 'nSB' },
+    2: { on: [...SOURCES, 'peers', 'peersLbl', 'nSB', 'sSB', 'stS', 'stT'], define: 'nSB' },
     2.05: { on: [...SOURCES, 'peers', 'peersLbl', 'nSB', 'sSB', 'stS', 'stT', 'chip'] },
     2.1: {
       on: [...SOURCES, 'peers', 'peersLbl', 'nSB', 'sSB', 'stS', 'stT', 'chip'],
       strong: ['sS', 'sT', 'sSB'],
     },
-    3: { on: [...TRIANGLE, 'ldF'], dim: ['peers', 'peersLbl', 'stS', 'stT'], define: 'nF' },
+    3: { on: TRIANGLE, dim: ['peers', 'peersLbl', 'stS', 'stT'], define: 'nF' },
     3.1: { on: [...TRIANGLE, ...READS], dim: ['peers', 'peersLbl', 'stS', 'stT'] },
     3.2: {
       on: [...TRIANGLE, ...READS, 'ckS', 'ckT', 'ckSB'],
@@ -113,12 +114,44 @@
   // from the node to that corner.
   const CALLOUTS = {
     nS: { x: 192, y: 24, anchor: 'tl', w: 0.6, ld: 'M158 70 H190' },
-    nT: { x: 196, y: 186, anchor: 'bl', w: 0.6, ld: 'M150 297 L196 186' },
+    // Waits for the tokens box to finish rising (0.8s) before attaching.
+    nT: { x: 196, y: 186, anchor: 'bl', w: 0.6, ld: 'M150 297 L196 186', delay: 0.8 },
     // Anchored right of the schema stream, which passes just left of it.
     nSB: { x: 232, y: 150, anchor: 'bl', w: 0.56, ld: `M${cx(N.SB)} 168 V152` },
     nF: { x: 536, y: 150, anchor: 'br', w: 0.46, ld: `M${cx(N.F)} 168 V152` },
   };
-  const LEADER_KEYS = { nS: 'ldS', nT: 'ldT', nSB: 'ldSB', nF: 'ldF' };
+  const CALLOUT_DELAY = 0.35; // seconds; card and leader share it
+
+  // Label entry delays follow their line: lb4T waits for rdT, which redraws
+  // (from 0.7s) when scrolling back up from stage 5.
+
+  // Hover / tap explainers that are not term definitions. Edit copy here.
+  //   dots:   the two groups of the stage-1.1 dot field.
+  //   checks: the check-mark discs; copy depends on the stage, with
+  //           `default` used for any stage not listed.
+  const EXPLAINERS = {
+    dots: {
+      shared: {
+        term: '471 shared',
+        text: 'the same value in all five brands. The spacing scale, type sizes, neutral and status colours, and component measurements: the core every brand builds on.',
+      },
+      brand: {
+        term: '69 by brand',
+        text: "these change per brand. About 40 are colours for buttons, links, heroes and tabs; the rest are corners, padding and a few sizes, such as MCR2030's pill button.",
+      },
+    },
+    checks: {
+      default: {
+        ckS: { term: 'Checked against the schema', text: "the component's fields and presets matched what the content schema allows." },
+        ckT: { term: 'Checked against the brand settings', text: 'every colour, size and spacing value matched the design tokens.' },
+        ckSB: { term: 'Checked against Storybook', text: "the component's layout matched the working version in the browser." },
+      },
+      4.1: {
+        ckT: { term: 'These agreed', text: 'the brand settings and Storybook both said 55% opacity, so the fault had to be in the conversion to Figma.' },
+        ckSB: { term: 'These agreed', text: 'the brand settings and Storybook both said 55% opacity, so the fault had to be in the conversion to Figma.' },
+      },
+    },
+  };
 
   // The schema callout carries a wireframe of the Book Card: structure, not
   // appearance. Dashed = optional. Edit the slots here.
@@ -149,7 +182,8 @@
     `<text class="kh-sv__el kh-sv__label ${cls}" data-k="${k}" x="${x}" y="${y}" text-anchor="${anchor}" style="--d:${delay}s">${text}</text>`;
   const check = (k, x, y, delay = 0) => `
     <g class="kh-sv__el kh-sv__check" data-k="${k}" style="--d:${delay}s" transform="translate(${x} ${y})">
-      <circle r="11.5"/>
+      <circle class="kh-sv__check-hit" r="19"/>
+      <circle class="kh-sv__check-disc" r="11.5"/>
       <path d="M-5 0.5 L-1.5 4 L5 -3.5"/>
     </g>`;
 
@@ -179,7 +213,7 @@
 <svg class="kh-sv" id="${id}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
   <defs>${'' /* masks appended by JS */}</defs>
   <g class="kh-sv__lines">
-    ${line('peers', P.peers, 'kh-sv__line--peers')}
+    ${line('peers', P.peers, 'kh-sv__line--peers', { delay: 0.35 })}
     ${line('stS', P.stS, 'kh-sv__line--stream', { head: true })}
     ${line('stT', P.stT, 'kh-sv__line--stream', { head: true })}
     ${line('rdS', P.rdS, 'kh-sv__line--read', { head: true, delay: 0 })}
@@ -188,13 +222,15 @@
     ${line('fix', P.fix, 'kh-sv__line--fix', { head: true, delay: 0.6, mid: '222,165' })}
     ${line('g5T', P.g5T, 'kh-sv__line--good', { head: true })}
     ${line('g5arc', P.g5arc, 'kh-sv__line--good', { head: true, delay: 0.3 })}
-    ${Object.keys(CALLOUTS).map((k) => line(LEADER_KEYS[k], CALLOUTS[k].ld, 'kh-sv__line--leader')).join('')}
+    ${Object.keys(CALLOUTS).map((k) => `<path class="kh-sv__leader" data-leader="${k}" style="--kh-co-delay:${CALLOUTS[k].delay ?? CALLOUT_DELAY}s" d="${CALLOUTS[k].ld}"/>`).join('')}
     <path class="kh-sv__el kh-sv__pulse" data-k="g5T" pathLength="1" d="${P.g5T}"/>
     <path class="kh-sv__el kh-sv__pulse" data-k="g5arc" pathLength="1" d="${P.g5arc}"/>
   </g>
   <g class="kh-sv__el kh-sv__dots" data-k="dots">${dots}</g>
-  ${label('dotsLbl', 200, 222, '471 shared · 87.2%', { anchor: 'start', delay: 0.6 })}
-  ${label('dotsLbl', 520, 222, '69 by brand', { anchor: 'end', cls: 'kh-sv__label--brand', delay: 0.9 })}
+  ${label('dotsLbl', 200, 222, '471 shared · 87.2%', { anchor: 'start', cls: 'kh-sv__dotlbl--shared', delay: 0.6 })}
+  ${label('dotsLbl', 520, 222, '69 by brand', { anchor: 'end', cls: 'kh-sv__label--brand kh-sv__dotlbl--brand', delay: 0.9 })}
+  <rect class="kh-sv__el kh-sv__hit" data-k="dots" data-dots="shared" x="196" y="206" width="246" height="160"/>
+  <rect class="kh-sv__el kh-sv__hit" data-k="dots" data-dots="brand" x="446" y="206" width="80" height="160"/>
   ${label('dotsLbl', 200, 384, 'Each dot is one of 540 Figma variables', { anchor: 'start', cls: 'kh-sv__label--quiet', delay: 1 })}
   ${node('nS', N.S, 'Content schemas')}
   ${node('nT', N.T, 'Design tokens', ' kh-sv__rise')}
@@ -208,8 +244,8 @@
   ${sub('sF', N.F, '297 variants')}
   ${sub('sF5', N.F, '56 instances')}
   ${label('lbF5', N.F.x + N.F.w, N.F.y + N.F.h + 20, 'edits kept', { anchor: 'end', cls: 'kh-sv__label--flag', delay: 1.2 })}
-  ${label('peersLbl', 90, 194, 'peers,', { anchor: 'start' })}
-  ${label('peersLbl', 90, 210, 'independent', { anchor: 'start' })}
+  ${label('peersLbl', 90, 194, 'peers,', { anchor: 'start', delay: 0.45 })}
+  ${label('peersLbl', 90, 210, 'independent', { anchor: 'start', delay: 0.45 })}
   <g class="kh-sv__el kh-sv__chip" data-k="chip" style="--d:0.9s">
     <rect x="${N.SB.x + N.SB.w - 70}" y="${N.SB.y - 34}" width="74" height="24" rx="12"/>
     <text x="${N.SB.x + N.SB.w - 33}" y="${N.SB.y - 17.5}">+ layout</text>
@@ -217,8 +253,8 @@
   ${label('lbS', 318, 26, 'reads fields, presets', { delay: 0.6 })}
   ${label('lbT', 318, 394, 'reads variables', { delay: 1.3 })}
   ${label('lbSB', 357, 160, 'reads geometry', { delay: 2 })}
-  ${label('lb4T', 318, 394, '0.55 read as 0.55%', { cls: 'kh-sv__label--flag' })}
-  ${label('lb4SB', 357, 160, 'line-height', { cls: 'kh-sv__label--flag' })}
+  ${label('lb4T', 318, 394, '0.55 read as 0.55%', { cls: 'kh-sv__label--flag', delay: 1 })}
+  ${label('lb4SB', 357, 160, 'line-height', { cls: 'kh-sv__label--flag', delay: 0.5 })}
   ${label('fixLbl', 357, 250, 'the limit flows down', { cls: 'kh-sv__label--fix', delay: 1.6 })}
   ${check('ckS', N.S.x + N.S.w, N.S.y, 0)}
   ${check('ckT', N.T.x + N.T.w, N.T.y, 0.15)}
@@ -344,12 +380,7 @@
       sets[m] = new Set(spec[m] || []);
     });
     svg.setAttribute('data-stage', stageId);
-    const layer = svg.parentNode.querySelector('.kh-scrolly__callouts');
-    if (layer) {
-      layer.querySelectorAll('[data-define]').forEach((c) => {
-        c.classList.toggle('is-on', c.dataset.define === spec.define);
-      });
-    }
+
     svg.querySelectorAll('[data-k]').forEach((el) => {
       const k = el.dataset.k;
       const on = sets.on.has(k);
@@ -395,6 +426,7 @@
       card.style.setProperty('--x', `${((place.x / W) * 100).toFixed(2)}%`);
       card.style.setProperty('--y', `${((place.y / H) * 100).toFixed(2)}%`);
       card.style.setProperty('--w', `${(place.w * 100).toFixed(0)}%`);
+      card.style.setProperty('--kh-co-delay', `${place.delay ?? CALLOUT_DELAY}s`);
       card.innerHTML = `${term ? `<span class="kh-scrolly__callout-term">${term.textContent}</span>` : ''}
         <span class="kh-scrolly__callout-text">${body.innerHTML.trim()}</span>
         ${WIREFRAME[key] ? wireframe(WIREFRAME[key]) : ''}`;
@@ -433,17 +465,51 @@
     return w > 0 && h > 0 ? w * h : 0;
   }
 
+  // Popup targets. Each returns its anchor element (what the caret points
+  // at), its content, and what must not count as an obstacle to itself.
+  //   node  -- a box: the term definition from the post's aside
+  //   dots  -- a dot group (shared block / brand column, with its labels)
+  //   check -- a check-mark disc: stage-dependent copy
+  // Check discs are drawn after the boxes, so over a disc the check wins.
+  function targetOf(el) {
+    return el.closest('.kh-sv__check, .kh-sv__hit, .kh-sv__node');
+  }
+
   function setupTips(region, graphic, svg) {
     const tip = document.createElement('div');
     tip.className = 'kh-scrolly__tip';
     graphic.appendChild(tip);
-    let openKey = null;
-    const GAP = 12; // box edge to card edge; the caret spans it
+    let openId = null;
+    const GAP = 12; // anchor edge to card edge; the caret spans it
     const PAD = 4; // keep inside the graphic
 
-    const place = (group) => {
+    const describe = (t) => {
+      if (t.matches('.kh-sv__node')) {
+        const key = t.dataset.k;
+        // The stage callout is already explaining this box.
+        if (graphic.dataset.callout === key) return null;
+        const def = definitionParts(region, key);
+        return def && { id: `node:${key}`, anchor: t.querySelector('rect'), term: def.term, html: def.html, own: [t] };
+      }
+      if (t.matches('.kh-sv__hit')) {
+        const group = t.dataset.dots;
+        const copy = EXPLAINERS.dots[group];
+        const own = [...svg.querySelectorAll('.kh-sv__hit, .kh-sv__dots, [data-k="dotsLbl"]')];
+        // Anchored on the group's label, not the whole block: around the
+        // block every side is crowded, but below the label is the group's
+        // own dot field, which may be covered.
+        const anchor = svg.querySelector(`.kh-sv__dotlbl--${group}`) || t;
+        return copy && { id: `dots:${group}`, anchor, term: copy.term, html: copy.text, own, dots: group, focus: t };
+      }
+      const key = t.dataset.k;
+      const stage = svg.dataset.stage;
+      const copy = (EXPLAINERS.checks[stage] || {})[key] || EXPLAINERS.checks.default[key];
+      return copy && { id: `check:${key}@${stage}`, anchor: t.querySelector('.kh-sv__check-disc'), term: copy.term, html: copy.text, own: [t] };
+    };
+
+    const place = (d) => {
       const host = graphic.getBoundingClientRect();
-      const box = group.querySelector('rect').getBoundingClientRect();
+      const box = d.anchor.getBoundingClientRect();
       const tw = tip.offsetWidth;
       const th = tip.offsetHeight;
       const rel = (r) => ({
@@ -454,7 +520,7 @@
       const midY = (b.top + b.bottom) / 2;
       const clamp = (v, lo, hi) => Math.max(lo, Math.min(v, hi));
       const obstacles = [...svg.querySelectorAll(OBSTACLES)]
-        .filter((el) => !group.contains(el))
+        .filter((el) => !d.own.some((o) => o.contains(el)))
         .map((el) => {
           // Boxes and check marks carry the meaning, so covering them costs
           // most; labels and arrowheads less; the dot field least.
@@ -465,6 +531,17 @@
           if (el.closest('.is-dim, .is-faint')) w *= 0.4;
           return { r: rel(el.getBoundingClientRect()), w };
         });
+      // A stage callout on screen is as important as a box; its leader
+      // should not be crossed either.
+      graphic.querySelectorAll('.kh-scrolly__callout.is-on').forEach((c) => {
+        obstacles.push({ r: rel(c.getBoundingClientRect()), w: 20 });
+      });
+      svg.querySelectorAll('.kh-sv__leader.is-on').forEach((l) => {
+        obstacles.push({ r: rel(l.getBoundingClientRect()), w: 2 });
+      });
+      // A dot popup should not hide the group it explains; covering the
+      // other (dimmed) group is fine.
+      if (d.focus) obstacles.push({ r: rel(d.focus.getBoundingClientRect()), w: 3 });
       const cands = [
         { side: 'bottom', x: midX - tw / 2, y: b.bottom + GAP, room: host.height - b.bottom },
         { side: 'top', x: midX - tw / 2, y: b.top - GAP - th, room: b.top },
@@ -483,7 +560,7 @@
       });
       cands.sort((p, q) => p.score - q.score);
       const c = cands[0];
-      // Caret position along the card edge, aimed at the box edge midpoint.
+      // Caret position along the card edge, aimed at the anchor's midpoint.
       const caret = c.vertical ? clamp(midX - c.x, 14, tw - 14) : clamp(midY - c.y, 14, th - 14);
       tip.dataset.side = c.side;
       tip.style.setProperty('--kh-tip-caret', `${caret}px`);
@@ -492,49 +569,56 @@
     };
 
     const hide = () => {
-      openKey = null;
+      openId = null;
       tip.classList.remove('is-on');
+      delete svg.dataset.dotFocus;
     };
 
-    const show = (group) => {
-      const key = group.dataset.k;
-      const callout = graphic.querySelector(`.kh-scrolly__callout[data-define="${key}"]`);
-      const layer = graphic.querySelector('.kh-scrolly__callouts');
-      const calloutShowing = callout && callout.classList.contains('is-on')
-        && layer && layer.classList.contains('is-pinned')
-        && getComputedStyle(layer).display !== 'none';
-      if (!group.classList.contains('is-on') || calloutShowing) {
+    const show = (t) => {
+      const d = t && t.classList.contains('is-on') ? describe(t) : null;
+      if (!d) {
         hide();
         return;
       }
-      const def = definitionParts(region, key);
-      if (!def) return;
-      openKey = key;
-      tip.innerHTML = `<span class="kh-scrolly__callout-term">${def.term}</span><span class="kh-scrolly__callout-text">${def.html}</span>`;
-      place(group);
+      openId = d.id;
+      tip.innerHTML = `<span class="kh-scrolly__callout-term">${d.term}</span><span class="kh-scrolly__callout-text">${d.html}</span>`;
+      if (d.dots) svg.dataset.dotFocus = d.dots;
+      else delete svg.dataset.dotFocus;
+      place(d);
       tip.classList.add('is-on');
     };
 
-    svg.querySelectorAll('.kh-sv__node').forEach((group) => {
-      group.addEventListener('pointerenter', (e) => {
-        if (e.pointerType !== 'touch') show(group);
-      });
-      group.addEventListener('pointerleave', (e) => {
-        if (e.pointerType !== 'touch') hide();
-      });
-      // Touch: tap a box to toggle its tooltip.
-      group.addEventListener('pointerup', (e) => {
-        if (e.pointerType !== 'touch') return;
-        if (openKey === group.dataset.k) hide();
-        else show(group);
-      });
+    // One delegated handler for every target: pointerover reaches the
+    // innermost target, so a check disc beats the box it sits on.
+    let current = null;
+    svg.addEventListener('pointerover', (e) => {
+      if (e.pointerType === 'touch') return;
+      const t = targetOf(e.target);
+      if (t === current) return;
+      current = t;
+      show(t);
     });
-    // Tap elsewhere, scroll, or a stage change closes it.
+    svg.addEventListener('pointerleave', (e) => {
+      if (e.pointerType === 'touch') return;
+      current = null;
+      hide();
+    });
+    // Touch: tap a target to toggle; tap elsewhere to close.
+    svg.addEventListener('pointerup', (e) => {
+      if (e.pointerType !== 'touch') return;
+      const t = targetOf(e.target);
+      const d = t && t.classList.contains('is-on') ? describe(t) : null;
+      if (d && d.id === openId) hide();
+      else show(t);
+    });
     document.addEventListener('pointerdown', (e) => {
-      if (openKey && !e.target.closest('.kh-sv__node')) hide();
+      if (openId && !targetOf(e.target)) hide();
     }, { passive: true });
-    window.addEventListener('scroll', () => { if (openKey) hide(); }, { passive: true });
-    return hide;
+    window.addEventListener('scroll', () => { if (openId) hide(); }, { passive: true });
+    return () => {
+      current = null;
+      hide();
+    };
   }
 
   // Keep the callout layer exactly over the drawn viewBox: the SVG letterboxes
@@ -615,6 +699,25 @@
     instances.push({ region, svg, steps, initial, current: initial, active: null, layer: graphic.querySelector('.kh-scrolly__callouts'), hideTip });
   });
 
+  // The ONE switch for a stage callout: its card and its leader line are
+  // turned on and off together, from the same condition, with the same
+  // delay. The condition: wide layout, graphic pinned (a callout popping out
+  // while the graphic is still sliding into place reads as a glitch), and
+  // the current stage defines a term.
+  function syncCallout(inst) {
+    if (!inst.layer) return;
+    const g = inst.svg.parentNode;
+    const top = parseFloat(getComputedStyle(g).top) || 0;
+    const pinned = Math.abs(g.getBoundingClientRect().top - top) < 2;
+    const spec = STAGES[inst.current] || {};
+    const key = wide.matches && pinned && spec.define ? spec.define : '';
+    if (key === (g.dataset.callout || '')) return;
+    g.dataset.callout = key;
+    g.querySelectorAll('.kh-scrolly__callout[data-define], .kh-sv__leader[data-leader]').forEach((el) => {
+      el.classList.toggle('is-on', (el.dataset.define || el.dataset.leader) === key);
+    });
+  }
+
   function triggerLine() {
     return window.innerHeight * (wide.matches ? 0.55 : 0.66);
   }
@@ -636,13 +739,7 @@
         applyStage(inst.svg, stage);
         inst.hideTip();
       }
-      if (inst.layer) {
-        // Pinned = the sticky graphic is sitting at its sticky offset.
-        const g = inst.svg.parentNode;
-        const top = parseFloat(getComputedStyle(g).top) || 0;
-        const pinned = Math.abs(g.getBoundingClientRect().top - top) < 2;
-        inst.layer.classList.toggle('is-pinned', pinned);
-      }
+      syncCallout(inst);
     });
   }
 

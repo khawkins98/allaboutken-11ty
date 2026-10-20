@@ -155,6 +155,21 @@
     transform: none;
   }
 
+  // On the way out it fades in place and only drops back once invisible:
+  // sliding away while visible left lines pointing at an empty spot.
+  .kh-sv__rise:not(.is-on) {
+    transition: opacity 0.45s ease, color 0.45s ease, transform 0s linear 0.45s;
+  }
+
+  // Anything that labels or decorates a line or box leaves faster than the
+  // thing it belongs to, so it is never left floating on its own.
+  .kh-sv__label:not(.is-on),
+  .kh-sv__chip:not(.is-on),
+  .kh-sv__check:not(.is-on),
+  .kh-sv__head:not(.is-on) {
+    transition-duration: 0.2s;
+  }
+
   .kh-sv__el.is-dim {
     opacity: 0.28;
   }
@@ -213,8 +228,20 @@
     stroke-width: 4;
   }
 
-  .kh-sv__line--leader {
+  // Callout leader. Not a stage element: the script switches it together
+  // with its callout card (one condition, one delay), so it never shows
+  // without the card. It arrives with the card and leaves before it.
+  .kh-sv__leader {
+    fill: none;
+    opacity: 0;
+    stroke: currentColor;
     stroke-width: 1.25;
+    transition: opacity 0.2s ease;
+  }
+
+  .kh-sv__leader.is-on {
+    opacity: 1;
+    transition: opacity 0.3s ease var(--kh-co-delay, 0.35s);
   }
 
   // The fix flowing out of the schema: dark ink and dashed, so it reads as
@@ -332,7 +359,23 @@
   }
 
   // Filled discs: an outline check at diagram scale was easy to miss.
-  .kh-sv__check circle {
+  // A check mark can be hovered for what it means at this stage. The hit
+  // circle is larger than the disc; neither takes the pointer while hidden.
+  .kh-sv__check {
+    pointer-events: none;
+  }
+
+  .kh-sv__check.is-on {
+    cursor: help;
+    pointer-events: all;
+  }
+
+  .kh-sv__check .kh-sv__check-hit {
+    fill: transparent;
+    stroke: none;
+  }
+
+  .kh-sv__check .kh-sv__check-disc {
     fill: currentColor;
     stroke: var(--kh-ground);
     stroke-width: 2;
@@ -353,8 +396,8 @@
     transform: translate(var(--kh-sv-dx, 0), var(--kh-sv-dy, 0)) scale(0.2);
     transform-box: fill-box;
     transform-origin: center;
-    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
-    transition-delay: calc(var(--kh-sv-i, 0) * 1ms);
+    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.2s ease;
+    transition-delay: calc(var(--kh-sv-i, 0) * 1ms), 0s;
   }
 
   .kh-sv__dot--brand {
@@ -364,6 +407,28 @@
 
   .kh-sv__dots.is-on .kh-sv__dot {
     transform: none;
+  }
+
+  // Dot groups can be hovered: the whole group (block or column, with its
+  // label) is the target. While one is explained, the other steps back.
+  .kh-sv__hit {
+    fill: transparent;
+    pointer-events: none;
+  }
+
+  .kh-sv__hit.is-on {
+    cursor: help;
+    pointer-events: all;
+  }
+
+  .kh-sv[data-dot-focus='shared'] .kh-sv__dot--brand,
+  .kh-sv[data-dot-focus='brand'] .kh-sv__dot:not(.kh-sv__dot--brand) {
+    opacity: 0.15;
+  }
+
+  .kh-sv[data-dot-focus='shared'] .kh-sv__dotlbl--brand.is-on,
+  .kh-sv[data-dot-focus='brand'] .kh-sv__dotlbl--shared.is-on {
+    opacity: 0.3;
   }
 
 
@@ -399,7 +464,7 @@
     }
 
     // No callouts in the narrow band, so no leaders to them either.
-    .kh-sv__line--leader {
+    .kh-sv__leader {
       display: none;
     }
   }
@@ -456,19 +521,12 @@
     width: min(22rem, var(--w));
   }
 
-  // Callouts wait until the graphic is pinned: as a region first scrolls in,
-  // the graphic is still moving, and a definition popping out then reads as
-  // a glitch rather than as an answer to the paragraph. Declared after
-  // `.is-on` below so it wins at equal weight.
+  // `.is-on` is set by the script's single callout switch (stage defines a
+  // term, layout is wide, graphic is pinned), together with the leader.
   .kh-scrolly__callout.is-on {
     opacity: 1;
     transform: translate(var(--kh-co-tx), var(--kh-co-ty));
-    transition-delay: 0.35s;
-  }
-
-  .kh-scrolly__callouts:not(.is-pinned) .kh-scrolly__callout {
-    opacity: 0;
-    transition-delay: 0s;
+    transition-delay: var(--kh-co-delay, 0.35s);
   }
 
   .kh-scrolly__callout--tl {
@@ -662,10 +720,21 @@
     }
 
     // Fade only: no pop.
+    // Fade in only; leave instantly, as the rest of the diagram does here,
+    // so a card or leader never outlives its node.
+    .kh-scrolly__callout,
+    .kh-sv__leader {
+      transition: none;
+    }
+
+    .kh-scrolly__callout.is-on,
+    .kh-sv__leader.is-on {
+      transition: opacity 0.2s linear;
+    }
+
     .kh-scrolly__callout,
     .kh-scrolly__callout.is-on {
       transform: translate(var(--kh-co-tx), var(--kh-co-ty));
-      transition: opacity 0.2s linear;
     }
 
     .kh-scrolly__step,
