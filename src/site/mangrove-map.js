@@ -138,38 +138,46 @@
       }
     };
 
+    // Layout (see _kh-dataviz.scss): on wide screens the studio shares the
+    // scrolly regions' grid. Heading and "what changes" sit in the step
+    // column; the controls and the card sit in the graphic column. Narrow
+    // screens stack in reading order: heading, controls, card, changes.
     container.innerHTML = `
       <div class="kh-brand-studio">
         <div class="kh-brand-studio__header">
-          <h3 class="kh-brand-studio__title">Same structured content schema, different tokens</h3>
-          <p class="kh-brand-studio__subtitle">Switch brand token modes and editorial presets on <code>HorizontalBookCard</code>: the tokens change how it looks while the structured content schema and layout rules stay intact.</p>
+          <h3 class="kh-brand-studio__title">Hold the content, swap the brand</h3>
+          <p class="kh-brand-studio__subtitle">Switch brands and presets on the Book Card. The brand settings change how it looks; its fields and layout stay the same.</p>
         </div>
 
-        <div class="kh-brand-studio__controls">
-          <div class="kh-brand-studio__group">
-            <span class="kh-brand-studio__label">Brand Mode:</span>
-            <button type="button" class="kh-brand-studio__brand-btn kh-brand-studio__brand-btn--active" data-brand="undrr"><span class="kh-brand-dot" style="background: #004F91;"></span>UNDRR</button>
-            <button type="button" class="kh-brand-studio__brand-btn" data-brand="pweb"><span class="kh-brand-dot" style="background: #0A6969;"></span>PreventionWeb</button>
-            <button type="button" class="kh-brand-studio__brand-btn" data-brand="mcr"><span class="kh-brand-dot" style="background: #591A61;"></span>MCR2030</button>
-            <button type="button" class="kh-brand-studio__brand-btn" data-brand="delta"><span class="kh-brand-dot" style="background: #004F91;"></span>DELTA</button>
-            <button type="button" class="kh-brand-studio__brand-btn" data-brand="irp"><span class="kh-brand-dot" style="background: #0F78BF;"></span>IRP</button>
+        <div class="kh-brand-studio__demo">
+          <div class="kh-brand-studio__controls">
+            <div class="kh-brand-studio__group" role="group" aria-labelledby="kh-bs-brand-label">
+              <span class="kh-brand-studio__label" id="kh-bs-brand-label">Brand</span>
+              <div class="kh-brand-studio__pills">
+                <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn kh-brand-studio__brand-btn--active" aria-pressed="true" data-brand="undrr"><span class="kh-brand-dot" style="background: #004F91;"></span>UNDRR</button>
+                <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn" aria-pressed="false" data-brand="pweb"><span class="kh-brand-dot" style="background: #0A6969;"></span>PreventionWeb</button>
+                <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn" aria-pressed="false" data-brand="mcr"><span class="kh-brand-dot" style="background: #591A61;"></span>MCR2030</button>
+                <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn" aria-pressed="false" data-brand="delta"><span class="kh-brand-dot" style="background: #004F91;"></span>DELTA</button>
+                <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn" aria-pressed="false" data-brand="irp"><span class="kh-brand-dot" style="background: #0F78BF;"></span>IRP</button>
+              </div>
+            </div>
+
+            <div class="kh-brand-studio__group" role="group" aria-labelledby="kh-bs-preset-label">
+              <span class="kh-brand-studio__label" id="kh-bs-preset-label">Preset</span>
+              <div class="kh-brand-studio__pills">
+                <button type="button" class="kh-brand-studio__pill kh-brand-studio__preset-btn kh-brand-studio__preset-btn--active" aria-pressed="true" data-preset="default">Default</button>
+                <button type="button" class="kh-brand-studio__pill kh-brand-studio__preset-btn" aria-pressed="false" data-preset="noimage">No image</button>
+                <button type="button" class="kh-brand-studio__pill kh-brand-studio__preset-btn" aria-pressed="false" data-preset="nolink">No link</button>
+                <button type="button" class="kh-brand-studio__pill kh-brand-studio__preset-btn" aria-pressed="false" data-preset="buttononly">Button only</button>
+              </div>
+            </div>
           </div>
 
-          <div class="kh-brand-studio__group">
-            <span class="kh-brand-studio__label">Editorial Preset:</span>
-            <button type="button" class="kh-brand-studio__preset-btn kh-brand-studio__preset-btn--active" data-preset="default">Default</button>
-            <button type="button" class="kh-brand-studio__preset-btn" data-preset="noimage">No Image</button>
-            <button type="button" class="kh-brand-studio__preset-btn" data-preset="nolink">No Link</button>
-            <button type="button" class="kh-brand-studio__preset-btn" data-preset="buttononly">Button Only</button>
-          </div>
-        </div>
-
-        <div class="kh-brand-studio__workspace">
-          <!-- Left: Live Rendered Component -->
+          <!-- The live component, framed like a node in the diagram -->
           <div class="kh-brand-studio__card-stage" id="live-card-stage">
             <div id="live-card" class="kh-live-card">
               <div id="live-card-visual" class="kh-live-card__visual">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 240" width="160" height="240">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 240" width="160" height="240" aria-hidden="true">
                   <rect width="160" height="240" fill="#FFFFFF"/>
                   <path d="M 0 0 L 160 0 L 160 85 L 0 85 Z" fill="#004F91" id="live-svg-banner" />
                   <circle cx="80" cy="50" r="24" fill="#FFFFFF" fill-opacity="0.2"/>
@@ -191,18 +199,18 @@
                 <button type="button" id="live-card-btn" class="kh-live-card__btn">Explore Publication →</button>
               </div>
             </div>
-
-            <div id="live-assertion-badge" class="kh-brand-studio__assertion-badge">
-              ✓ cardGeometryChecks.js: ALL ASSERTIONS PASSING (1:1.414 ratio, 0px border bleed)
-            </div>
           </div>
 
-          <!-- Right: what this brand changes, in plain terms -->
-          <div class="kh-brand-studio__inspector">
-            <h4 class="kh-brand-studio__inspector-title">What changes in <span id="inspector-brand">UNDRR</span></h4>
-            <div id="inspector-content" class="kh-brand-studio__tab-content" aria-live="polite">
-              <!-- Rendered by renderInspector() -->
-            </div>
+          <div id="live-assertion-badge" class="kh-brand-studio__assertion-badge" aria-live="polite">
+            ✓ cardGeometryChecks.js: ALL ASSERTIONS PASSING (1:1.414 ratio, 0px border bleed)
+          </div>
+        </div>
+
+        <!-- What this brand changes, in plain terms -->
+        <div class="kh-brand-studio__inspector">
+          <h4 class="kh-brand-studio__inspector-title">What changes in <span id="inspector-brand" class="kh-brand-studio__term">UNDRR</span></h4>
+          <div id="inspector-content" class="kh-brand-studio__tab-content" aria-live="polite">
+            <!-- Rendered by renderInspector() -->
           </div>
         </div>
       </div>
@@ -279,8 +287,12 @@
     const brandBtns = container.querySelectorAll('.kh-brand-studio__brand-btn');
     brandBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
-        brandBtns.forEach(b => b.classList.remove('kh-brand-studio__brand-btn--active'));
+        brandBtns.forEach((b) => {
+          b.classList.remove('kh-brand-studio__brand-btn--active');
+          b.setAttribute('aria-pressed', 'false');
+        });
         btn.classList.add('kh-brand-studio__brand-btn--active');
+        btn.setAttribute('aria-pressed', 'true');
         currentBrand = btn.dataset.brand;
         updateCard();
       });
@@ -290,8 +302,12 @@
     const presetBtns = container.querySelectorAll('.kh-brand-studio__preset-btn');
     presetBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
-        presetBtns.forEach(p => p.classList.remove('kh-brand-studio__preset-btn--active'));
+        presetBtns.forEach((p) => {
+          p.classList.remove('kh-brand-studio__preset-btn--active');
+          p.setAttribute('aria-pressed', 'false');
+        });
         btn.classList.add('kh-brand-studio__preset-btn--active');
+        btn.setAttribute('aria-pressed', 'true');
         currentPreset = btn.dataset.preset;
         updateCard();
       });

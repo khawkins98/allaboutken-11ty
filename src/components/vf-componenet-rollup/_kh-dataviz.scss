@@ -774,213 +774,243 @@
     letter-spacing: 0.04em;
   }
 
-  // Interactive Brand Studio & Component Contract Morpher
+  // Interactive Brand Studio (mangrove-map.js, #mangrove-brand-studio)
+  // ------------------------------------------------------------------
+  // Flat on the page ground, in the scrolly diagram's language: no panel.
+  // Wide (>= lg): the same two tracks as a scrolly region (_kh-story.scss),
+  // step column + 3rem + graphic column, so its edges line up with the
+  // diagram above and below. Heading and "what changes" sit in the step
+  // column; controls, the live card and its check sit in the graphic column.
+  // Narrow: one column in reading order, aligned to the reading measure.
+  // The card is framed like a diagram node (2px dark, rounded); the
+  // "what changes" list is a callout card with a dark term pill; the toggles
+  // are the same pill, dark when pressed and outlined when not.
+  // Its host is a .kh-bleed-out, which paints an opaque ground for plates.
+  // The studio is flat on the grid paper like the diagram, so clear it.
+  .kh-bleed-out:has(> .kh-brand-studio) {
+    background: none;
+  }
+
   .kh-brand-studio {
-    background: linear-gradient(180deg, #FAF7F0 0%, #F5EFE1 100%);
-    border: 1px solid #E2D8C3;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
-    box-sizing: border-box;
-    margin: 2rem 0;
-    padding: 1.25rem;
-    position: relative;
-    width: 100%;
+    color: var(--kh-color--text);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--kh-font-sans);
+    gap: 1.5rem;
+    margin: 0 auto;
+    max-width: var(--kh-story-measure, 39rem);
 
     * {
       box-sizing: border-box;
     }
 
-    &__header {
-      border-bottom: 1px solid #E5DEC9;
-      margin-bottom: 1.25rem;
-      padding-bottom: 1rem;
+    @media (min-width: $kh-breakpoint--lg) {
+      column-gap: 3rem;
+      display: grid;
+      grid-template-areas:
+        'header demo'
+        'inspector demo';
+      grid-template-columns: var(--kh-story-steps, 20rem) minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+      max-width: none;
+      row-gap: 1.75rem;
     }
 
+    &__header {
+      grid-area: header;
+    }
+
+    // Matches the prose h3 (27px / 600): the static Plex faces are 400/600.
     &__title {
-      font-family: var(--kh-font-sans);
-      font-size: 16px;
-      font-weight: 700;
-      margin: 0 0 4px;
+      color: var(--kh-color--text);
+      font-size: 27px;
+      font-weight: 600;
+      line-height: 1.333;
+      margin: 0 0 0.75rem;
     }
 
     &__subtitle {
-      color: #64748B;
-      font-size: 12px;
+      font-size: 1.125rem;
+      line-height: 1.6;
       margin: 0;
+    }
+
+    &__demo {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      grid-area: demo;
+      min-width: 0;
     }
 
     &__controls {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
+      display: grid;
+      gap: 0.85rem;
+    }
 
-      @media (min-width: 760px) {
-        align-items: center;
-        flex-direction: row;
-        justify-content: space-between;
+    // Label above the pills when narrow; a fixed label column when wide, so
+    // both rows of pills start on one edge.
+    &__group {
+      display: grid;
+      gap: 0.4rem;
+
+      @media (min-width: $kh-breakpoint--sm) {
+        align-items: start;
+        column-gap: 1rem;
+        grid-template-columns: 4.25rem minmax(0, 1fr);
       }
     }
 
-    &__group {
-      align-items: center;
+    // On the first pill row's centre line when the pills wrap.
+    &__label {
+      font-size: 15px;
+      font-weight: 600;
+
+      @media (min-width: $kh-breakpoint--sm) {
+        line-height: 2.5rem;
+      }
+    }
+
+    &__pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
 
-    &__label {
-      color: #1E293B;
-      font-family: var(--kh-font-sans);
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      margin-right: 0.2rem;
-      text-transform: uppercase;
-    }
-
-    &__brand-btn {
+    &__pill {
       align-items: center;
-      background: #FFF;
-      border: 1px solid #CBD5E1;
-      border-radius: 12px;
-      color: #334155;
+      background: var(--kh-ground);
+      border: 1px solid var(--kh-color--text);
+      border-radius: 999px;
+      color: var(--kh-color--text);
       cursor: pointer;
       display: inline-flex;
-      font-family: var(--kh-font-mono);
-      font-size: 11px;
-      font-weight: 500;
-      gap: 6px;
-      padding: 3px 9px;
-      transition: all 0.2s ease;
+      font-family: var(--kh-font-sans);
+      font-size: 15px;
+      font-weight: 400;
+      gap: 0.45rem;
+      line-height: 1.2;
+      margin: 0;
+      min-height: 2.5rem;
+      padding: 0.35rem 0.95rem;
+      transition: background-color 0.15s ease, color 0.15s ease;
 
+      &:hover {
+        background: #ebebe8;
+      }
+
+      // Doubled class: outranks the site-wide `[class*='kh-']:focus` dashed ring
+      // (index.scss), which comes later and also fires on mouse clicks.
+      &.kh-brand-studio__pill:focus {
+        outline: none;
+      }
+
+      &.kh-brand-studio__pill:focus-visible {
+        outline: 2px solid var(--kh-color--text);
+        outline-offset: 3px;
+      }
+
+      &[aria-pressed='true'] {
+        background: var(--kh-color--text);
+        color: var(--kh-ground);
+        font-weight: 600;
+      }
+
+      // The ground ring keeps a dark brand dot visible on the dark pill.
       .kh-brand-dot {
         border-radius: 50%;
+        box-shadow: 0 0 0 2px var(--kh-ground);
         display: inline-block;
-        height: 8px;
-        width: 8px;
-      }
-
-      &:hover,
-      &--active {
-        border-color: #0F172A;
-        color: #0F172A;
-        font-weight: 700;
-      }
-
-      &--active {
-        background: #F8FAFC;
-        box-shadow: 0 0 0 1px #0F172A;
+        flex: 0 0 auto;
+        height: 10px;
+        width: 10px;
       }
     }
 
-    &__preset-btn {
-      background: #FFF;
-      border: 1px solid #CBD5E1;
-      border-radius: 12px;
-      color: #334155;
-      cursor: pointer;
-      font-family: var(--kh-font-mono);
-      font-size: 11px;
-      padding: 3px 9px;
-      transition: all 0.2s ease;
-
-      &:hover,
-      &--active {
-        background: #334155;
-        border-color: #334155;
-        color: #FFF;
-      }
-    }
-
-    &__workspace {
-      display: grid;
-      gap: 1.25rem;
-      grid-template-columns: 1fr;
-
-      @media (min-width: 860px) {
-        grid-template-columns: 1.15fr 0.85fr;
-      }
-    }
-
+    // The live card, framed as a node in the diagram.
     &__card-stage {
-      align-items: center;
-      background: #FAF7F0;
-      border: 1px dashed #D6CEBB;
-      border-radius: 8px;
+      background: var(--kh-ground);
+      border: 2px solid var(--kh-color--text);
+      border-radius: 6px;
       display: flex;
-      flex-direction: column;
       justify-content: center;
-      min-height: 280px;
-      padding: 1.25rem;
-      position: relative;
+      padding: 1.5rem;
+
+      @media (max-width: $kh-breakpoint--sm-down) {
+        padding: 1rem;
+      }
     }
 
+    // Kept on purpose (owner's call). A status line under the node, in the
+    // diagram's "good" green (5.0:1 on the ground) with a rule, not a fill.
     &__assertion-badge {
-      background: #DCFCE7;
-      border: 1px solid #86EFAC;
-      border-radius: 4px;
-      color: #166534;
+      border-left: 3px solid #15803d;
+      color: #15803d;
       font-family: var(--kh-font-mono);
-      font-size: 10px;
-      font-weight: 600;
-      margin-top: 1rem;
-      padding: 3px 8px;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+      padding: 0.1rem 0 0.1rem 0.75rem;
     }
 
+    // "What changes": a callout card, as in the diagram.
     &__inspector {
-      background: #FFF;
-      border: 1px solid #E2D8C3;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      align-self: start;
+      background: var(--kh-ground);
+      border: 1px solid var(--kh-color--text);
+      font-size: 15px;
+      grid-area: inspector;
+      line-height: 1.5;
+      padding: 0.8rem 0.95rem 0.9rem;
     }
 
     &__inspector-title {
-      border-bottom: 1px solid #E2D8C3;
-      font-size: 13px;
-      font-weight: 700;
-      margin: 0;
-      padding: 0.7rem 1rem;
+      color: var(--kh-color--text);
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.5;
+      margin: 0 0 0.5rem;
     }
 
-    &__tab-content {
-      flex: 1 1 auto;
+    &__term {
+      background: var(--kh-color--text);
+      border-radius: 999px;
+      color: var(--kh-ground);
+      display: inline-block;
       font-size: 13px;
-      line-height: 1.45;
-      padding: 0.85rem 1rem 1rem;
+      font-weight: 600;
+      margin-left: 0.15rem;
+      padding: 0.1rem 0.65rem;
     }
 
     &__intro,
     &__same {
-      color: #475569;
+      color: var(--kh-color--grey--darkest);
       margin: 0;
     }
 
     &__same {
-      border-top: 1px solid #E2E8F0;
+      border-top: 1px solid var(--kh-rule, #dcdcd8);
       margin-top: 0.75rem;
       padding-top: 0.6rem;
     }
 
     &__changes {
       display: grid;
-      gap: 0.45rem;
+      gap: 0.4rem;
       margin: 0.6rem 0 0;
     }
 
     &__change {
       display: grid;
       gap: 0.75rem;
-      grid-template-columns: minmax(8.5rem, 40%) 1fr;
+      grid-template-columns: minmax(7.5rem, 45%) minmax(0, 1fr);
 
       dt {
-        color: #475569;
+        color: var(--kh-color--grey--darkest);
       }
 
       dd {
-        color: #0F172A;
         font-weight: 600;
         margin: 0;
       }
@@ -999,28 +1029,32 @@
 
   // Live Component Container (HorizontalBookCard)
   // Mirrors Mangrove's publication teaser: no background, border, radius or
-  // shadow in any brand (--mg-card-publication-*), so no frame here either.
+  // shadow in any brand (--mg-card-publication-*), so no frame here either;
+  // the frame around it is the studio's node box.
   .kh-live-card {
     background: transparent;
     display: flex;
     flex-direction: column;
+    gap: 1rem;
     max-width: 520px;
-    overflow: hidden;
     transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
     width: 100%;
 
-    @media (min-width: 540px) {
+    @media (min-width: $kh-breakpoint--sm) {
       flex-direction: row;
+      gap: 0;
     }
 
+    // Sized by its 160x240 cover, not stretched to the text beside it.
     &__visual {
+      align-self: flex-start;
       background: #E2E8F0;
       flex: 0 0 auto;
       overflow: hidden;
       position: relative;
-      width: 100%;
+      width: 120px;
 
-      @media (min-width: 540px) {
+      @media (min-width: $kh-breakpoint--sm) {
         width: 140px;
       }
 
@@ -1036,7 +1070,11 @@
       flex: 1 1 auto;
       flex-direction: column;
       gap: 0.5rem;
-      padding: var(--live-card-padding, 1rem);
+      padding: 0;
+
+      @media (min-width: $kh-breakpoint--sm) {
+        padding: 0 0 0 1.25rem;
+      }
     }
 
     // The card label is coloured text in the brand colour, not a filled chip.
@@ -1044,26 +1082,26 @@
       align-self: flex-start;
       color: var(--live-tag-color, #004F91);
       font-family: var(--kh-font-mono);
-      font-size: 10px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 600;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       transition: all 0.3s ease;
     }
 
     &__title {
-      color: #0F172A;
+      color: var(--kh-color--text);
       font-family: var(--kh-font-sans);
-      font-size: 15px;
-      font-weight: 700;
-      line-height: 1.25;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.3;
       margin: 0;
     }
 
     &__summary {
-      color: #475569;
-      font-size: 12px;
-      line-height: 1.45;
+      color: var(--kh-color--grey--darkest);
+      font-size: 15px;
+      line-height: 1.5;
       margin: 0;
     }
 
@@ -1084,7 +1122,24 @@
       &:hover {
         opacity: 0.9;
       }
+
+      &.kh-live-card__btn:focus {
+        outline: none;
+      }
+
+      &.kh-live-card__btn:focus-visible {
+        outline: 2px solid var(--kh-color--text);
+        outline-offset: 3px;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kh-brand-studio__pill,
+    .kh-live-card,
+    .kh-live-card__tag,
+    .kh-live-card__btn {
+      transition: none;
     }
   }
 }
-
