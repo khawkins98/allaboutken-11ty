@@ -39,7 +39,7 @@
   <!-- Header -->
   <g transform="translate(40, 42)">
     <text x="0" y="0" class="text-title">Five Brands, One Token Engine: Invariance vs. Adaptation</text>
-    <text x="0" y="22" class="text-subtitle">How 540 design tokens propagate across UNDRR, DELTA Resilience, IRP, MCR2030, and PreventionWeb</text>
+    <text x="0" y="22" class="text-subtitle">How 540 Figma variables propagate across UNDRR, DELTA Resilience, IRP, MCR2030, and PreventionWeb</text>
     
     <!-- Summary Tag -->
     <g transform="translate(730, -18)">
