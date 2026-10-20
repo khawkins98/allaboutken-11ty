@@ -25,6 +25,14 @@
 // underneath it. (Steps scrolling OVER the graphic as cards was tried: a
 // paragraph is taller than the gap between steps on a phone, so the previous
 // card was still covering the graphic at the moment the next stage played.)
+// Registered so it can transition (an unregistered custom property jumps).
+// At top level: @property is not valid inside a rule.
+@property --kh-drift {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+
 @mixin kh-scrolly() {
   .kh-scrolly--enhanced {
     display: grid;
@@ -520,108 +528,197 @@
     stroke-width: 2.75;
   }
 
-  // The dots. Each sits at the origin and is placed by --x/--y (set by the
-  // script per layout); --dl is a per-dot stagger set once at build. Size
-  // changes are a scale in the same transform: `r` is an attribute, because
-  // Firefox ignores it as a CSS property.
-  //   cloud    the cover's scatter (one frame, then travel)
-  //   settled  clusters in the four box regions; a named cluster (its box
-  //            is drawn, data-named) drops to a faint texture under it
+  // The dots: HTML <i> elements in a layer over the SVG, sized to the
+  // viewBox and scaled with it (the script sets --kh-sv-s, left and top),
+  // so positions and drift are in viewBox units. Each sits at the origin
+  // and is placed by --x/--y (set by the script per layout); --dl is a
+  // per-dot stagger set once at build. Size changes are a scale in the same
+  // transform. The layer mirrors the SVG's state attributes (data-dots,
+  // data-named, the hover focus, live, hidden) and is-jump / is-chain.
+  //   cloud    the first frame (scattered)
+  //   c1, c2   the opening beats: schemas, then variables and families
+  //   settled  the three sources formed; the variants adrift on the right
   //   spread   the 540 laid out beside the tokens box (stage 1.1)
+  //   full     clusters in all four box regions; a named cluster (its box
+  //            is drawn, data-named) drops to a faint texture under it
   //   chain    regrouped under the closing figures
-  .kh-sv__dot {
-    --kh-dot-s: 1;
-    fill: currentColor;
-    opacity: 0.82;
-    transform: translate(var(--x, 0), var(--y, 0)) scale(calc(var(--kh-dot-s) * var(--kh-dot-m, 1)));
-    transform-box: fill-box;
-    transform-origin: center;
-    transition: transform 1.5s cubic-bezier(0.22, 0.8, 0.25, 1) var(--dl, 0s), opacity 0.6s ease, fill 0.5s ease;
+  .kh-sv-dots {
+    // A sibling of the SVG, so it does not inherit the diagram's colours.
+    --kh-sv-good: #15803d; // as .kh-sv
+    color: var(--kh-color--text);
+    height: 400px;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    transform: scale(var(--kh-sv-s, 1));
+    transform-origin: 0 0;
+    width: 540px;
   }
 
-  .kh-sv.is-jump .kh-sv__dot {
+  .kh-sv__dot {
+    --kh-dot-s: 1;
+    animation: kh-sv-drift var(--kh-dr-d, 9s) ease-in-out var(--kh-dr-p, 0s) infinite;
+    background: currentColor;
+    border-radius: 50%;
+    height: 3px;
+    left: -1.5px;
+    opacity: 0.82;
+    position: absolute;
+    top: -1.5px;
+    transform: translate(var(--x, 0), var(--y, 0)) scale(calc(var(--kh-dot-s) * var(--kh-dot-m, 1)));
+    transition: transform 1.5s cubic-bezier(0.22, 0.8, 0.25, 1) var(--dl, 0s), opacity 0.6s ease, background-color 0.5s ease, --kh-drift 1.5s ease var(--dl, 0s);
+    width: 3px;
+    will-change: translate;
+  }
+
+  .kh-sv-dots.is-jump .kh-sv__dot {
     transition: none;
   }
 
+  // Drift: unclaimed dots wander a little, like free radicals, on the
+  // individual `translate` property (composed with the positioning
+  // transform above, so the two never fight), each on its own compositor
+  // layer. Each dot's loop is seeded by the script (duration, phase, two
+  // waypoints); the amplitude is one registered property, --kh-drift, in
+  // viewBox units, so it transitions: order arrives as a dot's drift fades
+  // while it travels into its cluster. Full on the cover, damping through
+  // the opening beats, zero for a formed cluster; the unclaimed variants
+  // keep a faint drift until stage 3. Paused while the graphic is off
+  // screen or the tab is hidden; none under reduced motion (below).
+  @keyframes kh-sv-drift {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+
+    33% {
+      translate: calc(var(--kh-drift, 0) * var(--kh-dr-x1, 0) * 1px) calc(var(--kh-drift, 0) * var(--kh-dr-y1, 0) * 1px);
+    }
+
+    66% {
+      translate: calc(var(--kh-drift, 0) * var(--kh-dr-x2, 0) * 1px) calc(var(--kh-drift, 0) * var(--kh-dr-y2, 0) * 1px);
+    }
+  }
+
+  .kh-sv-dots[data-dots='cloud'] .kh-sv__dot {
+    --kh-drift: 4;
+  }
+
+  .kh-sv-dots[data-dots='c1'] .kh-sv__dot {
+    --kh-drift: 3;
+  }
+
+  .kh-sv-dots[data-dots='c2'] .kh-sv__dot {
+    --kh-drift: 2;
+  }
+
+  .kh-sv-dots[data-dots='settled'] .kh-sv__dot,
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot {
+    --kh-drift: 1.2;
+  }
+
+  // A formed cluster is still: no animation and no compositor layer, so its
+  // dots are painted in flow at sub-pixel precision. (Composited layers are
+  // snapped to whole device pixels, which left the resting grids ragged;
+  // the residual drift collapsing as a dot starts its travel is invisible.)
+  .kh-sv-dots[data-dots='c1'] .kh-sv__dot--S,
+  .kh-sv-dots[data-dots='c2'] .kh-sv__dot--S,
+  .kh-sv-dots[data-dots='c2'] .kh-sv__dot--T,
+  .kh-sv-dots[data-dots='c2'] .kh-sv__dot--B,
+  .kh-sv-dots[data-dots='settled'] .kh-sv__dot:not(.kh-sv__dot--F),
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot:not(.kh-sv__dot--F),
+  .kh-sv-dots[data-dots='full'] .kh-sv__dot,
+  .kh-sv-dots[data-dots='chain'] .kh-sv__dot {
+    --kh-drift: 0;
+    animation: none;
+    will-change: auto;
+  }
+
+  .kh-sv-dots[data-live='0'] .kh-sv__dot,
+  .kh-sv-dots[data-hidden='1'] .kh-sv__dot {
+    animation-play-state: paused;
+  }
+
   .kh-sv__dot--brand {
-    fill: var(--kh-color--blue);
+    background: var(--kh-color--blue);
   }
 
   // Not yet gathered: scattered and quiet. The variants' drift (settled,
   // spread) is quieter still: not a cluster yet, not in the story yet.
-  .kh-sv[data-dots='cloud'] .kh-sv__dot,
-  .kh-sv[data-dots='c1'] .kh-sv__dot:not(.kh-sv__dot--S),
-  .kh-sv[data-dots='c2'] .kh-sv__dot--F {
+  .kh-sv-dots[data-dots='cloud'] .kh-sv__dot,
+  .kh-sv-dots[data-dots='c1'] .kh-sv__dot:not(.kh-sv__dot--S),
+  .kh-sv-dots[data-dots='c2'] .kh-sv__dot--F {
     opacity: 0.4;
   }
 
-  .kh-sv[data-dots='settled'] .kh-sv__dot--F {
+  .kh-sv-dots[data-dots='settled'] .kh-sv__dot--F {
     opacity: 0.22;
   }
 
   // While a cluster is being explained, the others step back.
-  .kh-sv[data-cluster-focus] .kh-sv__dot {
+  .kh-sv-dots[data-cluster-focus] .kh-sv__dot {
     opacity: 0.12;
   }
 
-  .kh-sv[data-cluster-focus='S'] .kh-sv__dot--S,
-  .kh-sv[data-cluster-focus='T'] .kh-sv__dot--T,
-  .kh-sv[data-cluster-focus='B'] .kh-sv__dot--B,
-  .kh-sv[data-cluster-focus='F'] .kh-sv__dot--F {
+  .kh-sv-dots[data-cluster-focus='S'] .kh-sv__dot--S,
+  .kh-sv-dots[data-cluster-focus='T'] .kh-sv__dot--T,
+  .kh-sv-dots[data-cluster-focus='B'] .kh-sv__dot--B,
+  .kh-sv-dots[data-cluster-focus='F'] .kh-sv__dot--F {
     opacity: 0.9;
   }
 
-  .kh-sv[data-named~='S'] .kh-sv__dot--S,
-  .kh-sv[data-named~='T'] .kh-sv__dot--T,
-  .kh-sv[data-named~='B'] .kh-sv__dot--B,
-  .kh-sv[data-named~='F'] .kh-sv__dot--F {
+  .kh-sv-dots[data-named~='S'] .kh-sv__dot--S,
+  .kh-sv-dots[data-named~='T'] .kh-sv__dot--T,
+  .kh-sv-dots[data-named~='B'] .kh-sv__dot--B,
+  .kh-sv-dots[data-named~='F'] .kh-sv__dot--F {
     --kh-dot-s: 0.8;
     opacity: 0.07;
   }
 
   // Spread: the 540 at reading size, the other clusters stepping back.
-  .kh-sv[data-dots='spread'] .kh-sv__dot--T {
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot--T {
     --kh-dot-s: 1.7;
     opacity: 0.5;
   }
 
-  .kh-sv[data-dots='spread'] .kh-sv__dot--T.kh-sv__dot--brand {
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot--T.kh-sv__dot--brand {
     opacity: 1;
   }
 
-  .kh-sv[data-dots='spread'] .kh-sv__dot--B,
-  .kh-sv[data-dots='spread'] .kh-sv__dot--F {
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot--B,
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot--F {
     opacity: 0.1;
   }
 
   // The 56 linked instances exist only in the close.
-  .kh-sv:not([data-dots='chain']) .kh-sv__dot--K,
+  .kh-sv-dots:not([data-dots='chain']) .kh-sv__dot--K,
   .kh-sv__dotcopy {
     opacity: 0;
     transition: opacity 0.5s ease;
   }
 
-  .kh-sv[data-dots='chain'] .kh-sv__dot--S {
+  .kh-sv-dots[data-dots='chain'] .kh-sv__dot--S {
     opacity: 0;
   }
 
-  .kh-sv[data-dots='chain'] .kh-sv__dot--T {
+  .kh-sv-dots[data-dots='chain'] .kh-sv__dot--T {
     --kh-dot-s: 0.38;
     opacity: 0.75;
   }
 
-  .kh-sv[data-dots='chain'] .kh-sv__dot--B {
+  .kh-sv-dots[data-dots='chain'] .kh-sv__dot--B {
     --kh-dot-s: 1.1;
     opacity: 0.85;
   }
 
-  .kh-sv[data-dots='chain'] .kh-sv__dot--F {
+  .kh-sv-dots[data-dots='chain'] .kh-sv__dot--F {
     opacity: 0.7;
   }
 
-  .kh-sv[data-dots='chain'] .kh-sv__dot--K {
+  .kh-sv-dots[data-dots='chain'] .kh-sv__dot--K {
     --kh-dot-s: 1.1;
-    fill: var(--kh-sv-good);
+    background: var(--kh-sv-good);
     opacity: 0.95;
     transition-delay: 1.2s;
   }
@@ -706,8 +803,8 @@
     pointer-events: all;
   }
 
-  .kh-sv[data-dot-focus='shared'] .kh-sv__dot--brand,
-  .kh-sv[data-dot-focus='brand'] .kh-sv__dot:not(.kh-sv__dot--brand) {
+  .kh-sv-dots[data-dot-focus='shared'] .kh-sv__dot--brand,
+  .kh-sv-dots[data-dot-focus='brand'] .kh-sv__dot:not(.kh-sv__dot--brand) {
     opacity: 0.15;
   }
 
@@ -788,7 +885,8 @@
     // Dots are drawn a third larger in the band. The four pattern copies of
     // the 540 (the close's 2,700) are grey bars at this scale, so the band
     // shows the one real block; the <ol> below carries the figure.
-    .kh-sv {
+    .kh-sv,
+    .kh-sv-dots {
       --kh-dot-m: 1.3;
     }
 
@@ -1108,6 +1206,10 @@
     .kh-scrolly__panel,
     .kh-scrolly--enhanced > .kh-scrolly__graphic {
       transition: none;
+    }
+
+    .kh-sv__dot {
+      animation: none;
     }
 
     .kh-sv__pulse.is-on {

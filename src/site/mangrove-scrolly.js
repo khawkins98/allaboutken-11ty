@@ -273,10 +273,14 @@
   //   F  297 variants;
   //   K  56 linked instances, in the close only (they are instances placed in
   //      a designer's file, not a subset of the 297, so they are new dots).
-  // Every dot sits at the origin and is placed by a CSS transform from two
+  // The dots are HTML (<i> elements in a layer over the SVG, scaled to the
+  // viewBox), not SVG circles: each is placed by a CSS transform from two
   // custom properties, so a layout change is one style write per dot and CSS
-  // does the travel; the radius is an attribute (Firefox ignores `r` in CSS),
-  // and size changes are a scale factor in the same transform.
+  // does the travel, and each one drifts on its own compositor layer. As
+  // SVG circles the same drift re-rasterised the whole SVG every frame
+  // (20 fps in Chromium, 3 in Firefox); as HTML it is 60 fps in both. The
+  // SVG keeps the hit rects, the labels and the close's pattern copies, and
+  // the layer mirrors the SVG's data attributes (see mirrorDots).
   // ------------------------------------------------------------------------
   const COUNTS = { S: 12, T: 540, B: 25, F: 297, K: 56 };
   const SHARED = 471;
@@ -349,20 +353,30 @@
   // Which clusters have formed in each layout (so can be labelled, hovered).
   const FORMED = { cloud: [], c1: ['S'], c2: ['S', 'T', 'B'], settled: ['S', 'T', 'B', 'F'], spread: ['S'], full: ['S', 'T', 'B', 'F'], chain: [] };
 
-  function buildDots(id) {
+  function buildDotLayer() {
     const dot = (g, i) => {
       const cls = ['kh-sv__dot', `kh-sv__dot--${g}`];
       if (g === 'T' && i >= SHARED) cls.push('kh-sv__dot--brand');
       const dl = (rng() * 0.6).toFixed(2);
       const c0 = CLOUD[g][i];
-      return `<circle class="${cls.join(' ')}" data-g="${g}" data-i="${i}" cx="0" cy="0" r="1.5" style="--dl:${dl}s;--x:${c0.x.toFixed(1)}px;--y:${c0.y.toFixed(1)}px"/>`;
+      // Drift: each dot wanders its own slow loop (duration, phase and two
+      // waypoints seeded here); the stage sets the amplitude, see
+      // --kh-drift in _kh-scrolly.scss.
+      const u = () => (rng() * 2 - 1).toFixed(2);
+      const drift = `--kh-dr-d:${(7 + rng() * 6).toFixed(1)}s;--kh-dr-p:${(-rng() * 13).toFixed(1)}s;--kh-dr-x1:${u()};--kh-dr-y1:${u()};--kh-dr-x2:${u()};--kh-dr-y2:${u()}`;
+      return `<i class="${cls.join(' ')}" data-g="${g}" data-i="${i}" style="--dl:${dl}s;--x:${c0.x.toFixed(1)}px;--y:${c0.y.toFixed(1)}px;${drift}"></i>`;
     };
     let out = '';
     Object.keys(COUNTS).forEach((g) => {
-      out += `<g class="kh-sv__dotgroup kh-sv__dotgroup--${g}" id="${id}-d${g}">`;
+      out += `<span class="kh-sv__dotgroup kh-sv__dotgroup--${g}">`;
       for (let i = 0; i < COUNTS[g]; i += 1) out += dot(g, i);
-      out += '</g>';
+      out += '</span>';
     });
+    return `<div class="kh-sv-dots" data-dots="cloud" aria-hidden="true">${out}</div>`;
+  }
+
+  function buildDots(id) {
+    let out = '';
     // Four more blocks of 540 for the close, one per brand, below the one
     // the real dots travel to. These do not travel, so they are a dot
     // pattern (one circle per 2.25-unit cell, phased to the real grid)
@@ -831,13 +845,13 @@
         const copy = EXPLAINERS.clusters[g];
         const def = copy.aside ? definitionParts(region, copy.aside) : null;
         const html = `${def ? `${def.html} ` : ''}${copy.text}`;
-        const own = [t, svg.querySelector(`.kh-sv__dotgroup--${g}`), svg.querySelector(`[data-k="cv${g}"]`)].filter(Boolean);
+        const own = [t, graphic.querySelector(`.kh-sv__dotgroup--${g}`), svg.querySelector(`[data-k="cv${g}"]`)].filter(Boolean);
         return { id: `cluster:${g}`, anchor: t, term: copy.term, html, own, cluster: g };
       }
       if (t.matches('.kh-sv__hit')) {
         const group = t.dataset.dots;
         const copy = EXPLAINERS.dots[group];
-        const own = [...svg.querySelectorAll('.kh-sv__hit, .kh-sv__dotgroup, [data-k="dotsLbl"]')];
+        const own = [...graphic.querySelectorAll('.kh-sv__hit, .kh-sv__dotgroup, [data-k="dotsLbl"]')];
         // Anchored on the group's label, not the whole block: around the
         // block every side is crowded, but below the label is the group's
         // own dot field, which may be covered.
@@ -862,7 +876,7 @@
       const midX = (b.left + b.right) / 2;
       const midY = (b.top + b.bottom) / 2;
       const clamp = (v, lo, hi) => Math.max(lo, Math.min(v, hi));
-      const obstacles = [...svg.querySelectorAll(OBSTACLES)]
+      const obstacles = [...graphic.querySelectorAll(OBSTACLES)]
         .filter((el) => !d.own.some((o) => o.contains(el)))
         .map((el) => {
           // Boxes and check marks carry the meaning, so covering them costs
@@ -1041,14 +1055,21 @@
     const host = graphic.getBoundingClientRect();
     region.style.setProperty('--kh-scrolly-gx', `${host.left.toFixed(1)}px`);
     region.style.setProperty('--kh-scrolly-gw', `${host.width.toFixed(1)}px`);
-    const layer = graphic.querySelector('.kh-scrolly__callouts');
-    if (!layer) return;
     const w = box.width;
     const h = box.height;
     if (!w || !h) return;
     const s = Math.min(w / W, h / H);
-    layer.style.left = `${box.left - host.left + (w - W * s) / 2}px`;
-    layer.style.top = `${box.top - host.top + (h - H * s) / 2}px`;
+    const left = `${box.left - host.left + (w - W * s) / 2}px`;
+    const top = `${box.top - host.top + (h - H * s) / 2}px`;
+    // The dot layer is viewBox-sized and scaled, so dot positions and drift
+    // are in viewBox units like everything in the SVG.
+    inst.dotLayer.style.left = left;
+    inst.dotLayer.style.top = top;
+    inst.dotLayer.style.setProperty('--kh-sv-s', s.toFixed(3));
+    const layer = graphic.querySelector('.kh-scrolly__callouts');
+    if (!layer) return;
+    layer.style.left = left;
+    layer.style.top = top;
     layer.style.width = `${W * s}px`;
     layer.style.height = `${H * s}px`;
   }
@@ -1080,9 +1101,22 @@
     // callout layer below.
     graphic.hidden = true;
     graphic.setAttribute('data-pagefind-ignore', '');
-    graphic.innerHTML = buildSvg(`kh-sv-${r}`);
+    graphic.innerHTML = buildDotLayer() + buildSvg(`kh-sv-${r}`);
     region.appendChild(graphic);
     const svg = graphic.querySelector('svg');
+    const dotLayer = graphic.querySelector('.kh-sv-dots');
+    // The dot CSS keys off the SVG's state attributes (data-dots, data-named,
+    // the hover focus, live, hidden) and its is-jump / is-chain classes;
+    // mirror them onto the layer so one state drives both.
+    const MIRROR = ['data-dots', 'data-named', 'data-cluster-focus', 'data-dot-focus', 'data-live', 'data-hidden'];
+    const mirrorDots = () => {
+      MIRROR.forEach((a) => {
+        if (svg.hasAttribute(a)) dotLayer.setAttribute(a, svg.getAttribute(a));
+        else dotLayer.removeAttribute(a);
+      });
+      ['is-jump', 'is-chain'].forEach((c) => dotLayer.classList.toggle(c, svg.classList.contains(c)));
+    };
+    new MutationObserver(mirrorDots).observe(svg, { attributes: true, attributeFilter: [...MIRROR, 'class'] });
     buildCallouts(region, graphic);
     const tips = setupTips(region, graphic, svg);
 
@@ -1122,10 +1156,10 @@
     if (steps.length) steps[steps.length - 1].el.classList.add('kh-scrolly__step--last');
 
     const panels = [...region.querySelectorAll('[data-scrolly-panel]')];
-    const dots = [...svg.querySelectorAll('.kh-sv__dot')];
+    const dots = [...dotLayer.querySelectorAll('.kh-sv__dot')];
     const initial = region.dataset.scrollyInitial || 'cover';
     const inst = {
-      region, svg, steps, panels, dots, initial, current: null, active: null, layer: graphic.querySelector('.kh-scrolly__callouts'), tips, timers: [],
+      region, svg, dotLayer, steps, panels, dots, initial, current: null, active: null, layer: graphic.querySelector('.kh-scrolly__callouts'), tips, timers: [],
     };
     instances.push(inst);
 
@@ -1250,6 +1284,14 @@
     });
     update();
   }
+
+  // The drift animation pauses with the tab (CSS: [data-hidden]); browsers
+  // throttle background tabs anyway, but this is explicit and free.
+  document.addEventListener('visibilitychange', () => {
+    instances.forEach((inst) => {
+      inst.svg.dataset.hidden = document.hidden ? '1' : '0';
+    });
+  });
 
   if (wide.addEventListener) {
     wide.addEventListener('change', () => {
