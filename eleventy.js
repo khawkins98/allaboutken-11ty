@@ -132,11 +132,17 @@ module.exports = function(config) {
       .replace(/\son[a-z]+="[^"]*"/gi, '');
   });
 
-  // Compute plain-text word count from HTML content
+  // Compute plain-text word count from HTML content.
+  // HTML comments and inline <svg> are prose-free: an editorial brief left in
+  // a comment, or the <text> labels of a diagram, used to be counted as words
+  // (the Mangrove impact story read 2,377 words for ~1,200 of prose). Keep in
+  // step with renderedWordCount() in scripts/compute-corpus-stats.mjs.
   config.addFilter("wordCount", (content) => {
     try {
       const html = String(content || '');
       const cleaned = html
+        .replace(/<!--[\s\S]*?-->/g, ' ')
+        .replace(/<svg[\s\S]*?<\/svg>/gi, ' ')
         .replace(/<script[\s\S]*?<\/script>/gi, ' ')
         .replace(/<style[\s\S]*?<\/style>/gi, ' ')
         .replace(/<iframe[\s\S]*?<\/iframe>/gi, ' ')

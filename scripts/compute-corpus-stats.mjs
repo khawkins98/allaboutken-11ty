@@ -28,10 +28,15 @@ function renderedWordCount(html) {
   const end = html.indexOf(BODY_END, start + BODY_START.length);
   if (start === -1 || end === -1) return null;
 
-  // Match the former `templateContent` calculation exactly: remove markup,
-  // then count whitespace-separated tokens. Script/style text and entities
-  // deliberately retain their previous counting behaviour.
-  const body = html.slice(start + BODY_START.length, end);
+  // Match the former `templateContent` calculation: remove markup, then count
+  // whitespace-separated tokens. Script/style text and entities deliberately
+  // retain their previous counting behaviour. HTML comments and inline <svg>
+  // are dropped first, as in the `wordCount` filter in eleventy.js: an
+  // editorial brief in a comment or a diagram's <text> labels are not prose.
+  const body = html
+    .slice(start + BODY_START.length, end)
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<svg[\s\S]*?<\/svg>/gi, ' ');
   const text = body.replace(/<[^>]*>/g, ' ');
   return (text.match(/\S+/g) || []).length;
 }
