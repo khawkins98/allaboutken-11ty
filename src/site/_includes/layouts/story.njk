@@ -53,6 +53,13 @@ templateEngineOverride: njk
       - Date, word count, topics, ref and contents move to a colophon at the
         end, ahead of the entry foot.
 
+    Enhanced-only states before the script runs: the inline script below
+    adds `kh-js` to <body> at first paint, and _kh-scrolly.scss hides the
+    scrolly panels and static figures under `body.kh-js` until the region's
+    script adds `.kh-scrolly--enhanced` (a 3s CSS fallback reveals them if
+    it never does). No-JS readers never get the class, so nothing is hidden
+    for them. Opacity only, so no layout shift.
+
     What it must keep in step with post.njk (other code reads these):
       - kh-entry-kind / kh-entry-date comments and the kh-entry-content
         start/end markers (scripts/compute-corpus-stats.mjs).
@@ -60,6 +67,7 @@ templateEngineOverride: njk
       - data-pagefind-ignore on every piece of apparatus.
       - footer.njk's `hasByline` list includes this layout. -#}
 
+<script>document.body.classList.add('kh-js');</script>
 {% if tags and ('impact-stories' in tags) %}<!-- kh-entry-kind:impact-story -->{% elif tags and ('posts' in tags) %}<!-- kh-entry-kind:blog -->{% endif %}
 <!-- kh-entry-date:{{ date | dateDisplay('yyyy-LL-dd') }} -->
 {%- set isImpactStory = tags and ('impact-stories' in tags) %}

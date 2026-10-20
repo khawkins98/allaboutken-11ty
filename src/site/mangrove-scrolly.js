@@ -363,7 +363,7 @@
       // waypoints seeded here); the stage sets the amplitude, see
       // --kh-drift in _kh-scrolly.scss.
       const u = () => (rng() * 2 - 1).toFixed(2);
-      const drift = `--kh-dr-d:${(7 + rng() * 6).toFixed(1)}s;--kh-dr-p:${(-rng() * 13).toFixed(1)}s;--kh-dr-x1:${u()};--kh-dr-y1:${u()};--kh-dr-x2:${u()};--kh-dr-y2:${u()}`;
+      const drift = `--kh-dr-d:${(7 + rng() * 6).toFixed(1)}s;--kh-dr-p:${(-rng() * 13).toFixed(1)}s;--kh-dr-x1:${u()};--kh-dr-y1:${u()};--kh-dr-x2:${u()};--kh-dr-y2:${u()};--kh-dr-in:${(rng() * 0.7).toFixed(2)}s`;
       return `<i class="${cls.join(' ')}" data-g="${g}" data-i="${i}" style="--dl:${dl}s;--x:${c0.x.toFixed(1)}px;--y:${c0.y.toFixed(1)}px;${drift}"></i>`;
     };
     let out = '';
@@ -1167,9 +1167,16 @@
     // Masks and arrowheads need layout-free geometry only, so the SVG can be
     // decorated while the graphic is still `hidden`.
     decorate(svg);
-    // The first frame is the scattered cloud (positions written at build),
-    // so nothing moves on load; scrolling does the gathering.
+    // The first frame is the scattered cloud (positions written at build);
+    // scrolling does the gathering. On a fresh load at the top the field
+    // precipitates in (a seeded, staggered entrance, CSS: is-arriving); a
+    // landing mid-page or reduced motion shows the dots simply present.
     svg.dataset.dots = 'cloud';
+    // (A hash landing scrolls after this runs, so scrollY alone is not enough.)
+    if (window.scrollY < 100 && !window.location.hash && !reduce.matches) {
+      dotLayer.classList.add('is-arriving');
+      setTimeout(() => dotLayer.classList.remove('is-arriving'), 2500);
+    }
     inst.current = initial;
     applyStage(inst, initial);
     // Publish the rendered scale so CSS can cap label sizes: scaled up to

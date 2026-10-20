@@ -34,6 +34,23 @@
 }
 
 @mixin kh-scrolly() {
+  // Before the script runs, with JS known to be on (layouts/story.njk adds
+  // body.kh-js at first paint): the panels and the static figures would
+  // otherwise paint in the flow and vanish when the region is enhanced.
+  // Opacity only (no layout shift), and a 3s fallback reveals them if the
+  // script never arrives. No-JS readers never get the class.
+  @at-root body.kh-js:has(#kh-css-toggle:checked) .kh-scrolly:not(.kh-scrolly--enhanced) [data-scrolly-panel],
+    body.kh-js:has(#kh-css-toggle:checked) .kh-scrolly:not(.kh-scrolly--enhanced) .kh-scrolly__static {
+    animation: kh-scrolly-reveal 0.4s ease 3s forwards;
+    opacity: 0;
+  }
+
+  @keyframes kh-scrolly-reveal {
+    to {
+      opacity: 1;
+    }
+  }
+
   .kh-scrolly--enhanced {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -574,6 +591,23 @@
 
   .kh-sv-dots.is-jump .kh-sv__dot {
     transition: none;
+  }
+
+  // Entrance on a fresh load (the script adds is-arriving at the top of the
+  // page only): each dot fades and scales up from nothing with a seeded
+  // stagger (--kh-dr-in), so the field precipitates into view over about
+  // 1.5s, and the drift is already running underneath, so there is no seam.
+  // `backwards` holds the start frame until each dot's turn; afterwards the
+  // state rules own opacity again. Reduced motion: none (below).
+  @keyframes kh-sv-arrive {
+    from {
+      opacity: 0;
+      scale: 0.2;
+    }
+  }
+
+  .kh-sv-dots.is-arriving .kh-sv__dot {
+    animation: kh-sv-arrive 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--kh-dr-in, 0s) backwards, kh-sv-drift var(--kh-dr-d, 9s) ease-in-out var(--kh-dr-p, 0s) infinite;
   }
 
   // Drift: unclaimed dots wander a little, like free radicals, on the
@@ -1208,7 +1242,8 @@
       transition: none;
     }
 
-    .kh-sv__dot {
+    .kh-sv__dot,
+    .kh-sv-dots.is-arriving .kh-sv__dot {
       animation: none;
     }
 
