@@ -18,7 +18,7 @@ kens_status: published
 story_plate: body
 image: /blog/mangrove-figma-library-overview.png
 image_meta:
-  text: "The Mangrove Figma library in use — component task catalogue, living button variants, and token-bound text styles derived from Storybook, the structured content schemas and the design tokens. Own work."
+  text: "The Mangrove Figma library in use: component task catalogue, living button variants, and token-bound text styles derived from Storybook, the structured content schemas and the design tokens. Own work."
   credit: "Own work."
   altext: "Screenshot of the Mangrove Figma library showing the component catalogue organized by task (Actions, Forms and selection, Content and data, Navigation and disclosure) alongside component reference variants and design token text styles."
 ---
@@ -70,7 +70,7 @@ image_meta:
   STRUCTURE / SCROLL STAGES (one stage per section, five stages total)
     1. Where did the truth come from?      -> STAGE 1 (two peers) + brand studio
     2. What does Storybook add?            -> STAGE 2 (peers flow into Storybook)
-    3. How does the plugin place Figma?    -> STAGE 3 (Figma reads all three)
+    3. How is the Figma library built?    -> STAGE 3 (Figma reads all three)
     4. What happened when sources disagreed? -> STAGE 4 (two edges, then a node)
     5. What did a token change prove?      -> STAGE 5 (flow reverses: source -> Figma)
     Then cost and reflection, no stage.
@@ -109,19 +109,19 @@ image_meta:
 
 **Most Figma kits tell a design system's story a second time.** Designers draw the components, engineers build them, and the two versions drift because nothing ties one to the other. Every correction gets made twice, by different people, from memory.
 
-**Mangrove's Figma library is derived instead, so a change made once lands everywhere.** When I changed a core spacing value in code and republished, a designer's pilot file updated and kept every one of their edits. Nobody redrew anything, and nobody had to check by eye that design and code still matched.
+**Mangrove's Figma library is derived instead, so a change made once lands everywhere.** When I changed a core spacing value in code and republished, a designer's pilot file updated and kept every one of their edits. Nobody redrew anything or compared design and code by eye.
 
-**That works because three sources already agreed.** The content rules (structured content schemas) say what each component contains, the brand settings (design tokens) say how it looks in each of UNDRR's five brands, and the developers' live component catalogue ([Storybook](https://mangrove.undrr.org/)) says how it is laid out. A plugin I built reads all three and builds a native Figma library: 297 variants in 25 component families, real components rather than pictures of them.
+**That works because three sources already agreed.** The content rules (structured content schemas) say what each component contains, the brand settings (design tokens) say how it looks in each of UNDRR's five brands, and the developers' live component catalogue ([Storybook](https://mangrove.undrr.org/)) says how it is laid out. A plugin I built reads all three and generates a native Figma library: 297 variants in 25 component families, real components rather than pictures of them.
 
-**That is triangulation: each source answers one question.** So when Figma disagreed with one of them, I knew which, and every mismatch was a bug with an address rather than an argument about taste.
+**That is triangulation: each source answers one question.** So when Figma disagreed with one of them, I knew which, and every mismatch became a bug with an address instead of an argument about taste.
 
 ## Why isn't this a solved problem?
 
 **Storybook and Figma look as if they do the same job.** Both show a design system's components, so it seems they should stay in step on their own. They don't, for the same reason a Windows app doesn't simply run on a Mac: each platform lays things out and behaves in its own way, and Figma's Auto Layout is not CSS.
 
-**There is no standard way across.** Every system has its own components, brands and edge cases, so any conversion depends on what you start from. Most teams settle for [a degree of parity](https://designsystemdiaries.substack.com/p/how-close-should-figma-be-to-code) between the two, or accept that [the front end is the real source of truth](https://www.robinrendle.com/notes/an-incoherent-rant-about-design-systems) and keep Figma following by hand.
+**There is no standard way across.** Every system has its own components, brands and edge cases, so any conversion depends on what you start from. Most teams settle for [a degree of parity](https://designsystemdiaries.substack.com/p/how-close-should-figma-be-to-code) between the two, or accept that [the front end is the real source of truth](https://www.robinrendle.com/notes/an-incoherent-rant-about-design-systems) and update Figma by hand to keep up.
 
-**Hard, but not impossible.** Separate what a component is from how it looks and how it is laid out, and most of the port becomes mechanical. That is also where AI helps: the work is reverse engineering, distilling one codebase into another platform's idioms rather than reinventing it, and every result can be checked against the original.
+**Hard, but not impossible.** Separate what a component is from how it looks and how it is laid out, and most of the port becomes mechanical. That is also where AI helps. The work is reverse engineering: rebuilding something that already exists in another platform's terms, with the original there to check every result against.
 
 {% endmarkdown %}
 <!--
@@ -221,15 +221,15 @@ image_meta:
 
 ## What does Storybook add?
 
-**Layout, and only layout.** Storybook is built from the other two: each pattern takes a schema's fields and the tokens' values and arranges them on a page. That arrangement is the one thing it is the authority on.
+**Layout, and only layout.** Storybook is built from the other two: each pattern takes a schema's fields and the tokens' values and arranges them on a page. That arrangement is the one thing Storybook has the final word on.
 
 {% endmarkdown %}
 <aside class="kh-scrolly__define" data-define="nSB"><p><strong><dfn>Storybook</dfn>:</strong> the developers' working catalogue of every component, running live in the browser with all its variations.</p></aside>
 {% markdown %}
 
-**The Book Card shows the split.** Its four presets, such as a version without an image, come from the schema. Its colour, type and spacing come from the tokens. Where the boxes land is Storybook's decision, and an automated geometry check confirms it.
+**The Book Card shows the split.** Its four presets, including a version without an image, come from the schema, and its colour, type and spacing from the tokens. Where the boxes land is Storybook's call, and an automated geometry check measures against it.
 
-**That split is what made the rest possible.** Each source owns one question, so each can be checked on that question alone.
+**Everything after this depends on that split.** Each source owns one question, so each can be checked on that question alone.
 
 {% endmarkdown %}
 </div>
@@ -276,7 +276,7 @@ image_meta:
 <div class="kh-scrolly__section" data-scrolly-steps="3 3.1 3.2">
 {% markdown %}
 
-## How does the plugin place Figma?
+## How is the Figma library built?
 
 {% endmarkdown %}
 <aside class="kh-scrolly__define" data-define="nF"><p><strong><dfn>Figma</dfn>:</strong> where designers mock up pages. Its library is the shared set of ready-made components they drag into their designs.</p></aside>
@@ -284,12 +284,12 @@ image_meta:
 
 **The plugin asks each source the question it owns.** Field lists and presets come from the schemas, values bind to Figma variables generated from the tokens, and geometry is checked against Storybook. Nothing in the library is authored in Figma: a designer switching the Book Card to its no-image preset is choosing one the schema already allows.
 
-**AI coding agents wrote most of the plugin, and the structure gave their work a right answer.** The agents traced tokens through the code and generated the instructions for building each component, and every instruction could be checked against one of three sources. That didn't make the output correct on its own; it made every error traceable.
+**AI coding agents wrote most of the plugin, and the structure gave their work a right answer.** The agents traced tokens through the code and generated the build instructions for each component, and every instruction could be checked against one of the three sources. Their output still had errors. The difference was that I could trace each one.
 
 {% endmarkdown %}
 </div>
 <!--
-  SCROLLY STAGE 3 -- "How does the plugin place Figma?"  (CLIMAX STATE)
+  SCROLLY STAGE 3 -- "How is the Figma library built?"  (CLIMAX STATE)
   Intent: the full triangle. Figma, from a different lineage, is located by
   reading each fixed point for the one thing it owns.
   Visual state:
@@ -365,13 +365,13 @@ image_meta:
 
 ## What happened when the sources disagreed?
 
-**Checking real output found the bugs; the sources told me where they lived.** The automated tests passed; inspecting the actual Figma components found the problems.
+**Real output found the bugs; the sources told me where they lived.** The automated tests all passed. The problems only showed up when I opened the generated components in Figma and inspected them.
 
-**Tokens against Figma: an invisible disabled control.** The disabled ComboBox vanished in Figma. The converter had passed the opacity token `0.55` into a field expecting a percentage, so 55% became 0.55%. The token and Storybook both agreed, which put the fault on the converter; I fixed it, and the test harness that had missed it.
+**Tokens against Figma: an invisible disabled control.** The disabled ComboBox vanished in Figma. The converter had passed the opacity token `0.55` into a field expecting a percentage, so 55% became 0.55%. The token and Storybook agreed with each other, which put the fault on the converter. I fixed it, and the test harness that had missed it.
 
-**Storybook against Figma: text spacing that drifted.** Small help text sat differently in Figma than in the browser; layout is Storybook's to decide, so I measured the browser and matched Figma to it.
+**Storybook against Figma: text spacing that drifted.** Small help text sat slightly differently in Figma than in the browser. Layout is Storybook's call, so I measured the line height in the browser and calibrated Figma to it.
 
-**The third mismatch was in a source.** Real disaster risk data in the Table ran into fixed dividers in Figma and Storybook alike: both were faithful, but the schema had no length limit. I added the limit and wrapping rules to the component guidance, and both now inherit them. Checking a derived library against its sources can find gaps in the sources too.
+**The third mismatch was in a source.** Real disaster risk data in the Table ran into fixed dividers in Figma and Storybook alike: both were faithful, but the schema had no length limit. I added the limit and wrapping rules to the component guidance, and both now inherit them. Deriving a library from its sources can find gaps in the sources too.
 
 {% endmarkdown %}
 </div>
@@ -424,7 +424,7 @@ image_meta:
       <text x="380" y="272">0.55 read as 0.55%</text>
     </g>
   </svg>
-  <figcaption class="kh-figure__caption">Two bugs sat on an edge, where Figma stopped agreeing with a source. The third sat in a source, and the fix flowed down to Storybook and Figma. Own work.</figcaption>
+  <figcaption class="kh-figure__caption">Two bugs sat on the lines between a source and Figma. The third sat in a source itself, and its fix flowed down to Storybook and Figma. Own work.</figcaption>
 </figure>
 <div class="kh-scrolly__section" data-scrolly-steps="5 5.1">
 {% markdown %}
@@ -433,7 +433,7 @@ image_meta:
 
 **A change at the source carries through to designers' work.** I changed a core UNDRR spacing token from 30px to 32px and republished the library. In a pilot file of 56 linked library instances, a resource page at desktop and mobile widths, the layout updated and every edited title, chosen preset and instance override survived.
 
-**Designers don't need the plugin to use the library.** The pilot was composed entirely from the published library, with custom headings and local notes. The plugin is a build tool; the library is what designers touch.
+**Designers don't need the plugin to use the library.** The pilot was built entirely from the published library, with its own headings and local notes. The plugin is my build tool; designers only ever touch the library.
 
 {% endmarkdown %}
 </div>
@@ -493,17 +493,17 @@ image_meta:
 
 ## What does it cost to keep?
 
-**Less than redrawing by hand, but not free.** The plugin and its tests are a large piece of code, about 77,000 lines with over 40% of it tests and audits, and someone has to keep it working alongside the product.
+**Less than redrawing by hand, but not free.** The plugin and its tests come to about 77,000 lines of code, over 40% of it tests and audits, and someone has to keep that working as the product changes.
 
-**So I chose a smaller ongoing commitment.** Brand settings sync automatically, because they are cheap to keep current. Full rebuilds of the library wait for major versions and new components, which is also why a paid tool such as [story.to.design](https://story.to.design/docs/extend-stories) didn't make sense for us.
+**So I chose a smaller ongoing commitment.** Brand settings sync automatically, because they are cheap to keep current. Full rebuilds of the library wait for major versions and new components. With rebuilds that infrequent, a paid tool such as [story.to.design](https://story.to.design/docs/extend-stories) didn't make sense for us.
 
-**It only holds while Figma stays downstream.** Copy, presets and visibility in a designer's own file belong to them. Edits to the shared library itself would turn Figma back into a second story, so that needs a policy before the next rebuild, and it doesn't have one yet.
+**It only holds while Figma stays downstream.** Copy, presets and visibility in a designer's own file belong to them. Edits to the shared library itself would turn Figma back into a second story. That needs a policy before the next rebuild, and there isn't one yet.
 
 ## Why did this work?
 
-**The truth was defined before the plugin started.** If the schemas and tokens had been vague, the plugin would have had nothing to triangulate against and the agents nothing to be checked against. Syndication had forced that work, for reasons that had nothing to do with Figma.
+**The truth was defined before I started the plugin.** If the schemas and tokens had been vague, the plugin would have had nothing to triangulate from, and the agents' output nothing to be checked against. Syndication had already forced that work, for reasons unrelated to Figma.
 
-**Each discipline gets the same story in its own tool.** Designers get Figma and developers get Storybook, both reading from the same content rules and brand settings: the same move as [putting analytics into editorial workflows](/work/2026/impact-story-undrr-analytics-overlay-mcp/).
+**Each discipline gets the same story in its own tool.** Designers get Figma and developers get Storybook, both drawing on the same content rules and brand settings. It's the same move I made in [putting analytics into editorial workflows](/work/2026/impact-story-undrr-analytics-overlay-mcp/): meet each team in the tool it already works in.
 
 {% endmarkdown %}
 {#- Closing: the screenshot plate, then the flow of numbers as the final
