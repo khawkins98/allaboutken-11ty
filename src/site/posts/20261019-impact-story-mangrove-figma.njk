@@ -109,9 +109,17 @@ image_meta:
 
 **Mangrove's Figma library is derived instead, so a change made once lands everywhere.** When I changed a core spacing value in code and republished, a designer's pilot file updated and kept every one of their edits. Nobody redrew anything, and nobody had to check by eye that design and code still matched.
 
-**That works because three sources already agreed.** The content rules (structured content schemas) say what each component contains, the brand settings (design tokens) say how it looks in each of UNDRR's five brands, and the developers' live component catalogue ([Storybook](https://mangrove.undrr.org/)) says how it is laid out. I built a plugin that reads all three and builds a native Figma library from them: 297 variants in 25 component families that designers can resize and edit, not pictures of components.
+**That works because three sources already agreed.** The content rules (structured content schemas) say what each component contains, the brand settings (design tokens) say how it looks in each of UNDRR's five brands, and the developers' live component catalogue ([Storybook](https://mangrove.undrr.org/)) says how it is laid out. A plugin I built reads all three and builds a native Figma library: 297 variants in 25 component families, real components rather than pictures of them.
 
 **That is triangulation: each source answers one question.** So when Figma disagreed with one of them, I knew which, and every mismatch was a bug with an address rather than an argument about taste.
+
+## Why isn't this a solved problem?
+
+**Storybook and Figma look as if they do the same job.** Both show a design system's components, so it seems they should stay in step on their own. They don't, for the same reason a Windows app doesn't simply run on a Mac: each platform lays things out and behaves in its own way, and Figma's Auto Layout is not CSS.
+
+**There is no standard way across.** Every system has its own components, brands and edge cases, so any conversion depends on what you start from. Most teams settle for [a degree of parity](https://designsystemdiaries.substack.com/p/how-close-should-figma-be-to-code) between the two, or accept that [the front end is the real source of truth](https://www.robinrendle.com/notes/an-incoherent-rant-about-design-systems) and keep Figma following by hand.
+
+**Hard, but not impossible.** Separate what a component is from how it looks and how it is laid out, and most of the port becomes mechanical. That is also where AI helps: the work is reverse engineering, distilling one codebase into another platform's idioms rather than reinventing it, and every result can be checked against the original.
 
 {% endmarkdown %}
 <!--
@@ -352,7 +360,7 @@ image_meta:
 
 ## What happened when the sources disagreed?
 
-**Checking real output found the bugs; the sources told me where they lived.** The automated tests passed. Inspecting the actual Figma components is what found the problems.
+**Checking real output found the bugs; the sources told me where they lived.** The automated tests passed; inspecting the actual Figma components found the problems.
 
 **Tokens against Figma: an invisible disabled control.** The disabled ComboBox vanished in Figma. The converter had passed the opacity token `0.55` into a field expecting a percentage, so 55% became 0.55%. The token and Storybook both agreed, which put the fault on the converter; I fixed it, and the test harness that had missed it.
 
@@ -418,7 +426,7 @@ image_meta:
 
 ## What did a token change prove?
 
-**A change at the source carries through to designers' work.** I changed a core UNDRR spacing token from 30px to 32px and republished the library. In a pilot file of 56 linked library instances, a resource page at desktop and mobile widths, the layout updated and every edited title, chosen preset and instance override survived. Restoring the token returned the measured fields to their baseline.
+**A change at the source carries through to designers' work.** I changed a core UNDRR spacing token from 30px to 32px and republished the library. In a pilot file of 56 linked library instances, a resource page at desktop and mobile widths, the layout updated and every edited title, chosen preset and instance override survived.
 
 **Designers don't need the plugin to use the library.** The pilot was composed entirely from the published library, with custom headings and local notes. The plugin is a build tool; the library is what designers touch.
 
