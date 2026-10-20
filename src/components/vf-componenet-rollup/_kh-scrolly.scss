@@ -220,32 +220,42 @@
 
     // The diagram steps back while a panel shows; the panel takes the
     // graphic's exact box (the script publishes it) and the pointer.
+    // The SVG, its callouts AND the dot layer (a sibling, since the drift
+    // moved the dots out of the SVG) all step back together.
     .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-sv,
+    .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-sv-dots,
     .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-scrolly__callouts {
       transition: opacity 0.35s ease;
     }
 
     .kh-scrolly--enhanced > .kh-scrolly__graphic.is-panel .kh-sv,
+    .kh-scrolly--enhanced > .kh-scrolly__graphic.is-panel .kh-sv-dots,
     .kh-scrolly--enhanced > .kh-scrolly__graphic.is-panel .kh-scrolly__callouts {
       opacity: 0;
       pointer-events: none;
     }
 
+    // Sized to its content and centred on the pinned band's middle, never
+    // taller than the viewport and never scrolling inside; its own ground
+    // so nothing underneath can show through.
     .kh-scrolly--enhanced .kh-scrolly__panel {
       align-items: stretch;
+      background: var(--kh-ground);
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      height: 80vh;
       justify-content: center;
       left: var(--kh-scrolly-gx, 50%);
       margin: 0;
+      max-height: 94vh;
       opacity: 0;
-      overflow: auto;
+      overflow: visible;
+      padding: 0.5rem 0;
       pointer-events: none;
       position: fixed;
-      top: 10vh;
+      top: 50vh;
       transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+      translate: 0 -50%;
       visibility: hidden;
       width: var(--kh-scrolly-gw, 45%);
       z-index: 5;
@@ -563,6 +573,10 @@
     // A sibling of the SVG, so it does not inherit the diagram's colours.
     --kh-sv-good: #15803d; // as .kh-sv
     color: var(--kh-color--text);
+    // Under the SVG (the graphic is the stacking context): a box's ground
+    // fill covers its own cluster's texture, and travelling dots never sit
+    // over a title. Positioned, so it would otherwise paint above the SVG.
+    z-index: -1;
     height: 400px;
     left: 0;
     pointer-events: none;
@@ -652,6 +666,28 @@
     --kh-drift: 1.2;
   }
 
+  // The variants (F) are not in the story until Figma is: absent through
+  // the cover and stages 1-2, BORN at stage 3 (precipitating in with the
+  // cover's arrival animation, drifting at full amplitude on the Figma
+  // side), then pulled into their cluster as the reads draw (3.1, full).
+  .kh-sv-dots[data-dots='cloud'] .kh-sv__dot--F,
+  .kh-sv-dots[data-dots='c1'] .kh-sv__dot--F,
+  .kh-sv-dots[data-dots='c2'] .kh-sv__dot--F,
+  .kh-sv-dots[data-dots='settled'] .kh-sv__dot--F,
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot--F {
+    --kh-drift: 0;
+    animation: none;
+    opacity: 0;
+    transition: none;
+    will-change: auto;
+  }
+
+  .kh-sv-dots[data-dots='born'] .kh-sv__dot {
+    --kh-drift: 0;
+    animation: none;
+    will-change: auto;
+  }
+
   // A formed cluster is still: no animation and no compositor layer, so its
   // dots are painted in flow at sub-pixel precision. (Composited layers are
   // snapped to whole device pixels, which left the resting grids ragged;
@@ -686,10 +722,6 @@
     opacity: 0.4;
   }
 
-  .kh-sv-dots[data-dots='settled'] .kh-sv__dot--F {
-    opacity: 0.22;
-  }
-
   // While a cluster is being explained, the others step back.
   .kh-sv-dots[data-cluster-focus] .kh-sv__dot {
     opacity: 0.12;
@@ -710,6 +742,23 @@
     opacity: 0.07;
   }
 
+  // The birth of the variants (stage 3): the Figma box is already drawn, so
+  // this outranks the named-cluster texture above. At 3.1 (full) they are
+  // pulled into the box as the reads draw, staying visible for the travel
+  // and only then settling to the texture under it.
+  .kh-sv-dots[data-dots='born'] .kh-sv__dot--F {
+    --kh-dot-s: 1;
+    --kh-drift: 4;
+    animation: kh-sv-arrive 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--kh-dr-in, 0s) backwards, kh-sv-drift var(--kh-dr-d, 9s) ease-in-out var(--kh-dr-p, 0s) infinite;
+    opacity: 0.55;
+    will-change: translate;
+  }
+
+  .kh-sv-dots[data-dots='full'] .kh-sv__dot--F {
+    transition-delay: var(--dl, 0s), 1.3s, 0s, var(--dl, 0s);
+    transition-duration: 1.5s, 0.8s, 0.5s, 1.5s;
+  }
+
   // Spread: the 540 at reading size, the other clusters stepping back.
   .kh-sv-dots[data-dots='spread'] .kh-sv__dot--T {
     --kh-dot-s: 1.7;
@@ -721,10 +770,6 @@
   }
 
   .kh-sv-dots[data-dots='spread'] .kh-sv__dot--B,
-  .kh-sv-dots[data-dots='spread'] .kh-sv__dot--F {
-    opacity: 0.1;
-  }
-
   // The 56 linked instances exist only in the close.
   .kh-sv-dots:not([data-dots='chain']) .kh-sv__dot--K,
   .kh-sv__dotcopy {
@@ -1243,7 +1288,8 @@
     }
 
     .kh-sv__dot,
-    .kh-sv-dots.is-arriving .kh-sv__dot {
+    .kh-sv-dots.is-arriving .kh-sv__dot,
+    .kh-sv-dots[data-dots='born'] .kh-sv__dot--F {
       animation: none;
     }
 

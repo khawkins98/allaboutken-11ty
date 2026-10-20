@@ -76,11 +76,12 @@ image_meta:
     keep the plain title page.
       cover  Constellation: every dot one real thing (540 variables, 69 by
              brand in blue; 297 variants; 25 families; the content schemas as
-             an unnumbered cluster), scattered (seeded) across the graphic.
-             Nothing moves on load: scrolling gathers the dots in story
-             order (schemas, then variables and families, then a faint drift
-             of variants on the Figma side) through the intro and "Why isn't
-             this a solved problem?". Formed clusters are hoverable.
+             an unnumbered cluster), scattered (seeded) across the graphic;
+             no variants yet. Scrolling gathers the dots in story order
+             (schemas, then variables and families) through the intro and
+             "Why isn't this a solved problem?". Formed clusters are
+             hoverable. The 297 variants are born at stage 3, on the Figma
+             side, and pulled into their cluster as the reads draw (3.1).
       1      Where did the truth come from?  -> schema box draws around its
              cluster; 1.1 tokens box + the 540 spread; 1.2 peers
       1.3    the brand studio, live, in the graphic column (a panel)
@@ -144,7 +145,7 @@ image_meta:
 #}
 <div class="kh-scrolly" data-scrolly-initial="cover" data-scrolly-cover=".kh-story__cover">
 <div class="kh-scrolly__steps">
-<p class="kh-scrolly__cover-note" hidden>Each dot is one thing the plugin reads or writes. As the story names them, they gather: the content schemas, the 540 brand variables (69 of them set per brand, in blue), the 25 component families, and, last, the 297 component variants.</p>
+<p class="kh-scrolly__cover-note" hidden>Each dot is one thing the plugin reads. As the story names them, they gather: the content schemas, the 540 brand variables (69 of them set per brand, in blue) and the 25 component families; the 297 component variants it writes arrive with Figma.</p>
 {{ orgIntro(org) }}
 {#
   OPENING BEATS. The dots start scattered (the first frame on load, no

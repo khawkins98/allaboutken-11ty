@@ -16,10 +16,11 @@
 //   - The diagram has three lives. COVER: a constellation of dots, each one a
 //     real thing the plugin reads or writes (540 Figma variables, 69 of them
 //     brand-specific; 297 variants; 25 families; the schemas as an unnumbered
-//     cluster), scattered (seeded) across the graphic on load. Scrolling
-//     gathers them in story order: schemas, then variables and families,
-//     then a faint drift of variants on the Figma side; Figma itself is not
-//     exposed until its section. BODY: the boxes draw themselves around the
+//     cluster), scattered (seeded) across the graphic on load; the 297
+//     variants are not there yet. Scrolling gathers them in story order:
+//     schemas, then variables and families. The variants are born at the
+//     Figma section as a new field on the Figma side and are pulled into
+//     their cluster as the plugin's reads draw. BODY: the boxes draw themselves around the
 //     clusters as the sections name them, and the stages play (sources,
 //     Storybook, Figma reads all three, faults, token change). CLOSE: the
 //     triangle crossfades to the flow of numbers and the dots regroup under
@@ -98,8 +99,9 @@
       on: [...SOURCES, 'peers', 'peersLbl', 'nSB', 'sSB', 'stS', 'stT', 'chip'],
       strong: ['sS', 'sT', 'sSB'],
     },
-    // Figma: the variants come forward into their box as it draws.
-    3: { on: TRIANGLE, dim: LOW, define: 'nF', dots: 'full' },
+    // Figma: the variants are BORN here (a new field of free radicals on
+    // the Figma side), then pulled into their cluster as the reads draw.
+    3: { on: TRIANGLE, dim: LOW, define: 'nF', dots: 'born' },
     3.1: { on: [...TRIANGLE, ...READS], dim: LOW, dots: 'full' },
     3.2: {
       on: [...TRIANGLE, ...READS, 'ckS', 'ckT', 'ckSB'],
@@ -314,8 +316,10 @@
   const driftRng = mulberry32(297);
   const DRIFT = [];
   for (let i = 0; i < COUNTS.F; i += 1) DRIFT.push({ x: 336 + driftRng() * 196, y: 36 + driftRng() * 330 });
-  // Settled: the three sources formed; the variants still adrift.
+  // Settled: the three sources formed; no variants yet (CSS hides F). Born:
+  // the same, with the variants scattered on the Figma side.
   const settled = (g, i) => (g === 'F' ? DRIFT[i] : full(g, i));
+  const born = settled;
   // Opening beats: schemas first (c1), then variables and families (c2).
   const c1 = (g, i) => (g === 'S' || g === 'K' ? full(g, i) : CLOUD[g][i]);
   const c2 = (g, i) => (g === 'F' ? CLOUD[g][i] : full(g, i));
@@ -347,13 +351,13 @@
   const CLOUD = {};
   Object.keys(COUNTS).forEach((g) => {
     CLOUD[g] = [];
-    for (let i = 0; i < COUNTS[g]; i += 1) CLOUD[g].push(g === 'K' ? chain('K', i) : cloud());
+    for (let i = 0; i < COUNTS[g]; i += 1) CLOUD[g].push(g === 'K' ? chain('K', i) : g === 'F' ? DRIFT[i] : cloud());
   });
-  const LAYOUT = { cloud: (g, i) => CLOUD[g][i], c1, c2, settled, spread, full, chain };
+  const LAYOUT = { cloud: (g, i) => CLOUD[g][i], c1, c2, settled, spread, born, full, chain };
   // Which clusters have formed in each layout (so can be labelled, hovered).
   // The variants (F) only form at stage 3, when their box names them, so
   // their drift answers no hover before that.
-  const FORMED = { cloud: [], c1: ['S'], c2: ['S', 'T', 'B'], settled: ['S', 'T', 'B'], spread: ['S'], full: ['S', 'T', 'B', 'F'], chain: [] };
+  const FORMED = { cloud: [], c1: ['S'], c2: ['S', 'T', 'B'], settled: ['S', 'T', 'B'], spread: ['S'], born: ['S', 'T', 'B'], full: ['S', 'T', 'B', 'F'], chain: [] };
 
   function buildDotLayer() {
     const dot = (g, i) => {

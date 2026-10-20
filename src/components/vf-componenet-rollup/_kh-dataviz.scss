@@ -795,6 +795,25 @@
     max-width: var(--kh-story-measure, 39rem);
     width: 100%;
 
+    // In the pinned panel the whole studio has to fit the viewport beside
+    // the prose, so it sits a little tighter than in the flow.
+    .kh-scrolly__panel & {
+      gap: 0.9rem;
+
+      .kh-brand-studio__demo {
+        gap: 0.9rem;
+      }
+
+      .kh-brand-studio__card-stage {
+        padding: 1rem 1.25rem;
+      }
+
+      .kh-brand-studio__inspector {
+        font-size: 14px;
+        padding: 0.65rem 0.85rem 0.75rem;
+      }
+    }
+
     * {
       box-sizing: border-box;
     }
