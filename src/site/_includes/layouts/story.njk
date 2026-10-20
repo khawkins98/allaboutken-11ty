@@ -149,4 +149,10 @@ templateEngineOverride: njk
 }
 </script>
 
+{#- The shared entry foot assumes post.njk's wide two-column grid. In a
+    story it follows the centred colophon, so .kh-story__foot re-flows it:
+    byline and onward reading in the reading column, the sequence drawing on
+    the wide track. The kh-story class supplies the measure variables. -#}
+<div class="kh-story kh-story__foot">
 {% include "partials/entry-foot.njk" %}
+</div>

@@ -419,6 +419,40 @@
     }
   }
 
+  // Entry foot inside a story: stacked in the reading column, with the
+  // byline first as the closure, then onward reading; the sequence drawing
+  // keeps the wide track. Overrides the shared two-column grid, which left
+  // the byline in a right-hand column that aligned with nothing here.
+  .kh-story__foot .kh-entry-foot {
+    display: flex;
+    flex-direction: column;
+
+    > .kh-author,
+    > .kh-readnext {
+      box-sizing: border-box;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: var(--kh-story-measure);
+      width: 100%;
+    }
+
+    > .kh-author {
+      margin-top: 0;
+      order: -1;
+    }
+
+    > .kh-readnext {
+      margin-top: 2.5rem;
+    }
+
+    > .kh-sequence {
+      align-self: center;
+      box-sizing: border-box;
+      max-width: min(100vw - 2rem, 78rem);
+      width: 100%;
+    }
+  }
+
   // Colophon: the apparatus post.njk puts up front, gathered at the end.
   .kh-story__colophon {
     border-top: 1px solid var(--kh-rule--strong);
