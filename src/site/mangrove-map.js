@@ -39,7 +39,7 @@
         tagLabel: 'GAR2022 PUBLICATION',
         intro: 'UNDRR is the default. The other four brands are small sets of changes on top of it.',
         changes: [
-          { label: 'Button and label colour', value: '#004f91', swatch: '#004f91' },
+          { label: 'Brand colour', value: '#004f91', swatch: '#004f91' },
           { label: 'Button hover', value: '#3372a7', swatch: '#3372a7' },
           { label: 'Button corners', value: '5px' },
           { label: 'Button text', value: '14px' },
@@ -54,7 +54,7 @@
         btnPadding: '10px 15px',
         tagLabel: 'DISASTER RISK DATA',
         changes: [
-          { label: 'Button and label colour', value: '#0a6969', swatch: '#0a6969' },
+          { label: 'Brand colour', value: '#0a6969', swatch: '#0a6969' },
           { label: 'Button hover', value: '#0c7575', swatch: '#0c7575' },
         ],
       },
@@ -67,7 +67,7 @@
         btnPadding: '15px 30px', // padding.button = spacing.150 spacing.300
         tagLabel: 'URBAN RESILIENCE',
         changes: [
-          { label: 'Button and label colour', value: '#591a61', swatch: '#591a61' },
+          { label: 'Brand colour', value: '#591a61', swatch: '#591a61' },
           { label: 'Button hover', value: '#6e2677', swatch: '#6e2677' },
           { label: 'Button corners', value: '30px, a pill' },
           { label: 'Button text', value: '18px, with more padding' },
@@ -82,7 +82,7 @@
         btnPadding: '10px 20px', // padding.button = spacing.100 spacing.200
         tagLabel: 'POLICY BRIEF',
         changes: [
-          { label: 'Button and label colour', value: '#004f91, the same blue as UNDRR', swatch: '#004f91' },
+          { label: 'Brand colour', value: '#004f91, the same blue as UNDRR', swatch: '#004f91' },
           { label: 'Button hover', value: '#106cb8', swatch: '#106cb8' },
           { label: 'Button padding', value: 'wider: 10px × 20px' },
           { label: 'Other cards', value: 'light grey #f2f2f2 (not this publication card)', swatch: '#f2f2f2' },
@@ -97,7 +97,7 @@
         btnPadding: '10px 15px',
         tagLabel: 'RECOVERY PLATFORM',
         changes: [
-          { label: 'Button and label colour', value: '#0f78bf', swatch: '#0f78bf' },
+          { label: 'Brand colour', value: '#0f78bf', swatch: '#0f78bf' },
           { label: 'Button hover', value: '#0d67a3', swatch: '#0d67a3' },
         ],
       },
@@ -202,7 +202,7 @@
           </div>
 
           <div id="live-assertion-badge" class="kh-brand-studio__assertion-badge" aria-live="polite">
-            ✓ cardGeometryChecks.js: ALL ASSERTIONS PASSING (1:1.414 ratio, 0px border bleed)
+            cardGeometryChecks.js: ALL ASSERTIONS PASSING (1:1.414 ratio, 0px border bleed)
           </div>
         </div>
 
@@ -271,14 +271,16 @@
       }
 
       if (p.showLink) {
-        liveTitle.innerHTML = '<a href="javascript:void(0)" style="color:inherit;text-decoration:none;">Global Assessment Report on Disaster Risk Reduction</a>';
+        // A preview, not a destination: show the linked state without a dead
+        // link (it used to be href="javascript:void(0)").
+        liveTitle.innerHTML = '<span class="kh-live-card__title-link">Global Assessment Report on Disaster Risk Reduction</span>';
       } else {
         liveTitle.textContent = 'Global Assessment Report on Disaster Risk Reduction';
       }
 
       liveAssertionBadge.textContent = p.showImage 
-        ? `✓ cardGeometryChecks.js: ALL ASSERTIONS PASSING (1:1.414 ratio, 0px border bleed, ${b.name} tokens bound)`
-        : `✓ cardGeometryChecks.js: PASS (Content reflows to clientWidth: 520px, 0px image delta)`;
+        ? `cardGeometryChecks.js: ALL ASSERTIONS PASSING (1:1.414 ratio, 0px border bleed, ${b.name} tokens bound)`
+        : `cardGeometryChecks.js: PASS (Content reflows to clientWidth: 520px, 0px image delta)`;
 
       renderInspector();
     }
