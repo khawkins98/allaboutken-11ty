@@ -761,9 +761,9 @@
       const card = document.createElement('div');
       card.className = `kh-scrolly__callout kh-scrolly__callout--${place.anchor}`;
       card.dataset.define = key;
-      card.style.setProperty('--x', `${((place.x / W) * 100).toFixed(2)}%`);
-      card.style.setProperty('--y', `${((place.y / H) * 100).toFixed(2)}%`);
-      card.style.setProperty('--w', `${(place.w * 100).toFixed(0)}%`);
+      card.style.setProperty('--kh-co-x', `${((place.x / W) * 100).toFixed(2)}%`);
+      card.style.setProperty('--kh-co-y', `${((place.y / H) * 100).toFixed(2)}%`);
+      card.style.setProperty('--kh-co-w', `${(place.w * 100).toFixed(0)}%`);
       card.style.setProperty('--kh-co-delay', `${place.delay ?? CALLOUT_DELAY}s`);
       card.innerHTML = `${term ? `<span class="kh-scrolly__callout-term">${term.textContent}</span>` : ''}
         <span class="kh-scrolly__callout-text">${body.innerHTML.trim()}</span>

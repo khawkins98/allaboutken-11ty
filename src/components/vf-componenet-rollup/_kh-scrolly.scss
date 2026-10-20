@@ -838,16 +838,16 @@
     box-sizing: border-box;
     color: var(--kh-color--text);
     font-size: 15px;
-    left: var(--x);
+    left: var(--kh-co-x, 0);
     line-height: 1.45;
     opacity: 0;
     padding: 0.7rem 0.9rem 0.8rem;
     position: absolute;
-    top: var(--y);
+    top: var(--kh-co-y, 0);
     transform: translate(var(--kh-co-tx), var(--kh-co-ty)) scale(0.92);
     // Leaves over 0.5s (the leader goes first, in 0.2s); arrives in 0.25s.
     transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-    width: min(22rem, var(--w));
+    width: min(22rem, var(--kh-co-w, 100%));
   }
 
   // `.is-on` is set by the script's single callout switch (stage defines a
