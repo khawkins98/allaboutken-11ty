@@ -407,7 +407,11 @@
   // the asides, without the wireframe. Only for nodes visible in the current
   // stage, and never for a node whose stage callout is already showing.
   function definitionParts(region, key) {
-    const aside = region.querySelector(`.kh-scrolly__define[data-define="${key}"]`);
+    // Each term is defined once, in the region where it first appears, but
+    // its box is hoverable in every later region: look it up document-wide,
+    // preferring this region's copy.
+    const sel = `.kh-scrolly__define[data-define="${key}"]`;
+    const aside = region.querySelector(sel) || document.querySelector(sel);
     if (!aside) return null;
     const source = aside.querySelector('p') || aside;
     const term = source.querySelector('dfn');
@@ -417,11 +421,75 @@
     return { term: term ? term.textContent : '', html: body.innerHTML.trim() };
   }
 
+  // Popup placement, Mapbox-style: try each side of the box, slide the card
+  // along that edge to stay inside the graphic, and keep the one that covers
+  // the least of what is currently drawn (other boxes, checks, labels, the
+  // chip, the dots). Ties go to the side with the most free space. The caret
+  // points at the box edge midpoint, clamped to stay on the card.
+  const OBSTACLES = '.kh-sv__node.is-on rect, .kh-sv__check.is-on, .kh-sv__label.is-on, .kh-sv__sub.is-on, .kh-sv__chip.is-on, .kh-sv__dots.is-on, .kh-sv__head.is-on';
+  function overlap(a, b) {
+    const w = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+    const h = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+    return w > 0 && h > 0 ? w * h : 0;
+  }
+
   function setupTips(region, graphic, svg) {
     const tip = document.createElement('div');
     tip.className = 'kh-scrolly__tip';
     graphic.appendChild(tip);
     let openKey = null;
+    const GAP = 12; // box edge to card edge; the caret spans it
+    const PAD = 4; // keep inside the graphic
+
+    const place = (group) => {
+      const host = graphic.getBoundingClientRect();
+      const box = group.querySelector('rect').getBoundingClientRect();
+      const tw = tip.offsetWidth;
+      const th = tip.offsetHeight;
+      const rel = (r) => ({
+        left: r.left - host.left, right: r.right - host.left, top: r.top - host.top, bottom: r.bottom - host.top,
+      });
+      const b = rel(box);
+      const midX = (b.left + b.right) / 2;
+      const midY = (b.top + b.bottom) / 2;
+      const clamp = (v, lo, hi) => Math.max(lo, Math.min(v, hi));
+      const obstacles = [...svg.querySelectorAll(OBSTACLES)]
+        .filter((el) => !group.contains(el))
+        .map((el) => {
+          // Boxes and check marks carry the meaning, so covering them costs
+          // most; labels and arrowheads less; the dot field least.
+          let w = 1;
+          if (el.matches('rect')) w = 20;
+          else if (el.matches('.kh-sv__check')) w = 6;
+          else if (el.matches('.kh-sv__dots')) w = 0.3;
+          if (el.closest('.is-dim, .is-faint')) w *= 0.4;
+          return { r: rel(el.getBoundingClientRect()), w };
+        });
+      const cands = [
+        { side: 'bottom', x: midX - tw / 2, y: b.bottom + GAP, room: host.height - b.bottom },
+        { side: 'top', x: midX - tw / 2, y: b.top - GAP - th, room: b.top },
+        { side: 'right', x: b.right + GAP, y: midY - th / 2, room: host.width - b.right },
+        { side: 'left', x: b.left - GAP - tw, y: midY - th / 2, room: b.left },
+      ].map((c) => {
+        const vertical = c.side === 'top' || c.side === 'bottom';
+        // Slide along the edge to stay inside; the cross axis cannot move.
+        const x = vertical ? clamp(c.x, PAD, host.width - tw - PAD) : c.x;
+        const y = vertical ? c.y : clamp(c.y, PAD, host.height - th - PAD);
+        const r = { left: x, top: y, right: x + tw, bottom: y + th };
+        const out = Math.max(0, PAD - r.left) + Math.max(0, r.right - host.width + PAD)
+          + Math.max(0, PAD - r.top) + Math.max(0, r.bottom - host.height + PAD);
+        const hit = obstacles.reduce((sum, o) => sum + overlap(r, o.r) * o.w, 0);
+        return { ...c, x, y, score: out * 1e4 + hit - c.room * 0.01, vertical };
+      });
+      cands.sort((p, q) => p.score - q.score);
+      const c = cands[0];
+      // Caret position along the card edge, aimed at the box edge midpoint.
+      const caret = c.vertical ? clamp(midX - c.x, 14, tw - 14) : clamp(midY - c.y, 14, th - 14);
+      tip.dataset.side = c.side;
+      tip.style.setProperty('--kh-tip-caret', `${caret}px`);
+      tip.style.left = `${c.x}px`;
+      tip.style.top = `${c.y}px`;
+    };
 
     const hide = () => {
       openKey = null;
@@ -443,19 +511,7 @@
       if (!def) return;
       openKey = key;
       tip.innerHTML = `<span class="kh-scrolly__callout-term">${def.term}</span><span class="kh-scrolly__callout-text">${def.html}</span>`;
-      // Measure, then place beside the box without covering it: below if
-      // there is room in the graphic, otherwise above; clamped to the sides.
-      const host = graphic.getBoundingClientRect();
-      const box = group.querySelector('rect').getBoundingClientRect();
-      const tw = tip.offsetWidth;
-      const th = tip.offsetHeight;
-      const gap = 8;
-      let top = box.bottom - host.top + gap;
-      if (top + th > host.height) top = box.top - host.top - gap - th;
-      let left = box.left - host.left + box.width / 2 - tw / 2;
-      left = Math.max(4, Math.min(left, host.width - tw - 4));
-      tip.style.left = `${left}px`;
-      tip.style.top = `${Math.max(4, top)}px`;
+      place(group);
       tip.classList.add('is-on');
     };
 
