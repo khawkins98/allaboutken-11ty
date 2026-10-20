@@ -1,0 +1,204 @@
+@use './settings' as *;
+
+// Story layout (layouts/story.njk)
+// --------------------------------
+// A quiet full-page frame for scroll-driven entries. Three tracks, all
+// centred in the viewport:
+//   measure -- the reading column every ordinary block sits in (~65ch)
+//   wide    -- full-width plates AND scrolly regions, so both share one pair
+//              of outer edges. A region is step column + gap + pinned
+//              graphic, centred as one composition with even margins.
+//              Its text starts left of the reading column on purpose: a
+//              pinned region is a distinct act, and centring it is what
+//              lets the graphic be large without running to the edge.
+// Nothing here knows about any particular post.
+@mixin kh-story() {
+  .kh-story {
+    --kh-story-measure: 39rem;
+    // Wider than the 81.25em body on large screens: the body is centred, so
+    // a centred element can exceed it symmetrically. The gutter (2rem total,
+    // 6rem from lg) is more than a classic scrollbar, so 100vw never causes
+    // sideways scroll. Capped at 78rem so the margins stay balanced on wide
+    // screens instead of the graphic running to the viewport edge.
+    --kh-story-wide: calc(100vw - 2rem);
+    --kh-story-steps: clamp(20rem, 28vw, 23rem);
+  }
+
+  // Cover: breadcrumb + ref, title, dek, one meta line, centred as a title
+  // page. Centring is what tells the reader this is a different kind of
+  // entry, and it lets the title run wider than the reading column without
+  // looking lopsided. Body text below stays left-aligned.
+  .kh-story__cover {
+    margin: 0 auto 2rem;
+    max-width: 56rem;
+    padding: 1.5rem 0 0;
+    text-align: center;
+  }
+
+  // The closing rule is the reading column's width, centred, so it lines up
+  // with the prose that follows.
+  .kh-story__cover::after {
+    border-bottom: 1px solid var(--kh-rule--strong);
+    content: '';
+    display: block;
+    margin: 1.75rem auto 0;
+    max-width: var(--kh-story-measure);
+  }
+
+  // Breadcrumb and Ref dock to the corners of the wide track (the same outer
+  // edges as the scrolly regions and plates), as apparatus framing the
+  // centred title rather than competing with it.
+  .kh-story__strap {
+    align-items: baseline;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    justify-content: space-between;
+    margin: 0 0 clamp(2rem, 9vh, 6rem) calc((100% - var(--kh-story-wide)) / 2);
+    text-align: left;
+    width: var(--kh-story-wide);
+  }
+
+  .kh-story__title {
+    font-size: clamp(2.25rem, 4.6vw, 4.25rem);
+    letter-spacing: -0.01em;
+    line-height: 1.04;
+    margin: 0 0 1.5rem;
+    text-wrap: balance;
+  }
+
+  .kh-story__dek {
+    color: var(--kh-color--grey--darkest);
+    font-size: clamp(1.2rem, 1.9vw, 1.55rem);
+    line-height: 1.4;
+    margin: 0 auto 1.5rem;
+    max-width: 40rem;
+    text-wrap: balance;
+  }
+
+  .kh-story__meta {
+    display: block;
+    margin: 0;
+  }
+
+  // Body: the body itself IS the reading column (centred, measure wide).
+  // Plates and enhanced scrolly regions break out of it to the wide track
+  // with symmetric negative margins. Constraining the container rather than
+  // centring each child avoids fighting the many `.kh-content p` style
+  // margin rules that would otherwise outrank a `> *` selector.
+  .kh-story__body {
+    font-size: 1.125rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--kh-story-measure);
+
+    .kh-note-box {
+      font-size: 0.9rem;
+    }
+  }
+
+  .kh-story__body > .kh-bleed-out,
+  .kh-story__body > .kh-story__graphic-col,
+  .kh-story__body > .kh-scrolly--enhanced {
+    box-sizing: border-box;
+    margin-left: calc((100% - var(--kh-story-wide)) / 2);
+    margin-right: calc((100% - var(--kh-story-wide)) / 2);
+    width: var(--kh-story-wide);
+  }
+
+  .kh-story__body > .kh-bleed-out {
+    margin-bottom: 3rem;
+    margin-top: 3rem;
+  }
+
+  // Optional one-line strap of result themes at the top of the body: reads
+  // as the last line of the cover.
+  .kh-story-themes {
+    color: var(--kh-color--grey--darkest);
+    font-family: var(--kh-font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-story {
+      --kh-story-wide: min(100vw - 6rem, 78rem);
+    }
+
+    // Steps + graphic as one centred composition on the wide track.
+    .kh-story__body > .kh-scrolly--enhanced {
+      column-gap: 3rem;
+      grid-template-columns: var(--kh-story-steps) minmax(0, 1fr);
+    }
+
+    // A figure that lines up with the scrolly graphic column, so an image
+    // between regions shares the diagram's left and right edges.
+    .kh-story__body > .kh-story__graphic-col {
+      padding-left: calc(var(--kh-story-steps) + 3rem);
+    }
+  }
+
+  .kh-story__body > .kh-story__graphic-col {
+    margin-bottom: 3rem;
+    margin-top: 3rem;
+  }
+
+  // Images fill their track: a plate the wide track, a figure the column.
+  .kh-story__plate img,
+  .kh-story__body > figure img {
+    height: auto;
+    width: 100%;
+  }
+
+  // The lead image, moved from the opening to a closing plate.
+  .kh-story__plate .kh-figure__caption {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--kh-story-measure);
+  }
+
+  // Colophon: the apparatus post.njk puts up front, gathered at the end.
+  .kh-story__colophon {
+    border-top: 1px solid var(--kh-rule--strong);
+    font-size: 0.95rem;
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+  }
+
+  .kh-story__colophon-list {
+    display: grid;
+    gap: 0.5rem 1.5rem;
+    grid-template-columns: minmax(6rem, max-content) minmax(0, 1fr);
+    margin: 0;
+
+    dt {
+      padding-top: 0.2rem;
+    }
+
+    dd {
+      margin: 0;
+    }
+  }
+
+  .kh-story__topics,
+  .kh-story__contents {
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-story__topics {
+    list-style: none;
+  }
+
+  .kh-story__topics li,
+  .kh-story__contents li {
+    margin: 0 0 0.15rem;
+  }
+
+  .kh-story__contents {
+    list-style: decimal-leading-zero inside;
+  }
+}

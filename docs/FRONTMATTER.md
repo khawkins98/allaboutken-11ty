@@ -59,6 +59,7 @@ layout: layouts/post.njk
   | Value | Use case |
   | --- | --- |
   | `layouts/post.njk` | Blog posts and impact stories |
+  | `layouts/story.njk` | Scroll-driven entries (`.kh-scrolly` regions); see the header comment in the layout |
   | `layouts/base.njk` | Standalone pages |
   | `layouts/digesting.njk` | "Digesting" short-form entries |
   | `layouts/photo.njk` | Photograph entries |
