@@ -24,6 +24,10 @@
 
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const HEAD = 11; // arrowhead length and base width, viewBox units
+  // Line draw-in time and the lag before its arrowhead fades in; both must
+  // match .kh-sv__reveal and .kh-sv__head.is-on in _kh-scrolly.scss.
+  const DRAW = 0.6;
+  const HEAD_LAG = 0.5;
   const W = 540;
   const H = 400;
 
@@ -44,7 +48,9 @@
     // Schemas arrive alone; tokens rise in with their own paragraph (1.1).
     1: { on: ['nS', 'sS'], define: 'nS' },
     1.1: { on: [...SOURCES, 'dots', 'dotsLbl'], define: 'nT' },
-    1.2: { on: [...SOURCES, 'peers', 'peersLbl'] },
+    // Keeps the token definition: nothing in 1.2 needs that space (the peers
+    // label sits left of it), so it stays until the region ends.
+    1.2: { on: [...SOURCES, 'peers', 'peersLbl'], define: 'nT' },
     // Storybook's definition first; the "+ layout" chip pops on the next
     // paragraph (2.05) so the two never compete.
     2: { on: [...SOURCES, 'peers', 'peersLbl', 'nSB', 'sSB', 'stS', 'stT'], define: 'nSB' },
@@ -116,16 +122,16 @@
   // from the node to that corner.
   const CALLOUTS = {
     nS: { x: 192, y: 24, anchor: 'tl', w: 0.6, ld: 'M158 70 H190' },
-    // Waits for the tokens box to finish rising (0.8s) before attaching.
-    nT: { x: 196, y: 186, anchor: 'bl', w: 0.6, ld: 'M150 297 L196 186', delay: 0.8 },
+    // Waits for the tokens box to finish rising (0.5s) before attaching.
+    nT: { x: 196, y: 186, anchor: 'bl', w: 0.6, ld: 'M150 297 L196 186', delay: 0.5 },
     // Anchored right of the schema stream, which passes just left of it.
     nSB: { x: 232, y: 150, anchor: 'bl', w: 0.56, ld: `M${cx(N.SB)} 168 V152` },
     nF: { x: 536, y: 150, anchor: 'br', w: 0.46, ld: `M${cx(N.F)} 168 V152` },
   };
-  const CALLOUT_DELAY = 0.35; // seconds; card and leader share it
+  const CALLOUT_DELAY = 0.15; // seconds; card and leader share it
 
   // Label entry delays follow their line: lb4T waits for rdT, which redraws
-  // (from 0.7s) when scrolling back up from stage 5.
+  // (from 0.5s) when scrolling back up from stage 5.
 
   // Hover / tap explainers that are not term definitions. Edit copy here.
   //   dots:   the two groups of the stage-1.1 dot field.
@@ -227,8 +233,8 @@
     ${line('stS', P.stS, 'kh-sv__line--stream', { head: true })}
     ${line('stT', P.stT, 'kh-sv__line--stream', { head: true })}
     ${line('rdS', P.rdS, 'kh-sv__line--read', { head: true, delay: 0 })}
-    ${line('rdT', P.rdT, 'kh-sv__line--read', { head: true, delay: 0.7 })}
-    ${line('rdSB', P.rdSB, 'kh-sv__line--read', { head: true, delay: 1.4 })}
+    ${line('rdT', P.rdT, 'kh-sv__line--read', { head: true, delay: 0.5 })}
+    ${line('rdSB', P.rdSB, 'kh-sv__line--read', { head: true, delay: 1 })}
     ${line('fix', P.fix, 'kh-sv__line--fix', { head: true, delay: 0.6, mid: '222,165' })}
     ${line('g5T', P.g5T, 'kh-sv__line--good', { head: true })}
     ${line('g5arc', P.g5arc, 'kh-sv__line--good', { head: true, delay: 0.3 })}
@@ -260,9 +266,9 @@
     <rect x="${N.SB.x + N.SB.w - 70}" y="${N.SB.y - 34}" width="74" height="24" rx="12"/>
     <text x="${N.SB.x + N.SB.w - 33}" y="${N.SB.y - 17.5}">+ layout</text>
   </g>
-  ${label('lbS', 318, 26, 'reads fields, presets', { delay: 0.6 })}
-  ${label('lbT', 318, 394, 'reads variables', { delay: 1.3 })}
-  ${label('lbSB', 357, 160, 'reads geometry', { delay: 2 })}
+  ${label('lbS', 318, 26, 'reads fields, presets', { delay: 0.5 })}
+  ${label('lbT', 318, 394, 'reads variables', { delay: 1 })}
+  ${label('lbSB', 357, 160, 'reads geometry', { delay: 1.5 })}
   ${label('lb4T', 318, 394, '0.55 read as 0.55%', { cls: 'kh-sv__label--flag', delay: 1 })}
   ${label('lb4SB', 357, 160, 'line-height', { cls: 'kh-sv__label--flag', delay: 0.5 })}
   ${label('fixLbl', 357, 250, 'the limit flows down', { cls: 'kh-sv__label--fix', delay: 1.6 })}
@@ -375,7 +381,7 @@
           // A mid-path head arrives part-way through the draw, not at its end.
           const delay = parseFloat((path.getAttribute('style') || '').replace(/[^0-9.]/g, '')) || 0;
           const share = at / len;
-          head.setAttribute('style', `--d:${(delay - 0.6 + 0.8 * share).toFixed(2)}s`);
+          head.setAttribute('style', `--d:${(delay - HEAD_LAG + DRAW * share).toFixed(2)}s`);
           anchor.after(head);
           anchor = head;
         });
@@ -531,10 +537,11 @@
     const describe = (t) => {
       if (t.matches('.kh-sv__node')) {
         const key = t.dataset.k;
-        // The stage callout is already explaining this box.
-        if (graphic.dataset.callout === key) return null;
         const def = definitionParts(region, key);
-        return def && { id: `node:${key}`, anchor: t.querySelector('rect'), term: def.term, html: def.html, own: [t] };
+        // If the stage callout is already explaining this box, it yields
+        // (fades back) while the popup is open and returns on leave, so the
+        // box always answers a hover and the two never show at once.
+        return def && { id: `node:${key}`, anchor: t.querySelector('rect'), term: def.term, html: def.html, own: [t], yields: graphic.dataset.callout === key ? key : '' };
       }
       if (t.matches('.kh-sv__hit')) {
         const group = t.dataset.dots;
@@ -622,10 +629,17 @@
     let viaKeyboard = false;
     let lastShown = null;
 
+    const setYield = (key) => {
+      graphic.querySelectorAll('.kh-scrolly__callout[data-define], .kh-sv__leader[data-leader]').forEach((el) => {
+        el.classList.toggle('is-yield', !!key && (el.dataset.define || el.dataset.leader) === key);
+      });
+    };
+
     const hide = () => {
       openId = null;
       viaKeyboard = false;
       tip.classList.remove('is-on');
+      setYield('');
       delete svg.dataset.dotFocus;
       if (described) {
         described.removeAttribute('aria-describedby');
@@ -645,6 +659,7 @@
       tip.innerHTML = `<span class="kh-scrolly__callout-term">${d.term}</span><span class="kh-scrolly__callout-text">${d.html}</span>`;
       if (d.dots) svg.dataset.dotFocus = d.dots;
       else delete svg.dataset.dotFocus;
+      setYield(d.yields || '');
       place(d);
       tip.classList.add('is-on');
       if (described && described !== t) described.removeAttribute('aria-describedby');
@@ -709,15 +724,17 @@
     // A hover popup closes on scroll; a keyboard one follows its button
     // (the graphic is pinned, so it rarely moves) rather than vanishing
     // under the reader's hands.
-    window.addEventListener('scroll', () => {
+    // Called from update(), the one scroll path, not from its own listener.
+    const onScroll = () => {
       if (!openId) return;
       if (viaKeyboard && lastShown) place(lastShown);
       else hide();
-    }, { passive: true });
-    return () => {
+    };
+    const reset = () => {
       current = null;
       hide();
     };
+    return { reset, onScroll };
   }
 
   // Keep the callout layer exactly over the drawn viewBox: the SVG letterboxes
@@ -757,7 +774,7 @@
     region.appendChild(graphic);
     const svg = graphic.querySelector('svg');
     buildCallouts(region, graphic);
-    const hideTip = setupTips(region, graphic, svg);
+    const tips = setupTips(region, graphic, svg);
 
     const steps = [];
     region.querySelectorAll('.kh-scrolly__section[data-scrolly-steps]').forEach((section) => {
@@ -801,21 +818,27 @@
         placeLayer(svg);
       }).observe(svg);
     }
-    instances.push({ region, svg, steps, initial, current: initial, active: null, layer: graphic.querySelector('.kh-scrolly__callouts'), hideTip });
+    instances.push({ region, svg, steps, initial, current: initial, active: null, layer: graphic.querySelector('.kh-scrolly__callouts'), tips });
   });
 
   // The ONE switch for a stage callout: its card and its leader line are
   // turned on and off together, from the same condition, with the same
-  // delay. The condition: wide layout, graphic pinned (a callout popping out
-  // while the graphic is still sliding into place reads as a glitch), and
-  // the current stage defines a term.
+  // delay. The condition: wide layout and the current stage defines a term.
+  // It used to also wait for the graphic to pin; at reading speed (about
+  // 600px/s) that wait plus the entry delay outlasted every stage's scroll
+  // window, so the callouts never appeared unless the reader stopped. The
+  // callout layer moves with the graphic, so one that is already up while
+  // the graphic slides into place is just part of the picture.
   function syncCallout(inst) {
     if (!inst.layer) return;
     const g = inst.svg.parentNode;
-    const top = parseFloat(getComputedStyle(g).top) || 0;
-    const pinned = Math.abs(g.getBoundingClientRect().top - top) < 2;
     const spec = STAGES[inst.current] || {};
-    const key = wide.matches && pinned && spec.define ? spec.define : '';
+    // Only a term this region has a card for: every SVG carries leader
+    // paths for all four terms, but region B starts in state 1.2 (which
+    // keeps the token definition) with no token aside of its own, and lit
+    // the leader to nowhere.
+    const has = spec.define && inst.layer.querySelector(`.kh-scrolly__callout[data-define="${spec.define}"]`);
+    const key = wide.matches && has ? spec.define : '';
     if (key === (g.dataset.callout || '')) return;
     g.dataset.callout = key;
     g.querySelectorAll('.kh-scrolly__callout[data-define], .kh-sv__leader[data-leader]').forEach((el) => {
@@ -823,17 +846,47 @@
     });
   }
 
-  function triggerLine() {
-    return window.innerHeight * (wide.matches ? 0.55 : 0.66);
+  // The trigger line is a share of a REFERENCE height, not of the live
+  // innerHeight: on a phone the address bar collapsing changes innerHeight
+  // by ~10% while the layout (vh/svh) stays put, and a line that moved with
+  // it flipped the stage under the reader. The reference follows width
+  // changes (a real resize or rotation) and only large height changes.
+  let refHeight = window.innerHeight;
+  let refWidth = window.innerWidth;
+  function refreshRef() {
+    const dh = Math.abs(window.innerHeight - refHeight) / refHeight;
+    if (window.innerWidth !== refWidth || dh > 0.25) {
+      refHeight = window.innerHeight;
+      refWidth = window.innerWidth;
+    }
   }
+  function triggerLine() {
+    return refHeight * (wide.matches ? 0.55 : 0.66);
+  }
+
+  // Hysteresis: a step takes over when its top passes a line slightly ABOVE
+  // the trigger, and hands back only when it drops slightly BELOW it, so a
+  // few pixels of scroll jitter around the line cannot flip the stage back
+  // and forth. Both lines are read from current positions, so a fling still
+  // lands on the right step.
+  const HYST = 0.04; // of the viewport height, each side of the trigger line
 
   function update() {
     const y = triggerLine();
+    const band = refHeight * HYST;
     instances.forEach((inst) => {
-      let active = null;
-      inst.steps.forEach((s) => {
-        if (s.anchor.getBoundingClientRect().top <= y) active = s;
+      let fwd = -1;
+      let back = -1;
+      inst.steps.forEach((s, i) => {
+        const top = s.anchor.getBoundingClientRect().top;
+        if (top <= y - band) fwd = i;
+        if (top <= y + band) back = i;
       });
+      const cur = inst.steps.indexOf(inst.active);
+      let idx = cur;
+      if (cur < fwd) idx = fwd;
+      else if (cur > back) idx = back;
+      const active = idx >= 0 ? inst.steps[idx] : null;
       const stage = active ? active.stage : inst.initial;
       if (active !== inst.active) {
         inst.steps.forEach((s) => s.el.classList.toggle('is-active', s === active));
@@ -842,9 +895,10 @@
       if (stage !== inst.current) {
         inst.current = stage;
         applyStage(inst.svg, stage);
-        inst.hideTip();
+        inst.tips.reset();
       }
       syncCallout(inst);
+      inst.tips.onScroll();
       // Live = the graphic is wholly on screen (pinned, or in flow but
       // visible), so focusing a button in it cannot scroll the page.
       const g = inst.svg.parentNode.getBoundingClientRect();
@@ -881,7 +935,10 @@
       instances.forEach((inst) => syncFocusables(inst.svg));
     });
   }
-  window.addEventListener('resize', () => window.requestAnimationFrame(update), { passive: true });
+  window.addEventListener('resize', () => {
+    refreshRef();
+    window.requestAnimationFrame(update);
+  }, { passive: true });
   // The observer band is a few pixels tall, so a step can enter it while its
   // top is still just below the trigger line; with no further crossing,
   // nothing fires again and the stage sticks. Re-checking on scroll (once

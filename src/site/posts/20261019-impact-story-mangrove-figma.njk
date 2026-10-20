@@ -133,8 +133,11 @@ image_meta:
   .kh-scrolly__define asides hold the term definitions (edit the copy here,
   nowhere else). They read inline without JS/CSS; on wide screens the script
   shows each as a callout beside its node and the aside is visually hidden.
+  data-scrolly-initial="1": the schema box (and its callout) is already drawn
+  as the graphic scrolls into view, rather than fading in once the first
+  paragraph reaches the trigger line and leaving a blank pinned graphic.
 -->
-<div class="kh-scrolly" data-scrolly-initial="0">
+<div class="kh-scrolly" data-scrolly-initial="1">
 <div class="kh-scrolly__steps">
 <div class="kh-scrolly__section" data-scrolly-steps="1 1.1 1.2">
 {% markdown %}

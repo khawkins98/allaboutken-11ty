@@ -45,6 +45,7 @@
     display: flex;
     grid-row: 1;
     height: 44vh;
+    height: 44svh; // see the narrow-screen note below
     padding: 0.5rem 0;
     position: sticky;
     top: 0;
@@ -78,8 +79,13 @@
   // A lead step (a section's heading owning its own stage, e.g. a definition
   // shown in the graphic) needs the same scroll time as a paragraph. On
   // narrow screens the visible in-prose definition carries that gap instead.
+  // The section hop is for specificity: _kh-content.scss sets heading
+  // margins with `.kh-content h2:not([class*='kh-'])`, (1,2,2) under the
+  // toggle scope, and the lead heading now matches it (it carries no `kh-`
+  // class, so its permalink is styled). Two classes plus the attribute
+  // outrank it; one class did not, and the gap silently collapsed to 16px.
   @media (min-width: $kh-breakpoint--lg) {
-    .kh-scrolly--enhanced [data-scrolly-lead] {
+    .kh-scrolly--enhanced .kh-scrolly__section > [data-scrolly-lead] {
       margin-bottom: 38vh;
     }
   }
@@ -88,9 +94,14 @@
     margin-bottom: 0;
   }
 
+  // Narrow: svh, not vh. On a phone the address bar collapsing grows vh by
+  // 10%, so vh gaps all grew at once and the page shifted down under the
+  // reader, flipping the stage back. svh is the small viewport, which does
+  // not change with the bar. (vh first, as the fallback.)
   @media (max-width: $kh-breakpoint--lg-down) {
     .kh-scrolly__step {
       margin-bottom: 24vh;
+      margin-bottom: 24svh;
     }
   }
 
@@ -147,32 +158,36 @@
 
   // Every keyed element starts hidden; the stage table turns it on. The delay
   // only applies on the way in (it is set on `.is-on`), so leaving a stage is
-  // immediate and entering one can be staggered.
+  // immediate and entering one can be staggered. Entries are quick (0.3s)
+  // and exits slower (0.6s): the reader is looking at what leaves, not at
+  // what has not arrived yet.
   .kh-sv__el {
     opacity: 0;
-    transition: opacity 0.45s ease, color 0.45s ease;
+    transition: opacity 0.6s ease, color 0.45s ease;
   }
 
   .kh-sv__el.is-on {
     opacity: 1;
     transition-delay: var(--d, 0s);
+    transition-duration: 0.3s;
   }
 
   // Design tokens rise into place beside the schemas when their paragraph
   // arrives, rather than appearing with the schemas as a pair.
   .kh-sv__rise {
     transform: translateY(70px);
-    transition: opacity 0.45s ease, color 0.45s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: opacity 0.6s ease, color 0.45s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   .kh-sv__rise.is-on {
     transform: none;
+    transition-duration: 0.3s, 0.3s, 0.5s;
   }
 
   // On the way out it fades in place and only drops back once invisible:
   // sliding away while visible left lines pointing at an empty spot.
   .kh-sv__rise:not(.is-on) {
-    transition: opacity 0.45s ease, color 0.45s ease, transform 0s linear 0.45s;
+    transition: opacity 0.6s ease, color 0.45s ease, transform 0s linear 0.6s;
   }
 
   // Anything that labels or decorates a line or box leaves faster than the
@@ -181,7 +196,7 @@
   .kh-sv__chip:not(.is-on),
   .kh-sv__check:not(.is-on),
   .kh-sv__head:not(.is-on) {
-    transition-duration: 0.2s;
+    transition-duration: 0.3s;
   }
 
   .kh-sv__el.is-dim {
@@ -200,26 +215,29 @@
     color: var(--kh-sv-good);
   }
 
-  // Lines draw in through a mask whose stroke is revealed from the start.
+  // Lines draw in through a mask whose stroke is revealed from the start
+  // (DRAW in mangrove-scrolly.js). On the way out the mask holds until the
+  // line has faded: a line that retracted from its tip while its arrowhead
+  // was still fading left the head floating for a moment.
   .kh-sv__reveal {
     fill: none;
     stroke: #fff;
     stroke-dasharray: 1 1;
     stroke-dashoffset: 1;
     stroke-width: 14;
-    transition: stroke-dashoffset 0.8s ease-in-out;
+    transition: stroke-dashoffset 0s linear 0.6s;
   }
 
   .kh-sv__reveal.is-on {
     stroke-dashoffset: 0;
-    transition-delay: var(--d, 0s);
+    transition: stroke-dashoffset 0.6s ease-in-out var(--d, 0s);
   }
 
   .kh-sv__line {
     fill: none;
     stroke: currentColor;
     stroke-width: 2;
-    transition: opacity 0.45s ease, color 0.45s ease, stroke-width 0.45s ease;
+    transition: opacity 0.6s ease, color 0.45s ease, stroke-width 0.45s ease;
   }
 
   .kh-sv__line--peers {
@@ -255,7 +273,14 @@
 
   .kh-sv__leader.is-on {
     opacity: 1;
-    transition: opacity 0.3s ease var(--kh-co-delay, 0.35s);
+    transition: opacity 0.25s ease var(--kh-co-delay, 0.15s);
+  }
+
+  // Yielding to a popup on the same box (see setYield): card and leader
+  // step back together and return on leave.
+  .kh-sv__leader.is-on.is-yield {
+    opacity: 0;
+    transition: opacity 0.15s ease;
   }
 
   // The fix flowing out of the schema: dark ink and dashed, so it reads as
@@ -273,8 +298,10 @@
     fill: currentColor;
   }
 
+  // HEAD_LAG in mangrove-scrolly.js: the head fades in as its line's draw
+  // reaches the tip.
   .kh-sv__head.is-on {
-    transition-delay: calc(var(--d, 0s) + 0.6s);
+    transition-delay: calc(var(--d, 0s) + 0.5s);
   }
 
   // Already on before this stage (the script sets `is-held`): the entry
@@ -487,6 +514,7 @@
 
     .kh-scrolly--enhanced .kh-scrolly__define {
       margin-bottom: 24vh;
+      margin-bottom: 24svh;
     }
 
     // No callouts in the narrow band, so no leaders to them either.
@@ -553,16 +581,25 @@
     position: absolute;
     top: var(--y);
     transform: translate(var(--kh-co-tx), var(--kh-co-ty)) scale(0.92);
-    transition: opacity 0.3s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    // Leaves over 0.5s (the leader goes first, in 0.2s); arrives in 0.25s.
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
     width: min(22rem, var(--w));
   }
 
   // `.is-on` is set by the script's single callout switch (stage defines a
-  // term, layout is wide, graphic is pinned), together with the leader.
+  // term, layout is wide), together with the leader.
   .kh-scrolly__callout.is-on {
     opacity: 1;
     transform: translate(var(--kh-co-tx), var(--kh-co-ty));
-    transition-delay: var(--kh-co-delay, 0.35s);
+    transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition-delay: var(--kh-co-delay, 0.15s);
+  }
+
+  // Yielding to a popup on the same box: fades back, no pop, and returns on
+  // leave with the same short fade.
+  .kh-scrolly__callout.is-on.is-yield {
+    opacity: 0;
+    transition: opacity 0.15s ease;
   }
 
   .kh-scrolly__callout--tl {
