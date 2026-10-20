@@ -351,7 +351,9 @@
   });
   const LAYOUT = { cloud: (g, i) => CLOUD[g][i], c1, c2, settled, spread, full, chain };
   // Which clusters have formed in each layout (so can be labelled, hovered).
-  const FORMED = { cloud: [], c1: ['S'], c2: ['S', 'T', 'B'], settled: ['S', 'T', 'B', 'F'], spread: ['S'], full: ['S', 'T', 'B', 'F'], chain: [] };
+  // The variants (F) only form at stage 3, when their box names them, so
+  // their drift answers no hover before that.
+  const FORMED = { cloud: [], c1: ['S'], c2: ['S', 'T', 'B'], settled: ['S', 'T', 'B'], spread: ['S'], full: ['S', 'T', 'B', 'F'], chain: [] };
 
   function buildDotLayer() {
     const dot = (g, i) => {
@@ -888,13 +890,16 @@
           if (el.closest('.is-dim, .is-faint')) w *= 0.4;
           return { r: rel(el.getBoundingClientRect()), w };
         });
-      // A stage callout on screen is as important as a box; its leader
-      // should not be crossed either.
-      graphic.querySelectorAll('.kh-scrolly__callout.is-on').forEach((c) => {
-        obstacles.push({ r: rel(c.getBoundingClientRect()), w: 20 });
+      // A stage callout on screen, and its leader, are hard obstacles: a
+      // popup never sits on a card if any side is clear. If every side
+      // overlaps one, the chosen side still minimises the overlap and the
+      // card yields (fades back) while the popup is open, see show().
+      const hard = [];
+      graphic.querySelectorAll('.kh-scrolly__callout.is-on:not(.is-yield)').forEach((c) => {
+        hard.push(rel(c.getBoundingClientRect()));
       });
-      svg.querySelectorAll('.kh-sv__leader.is-on').forEach((l) => {
-        obstacles.push({ r: rel(l.getBoundingClientRect()), w: 2 });
+      svg.querySelectorAll('.kh-sv__leader.is-on:not(.is-yield)').forEach((l) => {
+        hard.push(rel(l.getBoundingClientRect()));
       });
       // A dot popup should not hide the group it explains; covering the
       // other (dimmed) group is fine.
@@ -913,10 +918,12 @@
         const out = Math.max(0, PAD - r.left) + Math.max(0, r.right - host.width + PAD)
           + Math.max(0, PAD - r.top) + Math.max(0, r.bottom - host.height + PAD);
         const hit = obstacles.reduce((sum, o) => sum + overlap(r, o.r) * o.w, 0);
-        return { ...c, x, y, score: out * 1e4 + hit - c.room * 0.01, vertical };
+        const onCard = hard.reduce((sum, h) => sum + overlap(r, h), 0);
+        return { ...c, x, y, onCard, score: out * 1e4 + onCard * 1e3 + hit - c.room * 0.01, vertical };
       });
       cands.sort((p, q) => p.score - q.score);
       const c = cands[0];
+      place.onCard = c.onCard > 0;
       // Caret position along the card edge, aimed at the anchor's midpoint.
       const caret = c.vertical ? clamp(midX - c.x, 14, tw - 14) : clamp(midY - c.y, 14, th - 14);
       tip.dataset.side = c.side;
@@ -969,6 +976,9 @@
       else delete svg.dataset.clusterFocus;
       setYield(d.yields || '');
       place(d);
+      // Nowhere clear of the stage callout: it yields, as it does to its
+      // own box's popup.
+      if (place.onCard && graphic.dataset.callout) setYield(graphic.dataset.callout);
       tip.classList.add('is-on');
       if (described && described !== t) described.removeAttribute('aria-describedby');
       described = null;
