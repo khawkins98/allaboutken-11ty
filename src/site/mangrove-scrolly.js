@@ -1,7 +1,7 @@
 // Mangrove impact story: one persistent scroll-driven diagram, cover to close.
 //
 // Progressive enhancement over the five static <svg> figures and the closing
-// <ol> in 20261019-impact-story-mangrove-figma.njk. Without this script (or
+// <ol> in 20261021-impact-story-mangrove-figma.njk. Without this script (or
 // with the site CSS toggle off) the reader gets those inline, unchanged.
 //
 // How it works
