@@ -200,13 +200,13 @@ image_meta:
 
 ## Where did the truth come from?
 
-**The hard part was as much the culture change as the technical build.** Getting a broad range of stakeholders to agree on what a card, a hero or a landing page is *made of* took years of working across content teams, developers and leadership. That meant shifting organizational perspectives so teams embraced abstraction: content schemas for structure, design tokens for appearance, and code for layout. By the time a Figma library came up, that discipline was already settled and empowering live syndication. (I've written about [Mangrove as a content architecture that happens to ship a design system](/posts/20260327-content-architecture-shipping-container/).)
+**The hard part was as much the culture change as the technical build.** Getting a broad range of stakeholders to agree on what a card, a hero or a landing page is *made of* took years of sustained leadership: I led the initiative across our content teams, developers and organizational leadership to shift perspectives. That meant getting teams to embrace abstraction: content schemas for structure, design tokens for appearance, and code for layout. By the time a Figma library came up, that discipline was already settled and empowering live syndication. (I've written about [Mangrove as a content architecture that happens to ship a design system](/posts/20260327-content-architecture-shipping-container/).)
 
 {% endmarkdown %}
 <aside class="kh-scrolly__define" data-define="nS"><p><strong><dfn>Content schema</dfn>:</strong> the agreed list of what each piece of content contains and its limits. A Book Card always has a title and a link, may have an image, and its summary has a maximum length. Agreeing this is what lets UNDRR share content across its sites.</p></aside>
 {% markdown %}
 
-**The brand settings are a second, independent source.** I worked with colleagues to align the structures of the design tokens across UNDRR, PreventionWeb, MCR2030, DELTA Resilience and IRP into one unified set, which the plugin turns into 540 Figma variables. 471 of them (87.2%) are the same in every brand; the other 69 are where the brands differ: colour, corner radius, a softer surface here, hero spacing there.
+**The brand settings are a second, independent source.** I led the effort to align the structure of the design tokens across UNDRR, PreventionWeb, MCR2030, DELTA Resilience and IRP into one unified set, which the plugin turns into 540 Figma variables. 471 of them (87.2%) are the same in every brand; the other 69 are where the brands differ: colour, corner radius, a softer surface here, hero spacing there.
 
 {% endmarkdown %}
 <aside class="kh-scrolly__define" data-define="nT"><p><strong><dfn>Design token</dfn>:</strong> a named brand setting, like <em>this blue</em>, <em>this corner roundness</em> or <em>this spacing</em>, stored once. Each brand gives the same name its own value; change one and everything using it updates.</p></aside>
@@ -267,7 +267,7 @@ image_meta:
 
 ## What does Storybook add?
 
-**Layout, and only layout.** I worked with our front-end developers to build Mangrove out, and with engineering teams to integrate it into live sites. Storybook is the working catalogue of that effort: each pattern takes a schema's fields and the tokens' values and arranges them on a page. That arrangement is the one thing Storybook has the final word on.
+**Layout, and only layout.** I led our front-end developers in building Mangrove out, and directed the work with engineering teams to integrate it across our live sites. Storybook is the working catalogue of that initiative: each pattern takes a schema's fields and the tokens' values and arranges them on a page. That arrangement is the one thing Storybook has the final word on.
 
 {% endmarkdown %}
 <aside class="kh-scrolly__define" data-define="nSB"><p><strong><dfn>Storybook</dfn>:</strong> the developers' working catalogue of every component, running live in the browser with all its variations.</p></aside>
@@ -473,7 +473,7 @@ image_meta:
 
 **A change at the source carries through to designers' work.** I changed a core UNDRR spacing token from 30px to 32px and republished the library. In a pilot file of 56 linked library instances, a resource page at desktop and mobile widths, the layout updated and every edited title, chosen preset and instance override survived.
 
-**Designers don't need the plugin to use the library.** I worked closely with our designers to ensure this approach supported their craft rather than dictating it. The pilot was built entirely from the published library, with its own headings and local notes; the plugin is my build tool behind the scenes, and designers only ever touch the library.
+**Designers don't need the plugin to use the library.** I led the adoption effort with our design team, ensuring this architecture empowered their craft rather than dictating it. The pilot was built entirely from the published library, with its own headings and local notes; the plugin is a build tool behind the scenes, and designers only ever touch the library.
 
 {% endmarkdown %}
 </div>
