@@ -331,6 +331,9 @@
     font-family: var(--kh-font-sans);
     height: 100%;
     overflow: visible;
+    // The SVG's own box must not swallow pointer events: the demo's real
+    // button (stage w) sits underneath it; interactive parts opt back in.
+    pointer-events: none;
     width: 100%;
   }
 
@@ -941,30 +944,13 @@
 
 
 
-  // Technical-drawing annotations for stage w: a hairline leader and a
-  // small grey note share one key, so they show and leave together.
-  .kh-sv__line--note {
-    stroke: var(--kh-color--grey--darkest);
-    stroke-width: 1;
-  }
-
-  .kh-sv__label--note {
-    fill: var(--kh-color--grey--darkest);
-    font-size: min(11.5px, calc(12.5px / var(--kh-sv-s, 1)));
-  }
-
-  // A note's leader leaves as fast as its label (0.3s), never after it.
-  .kh-sv__line--note:not(.is-on) {
-    transition-duration: 0.3s;
-  }
-
-  // The layout demo: an HTML layer over the graphic, viewBox-sized and
-  // scaled like the dot layer (the script sets --kh-sv-s, left and top),
-  // under the SVG so the seam, notes and hit targets paint over it. Both
-  // sides are the same six wireframe cards; the shared width is
-  // --kh-demo-w (set by the script, viewBox units), which transitions.
+  // The demo, "multiply the frames" (stage w): an HTML layer over the
+  // graphic, viewBox-sized and scaled like the dot layer (the script sets
+  // --kh-sv-s, left and top), under the SVG so the seam, labels, source
+  // boxes, arrow and hit targets paint over it. data-demo is the beat
+  // (multiply, token, derive, done), data-step the moment within it.
   .kh-sv-demo {
-    --kh-demo-w: 236px;
+    --kh-demo-pad: 12px;
     color: var(--kh-color--text);
     font-family: var(--kh-font-sans);
     height: 400px;
@@ -978,16 +964,16 @@
     transition: opacity 0.35s ease;
     width: 540px;
     z-index: -1;
+
+    p {
+      margin: 0;
+    }
   }
 
-  .kh-sv-demo[data-demo='sweep'],
-  .kh-sv-demo[data-demo='gap'] {
+  .kh-sv-demo[data-demo='multiply'],
+  .kh-sv-demo[data-demo='token'],
+  .kh-sv-demo[data-demo='derive'] {
     opacity: 1;
-  }
-
-  .kh-sv-demo.is-jump .kh-sv-demo__box,
-  .kh-sv-demo.is-jump .kh-sv-demo__ruler i {
-    transition: none;
   }
 
   .kh-sv-demo__side {
@@ -995,182 +981,299 @@
     width: 236px;
   }
 
-  .kh-sv-demo__box {
-    box-sizing: border-box;
-    display: grid;
-    gap: 6px;
-    padding: 8px;
-    transition: width 2.2s cubic-bezier(0.45, 0.05, 0.3, 1);
-    width: var(--kh-demo-w);
-  }
-
-  // Left: the browser viewport, a thin rule; the grid is REAL CSS.
-  .kh-sv-demo__grid {
-    border: 1px solid var(--kh-color--grey--darkest);
-    grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
-  }
-
-  // Right: a Figma frame, dashed. Its columns are whichever layout is
-  // active (data-v); the cards stretch to fill between swaps.
-  .kh-sv-demo__frame {
-    border: 1.5px dashed var(--kh-color--grey--darkest);
-    border-radius: 6px;
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .kh-sv-demo__frame[data-v='v2'] {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .kh-sv-demo__frame[data-v='v1'] {
-    grid-template-columns: 1fr;
-  }
-
-  // The swap: a blink of the frame as the next authored layout lands.
-  @keyframes kh-sv-swap {
-    0%,
-    100% {
-      opacity: 1;
-    }
-
-    40% {
-      opacity: 0.25;
-    }
-  }
-
-  .kh-sv-demo__frame.is-swap {
-    animation: kh-sv-swap 0.3s ease-out 1;
-  }
-
-  // Stretched past the range its layout was drawn for (w.1): the fault
-  // colour, sparingly, on the frame and its cards.
-  .kh-sv-demo__frame.is-over,
-  .kh-sv-demo__frame.is-over .kh-sv-demo__card {
-    border-color: var(--kh-sv-fault, #c2410c);
-  }
-
-  // A wireframe card: outline, a title bar and two text lines.
-  .kh-sv-demo__card {
-    border: 1px solid var(--kh-color--text);
-    border-radius: 2px;
-    box-sizing: border-box;
-    display: grid;
-    gap: 3px;
-    height: 30px;
-    min-width: 0;
-    padding: 4px;
-
-    b {
-      background: var(--kh-color--text);
-      display: block;
-      height: 4px;
-      width: 60%;
-    }
-
-    s {
-      background: var(--kh-color--grey);
-      display: block;
-      height: 2px;
-      width: 90%;
-
-      & + s {
-        width: 70%;
-      }
-    }
-  }
-
-  // The ghost: the layout nobody drew for the in-between width (w.1), a
-  // dashed outline at that width, below the frame.
-  .kh-sv-demo__ghost {
-    border: 1.5px dashed var(--kh-color--grey);
-    border-radius: 6px;
-    box-sizing: border-box;
-    display: grid;
-    gap: 6px;
-    grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
-    left: 0;
+  // Anything revealed by a step fades in; it leaves with the demo.
+  .kh-sv-demo__ln--state,
+  .kh-sv-demo__ln--token,
+  .kh-sv-demo__token,
+  .kh-sv-demo__note,
+  .kh-sv-demo__legend,
+  .kh-sv-demo__formula,
+  .kh-sv-demo__tile,
+  .kh-sv-demo__hand {
     opacity: 0;
-    padding: 8px;
-    position: absolute;
-    top: 118px;
-    transition: opacity 0.35s ease;
-    width: var(--kh-demo-w);
-
-    .kh-sv-demo__card {
-      border-color: var(--kh-color--grey);
-      border-style: dashed;
-
-      b,
-      s {
-        opacity: 0.35;
-      }
-    }
+    transition: opacity 0.3s ease;
   }
 
-  .kh-sv-demo[data-demo='gap'] .kh-sv-demo__ghost {
+  // The CSS side: a snippet that grows its state selectors (m2) and the
+  // token line (w.1), and the real button, which follows the token.
+  .kh-sv-demo__code {
+    background: none;
+    border: 0;
+    color: var(--kh-color--grey--darkest);
+    font-family: var(--kh-font-mono);
+    font-size: 8.5px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    white-space: pre;
+  }
+
+  .kh-sv-demo__ln {
+    display: block;
+  }
+
+  .kh-sv-demo__ln--token {
+    display: none;
+  }
+
+  .kh-sv-demo[data-step='m2'] .kh-sv-demo__ln--state,
+  .kh-sv-demo[data-step='m3'] .kh-sv-demo__ln--state,
+  .kh-sv-demo[data-demo='token'] .kh-sv-demo__ln--state,
+  .kh-sv-demo[data-demo='derive'] .kh-sv-demo__ln--state {
     opacity: 1;
   }
 
-  // The three authored layouts as tabs; the active one is the dark pill.
-  .kh-sv-demo__tabs {
-    display: flex;
-    gap: 8px;
-    left: 0;
-    position: absolute;
+  .kh-sv-demo__ln--state:nth-child(3) {
+    transition-delay: 0.25s;
   }
 
-  .kh-sv-demo__tab {
-    border: 1px solid var(--kh-color--text);
-    border-radius: 999px;
-    box-sizing: border-box;
-    font-size: 9px;
-    font-weight: 700;
-    height: 16px;
-    line-height: 14px;
-    text-align: center;
-    transition: background-color 0.2s ease, color 0.2s ease;
-    width: 66px;
+  .kh-sv-demo__ln--state:nth-child(4) {
+    transition-delay: 0.5s;
+  }
 
-    &.is-on {
+  .kh-sv-demo__token {
+    color: var(--kh-color--grey--darkest);
+    font-family: var(--kh-font-mono);
+    font-size: 8.5px;
+    margin-top: 6px;
+
+    s {
+      text-decoration: line-through;
+    }
+  }
+
+  .kh-sv-demo[data-demo='token'] .kh-sv-demo__token,
+  .kh-sv-demo[data-demo='derive'] .kh-sv-demo__token {
+    opacity: 1;
+  }
+
+  .kh-sv-demo[data-demo='token'] {
+    --kh-demo-pad: 16px;
+  }
+
+  .kh-sv-demo[data-demo='derive'] {
+    --kh-demo-pad: 16px;
+  }
+
+  .kh-sv-demo__stage {
+    display: flex;
+    height: 60px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  // The button is a real one, in the diagram's ink: pill, 1.5 rule; hover
+  // fills, focus-visible rings, and its padding is the token.
+  // Only the button takes the pointer; everything else is explained by the
+  // SVG hit areas above it.
+  .kh-sv-demo__button {
+    align-self: center;
+    background: var(--kh-ground);
+    pointer-events: auto;
+    border: 1.5px solid var(--kh-color--text);
+    border-radius: 999px;
+    color: var(--kh-color--text);
+    cursor: pointer;
+    font: 700 11px var(--kh-font-sans);
+    line-height: 1;
+    padding: 7px var(--kh-demo-pad);
+    transition: padding 0.4s ease, background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
       background: var(--kh-color--text);
       color: var(--kh-ground);
     }
-  }
 
-  // The shared width, as a ruler with a readout, in grey.
-  .kh-sv-demo__ruler {
-    color: var(--kh-color--grey--darkest);
-    font-family: var(--kh-font-mono);
-    font-size: 9px;
-    height: 14px;
-    margin-top: 8px;
-    position: relative;
+    &.kh-sv-demo__button:focus {
+      outline: none;
+    }
 
-    i {
-      border-left: 1px solid currentColor;
-      border-right: 1px solid currentColor;
-      display: block;
-      height: 6px;
-      position: relative;
-      transition: width 2.2s cubic-bezier(0.45, 0.05, 0.3, 1);
-      width: var(--kh-demo-w);
-
-      &::after {
-        border-top: 1px solid currentColor;
-        content: '';
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 3px;
-      }
+    &.kh-sv-demo__button:focus-visible {
+      outline: 1.5px dashed var(--kh-color--text);
+      outline-offset: 3px;
     }
   }
 
-  .kh-sv-demo__readout {
+  .kh-sv-demo__note {
+    color: var(--kh-color--grey--darkest);
+    font-size: 9px;
+    text-align: center;
+  }
+
+  .kh-sv-demo[data-demo='token'] .kh-sv-demo__note--follows,
+  .kh-sv-demo[data-demo='derive'] .kh-sv-demo__note--follows {
+    opacity: 1;
+  }
+
+  // The counters, ink; the Figma one goes orange when tiles are out of step.
+  .kh-sv-demo__count {
+    font-size: 10px;
+    margin-top: 14px;
+    text-align: center;
+
+    b {
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  .kh-sv-demo__count--css {
+    position: absolute;
+    top: 190px;
+    width: 100%;
+  }
+
+  .kh-sv-demo__count--fig {
+    position: absolute;
+    top: 192px;
+    transition: color 0.3s ease;
+    width: 100%;
+  }
+
+  .kh-sv-demo__count--fig.is-off {
+    color: var(--kh-sv-fault, #c2410c);
+  }
+
+  // The Figma side: a grid of 72 variant tiles (pills), revealed 4 (m2)
+  // then all (m3, staggered by --i); the legend and the multiplication.
+  .kh-sv-demo__grid {
+    position: absolute;
+  }
+
+  .kh-sv-demo__tile {
+    border: 1.2px solid var(--kh-color--text);
+    border-radius: 999px;
+    box-sizing: border-box;
+    display: block;
+    height: 12px;
+    position: absolute;
+    transition: opacity 0.3s ease, border-color 0.3s ease;
+    width: 22px;
+  }
+
+  .kh-sv-demo[data-step='m2'] .kh-sv-demo__tile:nth-child(-n + 4),
+  .kh-sv-demo[data-step='m3'] .kh-sv-demo__tile,
+  .kh-sv-demo[data-demo='token'] .kh-sv-demo__tile,
+  .kh-sv-demo[data-demo='derive'] .kh-sv-demo__tile {
+    opacity: 1;
+  }
+
+  .kh-sv-demo[data-step='m3'] .kh-sv-demo__tile {
+    transition-delay: calc(var(--i, 0) * 18ms);
+  }
+
+  .kh-sv-demo__legend,
+  .kh-sv-demo__formula {
+    color: var(--kh-color--grey--darkest);
+    font-size: 8.5px;
+    position: absolute;
+    top: 166px;
+    width: 100%;
+  }
+
+  .kh-sv-demo__formula {
+    top: 178px;
+  }
+
+  .kh-sv-demo[data-step='m2'] .kh-sv-demo__legend,
+  .kh-sv-demo[data-step='m3'] .kh-sv-demo__legend,
+  .kh-sv-demo[data-step='m3'] .kh-sv-demo__formula,
+  .kh-sv-demo[data-demo='token'] .kh-sv-demo__formula,
+  .kh-sv-demo[data-demo='derive'] .kh-sv-demo__formula {
+    opacity: 1;
+  }
+
+  // w.1: the hand hops across the grid (translate keyframes between tile
+  // positions, then it stops), seven tiles go orange as it passes, and the
+  // joke lands. Paused with the tab (data-hidden, mirrored from the SVG).
+  .kh-sv-demo__hand {
+    fill: var(--kh-ground);
     left: 0;
     position: absolute;
-    top: 7px;
+    stroke: var(--kh-color--text);
+    stroke-linejoin: round;
+    stroke-width: 1.2;
+    top: 0;
+    translate: var(--kh-hx0, 0px) var(--kh-hy0, 0px);
   }
+
+  @keyframes kh-sv-hand {
+    0% {
+      translate: 20px 6px;
+    }
+
+    15%,
+    22% {
+      translate: 120px 22px;
+    }
+
+    37%,
+    44% {
+      translate: 176px 54px;
+    }
+
+    58%,
+    65% {
+      translate: 92px 86px;
+    }
+
+    80%,
+    100% {
+      translate: 150px 118px;
+    }
+  }
+
+  .kh-sv-demo[data-demo='token'] .kh-sv-demo__hand {
+    animation: kh-sv-hand 2.6s ease-in-out 0.2s 1 forwards;
+    opacity: 1;
+  }
+
+  .kh-sv-demo[data-hidden='1'] .kh-sv-demo__hand {
+    animation-play-state: paused;
+  }
+
+  .kh-sv-demo[data-step='tok2'] .kh-sv-demo__tile--off {
+    border-color: var(--kh-sv-fault, #c2410c);
+    border-width: 1.6px;
+    transition-delay: calc(var(--i, 0) * 6ms);
+  }
+
+  .kh-sv-demo[data-step='tok2'] .kh-sv-demo__note--joke {
+    opacity: 1;
+  }
+
+  .kh-sv-demo__note--joke {
+    color: var(--kh-sv-fault, #c2410c);
+    position: absolute;
+    top: 232px;
+    width: 100%;
+  }
+
+  // w.2: the orange clears (drv2) once the sources' arrow has arrived.
+  .kh-sv-demo[data-step='drv'] .kh-sv-demo__tile--off {
+    border-color: var(--kh-sv-fault, #c2410c);
+    border-width: 1.6px;
+  }
+
+  // The source boxes (SVG) and the arrow into the grid.
+  .kh-sv__src rect {
+    fill: var(--kh-ground);
+    stroke: var(--kh-color--text);
+    stroke-width: 1.5;
+  }
+
+  .kh-sv__src text {
+    fill: var(--kh-color--text);
+    font-family: var(--kh-font-mono);
+    font-size: min(10px, calc(11px / var(--kh-sv-s, 1)));
+    text-anchor: middle;
+  }
+
+  .kh-sv__line--derive {
+    stroke-width: 2.5;
+  }
+
+
 
   // Dot groups can be hovered: the whole group (block or column, with its
   // label) is the target. While one is explained, the other steps back.
@@ -1484,8 +1587,11 @@
     pointer-events: none;
   }
 
+  // Interactive parts opt back in to pointer events (the SVG's own box
+  // passes them through to the demo's real button underneath).
   .kh-sv__node.is-on {
     cursor: help;
+    pointer-events: visiblePainted;
   }
 
   // Keyboard focus on an "Explain:" button (box, check disc, dot group):
@@ -1596,20 +1702,22 @@
     }
 
     .kh-sv-demo,
-    .kh-sv-demo__box,
-    .kh-sv-demo__ruler i,
+    .kh-sv-demo__tile,
+    .kh-sv-demo__button,
     .kh-sv-dots {
       transition: none;
     }
 
-    .kh-sv-demo__frame.is-swap {
+    // The final state of each beat: no hopping hand (it sits on its last
+    // tile), no ticking counter (the script sets the final value).
+    .kh-sv-demo[data-demo='token'] .kh-sv-demo__hand {
       animation: none;
+      translate: 150px 118px;
     }
 
     // Each beat of stage w shows its finished layout; the seam and notes
     // simply fade in.
-    .kh-sv__line--seam,
-    .kh-sv__line--note {
+    .kh-sv__line--seam {
       transition: opacity 0.2s linear;
     }
 

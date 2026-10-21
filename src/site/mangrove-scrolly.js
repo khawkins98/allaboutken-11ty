@@ -83,15 +83,21 @@
     c0: { on: [], dots: 'cloud' },
     c1: { on: [], dots: 'c1' },
     c2: { on: [], dots: 'c2' },
-    // "Why isn't this a solved problem?": a small live layout demo takes the
-    // dots' place (see buildDemo / runDemo). w: the same six cards either
-    // side of a seam, the container width sweeping wide, narrow, wide; CSS
-    // Grid reflows on its own (it is real CSS), Figma swaps between three
-    // authored layouts. w.1: the sweep stops at a width nobody drew a
-    // layout for. w.2: the demo fades and the dots return, already settled.
-    w: { on: ['seam', 'lbCss', 'lbFig', 'anCss', 'anFig', 'hitCss', 'hitFig', 'hitV3', 'hitV2', 'hitV1'], dim: ['seam'], dots: 'settled', demo: 'sweep' },
-    'w.1': { on: ['seam', 'lbCss', 'lbFig', 'anGap', 'hitCss', 'hitFig', 'hitV3', 'hitV2', 'hitV1'], dim: ['seam'], dots: 'settled', demo: 'gap' },
-    'w.2': { on: [], dots: 'settled' },
+    // "Why isn't this a solved problem?": a small live demo takes the dots'
+    // place (see buildDemo / runDemo), "multiply the frames". w: one
+    // Donate button each side; the CSS side grows :hover, :focus-visible and
+    // :disabled selectors and stays one component, the Figma side grows a
+    // variant grid, 1 to 4 to 72 (4 states x 3 sizes x 2 icon x 3
+    // breakpoints, an illustrative example, not a Mangrove figure). w.1: a
+    // spacing token changes; CSS follows at once, a hand visits the 72 and
+    // seven end up out of step (orange). w.2: the three sources derive the
+    // grid, the orange clears, then (late in the beat) the demo hands back
+    // to the dots, already settled, for stage 1.
+    w: { on: ['seam', 'lbCss', 'lbFig', 'lbEx', 'hitCode', 'hitGrid', 'hitCount'], dim: ['seam'], dots: 'settled', demo: 'multiply' },
+    'w.1': { on: ['seam', 'lbCss', 'lbFig', 'lbEx', 'hitCode', 'hitHand', 'hitCount'], dim: ['seam'], dots: 'settled', demo: 'token' },
+    'w.2': { on: ['seam', 'lbCss', 'lbFig', 'lbEx', 'drv', 'drvA', 'hitCode', 'hitGrid', 'hitCount', 'hitDrv'], dim: ['seam'], dots: 'settled', demo: 'derive' },
+    // After the hand-back inside w.2 (see runDemo): nothing but the dots.
+    'w.2+': { on: [], dots: 'settled', demo: 'done' },
     // Schemas arrive alone; tokens rise in with their own paragraph (1.1).
     1: { on: ['nS', 'sS'], define: 'nS' },
     1.1: { on: [...SOURCES, 'dots', 'dotsLbl'], define: 'nT', dots: 'spread' },
@@ -216,13 +222,14 @@
   //   checks: the check-mark discs; copy depends on the stage, with
   //           `default` used for any stage not listed.
   const EXPLAINERS = {
-    // Stage w, the layout demo: each side and the three Figma layouts.
+    // Stage w, "multiply the frames": the CSS snippet, the Figma variant
+    // grid, the counter, the hand (and its orange tiles), the derivation.
     w: {
-      css: { term: 'Storybook (CSS)', text: 'In the browser, one CSS rule lays the cards out at every width: the grid works out how many columns fit and reflows as the space changes. That is how Storybook renders a component.' },
-      fig: { term: 'Figma', text: 'In Figma, Auto Layout stretches a frame between limits, but there are no media or container queries: structurally different layouts are separate frames someone draws, usually desktop, tablet and mobile. Similar ideas, a different way of rendering.' },
-      v3: { term: 'Desktop', text: 'An authored layout: three columns, drawn by hand for wide screens. Its cards stretch to fill until the next layout takes over.' },
-      v2: { term: 'Tablet', text: 'An authored layout: two columns, drawn by hand for middling widths. Between it and the next one, the cards just stretch.' },
-      v1: { term: 'Mobile', text: 'An authored layout: one column, drawn by hand for phones.' },
+      code: { term: 'One component', text: 'In CSS the button is one component. Hover, focus and disabled are selectors on it, and the browser handles the width, so there is one thing to keep right.' },
+      grid: { term: 'One variant each', text: 'Figma has no :hover and no media queries, so each state, size and breakpoint is a variant someone draws: 4 states x 3 sizes x 2 icon x 3 breakpoints is 72 of them for one button. An example, not a Mangrove count.' },
+      count: { term: 'The count', text: 'The same button, counted on each side: one component in code against the variants it takes to cover the same states, sizes and widths in Figma.' },
+      hand: { term: 'By hand', text: 'When a value changes, someone visits every variant by hand. Most get the new value; a few end up out of step, and nobody can tell which from the outside.' },
+      drv: { term: 'Derived', text: 'When the variants are derived from the sources (the schema, the tokens, Storybook), the plugin generates all of them, so none is drawn by hand and a change lands in every one.' },
     },
     // The formed clusters, before a box names them. `aside` prepends the
     // post's own definition of that term (the .kh-scrolly__define copy).
@@ -369,22 +376,21 @@
     CLOUD[g] = [];
     for (let i = 0; i < COUNTS[g]; i += 1) CLOUD[g].push(g === 'K' ? chain('K', i) : g === 'F' ? DRIFT[i] : cloud());
   });
-  // The layout demo (stage w) lives in an HTML layer over the graphic (see
-  // buildDemo); the SVG keeps the seam, the labels, the notes and the hit
-  // targets at these viewBox positions.
+  // The demo (stage w) lives in an HTML layer over the graphic (see
+  // buildDemo); the SVG keeps the seam, the labels, the source boxes, the
+  // arrow and the hit targets at these viewBox positions.
   const SEAM = 270;
   const DEMO = {
-    css: { x: 16, y: 58, w: 236 },
-    fig: { x: 292, y: 58, w: 236 },
-    tabs: { y: 300, w: 66, h: 16, gap: 8 },
-    // Width thresholds (viewBox units) where Figma swaps layouts, and each
-    // layout's comfortable range; the gap width in w.1 sits outside all of
-    // them.
-    swap: { v3: 196, v2: 128 },
-    comfy: { v3: [196, 236], v2: [128, 160], v1: [84, 118] },
-    sweep: { wide: 236, narrow: 84 },
-    gap: 182,
+    css: { x: 16, y: 56 },
+    fig: { x: 292, y: 56 },
+    grid: { x: 292, y: 72, cols: 8, rows: 9, w: 22, h: 12, gx: 28, gy: 16 },
+    // The seven tiles the hand leaves out of step (indexes into the 72).
+    off: [10, 19, 27, 36, 44, 53, 61],
+    hops: [3, 12, 22, 27, 38, 53, 61],
+    src: [{ k: 'schema', x: 20 }, { k: 'tokens', x: 96 }, { k: 'story', x: 172 }],
+    srcY: 300,
   };
+  const tileAt = (i) => ({ x: DEMO.grid.x + (i % DEMO.grid.cols) * DEMO.grid.gx, y: DEMO.grid.y + Math.floor(i / DEMO.grid.cols) * DEMO.grid.gy });
 
   const LAYOUT = { cloud: (g, i) => CLOUD[g][i], c1, c2, settled, spread, born, full, chain };
   // Which clusters have formed in each layout (so can be labelled, hovered).
@@ -513,23 +519,22 @@
     ${line('ca2', P.ca2, 'kh-sv__line--chain', { head: true, delay: 1.45 })}
     ${line('ca3', P.ca3, 'kh-sv__line--chain', { head: true, delay: 1.8 })}
     ${line('seam', `M${SEAM} 36 V384`, 'kh-sv__line--seam', { delay: 0.6 })}
-    ${line('anCss', 'M80 302 V350', 'kh-sv__line--note', { delay: 1.2 })}
-    ${line('anFig', 'M380 324 V350', 'kh-sv__line--note', { delay: 1.4 })}
-    ${'' /* Between the Tablet and Mobile tabs, not through one. */}
-    ${line('anGap', 'M436 292 V330', 'kh-sv__line--note', { delay: 1.6 })}
+    ${'' /* The derivation (w.2): from the three source boxes into the grid. */}
+    ${line('drvA', 'M240 300 C300 262, 284 220, 290 202', 'kh-sv__line--derive', { head: true, delay: 0.7 })}
     ${Object.keys(CALLOUTS).map((k) => `<path class="kh-sv__leader" data-leader="${k}" style="--kh-co-delay:${CALLOUTS[k].delay ?? CALLOUT_DELAY}s" d="${CALLOUTS[k].ld}"/>`).join('')}
     <path class="kh-sv__el kh-sv__pulse" data-k="g5T" pathLength="1" d="${P.g5T}"/>
     <path class="kh-sv__el kh-sv__pulse" data-k="g5arc" pathLength="1" d="${P.g5arc}"/>
   </g>
   <g class="kh-sv__dots" aria-hidden="true">${buildDots(id)}</g>
-  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--w" data-k="hitCss" data-w="css" x="${DEMO.css.x - 6}" y="${DEMO.css.y - 6}" width="${DEMO.css.w + 12}" height="230" ${btn('the Storybook side, laid out by CSS')}/>
-  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--w" data-k="hitFig" data-w="fig" x="${DEMO.fig.x - 6}" y="${DEMO.fig.y - 6}" width="${DEMO.fig.w + 12}" height="230" ${btn('the Figma side, three drawn layouts')}/>
-  ${['v3', 'v2', 'v1'].map((v, i) => `<rect class="kh-sv__el kh-sv__hit kh-sv__hit--tab" data-k="hit${v.toUpperCase()}" data-w="${v}" x="${DEMO.fig.x + i * (DEMO.tabs.w + DEMO.tabs.gap)}" y="${DEMO.tabs.y - 4}" width="${DEMO.tabs.w}" height="${DEMO.tabs.h + 8}" ${btn(`the ${{ v3: 'desktop', v2: 'tablet', v1: 'mobile' }[v]} layout`)}/>`).join('')}
+  ${DEMO.src.map((b) => `<g class="kh-sv__el kh-sv__src" data-k="drv" style="--d:0.2s" aria-hidden="true"><rect x="${b.x}" y="${DEMO.srcY}" width="66" height="22" rx="4"/><text x="${b.x + 33}" y="${DEMO.srcY + 15}">${b.k}</text></g>`).join('')}
+  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--w" data-k="hitCode" data-w="code" x="10" y="52" width="246" height="110" ${btn('the CSS, one component with its states')}/>
+  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--w" data-k="hitGrid" data-w="grid" x="${DEMO.grid.x - 6}" y="${DEMO.grid.y - 6}" width="${DEMO.grid.cols * DEMO.grid.gx + 8}" height="${DEMO.grid.rows * DEMO.grid.gy + 8}" ${btn('the Figma variant grid')}/>
+  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--w" data-k="hitHand" data-w="hand" x="${DEMO.grid.x - 6}" y="${DEMO.grid.y - 6}" width="${DEMO.grid.cols * DEMO.grid.gx + 8}" height="${DEMO.grid.rows * DEMO.grid.gy + 8}" ${btn('the hand visiting every variant')}/>
+  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--w" data-k="hitDrv" data-w="drv" x="14" y="196" width="282" height="132" ${btn('the derivation from the sources')}/>
+  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--w" data-k="hitCount" data-w="count" x="286" y="248" width="250" height="40" ${btn('the count on each side')}/>
   ${label('lbCss', 16, 44, 'Storybook (CSS)', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1 })}
   ${label('lbFig', 292, 44, 'Figma', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1 })}
-  ${label('anCss', 16, 364, 'CSS: one rule, every width', { cls: 'kh-sv__label--note', anchor: 'start', delay: 1.2 })}
-  ${label('anFig', 292, 364, 'Figma: a layout per breakpoint', { cls: 'kh-sv__label--note', anchor: 'start', delay: 1.4 })}
-  ${label('anGap', 436, 344, 'no layout drawn for this width', { cls: 'kh-sv__label--note', delay: 1.6 })}
+  ${label('lbEx', 16, 388, 'one button, as an example', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1 })}
   ${label('cvS', N.S.x + 4, N.S.y + N.S.h + 16, 'content schemas', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1.4 })}
   ${label('cvT', N.T.x + 4, N.T.y + N.T.h + 16, '540 Figma variables, 69 by brand', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1.5 })}
   ${label('cvB', cx(N.SB), N.SB.y + N.SB.h + 16, '25 component families', { cls: 'kh-sv__label--cover', delay: 1.6 })}
@@ -685,6 +690,9 @@
 
   function applyStage(inst, stageId) {
     const { svg } = inst;
+    // Once w.2 has handed back to the dots, it stays handed back until the
+    // reader leaves the beat.
+    if (stageId === 'w.2' && inst.demoLayer && inst.demoLayer.dataset.demo === 'done') stageId = 'w.2+';
     const spec = STAGES[stageId] || {};
     const sets = {};
     ['on', 'dim', 'faint', 'strong', 'fault', 'good'].forEach((m) => {
@@ -732,67 +740,50 @@
     syncFocusables(svg);
   }
 
-  // The layout demo. An HTML layer over the graphic, viewBox-sized and
-  // scaled like the dot layer, holding the same six wireframe cards twice.
-  // Left: a REAL CSS grid (repeat(auto-fit, minmax())) in a container whose
-  // width is set by --kh-demo-w, so the browser itself reflows 3, 2, 1
-  // columns. Right: a Figma frame of the same width, with three authored
-  // layouts (desktop 3-col, tablet 2-col, mobile 1-col) as tabs; the active
-  // one's cards stretch to fill, and at a threshold the frame swaps to the
-  // next. A grey ruler and readout show the shared width.
+  // The demo, "multiply the frames". An HTML layer over the graphic,
+  // viewBox-sized and scaled like the dot layer. Left: a REAL <button>
+  // (hover it) and a code snippet that grows its state selectors. Right: a
+  // grid of 72 variant tiles, a legend, the multiplication and a counter;
+  // in w.1 a hand cursor hops across and leaves seven tiles orange. The
+  // beat within a stage is data-step on the layer; CSS does the reveals.
   function buildDemo() {
-    const cards = (n) => Array.from({ length: n }, (_, i) => `<i class="kh-sv-demo__card" style="--kh-card-i:${i}"><b></b><s></s><s></s></i>`).join('');
-    const tab = (v, name) => `<span class="kh-sv-demo__tab" data-v="${v}">${name}</span>`;
+    const g = DEMO.grid;
+    const tiles = Array.from({ length: g.cols * g.rows }, (_, i) => { const t = tileAt(i); return `<i class="kh-sv-demo__tile${DEMO.off.includes(i) ? ' kh-sv-demo__tile--off' : ''}" style="--i:${i};left:${t.x - g.x}px;top:${t.y - g.y}px"></i>`; }).join('');
+    const hops = DEMO.hops.map((i) => tileAt(i));
+    const hand = `<svg class="kh-sv-demo__hand" viewBox="0 0 16 18" width="16" height="18" style="--kh-hx0:${(hops[0].x - g.x + 8).toFixed(0)}px;--kh-hy0:${(hops[0].y - g.y + 4).toFixed(0)}px"><path d="M5 1.5v8L3.2 8.1a1.3 1.3 0 0 0-1.9 1.7l3.6 5.2A4 4 0 0 0 8.2 17H10a4 4 0 0 0 4-4V8.5a1.2 1.2 0 0 0-2.4 0V8a1.2 1.2 0 0 0-2.4 0V7.5a1.2 1.2 0 0 0-2.4 0v-6a1.2 1.2 0 0 0-2.4 0Z"/></svg>`;
     return `<div class="kh-sv-demo" aria-hidden="true">
       <div class="kh-sv-demo__side kh-sv-demo__side--css" style="left:${DEMO.css.x}px;top:${DEMO.css.y}px">
-        <div class="kh-sv-demo__box kh-sv-demo__grid">${cards(6)}</div>
-        <div class="kh-sv-demo__ruler"><i></i><span class="kh-sv-demo__readout">${DEMO.sweep.wide}px</span></div>
+        <pre class="kh-sv-demo__code"><span class="kh-sv-demo__ln">.kh-button {</span><span class="kh-sv-demo__ln kh-sv-demo__ln--state">  &amp;:hover</span><span class="kh-sv-demo__ln kh-sv-demo__ln--state">  &amp;:focus-visible</span><span class="kh-sv-demo__ln kh-sv-demo__ln--state">  &amp;:disabled</span><span class="kh-sv-demo__ln kh-sv-demo__ln--token">  padding: var(--kh-space-sm)</span><span class="kh-sv-demo__ln">}</span></pre>
+        <p class="kh-sv-demo__token">--kh-space-sm: <s>12px</s> &rarr; 16px</p>
+        <div class="kh-sv-demo__stage"><button type="button" class="kh-sv-demo__button" tabindex="-1">Donate</button></div>
+        <p class="kh-sv-demo__note kh-sv-demo__note--follows">every state follows</p>
+        <p class="kh-sv-demo__count kh-sv-demo__count--css"><b>1</b> component</p>
       </div>
       <div class="kh-sv-demo__side kh-sv-demo__side--fig" style="left:${DEMO.fig.x}px;top:${DEMO.fig.y}px">
-        <div class="kh-sv-demo__box kh-sv-demo__frame" data-v="v3">${cards(6)}</div>
-        <div class="kh-sv-demo__ghost">${cards(6)}</div>
-        <div class="kh-sv-demo__tabs" style="top:${DEMO.tabs.y - DEMO.fig.y}px">${tab('v3', 'Desktop')}${tab('v2', 'Tablet')}${tab('v1', 'Mobile')}</div>
+        <div class="kh-sv-demo__grid" style="top:${g.y - DEMO.fig.y}px;width:${g.cols * g.gx}px;height:${g.rows * g.gy}px">${tiles}${hand}</div>
+        <p class="kh-sv-demo__legend">default &middot; hover &middot; focus &middot; disabled</p>
+        <p class="kh-sv-demo__formula">4 states &times; 3 sizes &times; 2 icon &times; 3 breakpoints</p>
+        <p class="kh-sv-demo__note kh-sv-demo__note--joke">padding 12&hellip; or 13?</p>
+        <p class="kh-sv-demo__count kh-sv-demo__count--fig"><b>1</b> <span>variant</span></p>
       </div>
     </div>`;
   }
 
-  // Which authored layout Figma shows at a width, and whether that layout
-  // is being stretched past the range it was drawn for.
-  function figVariant(w) {
-    const v = w >= DEMO.swap.v3 ? 'v3' : w >= DEMO.swap.v2 ? 'v2' : 'v1';
-    const [lo, hi] = DEMO.comfy[v];
-    return { v, over: w < lo - 1 || w > hi + 1 };
+  const DEMO_T = { m2: 1300, m3: 2900, done: 5000 };
+  function setCount(inst, n, label, cls = '') {
+    const c = inst.demoLayer.querySelector('.kh-sv-demo__count--fig');
+    c.querySelector('b').textContent = String(n);
+    c.querySelector('span').textContent = label;
+    c.className = `kh-sv-demo__count kh-sv-demo__count--fig${cls ? ` ${cls}` : ''}`;
   }
-
-  function setDemoWidth(inst, w) {
-    inst.demoLayer.style.setProperty('--kh-demo-w', `${w}px`);
-  }
-
-  // Reads the live width (the transition is in CSS) once a frame while a
-  // sweep runs, to drive the readout and the Figma layout swap; stops when
-  // the sweep settles. Not a standing loop.
-  function watchDemo(inst, until) {
-    const demo = inst.demoLayer;
-    const frame = demo.querySelector('.kh-sv-demo__frame');
-    const readout = demo.querySelector('.kh-sv-demo__readout');
-    const tick = () => {
-      if (inst.demoWatch !== tick) return;
-      const w = frame.getBoundingClientRect().width / (parseFloat(demo.style.getPropertyValue('--kh-sv-s')) || 1);
-      readout.textContent = `${Math.round(w)}px`;
-      const { v, over } = figVariant(w);
-      if (frame.dataset.v !== v) {
-        frame.dataset.v = v;
-        // A quick, visible swap: the frame blinks as the next layout lands.
-        frame.classList.remove('is-swap');
-        void frame.offsetWidth;
-        frame.classList.add('is-swap');
-        demo.querySelectorAll('.kh-sv-demo__tab').forEach((t) => t.classList.toggle('is-on', t.dataset.v === v));
-      }
-      frame.classList.toggle('is-over', over && demo.dataset.demo === 'gap');
-      if (performance.now() < until) requestAnimationFrame(tick);
-      else inst.demoWatch = null;
+  function tickCount(inst, from, to, ms, label) {
+    const start = performance.now();
+    const tick = (now) => {
+      if (inst.demoLayer.dataset.demo !== 'multiply') return;
+      const t = Math.min(1, (now - start) / ms);
+      setCount(inst, Math.round(from + (to - from) * (1 - (1 - t) ** 2)), label);
+      if (t < 1) requestAnimationFrame(tick);
     };
-    inst.demoWatch = tick;
     requestAnimationFrame(tick);
   }
 
@@ -800,42 +791,43 @@
     const demo = inst.demoLayer;
     (inst.wTimers || []).forEach(clearTimeout);
     inst.wTimers = [];
-    inst.demoWatch = null;
     if (demo.dataset.demo === mode) return;
     const was = demo.dataset.demo;
     demo.dataset.demo = mode;
-    inst.dotLayer.classList.toggle('is-demo', !!mode);
-    if (!mode) {
-      demo.querySelector('.kh-sv-demo__frame').classList.remove('is-over', 'is-swap');
+    const live = mode && mode !== 'done';
+    inst.dotLayer.classList.toggle('is-demo', !!live);
+    const later = (fn, ms) => { if (reduce.matches) fn(); else inst.wTimers.push(setTimeout(fn, ms)); };
+    const step = (st) => { demo.dataset.step = st; };
+    if (!live) {
+      step('');
       return;
     }
-    const frame = demo.querySelector('.kh-sv-demo__frame');
-    const settle = (w) => {
-      // Reduced motion, or a stage entered from the other w beat: the
-      // finished state, no sweep.
-      demo.classList.add('is-jump');
-      setDemoWidth(inst, w);
-      void demo.offsetWidth;
-      demo.classList.remove('is-jump');
-      watchDemo(inst, performance.now() + 50);
-    };
-    if (mode === 'gap') {
-      if (reduce.matches || !was) settle(DEMO.gap);
-      else {
-        setDemoWidth(inst, DEMO.gap);
-        watchDemo(inst, performance.now() + 2400);
-      }
+    if (mode === 'multiply') {
+      // 1 button each side; the states; the multiplication to 72.
+      step('m1');
+      setCount(inst, 1, 'variant');
+      later(() => { step('m2'); setCount(inst, 4, 'variants'); }, DEMO_T.m2);
+      later(() => { step('m3'); if (reduce.matches) setCount(inst, 72, 'variants'); else tickCount(inst, 4, 72, 1500, 'variants'); }, DEMO_T.m3);
       return;
     }
-    // sweep: wide, hold, narrow, hold, wide, hold.
-    if (reduce.matches) {
-      settle(DEMO.sweep.wide);
+    if (mode === 'token') {
+      // Entered from w: the grid is up. Entered from w.2 (scrolling back):
+      // the grid is up too, orange restored below. From elsewhere: jump.
+      step('tok');
+      setCount(inst, 72, 'variants');
+      later(() => { step('tok2'); setCount(inst, 7, 'out of step', 'is-off'); }, 2600);
       return;
     }
-    settle(DEMO.sweep.wide);
-    frame.classList.remove('is-over');
-    inst.wTimers.push(setTimeout(() => { setDemoWidth(inst, DEMO.sweep.narrow); watchDemo(inst, performance.now() + 5200); }, 900));
-    inst.wTimers.push(setTimeout(() => setDemoWidth(inst, DEMO.sweep.wide), 3400));
+    // derive: the sources, the arrow, the orange clears, then hand back.
+    step('drv');
+    setCount(inst, 7, 'out of step', 'is-off');
+    later(() => { step('drv2'); setCount(inst, 72, '\u00b7 0 drawn by hand'); }, 1500);
+    if (!reduce.matches) {
+      inst.wTimers.push(setTimeout(() => {
+        inst.current = 'w.2+';
+        applyStage(inst, 'w.2+');
+      }, DEMO_T.done));
+    }
   }
 
   // Panels: the named one shows over the graphic (wide) and the diagram
@@ -1003,11 +995,10 @@
         return def && { id: `node:${key}`, anchor: t.querySelector('rect'), term: def.term, html: def.html, own: [t], yields: graphic.dataset.callout === key ? key : '' };
       }
       if (t.dataset.w) {
-        // Stage w explainers: the two sides (anchored on their word labels)
-        // and the three Figma layout tabs (anchored on the tab itself).
+        // Stage w explainers: the hit areas over the demo, anchored on the
+        // area itself (the count on its own hit, the arrow on its path).
         const copy = EXPLAINERS.w[t.dataset.w];
-        const anchor = t.dataset.w === 'css' ? svg.querySelector('[data-k="lbCss"]') : t.dataset.w === 'fig' ? svg.querySelector('[data-k="lbFig"]') : t;
-        return copy && { id: `w:${t.dataset.w}`, anchor: anchor || t, term: copy.term, html: copy.text, own: [t] };
+        return copy && { id: `w:${t.dataset.w}`, anchor: t, term: copy.term, html: copy.text, own: [t] };
       }
       if (t.matches('.kh-sv__hit--cluster')) {
         const g = t.dataset.cluster;
@@ -1294,7 +1285,8 @@
       graphic.appendChild(cap);
     });
     region.appendChild(graphic);
-    const svg = graphic.querySelector('svg');
+    // By class: the demo layer carries a small inline SVG of its own.
+    const svg = graphic.querySelector('svg.kh-sv');
     const dotLayer = graphic.querySelector('.kh-sv-dots');
     const demoLayer = graphic.querySelector('.kh-sv-demo');
     // The dot CSS keys off the SVG's state attributes (data-dots, data-named,
@@ -1307,6 +1299,7 @@
         else dotLayer.removeAttribute(a);
       });
       ['is-jump', 'is-chain'].forEach((c) => dotLayer.classList.toggle(c, svg.classList.contains(c)));
+      ['data-hidden', 'data-live'].forEach((a) => { if (svg.hasAttribute(a)) demoLayer.setAttribute(a, svg.getAttribute(a)); });
     };
     new MutationObserver(mirrorDots).observe(svg, { attributes: true, attributeFilter: [...MIRROR, 'class'] });
     buildCallouts(region, graphic);
