@@ -152,6 +152,50 @@
     margin: -1.5rem 0 2rem;
   }
 
+  // Its wide-screen form: a caption under the dot field, shown while the
+  // dots are gathering (cover through the "why" beat), gone once the first
+  // box is drawn. Narrow screens keep the prose original instead.
+  .kh-scrolly__dots-caption {
+    display: none;
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    // Visually hidden (same pattern as .kh-u-sr-only): the caption copy in
+    // the graphic carries it on screen.
+    .kh-scrolly--enhanced .kh-scrolly__cover-note {
+      border: 0;
+      clip-path: inset(50%);
+      height: 1px;
+      margin: 0;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+
+    .kh-scrolly__dots-caption {
+      bottom: 0;
+      color: var(--kh-color--grey--darkest);
+      display: block;
+      font-size: 0.9rem;
+      left: 50%;
+      line-height: 1.5;
+      margin: 0;
+      max-width: 34rem;
+      opacity: 0;
+      position: absolute;
+      text-align: center;
+      transform: translateX(-50%);
+      transition: opacity 0.4s ease;
+      width: 90%;
+    }
+
+    .kh-scrolly__graphic:has(.kh-sv:is([data-stage='cover'], [data-stage='c0'], [data-stage='c1'], [data-stage='c2'], [data-stage='w'])) .kh-scrolly__dots-caption {
+      opacity: 1;
+    }
+  }
+
   // Narrow: the band slides away for a stretch of plain prose or a panel in
   // the flow, and comes back for the next stage.
   .kh-scrolly--enhanced > .kh-scrolly__graphic.is-released {

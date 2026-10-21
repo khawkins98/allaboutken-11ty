@@ -1103,7 +1103,8 @@
       cover.setAttribute('data-scrolly-adopted', '');
       stepsCol.insertBefore(cover, stepsCol.firstChild);
     }
-    region.querySelectorAll('.kh-scrolly__cover-note[hidden]').forEach((el) => {
+    const coverNotes = [...region.querySelectorAll('.kh-scrolly__cover-note[hidden]')];
+    coverNotes.forEach((el) => {
       el.hidden = false;
     });
 
@@ -1116,6 +1117,16 @@
     graphic.hidden = true;
     graphic.setAttribute('data-pagefind-ignore', '');
     graphic.innerHTML = buildDotLayer() + buildSvg(`kh-sv-${r}`);
+    // On wide screens the cover note is a caption under the dot field: a
+    // copy inside the graphic, aria-hidden (the original stays in the prose
+    // for assistive tech and narrow screens, and is visually hidden on wide
+    // ones by CSS). It shows only while the dots are gathering.
+    coverNotes.forEach((el) => {
+      const cap = el.cloneNode(true);
+      cap.className = 'kh-scrolly__dots-caption';
+      cap.setAttribute('aria-hidden', 'true');
+      graphic.appendChild(cap);
+    });
     region.appendChild(graphic);
     const svg = graphic.querySelector('svg');
     const dotLayer = graphic.querySelector('.kh-sv-dots');
