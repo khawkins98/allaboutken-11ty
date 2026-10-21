@@ -723,7 +723,9 @@
   .kh-sv-dots[data-dots='c1'] .kh-sv__dot.kh-sv__dot--F,
   .kh-sv-dots[data-dots='c2'] .kh-sv__dot.kh-sv__dot--F,
   .kh-sv-dots[data-dots='settled'] .kh-sv__dot.kh-sv__dot--F,
-  .kh-sv-dots[data-dots='spread'] .kh-sv__dot.kh-sv__dot--F {
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot.kh-sv__dot--F,
+  .kh-sv-dots[data-dots='clash'] .kh-sv__dot.kh-sv__dot--F,
+  .kh-sv-dots[data-dots='clash2'] .kh-sv__dot.kh-sv__dot--F {
     --kh-drift: 0;
     animation: none;
     opacity: 0;
@@ -817,7 +819,10 @@
     opacity: 1;
   }
 
-  .kh-sv-dots[data-dots='spread'] .kh-sv__dot--B,
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot--B {
+    opacity: 0.1;
+  }
+
   // The 56 linked instances exist only in the close.
   .kh-sv-dots:not([data-dots='chain']) .kh-sv__dot--K,
   .kh-sv__dotcopy {
@@ -916,6 +921,87 @@
 
   .kh-sv__line--chain {
     stroke-width: 2;
+  }
+
+  // Stage w: the seam between the two layout engines (faint, dimmed by the
+  // stage), the Auto-Layout frames (dashed, rounded) and the two bridges
+  // that stop short. Rings mark the dots stuck at the seam: fault colour,
+  // rings only.
+  .kh-sv__line--seam {
+    stroke-dasharray: 2 6;
+    stroke-linecap: round;
+    stroke-width: 1.5;
+  }
+
+  .kh-sv__line--frame {
+    stroke: var(--kh-color--grey--darkest);
+    stroke-dasharray: 4 3;
+    stroke-width: 1.5;
+  }
+
+  .kh-sv__line--bridge {
+    stroke-dasharray: 5 4;
+    stroke-width: 2;
+  }
+
+  .kh-sv__ring {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+
+  // A ring leaves before the dot it marks can move (the seam dots wait
+  // 0.35s, see buildDotLayer).
+  .kh-sv__ring:not(.is-on) {
+    transition-duration: 0.2s;
+  }
+
+  // "Two layout engines" (stage w, layouts clash and clash2): the left,
+  // flow side keeps a faint drift; the right, frames side and the dots
+  // stuck at the seam are rigid and still (not composited, so they rest on
+  // exact pixels). Entering w is one short release: 0.8s, the usual easing.
+  // Only the content dots that have a side: the chain-only K dots and the
+  // not-yet-born F dots stay hidden.
+  .kh-sv-dots[data-dots='clash'] .kh-sv__dot--L,
+  .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--L,
+  .kh-sv-dots[data-dots='clash'] .kh-sv__dot--R,
+  .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--R,
+  .kh-sv-dots[data-dots='clash'] .kh-sv__dot--seam,
+  .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--seam {
+    --kh-drift: 0.8;
+    opacity: 0.82;
+  }
+
+  .kh-sv-dots[data-dots='clash'] .kh-sv__dot {
+    transition-duration: 0.8s, 0.6s, 0.5s, 0.8s;
+  }
+
+  .kh-sv-dots[data-dots='clash'] .kh-sv__dot--R,
+  .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--R,
+  .kh-sv-dots[data-dots='clash'] .kh-sv__dot--seam,
+  .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--seam {
+    --kh-drift: 0;
+    animation: none;
+    will-change: auto;
+  }
+
+  // Square once per stage; never animated (border-radius is not in the
+  // dot's transition list).
+  .kh-sv__dot.is-sq {
+    border-radius: 0;
+  }
+
+  // One dot crosses the seam by hand, once, slowly, then stops. Paused with
+  // the tab like the drift (the data-hidden rule covers every dot).
+  @keyframes kh-sv-cross {
+    to {
+      translate: var(--kh-cx, 0px) var(--kh-cy, 0px);
+    }
+  }
+
+  .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--cross {
+    animation: kh-sv-cross 4s ease-in-out 1.4s 1 forwards;
+    will-change: translate;
   }
 
   // Dot groups can be hovered: the whole group (block or column, with its
@@ -1337,8 +1423,18 @@
 
     .kh-sv__dot,
     .kh-sv-dots.is-arriving .kh-sv__dot,
-    .kh-sv-dots[data-dots='born'] .kh-sv__dot--F {
+    .kh-sv-dots[data-dots='born'] .kh-sv__dot--F,
+    .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--cross {
       animation: none;
+    }
+
+    // Each beat of stage w shows its finished layout; the frames, seam,
+    // bridges and rings simply fade in.
+    .kh-sv__line--frame,
+    .kh-sv__line--seam,
+    .kh-sv__line--bridge,
+    .kh-sv__ring {
+      transition: opacity 0.2s linear;
     }
 
     .kh-sv__pulse.is-on {

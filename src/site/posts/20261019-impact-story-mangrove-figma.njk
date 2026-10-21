@@ -78,9 +78,21 @@ image_meta:
              an unnumbered cluster), scattered (seeded) across the graphic;
              no variants yet. Scrolling gathers the dots in story order
              (schemas, then variables and families) through the intro and
-             "Why isn't this a solved problem?". Formed clusters are
-             hoverable. The 297 variants are born at stage 3, on the Figma
-             side, and pulled into their cluster as the reads draw (3.1).
+             the intro. Formed clusters are hoverable. The 297 variants are
+             born at stage 3, on the Figma side, and pulled into their
+             cluster as the reads draw (3.1).
+      w      "Why isn't this a solved problem?", three beats, "two layout
+             engines": the dots stop being data and stand for layout rules.
+             w: the tidy clusters let go (0.8s) and the same content dots
+             fall under two rule sets either side of a faint seam: ragged
+             CSS-like flow rows on the left (faint drift), rigid dashed
+             Auto-Layout frames on the right (square dots, still), five dots
+             stuck at the seam ringed in the fault orange. w.1: the frames
+             re-lay out (hug to fill), two dashed bridges arc across and stop
+             short, one dot crosses once "by hand" and stops. w.2: frames
+             dissolve, squares round off, the dots sort back into the three
+             clusters (the settled layout exactly), labels and hover return,
+             so stage 1 draws the schema box around them with no seam.
       1      Where did the truth come from?  -> schema box draws around its
              cluster; 1.1 tokens box + the 540 spread; 1.2 peers
       1.3    the brand studio, live, in the graphic column (a panel)
@@ -144,7 +156,7 @@ image_meta:
 #}
 <div class="kh-scrolly" data-scrolly-initial="cover" data-scrolly-cover=".kh-story__cover">
 <div class="kh-scrolly__steps">
-<p class="kh-scrolly__cover-note" hidden>Each dot is one thing the plugin reads. As the story names them, they gather: the content schemas, the 540 brand variables (69 of them set per brand, in blue) and the 25 component families; the 297 component variants it writes arrive with Figma.</p>
+<p class="kh-scrolly__cover-note" hidden>Each dot is one thing the plugin reads (except for a moment in "Why isn't this a solved problem?", where they only stand for layout rules). As the story names them, they gather: the content schemas, the 540 brand variables (69 of them set per brand, in blue) and the 25 component families; the 297 component variants it writes arrive with Figma.</p>
 {#
   OPENING BEATS. The dots start scattered (the first frame on load, no
   animation) and gather as the story names them: the schemas with the
@@ -167,7 +179,7 @@ image_meta:
 
 {% endmarkdown %}
 </div>
-<div class="kh-scrolly__section" data-scrolly-steps="w" data-scrolly-short>
+<div class="kh-scrolly__section" data-scrolly-steps="w w.1 w.2" data-scrolly-short>
 {% markdown %}
 
 ## Why isn't this a solved problem?

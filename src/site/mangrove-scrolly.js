@@ -83,7 +83,10 @@
     c0: { on: [], dots: 'cloud' },
     c1: { on: [], dots: 'c1' },
     c2: { on: [], dots: 'c2' },
-    w: { on: [] },
+    // "Two layout engines" (see buildClash): the dots stop being data.
+    w: { on: ['seam', 'frA', 'frB', 'frC', 'ring', 'lbFlow', 'lbFrames'], dim: ['seam'], fault: ['ring'], dots: 'clash' },
+    'w.1': { on: ['seam', 'frA2', 'frB2', 'frC2', 'ring', 'lbFlow', 'lbFrames', 'br1', 'br2'], dim: ['seam'], fault: ['ring'], dots: 'clash2' },
+    'w.2': { on: [], dots: 'settled' },
     // Schemas arrive alone; tokens rise in with their own paragraph (1.1).
     1: { on: ['nS', 'sS'], define: 'nS' },
     1.1: { on: [...SOURCES, 'dots', 'dotsLbl'], define: 'nT', dots: 'spread' },
@@ -353,24 +356,114 @@
     CLOUD[g] = [];
     for (let i = 0; i < COUNTS[g]; i += 1) CLOUD[g].push(g === 'K' ? chain('K', i) : g === 'F' ? DRIFT[i] : cloud());
   });
-  const LAYOUT = { cloud: (g, i) => CLOUD[g][i], c1, c2, settled, spread, born, full, chain };
+  // "Two layout engines" (stage w): the same content dots (S, T, B; no F
+  // yet) fall under two rule sets either side of a seam at x = SEAM. Each
+  // dot's side is fixed at build by its index (alternating). Left, "flow":
+  // ragged wrapping rows, like CSS flow. Right, "frames": rigid grids with
+  // fixed padding and gap inside dashed Auto-Layout frames, which hug their
+  // content in `clash` and fill their column in `clash2`, so the dots
+  // re-grid and the misfits shift. Five right-side dots are stuck at the
+  // seam (ringed in the fault colour); one left-side dot crosses once, by
+  // hand, in clash2 (a CSS animation, see --kh-cx/--kh-cy).
+  const SEAM = 270;
+  const CONTENT = ['S', 'T', 'B'];
+  const SIDE = {};
+  const CLASH = { clash: {}, clash2: {} };
+  const FRAMES = { clash: [], clash2: [] };
+  const SEAM_PTS = [70, 130, 190, 250, 310].map((y) => ({ x: SEAM, y }));
+  let CROSS = null;
+  const rr = (x, y, w, h, r = 6) => `M${x + r} ${y} H${x + w - r} A${r} ${r} 0 0 1 ${x + w} ${y + r} V${y + h - r} A${r} ${r} 0 0 1 ${x + w - r} ${y + h} H${x + r} A${r} ${r} 0 0 1 ${x} ${y + h - r} V${y + r} A${r} ${r} 0 0 1 ${x + r} ${y} Z`;
+  (function buildClash() {
+    const r2 = mulberry32(7);
+    const left = [];
+    const right = [];
+    let n = 0;
+    CONTENT.forEach((g) => {
+      for (let i = 0; i < COUNTS[g]; i += 1) {
+        const key = `${g}${i}`;
+        SIDE[key] = n % 2 ? 'R' : 'L';
+        (n % 2 ? right : left).push(key);
+        n += 1;
+      }
+    });
+    // Flow: rows of a random length (16-27 dots), 8.5 apart, 18 down.
+    let row = 0;
+    let col = 0;
+    let len = 16 + Math.floor(r2() * 12);
+    left.forEach((key) => {
+      if (col >= len) {
+        row += 1;
+        col = 0;
+        len = 16 + Math.floor(r2() * 12);
+      }
+      const pt = { x: 16 + col * 8.5, y: 60 + row * 18 };
+      CLASH.clash[key] = pt;
+      CLASH.clash2[key] = pt;
+      col += 1;
+    });
+    // Frames: fixed padding 10 and gap 9. Hug: as many columns as the frame
+    // was drawn for, rows as needed. Fill: wider frames, more columns.
+    const seamKeys = right.slice(-SEAM_PTS.length);
+    const framed = right.slice(0, right.length - SEAM_PTS.length);
+    const plan = {
+      clash: [{ x: 292, y: 56, cols: 20, cap: 120 }, { x: 292, y: 142, cols: 9, cap: 108 }, { x: 404, y: 142, cols: 9, cap: 108 }],
+      clash2: [{ x: 292, y: 56, cols: 24, cap: 120, fill: { w: 232, h: 68 } }, { x: 292, y: 142, cols: 11, cap: 108, fill: { w: 112, h: 230 } }, { x: 414, y: 142, cols: 11, cap: 108, fill: { w: 110, h: 230 } }],
+    };
+    Object.keys(plan).forEach((lay) => {
+      let k = 0;
+      plan[lay].forEach((f) => {
+        const take = framed.slice(k, k + f.cap);
+        k += f.cap;
+        take.forEach((key, j) => {
+          CLASH[lay][key] = { x: f.x + 10 + (j % f.cols) * 9, y: f.y + 10 + Math.floor(j / f.cols) * 9 };
+        });
+        const rows = Math.ceil(take.length / f.cols);
+        const hug = { w: 20 + (Math.min(take.length, f.cols) - 1) * 9, h: 20 + (rows - 1) * 9 };
+        FRAMES[lay].push({ x: f.x, y: f.y, w: f.fill ? f.fill.w : hug.w, h: f.fill ? f.fill.h : hug.h });
+      });
+    });
+    seamKeys.forEach((key, j) => {
+      CLASH.clash[key] = SEAM_PTS[j];
+      CLASH.clash2[key] = SEAM_PTS[j];
+      SIDE[key] = 'seam';
+    });
+    // The crossing dot: the last dot of the third flow row goes to the
+    // third frame's last cell, by hand.
+    const rowEnd = left.find((key, idx) => idx > 0 && CLASH.clash[left[idx + 1]] && CLASH.clash[left[idx + 1]].y > CLASH.clash[key].y && CLASH.clash[key].y === 60 + 2 * 18);
+    const lastFramed = framed[framed.length - 1];
+    if (rowEnd && lastFramed) {
+      const from = CLASH.clash2[rowEnd];
+      const to = CLASH.clash2[lastFramed];
+      CROSS = { key: rowEnd, dx: (to.x + 9 - from.x).toFixed(1), dy: (to.y - from.y).toFixed(1) };
+    }
+  }());
+  const clash = (g, i) => CLASH.clash[`${g}${i}`] || settled(g, i);
+  const clash2 = (g, i) => CLASH.clash2[`${g}${i}`] || settled(g, i);
+
+  const LAYOUT = { cloud: (g, i) => CLOUD[g][i], c1, c2, settled, spread, born, full, chain, clash, clash2 };
   // Which clusters have formed in each layout (so can be labelled, hovered).
   // The variants (F) only form at stage 3, when their box names them, so
   // their drift answers no hover before that.
-  const FORMED = { cloud: [], c1: ['S'], c2: ['S', 'T', 'B'], settled: ['S', 'T', 'B'], spread: ['S'], born: ['S', 'T', 'B'], full: ['S', 'T', 'B', 'F'], chain: [] };
+  const FORMED = { cloud: [], c1: ['S'], c2: ['S', 'T', 'B'], settled: ['S', 'T', 'B'], spread: ['S'], born: ['S', 'T', 'B'], full: ['S', 'T', 'B', 'F'], chain: [], clash: [], clash2: [] };
 
   function buildDotLayer() {
     const dot = (g, i) => {
       const cls = ['kh-sv__dot', `kh-sv__dot--${g}`];
       if (g === 'T' && i >= SHARED) cls.push('kh-sv__dot--brand');
-      const dl = (rng() * 0.6).toFixed(2);
+      const side = SIDE[`${g}${i}`];
+      if (side) cls.push(`kh-sv__dot--${side}`);
+      const cross = CROSS && CROSS.key === `${g}${i}` ? `;--kh-cx:${CROSS.dx}px;--kh-cy:${CROSS.dy}px` : '';
+      if (cross) cls.push('kh-sv__dot--cross');
+      // The dots stuck at the seam (stage w) wait 0.35s before any move, so
+      // their fault rings (0.2s exit) are always gone before they go.
+      const dl = SIDE[`${g}${i}`] === 'seam' ? '0.35' : (rng() * 0.6).toFixed(2);
       const c0 = CLOUD[g][i];
       // Drift: each dot wanders its own slow loop (duration, phase and two
       // waypoints seeded here); the stage sets the amplitude, see
       // --kh-drift in _kh-scrolly.scss.
       const u = () => (rng() * 2 - 1).toFixed(2);
       const drift = `--kh-dr-d:${(7 + rng() * 6).toFixed(1)}s;--kh-dr-p:${(-rng() * 13).toFixed(1)}s;--kh-dr-x1:${u()};--kh-dr-y1:${u()};--kh-dr-x2:${u()};--kh-dr-y2:${u()};--kh-dr-in:${(rng() * 0.7).toFixed(2)}s`;
-      return `<i class="${cls.join(' ')}" data-g="${g}" data-i="${i}" style="--dl:${dl}s;--x:${c0.x.toFixed(1)}px;--y:${c0.y.toFixed(1)}px;${drift}"></i>`;
+      return `<i class="${cls.join(' ')}" data-g="${g}" data-i="${i}" style="--dl:${dl}s;--x:${c0.x.toFixed(1)}px;--y:${c0.y.toFixed(1)}px;${drift}${cross}"></i>`;
     };
     let out = '';
     Object.keys(COUNTS).forEach((g) => {
@@ -477,11 +570,19 @@
     ${line('ca1', P.ca1, 'kh-sv__line--chain', { head: true, delay: 1.1 })}
     ${line('ca2', P.ca2, 'kh-sv__line--chain', { head: true, delay: 1.45 })}
     ${line('ca3', P.ca3, 'kh-sv__line--chain', { head: true, delay: 1.8 })}
+    ${line('seam', `M${SEAM} 36 V384`, 'kh-sv__line--seam', { delay: 0.6 })}
+    ${FRAMES.clash.map((f, i) => line(`fr${'ABC'[i]}`, rr(f.x, f.y, f.w, f.h), 'kh-sv__line--frame', { delay: 0.8 + i * 0.15 })).join('')}
+    ${FRAMES.clash2.map((f, i) => line(`fr${'ABC'[i]}2`, rr(f.x, f.y, f.w, f.h), 'kh-sv__line--frame', { delay: 0.3 + i * 0.15 })).join('')}
+    ${line('br1', 'M238 96 C258 74, 272 74, 284 90', 'kh-sv__line--bridge', { head: true, delay: 1.2 })}
+    ${line('br2', 'M238 262 C258 240, 272 240, 284 256', 'kh-sv__line--bridge', { head: true, delay: 1.6 })}
     ${Object.keys(CALLOUTS).map((k) => `<path class="kh-sv__leader" data-leader="${k}" style="--kh-co-delay:${CALLOUTS[k].delay ?? CALLOUT_DELAY}s" d="${CALLOUTS[k].ld}"/>`).join('')}
     <path class="kh-sv__el kh-sv__pulse" data-k="g5T" pathLength="1" d="${P.g5T}"/>
     <path class="kh-sv__el kh-sv__pulse" data-k="g5arc" pathLength="1" d="${P.g5arc}"/>
   </g>
   <g class="kh-sv__dots" aria-hidden="true">${buildDots(id)}</g>
+  ${SEAM_PTS.map((pt) => `<circle class="kh-sv__el kh-sv__ring" data-k="ring" cx="${pt.x}" cy="${pt.y}" r="5" style="--d:1.2s" aria-hidden="true"/>`).join('')}
+  ${label('lbFlow', 16, 44, 'flow', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1 })}
+  ${label('lbFrames', 292, 44, 'frames', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1 })}
   ${label('cvS', N.S.x + 4, N.S.y + N.S.h + 16, 'content schemas', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1.4 })}
   ${label('cvT', N.T.x + 4, N.T.y + N.T.h + 16, '540 Figma variables, 69 by brand', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1.5 })}
   ${label('cvB', cx(N.SB), N.SB.y + N.SB.h + 16, '25 component families', { cls: 'kh-sv__label--cover', delay: 1.6 })}
@@ -627,10 +728,14 @@
   function placeDots(inst, layout) {
     if (inst.svg.dataset.dots === layout) return;
     const fn = LAYOUT[layout];
+    const sq = layout === 'clash' || layout === 'clash2';
     inst.dots.forEach((d) => {
       const p = fn(d.dataset.g, Number(d.dataset.i));
       d.style.setProperty('--x', `${p.x.toFixed(1)}px`);
       d.style.setProperty('--y', `${p.y.toFixed(1)}px`);
+      // Square dots inside the frames: a class, set once per stage, never
+      // animated.
+      d.classList.toggle('is-sq', sq && d.classList.contains('kh-sv__dot--R'));
     });
     inst.svg.dataset.dots = layout;
   }
