@@ -1,0 +1,533 @@
+@use './settings' as *;
+
+// Story layout (layouts/story.njk)
+// --------------------------------
+// A quiet full-page frame for scroll-driven entries. Three tracks, all
+// centred in the viewport:
+//   measure -- the reading column every ordinary block sits in (~65ch)
+//   wide    -- full-width plates AND scrolly regions, so both share one pair
+//              of outer edges. A region is step column + gap + pinned
+//              graphic, centred as one composition with even margins.
+//              Its text starts left of the reading column on purpose: a
+//              pinned region is a distinct act, and centring it is what
+//              lets the graphic be large without running to the edge.
+// Nothing here knows about any particular post.
+@mixin kh-story() {
+  .kh-story {
+    --kh-story-measure: 39rem;
+    // Wider than the 81.25em body on large screens: the body is centred, so
+    // a centred element can exceed it symmetrically. The gutter (2rem total,
+    // 6rem from lg) is more than a classic scrollbar, so 100vw never causes
+    // sideways scroll. Capped at 78rem so the margins stay balanced on wide
+    // screens instead of the graphic running to the viewport edge.
+    --kh-story-wide: calc(100vw - 2rem);
+    // The step column carries the whole story beside the pinned graphic, so
+    // it is a touch wider than a caption column: about 48 characters.
+    --kh-story-steps: clamp(21rem, 31vw, 26rem);
+  }
+
+  // Cover: breadcrumb + ref, title, dek, one meta line, centred as a title
+  // page. Centring is what tells the reader this is a different kind of
+  // entry, and it lets the title run wider than the reading column without
+  // looking lopsided. Body text below stays left-aligned.
+  .kh-story__cover {
+    margin: 0 auto 2rem;
+    max-width: 56rem;
+    padding: 1.5rem 0 0;
+    text-align: center;
+  }
+
+  // Breadcrumb and Ref dock to the corners of the wide track (the same outer
+  // edges as the scrolly regions and plates), as apparatus framing the
+  // centred title rather than competing with it.
+  .kh-story__strap {
+    align-items: baseline;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    justify-content: space-between;
+    margin: 0 0 clamp(2rem, 9vh, 6rem) calc((100% - var(--kh-story-wide)) / 2);
+    text-align: left;
+    width: var(--kh-story-wide);
+  }
+
+  .kh-story__title {
+    font-size: clamp(2.25rem, 4.6vw, 4.25rem);
+    letter-spacing: -0.01em;
+    line-height: 1.04;
+    margin: 0 0 1.5rem;
+    text-wrap: balance;
+  }
+
+  .kh-story__dek {
+    color: var(--kh-color--grey--darkest);
+    font-size: clamp(1.2rem, 1.9vw, 1.55rem);
+    line-height: 1.4;
+    margin: 0 auto 1.5rem;
+    max-width: 40rem;
+    text-wrap: balance;
+  }
+
+  .kh-story__meta {
+    display: block;
+    margin: 0;
+  }
+
+  // Body: the body itself IS the reading column (centred, measure wide).
+  // Plates and enhanced scrolly regions break out of it to the wide track
+  // with symmetric negative margins. Constraining the container rather than
+  // centring each child avoids fighting the many `.kh-content p` style
+  // margin rules that would otherwise outrank a `> *` selector.
+  .kh-story__body {
+    font-size: 1.125rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--kh-story-measure);
+
+    .kh-note-box {
+      font-size: 0.9rem;
+    }
+  }
+
+  .kh-story__body > .kh-bleed-out,
+  .kh-story__body > .kh-scrolly--enhanced {
+    box-sizing: border-box;
+    margin-left: calc((100% - var(--kh-story-wide)) / 2);
+    margin-right: calc((100% - var(--kh-story-wide)) / 2);
+    width: var(--kh-story-wide);
+  }
+
+  // The global .kh-bleed-out paints the page ground to occlude the sticky
+  // contents rail of ordinary posts. The story layout has no rail, so let
+  // plates and figures sit on the grid paper like everything else.
+  .kh-story__body > .kh-bleed-out {
+    background: none;
+    margin-bottom: 3rem;
+    margin-top: 3rem;
+  }
+
+  // The cover adopted into a scrolly region's step column (the script moves
+  // it there, see data-scrolly-cover): a left-aligned title page beside the
+  // graphic's opening state. Everything the centred cover did with the wide
+  // track is undone, since the column is the measure now.
+  .kh-scrolly--enhanced .kh-story__cover {
+    margin: 0 0 2.5rem;
+    max-width: none;
+    padding: 0;
+    text-align: left;
+
+    &::after {
+      margin: 1.5rem 0 0;
+      max-width: none;
+    }
+  }
+
+  .kh-scrolly--enhanced .kh-story__strap {
+    margin: 0 0 2rem;
+    width: auto;
+  }
+
+  .kh-scrolly--enhanced .kh-story__title {
+    font-size: clamp(2rem, 3.2vw, 2.9rem);
+  }
+
+  .kh-scrolly--enhanced .kh-story__dek {
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+    margin: 0 0 1.25rem;
+    max-width: none;
+  }
+
+  // Inside the region the closing chain is the graphic's final state, so the
+  // <ol> (kept for RSS and no-JS) and the note it carries step aside; the
+  // title and caption stay as the closing step's text.
+  .kh-scrolly--enhanced .kh-story-flow {
+    text-align: left;
+
+    .kh-story-flow__note {
+      display: none;
+    }
+
+    .kh-figure__caption {
+      margin: 0.75rem 0 0;
+    }
+  }
+
+  // Wide: the pinned graphic is the chain. Narrow: the band shows it small
+  // (numbers and units), and the <ol> stays as the legible version below.
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-scrolly--enhanced .kh-story-flow .kh-story-flow__chain {
+      display: none;
+    }
+  }
+
+  @media (max-width: $kh-breakpoint--lg-down) {
+    .kh-scrolly--enhanced .kh-story-flow .kh-story-flow__chain {
+      margin: 1.5rem 0;
+    }
+  }
+
+  .kh-scrolly--enhanced .kh-story__plate .kh-figure__caption {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .kh-scrolly--enhanced .kh-story-flow__title {
+    margin-bottom: 0.75rem;
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-story {
+      --kh-story-wide: min(100vw - 6rem, 78rem);
+    }
+
+    // The cover fills a screen beside the constellation, title centred on
+    // the graphic's height.
+    .kh-scrolly--enhanced .kh-story__cover {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 70vh;
+      padding-top: 10vh;
+    }
+
+    // Steps + graphic as one centred composition on the wide track.
+    .kh-story__body > .kh-scrolly--enhanced {
+      column-gap: 3rem;
+      grid-template-columns: var(--kh-story-steps) minmax(0, 1fr);
+    }
+  }
+
+  // Images fill their track: a plate the wide track, a figure the column.
+  .kh-story__plate img,
+  .kh-story__body > figure img {
+    height: auto;
+    width: 100%;
+  }
+
+  // Inside an enhanced region the plate is a panel; its image keeps the
+  // panel's cap rather than filling the (fixed) panel's width blindly.
+  .kh-scrolly--enhanced .kh-story__plate img {
+    width: auto;
+  }
+
+  // The lead image, moved from the opening to a closing plate.
+  .kh-story__plate .kh-figure__caption {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--kh-story-measure);
+  }
+
+  // Closing chain of figures (.kh-story-flow): an <ol> of node boxes joined
+  // by arrows, in the scrolly diagram's language (2px dark rounded boxes,
+  // dark term pills, green for a healthy change). The markup is the whole
+  // visual; arrows are pseudo-elements, so with CSS off or in RSS it reads
+  // as a plain numbered list. Narrow: one column, arrows pointing down.
+  // Wide: one row, arrows pointing right. Arrow tips stop
+  // --kh-flow-clear short of the next box's border, never under it.
+  // /story-flow.js adds --armed (hidden start state) and .is-in (play);
+  // without it, or under reduced motion, the final state simply shows.
+  .kh-story-flow {
+    --kh-flow-gap: 3rem;
+    --kh-flow-clear: 7px;
+    --kh-flow-head: 14px;
+    --kh-flow-good: #15803d; // as --kh-sv-good in _kh-scrolly.scss
+    font-family: var(--kh-font-sans);
+    text-align: center;
+  }
+
+  .kh-story__body .kh-story-flow__title {
+    font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 auto 2rem;
+    text-wrap: balance;
+  }
+
+  .kh-story__body .kh-story-flow__chain {
+    display: grid;
+    gap: var(--kh-flow-gap);
+    grid-template-columns: minmax(0, 22rem);
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-story__body .kh-story-flow__step {
+    --kh-flow-bw: 2px;
+    --kh-flow-ink: var(--kh-color--text);
+    align-items: center;
+    background: var(--kh-ground);
+    border: var(--kh-flow-bw) solid var(--kh-flow-ink);
+    border-radius: 6px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 1.25rem 1rem 1.35rem;
+    position: relative;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  // The healthy-change node: the scrolly's green, at its 4px "is-good" weight.
+  .kh-story__body .kh-story-flow__step--good {
+    --kh-flow-bw: 4px;
+    --kh-flow-ink: var(--kh-flow-good);
+  }
+
+  .kh-story-flow__figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .kh-story-flow__num {
+    color: var(--kh-flow-ink);
+    display: block;
+    font-size: clamp(2.6rem, 4.2vw, 3.6rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  // The unit as a term pill, like the diagram's callout terms.
+  .kh-story-flow__label {
+    background: var(--kh-flow-ink);
+    border-radius: 999px;
+    color: var(--kh-ground);
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0.75rem 0 0.7rem;
+    padding: 0.2rem 0.75rem 0.25rem;
+  }
+
+  .kh-story__body .kh-story-flow__sub {
+    color: var(--kh-color--grey--darkest);
+    font-size: 0.92rem;
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+
+  // Arrow into every step but the first: shaft (::before) + head (::after),
+  // placed in the gap above (narrow) or to the left (wide). Offsets are from
+  // this box's padding edge, so its own border width is part of the sum.
+  .kh-story-flow__step + .kh-story-flow__step::before,
+  .kh-story-flow__step + .kh-story-flow__step::after {
+    background: var(--kh-flow-ink);
+    content: '';
+    left: 50%;
+    position: absolute;
+  }
+
+  .kh-story-flow__step + .kh-story-flow__step::before {
+    height: calc(var(--kh-flow-gap) - 2 * var(--kh-flow-clear) - var(--kh-flow-head) + 1px);
+    top: calc(0px - var(--kh-flow-bw) - var(--kh-flow-gap) + var(--kh-flow-clear));
+    transform: translateX(-50%);
+    transform-origin: 50% 0;
+    width: 2px;
+  }
+
+  .kh-story-flow__step + .kh-story-flow__step::after {
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    height: var(--kh-flow-head);
+    margin-left: -6px;
+    top: calc(0px - var(--kh-flow-bw) - var(--kh-flow-clear) - var(--kh-flow-head));
+    width: 12px;
+  }
+
+  .kh-story__body .kh-story-flow__note {
+    color: var(--kh-color--grey--darkest);
+    font-family: var(--kh-font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    margin: 1.75rem auto 0;
+  }
+
+  .kh-story-flow .kh-figure__caption {
+    margin: 1rem auto 0;
+    max-width: var(--kh-story-measure);
+    text-align: left;
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-story-flow {
+      --kh-flow-gap: 3.5rem;
+    }
+
+    .kh-story__body .kh-story-flow__chain {
+      grid-auto-columns: minmax(0, 1fr);
+      grid-auto-flow: column;
+      grid-template-columns: none;
+      justify-content: stretch;
+    }
+
+    .kh-story-flow__step + .kh-story-flow__step::before {
+      height: 2px;
+      left: calc(0px - var(--kh-flow-bw) - var(--kh-flow-gap) + var(--kh-flow-clear));
+      top: 50%;
+      transform: translateY(-50%);
+      transform-origin: 0 50%;
+      width: calc(var(--kh-flow-gap) - 2 * var(--kh-flow-clear) - var(--kh-flow-head) + 1px);
+    }
+
+    .kh-story-flow__step + .kh-story-flow__step::after {
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      height: 12px;
+      left: calc(0px - var(--kh-flow-bw) - var(--kh-flow-clear) - var(--kh-flow-head));
+      margin: -6px 0 0;
+      top: 50%;
+      width: var(--kh-flow-head);
+    }
+  }
+
+  // Draw-in, left to right (top to bottom when stacked). Each step's --i is
+  // set by the script; its arrow draws first, then the box arrives.
+  .kh-story-flow--armed {
+    .kh-story-flow__step {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition-delay: calc(var(--i, 0) * 0.55s + 0.3s);
+    }
+
+    .kh-story-flow__step::before {
+      scale: 0 1;
+      transition: scale 0.35s ease-in-out;
+      transition-delay: calc(var(--i, 0) * 0.55s);
+    }
+
+    .kh-story-flow__step::after {
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      transition-delay: calc(var(--i, 0) * 0.55s + 0.3s);
+    }
+
+    .kh-story-flow__note,
+    .kh-figure__caption {
+      opacity: 0;
+      transition: opacity 0.6s ease calc(var(--kh-flow-n, 4) * 0.55s + 0.4s);
+    }
+  }
+
+  @media (max-width: $kh-breakpoint--lg-down) {
+    .kh-story-flow--armed .kh-story-flow__step::before {
+      scale: 1 0;
+    }
+  }
+
+  .kh-story-flow--armed.is-in {
+    .kh-story-flow__step {
+      opacity: 1;
+      transform: none;
+    }
+
+    .kh-story-flow__step::before {
+      scale: 1 1;
+    }
+
+    .kh-story-flow__step::after,
+    .kh-story-flow__note,
+    .kh-figure__caption {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kh-story-flow--armed {
+      .kh-story-flow__step,
+      .kh-story-flow__step::before,
+      .kh-story-flow__step::after,
+      .kh-story-flow__note,
+      .kh-figure__caption {
+        opacity: 1;
+        scale: none;
+        transform: none;
+        transition: none;
+      }
+    }
+  }
+
+  // Entry foot inside a story: stacked in the reading column, with the
+  // byline first as the closure, then onward reading; the sequence drawing
+  // keeps the wide track. Overrides the shared two-column grid, which left
+  // the byline in a right-hand column that aligned with nothing here.
+  .kh-story__foot .kh-entry-foot {
+    display: flex;
+    flex-direction: column;
+
+    > .kh-author,
+    > .kh-readnext {
+      box-sizing: border-box;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: var(--kh-story-measure);
+      width: 100%;
+    }
+
+    > .kh-author {
+      margin-top: 0;
+      order: -1;
+    }
+
+    > .kh-readnext {
+      margin-top: 2.5rem;
+    }
+
+    > .kh-sequence {
+      align-self: center;
+      box-sizing: border-box;
+      max-width: min(100vw - 2rem, 78rem);
+      width: 100%;
+    }
+  }
+
+  // Colophon: the apparatus post.njk puts up front, gathered at the end.
+  .kh-story__colophon {
+    border-top: 1px solid var(--kh-rule--strong);
+    font-size: 0.95rem;
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+  }
+
+  .kh-story__colophon-list {
+    display: grid;
+    gap: 0.5rem 1.5rem;
+    grid-template-columns: minmax(6rem, max-content) minmax(0, 1fr);
+    margin: 0;
+
+    dt {
+      padding-top: 0.2rem;
+    }
+
+    dd {
+      margin: 0;
+    }
+  }
+
+  .kh-story__topics,
+  .kh-story__contents {
+    margin: 0;
+    padding: 0;
+  }
+
+  .kh-story__topics {
+    list-style: none;
+  }
+
+  .kh-story__topics li,
+  .kh-story__contents li {
+    margin: 0 0 0.15rem;
+  }
+
+  .kh-story__contents {
+    list-style: decimal-leading-zero inside;
+  }
+}

@@ -1,0 +1,591 @@
+---
+title: "One shared truth for Storybook and Figma"
+layout: layouts/story.njk
+teaser: "Brand rules and structured content empower live sites and designer Figma files."
+description: "How UNDRR's agreed content rules, brand settings and component catalogue let a plugin derive the Mangrove Figma library, so one change lands in code and design alike."
+date: 2026-10-21
+tags:
+  - posts
+  - impact-stories
+topics:
+  - design systems
+  - information architecture
+  - AI
+org: UNDRR
+permalink: /work/2026/impact-story-mangrove-figma/
+kens_status: ready_for_publication
+# The post places the image plate itself, so the closing flow can follow it.
+story_plate: body
+image: /blog/mangrove-figma-library-overview.png
+image_meta:
+  text: "The Mangrove Figma library in use: component task catalogue, living button variants, and token-bound text styles derived from Storybook, the structured content schemas and the design tokens. Own work."
+  credit: "Own work."
+  altext: "Screenshot of the Mangrove Figma library showing the component catalogue organized by task (Actions, Forms and selection, Content and data, Navigation and disclosure) alongside component reference variants and design token text styles."
+---
+
+{#
+  ==============================================================================
+  NARRATIVE BRIEF (2026-10-19, structure revised 2026-10-20 for the single
+  persistent graphic). Read this before touching visuals.
+  ==============================================================================
+
+  VOCABULARY: Figma is "derived" (not drawn) and "native" (real Auto Layout,
+  variables). Do not call it a "translation" (a second metaphor competing
+  with triangulation, and implies loss) or "localization" (means languages
+  at UNDRR). Bugs 1 and 2 are "conversion" bugs.
+
+  ONE PICTURE, SAID ONCE: SURVEYOR'S TRIANGULATION
+  Three known, fixed points locate a fourth. The three fixed points are the
+  structured content schemas, the design tokens and Storybook. Figma is the
+  point being located. Do not also call this "four levels of abstraction";
+  pick the triangle and keep it.
+
+  EACH SOURCE OWNS EXACTLY ONE QUESTION (this is the spine of the post)
+    - Structured content schemas -> what a component is MADE OF
+      (fields, optionality, presets, length limits).
+    - Design tokens -> how it LOOKS in each brand
+      (540 Figma variables generated from the merged tokens, 471 / 87.2% shared,
+      69 brand-specific. Source: undrr-mangrove-figma generated variables, 520
+      with 451 invariant, plus 15 Book Card and 5 Tag helper variables per
+      docs/COMPONENT-MAINTENANCE.md. The raw token YAML has ~220 tokens, so
+      do not call these 'tokens'.)
+    - Storybook -> how it is LAID OUT (and only that; it is the authority on
+      layout, which is why the line-height fix calibrated Figma to the DOM).
+  Because each source owns one question, a mismatch points at one source.
+  Earlier drafts said "Storybook is the reference, not the authority", which
+  contradicted the line-height fix. Replaced with "authority on layout only".
+
+  THE BUGS, TOLD HONESTLY
+    - Triangulation did not CATCH the bugs. Inspecting real Figma nodes did
+      (headless runs passed). Triangulation told me WHERE each bug lived.
+    - Bug 1 (tokens <-> Figma) and bug 2 (Storybook <-> Figma) are conversion
+      bugs on an edge.
+    - Bug 3 (Table limits) is different and is the turn of the section: both
+      Storybook and Figma were faithful; the SCHEMA had a gap. Deriving the library
+      found a bug in a source. Fix went into the schema/guidance, both
+      downstreams inherit it. Earlier drafts forced this onto an edge, which
+      did not fit the "Figma disagreed with a source" claim.
+
+  STRUCTURE / SCROLL STAGES: ONE PERSISTENT GRAPHIC, COVER TO CLOSE
+    The whole body is a single .kh-scrolly region. On wide screens one SVG is
+    pinned beside the prose from the title page to the closing figures; on
+    narrow screens it is the band at the top, released for the long prose.
+    The page's own cover (layouts/story.njk) is adopted into the region's
+    step column by the script (data-scrolly-cover), so no-JS and RSS readers
+    keep the plain title page.
+      cover  Constellation: every dot one real thing (540 variables, 69 by
+             brand in blue; 297 variants; 25 families; the content schemas as
+             an unnumbered cluster), scattered (seeded) across the graphic;
+             no variants yet. Scrolling gathers the dots in story order
+             (schemas, then variables and families) through the intro and
+             the intro. Formed clusters are hoverable. The 297 variants are
+             born at stage 3, on the Figma side, and pulled into their
+             cluster as the reads draw (3.1).
+      w      "Why isn't this a solved problem?", three beats, "multiply the
+             frames": the dots step aside and a small live demo takes their
+             place, one example button each side of a seam. w: the Storybook
+             side is a real <button> with real :hover / :focus-visible, and
+             a snippet that grows its state selectors (one component); the
+             Figma side grows a variant grid 1, 4, 72 (4 states x 3 sizes x
+             2 icon x 3 breakpoints, shown on screen, titled "one button, as
+             an example": illustrative, not a Mangrove figure) with a
+             counter. w.1: --kh-space-sm 12px to 16px; the button follows
+             at once ("every state follows"); a hand hops the grid and seven
+             tiles end up out of step (fault orange, "padding 12... or
+             13?"). w.2: three source boxes derive the grid (arrow), the
+             orange clears ("72 . 0 drawn by hand"), and late in the beat the
+             demo hands back: it fades and the dots return already settled,
+             so stage 1 draws the schema box with no seam.
+      1      Where did the truth come from?  -> schema box draws around its
+             cluster; 1.1 tokens box + the 540 spread; 1.2 peers
+      1.3    the brand studio, live, in the graphic column (a panel)
+      2      What does Storybook add?        -> box draws around 25 families
+      3      How is the Figma library built? -> box draws around the 297;
+             3.3 the Figma screenshot panel
+      4      What happened when sources disagreed? -> two edges, then a node
+      5      What did a token change prove?  -> flow reverses
+      6      cost and reflection: resting triangle (band released on narrow);
+             6.5 the library plate panel
+      7      close: the triangle crossfades to the flow of numbers, the dots
+             regroup honestly (5 x 540 under 2,700; 25 + 297 under variants;
+             56 new green under linked instances; nothing under 110 styles)
+    Panels (.kh-scrolly__panel) are in the prose flow for DOM/tab order and
+    shown position:fixed over the pinned graphic while their stage is active.
+
+  BRAND STUDIO (#mangrove-brand-studio) sits in section 1 as stage 1.3. What
+  it demonstrates is that schemas and tokens are independent (hold the
+  schema, swap the tokens). Its heading and one-line intro are prose in the
+  step column; the interactive part (toggles, card, "what changes") is a
+  panel in the graphic column. The real proof of derivation is the
+  30px -> 32px token change, its own section with its own stage.
+
+  OPEN QUESTIONS FOR KEN (not resolvable from the repo)
+    - RESOLVED (Ken, 2026-10-20): cite "297 variants in 25 component
+      families" (Professional checkpoint); drop 396 symbols / 34 sets.
+      Figures are a POINT-IN-TIME record of the reviewed checkpoint, not the
+      live state: the kit has since grown (32 families / 383 variants in its
+      README) and Mangrove's stable tokens lag the kit. Do not "update" the
+      numbers to current values; they describe the story as it happened.
+      Syndication timing softened to "already settled by the time a Figma kit
+      came up". story.to.design shortened to one sentence.
+
+  VISUAL GUARDRAILS (unchanged)
+    Scope CSS under body:has(#kh-css-toggle:checked); data-pagefind-ignore on
+    all diagram/interactive chrome; .kh-bleed-out (never .kh-figure inside
+    .kh-content); verify with yarn lint:css, lint:links, lint:images.
+    Inspiration for the scroll pass: Nadieh Bremer, Searching for Birds
+    (https://searchingforbirds.visualcinnamon.com/). The scroll pass lives in
+    src/site/mangrove-scrolly.js + _kh-scrolly.scss; initBrandStudio in
+    src/site/mangrove-map.js is live. The five static figures and the closing
+    <ol> stay in the markup as the no-JS, CSS-off and RSS version.
+  ==============================================================================
+#}
+
+{#
+  THE REGION. One .kh-scrolly for the whole body. src/site/mangrove-scrolly.js
+  builds one SVG, inserts it as .kh-scrolly__graphic and pins it beside the
+  prose from the cover to the closing figures. data-scrolly-cover names the
+  page's cover (rendered by layouts/story.njk) for the script to adopt as the
+  first thing in the step column. Each .kh-scrolly__section maps its
+  paragraphs, in order, to the stages in data-scrolly-steps; a section with
+  data-scrolly-plain keeps ordinary paragraph spacing (one resting stage for
+  a stretch of prose). Elements with data-scrolly-stage (the figures at the
+  end) are steps in their own right. Elements with data-scrolly-panel are
+  shown in the graphic column while their stage is active, in place of the
+  diagram; they stay in the prose flow for reading and tab order. The static
+  figures (.kh-scrolly__static) stay in the markup as the no-JS, CSS-off and
+  RSS fallback; enhanced CSS hides them. .kh-scrolly__define asides hold the
+  term definitions (edit the copy here, nowhere else).
+#}
+<div class="kh-scrolly" data-scrolly-initial="cover" data-scrolly-cover=".kh-story__cover">
+<div class="kh-scrolly__steps">
+<p class="kh-scrolly__cover-note" hidden>Each dot is one thing the plugin reads. As the story names them, they gather: the content schemas, the 540 brand variables (69 of them set per brand, in blue) and the 25 component families; the 297 component variants it writes arrive with Figma.</p>
+{#
+  OPENING BEATS. The dots start scattered (the first frame on load, no
+  animation) and gather as the story names them: the schemas with the
+  second paragraph (c1), the brand variables and component families with
+  the third (c2), and the variants only as a faint, unnamed drift on the
+  Figma side through "Why isn't this a solved problem?" (w). Figma itself
+  is not exposed until stage 3. Short step gaps: these are reading
+  paragraphs, not diagram beats.
+#}
+<div class="kh-scrolly__section" data-scrolly-steps="c0 c1 c2 c2" data-scrolly-short>
+{% markdown %}
+
+**Figma kits often tell a design system's story a second time.** Designers draw the components, engineers build them, and the two versions drift because nothing ties one to the other. Every correction gets made twice, by different people, or often doesn't and the two worlds drift. Double the work and half the benefit.
+
+**UNDRR's Mangrove Figma library is derived instead: a change made once lands everywhere.** When I changed a core spacing value in code and republished, a designer's pilot file updated and kept every one of their edits. Nobody redrew anything or compared design and code by eye.
+
+**My solution for UNDRR works because three sources already agree on how truth is told.** The content rules (structured content schemas) say what each component contains, the brand settings (design tokens) say how it looks in each of UNDRR's five brands, and the developers' live component catalogue ([Storybook](https://mangrove.undrr.org/)) says how it is laid out. A plugin built to this architecture reads all three and generates a native Figma library: 297 variants in 25 component families, real components rather than pictures of them.
+
+**That is triangulation: each source answers one question.** So when Figma disagreed with one of them, I knew which, and every mismatch became a bug with an address instead of an argument about taste.
+
+{% endmarkdown %}
+</div>
+<div class="kh-scrolly__section" data-scrolly-steps="w w.1 w.2" data-scrolly-short>
+{% markdown %}
+
+## Why isn't this a solved problem?
+
+**Storybook and Figma only look as if they do the same job.** Both show a design system's components, so it seems they should stay in step on their own. They don't, for the same reason a Windows app doesn't simply run on a Mac: each platform lays things out and behaves in its own way, and Figma's Auto Layout is not CSS.
+
+**There is no standard way across.** Every system has its own components, brands and edge cases, so any conversion depends on what you start from. Most teams settle for [a degree of parity](https://designsystemdiaries.substack.com/p/how-close-should-figma-be-to-code) between the two, or accept that [the front end is the real source of truth](https://www.robinrendle.com/notes/an-incoherent-rant-about-design-systems) and update Figma by hand to keep up.
+
+**Hard, but not impossible.** Separate what a component is from how it looks and how it is laid out, and most of the port becomes mechanical. That is also where AI helps. The work is reverse engineering: rebuilding something that already exists in another platform's terms, with the original there to check every result against.
+
+{% endmarkdown %}
+</div>
+<div class="kh-scrolly__section" data-scrolly-steps="1 1.1 1.2">
+{% markdown %}
+
+## Where did the truth come from?
+
+**The hard part was as much the culture change as the technical build.** Getting a broad range of stakeholders to agree on what a card, a hero or a landing page is *made of* took years of sustained leadership: I led the initiative across our content teams, developers and organizational leadership to shift perspectives. That meant getting teams to embrace abstraction: content schemas for structure, design tokens for appearance, and code for layout. By the time a Figma library came up, that discipline was already settled and empowering live syndication. (I've written about [Mangrove as a content architecture that happens to ship a design system](/posts/20260327-content-architecture-shipping-container/).)
+
+{% endmarkdown %}
+<aside class="kh-scrolly__define" data-define="nS"><p><strong><dfn>Content schema</dfn>:</strong> the agreed list of what each piece of content contains and its limits. A Book Card always has a title and a link, may have an image, and its summary has a maximum length. Agreeing this is what lets UNDRR share content across its sites.</p></aside>
+{% markdown %}
+
+**The brand settings are a second, independent source.** I led the effort to align the structure of the design tokens across UNDRR, PreventionWeb, MCR2030, DELTA Resilience and IRP into one unified set, which the plugin turns into 540 Figma variables. 471 of them (87.2%) are the same in every brand; the other 69 are where the brands differ: colour, corner radius, a softer surface here, hero spacing there.
+
+{% endmarkdown %}
+<aside class="kh-scrolly__define" data-define="nT"><p><strong><dfn>Design token</dfn>:</strong> a named brand setting, like <em>this blue</em>, <em>this corner roundness</em> or <em>this spacing</em>, stored once. Each brand gives the same name its own value; change one and everything using it updates.</p></aside>
+{% markdown %}
+
+**Neither source needs to know about the other.** A schema says nothing about colour, and a token says nothing about whether a card has an image. So you can hold one still and swap the other: below, the same Book Card schema under each brand's tokens.
+
+{% endmarkdown %}
+</div>
+{#
+  SCROLLY STAGE 1 -- "Where did the truth come from?"
+  Intent: two independent sources of truth exist before any rendering
+  environment does.
+  Visual state:
+    - Only two nodes: "Content schemas" (made of) and "Design tokens" (looks).
+    - Equal size and weight, fading in together, joined by a dotted "peers"
+      line with no arrowhead: neither feeds the other.
+    - No ghost of Storybook or Figma yet.
+    - Optional data layer: the token node can resolve into 540 dots, 471 in a
+      shared core and 69 splitting off by brand. This is the one place in the
+      story where the 87.2% is shown rather than stated.
+  The brand studio follows directly as the hands-on version of this stage.
+#}
+<figure class="kh-bleed-out kh-scrolly__static" data-pagefind-ignore>
+  <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-1-title mg-stage-1-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
+    <title id="mg-stage-1-title">Stage 1: two independent sources of truth</title>
+    <desc id="mg-stage-1-desc">Two boxes on the left: content schemas above, design tokens below, joined by a dotted line marked peers. Nothing else is drawn yet.</desc>
+    <rect x="20" y="40" width="150" height="56" rx="6"/>
+    <rect x="20" y="184" width="150" height="56" rx="6"/>
+    <line x1="95" y1="96" x2="95" y2="184" stroke-dasharray="2 5"/>
+    <g fill="currentColor" stroke="none" text-anchor="middle">
+      <text x="95" y="64" font-weight="bold">Content schemas</text>
+      <text x="95" y="84" font-size="12">the content it holds</text>
+      <text x="95" y="208" font-weight="bold">Design tokens</text>
+      <text x="95" y="228" font-size="12">colour, type, spacing</text>
+      <text x="108" y="145" font-size="12" text-anchor="start">peers, independent</text>
+    </g>
+  </svg>
+  <figcaption class="kh-figure__caption">Two sources of truth, defined independently: schemas say what a component is made of; tokens say how it looks in each brand. Own work.</figcaption>
+</figure>
+{#
+  BRAND STUDIO (stage 1.3). Its heading and intro are prose here, in the step
+  column; the live studio (built by mangrove-map.js into #mangrove-brand-studio)
+  is a panel shown in the graphic column while this stage is active. The
+  short paragraph inside it is the no-JS / RSS fallback. Narrow screens show the
+  studio in the flow, with the band released.
+#}
+<div class="kh-scrolly__section" data-scrolly-steps="1.3">
+<h3>Hold the content, swap the brand</h3>
+<p><strong>Switch brands on the Book Card.</strong> The content stays the same throughout: brand settings change how it looks, and Storybook decides how it is laid out.</p>
+</div>
+<div id="mangrove-brand-studio" class="kh-scrolly__panel" data-scrolly-panel="studio" data-pagefind-ignore>
+  <p class="kh-scrolly__panel-fallback">The interactive brand switcher needs JavaScript. In short: 471 of 540 Figma variables (87.2%) are the same in all five brands; the rest change colour, corners and button sizing without changing what the card is made of.</p>
+</div>
+<script src="/mangrove-map.js" defer></script>
+<div class="kh-scrolly__section" data-scrolly-steps="2 2.05 2.1">
+{% markdown %}
+
+## What does Storybook add?
+
+**Layout, and only layout.** I led our front-end developers in building Mangrove out, and directed the work with engineering teams to integrate it across our live sites. Storybook is the working catalogue of that initiative: each pattern takes a schema's fields and the tokens' values and arranges them on a page. That arrangement is the one thing Storybook has the final word on.
+
+{% endmarkdown %}
+<aside class="kh-scrolly__define" data-define="nSB"><p><strong><dfn>Storybook</dfn>:</strong> the developers' working catalogue of every component, running live in the browser with all its variations.</p></aside>
+{% markdown %}
+
+**The Book Card shows the split.** Its four presets, including a version without an image, come from the schema, and its colour, type and spacing from the tokens. Where the boxes land is Storybook's call, and an automated geometry check measures against it.
+
+**Everything after this depends on that split.** Each source owns one question, so each can be checked on that question alone.
+
+{% endmarkdown %}
+</div>
+{#
+  SCROLLY STAGE 2 -- "What does Storybook add?"
+  Intent: the two peers combine in Storybook; layout is the only new
+  ingredient.
+  Visual state:
+    - Peers stay anchored left.
+    - Storybook appears centre. Two solid streams draw in, one from each peer.
+    - Storybook is labelled "layout". A small "+ layout" chip appearing ON
+      the Storybook node as the streams arrive makes the "only thing it adds"
+      point without words.
+    - Optional detail: HorizontalBookCard's three ingredients colour-coded by
+      source (fields = schema colour, values = token colour, boxes = layout).
+      If that colour coding is used, carry it through every later stage: it is
+      how the reader will recognise which source a bug belongs to in stage 4.
+    - Figma still absent.
+#}
+<figure class="kh-bleed-out kh-scrolly__static" data-pagefind-ignore>
+  <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-2-title mg-stage-2-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
+    <title id="mg-stage-2-title">Stage 2: Storybook adds layout</title>
+    <desc id="mg-stage-2-desc">The two source boxes on the left each send an arrow into a Storybook box in the centre, labelled adds layout.</desc>
+    <defs>
+      <marker id="mg-stage-2-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" stroke="none"/></marker>
+    </defs>
+    <rect x="20" y="40" width="150" height="56" rx="6"/>
+    <rect x="20" y="184" width="150" height="56" rx="6"/>
+    <rect x="245" y="112" width="150" height="56" rx="6"/>
+    <line x1="95" y1="96" x2="95" y2="184" stroke-dasharray="2 5"/>
+    <line x1="170" y1="72" x2="243" y2="128" marker-end="url(#mg-stage-2-arrow)"/>
+    <line x1="170" y1="208" x2="243" y2="152" marker-end="url(#mg-stage-2-arrow)"/>
+    <g fill="currentColor" stroke="none" text-anchor="middle">
+      <text x="95" y="64" font-weight="bold">Content schemas</text>
+      <text x="95" y="84" font-size="12">the content it holds</text>
+      <text x="95" y="208" font-weight="bold">Design tokens</text>
+      <text x="95" y="228" font-size="12">colour, type, spacing</text>
+      <text x="320" y="136" font-weight="bold">Storybook</text>
+      <text x="320" y="156" font-size="12">adds the page layout</text>
+    </g>
+  </svg>
+  <figcaption class="kh-figure__caption">Storybook is where the two sources meet. It takes fields from the schema and values from the tokens, and adds the layout. Own work.</figcaption>
+</figure>
+<div class="kh-scrolly__section" data-scrolly-steps="3 3.1 3.2">
+{% markdown %}
+
+## How is the Figma library built?
+
+{% endmarkdown %}
+<aside class="kh-scrolly__define" data-define="nF"><p><strong><dfn>Figma</dfn>:</strong> where designers mock up pages. Its library is the shared set of ready-made components they drag into their designs.</p></aside>
+{% markdown %}
+
+**The plugin asks each source the question it owns.** Field lists and presets come from the schemas, values bind to Figma variables generated from the tokens, and geometry is checked against Storybook. Nothing in the library is authored in Figma: a designer switching the Book Card to its no-image preset is choosing one the schema already allows.
+
+**I directed AI coding agents to write most of the plugin, and the structure gave their work a right answer.** The agents traced tokens through the code and generated the build instructions for each component, and every instruction could be checked against one of the three sources. Their output still had errors. The difference was that I could trace each one.
+
+{% endmarkdown %}
+</div>
+{#
+  SCROLLY STAGE 3 -- "How is the Figma library built?"  (CLIMAX STATE)
+  Intent: the full triangle. Figma, from a different lineage, is located by
+  reading each fixed point for the one thing it owns.
+  Visual state:
+    - Figma node appears right, visually distinct (heavier stroke / different
+      fill) to signal a different lineage.
+    - Three dashed "reads" lines draw out from Figma one at a time, each
+      labelled with the question it asks, in the order of the paragraph:
+        1. arc over the top to Content schemas: "fields, presets"
+        2. arc underneath to Design tokens: "variables"
+        3. straight left to Storybook: "geometry"
+    - Stage-2 streams stay visible at lower opacity.
+    - Optional: the three reads converge on Figma like survey sight-lines
+      meeting at a point. That IS the metaphor; it is worth getting right.
+  Stage 4 and stage 5 are both modes of this exact geometry. Do not move nodes
+  after this point.
+#}
+<figure class="kh-bleed-out kh-scrolly__static" data-pagefind-ignore>
+  <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-3-title mg-stage-3-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
+    <title id="mg-stage-3-title">Stage 3: the plugin reads all three sources</title>
+    <desc id="mg-stage-3-desc">A Figma box on the right has three dashed lines reaching back to the content schemas for fields and presets, to the design tokens for variables, and to Storybook for geometry.</desc>
+    <defs>
+      <marker id="mg-stage-3-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" stroke="none"/></marker>
+    </defs>
+    <rect x="20" y="40" width="150" height="56" rx="6"/>
+    <rect x="20" y="184" width="150" height="56" rx="6"/>
+    <rect x="245" y="112" width="150" height="56" rx="6"/>
+    <rect x="470" y="112" width="150" height="56" rx="6" stroke-width="3"/>
+    <g opacity="0.45">
+      <line x1="95" y1="96" x2="95" y2="184" stroke-dasharray="2 5"/>
+      <line x1="170" y1="72" x2="243" y2="128" marker-end="url(#mg-stage-3-arrow)"/>
+      <line x1="170" y1="208" x2="243" y2="152" marker-end="url(#mg-stage-3-arrow)"/>
+    </g>
+    <g stroke-dasharray="7 5">
+      <line x1="470" y1="140" x2="397" y2="140" marker-end="url(#mg-stage-3-arrow)"/>
+      <path d="M545 112 C545 30, 300 20, 172 56" marker-end="url(#mg-stage-3-arrow)"/>
+      <path d="M545 168 C545 250, 300 260, 172 224" marker-end="url(#mg-stage-3-arrow)"/>
+    </g>
+    <g fill="currentColor" stroke="none" text-anchor="middle">
+      <text x="95" y="64" font-weight="bold">Content schemas</text>
+      <text x="95" y="84" font-size="12">the content it holds</text>
+      <text x="95" y="208" font-weight="bold">Design tokens</text>
+      <text x="95" y="228" font-size="12">colour, type, spacing</text>
+      <text x="320" y="136" font-weight="bold">Storybook</text>
+      <text x="320" y="156" font-size="12">the page layout</text>
+      <text x="545" y="136" font-weight="bold">Figma</text>
+      <text x="545" y="156" font-size="12">297 variants</text>
+      <text x="380" y="30" font-size="12">reads fields, presets</text>
+      <text x="380" y="272" font-size="12">reads variables</text>
+      <text x="432" y="128" font-size="12">reads geometry</text>
+    </g>
+  </svg>
+  <figcaption class="kh-figure__caption">The plugin asks each source the one question it owns, so Figma is located by three fixed points rather than copied from the nearest one. Own work.</figcaption>
+</figure>
+{#
+  The Figma result (stage 3.3): a panel in the graphic column, caption in the
+  step column. The source PNG is only 685px wide, so it is capped at its
+  600w variant (--kh-story-native) rather than upscaled.
+#}
+<figure class="kh-scrolly__panel-fig" data-scrolly-stage="3.3" style="--kh-story-native: 600px">
+  <div class="kh-scrolly__panel" data-scrolly-panel="figma">
+    <img class="kh-figure__image" src="/images/blog/mangrove-figma-card-presets-and-brand-tags.png" alt="Figma canvas showing Horizontal Book Card component presets (Default, NoImage, NoLink, ButtonOnly) alongside layer panels displaying Tag integration across MCR2030 and PreventionWeb brands">
+  </div>
+  <figcaption class="kh-figure__caption">The schema's four Book Card presets as Figma variant properties, next to brand-specific Tag tokens. Own work.</figcaption>
+</figure>
+<div class="kh-scrolly__section" data-scrolly-steps="4 4.1 4.2 4.3">
+{% markdown %}
+
+## What happened when the sources disagreed?
+
+**Real output found the bugs; the sources told me where they lived.** The automated tests all passed. The problems only showed up when I opened the generated components in Figma and inspected them.
+
+**Tokens against Figma: an invisible disabled control.** The disabled ComboBox vanished in Figma. The converter had passed the opacity token `0.55` into a field expecting a percentage, so 55% became 0.55%. The token and Storybook agreed with each other, which put the fault on the converter. I fixed it, and the test harness that had missed it.
+
+**Storybook against Figma: text spacing that drifted.** Small help text sat slightly differently in Figma than in the browser. Layout is Storybook's call, so I measured the line height in the browser and calibrated Figma to it.
+
+**The third mismatch was in a source.** Real disaster risk data in the Table ran into fixed dividers in Figma and Storybook alike: both were faithful, but the schema had no length limit. I worked with colleagues to establish the limit and wrapping rules in the component guidance, and both now inherit them. Deriving a library from its sources can find gaps in the sources too.
+
+{% endmarkdown %}
+</div>
+{#
+  SCROLLY STAGE 4 -- "What happened when the sources disagreed?"
+  Intent: a mismatch has an address. Then the turn: sometimes the address is
+  a source, not an edge.
+  Visual state (same geometry as stage 3, everything dimmed, then in turn as
+  each paragraph passes):
+    1. Lower arc Tokens -> Figma lights burnt orange (#c2410c):
+       "0.55 read as 0.55%". Tokens and Storybook nodes show a small check
+       (they agree), Figma's edge carries the fault.
+    2. Centre line Storybook -> Figma lights: "line-height". Storybook node
+       shows it is the authority on layout (e.g. its "layout" label brightens).
+    3. THE TURN: no edge lights. The Content schemas NODE itself goes orange,
+       flagged "no length limit". Then the fix flows OUT of the schema node,
+       down its existing streams, into Storybook and on to Figma (both
+       downstreams inherit it). This is the only moment in the diagram where
+       a source is the thing that was wrong; make it visibly different from
+       1 and 2 (node vs edge).
+  End state: two orange edges plus one orange node.
+#}
+<figure class="kh-bleed-out kh-scrolly__static" data-pagefind-ignore>
+  <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-4-title mg-stage-4-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
+    <title id="mg-stage-4-title">Stage 4: two bugs on edges, one in a source</title>
+    <desc id="mg-stage-4-desc">The same diagram. The tokens-to-Figma line is highlighted and labelled 0.55 read as 0.55 percent. The Storybook-to-Figma line is highlighted and labelled line-height. The content schemas box itself is highlighted and labelled no length limit.</desc>
+    <rect x="20" y="40" width="150" height="56" rx="6" stroke="#c2410c" stroke-width="4"/>
+    <rect x="20" y="184" width="150" height="56" rx="6"/>
+    <rect x="245" y="112" width="150" height="56" rx="6"/>
+    <rect x="470" y="112" width="150" height="56" rx="6" stroke-width="3"/>
+    <g opacity="0.3">
+      <line x1="95" y1="96" x2="95" y2="184" stroke-dasharray="2 5"/>
+      <line x1="170" y1="72" x2="243" y2="128"/>
+      <line x1="170" y1="208" x2="243" y2="152"/>
+      <path d="M545 112 C545 30, 300 20, 172 56" stroke-dasharray="7 5"/>
+    </g>
+    <g stroke="#c2410c" stroke-width="4">
+      <line x1="470" y1="140" x2="397" y2="140"/>
+      <path d="M545 168 C545 250, 300 260, 172 224"/>
+    </g>
+    <g fill="currentColor" stroke="none" text-anchor="middle">
+      <text x="95" y="64" font-weight="bold">Content schemas</text>
+      <text x="95" y="208" font-weight="bold">Design tokens</text>
+      <text x="320" y="136" font-weight="bold">Storybook</text>
+      <text x="545" y="136" font-weight="bold">Figma</text>
+    </g>
+    <g fill="#c2410c" stroke="none" font-size="12" font-weight="bold" text-anchor="middle">
+      <text x="95" y="84">no length limit</text>
+      <text x="432" y="128">line-height</text>
+      <text x="380" y="272">0.55 read as 0.55%</text>
+    </g>
+  </svg>
+  <figcaption class="kh-figure__caption">Two bugs sat on the lines between a source and Figma. The third sat in a source itself, and its fix flowed down to Storybook and Figma. Own work.</figcaption>
+</figure>
+<div class="kh-scrolly__section" data-scrolly-steps="5 5.1">
+{% markdown %}
+
+## What did a token change prove?
+
+**A change at the source carries through to designers' work.** I changed a core UNDRR spacing token from 30px to 32px and republished the library. In a pilot file of 56 linked library instances, a resource page at desktop and mobile widths, the layout updated and every edited title, chosen preset and instance override survived.
+
+**Designers don't need the plugin to use the library.** I led the adoption effort with our design team, ensuring this architecture empowered their craft rather than dictating it. The pilot was built entirely from the published library, with its own headings and local notes; the plugin is a build tool behind the scenes, and designers only ever touch the library.
+
+{% endmarkdown %}
+</div>
+{#
+  SCROLLY STAGE 5 -- "What did a token change prove?"  (RESOLUTION)
+  Intent: the flow reverses. Until now Figma reached back to read its sources;
+  here a change starts at a source and arrives in a designer's file intact.
+  Visual state (same geometry):
+    - Design tokens node ticks "30px -> 32px".
+    - A pulse travels tokens -> Storybook and, along the lower arc now pointing
+      the OTHER way, tokens -> Figma.
+    - Figma node opens into a small pilot file: 56 instances, desktop + mobile.
+      Instances nudge by 2px; designer edits (a retitled heading, a toggled
+      preset) are marked and visibly do not change.
+    - Optional: the pulse runs back on "restore" to show the baseline returns.
+  Use a colour distinct from stage 4's orange: this is a healthy change, not
+  a fault.
+#}
+<figure class="kh-bleed-out kh-scrolly__static" data-pagefind-ignore>
+  <svg viewBox="0 0 640 280" role="img" aria-labelledby="mg-stage-5-title mg-stage-5-desc" style="display:block;width:100%;max-width:720px;height:auto" font-family="inherit" font-size="14" fill="none" stroke="currentColor" stroke-width="2">
+    <title id="mg-stage-5-title">Stage 5: a token change flows through to Figma</title>
+    <desc id="mg-stage-5-desc">The design tokens box is labelled 30px to 32px. Highlighted arrows run from it to Storybook and, along the lower arc, to Figma, which is labelled 56 instances, overrides kept.</desc>
+    <defs>
+      <marker id="mg-stage-5-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#15803d" stroke="none"/></marker>
+    </defs>
+    <rect x="20" y="40" width="150" height="56" rx="6"/>
+    <rect x="20" y="184" width="150" height="56" rx="6" stroke="#15803d" stroke-width="4"/>
+    <rect x="245" y="112" width="150" height="56" rx="6"/>
+    <rect x="470" y="112" width="150" height="56" rx="6" stroke-width="3"/>
+    <g opacity="0.3">
+      <line x1="95" y1="96" x2="95" y2="184" stroke-dasharray="2 5"/>
+      <line x1="170" y1="72" x2="243" y2="128"/>
+      <line x1="470" y1="140" x2="397" y2="140" stroke-dasharray="7 5"/>
+      <path d="M545 112 C545 30, 300 20, 172 56" stroke-dasharray="7 5"/>
+    </g>
+    <g stroke="#15803d" stroke-width="4">
+      <line x1="170" y1="208" x2="243" y2="152" marker-end="url(#mg-stage-5-arrow)"/>
+      <path d="M172 224 C300 260, 545 250, 545 170" marker-end="url(#mg-stage-5-arrow)"/>
+    </g>
+    <g fill="currentColor" stroke="none" text-anchor="middle">
+      <text x="95" y="64" font-weight="bold">Content schemas</text>
+      <text x="95" y="208" font-weight="bold">Design tokens</text>
+      <text x="320" y="136" font-weight="bold">Storybook</text>
+      <text x="545" y="136" font-weight="bold">Figma</text>
+      <text x="545" y="156" font-size="12">56 instances, edits kept</text>
+    </g>
+    <g fill="#15803d" stroke="none" font-size="12" font-weight="bold" text-anchor="middle">
+      <text x="95" y="228">30px → 32px</text>
+    </g>
+  </svg>
+  <figcaption class="kh-figure__caption">The flow reverses: a spacing token changed at the source reached a designer's pilot file, and their edits survived. Own work.</figcaption>
+</figure>
+{#
+  Cost and reflection: ordinary prose over a resting diagram (stage 6). On
+  narrow screens the band is released for this stretch.
+#}
+<div class="kh-scrolly__section" data-scrolly-steps="6" data-scrolly-plain>
+{% markdown %}
+
+## What does it cost to keep?
+
+**Less than redrawing by hand, but not free.** The plugin and its tests come to about 77,000 lines of code, over 40% of it tests and audits, and someone has to keep that working as the product changes.
+
+**So I established a sustainable operating model.** Brand settings sync automatically, because they are cheap to keep current. Full rebuilds of the library wait for major versions and new components. With rebuilds that infrequent, a paid tool such as [story.to.design](https://story.to.design/docs/extend-stories) didn't make sense for us.
+
+**It only holds while Figma stays downstream.** Copy, presets and visibility in a designer's own file belong to them. Edits to the shared library itself would turn Figma back into a second story. That needs a policy before the next rebuild, and there isn't one yet.
+
+## Why did this work?
+
+**The technical build rested on years of culture change.** If the schemas and tokens had been vague, the plugin would have had nothing to triangulate from, and the agents' output nothing to be checked against. Getting stakeholders across editorial, engineering and design to embrace these layers of abstraction took sustained leadership: the plugin simply harvested the alignment we had already built.
+
+**Managing my team meant holding the technical contracts; leading across teams meant building trust.** Content authors needed confidence that schemas would protect their publishing workflows; developers needed patterns they could rely on in production; designers needed Figma components that respected their autonomy.
+
+**Each discipline gets the same story in its own tool.** Designers get Figma and developers get Storybook, both drawing on the same content rules and brand settings. It's the same move I made in [putting analytics into editorial workflows](/work/2026/impact-story-undrr-analytics-overlay-mcp/): meet each team in the tool it already works in.
+
+{% endmarkdown %}
+</div>
+{#- Closing: the library plate as a panel (stage 6.5), then the flow of
+    numbers (stage 7), which the diagram becomes on wide screens; the <ol>
+    stays as the RSS and no-JS version. `story_plate: body` (frontmatter)
+    stops the layout drawing the plate after the body. Figures are a
+    point-in-time record of the reviewed checkpoint: do not update them. -#}
+<figure class="kh-bleed-out kh-story__plate kh-scrolly__panel-fig" data-scrolly-stage="6.5">
+  <div class="kh-scrolly__panel" data-scrolly-panel="plate">
+    <img class="kh-figure__image" src="/images{{ image | url }}" alt="{{ image_meta.altext }}" loading="lazy" decoding="async" sizes="(min-width: 81.25em) 1268px, 100vw">
+  </div>
+  <figcaption class="kh-figure__caption">{{ image_meta.text | safe }}</figcaption>
+</figure>
+<figure class="kh-bleed-out kh-story-flow" aria-labelledby="mg-flow-title" data-scrolly-stage="7">
+  <p class="kh-story-flow__title" id="mg-flow-title">What one shared truth reaches</p>
+  <ol class="kh-story-flow__chain">
+    <li class="kh-story-flow__step">
+      <p class="kh-story-flow__figure"><strong class="kh-story-flow__num">2,700</strong> <span class="kh-story-flow__label">brand values</span></p>
+      <p class="kh-story-flow__sub">5 brands × 540 Figma variables (471 shared, 69 by brand)</p>
+    </li>
+    <li class="kh-story-flow__step">
+      <p class="kh-story-flow__figure"><strong class="kh-story-flow__num">110</strong> <span class="kh-story-flow__label">styles</span></p>
+      <p class="kh-story-flow__sub">102 text, 8 effects</p>
+    </li>
+    <li class="kh-story-flow__step">
+      <p class="kh-story-flow__figure"><strong class="kh-story-flow__num">297</strong> <span class="kh-story-flow__label">variants</span></p>
+      <p class="kh-story-flow__sub">in 25 component families</p>
+    </li>
+    <li class="kh-story-flow__step kh-story-flow__step--good">
+      <p class="kh-story-flow__figure"><strong class="kh-story-flow__num">56</strong> <span class="kh-story-flow__label">linked instances</span></p>
+      <p class="kh-story-flow__sub">in a designer's pilot file, every edit kept through a token change</p>
+    </li>
+  </ol>
+  <p class="kh-story-flow__note">Built with about 77,000 lines of code, 33,000 of them tests and audits.</p>
+  <figcaption class="kh-figure__caption">Each step is derived, not drawn: the brand values, styles and component variants all come from the same sources, and a designer's page built from them kept its edits when one of those sources changed. Own work.</figcaption>
+</figure>
+</div>
+</div>
+<script src="/mangrove-scrolly.js" defer></script>
+<script src="/story-flow.js" defer></script>
