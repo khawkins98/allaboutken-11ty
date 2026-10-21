@@ -193,7 +193,8 @@
       width: 90%;
     }
 
-    .kh-scrolly__graphic:has(.kh-sv:is([data-stage='cover'], [data-stage='c0'], [data-stage='c1'], [data-stage='c2'], [data-stage='w'])) .kh-scrolly__dots-caption {
+    // Cover through c2 only: from "why" on, the dots are metaphor, not data.
+    .kh-scrolly__graphic:has(.kh-sv:is([data-stage='cover'], [data-stage='c0'], [data-stage='c1'], [data-stage='c2'])) .kh-scrolly__dots-caption {
       opacity: 1;
     }
   }
@@ -944,10 +945,42 @@
     stroke-width: 2;
   }
 
+  // A ring is a group: the disc, plus a larger transparent hit circle for
+  // its popup (hoverable only while on, like a check mark).
   .kh-sv__ring {
     fill: none;
+    pointer-events: none;
     stroke: currentColor;
     stroke-width: 1.5;
+  }
+
+  .kh-sv__ring.is-on {
+    cursor: help;
+    pointer-events: all;
+  }
+
+  .kh-sv__ring-hit {
+    fill: transparent;
+    stroke: none;
+  }
+
+  // Technical-drawing annotations for stage w: a hairline leader and a
+  // small grey note share one key, so they show and leave together.
+  .kh-sv__line--note {
+    stroke: var(--kh-color--grey--darkest);
+    stroke-width: 1;
+  }
+
+  .kh-sv__label--note {
+    fill: var(--kh-color--grey--darkest);
+    font-size: min(11.5px, calc(12.5px / var(--kh-sv-s, 1)));
+  }
+
+  // Hit targets that are lines (the bridges): a wide invisible stroke.
+  .kh-sv__hit--line {
+    fill: none;
+    stroke: transparent;
+    stroke-width: 14;
   }
 
   // A ring leaves before the dot it marks can move (the seam dots wait
