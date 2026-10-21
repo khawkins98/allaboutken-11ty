@@ -176,7 +176,7 @@ image_meta:
 
 **UNDRR's Mangrove Figma library is derived instead: a change made once lands everywhere.** When I changed a core spacing value in code and republished, a designer's pilot file updated and kept every one of their edits. Nobody redrew anything or compared design and code by eye.
 
-**My solution for UNDRR works because three sources already agree on how truth is told.** The content rules (structured content schemas) say what each component contains, the brand settings (design tokens) say how it looks in each of UNDRR's five brands, and the developers' live component catalogue ([Storybook](https://mangrove.undrr.org/)) says how it is laid out. A plugin I built reads all three and generates a native Figma library: 297 variants in 25 component families, real components rather than pictures of them.
+**My solution for UNDRR works because three sources already agree on how truth is told.** The content rules (structured content schemas) say what each component contains, the brand settings (design tokens) say how it looks in each of UNDRR's five brands, and the developers' live component catalogue ([Storybook](https://mangrove.undrr.org/)) says how it is laid out. A plugin built to this architecture reads all three and generates a native Figma library: 297 variants in 25 component families, real components rather than pictures of them.
 
 **That is triangulation: each source answers one question.** So when Figma disagreed with one of them, I knew which, and every mismatch became a bug with an address instead of an argument about taste.
 
@@ -206,7 +206,7 @@ image_meta:
 <aside class="kh-scrolly__define" data-define="nS"><p><strong><dfn>Content schema</dfn>:</strong> the agreed list of what each piece of content contains and its limits. A Book Card always has a title and a link, may have an image, and its summary has a maximum length. Agreeing this is what lets UNDRR share content across its sites.</p></aside>
 {% markdown %}
 
-**The brand settings are a second, independent source.** I merged the design tokens from UNDRR, PreventionWeb, MCR2030, DELTA Resilience and IRP into one set, which the plugin turns into 540 Figma variables. 471 of them (87.2%) are the same in every brand; the other 69 are where the brands differ: colour, corner radius, a softer surface here, hero spacing there.
+**The brand settings are a second, independent source.** I worked with colleagues to align the structures of the design tokens across UNDRR, PreventionWeb, MCR2030, DELTA Resilience and IRP into one unified set, which the plugin turns into 540 Figma variables. 471 of them (87.2%) are the same in every brand; the other 69 are where the brands differ: colour, corner radius, a softer surface here, hero spacing there.
 
 {% endmarkdown %}
 <aside class="kh-scrolly__define" data-define="nT"><p><strong><dfn>Design token</dfn>:</strong> a named brand setting, like <em>this blue</em>, <em>this corner roundness</em> or <em>this spacing</em>, stored once. Each brand gives the same name its own value; change one and everything using it updates.</p></aside>
@@ -411,7 +411,7 @@ image_meta:
 
 **Storybook against Figma: text spacing that drifted.** Small help text sat slightly differently in Figma than in the browser. Layout is Storybook's call, so I measured the line height in the browser and calibrated Figma to it.
 
-**The third mismatch was in a source.** Real disaster risk data in the Table ran into fixed dividers in Figma and Storybook alike: both were faithful, but the schema had no length limit. I added the limit and wrapping rules to the component guidance, and both now inherit them. Deriving a library from its sources can find gaps in the sources too.
+**The third mismatch was in a source.** Real disaster risk data in the Table ran into fixed dividers in Figma and Storybook alike: both were faithful, but the schema had no length limit. I worked with colleagues to establish the limit and wrapping rules in the component guidance, and both now inherit them. Deriving a library from its sources can find gaps in the sources too.
 
 {% endmarkdown %}
 </div>
@@ -537,7 +537,7 @@ image_meta:
 
 **Less than redrawing by hand, but not free.** The plugin and its tests come to about 77,000 lines of code, over 40% of it tests and audits, and someone has to keep that working as the product changes.
 
-**So I chose a smaller ongoing commitment.** Brand settings sync automatically, because they are cheap to keep current. Full rebuilds of the library wait for major versions and new components. With rebuilds that infrequent, a paid tool such as [story.to.design](https://story.to.design/docs/extend-stories) didn't make sense for us.
+**So I established a sustainable operating model.** Brand settings sync automatically, because they are cheap to keep current. Full rebuilds of the library wait for major versions and new components. With rebuilds that infrequent, a paid tool such as [story.to.design](https://story.to.design/docs/extend-stories) didn't make sense for us.
 
 **It only holds while Figma stays downstream.** Copy, presets and visibility in a designer's own file belong to them. Edits to the shared library itself would turn Figma back into a second story. That needs a policy before the next rebuild, and there isn't one yet.
 
