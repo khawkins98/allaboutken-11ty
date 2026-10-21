@@ -247,6 +247,7 @@
       grid-row: 1;
       padding-bottom: 32vh;
       padding-top: 0;
+      z-index: 5;
     }
 
     .kh-scrolly--enhanced > .kh-scrolly__graphic {
@@ -271,15 +272,25 @@
     // moved the dots out of the SVG) all step back together.
     .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-sv,
     .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-sv-dots,
+    .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-sv-demo,
     .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-scrolly__callouts {
       transition: opacity 0.35s ease;
     }
 
-    .kh-scrolly--enhanced > .kh-scrolly__graphic.is-panel .kh-sv,
-    .kh-scrolly--enhanced > .kh-scrolly__graphic.is-panel .kh-sv-dots,
-    .kh-scrolly--enhanced > .kh-scrolly__graphic.is-panel .kh-scrolly__callouts {
-      opacity: 0;
+    .kh-scrolly--enhanced > .kh-scrolly__graphic.is-panel {
       pointer-events: none;
+
+      .kh-sv,
+      .kh-sv-dots,
+      .kh-sv-demo,
+      .kh-scrolly__callouts {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      * {
+        pointer-events: none !important;
+      }
     }
 
     // Sized to its content and centred on the pinned band's middle, never
@@ -305,7 +316,7 @@
       translate: 0 -50%;
       visibility: hidden;
       width: var(--kh-scrolly-gw, 45%);
-      z-index: 5;
+      z-index: 6;
     }
 
     .kh-scrolly--enhanced .kh-scrolly__panel.is-on {
@@ -313,6 +324,7 @@
       pointer-events: auto;
       transition: opacity 0.35s ease 0.25s, visibility 0s linear 0.25s;
       visibility: visible;
+      z-index: 10;
     }
 
     .kh-scrolly--enhanced .kh-scrolly__panel img {
@@ -1100,6 +1112,12 @@
     text-align: center;
   }
 
+  .kh-sv-demo__note--follows {
+    position: absolute;
+    top: 232px;
+    width: 100%;
+  }
+
   .kh-sv-demo[data-demo='token'] .kh-sv-demo__note--follows,
   .kh-sv-demo[data-demo='derive'] .kh-sv-demo__note--follows {
     opacity: 1;
@@ -1119,7 +1137,7 @@
 
   .kh-sv-demo__count--css {
     position: absolute;
-    top: 190px;
+    top: 192px;
     width: 100%;
   }
 

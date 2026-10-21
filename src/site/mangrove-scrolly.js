@@ -85,7 +85,7 @@
     c2: { on: [], dots: 'c2' },
     // "Why isn't this a solved problem?": a small live demo takes the dots'
     // place (see buildDemo / runDemo), "multiply the frames". w: one
-    // Donate button each side; the CSS side grows :hover, :focus-visible and
+    // example button each side; the CSS side grows :hover, :focus-visible and
     // :disabled selectors and stays one component, the Figma side grows a
     // variant grid, 1 to 4 to 72 (4 states x 3 sizes x 2 icon x 3
     // breakpoints, an illustrative example, not a Mangrove figure). w.1: a
@@ -755,7 +755,7 @@
       <div class="kh-sv-demo__side kh-sv-demo__side--css" style="left:${DEMO.css.x}px;top:${DEMO.css.y}px">
         <pre class="kh-sv-demo__code"><span class="kh-sv-demo__ln">.kh-button {</span><span class="kh-sv-demo__ln kh-sv-demo__ln--state">  &amp;:hover</span><span class="kh-sv-demo__ln kh-sv-demo__ln--state">  &amp;:focus-visible</span><span class="kh-sv-demo__ln kh-sv-demo__ln--state">  &amp;:disabled</span><span class="kh-sv-demo__ln kh-sv-demo__ln--token">  padding: var(--kh-space-sm)</span><span class="kh-sv-demo__ln">}</span></pre>
         <p class="kh-sv-demo__token">--kh-space-sm: <s>12px</s> &rarr; 16px</p>
-        <div class="kh-sv-demo__stage"><button type="button" class="kh-sv-demo__button" tabindex="-1">Donate</button></div>
+        <div class="kh-sv-demo__stage"><button type="button" class="kh-sv-demo__button" tabindex="-1">Example button</button></div>
         <p class="kh-sv-demo__note kh-sv-demo__note--follows">every state follows</p>
         <p class="kh-sv-demo__count kh-sv-demo__count--css"><b>1</b> component</p>
       </div>
