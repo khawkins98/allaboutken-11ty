@@ -51,7 +51,7 @@ I started with [Alexandre Fontoura's Castaway](https://github.com/xesf/castaway)
 
 Decoding the files gives you instructions to interpret. Examining the executable helps recover the rules around them. An interpretation can still be wrong in ways that look plausible on screen.
 
-The useful reference is the original program running. The project's [capture tools](https://github.com/khawkins98/johnny_web/blob/main/tools/faithfulness-oracle/METHODOLOGY.md) use Windows 3.1 inside a patched DOSBox-X. The patch lets the harness isolate a gag and record its animation threads over time. The captures use the same game-data version as the browser port, so differences aren't caused by comparing two releases.
+The useful reference is the original program running. The project's [capture tools](https://github.com/khawkins98/johnny_web/blob/main/tools/faithfulness-oracle/METHODOLOGY.md) run Windows 3.1 inside a patched DOSBox-X emulator. Rather than dumping raw memory or monitoring operating system CPU threads, the harness hooks directly into the 16-bit executable's main script tick function. On each 50 Hz logical tick, it samples the engine's internal tables to log active script threads (the "actors"), their runstates, delay counters, and random-number generator choices into structured JSON Lines (`timeline.jsonl`) files.
 
 <figure class="kh-figure">
   <img class="kh-figure__image" src="/images/blog/johnny-castaway-developer-tools.png" alt="The Developer Tools panel beside Johnny fishing. FISHING.ADS and EIGHT ARM MENACE are selected, with controls for the simulated day, single-scene playback, saved story progress, and downloading a JSONL trace." />
@@ -61,10 +61,10 @@ The useful reference is the original program running. The project's [capture too
 
 I compare the two versions in four steps:
 
-1. Run the same gag in the original program several times, allowing for its random branches.
-2. Turn those recordings into reference fingerprints: which animation threads are active together, their peak count, and their lifespans.
-3. Run the browser engine and compare its timeline against those references.
-4. Investigate differences, with visual checks where the traces don't settle the question.
+1. Run the same gag in the instrumented original program several times to capture its random branches.
+2. Distill those execution logs into reference fingerprints: structured JSON readouts capturing which script threads run concurrently, their peak count, and their lifespans.
+3. Run the browser engine and compare its tick-by-tick JavaScript timeline against those reference fingerprints.
+4. Investigate differences, with visual checks whenever the traces diverge.
 
 One finding was particularly revealing. Treating random branches equally made a fishing sequence exit about three times too often. The original data assigns different weights. Both versions could display a plausible fishing trip and reach an ending; the frequency of the choices was wrong.
 
