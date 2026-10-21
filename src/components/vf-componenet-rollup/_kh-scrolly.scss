@@ -726,6 +726,7 @@
   .kh-sv-dots[data-dots='settled'] .kh-sv__dot.kh-sv__dot--F,
   .kh-sv-dots[data-dots='spread'] .kh-sv__dot.kh-sv__dot--F,
   .kh-sv-dots[data-dots='clash'] .kh-sv__dot.kh-sv__dot--F,
+  .kh-sv-dots[data-dots='clashN'] .kh-sv__dot.kh-sv__dot--F,
   .kh-sv-dots[data-dots='clash2'] .kh-sv__dot.kh-sv__dot--F {
     --kh-drift: 0;
     animation: none;
@@ -940,6 +941,51 @@
     stroke-width: 1.5;
   }
 
+  // The flow side's container: resizes like a liquid's vessel, one easing.
+  .kh-sv__bucket {
+    fill: none;
+    stroke: var(--kh-color--grey--darkest);
+    stroke-dasharray: 4 3;
+    stroke-width: 1.5;
+    transition: opacity 0.6s ease, width 0.9s cubic-bezier(0.22, 0.8, 0.25, 1);
+  }
+
+  .kh-sv__bucket-lid {
+    fill: var(--kh-ground);
+    stroke: none;
+    transition: opacity 0.6s ease, width 0.9s cubic-bezier(0.22, 0.8, 0.25, 1);
+  }
+
+  // Nine-slice frames: the dashed edges stretch in steps; the corner marks
+  // keep their size and translate with the edge they sit on.
+  .kh-sv__frame {
+    fill: none;
+    stroke: var(--kh-color--grey--darkest);
+    stroke-dasharray: 4 3;
+    stroke-width: 1.5;
+    transition: opacity 0.6s ease, width 0.6s steps(3, end), height 0.6s steps(3, end);
+  }
+
+  .kh-sv__corner {
+    fill: none;
+    stroke: var(--kh-color--grey--darkest);
+    stroke-width: 2;
+    transform: translate(var(--kh-cnx, 0px), var(--kh-cny, 0px));
+    transition: opacity 0.6s ease, transform 0.6s steps(3, end);
+  }
+
+  // The entry delay (--d) is for fading in; the resize itself must not
+  // inherit it, or the frames lag the bucket by a whole phase.
+  .kh-sv__bucket.is-on,
+  .kh-sv__bucket-lid.is-on,
+  .kh-sv__frame.is-on {
+    transition-delay: var(--d, 0s), 0s, 0s;
+  }
+
+  .kh-sv__corner.is-on {
+    transition-delay: var(--d, 0s), 0s;
+  }
+
   .kh-sv__line--bridge {
     stroke-dasharray: 5 4;
     stroke-width: 2;
@@ -996,22 +1042,48 @@
   // Only the content dots that have a side: the chain-only K dots and the
   // not-yet-born F dots stay hidden.
   .kh-sv-dots[data-dots='clash'] .kh-sv__dot--L,
+  .kh-sv-dots[data-dots='clashN'] .kh-sv__dot--L,
   .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--L,
   .kh-sv-dots[data-dots='clash'] .kh-sv__dot--R,
+  .kh-sv-dots[data-dots='clashN'] .kh-sv__dot--R,
   .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--R,
   .kh-sv-dots[data-dots='clash'] .kh-sv__dot--seam,
+  .kh-sv-dots[data-dots='clashN'] .kh-sv__dot--seam,
   .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--seam {
     --kh-drift: 0.8;
     opacity: 0.82;
   }
 
-  .kh-sv-dots[data-dots='clash'] .kh-sv__dot {
+  .kh-sv-dots[data-dots='clash'] .kh-sv__dot,
+  .kh-sv-dots[data-dots='clashN'] .kh-sv__dot {
     transition-duration: 0.8s, 0.6s, 0.5s, 0.8s;
   }
 
+  // The frames side recalculates: the dots jump to their new grid in
+  // discrete steps, no easing.
   .kh-sv-dots[data-dots='clash'] .kh-sv__dot--R,
+  .kh-sv-dots[data-dots='clashN'] .kh-sv__dot--R {
+    transition-timing-function: steps(3, end), ease, ease, ease;
+  }
+
+  // The flow side pours in on entering w: each dot drops into its row with
+  // the usual per-dot stagger, the drift already running underneath.
+  @keyframes kh-sv-pour {
+    from {
+      opacity: 0;
+      translate: 0 -48px;
+    }
+  }
+
+  .kh-sv-dots.is-pour .kh-sv__dot--L {
+    animation: kh-sv-pour 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--dl, 0s) backwards, kh-sv-drift var(--kh-dr-d, 9s) ease-in-out var(--kh-dr-p, 0s) infinite;
+  }
+
+  .kh-sv-dots[data-dots='clash'] .kh-sv__dot--R,
+  .kh-sv-dots[data-dots='clashN'] .kh-sv__dot--R,
   .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--R,
   .kh-sv-dots[data-dots='clash'] .kh-sv__dot--seam,
+  .kh-sv-dots[data-dots='clashN'] .kh-sv__dot--seam,
   .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--seam {
     --kh-drift: 0;
     animation: none;
@@ -1457,8 +1529,16 @@
     .kh-sv__dot,
     .kh-sv-dots.is-arriving .kh-sv__dot,
     .kh-sv-dots[data-dots='born'] .kh-sv__dot--F,
-    .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--cross {
+    .kh-sv-dots[data-dots='clash2'] .kh-sv__dot--cross,
+    .kh-sv-dots.is-pour .kh-sv__dot--L {
       animation: none;
+    }
+
+    .kh-sv__bucket,
+    .kh-sv__bucket-lid,
+    .kh-sv__frame,
+    .kh-sv__corner {
+      transition: opacity 0.2s linear;
     }
 
     // Each beat of stage w shows its finished layout; the frames, seam,

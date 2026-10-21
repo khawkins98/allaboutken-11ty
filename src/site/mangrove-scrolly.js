@@ -84,8 +84,11 @@
     c1: { on: [], dots: 'c1' },
     c2: { on: [], dots: 'c2' },
     // "Two layout engines" (see buildClash): the dots stop being data.
-    w: { on: ['seam', 'frA', 'frB', 'frC', 'ring', 'lbFlow', 'lbFrames', 'anFlow', 'anFrames', 'anRing', 'hitFlow', 'hitFrames'], dim: ['seam'], fault: ['ring'], dots: 'clash' },
-    'w.1': { on: ['seam', 'frA2', 'frB2', 'frC2', 'ring', 'lbFlow', 'lbFrames', 'br1', 'br2', 'anBr', 'anCross', 'hitFlow', 'hitFrames', 'hitBr1', 'hitBr2', 'hitCross'], dim: ['seam'], fault: ['ring'], dots: 'clash2' },
+    // The container resizes once on entry (narrow, then wide, then holds):
+    // the flow side reflows like liquid, the frames recalculate in steps.
+    // See resizeW.
+    w: { on: ['bucket', 'seam', 'frA', 'frB', 'frC', 'ring', 'lbFlow', 'lbFrames', 'anFlow', 'anFrames', 'anRing', 'hitFlow', 'hitFrames'], dim: ['seam'], fault: ['ring'], dots: 'clash', resize: true },
+    'w.1': { on: ['bucket', 'seam', 'frA2', 'frB2', 'frC2', 'ring', 'lbFlow', 'lbFrames', 'br1', 'br2', 'anBr', 'anCross', 'hitFlow', 'hitFrames', 'hitBr1', 'hitBr2', 'hitCross'], dim: ['seam'], fault: ['ring'], dots: 'clash2' },
     'w.2': { on: [], dots: 'settled' },
     // Schemas arrive alone; tokens rise in with their own paragraph (1.1).
     1: { on: ['nS', 'sS'], define: 'nS' },
@@ -214,8 +217,8 @@
     // Stage w, "two layout engines": the flow and frames areas, each seam
     // ring, the bridges and the crossing dot.
     w: {
-      flow: { term: 'CSS flow', text: 'In the browser, layout is CSS: content flows and wraps to fit the space it is given. That is how Storybook renders a component.' },
-      frames: { term: 'Auto Layout', text: 'Figma lays things out with Auto Layout: fixed frames with set padding, gaps and resizing rules. Similar ideas, a different engine.' },
+      flow: { term: 'CSS flow', text: 'In the browser, layout is CSS: content flows and wraps to fit the space it is given. Resize the container and the content flows into the new shape. That is how Storybook renders a component.' },
+      frames: { term: 'Auto Layout', text: 'Figma lays things out with Auto Layout: frames with set padding, gaps and resizing rules. Resize one and it recalculates: fixed padding and gaps, edges that stretch while the corners hold. Similar ideas, a different engine.' },
       ring: { term: 'Fits neither', text: 'Some details exist on one side with no exact equivalent on the other, such as a CSS behaviour Auto Layout cannot express. Those are where copies drift.' },
       bridge: { term: 'A converter', text: 'Off-the-shelf converters get you part of the way. Every system differs, so the last stretch is custom.' },
       cross: { term: 'By hand', text: 'Without a shared source, someone carries each change across by hand.' },
@@ -377,8 +380,10 @@
   const SEAM = 270;
   const CONTENT = ['S', 'T', 'B'];
   const SIDE = {};
-  const CLASH = { clash: {}, clash2: {} };
-  const FRAMES = { clash: [], clash2: [] };
+  const CLASH = { clash: {}, clashN: {}, clash2: {} };
+  const FRAMES = { clash: [], clashN: [], clash2: [] };
+  // The flow side's container ("bucket"): wide, and narrowed for the resize.
+  const BUCKET = { x: 10, y: 50, h: 268, w: { clash: 240, clashN: 184 } };
   const SEAM_PTS = [70, 130, 190, 250, 310].map((y) => ({ x: SEAM, y }));
   let CROSS = null;
   const rr = (x, y, w, h, r = 6) => `M${x + r} ${y} H${x + w - r} A${r} ${r} 0 0 1 ${x + w} ${y + r} V${y + h - r} A${r} ${r} 0 0 1 ${x + w - r} ${y + h} H${x + r} A${r} ${r} 0 0 1 ${x} ${y + h - r} V${y + r} A${r} ${r} 0 0 1 ${x + r} ${y} Z`;
@@ -395,11 +400,13 @@
         n += 1;
       }
     });
-    // Flow: rows of a random length (16-27 dots), 8.5 apart, 18 down.
+    // Flow: rows of a random length (16-27 dots), 8.5 apart, 18 down. In
+    // the narrowed container the same stream rewraps at 20 a row, like
+    // text, so the level rises.
     let row = 0;
     let col = 0;
     let len = 16 + Math.floor(r2() * 12);
-    left.forEach((key) => {
+    left.forEach((key, idx) => {
       if (col >= len) {
         row += 1;
         col = 0;
@@ -408,6 +415,7 @@
       const pt = { x: 16 + col * 8.5, y: 60 + row * 18 };
       CLASH.clash[key] = pt;
       CLASH.clash2[key] = pt;
+      CLASH.clashN[key] = { x: 16 + (idx % 20) * 8.5, y: 60 + Math.floor(idx / 20) * 17 };
       col += 1;
     });
     // Frames: fixed padding 10 and gap 9. Hug: as many columns as the frame
@@ -416,6 +424,8 @@
     const framed = right.slice(0, right.length - SEAM_PTS.length);
     const plan = {
       clash: [{ x: 292, y: 56, cols: 20, cap: 120 }, { x: 292, y: 142, cols: 9, cap: 108 }, { x: 404, y: 142, cols: 9, cap: 108 }],
+      // Narrowed: fewer columns, same padding and gap, so rows are added.
+      clashN: [{ x: 292, y: 56, cols: 15, cap: 120 }, { x: 292, y: 142, cols: 7, cap: 108 }, { x: 404, y: 142, cols: 7, cap: 108 }],
       clash2: [{ x: 292, y: 56, cols: 24, cap: 120, fill: { w: 232, h: 68 } }, { x: 292, y: 142, cols: 11, cap: 108, fill: { w: 112, h: 230 } }, { x: 414, y: 142, cols: 11, cap: 108, fill: { w: 110, h: 230 } }],
     };
     Object.keys(plan).forEach((lay) => {
@@ -433,6 +443,7 @@
     });
     seamKeys.forEach((key, j) => {
       CLASH.clash[key] = SEAM_PTS[j];
+      CLASH.clashN[key] = SEAM_PTS[j];
       CLASH.clash2[key] = SEAM_PTS[j];
       SIDE[key] = 'seam';
     });
@@ -448,13 +459,14 @@
     }
   }());
   const clash = (g, i) => CLASH.clash[`${g}${i}`] || settled(g, i);
+  const clashN = (g, i) => CLASH.clashN[`${g}${i}`] || settled(g, i);
   const clash2 = (g, i) => CLASH.clash2[`${g}${i}`] || settled(g, i);
 
-  const LAYOUT = { cloud: (g, i) => CLOUD[g][i], c1, c2, settled, spread, born, full, chain, clash, clash2 };
+  const LAYOUT = { cloud: (g, i) => CLOUD[g][i], c1, c2, settled, spread, born, full, chain, clash, clashN, clash2 };
   // Which clusters have formed in each layout (so can be labelled, hovered).
   // The variants (F) only form at stage 3, when their box names them, so
   // their drift answers no hover before that.
-  const FORMED = { cloud: [], c1: ['S'], c2: ['S', 'T', 'B'], settled: ['S', 'T', 'B'], spread: ['S'], born: ['S', 'T', 'B'], full: ['S', 'T', 'B', 'F'], chain: [], clash: [], clash2: [] };
+  const FORMED = { cloud: [], c1: ['S'], c2: ['S', 'T', 'B'], settled: ['S', 'T', 'B'], spread: ['S'], born: ['S', 'T', 'B'], full: ['S', 'T', 'B', 'F'], chain: [], clash: [], clashN: [], clash2: [] };
 
   function buildDotLayer() {
     const dot = (g, i) => {
@@ -581,13 +593,18 @@
     ${line('ca2', P.ca2, 'kh-sv__line--chain', { head: true, delay: 1.45 })}
     ${line('ca3', P.ca3, 'kh-sv__line--chain', { head: true, delay: 1.8 })}
     ${line('seam', `M${SEAM} 36 V384`, 'kh-sv__line--seam', { delay: 0.6 })}
-    ${FRAMES.clash.map((f, i) => line(`fr${'ABC'[i]}`, rr(f.x, f.y, f.w, f.h), 'kh-sv__line--frame', { delay: 0.8 + i * 0.15 })).join('')}
+    ${'' /* The flow side's container: a dashed box whose top edge is covered by a ground-coloured lid, so it reads as an open bucket. Its width transitions. */}
+    <rect class="kh-sv__el kh-sv__bucket" data-k="bucket" x="${BUCKET.x}" y="${BUCKET.y}" width="${BUCKET.w.clash}" height="${BUCKET.h}" rx="4" style="--d:0.3s"/>
+    <rect class="kh-sv__el kh-sv__bucket-lid" data-k="bucket" x="${BUCKET.x - 2}" y="${BUCKET.y - 3}" width="${BUCKET.w.clash + 4}" height="6" style="--d:0.3s"/>
+    ${'' /* Nine-slice frames: a dashed rect whose edges stretch (width/height transition, stepped) and four fixed-size corner marks that translate with the edges. */}
+    ${FRAMES.clash.map((f, i) => `<rect class="kh-sv__el kh-sv__frame" data-k="fr${'ABC'[i]}" data-frame="${i}" x="${f.x}" y="${f.y}" width="${f.w}" height="${f.h}" rx="6" style="--d:${(0.8 + i * 0.15).toFixed(2)}s"/>`
+      + ['tl', 'tr', 'br', 'bl'].map((c) => { const L = 9; const d = c === 'tl' ? `M${f.x} ${f.y + L} V${f.y + 6} Q${f.x} ${f.y} ${f.x + 6} ${f.y} H${f.x + L}` : c === 'tr' ? `M${f.x + f.w - L} ${f.y} H${f.x + f.w - 6} Q${f.x + f.w} ${f.y} ${f.x + f.w} ${f.y + 6} V${f.y + L}` : c === 'br' ? `M${f.x + f.w} ${f.y + f.h - L} V${f.y + f.h - 6} Q${f.x + f.w} ${f.y + f.h} ${f.x + f.w - 6} ${f.y + f.h} H${f.x + f.w - L}` : `M${f.x + L} ${f.y + f.h} H${f.x + 6} Q${f.x} ${f.y + f.h} ${f.x} ${f.y + f.h - 6} V${f.y + f.h - L}`; return `<path class="kh-sv__el kh-sv__corner" data-k="fr${'ABC'[i]}" data-frame="${i}" data-corner="${c}" d="${d}" style="--d:${(0.8 + i * 0.15).toFixed(2)}s"/>`; }).join('')).join('')}
     ${FRAMES.clash2.map((f, i) => line(`fr${'ABC'[i]}2`, rr(f.x, f.y, f.w, f.h), 'kh-sv__line--frame', { delay: 0.3 + i * 0.15 })).join('')}
     ${line('br1', 'M238 112 C258 90, 272 90, 284 104', 'kh-sv__line--bridge', { head: true, delay: 1.2 })}
     ${line('br2', 'M238 232 C258 210, 272 210, 284 224', 'kh-sv__line--bridge', { head: true, delay: 1.6 })}
-    ${line('anFlow', 'M70 304 V334', 'kh-sv__line--note', { delay: 1.6 })}
-    ${line('anFrames', `M340 ${FRAMES.clash[1].y + FRAMES.clash[1].h + 4} V334`, 'kh-sv__line--note', { delay: 1.8 })}
-    ${line('anRing', `M${SEAM - 7} ${SEAM_PTS[4].y} H${SEAM - 20}`, 'kh-sv__line--note', { delay: 2 })}
+    ${line('anFlow', 'M70 304 V350', 'kh-sv__line--note', { delay: 1.6 })}
+    ${line('anFrames', 'M380 302 V350', 'kh-sv__line--note', { delay: 1.8 })}
+    ${line('anRing', `M${SEAM + 5} ${SEAM_PTS[4].y + 5} L${SEAM + 12} ${SEAM_PTS[4].y + 14}`, 'kh-sv__line--note', { delay: 2 })}
     ${line('anBr', 'M262 230 V318', 'kh-sv__line--note', { delay: 2.3 })}
     ${CROSS ? line('anCross', `M${CROSS.to.x} ${CROSS.to.y + 7} V376`, 'kh-sv__line--note', { delay: 5.7 }) : ''}
     <path class="kh-sv__el kh-sv__hit kh-sv__hit--line" data-k="hitBr1" data-w="bridge" d="M238 112 C258 90, 272 90, 284 104" ${btn('a converter that stops short')}/>
@@ -604,9 +621,9 @@
   ${CROSS ? `<circle class="kh-sv__el kh-sv__hit kh-sv__hit--cross" data-k="hitCross" data-w="cross" cx="${CROSS.to.x}" cy="${CROSS.to.y}" r="11" style="--d:5.6s" ${btn('the dot carried across by hand')}/>` : ''}
   ${label('lbFlow', 16, 44, 'flow', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1 })}
   ${label('lbFrames', 292, 44, 'frames', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1 })}
-  ${label('anFlow', 16, 348, 'CSS flow: content wraps to fit', { cls: 'kh-sv__label--note', anchor: 'start', delay: 1.6 })}
-  ${label('anFrames', 292, 348, 'Auto Layout: fixed frames', { cls: 'kh-sv__label--note', anchor: 'start', delay: 1.8 })}
-  ${label('anRing', SEAM - 24, SEAM_PTS[4].y + 4, 'fits neither', { cls: 'kh-sv__label--note', anchor: 'end', delay: 2 })}
+  ${label('anFlow', 16, 364, 'CSS flow: content reflows to fit', { cls: 'kh-sv__label--note', anchor: 'start', delay: 1.6 })}
+  ${label('anFrames', 292, 364, 'Auto Layout: frames recalculate', { cls: 'kh-sv__label--note', anchor: 'start', delay: 1.8 })}
+  ${label('anRing', SEAM + 14, SEAM_PTS[4].y + 24, 'fits neither', { cls: 'kh-sv__label--note', anchor: 'start', delay: 2 })}
   ${label('anBr', 262, 332, 'a converter stops short', { cls: 'kh-sv__label--note', anchor: 'end', delay: 2.3 })}
   ${CROSS ? label('anCross', Math.min(CROSS.to.x + 40, 534), 390, 'fixed by hand', { cls: 'kh-sv__label--note', anchor: 'end', delay: 5.7 }) : ''}
   ${label('cvS', N.S.x + 4, N.S.y + N.S.h + 16, 'content schemas', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1.4 })}
@@ -808,9 +825,56 @@
     });
 
     placeDots(inst, layout);
+    resizeW(inst, !!spec.resize);
     syncPanels(inst, spec);
     syncChain(inst, spec);
     syncFocusables(svg);
+  }
+
+  // Stage w's one shared action: the container resizes. The bucket and the
+  // frames narrow (the dots following each in their own way), then widen
+  // again, then hold. Geometry goes on the elements as inline style, so the
+  // CSS transitions (fluid on the left, stepped on the right) do the motion.
+  // Not under reduced motion: the finished, wide state only.
+  function setResize(inst, narrow) {
+    const { svg } = inst;
+    const lay = narrow ? 'clashN' : 'clash';
+    const bw = BUCKET.w[lay];
+    svg.querySelector('.kh-sv__bucket').style.width = `${bw}px`;
+    svg.querySelector('.kh-sv__bucket-lid').style.width = `${bw + 4}px`;
+    FRAMES[lay].forEach((f, i) => {
+      const wide = FRAMES.clash[i];
+      const rect = svg.querySelector(`.kh-sv__frame[data-frame="${i}"]`);
+      rect.style.width = `${f.w}px`;
+      rect.style.height = `${f.h}px`;
+      const dx = `${(f.w - wide.w).toFixed(1)}px`;
+      const dy = `${(f.h - wide.h).toFixed(1)}px`;
+      svg.querySelectorAll(`.kh-sv__corner[data-frame="${i}"]`).forEach((c) => {
+        const k = c.dataset.corner;
+        c.style.setProperty('--kh-cnx', k === 'tr' || k === 'br' ? dx : '0px');
+        c.style.setProperty('--kh-cny', k === 'br' || k === 'bl' ? dy : '0px');
+      });
+    });
+    placeDots(inst, lay);
+  }
+  function resizeW(inst, on) {
+    (inst.wTimers || []).forEach(clearTimeout);
+    inst.wTimers = [];
+    inst.dotLayer.classList.remove('is-pour');
+    if (!on) {
+      if (inst.svg.querySelector('.kh-sv__frame').style.width) setResize(inst, false);
+      return;
+    }
+    if (reduce.matches) {
+      setResize(inst, false);
+      return;
+    }
+    // Pour in (CSS: is-pour), settle, narrow, widen, hold.
+    inst.dotLayer.classList.add('is-pour');
+    setResize(inst, false);
+    inst.wTimers.push(setTimeout(() => inst.dotLayer.classList.remove('is-pour'), 1400));
+    inst.wTimers.push(setTimeout(() => setResize(inst, true), 1500));
+    inst.wTimers.push(setTimeout(() => setResize(inst, false), 2800));
   }
 
   // Panels: the named one shows over the graphic (wide) and the diagram
