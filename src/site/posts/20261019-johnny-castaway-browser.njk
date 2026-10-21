@@ -20,9 +20,9 @@ image_meta:
 
 {% markdown %}
 
-Johnny Castaway was the standout screensaver of the early 1990s, and for decades, that is where he remained. Released by Dynamix and Sierra On-Line in 1992, he fished, slept, built rafts, and got into trouble whenever an office PC sat idle. Over time, enjoying that casual rhythm became nearly impossible without dragging a dusty computer out of a closet or wrestling with an emulated virtual machine. Because the friction was so high, most people simply moved on.
+In 1992, Dynamix and Sierra On-Line released *Johnny Castaway*. Whenever an office PC went idle, a tiny castaway fished, slept, built rafts, and got into trouble on Windows 3.1. And for decades, that is pretty much where he stayed. Enjoying that casual rhythm today usually means dragging a beige tower out of a closet or coaxing an old Windows install inside a virtual machine. Because the friction is so high, almost nobody bothers.
 
-I thought that with the aid of modern tooling, there had to be a way to make the island enjoyable again: [Johnny now runs directly in a browser tab](https://khawkins98.github.io/johnny_web/). Pulling that off was only possible with AI. While using LLMs to reverse-engineer legacy software has become popular recently, my efforts here predated that wave, and it was far from easy. It turned into a deep learning experience: decoding the bytecode engine, reconstructing the original executable's lost scene director, and building an automated oracle to verify the browser port against the 1992 program running in an instrumented emulator.
+I wanted Johnny where I actually spend my time, so [he now runs in a browser tab](https://khawkins98.github.io/johnny_web/). Rebuilding that environment was only possible with AI assistance. Using LLMs to reverse-engineer old binaries has become a popular weekend hack lately, but when I started this work, the path was much less charted—and it was rarely easy. It meant decoding custom bytecode, reconstructing a lost scene director, and building an automated oracle to hold the browser port to the behavior of the original 16-bit executable.
 
 > **tl;dr**
 >
@@ -32,26 +32,26 @@ I thought that with the aid of modern tooling, there had to be a way to make the
 
 ## Inside a gag, and between gags
 
-The original files contain artwork, sound, and small programs describing the animations. They use the [Dynamix Game Development System (DGDS)](https://github.com/scummvm/scummvm/tree/master/engines/dgds), Sierra and Dynamix's proprietary adventure engine. The browser engine, which I've called [Bottle DGDS](https://github.com/khawkins98/johnny_web/blob/main/docs/architecture.md#system-overview), decodes those resources and runs their bytecode instructions in JavaScript.
+The original files contain artwork, sound, and small programs describing the animations. They use the [Dynamix Game Development System (DGDS)](https://github.com/scummvm/scummvm/tree/master/engines/dgds), Sierra's proprietary adventure engine. My browser implementation, [Bottle DGDS](https://github.com/khawkins98/johnny_web/blob/main/docs/architecture.md#system-overview), parses those resources and runs their bytecode instructions in JavaScript.
 
-There are two distinct script levels:
+The scripts operate on two levels:
 
-- **[ADS (Animation Director Script)](https://github.com/khawkins98/johnny_web/blob/main/docs/architecture.md#resource-and-script-model) files coordinate a gag.** They act as the high-level sequencer: starting and stopping animations, evaluating branch choices, and waiting for other actions to finish.
-- **[TTM (Tiny Templated Movie)](https://github.com/khawkins98/johnny_web/blob/main/docs/architecture.md#resource-and-script-model) files perform the animation.** They handle per-frame execution: loading bitmap sprites, drawing sprite frames, waiting on timer ticks, playing sound samples, and looping or finishing.
+- **[ADS (Animation Director Script)](https://github.com/khawkins98/johnny_web/blob/main/docs/architecture.md#resource-and-script-model) files coordinate a gag.** They act as the high-level sequencer: starting and stopping scenes, evaluating random branches, and waiting for other actions to finish.
+- **[TTM (Tiny Templated Movie)](https://github.com/khawkins98/johnny_web/blob/main/docs/architecture.md#resource-and-script-model) files perform the animation.** They handle per-frame work: loading bitmap sprites, drawing sprite frames, waiting on timer ticks, playing sound samples, and looping.
 
-The [“Eight Arm Menace” scene flow](https://github.com/khawkins98/johnny_web/blob/main/docs/scene-flows/FISHING.ADS.md#eight-arm-menace-fishingads-tag-3) makes that concrete: Johnny gets his pole, casts it, reels in a heavy catch, and reaches the octopus gag. Several animations can be active together. Their order and timing determine whether the result reads as one coherent joke.
+The [“Eight Arm Menace” scene flow](https://github.com/khawkins98/johnny_web/blob/main/docs/scene-flows/FISHING.ADS.md#eight-arm-menace-fishingads-tag-3) shows how they fit together: Johnny gets his pole, casts, reels in a heavy catch, and reaches the octopus gag. Several animation threads run concurrently. Their relative order and timing determine whether the result lands as a coherent joke.
 
-Choosing which gag comes next is another job entirely. The original Windows executable had a director wrapped around those scripts. It chose an eligible final scene, filled in compatible everyday scenes before it, and arranged Johnny's walks between their starting and ending positions. The browser port reconstructs that [scene-selection behaviour](https://github.com/khawkins98/johnny_web/blob/main/docs/johnny-host-behavior.md) separately from the script interpreter.
+Deciding which gag comes next is a separate problem. In 1992, the Windows executable wrapped a scene director around these scripts. It picked an eligible story scene, queued up everyday filler scenes before it, and scheduled Johnny's walks between their starting and ending positions. The browser port rebuilds that [scene-selection behaviour](https://github.com/khawkins98/johnny_web/blob/main/docs/johnny-host-behavior.md) outside the script interpreter.
 
-That distinction exposed a gap in earlier web ports: they could decode and play scenes that ordinary playback never selected. The files were present, but the director was missing. Decoding an animation tells you how to draw it, but not when the character should decide to walk across the sand.
+That separation explained why earlier web ports felt incomplete. They could parse and play individual animations, but without the director, ordinary playback never selected them. Decoding a file tells you how to render an animation, but not when Johnny should decide to walk across the beach.
 
 ## Asking the original what it actually does
 
-I started with [Alexandre Fontoura's Castaway](https://github.com/xesf/castaway), which already had a JavaScript foundation for decoding the resources. Jérémie Guillaume's [Johnny Reborn](https://github.com/jno6809/jc_reborn), Hans Milling's [C# remake](https://github.com/nivs1978/Johnny-Castaway-Open-Source), and the [ScummVM DGDS engine](https://github.com/scummvm/scummvm/tree/master/engines/dgds) provided further findings and behavioural references. This project owes a great deal to their work.
+I didn't start from scratch. [Alexandre Fontoura's Castaway](https://github.com/xesf/castaway) provided a working JavaScript foundation for decoding resources. Jérémie Guillaume's [Johnny Reborn](https://github.com/jno6809/jc_reborn), Hans Milling's [C# remake](https://github.com/nivs1978/Johnny-Castaway-Open-Source), and ScummVM's [DGDS engine](https://github.com/scummvm/scummvm/tree/master/engines/dgds) offered crucial reference points.
 
-Decoding the files gives you instructions to interpret. Examining the executable helps recover the rules around them. An interpretation can still be wrong in ways that look plausible on screen.
+Still, reverse engineering has an easy trap: an interpretation can look convincing on screen while being completely wrong under the hood. The only reliable benchmark is the original 1992 program running in real time.
 
-The useful reference is the original program running. The project's [capture tools](https://github.com/khawkins98/johnny_web/blob/main/tools/faithfulness-oracle/METHODOLOGY.md) run Windows 3.1 inside a patched DOSBox-X emulator. Rather than dumping raw memory or monitoring operating system CPU threads, the harness hooks directly into the 16-bit executable's main script tick function. On each 50 Hz logical tick, it samples the engine's internal tables to log active script threads (the "actors"), their runstates, delay counters, and random-number generator choices into structured JSON Lines (`timeline.jsonl`) files.
+To get that, I built [capture tooling](https://github.com/khawkins98/johnny_web/blob/main/tools/faithfulness-oracle/METHODOLOGY.md) around Windows 3.1 running in a patched DOSBox-X emulator. Instead of dumping raw memory or monitoring operating system CPU threads, the harness hooks directly into the 16-bit executable's main script tick function. On each 50 Hz logical tick, it samples the engine's internal tables to log active script threads (the "actors"), their runstates, delay counters, and random-number generator choices into structured JSON Lines (`timeline.jsonl`) files.
 
 <figure class="kh-figure">
   <img class="kh-figure__image" src="/images/blog/johnny-castaway-developer-tools.png" alt="The Developer Tools panel beside Johnny fishing. FISHING.ADS and EIGHT ARM MENACE are selected, with controls for the simulated day, single-scene playback, saved story progress, and downloading a JSONL trace." />
@@ -59,30 +59,28 @@ The useful reference is the original program running. The project's [capture too
   <small class="kh-figure__credit">Screenshot from johnny_web. Original artwork by Dynamix / Sierra On-Line.</small>
 </figure>
 
-I compare the two versions in four steps:
+Checking the port against the original comes down to four steps:
 
-1. Run the same gag in the instrumented original program several times to capture its random branches.
+1. Run a gag in the instrumented emulator multiple times to capture every random branch.
 2. Distill those execution logs into reference fingerprints: structured JSON readouts capturing which script threads run concurrently, their peak count, and their lifespans.
 3. Run the browser engine and compare its tick-by-tick JavaScript timeline against those reference fingerprints.
-4. Investigate differences, with visual checks whenever the traces diverge.
+4. Investigate discrepancies, using visual checks whenever the traces diverge.
 
-One finding was particularly revealing. Treating random branches equally made a fishing sequence exit about three times too often. The original data assigns different weights. Both versions could display a plausible fishing trip and reach an ending; the frequency of the choices was wrong.
+The traces immediately caught subtle bugs. For example, treating random branches equally made Johnny exit a fishing sequence about three times too often. The original data assigned different weights to each outcome. Both versions reached a plausible ending on screen, but the remake was choosing the wrong path far too frequently.
 
-Timing has similar traps. How long an animation is allowed to run is separate from how long each frame should wait. Confusing those clocks changes how actions overlap, even when the individual drawings are correct.
+Animation timing had similar traps. How long an animation is allowed to run is distinct from how long each individual frame should pause. Mixing up those clocks altered how actions overlapped, even when the drawings themselves were correct.
 
-There is a second kind of reference in the project: [rendering goldens](https://github.com/khawkins98/johnny_web/blob/main/test/render-goldens.mjs). These replay selected fragile sequences with repeatable inputs and save compact fingerprints of the drawing operations and resulting pixels. A later code change that alters the output makes the check fail, so the difference can be reviewed.
+A second safety net catches regressions: [rendering goldens](https://github.com/khawkins98/johnny_web/blob/main/test/render-goldens.mjs). These replay fragile sequences with deterministic inputs and save compact fingerprints of drawing operations and pixels. A later code change that alters output makes the check fail, flagging the difference for review. The [coverage report](https://github.com/khawkins98/johnny_web/blob/main/docs/oracle-coverage.md) records what has been verified and where gaps remain.
 
-The original-program recordings help establish what the port should do. The goldens preserve reviewed behaviour in the port, including any mistake that made it into the baseline. Neither check proves that every pixel, sound, or random path is correct. The [coverage report](https://github.com/khawkins98/johnny_web/blob/main/docs/oracle-coverage.md) records the comparisons and their gaps.
-
-I used AI heavily in the implementation, reverse-engineering, and testing. The running original gave that work something concrete to answer to. A convincing explanation of an instruction became a hypothesis to check against a trace, rather than a result to accept on its own.
+This is where AI proved invaluable. LLMs are remarkably good at suggesting what an obscure assembly routine or opcode table might be doing, but they are equally prone to plausible hallucinations. Running the original executable gave those suggestions an unyielding ground truth: an AI hypothesis either matched the emulator trace, or it was wrong.
 
 ## The machinery behind a living screensaver
 
-Once the runtime works, you can appreciate the craft Dynamix poured into the original screensaver. Jeff Tunnell, who co-founded Dynamix and helped create Johnny Castaway, [described its rhythm](https://jefftunnell.com/johnny-castaway-common-questions/):
+Once the runtime faithfully executes the scripts, the elegance of Dynamix's original design becomes obvious. Jeff Tunnell, who co-founded Dynamix and created Johnny Castaway, [summarized the core idea](https://jefftunnell.com/johnny-castaway-common-questions/):
 
 > “So it generally runs a little loop that is interrupted by random events.”
 
-The variety operates across multiple interlocking clocks. Within a day, the director chooses among eligible everyday scenes and gags using weighted probabilities. Across days, it follows an [eleven-day story](https://github.com/khawkins98/johnny_web/blob/main/docs/story-over-time.md), with particular milestones tied to particular days.
+The variety operates across multiple interlocking clocks. Within a day, the director chooses among eligible everyday scenes and gags using weighted probabilities. Across days, it follows an [eleven-day story](https://github.com/khawkins98/johnny_web/blob/main/docs/story-over-time.md), with particular milestones tied to calendar dates.
 
 <figure class="kh-figure">
   <img class="kh-figure__image" src="/images/blog/johnny-castaway-moonlight.png" alt="Johnny sleeps beneath a palm tree on a small island at night. A full moon and stars light the blue sky, with a bright reflection stretching across the sea." />
@@ -90,11 +88,11 @@ The variety operates across multiple interlocking clocks. Within a day, the dire
   <small class="kh-figure__credit">Screenshot from johnny_web. Original artwork by Dynamix / Sierra On-Line.</small>
 </figure>
 
-Playing a day's key scene unlocks the next chapter. When your calendar date changes, the saved state advances one step towards that unlocked day. It avoids skipping ahead if you have been away for weeks, and day eleven gracefully wraps back to day one. The browser port persists this timeline in local storage.
+Completing a day's key scene unlocks the next chapter. When your calendar date changes, the saved state advances one step toward that unlocked day. It avoids skipping ahead if you have been away for weeks, and day eleven gracefully wraps back to day one. The browser port keeps this progress in local storage.
 
-Environmental details run on their own schedules. The tide follows a half-hour cycle; holiday decorations appear on specific calendar dates. The raft's construction progress, the island's position, and day-night lighting shifts all belong to the director's scene planner.
+Environmental details run on their own schedules. The tide rises and falls on a thirty-minute cycle; holiday decorations appear on specific calendar dates. The raft's construction progress, the island's position, and day-night lighting shifts all belong to the director's scheduler.
 
-If you want to revisit the screensaver's cultural impact and gags, Nostalgia Nerd's retrospective gives a wonderful overview of why it captivated so many of us in the 1990s:
+For a look at the original 1992 release and its cultural impact, Nostalgia Nerd's retrospective gives a wonderful overview of why it captivated so many of us in the 1990s:
 
 {% endmarkdown %}
 
@@ -106,12 +104,12 @@ If you want to revisit the screensaver's cultural impact and gags, Nostalgia Ner
 
 ## Back on the island
 
-The [browser version](https://khawkins98.github.io/johnny_web/) offers Classic and Enhanced playback. Classic keeps the native 320×200 scale, static clouds and original waves; Enhanced adds responsive scaling with animated clouds and ocean waves. The original Dynamix and Sierra pixel art, audio cues, and gags remain the center of the experience.
+The [browser port](https://khawkins98.github.io/johnny_web/) offers Classic and Enhanced playback. Classic keeps the native 320×200 resolution, static clouds, and flat waves; Enhanced adds responsive scaling with animated clouds and ocean waves. The original Dynamix and Sierra pixel art, audio cues, and gags remain the center of the experience.
 
-To run it, you provide the original game data. The [README](https://github.com/khawkins98/johnny_web#readme) links the floppy archive; dropping its ZIP or extracted `.ima` disk image directly onto the page imports the resources into browser storage.
+To run it, you supply the original game data. The [README](https://github.com/khawkins98/johnny_web#readme) links the floppy archive; dropping its ZIP or extracted `.ima` disk image directly onto the page imports the resources straight into browser storage.
 
-Like my [recent Mac OS 9 work](/posts/20260810-newsheep-sheepshaver-mac-os-9-2-apple-silicon-jit/), this started with wanting to spend time with vintage software again. Johnny's small island turned out to contain a surprisingly sophisticated simulation engine that was a joy to unpack.
+Like my [recent Mac OS 9 work](/posts/20260810-newsheep-sheepshaver-mac-os-9-2-apple-silicon-jit/), this started as an excuse to spend time with vintage software again. Johnny's island turned out to contain far more clever engineering than a simple screensaver had any right to have.
 
-I'd love to hear which gag you remember, or where you first saw him. It is great having that little castaway back at work in the corner of a screen.
+If you remember Johnny from back in the day, I'd love to hear which gag stuck with you. It's nice having that little castaway getting on with his life in the corner of a tab again.
 
 {% endmarkdown %}
