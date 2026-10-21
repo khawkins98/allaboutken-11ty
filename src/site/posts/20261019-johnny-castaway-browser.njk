@@ -32,12 +32,12 @@ I thought that with the aid of modern tooling, there had to be a way to make the
 
 ## Inside a gag, and between gags
 
-The original files contain artwork, sound, and small programs describing the animations. They use the **Dynamix Game Development System**, or DGDS. The browser engine, which I've called Bottle DGDS, decodes those resources and runs their instructions in JavaScript.
+The original files contain artwork, sound, and small programs describing the animations. They use the [Dynamix Game Development System (DGDS)](https://github.com/scummvm/scummvm/tree/master/engines/dgds), Sierra and Dynamix's proprietary adventure engine. The browser engine, which I've called [Bottle DGDS](https://github.com/khawkins98/johnny_web/blob/main/docs/architecture.md#system-overview), decodes those resources and runs their bytecode instructions in JavaScript.
 
 There are two distinct script levels:
 
-- **ADS scripts coordinate a gag.** They start and stop animations, make choices, and wait for other actions to finish.
-- **TTM scripts perform the animation.** They load images, draw sprite frames, wait, play sounds, and loop or finish.
+- **[ADS (Animation Director Script)](https://github.com/khawkins98/johnny_web/blob/main/docs/architecture.md#resource-and-script-model) files coordinate a gag.** They act as the high-level sequencer: starting and stopping animations, evaluating branch choices, and waiting for other actions to finish.
+- **[TTM (Tiny Templated Movie)](https://github.com/khawkins98/johnny_web/blob/main/docs/architecture.md#resource-and-script-model) files perform the animation.** They handle per-frame execution: loading bitmap sprites, drawing sprite frames, waiting on timer ticks, playing sound samples, and looping or finishing.
 
 The [“Eight Arm Menace” scene flow](https://github.com/khawkins98/johnny_web/blob/main/docs/scene-flows/FISHING.ADS.md#eight-arm-menace-fishingads-tag-3) makes that concrete: Johnny gets his pole, casts it, reels in a heavy catch, and reaches the octopus gag. Several animations can be active together. Their order and timing determine whether the result reads as one coherent joke.
 
