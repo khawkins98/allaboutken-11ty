@@ -5,6 +5,8 @@
 @use './semantic-search' as semantic-search;
 @use './kh-datasheet' as kh-datasheet;
 @use './kh-dataviz' as kh-dataviz;
+@use './kh-scrolly' as kh-scrolly;
+@use './kh-story' as kh-story;
 @use './kh-story-lab' as kh-story-lab;
 @use './kh-photos' as kh-photos;
 @use '../kh-ambience/kh-ambience' as kh-ambience;
@@ -29,6 +31,8 @@ body:has(#kh-css-toggle:checked) {
   @include semantic-search.semantic-search-styles();
   @include kh-datasheet.kh-datasheet();
   @include kh-dataviz.kh-dataviz();
+  @include kh-scrolly.kh-scrolly();
+  @include kh-story.kh-story();
   @include kh-story-lab.kh-story-lab();
   @include kh-photos.kh-photos();
   --kh-color--grey: #707372;

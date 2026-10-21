@@ -1,0 +1,1747 @@
+@use './settings' as *;
+
+// Scrollytelling: sticky graphic + scrolling prose steps
+// -------------------------------------------------------
+// Used by the Mangrove impact story (src/site/mangrove-scrolly.js): one
+// region, one graphic pinned beside the prose from the cover to the closing
+// figures. Every class styled here is either `.kh-scrolly--enhanced` or
+// something the script itself adds, so without JS the region is plain prose
+// with its static figures inline. And the whole mixin sits inside the
+// CSS-toggle scope, so with the toggle off the JS-built graphic keeps its
+// `hidden` attribute and never shows. Pinning is native `position: sticky`;
+// the script only flips classes. All motion is CSS transitions, dropped
+// under reduced motion.
+// Panels (`[data-scrolly-panel]`: the brand studio, the screenshots) stay in
+// the prose flow, so reading order and tab order are the document's. On
+// wide screens the active one is `position: fixed` at exactly the pinned
+// graphic's place (the script publishes --kh-scrolly-gx/-gw from the
+// graphic's box) and the diagram steps back; the others are hidden and
+// `inert`. Narrow screens show them in the flow and slide the band away.
+
+// Wide (>= lg): prose in a narrower left column, graphic pinned right. On
+// its own the region bleeds left like `.kh-bleed-out` to find the room;
+// inside layouts/story.njk, _kh-story.scss places it on the page grid.
+// Narrow: graphic pinned in an opaque band at the top; prose steps scroll up
+// underneath it. (Steps scrolling OVER the graphic as cards was tried: a
+// paragraph is taller than the gap between steps on a phone, so the previous
+// card was still covering the graphic at the moment the next stage played.)
+// Registered so it can transition (an unregistered custom property jumps).
+// At top level: @property is not valid inside a rule.
+@property --kh-drift {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+
+@mixin kh-scrolly() {
+  // Before the script runs, with JS known to be on (layouts/story.njk adds
+  // body.kh-js at first paint): the panels and the static figures would
+  // otherwise paint in the flow and vanish when the region is enhanced.
+  // Opacity only (no layout shift), and a 3s fallback reveals them if the
+  // script never arrives. No-JS readers never get the class.
+  @at-root body.kh-js:has(#kh-css-toggle:checked) .kh-scrolly:not(.kh-scrolly--enhanced) [data-scrolly-panel],
+    body.kh-js:has(#kh-css-toggle:checked) .kh-scrolly:not(.kh-scrolly--enhanced) .kh-scrolly__static {
+    animation: kh-scrolly-reveal 0.4s ease 3s forwards;
+    opacity: 0;
+  }
+
+  @keyframes kh-scrolly-reveal {
+    to {
+      opacity: 1;
+    }
+  }
+
+  .kh-scrolly--enhanced {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    // Small: breathing room after the region. It does not extend the pin
+    // (sticky stops at the content box); on a phone the band leaves as the
+    // last paragraph's bottom slides under it, which is when it is read.
+    // Wide: the room for the pin is on the steps column, see below.
+    padding-bottom: 6vh;
+
+    .kh-scrolly__static {
+      display: none;
+    }
+
+    // The card-presets screenshot sits inside the steps column; its own
+    // left bleed would push it out of the region.
+    .kh-bleed-out {
+      margin-left: 0;
+    }
+  }
+
+  // `transition`: narrow screens slide the band away (is-released, below)
+  // for a stretch of plain prose or a panel in the flow.
+  .kh-scrolly--enhanced > .kh-scrolly__graphic {
+    background: var(--kh-ground);
+    border-bottom: 1px solid var(--kh-rule);
+    box-sizing: border-box;
+    display: flex;
+    grid-row: 1;
+    height: 44vh;
+    height: 44svh; // see the narrow-screen note below
+    padding: 0.5rem 0;
+    position: sticky;
+    top: 0;
+    transition: transform 0.4s ease;
+    z-index: 4;
+  }
+
+  .kh-scrolly--enhanced > .kh-scrolly__steps {
+    grid-row: 2;
+    padding-top: 2rem;
+    position: relative;
+    z-index: 3;
+  }
+
+  // Steps are the prose paragraphs. Spacing between them is what gives each
+  // stage time on screen; the inactive ones fade back so the eye lands on the
+  // paragraph the graphic is currently showing.
+  .kh-scrolly__step {
+    margin-bottom: 38vh;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+
+  .kh-scrolly__step.is-active {
+    opacity: 1;
+  }
+
+  // The last step of a region needs no gap after it: the trigger line sits
+  // at 55% (66% narrow), so its top reaches the line while the paragraph is
+  // still on screen. The old 38vh gap + 18vh padding was the dead zone
+  // before whatever followed the region.
+  // A lead step (a section's heading owning its own stage, e.g. a definition
+  // shown in the graphic) needs the same scroll time as a paragraph. On
+  // narrow screens the visible in-prose definition carries that gap instead.
+  // The section hop is for specificity: _kh-content.scss sets heading
+  // margins with `.kh-content h2:not([class*='kh-'])`, (1,2,2) under the
+  // toggle scope, and the lead heading now matches it (it carries no `kh-`
+  // class, so its permalink is styled). Two classes plus the attribute
+  // outrank it; one class did not, and the gap silently collapsed to 16px.
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-scrolly--enhanced .kh-scrolly__section > [data-scrolly-lead] {
+      margin-bottom: 38vh;
+    }
+  }
+
+  .kh-scrolly__step.kh-scrolly__step--last {
+    margin-bottom: 0;
+  }
+
+  // Ordinary prose over one resting stage: normal spacing, no dimming.
+  .kh-scrolly__step.kh-scrolly__step--plain {
+    margin-bottom: 1.25rem;
+    opacity: 1;
+  }
+
+  // Reading paragraphs that still step the graphic (the opening beats):
+  // a shorter gap than a diagram beat, and no dimming.
+  .kh-scrolly__step.kh-scrolly__step--short {
+    margin-bottom: 12vh;
+    opacity: 1;
+  }
+
+  // The cover note (shown by the script; `hidden` in the markup, since it
+  // describes the enhanced graphic only).
+  .kh-scrolly__cover-note {
+    color: var(--kh-color--grey--darkest);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: -1.5rem 0 2rem;
+  }
+
+  // Its wide-screen form: a caption under the dot field, shown while the
+  // dots are gathering (cover through the "why" beat), gone once the first
+  // box is drawn. Narrow screens keep the prose original instead.
+  .kh-scrolly__dots-caption {
+    display: none;
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    // Visually hidden (same pattern as .kh-u-sr-only): the caption copy in
+    // the graphic carries it on screen.
+    .kh-scrolly--enhanced .kh-scrolly__cover-note {
+      border: 0;
+      clip-path: inset(50%);
+      height: 1px;
+      margin: 0;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+
+    // Sits just below the graphic box rather than inside its bottom edge,
+    // where it collided with the lowest row of scattered dots.
+    .kh-scrolly__dots-caption {
+      top: 100%;
+      color: var(--kh-color--grey--darkest);
+      display: block;
+      font-size: 0.9rem;
+      left: 50%;
+      line-height: 1.5;
+      margin: 0;
+      max-width: 34rem;
+      opacity: 0;
+      position: absolute;
+      text-align: center;
+      transform: translateX(-50%);
+      transition: opacity 0.4s ease;
+      width: 90%;
+    }
+
+    // Cover through c2 only: from "why" on, the dots are metaphor, not data.
+    .kh-scrolly__graphic:has(.kh-sv:is([data-stage='cover'], [data-stage='c0'], [data-stage='c1'], [data-stage='c2'])) .kh-scrolly__dots-caption {
+      opacity: 1;
+    }
+  }
+
+  // Narrow: the band slides away for a stretch of plain prose or a panel in
+  // the flow, and comes back for the next stage.
+  .kh-scrolly--enhanced > .kh-scrolly__graphic.is-released {
+    transform: translateY(-100%);
+  }
+
+  // A panel's figure: in the flow, caption as the step. On wide screens the
+  // image is lifted out (below); here it is simply a figure.
+  .kh-scrolly__panel img {
+    display: block;
+    height: auto;
+    max-width: min(100%, var(--kh-story-native, 100%));
+  }
+
+  // Narrow: svh, not vh. On a phone the address bar collapsing grows vh by
+  // 10%, so vh gaps all grew at once and the page shifted down under the
+  // reader, flipping the stage back. svh is the small viewport, which does
+  // not change with the bar. (vh first, as the fallback.)
+  @media (max-width: $kh-breakpoint--lg-down) {
+    .kh-scrolly__step {
+      margin-bottom: 24vh;
+      margin-bottom: 24svh;
+    }
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-scrolly--enhanced {
+      column-gap: 2.5rem;
+      grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+      margin-left: -22%;
+      padding-bottom: 0;
+    }
+
+    // The pinned graphic runs from 10vh to 90vh and its sticky range ends
+    // at the region's CONTENT box, so padding on the region does nothing for
+    // the pin; the steps column is what sets the row height, so the room
+    // goes here. With no room the last paragraph of every region triggered
+    // its stage (top at 55vh) when the graphic had already been pushed
+    // 45-80px off the top: the climax of region B (the full triangle, checks
+    // on) and the ending of region C (edits kept) were only ever seen
+    // sliding away. 32vh keeps the graphic pinned until the final
+    // paragraph's top is about a third of the way up the screen: close to
+    // the 38vh every other step gets.
+    .kh-scrolly--enhanced > .kh-scrolly__steps {
+      grid-column: 1;
+      grid-row: 1;
+      padding-bottom: 32vh;
+      padding-top: 0;
+      z-index: 5;
+    }
+
+    .kh-scrolly--enhanced > .kh-scrolly__graphic {
+      align-self: start;
+      background: none;
+      border-bottom: 0;
+      grid-column: 2;
+      grid-row: 1;
+      height: 80vh;
+      padding: 0;
+      top: 10vh;
+      transition: none;
+    }
+
+    .kh-scrolly--enhanced > .kh-scrolly__graphic.is-released {
+      transform: none;
+    }
+
+    // The diagram steps back while a panel shows; the panel takes the
+    // graphic's exact box (the script publishes it) and the pointer.
+    // The SVG, its callouts AND the dot layer (a sibling, since the drift
+    // moved the dots out of the SVG) all step back together.
+    .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-sv,
+    .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-sv-dots,
+    .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-sv-demo,
+    .kh-scrolly--enhanced > .kh-scrolly__graphic .kh-scrolly__callouts {
+      transition: opacity 0.35s ease;
+    }
+
+    .kh-scrolly--enhanced > .kh-scrolly__graphic.is-panel {
+      pointer-events: none;
+
+      .kh-sv,
+      .kh-sv-dots,
+      .kh-sv-demo,
+      .kh-scrolly__callouts {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      * {
+        pointer-events: none !important;
+      }
+    }
+
+    // Sized to its content and centred on the pinned band's middle, never
+    // taller than the viewport and never scrolling inside; its own ground
+    // so nothing underneath can show through.
+    .kh-scrolly--enhanced .kh-scrolly__panel {
+      align-items: stretch;
+      background: var(--kh-ground);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      left: var(--kh-scrolly-gx, 50%);
+      margin: 0;
+      max-height: 94vh;
+      opacity: 0;
+      overflow: visible;
+      padding: 0.5rem 0;
+      pointer-events: none;
+      position: fixed;
+      top: 50vh;
+      transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+      translate: 0 -50%;
+      visibility: hidden;
+      width: var(--kh-scrolly-gw, 45%);
+      z-index: 6;
+    }
+
+    .kh-scrolly--enhanced .kh-scrolly__panel.is-on {
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 0.35s ease 0.25s, visibility 0s linear 0.25s;
+      visibility: visible;
+      z-index: 10;
+    }
+
+    .kh-scrolly--enhanced .kh-scrolly__panel img {
+      margin: 0 auto;
+    }
+  }
+
+  // ------------------------------------------------------------------------
+  // The diagram
+  // ------------------------------------------------------------------------
+  .kh-sv {
+    --kh-sv-fault: #c2410c; // burnt orange: a fault (5.2:1 on the ground)
+    --kh-sv-good: #15803d; // green: a healthy change (5.0:1 on the ground)
+    color: var(--kh-color--text);
+    display: block;
+    font-family: var(--kh-font-sans);
+    height: 100%;
+    overflow: visible;
+    // The SVG's own box must not swallow pointer events: the demo's real
+    // button (stage w) sits underneath it; interactive parts opt back in.
+    pointer-events: none;
+    width: 100%;
+  }
+
+  // Every keyed element starts hidden; the stage table turns it on. The delay
+  // only applies on the way in (it is set on `.is-on`), so leaving a stage is
+  // immediate and entering one can be staggered. Entries are quick (0.3s)
+  // and exits slower (0.6s): the reader is looking at what leaves, not at
+  // what has not arrived yet.
+  .kh-sv__el {
+    opacity: 0;
+    transition: opacity 0.6s ease, color 0.45s ease;
+  }
+
+  .kh-sv__el.is-on {
+    opacity: 1;
+    transition-delay: var(--d, 0s);
+    transition-duration: 0.3s;
+  }
+
+  // Anything that labels or decorates a line or box leaves faster than the
+  // thing it belongs to, so it is never left floating on its own.
+  .kh-sv__label:not(.is-on),
+  .kh-sv__chip:not(.is-on),
+  .kh-sv__check:not(.is-on),
+  .kh-sv__head:not(.is-on) {
+    transition-duration: 0.3s;
+  }
+
+  .kh-sv__el.is-dim {
+    opacity: 0.28;
+  }
+
+  .kh-sv__el.is-faint {
+    opacity: 0.1;
+  }
+
+  .kh-sv__el.is-fault {
+    color: var(--kh-sv-fault);
+  }
+
+  .kh-sv__el.is-good {
+    color: var(--kh-sv-good);
+  }
+
+  // Lines draw in through a mask whose stroke is revealed from the start
+  // (DRAW in mangrove-scrolly.js). On the way out the mask holds until the
+  // line has faded: a line that retracted from its tip while its arrowhead
+  // was still fading left the head floating for a moment.
+  .kh-sv__reveal {
+    fill: none;
+    stroke: #fff;
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 1;
+    stroke-width: 14;
+    transition: stroke-dashoffset 0s linear 0.6s;
+  }
+
+  .kh-sv__reveal.is-on {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.6s ease-in-out var(--d, 0s);
+  }
+
+  .kh-sv__line {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    transition: opacity 0.6s ease, color 0.45s ease, stroke-width 0.45s ease;
+  }
+
+  .kh-sv__line--peers {
+    stroke-dasharray: 2 6;
+    stroke-linecap: round;
+  }
+
+  .kh-sv__line--read {
+    stroke-dasharray: 7 5;
+  }
+
+  // Survey sight-lines firm up once every reading has a right answer.
+  .kh-sv__line--read.is-strong {
+    stroke-dasharray: none;
+    stroke-width: 2.5;
+  }
+
+  .kh-sv__line--read.is-fault {
+    stroke-dasharray: none;
+    stroke-width: 4;
+  }
+
+  // Callout leader. Not a stage element: the script switches it together
+  // with its callout card (one condition, one delay), so it never shows
+  // without the card. It arrives with the card and leaves before it.
+  .kh-sv__leader {
+    fill: none;
+    opacity: 0;
+    stroke: currentColor;
+    stroke-width: 1.25;
+    transition: opacity 0.2s ease;
+  }
+
+  .kh-sv__leader.is-on {
+    opacity: 1;
+    transition: opacity 0.25s ease var(--kh-co-delay, 0.15s);
+  }
+
+  // Yielding to a popup on the same box (see setYield): card and leader
+  // step back together and return on leave.
+  .kh-sv__leader.is-on.is-yield {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  // The fix flowing out of the schema: dark ink and dashed, so it reads as
+  // a movement along existing routes, not as a new (fourth) edge or a fault.
+  .kh-sv__line--fix {
+    stroke-dasharray: 7 4;
+    stroke-width: 3;
+  }
+
+  .kh-sv__line--good {
+    stroke-width: 4;
+  }
+
+  .kh-sv__head {
+    fill: currentColor;
+  }
+
+  // HEAD_LAG in mangrove-scrolly.js: the head fades in as its line's draw
+  // reaches the tip.
+  .kh-sv__head.is-on {
+    transition-delay: calc(var(--d, 0s) + 0.5s);
+  }
+
+  // Already on before this stage (the script sets `is-held`): the entry
+  // stagger is for arriving, so a restyle in place is immediate. Lines,
+  // heads, labels and checks all change colour or weight together.
+  .kh-sv__el.is-on.is-held {
+    transition-delay: 0s;
+  }
+
+  // Travelling pulse (stage 5). The dash is 4% of the path and the gap is
+  // longer than the whole path, so only one dash exists at a time; it runs
+  // from just before the start to just past the end. The old `0.04 0.96`
+  // pattern put a second dash exactly at the path end, whose round cap sat
+  // as a green dot under the Figma box before the arrow had arrived.
+  .kh-sv__pulse {
+    fill: none;
+    stroke: var(--kh-sv-good);
+    stroke-dasharray: 0.04 2;
+    stroke-dashoffset: 0.1;
+    stroke-linecap: round;
+    stroke-width: 11;
+  }
+
+  .kh-sv__pulse.is-on {
+    animation: kh-sv-pulse 2.6s linear 1s infinite;
+    opacity: 0.35;
+  }
+
+  @keyframes kh-sv-pulse {
+    from {
+      stroke-dashoffset: 0.1;
+    }
+
+    to {
+      stroke-dashoffset: -1.1;
+    }
+  }
+
+  // Nodes
+  .kh-sv__box {
+    fill: var(--kh-ground);
+    stroke: currentColor;
+    stroke-width: 2;
+    transition: stroke-width 0.45s ease;
+  }
+
+  .kh-sv__node--figma .kh-sv__box {
+    stroke-width: 3.5;
+  }
+
+  .kh-sv__node.is-fault .kh-sv__box,
+  .kh-sv__node.is-good .kh-sv__box {
+    stroke-width: 4;
+  }
+
+  // Label sizes are capped in rendered pixels via --kh-sv-s (the SVG's
+  // current scale, set by mangrove-scrolly.js): min(natural, cap / scale).
+  .kh-sv__title {
+    fill: var(--kh-color--text);
+    font-size: min(17px, calc(18px / var(--kh-sv-s, 1)));
+    font-weight: 700;
+    text-anchor: middle;
+  }
+
+  .kh-sv__sub {
+    fill: currentColor;
+    font-size: min(14px, calc(15px / var(--kh-sv-s, 1)));
+    text-anchor: middle;
+  }
+
+  .kh-sv__sub.is-strong,
+  .kh-sv__sub--flag {
+    font-weight: 700;
+  }
+
+  .kh-sv__label {
+    fill: currentColor;
+    font-size: min(13.5px, calc(14.5px / var(--kh-sv-s, 1)));
+  }
+
+  .kh-sv__label--fix {
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  .kh-sv__label--flag {
+    font-weight: 700;
+  }
+
+  .kh-sv__label--quiet {
+    fill: var(--kh-color--grey--darkest);
+  }
+
+  .kh-sv__label--brand {
+    fill: var(--kh-color--blue);
+    font-weight: 700;
+  }
+
+  .kh-sv__chip rect {
+    fill: var(--kh-color--text);
+  }
+
+  .kh-sv__chip text {
+    fill: var(--kh-ground);
+    font-size: min(13px, calc(14px / var(--kh-sv-s, 1)));
+    font-weight: 700;
+    text-anchor: middle;
+  }
+
+  // Filled discs: an outline check at diagram scale was easy to miss.
+  // A check mark can be hovered for what it means at this stage. The hit
+  // circle is larger than the disc; neither takes the pointer while hidden.
+  .kh-sv__check {
+    pointer-events: none;
+  }
+
+  .kh-sv__check.is-on {
+    cursor: help;
+    pointer-events: all;
+  }
+
+  .kh-sv__check .kh-sv__check-hit {
+    fill: transparent;
+    stroke: none;
+  }
+
+  .kh-sv__check .kh-sv__check-disc {
+    fill: currentColor;
+    stroke: var(--kh-ground);
+    stroke-width: 2;
+  }
+
+  .kh-sv__check path {
+    fill: none;
+    stroke: var(--kh-ground);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.75;
+  }
+
+  // The dots: HTML <i> elements in a layer over the SVG, sized to the
+  // viewBox and scaled with it (the script sets --kh-sv-s, left and top),
+  // so positions and drift are in viewBox units. Each sits at the origin
+  // and is placed by --x/--y (set by the script per layout); --dl is a
+  // per-dot stagger set once at build. Size changes are a scale in the same
+  // transform. The layer mirrors the SVG's state attributes (data-dots,
+  // data-named, the hover focus, live, hidden) and is-jump / is-chain.
+  //   cloud    the first frame (scattered)
+  //   c1, c2   the opening beats: schemas, then variables and families
+  //   settled  the three sources formed; the variants adrift on the right
+  //   spread   the 540 laid out beside the tokens box (stage 1.1)
+  //   full     clusters in all four box regions; a named cluster (its box
+  //            is drawn, data-named) drops to a faint texture under it
+  //   chain    regrouped under the closing figures
+  .kh-sv-dots {
+    // A sibling of the SVG, so it does not inherit the diagram's colours.
+    --kh-sv-good: #15803d; // as .kh-sv
+    color: var(--kh-color--text);
+    // Under the SVG (the graphic is the stacking context): a box's ground
+    // fill covers its own cluster's texture, and travelling dots never sit
+    // over a title. Positioned, so it would otherwise paint above the SVG.
+    z-index: -1;
+    height: 400px;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    transform: scale(var(--kh-sv-s, 1));
+    transform-origin: 0 0;
+    // Fades out while the layout demo shows (stage w, w.1; is-demo) and
+    // back, already settled, at w.2.
+    transition: opacity 0.4s ease;
+    width: 540px;
+  }
+
+  .kh-sv-dots.is-demo {
+    opacity: 0;
+  }
+
+  .kh-sv__dot {
+    --kh-dot-s: 1;
+    animation: kh-sv-drift var(--kh-dr-d, 9s) ease-in-out var(--kh-dr-p, 0s) infinite;
+    background: currentColor;
+    border-radius: 50%;
+    height: 3px;
+    left: -1.5px;
+    opacity: 0.82;
+    position: absolute;
+    top: -1.5px;
+    transform: translate(var(--x, 0), var(--y, 0)) scale(calc(var(--kh-dot-s) * var(--kh-dot-m, 1)));
+    transition: transform 1.5s cubic-bezier(0.22, 0.8, 0.25, 1) var(--dl, 0s), opacity 0.6s ease, background-color 0.5s ease, --kh-drift 1.5s ease var(--dl, 0s);
+    width: 3px;
+    will-change: translate;
+  }
+
+  .kh-sv-dots.is-jump .kh-sv__dot {
+    transition: none;
+  }
+
+  // Entrance on a fresh load (the script adds is-arriving at the top of the
+  // page only): each dot fades and scales up from nothing with a seeded
+  // stagger (--kh-dr-in), so the field precipitates into view over about
+  // 1.5s, and the drift is already running underneath, so there is no seam.
+  // `backwards` holds the start frame until each dot's turn; afterwards the
+  // state rules own opacity again. Reduced motion: none (below).
+  @keyframes kh-sv-arrive {
+    from {
+      opacity: 0;
+      scale: 0.2;
+    }
+  }
+
+  .kh-sv-dots.is-arriving .kh-sv__dot {
+    animation: kh-sv-arrive 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--kh-dr-in, 0s) backwards, kh-sv-drift var(--kh-dr-d, 9s) ease-in-out var(--kh-dr-p, 0s) infinite;
+  }
+
+  // Drift: unclaimed dots wander a little, like free radicals, on the
+  // individual `translate` property (composed with the positioning
+  // transform above, so the two never fight), each on its own compositor
+  // layer. Each dot's loop is seeded by the script (duration, phase, two
+  // waypoints); the amplitude is one registered property, --kh-drift, in
+  // viewBox units, so it transitions: order arrives as a dot's drift fades
+  // while it travels into its cluster. Full on the cover, damping through
+  // the opening beats, zero for a formed cluster; the unclaimed variants
+  // keep a faint drift until stage 3. Paused while the graphic is off
+  // screen or the tab is hidden; none under reduced motion (below).
+  @keyframes kh-sv-drift {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+
+    33% {
+      translate: calc(var(--kh-drift, 0) * var(--kh-dr-x1, 0) * 1px) calc(var(--kh-drift, 0) * var(--kh-dr-y1, 0) * 1px);
+    }
+
+    66% {
+      translate: calc(var(--kh-drift, 0) * var(--kh-dr-x2, 0) * 1px) calc(var(--kh-drift, 0) * var(--kh-dr-y2, 0) * 1px);
+    }
+  }
+
+  .kh-sv-dots[data-dots='cloud'] .kh-sv__dot {
+    --kh-drift: 4;
+  }
+
+  .kh-sv-dots[data-dots='c1'] .kh-sv__dot {
+    --kh-drift: 3;
+  }
+
+  .kh-sv-dots[data-dots='c2'] .kh-sv__dot {
+    --kh-drift: 2;
+  }
+
+  .kh-sv-dots[data-dots='settled'] .kh-sv__dot,
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot {
+    --kh-drift: 1.2;
+  }
+
+  // The variants (F) are not in the story until Figma is: absent through
+  // the cover and stages 1-2, BORN at stage 3 (precipitating in with the
+  // cover's arrival animation, drifting at full amplitude on the Figma
+  // side), then pulled into their cluster as the reads draw (3.1, full).
+  // Doubled class (.kh-sv__dot.kh-sv__dot--F) so this outranks the later
+  // "unclaimed dots" opacity and the is-arriving entrance, which tied with
+  // it and let all 297 show on the cover.
+  .kh-sv-dots[data-dots='cloud'] .kh-sv__dot.kh-sv__dot--F,
+  .kh-sv-dots[data-dots='c1'] .kh-sv__dot.kh-sv__dot--F,
+  .kh-sv-dots[data-dots='c2'] .kh-sv__dot.kh-sv__dot--F,
+  .kh-sv-dots[data-dots='settled'] .kh-sv__dot.kh-sv__dot--F,
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot.kh-sv__dot--F {
+    --kh-drift: 0;
+    animation: none;
+    opacity: 0;
+    transition: none;
+    will-change: auto;
+  }
+
+  .kh-sv-dots[data-dots='born'] .kh-sv__dot {
+    --kh-drift: 0;
+    animation: none;
+    will-change: auto;
+  }
+
+  // A formed cluster is still: no animation and no compositor layer, so its
+  // dots are painted in flow at sub-pixel precision. (Composited layers are
+  // snapped to whole device pixels, which left the resting grids ragged;
+  // the residual drift collapsing as a dot starts its travel is invisible.)
+  .kh-sv-dots[data-dots='c1'] .kh-sv__dot--S,
+  .kh-sv-dots[data-dots='c2'] .kh-sv__dot--S,
+  .kh-sv-dots[data-dots='c2'] .kh-sv__dot--T,
+  .kh-sv-dots[data-dots='c2'] .kh-sv__dot--B,
+  .kh-sv-dots[data-dots='settled'] .kh-sv__dot:not(.kh-sv__dot--F),
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot:not(.kh-sv__dot--F),
+  .kh-sv-dots[data-dots='full'] .kh-sv__dot,
+  .kh-sv-dots[data-dots='chain'] .kh-sv__dot {
+    --kh-drift: 0;
+    animation: none;
+    will-change: auto;
+  }
+
+  .kh-sv-dots[data-live='0'] .kh-sv__dot,
+  .kh-sv-dots[data-hidden='1'] .kh-sv__dot {
+    animation-play-state: paused;
+  }
+
+  .kh-sv__dot--brand {
+    background: var(--kh-color--blue);
+  }
+
+  // Not yet gathered: scattered and quiet. The variants' drift (settled,
+  // spread) is quieter still: not a cluster yet, not in the story yet.
+  .kh-sv-dots[data-dots='cloud'] .kh-sv__dot,
+  .kh-sv-dots[data-dots='c1'] .kh-sv__dot:not(.kh-sv__dot--S) {
+    opacity: 0.4;
+  }
+
+  // While a cluster is being explained, the others step back.
+  .kh-sv-dots[data-cluster-focus] .kh-sv__dot {
+    opacity: 0.12;
+  }
+
+  .kh-sv-dots[data-cluster-focus='S'] .kh-sv__dot--S,
+  .kh-sv-dots[data-cluster-focus='T'] .kh-sv__dot--T,
+  .kh-sv-dots[data-cluster-focus='B'] .kh-sv__dot--B,
+  .kh-sv-dots[data-cluster-focus='F'] .kh-sv__dot--F {
+    opacity: 0.9;
+  }
+
+  .kh-sv-dots[data-named~='S'] .kh-sv__dot--S,
+  .kh-sv-dots[data-named~='T'] .kh-sv__dot--T,
+  .kh-sv-dots[data-named~='B'] .kh-sv__dot--B,
+  .kh-sv-dots[data-named~='F'] .kh-sv__dot--F {
+    --kh-dot-s: 0.8;
+    opacity: 0.07;
+  }
+
+  // The birth of the variants (stage 3): the Figma box is already drawn, so
+  // this outranks the named-cluster texture above. At 3.1 (full) they are
+  // pulled into the box as the reads draw, staying visible for the travel
+  // and only then settling to the texture under it.
+  .kh-sv-dots[data-dots='born'] .kh-sv__dot--F {
+    --kh-dot-s: 1;
+    --kh-drift: 4;
+    animation: kh-sv-arrive 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--kh-dr-in, 0s) backwards, kh-sv-drift var(--kh-dr-d, 9s) ease-in-out var(--kh-dr-p, 0s) infinite;
+    opacity: 0.55;
+    will-change: translate;
+  }
+
+  .kh-sv-dots[data-dots='full'] .kh-sv__dot--F {
+    transition-delay: var(--dl, 0s), 1.3s, 0s, var(--dl, 0s);
+    transition-duration: 1.5s, 0.8s, 0.5s, 1.5s;
+  }
+
+  // Spread: the 540 at reading size, the other clusters stepping back.
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot--T {
+    --kh-dot-s: 1.7;
+    opacity: 0.5;
+  }
+
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot--T.kh-sv__dot--brand {
+    opacity: 1;
+  }
+
+  .kh-sv-dots[data-dots='spread'] .kh-sv__dot--B {
+    opacity: 0.1;
+  }
+
+  // The 56 linked instances exist only in the close.
+  .kh-sv-dots:not([data-dots='chain']) .kh-sv__dot--K,
+  .kh-sv__dotcopy {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .kh-sv-dots[data-dots='chain'] .kh-sv__dot--S {
+    opacity: 0;
+  }
+
+  .kh-sv-dots[data-dots='chain'] .kh-sv__dot--T {
+    --kh-dot-s: 0.38;
+    opacity: 0.75;
+  }
+
+  .kh-sv-dots[data-dots='chain'] .kh-sv__dot--B {
+    --kh-dot-s: 1.1;
+    opacity: 0.85;
+  }
+
+  .kh-sv-dots[data-dots='chain'] .kh-sv__dot--F {
+    opacity: 0.7;
+  }
+
+  .kh-sv-dots[data-dots='chain'] .kh-sv__dot--K {
+    --kh-dot-s: 1.1;
+    background: var(--kh-sv-good);
+    opacity: 0.95;
+    transition-delay: 1.2s;
+  }
+
+  // The other four brands' blocks of 540 (pattern-filled), once the first
+  // has arrived.
+  .kh-sv[data-dots='chain'] .kh-sv__dotcopy {
+    opacity: 0.75;
+    transition-delay: var(--d, 1.3s);
+  }
+
+  .kh-sv__ptdot {
+    fill: var(--kh-color--text);
+  }
+
+  // Cluster labels on the cover: quiet, and gone when the box names them.
+  .kh-sv__label--cover {
+    fill: var(--kh-color--grey--darkest);
+    font-size: min(12.5px, calc(13.5px / var(--kh-sv-s, 1)));
+  }
+
+  // The closing figures: boxes draw themselves in (pathLength 1), then the
+  // number, its unit as a dark pill, and the sub-label. The last figure is
+  // the healthy-change green at its 4px weight, as in the diagram.
+  .kh-sv__chbox {
+    fill: var(--kh-ground);
+    stroke: currentColor;
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 1;
+    stroke-width: 2;
+    transition: stroke-dashoffset 0s linear 0.6s;
+  }
+
+  .kh-sv__chain.is-on .kh-sv__chbox {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.7s ease-in-out var(--d, 0s);
+  }
+
+  .kh-sv__chain--good .kh-sv__chbox {
+    stroke-width: 4;
+  }
+
+  .kh-sv__num {
+    fill: currentColor;
+    font-size: min(28px, calc(30px / var(--kh-sv-s, 1)));
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-anchor: middle;
+  }
+
+  .kh-sv__pill rect {
+    fill: currentColor;
+  }
+
+  .kh-sv__pill text {
+    fill: var(--kh-ground);
+    font-size: min(11.5px, calc(12.5px / var(--kh-sv-s, 1)));
+    font-weight: 700;
+    text-anchor: middle;
+  }
+
+  .kh-sv__chsub {
+    fill: var(--kh-color--grey--darkest);
+    font-size: min(11px, calc(12px / var(--kh-sv-s, 1)));
+    text-anchor: middle;
+  }
+
+  .kh-sv__line--chain {
+    stroke-width: 2;
+  }
+
+  // Stage w: the seam between the two layout engines (faint, dimmed by the
+  // stage), the Auto-Layout frames (dashed, rounded) and the two bridges
+  // that stop short. Rings mark the dots stuck at the seam: fault colour,
+  // rings only.
+  .kh-sv__line--seam {
+    stroke-dasharray: 2 6;
+    stroke-linecap: round;
+    stroke-width: 1.5;
+  }
+
+
+
+  // The demo, "multiply the frames" (stage w): an HTML layer over the
+  // graphic, viewBox-sized and scaled like the dot layer (the script sets
+  // --kh-sv-s, left and top), under the SVG so the seam, labels, source
+  // boxes, arrow and hit targets paint over it. data-demo is the beat
+  // (multiply, token, derive, done), data-step the moment within it.
+  .kh-sv-demo {
+    --kh-demo-pad: 12px;
+    color: var(--kh-color--text);
+    font-family: var(--kh-font-sans);
+    height: 400px;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    transform: scale(var(--kh-sv-s, 1));
+    transform-origin: 0 0;
+    transition: opacity 0.35s ease;
+    width: 540px;
+    z-index: -1;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .kh-sv-demo[data-demo='multiply'],
+  .kh-sv-demo[data-demo='token'],
+  .kh-sv-demo[data-demo='derive'] {
+    opacity: 1;
+  }
+
+  .kh-sv-demo__side {
+    position: absolute;
+    width: 236px;
+  }
+
+  // Anything revealed by a step fades in; it leaves with the demo.
+  .kh-sv-demo__ln--state,
+  .kh-sv-demo__ln--token,
+  .kh-sv-demo__token,
+  .kh-sv-demo__note,
+  .kh-sv-demo__legend,
+  .kh-sv-demo__formula,
+  .kh-sv-demo__tile,
+  .kh-sv-demo__hand {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  // The CSS side: a snippet that grows its state selectors (m2) and the
+  // token line (w.1), and the real button, which follows the token.
+  .kh-sv-demo__code {
+    background: none;
+    border: 0;
+    color: var(--kh-color--grey--darkest);
+    font-family: var(--kh-font-mono);
+    font-size: 8.5px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    white-space: pre;
+  }
+
+  .kh-sv-demo__ln {
+    display: block;
+  }
+
+  .kh-sv-demo__ln--token {
+    display: none;
+  }
+
+  .kh-sv-demo[data-step='m2'] .kh-sv-demo__ln--state,
+  .kh-sv-demo[data-step='m3'] .kh-sv-demo__ln--state,
+  .kh-sv-demo[data-demo='token'] .kh-sv-demo__ln--state,
+  .kh-sv-demo[data-demo='derive'] .kh-sv-demo__ln--state {
+    opacity: 1;
+  }
+
+  .kh-sv-demo__ln--state:nth-child(3) {
+    transition-delay: 0.25s;
+  }
+
+  .kh-sv-demo__ln--state:nth-child(4) {
+    transition-delay: 0.5s;
+  }
+
+  .kh-sv-demo__token {
+    color: var(--kh-color--grey--darkest);
+    font-family: var(--kh-font-mono);
+    font-size: 8.5px;
+    margin-top: 6px;
+
+    s {
+      text-decoration: line-through;
+    }
+  }
+
+  .kh-sv-demo[data-demo='token'] .kh-sv-demo__token,
+  .kh-sv-demo[data-demo='derive'] .kh-sv-demo__token {
+    opacity: 1;
+  }
+
+  .kh-sv-demo[data-demo='token'] {
+    --kh-demo-pad: 16px;
+  }
+
+  .kh-sv-demo[data-demo='derive'] {
+    --kh-demo-pad: 16px;
+  }
+
+  .kh-sv-demo__stage {
+    display: flex;
+    height: 60px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  // The button is a real one, in the diagram's ink: pill, 1.5 rule; hover
+  // fills, focus-visible rings, and its padding is the token.
+  // Only the button takes the pointer; everything else is explained by the
+  // SVG hit areas above it.
+  .kh-sv-demo__button {
+    align-self: center;
+    background: var(--kh-ground);
+    pointer-events: auto;
+    border: 1.5px solid var(--kh-color--text);
+    border-radius: 999px;
+    color: var(--kh-color--text);
+    cursor: pointer;
+    font: 700 11px var(--kh-font-sans);
+    line-height: 1;
+    padding: 7px var(--kh-demo-pad);
+    transition: padding 0.4s ease, background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      background: var(--kh-color--text);
+      color: var(--kh-ground);
+    }
+
+    &.kh-sv-demo__button:focus {
+      outline: none;
+    }
+
+    &.kh-sv-demo__button:focus-visible {
+      outline: 1.5px dashed var(--kh-color--text);
+      outline-offset: 3px;
+    }
+  }
+
+  .kh-sv-demo__note {
+    color: var(--kh-color--grey--darkest);
+    font-size: 9px;
+    text-align: center;
+  }
+
+  .kh-sv-demo__note--follows {
+    position: absolute;
+    top: 232px;
+    width: 100%;
+  }
+
+  .kh-sv-demo[data-demo='token'] .kh-sv-demo__note--follows,
+  .kh-sv-demo[data-demo='derive'] .kh-sv-demo__note--follows {
+    opacity: 1;
+  }
+
+  // The counters, ink; the Figma one goes orange when tiles are out of step.
+  .kh-sv-demo__count {
+    font-size: 10px;
+    margin-top: 14px;
+    text-align: center;
+
+    b {
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  .kh-sv-demo__count--css {
+    position: absolute;
+    top: 192px;
+    width: 100%;
+  }
+
+  .kh-sv-demo__count--fig {
+    position: absolute;
+    top: 192px;
+    transition: color 0.3s ease;
+    width: 100%;
+  }
+
+  .kh-sv-demo__count--fig.is-off {
+    color: var(--kh-sv-fault, #c2410c);
+  }
+
+  // The Figma side: a grid of 72 variant tiles (pills), revealed 4 (m2)
+  // then all (m3, staggered by --i); the legend and the multiplication.
+  .kh-sv-demo__grid {
+    position: absolute;
+  }
+
+  .kh-sv-demo__tile {
+    border: 1.2px solid var(--kh-color--text);
+    border-radius: 999px;
+    box-sizing: border-box;
+    display: block;
+    height: 12px;
+    position: absolute;
+    transition: opacity 0.3s ease, border-color 0.3s ease;
+    width: 22px;
+  }
+
+  .kh-sv-demo[data-step='m2'] .kh-sv-demo__tile:nth-child(-n + 4),
+  .kh-sv-demo[data-step='m3'] .kh-sv-demo__tile,
+  .kh-sv-demo[data-demo='token'] .kh-sv-demo__tile,
+  .kh-sv-demo[data-demo='derive'] .kh-sv-demo__tile {
+    opacity: 1;
+  }
+
+  .kh-sv-demo[data-step='m3'] .kh-sv-demo__tile {
+    transition-delay: calc(var(--i, 0) * 18ms);
+  }
+
+  .kh-sv-demo__legend,
+  .kh-sv-demo__formula {
+    color: var(--kh-color--grey--darkest);
+    font-size: 8.5px;
+    position: absolute;
+    top: 166px;
+    width: 100%;
+  }
+
+  .kh-sv-demo__formula {
+    top: 178px;
+  }
+
+  .kh-sv-demo[data-step='m2'] .kh-sv-demo__legend,
+  .kh-sv-demo[data-step='m3'] .kh-sv-demo__legend,
+  .kh-sv-demo[data-step='m3'] .kh-sv-demo__formula,
+  .kh-sv-demo[data-demo='token'] .kh-sv-demo__formula,
+  .kh-sv-demo[data-demo='derive'] .kh-sv-demo__formula {
+    opacity: 1;
+  }
+
+  // w.1: the hand hops across the grid (translate keyframes between tile
+  // positions, then it stops), seven tiles go orange as it passes, and the
+  // joke lands. Paused with the tab (data-hidden, mirrored from the SVG).
+  .kh-sv-demo__hand {
+    fill: var(--kh-ground);
+    left: 0;
+    position: absolute;
+    stroke: var(--kh-color--text);
+    stroke-linejoin: round;
+    stroke-width: 1.2;
+    top: 0;
+    translate: var(--kh-hx0, 0px) var(--kh-hy0, 0px);
+  }
+
+  @keyframes kh-sv-hand {
+    0% {
+      translate: 20px 6px;
+    }
+
+    15%,
+    22% {
+      translate: 120px 22px;
+    }
+
+    37%,
+    44% {
+      translate: 176px 54px;
+    }
+
+    58%,
+    65% {
+      translate: 92px 86px;
+    }
+
+    80%,
+    100% {
+      translate: 150px 118px;
+    }
+  }
+
+  .kh-sv-demo[data-demo='token'] .kh-sv-demo__hand {
+    animation: kh-sv-hand 2.6s ease-in-out 0.2s 1 forwards;
+    opacity: 1;
+  }
+
+  .kh-sv-demo[data-hidden='1'] .kh-sv-demo__hand {
+    animation-play-state: paused;
+  }
+
+  .kh-sv-demo[data-step='tok2'] .kh-sv-demo__tile--off {
+    border-color: var(--kh-sv-fault, #c2410c);
+    border-width: 1.6px;
+    transition-delay: calc(var(--i, 0) * 6ms);
+  }
+
+  .kh-sv-demo[data-step='tok2'] .kh-sv-demo__note--joke {
+    opacity: 1;
+  }
+
+  .kh-sv-demo__note--joke {
+    color: var(--kh-sv-fault, #c2410c);
+    position: absolute;
+    top: 232px;
+    width: 100%;
+  }
+
+  // w.2: the orange clears (drv2) once the sources' arrow has arrived.
+  .kh-sv-demo[data-step='drv'] .kh-sv-demo__tile--off {
+    border-color: var(--kh-sv-fault, #c2410c);
+    border-width: 1.6px;
+  }
+
+  // The source boxes (SVG) and the arrow into the grid.
+  .kh-sv__src rect {
+    fill: var(--kh-ground);
+    stroke: var(--kh-color--text);
+    stroke-width: 1.5;
+  }
+
+  .kh-sv__src text {
+    fill: var(--kh-color--text);
+    font-family: var(--kh-font-mono);
+    font-size: min(10px, calc(11px / var(--kh-sv-s, 1)));
+    text-anchor: middle;
+  }
+
+  .kh-sv__line--derive {
+    stroke-width: 2.5;
+  }
+
+
+
+  // Dot groups can be hovered: the whole group (block or column, with its
+  // label) is the target. While one is explained, the other steps back.
+  .kh-sv__hit {
+    fill: transparent;
+    pointer-events: none;
+  }
+
+  .kh-sv__hit.is-on {
+    cursor: help;
+    pointer-events: all;
+  }
+
+  .kh-sv-dots[data-dot-focus='shared'] .kh-sv__dot--brand,
+  .kh-sv-dots[data-dot-focus='brand'] .kh-sv__dot:not(.kh-sv__dot--brand) {
+    opacity: 0.15;
+  }
+
+  .kh-sv[data-dot-focus='shared'] .kh-sv__dotlbl--brand.is-on,
+  .kh-sv[data-dot-focus='brand'] .kh-sv__dotlbl--shared.is-on {
+    opacity: 0.3;
+  }
+
+
+  // ------------------------------------------------------------------------
+  // Term definitions
+  // ------------------------------------------------------------------------
+  // In the prose: a quiet card right after the paragraph it belongs to. This
+  // is what no-JS, RSS-styled and narrow-screen readers see.
+  .kh-scrolly__define {
+    border-left: 3px solid var(--kh-color--text);
+    font-size: 0.95rem;
+    margin: 0 0 1.5rem;
+    padding: 0.1rem 0 0.1rem 0.9rem;
+
+    p {
+      margin: 0;
+    }
+
+    dfn {
+      font-style: normal;
+    }
+  }
+
+  // Narrow screens keep the in-prose definition (the pinned band is too small
+  // for an overlay), so pull it up under its paragraph and carry the step gap.
+  @media (max-width: $kh-breakpoint--lg-down) {
+    .kh-scrolly__step:has(+ .kh-scrolly__define) {
+      margin-bottom: 1rem;
+    }
+
+    .kh-scrolly--enhanced .kh-scrolly__define {
+      margin-bottom: 24vh;
+      margin-bottom: 24svh;
+    }
+
+    // A panel in the flow sits right under the step that introduces it,
+    // not a step-gap below.
+    .kh-scrolly--enhanced .kh-scrolly__section + .kh-scrolly__panel {
+      margin-top: calc(1.5rem - 24vh);
+      margin-top: calc(1.5rem - 24svh);
+    }
+
+    // No callouts in the narrow band, so no leaders to them either.
+    .kh-sv__leader {
+      display: none;
+    }
+
+    // The band is width-limited on a phone (scale ~0.66), where the natural
+    // 13.5-unit labels rendered at 9px. Free-standing labels (the reads, the
+    // bug flags, the dot counts) have room to grow, so give them a 10.5px
+    // floor; box titles and subtitles are sized by their boxes and stay.
+    // Not higher: "independent" (the peers label) runs to within a few units
+    // of the Storybook box at this size.
+    .kh-sv__label {
+      font-size: max(13.5px, calc(10.5px / var(--kh-sv-s, 1)));
+    }
+
+    .kh-sv__label--cover {
+      font-size: max(12.5px, calc(9.5px / var(--kh-sv-s, 1)));
+    }
+
+    // Four figures across a 390px band: the pills keep a readable floor,
+    // the sub-labels step aside (the <ol> below carries them on narrow).
+    .kh-sv__pill text {
+      font-size: max(11.5px, calc(8.5px / var(--kh-sv-s, 1)));
+    }
+
+    .kh-sv__chsub {
+      display: none;
+    }
+
+    // Dots are drawn a third larger in the band. The four pattern copies of
+    // the 540 (the close's 2,700) are grey bars at this scale, so the band
+    // shows the one real block; the <ol> below carries the figure.
+    .kh-sv,
+    .kh-sv-dots {
+      --kh-dot-m: 1.3;
+    }
+
+    .kh-sv__dotcopy {
+      display: none;
+    }
+  }
+
+  // Wide screens: the aside stays in the DOM for assistive tech and reading
+  // order, but is visually hidden; the graphic shows the callout copy.
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-scrolly--enhanced .kh-scrolly__define {
+      border: 0;
+      clip-path: inset(50%);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+  }
+
+  // The overlay layer is sized and placed by the script to match the drawn
+  // viewBox exactly, so callout positions are viewBox percentages.
+  .kh-scrolly__callouts {
+    display: none;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  @media (min-width: $kh-breakpoint--lg) {
+    .kh-scrolly__callouts {
+      display: block;
+    }
+  }
+
+  // Calm light card with a dark rule; the term sits in a dark pill, the same
+  // language as the "+ layout" chip. It pops out from its node.
+  .kh-scrolly__callout {
+    --kh-co-tx: 0%;
+    --kh-co-ty: 0%;
+    background: var(--kh-ground);
+    border: 1px solid var(--kh-color--text);
+    box-shadow: 0 2px 10px rgb(0 0 0 / 7%);
+    box-sizing: border-box;
+    color: var(--kh-color--text);
+    font-size: 15px;
+    left: var(--kh-co-x, 0);
+    line-height: 1.45;
+    opacity: 0;
+    padding: 0.7rem 0.9rem 0.8rem;
+    position: absolute;
+    top: var(--kh-co-y, 0);
+    transform: translate(var(--kh-co-tx), var(--kh-co-ty)) scale(0.92);
+    // Leaves over 0.5s (the leader goes first, in 0.2s); arrives in 0.25s.
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    width: min(22rem, var(--kh-co-w, 100%));
+  }
+
+  // `.is-on` is set by the script's single callout switch (stage defines a
+  // term, layout is wide), together with the leader.
+  .kh-scrolly__callout.is-on {
+    opacity: 1;
+    transform: translate(var(--kh-co-tx), var(--kh-co-ty));
+    transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition-delay: var(--kh-co-delay, 0.15s);
+  }
+
+  // Yielding to a popup on the same box: fades back, no pop, and returns on
+  // leave with the same short fade.
+  .kh-scrolly__callout.is-on.is-yield {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .kh-scrolly__callout--tl {
+    transform-origin: 0 30%;
+  }
+
+  .kh-scrolly__callout--bl {
+    --kh-co-ty: -100%;
+    transform-origin: 20% 100%;
+  }
+
+  .kh-scrolly__callout--br {
+    --kh-co-tx: -100%;
+    --kh-co-ty: -100%;
+    transform-origin: 80% 100%;
+  }
+
+  .kh-scrolly__callout-term {
+    background: var(--kh-color--text);
+    border-radius: 999px;
+    color: var(--kh-ground);
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    padding: 0.1rem 0.65rem;
+  }
+
+  .kh-scrolly__callout-text {
+    display: block;
+  }
+
+  // Hover / tap popup on a node box, Mapbox-style: a floating card anchored
+  // beside the box (the script picks the side), with a caret pointing at it.
+  // The shadow is a drop-shadow filter, not box-shadow, so the caret casts
+  // one too. The caret is a rotated square that paints over the card's own
+  // border where they meet and carries the border on its two outer sides
+  // only, so the outline is one continuous line with no doubled edge.
+  .kh-scrolly__tip {
+    --kh-tip-lift: 4px;
+    --kh-tip-dx: 0px;
+    --kh-tip-dy: var(--kh-tip-lift);
+    background: var(--kh-ground);
+    border: 1px solid var(--kh-color--text);
+    box-sizing: border-box;
+    color: var(--kh-color--text);
+    filter: drop-shadow(0 3px 8px rgb(0 0 0 / 12%)) drop-shadow(0 1px 2px rgb(0 0 0 / 8%));
+    font-size: 14px;
+    left: 0;
+    line-height: 1.45;
+    max-width: min(18rem, 92%);
+    opacity: 0;
+    padding: 0.6rem 0.8rem 0.7rem;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    transform: translate(var(--kh-tip-dx), var(--kh-tip-dy));
+    transition: opacity 0.15s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+    visibility: hidden;
+    width: max-content;
+    z-index: 6;
+
+    &::before {
+      background: var(--kh-ground);
+      border: 1px solid var(--kh-color--text);
+      box-sizing: border-box;
+      content: '';
+      height: 12px;
+      position: absolute;
+      width: 12px;
+    }
+  }
+
+  // Each side: caret on the edge facing the box; the card lifts in from it.
+  .kh-scrolly__tip[data-side='bottom'] {
+    &::before {
+      border-bottom-color: transparent;
+      border-right-color: transparent;
+      left: var(--kh-tip-caret, 50%);
+      top: -6.5px;
+      transform: translateX(-50%) rotate(45deg);
+    }
+  }
+
+  .kh-scrolly__tip[data-side='top'] {
+    --kh-tip-dy: calc(-1 * var(--kh-tip-lift));
+
+    &::before {
+      border-left-color: transparent;
+      border-top-color: transparent;
+      bottom: -6.5px;
+      left: var(--kh-tip-caret, 50%);
+      transform: translateX(-50%) rotate(45deg);
+    }
+  }
+
+  .kh-scrolly__tip[data-side='right'] {
+    --kh-tip-dx: var(--kh-tip-lift);
+    --kh-tip-dy: 0px;
+
+    &::before {
+      border-right-color: transparent;
+      border-top-color: transparent;
+      left: -6.5px;
+      top: var(--kh-tip-caret, 50%);
+      transform: translateY(-50%) rotate(45deg);
+    }
+  }
+
+  .kh-scrolly__tip[data-side='left'] {
+    --kh-tip-dx: calc(-1 * var(--kh-tip-lift));
+    --kh-tip-dy: 0px;
+
+    &::before {
+      border-bottom-color: transparent;
+      border-left-color: transparent;
+      right: -6.5px;
+      top: var(--kh-tip-caret, 50%);
+      transform: translateY(-50%) rotate(45deg);
+    }
+  }
+
+  .kh-scrolly__tip.is-on {
+    --kh-tip-lift: 0px;
+    opacity: 1;
+    transition: opacity 0.15s ease, transform 0.18s ease;
+    visibility: visible;
+  }
+
+  // Boxes you can hover for a definition. Only boxes, check discs and hit
+  // areas take the pointer: text, lines and anything not on would otherwise
+  // sit over a hit area and swallow the hover (an off-stage label did).
+  .kh-sv text,
+  .kh-sv__lines,
+  .kh-sv__chip,
+  .kh-sv__dots,
+  .kh-sv__chain,
+  .kh-sv__el:not(.is-on) {
+    pointer-events: none;
+  }
+
+  // Interactive parts opt back in to pointer events (the SVG's own box
+  // passes them through to the demo's real button underneath).
+  .kh-sv__node.is-on {
+    cursor: help;
+    pointer-events: visiblePainted;
+  }
+
+  // Keyboard focus on an "Explain:" button (box, check disc, dot group):
+  // the page's dashed ring, drawn round the element's box. Mouse focus
+  // shows nothing, as elsewhere on the site.
+  .kh-sv [role='button'] {
+    outline: none;
+  }
+
+  .kh-sv [role='button']:focus-visible {
+    outline: 1px dashed rgb(0 0 0 / 60%);
+    outline-offset: 4px;
+  }
+
+  // Wireframe: structure, not appearance. Grey hairlines, mono labels, no
+  // colour; dashed slots are optional.
+  .kh-scrolly__wire {
+    border: 1px solid var(--kh-color--grey);
+    display: grid;
+    font-family: var(--kh-font-mono);
+    font-size: 11px;
+    gap: 0.4rem;
+    grid-template-columns: 30% 1fr;
+    margin-top: 0.7rem;
+    padding: 0.45rem;
+
+    i {
+      color: var(--kh-color--grey);
+      font-style: normal;
+    }
+  }
+
+  .kh-scrolly__wire-media,
+  .kh-scrolly__wire-slot {
+    border: 1px solid var(--kh-color--grey);
+    color: var(--kh-color--grey--darkest);
+    display: block;
+    line-height: 1.3;
+    padding: 0.2rem 0.35rem;
+  }
+
+  .kh-scrolly__wire-media {
+    align-content: center;
+    min-height: 5.5rem;
+    text-align: center;
+  }
+
+  .kh-scrolly__wire-body {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .kh-scrolly__wire-slot--l {
+    font-weight: 700;
+  }
+
+  .kh-scrolly__wire-slot--m {
+    min-height: 2.2rem;
+  }
+
+  .kh-scrolly__wire-media.is-optional,
+  .kh-scrolly__wire-slot.is-optional {
+    border-style: dashed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kh-scrolly__tip,
+    .kh-scrolly__tip.is-on {
+      --kh-tip-lift: 0px;
+      transition: none;
+    }
+
+    // Fade only: no pop.
+    // Fade in only; leave instantly, as the rest of the diagram does here,
+    // so a card or leader never outlives its node.
+    .kh-scrolly__callout,
+    .kh-sv__leader {
+      transition: none;
+    }
+
+    .kh-scrolly__callout.is-on,
+    .kh-sv__leader.is-on {
+      transition: opacity 0.2s linear;
+    }
+
+    .kh-scrolly__callout,
+    .kh-scrolly__callout.is-on {
+      transform: translate(var(--kh-co-tx), var(--kh-co-ty));
+    }
+
+    .kh-scrolly__step,
+    .kh-sv__el,
+    .kh-sv__line,
+    .kh-sv__reveal,
+    .kh-sv__box,
+    .kh-sv__chbox,
+    .kh-sv__dot,
+    .kh-sv__dotcopy,
+    .kh-scrolly__panel,
+    .kh-scrolly--enhanced > .kh-scrolly__graphic {
+      transition: none;
+    }
+
+    .kh-sv__dot,
+    .kh-sv-dots.is-arriving .kh-sv__dot,
+    .kh-sv-dots[data-dots='born'] .kh-sv__dot--F {
+      animation: none;
+    }
+
+    .kh-sv-demo,
+    .kh-sv-demo__tile,
+    .kh-sv-demo__button,
+    .kh-sv-dots {
+      transition: none;
+    }
+
+    // The final state of each beat: no hopping hand (it sits on its last
+    // tile), no ticking counter (the script sets the final value).
+    .kh-sv-demo[data-demo='token'] .kh-sv-demo__hand {
+      animation: none;
+      translate: 150px 118px;
+    }
+
+    // Each beat of stage w shows its finished layout; the seam and notes
+    // simply fade in.
+    .kh-sv__line--seam {
+      transition: opacity 0.2s linear;
+    }
+
+    .kh-sv__pulse.is-on {
+      animation: none;
+      opacity: 0;
+    }
+  }
+}

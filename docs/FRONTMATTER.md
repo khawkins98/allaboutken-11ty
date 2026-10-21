@@ -59,6 +59,7 @@ layout: layouts/post.njk
   | Value | Use case |
   | --- | --- |
   | `layouts/post.njk` | Blog posts and impact stories |
+  | `layouts/story.njk` | Scroll-driven entries (`.kh-scrolly` regions); see the header comment in the layout |
   | `layouts/base.njk` | Standalone pages |
   | `layouts/digesting.njk` | "Digesting" short-form entries |
   | `layouts/photo.njk` | Photograph entries |
@@ -153,6 +154,19 @@ image_meta:
 - `altext` (or `alt`) → used for `<img alt="...">` in `layouts/post.njk`; both are checked and `altext` takes precedence.
 - `alt` (only) is used for `og:image:alt` and `twitter:image:alt` in `layouts/base.njk`.
 - For Ken's own photos use: `credit: "Own work."` (not "Photo by Ken Hawkins").
+
+---
+
+### `story_plate`
+
+```yaml
+story_plate: body
+```
+
+- Only read by `layouts/story.njk`. Absent (the default), the layout shows `image` as a closing plate after the body.
+- `body` tells the layout not to render the plate, because the post places it itself with `{% include "partials/story-plate.njk" %}`. Use it when a story needs to close on something *after* the plate, such as a final `.kh-story-flow` visual.
+- Placing the plate in the body also puts the plate, and anything after it, in the RSS feed, which carries only the body (`templateContent`).
+- `image` and `image_meta` keep working as usual for listings, thumbnails and JSON-LD.
 
 ---
 

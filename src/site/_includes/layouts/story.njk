@@ -1,0 +1,186 @@
+---
+layout: layouts/base.njk
+pageClass: posts
+templateEngineOverride: njk
+---
+{% from "partials/orgs.njk" import orgSummary %}
+{#- Story layout: a quiet full-page frame for scroll-driven pieces.
+
+    When to use it: an entry built around one or more `.kh-scrolly` regions
+    (a pinned graphic beside prose steps). The standard post.njk apparatus --
+    pulse strip, left rail with word count, topic tallies and contents, a lead
+    screenshot above the teaser -- competes with a pinned graphic and pushes
+    the prose into an offset column. Everything else should use post.njk.
+
+    What a post must provide:
+      - `layout: layouts/story.njk`, plus the usual post frontmatter (title,
+        teaser, date, tags, topics; `image` + `image_meta` are optional).
+      - Body content written as a sequence of top-level blocks. Each one sits
+        in a single centred reading column unless it is:
+          .kh-scrolly              -- a scroll-driven region; spans the page
+                                      once its script adds .kh-scrolly--enhanced.
+                                      A region may be the WHOLE body (one
+                                      graphic pinned from the cover to the
+                                      close): give it data-scrolly-cover with
+                                      a selector for the cover below, and the
+                                      script adopts the cover into the region's
+                                      step column, leaving no-JS and RSS readers
+                                      the plain title page. Blocks inside such
+                                      a region that belong in the graphic
+                                      column (an interactive, a screenshot)
+                                      carry data-scrolly-panel; see
+                                      _kh-scrolly.scss.
+          .kh-bleed-out            -- a full-width plate (screenshot,
+                                      interactive, wide figure)
+          .kh-story-flow           -- optional closing chain of figures (an
+                                      <ol> of node boxes joined by arrows);
+                                      /story-flow.js counts them in, unless the
+                                      chain sits inside an enhanced region, where
+                                      the region's graphic is the ending and the
+                                      <ol> is the RSS / no-JS version
+      - Any script the regions need, loaded by the post itself.
+
+    What it changes relative to post.njk:
+      - Opening is a cover: breadcrumb + ref, title, teaser as the dek, one
+        meta line. No pulse strip, no rail, no topic tallies.
+      - `image` is shown as a closing plate after the body rather than as a
+        lead screenshot above it. To close on something AFTER the plate (a
+        final visual), set `story_plate: body` and place the plate in the
+        body, either with {% include "partials/story-plate.njk" %} or with
+        your own figure built from `image` / `image_meta` (a region may want
+        it as a panel); everything then sits in the body, so the RSS feed
+        carries it too. `image` still feeds listings, thumbnails and the
+        JSON-LD either way.
+      - Date, word count, topics, ref and contents move to a colophon at the
+        end, ahead of the entry foot.
+
+    Enhanced-only states before the script runs: the inline script below
+    adds `kh-js` to <body> at first paint, and _kh-scrolly.scss hides the
+    scrolly panels and static figures under `body.kh-js` until the region's
+    script adds `.kh-scrolly--enhanced` (a 3s CSS fallback reveals them if
+    it never does). No-JS readers never get the class, so nothing is hidden
+    for them. Opacity only, so no layout shift.
+
+    What it must keep in step with post.njk (other code reads these):
+      - kh-entry-kind / kh-entry-date comments and the kh-entry-content
+        start/end markers (scripts/compute-corpus-stats.mjs).
+      - The JSON-LD block, feedback partial and entry-foot partial.
+      - data-pagefind-ignore on every piece of apparatus.
+      - footer.njk's `hasByline` list includes this layout. -#}
+
+<script>document.body.classList.add('kh-js');</script>
+{% if tags and ('impact-stories' in tags) %}<!-- kh-entry-kind:impact-story -->{% elif tags and ('posts' in tags) %}<!-- kh-entry-kind:blog -->{% endif %}
+<!-- kh-entry-date:{{ date | dateDisplay('yyyy-LL-dd') }} -->
+{%- set isImpactStory = tags and ('impact-stories' in tags) %}
+{#- Document reference: same rule as post.njk. -#}
+{%- set docRef = (collections.impactStories | impactStoryRef(page.url)) if isImpactStory else null %}
+{%- set docRef = docRef or (page | docRef) %}
+{%- set words = content | wordCount %}
+
+<article class="kh-story">
+  <header class="kh-story__cover">
+    <p class="kh-breadcrumb kh-story__strap" data-pagefind-ignore>
+      {% if isImpactStory %}<a href="/work">← Work</a>{% else %}<a href="/blog">← Blog</a>{% endif %}
+      {% if docRef %}<a class="kh-doc-ref" href="{{ page.url }}" title="Permalink to this entry">Ref {{ docRef }}</a>{% endif %}
+    </p>
+    <h1 class="kh-font-headline kh-story__title">{{ title }}</h1>
+    {% if teaser -%}
+    <p class="kh-story__dek">{{ teaser | emdash | safe }}</p>
+    {%- endif %}
+    <p class="kh-meta kh-story__meta" data-pagefind-ignore>
+      <time datetime="{{ date | dateDisplay('yyyy-MM-dd') }}">{% if isImpactStory %}{{ date | dateDisplay('y') }}{% else %}{{ date | dateDisplay }}{% endif %}</time>
+      {% if org %}&middot; {{ org }} {% endif %}&middot; {{ words | formatNumber }} words
+    </p>
+  </header>
+
+  <div class="kh-content kh-story__body">
+    <!-- kh-entry-content:start -->{{ content | safe }}<!-- kh-entry-content:end -->
+
+    {#- `story_plate: body` means the post places the plate itself (see
+        partials/story-plate.njk), so it can close on something after it. -#}
+    {% if story_plate != 'body' %}{% include "partials/story-plate.njk" %}{% endif %}
+
+    {%- if comment != false %}
+    {% include "partials/feedback.njk" %}
+    {%- endif %}
+
+    {#- Colophon: the apparatus post.njk shows up front, gathered at the end
+        where it no longer competes with the opening. -#}
+    <footer class="kh-story__colophon" data-pagefind-ignore>
+      <dl class="kh-story__colophon-list">
+        <dt class="kh-meta">Published</dt>
+        <dd><time datetime="{{ date | dateDisplay('yyyy-MM-dd') }}">{{ date | dateDisplay }}</time></dd>
+        <dt class="kh-meta">Length</dt>
+        <dd>{{ words | formatNumber }} words</dd>
+        {%- set orgText = orgSummary(org) | trim if org else '' %}
+        {% if orgText %}
+        <dt class="kh-meta">Context</dt>
+        <dd>{{ orgText | safe }}</dd>
+        {% endif %}
+        {% if docRef %}
+        <dt class="kh-meta">Ref</dt>
+        <dd><a class="kh-doc-ref" href="{{ page.url }}" title="Permalink to this entry">{{ docRef }}</a></dd>
+        {% endif %}
+        {% if topics %}
+        <dt class="kh-meta">Topics</dt>
+        <dd>
+          <ul class="kh-story__topics">
+            {%- for topic in topics %}
+            {%- set parent = topic | topicParent %}
+            {%- set child = topic | topicChild %}
+            {%- set topicSlug = collections.topics | topicPageSlug(topic) %}
+            <li>{%- if topicSlug %}<a href="/topics/{{ topicSlug }}/">{{ parent }}</a>{% else %}{{ parent }}{% endif %}{% if child %} <span class="kh-topic-child">{{ child }}</span>{% endif %}</li>
+            {%- endfor %}
+          </ul>
+        </dd>
+        {% endif %}
+        {%- set tocEntries = content | tocEntries %}
+        {%- if tocEntries.length >= 2 %}
+        <dt class="kh-meta">Contents</dt>
+        <dd>
+          <ol class="kh-story__contents">
+            {%- for entry in tocEntries %}
+            <li><a href="#{{ entry.id }}">{{ entry.text }}</a></li>
+            {%- endfor %}
+          </ol>
+        </dd>
+        {%- endif %}
+      </dl>
+      {% include "partials/series-nav.njk" %}
+    </footer>
+  </div>
+</article>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.allaboutken.com{{ page.url | url }}"
+  },
+  "headline": {{ title | dump | safe }},
+  "description": {{ (teaser or siteConfig.siteInformation.short_description) | striptags | dump | safe }},
+  "datePublished": {{ date | dump | safe }},
+  "dateModified": {{ (updated or date) | dump | safe }},
+  "author": {
+    "@type": "Person",
+    "name": {{ siteConfig.siteInformation.author | dump | safe }}
+  },
+  {% if image -%}
+  "image": ["https://www.allaboutken.com/images{{ image | url }}"],
+  {%- endif %}
+  "publisher": {
+    "@type": "Person",
+    "name": {{ siteConfig.siteInformation.author | dump | safe }}
+  }
+}
+</script>
+
+{#- The shared entry foot assumes post.njk's wide two-column grid. In a
+    story it follows the centred colophon, so .kh-story__foot re-flows it:
+    byline and onward reading in the reading column, the sequence drawing on
+    the wide track. The kh-story class supplies the measure variables. -#}
+<div class="kh-story kh-story__foot">
+{% include "partials/entry-foot.njk" %}
+</div>

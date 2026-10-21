@@ -1,0 +1,15 @@
+{#- Story plate: the entry's frontmatter `image` as a full-width figure.
+    layouts/story.njk renders it after the body by default. A story that
+    sets `story_plate: body` places it itself, with
+    {% include "partials/story-plate.njk" %}, so it can put something after
+    the plate (a closing visual) and keep both in the body, which is what
+    the RSS feed carries. `image` still feeds listings and thumbnails either
+    way. -#}
+{% if image %}
+<figure class="kh-bleed-out kh-story__plate">
+  <img class="kh-figure__image" src="/images{{ image | url }}" alt="{{ image_meta.altext or image_meta.alt or '' }}" loading="lazy" decoding="async" sizes="(min-width: 81.25em) 1268px, 100vw">
+  {% if image_meta and image_meta.text %}
+  <figcaption class="kh-figure__caption">{{ image_meta.text | safe }}</figcaption>
+  {% endif %}
+</figure>
+{% endif %}
