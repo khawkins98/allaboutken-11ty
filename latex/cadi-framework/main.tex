@@ -1,0 +1,348 @@
+% Adapted from the original web post:
+%   "CADI: a prescriptive path for slop-free AI in content work"
+%   https://www.allaboutken.com/posts/20260609-iterative-pattern-framework/
+% Restructured into paper form as a proof of concept for depositing on
+% Zenodo (user: khawkins98) with an ORCID-linked author record.
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{parskip}
+
+\title{CADI: A Prescriptive Framework for Evidence-Based AI-Assisted Content Work}
+\author{%
+  Ken Hawkins\thanks{Independent Researcher.} \\
+  \href{https://orcid.org/0009-0009-6728-2237}{ORCID: 0009-0009-6728-2237}
+}
+\date{June 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Most AI-writing assistance starts cold on every task: no memory of what
+worked last time, no documented picture of an organisation's voice or
+standards. The common responses --- better prompting, a static style
+guide, a bolted-on agent --- each capture part of the answer but not
+the order or the combination. This paper presents CADI (Collect,
+Analyze, Document, Iterate), a four-phase, evidence-based loop for
+deriving AI writing guidance from an organisation's own best content
+and revising that guidance on measured outcomes rather than intuition.
+The framework is illustrated with a case study from UNDRR (the UN
+Office for Disaster Risk Reduction) and situated against related work
+in voice-profile tooling, prompt-engineering evaluation, and clinical
+guideline methodology.
+\end{abstract}
+
+\section{The problem: every prompt starts from zero}
+
+Most AI writing assistance starts cold every time. There is no memory
+of what worked last time, and no sense of an organisation's voice, its
+standards, or its audience. The result is generic, confident output
+that must be corrected after the fact.
+
+The fix is not a better prompt. It is giving the model a documented
+picture of what ``good'' looks like for a specific organisation, and a
+way to improve that picture as more is learned about what works. Done
+well, the model becomes more useful over time rather than requiring
+the same corrective effort on every task.
+
+A failure mode persists even once this is addressed: \emph{confident
+wrongness with silent drift}. Output sounds authoritative but cites a
+source incorrectly, or lands near the target word count while quietly
+shifting the intended meaning. These errors are harder to catch than
+obvious nonsense, and they compound faster.
+
+\section{Supervised co-writing as the starting point}
+
+Most people using AI for writing are not doing autonomous AI
+publishing. They are doing \emph{supervised co-writing}: the model
+handles a first pass or a tedious sub-task, a human reviews and
+corrects, and a human publishes. That is the normal case, and it is
+where most of the current value sits.
+
+CADI targets teams who want to move from ``AI is something we
+sometimes use'' toward ``AI is something our editorial standards
+reliably shape.'' That transition does not happen through prompting
+technique alone; it requires a documented, testable, and revisable
+guidance layer.
+
+\section{Preconditions}
+
+The framework works best when an organisation can answer yes to the
+following:
+
+\begin{itemize}[nosep]
+  \item There are ideally 50+ published items considered high quality
+        (not merely recent). Ten to twenty items from a narrow,
+        high-quality domain still work, at the cost of some
+        overfitting; the discipline of running the loop is what
+        compounds over time.
+  \item Some quality signal exists: engagement data, editor picks,
+        longevity tags, or manual curation.
+  \item At least one person has time to own the guidance document and
+        keep it current.
+  \item Content can be exported from the CMS in text form (Markdown,
+        HTML, or CSV).
+  \item Editors are willing to log failures rather than silently
+        fixing them.
+\end{itemize}
+
+None of this requires a data-science team, a custom CMS, or a formal
+AI strategy. If no one will own the guidance document, however, the
+method breaks down regardless of tooling.
+
+\section{The CADI framework}
+
+CADI is a four-phase loop, built once and then run continuously on its
+final phase. Each cycle sharpens the guidance document rather than
+adding to its weight.
+
+\subsection{C --- Collect: extract the best examples}
+
+An organisation's best content already embodies its patterns: word
+counts, title structures, tag usage, narrative flow. The task is to
+curate an exemplary set, not simply pull the most recent items.
+
+Work within a single content subtype at a time. Most organisations
+publish several superficially similar formats --- press releases,
+news briefs, feature reports, donor updates, blog posts --- each with
+its own voice and structure; mixing them yields average patterns that
+fit none of them.
+
+Top-traffic items are the obvious and most common wrong default.
+High traffic often correlates with topic timeliness or reach rather
+than the qualities worth reproducing. Three signals combine better:
+
+\begin{itemize}[nosep]
+  \item \textbf{Editorial investment} --- items the team spent the
+        most time on, since effort is a quality signal even absent
+        strong metrics.
+  \item \textbf{Aspirational fit} --- items the organisation wants
+        more of its output to resemble.
+  \item \textbf{Performance for type} --- a press release performing
+        at five times the median for press releases is more
+        informative than a single feature that went viral.
+\end{itemize}
+
+Existing reference material --- style guides, brand guidelines,
+glossaries, terminology lists, institutional memos --- should be
+added alongside the corpus. The corpus shows the model what good looks
+like by example; the reference material states the rules to enforce
+and should be citable directly in generated drafts.
+
+\emph{Exit criterion:} 50--100 items in one consolidated, cleaned
+document; a written record of why they qualify; an editor's spot-check
+for outliers.
+
+\subsection{A --- Analyze: find quantitative patterns}
+
+The curated examples are fed to a model with a structured prompt to
+extract empirical description, not yet guidance:
+
+\begin{itemize}[nosep]
+  \item Average word counts, with ranges, by content type
+  \item Title formats and syntactic shapes
+  \item Heading and structural patterns
+  \item Voice markers (person, contractions, hedging, sentence-length
+        variance)
+  \item Source treatment (inline links, blockquotes, first-paragraph
+        attribution)
+  \item Opening and closing patterns
+  \item Cross-linking density
+  \item Metadata usage
+\end{itemize}
+
+This list is not exhaustive; each content subtype has its own tells,
+and the signals watched for should be documented so they can be
+revisited on the next cycle. Models handle the extraction well; the
+interpretation remains a human judgment.
+
+\emph{Exit criterion:} a written summary of patterns with numbers,
+reviewed by at least one editor for anything unrepresentative.
+
+\subsection{D --- Document: turn patterns into working instructions}
+
+The Analyze output is combined with existing institutional knowledge
+into a single document the AI tool uses as standing context. Where an
+existing style guide already covers a subtype, the Document step
+tightens it with the Analyze step's numbers rather than re-deriving it
+from scratch, overriding only where there is evidence the prior
+guidance was wrong.
+
+Observed patterns and existing rules will sometimes conflict --- for
+example, an 8-word average title length against a house-style cap of
+6. The decision, and its rationale, belongs in a change log rather
+than remaining implicit.
+
+The result is guidance concrete enough to act on (``180 words
+$\pm$10\%'') rather than vague (``be concise''); the same document also
+serves human editors.
+
+\emph{Exit criterion:} the instructions reviewed by an editor not
+involved in writing them, and integrated with the AI tool in use.
+
+\subsection{I --- Iterate: build confidence over time}
+
+Iteration done badly is tweaking in the dark. Done well, it is
+hypothesis-driven, for example:
+
+\begin{itemize}[nosep]
+  \item \emph{If} explicit numeric targets are added (``180 words
+        $\pm$10\%''), \emph{then} first-pass acceptance rises from 40\%
+        to 70\% (illustrative).
+  \item \emph{If} exemplars of title styles are shown, \emph{then} the
+        model chooses appropriate titles 85\% of the time
+        (illustrative).
+  \item \emph{If} oppositional review is run (a second model critiques
+        the guidance), \emph{then} biased rules are caught 80\% of the
+        time (illustrative).
+\end{itemize}
+
+Hypotheses are tested with a simple before/after comparison on real
+content, a concrete outcome metric, and a written record of what
+changed and why. For a small team (two to three editors), 20--30 items
+per condition supports an honest qualitative comparison --- an
+improvement over blind tweaking, though not a statistical signal.
+Genuine statistical rigor requires much larger, blinded samples that
+most editorial teams will not reach; qualitative honesty about what
+changed and why is the realistic bar.
+
+A mid-cycle revision trigger applies when more than 20\% of a week's
+outputs fail the same check: that pattern warrants investigation
+immediately rather than waiting for a scheduled audit.
+
+\emph{Exit criterion:} at least one completed hypothesis test, a
+documented decision (kept or rejected), and a failure log someone is
+actively adding to.
+
+\section{Case study: CADI at UNDRR}
+
+One full loop illustrates the framework in practice:
+
+\begin{itemize}[nosep]
+  \item \textbf{Collection}: 122 publications flagged as
+        ``evergreen + high-engagement'' in Drupal.
+  \item \textbf{Analysis}: the model extracted patterns --- 169-word
+        average, 56\% of titles using colons, all items using two to
+        four themes.
+  \item \textbf{Documentation}: a guidance document was drafted and
+        uploaded as standing instructions in Microsoft 365 Copilot.
+  \item \textbf{Iteration}: quarterly audits checked whether new AI
+        drafts matched the documented patterns, with a shared change
+        log recording adjustments and rationale.
+\end{itemize}
+
+Before CADI, none of curation, pattern extraction, guidance
+documentation, or iteration reliably produced anything usable in
+isolation; each task restarted from nothing. Running them as a
+connected loop converted a set of one-off attempts into a continuous,
+improving process. The value was not a single headline metric but the
+conversion of ad hoc effort into something repeatable. This case is
+not offered as rigorous evidence: a prospective, quantified A/B test
+of which guidance changes move which outcomes by how much remains the
+missing piece, and is the direction future cycles should move toward.
+
+\section{Where this breaks down}
+
+Iteration reverts to guesswork under several conditions:
+
+\begin{enumerate}[nosep]
+  \item \textbf{Encoding bias without inspection} --- a pattern such
+        as ``short sentences are good'' may simply reflect that the
+        exemplars targeted beginners; applied universally, it
+        infantilizes advanced content.
+  \item \textbf{Optimizing for fit rather than truth} --- ``this tag
+        co-occurs 26\% of the time, so always pair them'' should read
+        ``consider pairing them.''
+  \item \textbf{No quality gate on the source set} --- mediocre
+        content in the ``best'' set skews guidance toward mediocrity.
+  \item \textbf{Stopping too early or too late} --- ten examples is
+        too few; five hundred risks overfitting.
+  \item \textbf{Expecting voice cloning in informal genres} ---
+        style-imitation performs well for structured formats such as
+        news and email, and considerably worse for informal, personal
+        writing such as blogs and forum posts; corpus-derived guidance
+        reliably reproduces structure and convention, but a
+        distinctive personal voice still requires a human pass.
+\end{enumerate}
+
+Mitigations include transparent curation criteria, documented
+assumptions, human review between cycles, oppositional analysis (a
+second model critiquing the instructions), and explicit escape hatches
+(``usually X, unless Y'').
+
+CADI also does not fit cleanly for high-volume newsrooms shipping
+dozens of pieces per week across many content subtypes; it assumes one
+primary subtype at a time and a corpus small enough to read in full.
+Sampling methodology and per-subtype parallel runs would be needed at
+that scale, and are out of scope here.
+
+\section{Related work}
+
+None of the individual pieces of CADI are novel in isolation; the
+contribution is the connected loop.
+
+Commercial tools such as Writer and Jasper reverse-engineer a voice
+profile from an organisation's own content, functioning as
+implementations of the Collect and Analyze phases. ChainForge (CHI
+2024) formalized treating prompts, and the criteria used to evaluate
+them, as testable hypotheses --- the same posture CADI takes toward
+its own guidance document. Clinical guideline methodology (AGREE II
+and GRADE) assesses whether guidelines are evidence-based and
+implementable; the Australian COVID-19 living guidelines went further,
+revising and republishing weekly for 24 weeks as new evidence arrived
+--- a continuously iterated guidance document running in production.
+
+A software subscription is not a method, and a research paper is not a
+guide. What appears missing elsewhere is the connected discipline:
+deriving guidance from a curated, organisation-specific corpus, then
+maintaining the failure log and test record that make that guidance
+revisable on evidence rather than intuition. That combination is what
+CADI names.
+
+\section{Conclusion}
+
+CADI is best understood as a forcing function rather than a generator:
+most of the underlying work is still careful reading of an
+organisation's own content. The framework's contribution is ensuring
+that reading happens, and that what is learned from it gets written
+down, tested, and revised. It is presented here as the method run
+in production at UNDRR; adaptation should be expected for different
+volumes, content types, and organisational constraints.
+
+\section*{References}
+
+\begin{enumerate}[nosep]
+  \item Bsharat et al., ``Principled Instructions Are All You Need,''
+        \href{https://arxiv.org/abs/2312.16171}{arXiv:2312.16171}.
+  \item ``Catch Me If You Can? Not Yet: LLMs Still Struggle to Imitate
+        the Implicit Writing Styles of Everyday Authors,'' EMNLP 2025
+        Findings, \href{https://arxiv.org/abs/2509.14543}{arXiv:2509.14543}.
+  \item Wu et al., ``ScatterShot: Interactive In-context Example
+        Curation for Text Transformation,'' ACM IUI 2023,
+        \href{https://arxiv.org/abs/2302.07346}{arXiv:2302.07346}.
+  \item Arawjo et al., ``ChainForge: A Visual Toolkit for Prompt
+        Engineering and LLM Hypothesis Testing,'' CHI 2024,
+        \href{https://arxiv.org/abs/2309.09128}{arXiv:2309.09128}.
+  \item Tendal et al., ``Weekly updates of national living
+        evidence-based guidelines: methods for the Australian living
+        guidelines for care of people with COVID-19,'' \emph{Journal
+        of Clinical Epidemiology}, 2020,
+        \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC7657075/}{PMC7657075}.
+  \item Wei et al., ``Chain-of-Thought Prompting Elicits Reasoning,''
+        2022, \href{https://arxiv.org/abs/2201.11903}{arXiv:2201.11903}.
+  \item Yao et al., ``Tree of Thoughts: Deliberate Problem Solving with
+        LLMs,'' 2023, \href{https://arxiv.org/abs/2305.10601}{arXiv:2305.10601}.
+  \item Kohavi, Longbotham et al., ``Controlled experiments on the
+        web: survey and practical guide,'' \emph{Data Mining and
+        Knowledge Discovery}, 2009,
+        \href{https://doi.org/10.1007/s10618-008-0114-1}{doi:10.1007/s10618-008-0114-1}.
+  \item AGREE II --- \href{https://www.agreetrust.org/}{agreetrust.org}.
+  \item GRADE --- \href{https://www.gradeworkinggroup.org/}{gradeworkinggroup.org}.
+  \item Di\'ataxis --- \href{https://diataxis.fr/}{diataxis.fr}.
+  \item PRISMA --- \href{https://www.prisma-statement.org/}{prisma-statement.org}.
+\end{enumerate}
+
+\end{document}
