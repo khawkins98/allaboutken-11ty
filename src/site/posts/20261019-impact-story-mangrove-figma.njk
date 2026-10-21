@@ -157,11 +157,11 @@ image_meta:
 <div class="kh-scrolly__section" data-scrolly-steps="c0 c1 c2 c2" data-scrolly-short>
 {% markdown %}
 
-**Most Figma kits tell a design system's story a second time.** Designers draw the components, engineers build them, and the two versions drift because nothing ties one to the other. Every correction gets made twice, by different people, from memory.
+**Figma kits often tell a design system's story a second time.** Designers draw the components, engineers build them, and the two versions drift because nothing ties one to the other. Every correction gets made twice, by different people, or often doesn't and the two worlds drift. Double the work and half the benefit.
 
-**Mangrove's Figma library is derived instead, so a change made once lands everywhere.** When I changed a core spacing value in code and republished, a designer's pilot file updated and kept every one of their edits. Nobody redrew anything or compared design and code by eye.
+**UNDRR's Mangrove Figma library is derived instead: a change made once lands everywhere.** When we changed a core spacing value in code and republished, a designer's pilot file updated and kept every one of their edits. Nobody redrew anything or compared design and code by eye.
 
-**That works because three sources already agreed.** The content rules (structured content schemas) say what each component contains, the brand settings (design tokens) say how it looks in each of UNDRR's five brands, and the developers' live component catalogue ([Storybook](https://mangrove.undrr.org/)) says how it is laid out. A plugin I built reads all three and generates a native Figma library: 297 variants in 25 component families, real components rather than pictures of them.
+**That works because three sources already agree on how truth is told.** The content rules (structured content schemas) say what each component contains, the brand settings (design tokens) say how it looks in each of UNDRR's five brands, and the developers' live component catalogue ([Storybook](https://mangrove.undrr.org/)) says how it is laid out. A plugin I built reads all three and generates a native Figma library: 297 variants in 25 component families, real components rather than pictures of them.
 
 **That is triangulation: each source answers one question.** So when Figma disagreed with one of them, I knew which, and every mismatch became a bug with an address instead of an argument about taste.
 
@@ -172,7 +172,7 @@ image_meta:
 
 ## Why isn't this a solved problem?
 
-**Storybook and Figma look as if they do the same job.** Both show a design system's components, so it seems they should stay in step on their own. They don't, for the same reason a Windows app doesn't simply run on a Mac: each platform lays things out and behaves in its own way, and Figma's Auto Layout is not CSS.
+**Storybook and Figma only look as if they do the same job.** Both show a design system's components, so it seems they should stay in step on their own. They don't, for the same reason a Windows app doesn't simply run on a Mac: each platform lays things out and behaves in its own way, and Figma's Auto Layout is not CSS.
 
 **There is no standard way across.** Every system has its own components, brands and edge cases, so any conversion depends on what you start from. Most teams settle for [a degree of parity](https://designsystemdiaries.substack.com/p/how-close-should-figma-be-to-code) between the two, or accept that [the front end is the real source of truth](https://www.robinrendle.com/notes/an-incoherent-rant-about-design-systems) and update Figma by hand to keep up.
 
