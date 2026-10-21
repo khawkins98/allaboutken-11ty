@@ -1,7 +1,7 @@
 ---
 title: "Rehabilitating Johnny Castaway for the browser"
 layout: layouts/post.njk
-teaser: "Bringing the 1992 screensaver to modern browsers exposed the scripts, story clock and scene director behind Johnny's island."
+teaser: "Bringing the '90s screensaver to modern browsers exposed the scripts, story clock and scene director behind Johnny's island."
 date: 2026-10-19
 tags:
   - posts
@@ -13,7 +13,7 @@ topics:
 kens_status: draft
 image: /blog/johnny-castaway-octopus.png
 image_meta:
-  text: "An ambitious fishing trip ends with Johnny up the palm tree and an octopus on the beach."
+  text: "An ambitious fishing trip ends with Johnny up the palm tree and an octopus on the beach. One of his more exciting escapades."
   credit: "Screenshot from johnny_web. Original Johnny Castaway artwork by Dynamix / Sierra On-Line."
   altext: "Johnny clings halfway up a palm tree while a red octopus sits below him on a tiny island, with a raft beside the shore and blue sea beyond."
 ---
@@ -22,7 +22,9 @@ image_meta:
 
 In 1992, Dynamix and Sierra On-Line released *Johnny Castaway*. Whenever an office PC went idle, a tiny castaway fished, slept, built rafts, and got into trouble on Windows 3.1. And for decades, that is pretty much where he stayed. Enjoying that casual rhythm today usually means dragging a beige tower out of a closet or coaxing an old Windows install inside a virtual machine. Because the friction is so high, almost nobody bothers.
 
-I wanted Johnny where I actually spend my time, so [he now runs in a browser tab](https://khawkins98.github.io/johnny_web/). Rebuilding that environment was only possible with AI assistance. Using LLMs to reverse-engineer old binaries has become a popular weekend hack lately, but when I started this work, the path was much less charted—and it was rarely easy. It meant decoding custom bytecode, reconstructing a lost scene director, and building an automated oracle to hold the browser port to the behavior of the original 16-bit executable.
+[Now he toils his days in a browser tab](https://khawkins98.github.io/johnny_web/). 
+
+Rebuilding his island in a JS runtime was only feasible with AI assistance. There have been similar past attempts, but none captured his story accurately (if I've missed one, please tell me). 
 
 > **tl;dr**
 >
@@ -92,6 +94,8 @@ Completing a day's key scene unlocks the next chapter. When your calendar date c
 
 Environmental details run on their own schedules. The tide rises and falls on a thirty-minute cycle; holiday decorations appear on specific calendar dates. The raft's construction progress, the island's position, and day-night lighting shifts all belong to the director's scheduler.
 
+That narrative structure is what makes Johnny so fascinating to investigate. It is not just an endless stream of random sight gags; it is an authored story with random permutations running through it. That subtlety gave the island its sense of life, and it is a neat design that is still not widely understood.
+
 For a look at the original 1992 release and its cultural impact, Nostalgia Nerd's retrospective gives a wonderful overview of why it captivated so many of us in the 1990s:
 
 {% endmarkdown %}
@@ -108,7 +112,7 @@ The [browser port](https://khawkins98.github.io/johnny_web/) offers Classic and 
 
 To run it, you supply the original game data. The [README](https://github.com/khawkins98/johnny_web#readme) links the floppy archive; dropping its ZIP or extracted `.ima` disk image directly onto the page imports the resources straight into browser storage.
 
-Like my [recent Mac OS 9 work](/posts/20260810-newsheep-sheepshaver-mac-os-9-2-apple-silicon-jit/), this started as an excuse to spend time with vintage software again. Johnny's island turned out to contain far more clever engineering than a simple screensaver had any right to have.
+I still have plans to continue optimizing the runtime and work on improvements around visualizing and mapping Johnny's story over time. Like my [recent Mac OS 9 work](/posts/20260810-newsheep-sheepshaver-mac-os-9-2-apple-silicon-jit/), this started as an excuse to spend time with vintage software again. Johnny's island turned out to contain far more clever engineering than a simple screensaver had any right to have.
 
 If you remember Johnny from back in the day, I'd love to hear which gag stuck with you. It's nice having that little castaway getting on with his life in the corner of a tab again.
 
