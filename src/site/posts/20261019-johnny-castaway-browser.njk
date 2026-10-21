@@ -1,7 +1,7 @@
 ---
 title: "Rehabilitating Johnny Castaway for the browser"
 layout: layouts/post.njk
-teaser: "Rehabilitating an early screensaver for the browser exposed the scripts, story clock and scene director behind Johnny's island."
+teaser: "Bringing the 1992 screensaver to modern browsers exposed the scripts, story clock and scene director behind Johnny's island."
 date: 2026-10-19
 tags:
   - posts
@@ -20,11 +20,9 @@ image_meta:
 
 {% markdown %}
 
-Johnny Castaway was the standout screensaver of the early 1990s. Released by Dynamix and Sierra On-Line in 1992, it replaced the blank idle screens of Windows 3.1 with a tiny castaway living out an unpredictable life on a desert island. I remember coming across him in 1992 and '93 and being captivated. He fished, slept, built rafts, and got into trouble whenever nobody was touching the keyboard.
+Johnny Castaway was the standout screensaver of the early 1990s, and for decades, that is where he remained. Released by Dynamix and Sierra On-Line in 1992, he fished, slept, built rafts, and got into trouble whenever an office PC sat idle. Over time, enjoying that casual rhythm became nearly impossible without dragging a dusty computer out of a closet or wrestling with an emulated virtual machine. Because the friction was so high, most people simply moved on.
 
-Thirty-four years later, enjoying that casual rhythm is surprisingly hard. If I want to see Johnny or share him with my kid, the modern options are dreary: drag a dusty computer out of a closet, or configure a virtual machine and hope emulated Windows 3.1 behaves. Neither captures the effortless charm of having him get on with his day in the corner of your screen.
-
-So I wanted him where I actually spend my time: [Johnny now runs directly in a browser tab](https://khawkins98.github.io/johnny_web/). Rehabilitating him for modern browsers meant going beyond replaying animations. It required reverse-engineering the bytecode engine, reconstructing the original executable's lost scene director, and building an automated oracle to verify the browser port against the 1992 program running in an instrumented emulator.
+I thought that with the aid of modern tooling, there had to be a way to make the island enjoyable again: [Johnny now runs directly in a browser tab](https://khawkins98.github.io/johnny_web/). Pulling that off was only possible with AI. While using LLMs to reverse-engineer legacy software has become popular recently, my efforts here predated that wave, and it was far from easy. It turned into a deep learning experience: decoding the bytecode engine, reconstructing the original executable's lost scene director, and building an automated oracle to verify the browser port against the 1992 program running in an instrumented emulator.
 
 > **tl;dr**
 >
