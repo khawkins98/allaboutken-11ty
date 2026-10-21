@@ -83,12 +83,14 @@
     c0: { on: [], dots: 'cloud' },
     c1: { on: [], dots: 'c1' },
     c2: { on: [], dots: 'c2' },
-    // "Two layout engines" (see buildClash): the dots stop being data.
-    // The container resizes once on entry (narrow, then wide, then holds):
-    // the flow side reflows like liquid, the frames recalculate in steps.
-    // See resizeW.
-    w: { on: ['bucket', 'seam', 'frA', 'frB', 'frC', 'ring', 'lbFlow', 'lbFrames', 'anFlow', 'anFrames', 'anRing', 'hitFlow', 'hitFrames'], dim: ['seam'], fault: ['ring'], dots: 'clash', resize: true },
-    'w.1': { on: ['bucket', 'seam', 'frA2', 'frB2', 'frC2', 'ring', 'lbFlow', 'lbFrames', 'br1', 'br2', 'anBr', 'anCross', 'hitFlow', 'hitFrames', 'hitBr1', 'hitBr2', 'hitCross'], dim: ['seam'], fault: ['ring'], dots: 'clash2' },
+    // "Why isn't this a solved problem?": a small live layout demo takes the
+    // dots' place (see buildDemo / runDemo). w: the same six cards either
+    // side of a seam, the container width sweeping wide, narrow, wide; CSS
+    // Grid reflows on its own (it is real CSS), Figma swaps between three
+    // authored layouts. w.1: the sweep stops at a width nobody drew a
+    // layout for. w.2: the demo fades and the dots return, already settled.
+    w: { on: ['seam', 'lbCss', 'lbFig', 'anCss', 'anFig', 'hitCss', 'hitFig', 'hitV3', 'hitV2', 'hitV1'], dim: ['seam'], dots: 'settled', demo: 'sweep' },
+    'w.1': { on: ['seam', 'lbCss', 'lbFig', 'anGap', 'hitCss', 'hitFig', 'hitV3', 'hitV2', 'hitV1'], dim: ['seam'], dots: 'settled', demo: 'gap' },
     'w.2': { on: [], dots: 'settled' },
     // Schemas arrive alone; tokens rise in with their own paragraph (1.1).
     1: { on: ['nS', 'sS'], define: 'nS' },
@@ -214,14 +216,13 @@
   //   checks: the check-mark discs; copy depends on the stage, with
   //           `default` used for any stage not listed.
   const EXPLAINERS = {
-    // Stage w, "two layout engines": the flow and frames areas, each seam
-    // ring, the bridges and the crossing dot.
+    // Stage w, the layout demo: each side and the three Figma layouts.
     w: {
-      flow: { term: 'CSS flow', text: 'In the browser, layout is CSS: content flows and wraps to fit the space it is given. Resize the container and the content flows into the new shape. That is how Storybook renders a component.' },
-      frames: { term: 'Auto Layout', text: 'Figma lays things out with Auto Layout: frames with set padding, gaps and resizing rules. Resize one and it recalculates: fixed padding and gaps, edges that stretch while the corners hold. Similar ideas, a different engine.' },
-      ring: { term: 'Fits neither', text: 'Some details exist on one side with no exact equivalent on the other, such as a CSS behaviour Auto Layout cannot express. Those are where copies drift.' },
-      bridge: { term: 'A converter', text: 'Off-the-shelf converters get you part of the way. Every system differs, so the last stretch is custom.' },
-      cross: { term: 'By hand', text: 'Without a shared source, someone carries each change across by hand.' },
+      css: { term: 'Storybook (CSS)', text: 'In the browser, one CSS rule lays the cards out at every width: the grid works out how many columns fit and reflows as the space changes. That is how Storybook renders a component.' },
+      fig: { term: 'Figma', text: 'In Figma, Auto Layout stretches a frame between limits, but there are no media or container queries: structurally different layouts are separate frames someone draws, usually desktop, tablet and mobile. Similar ideas, a different way of rendering.' },
+      v3: { term: 'Desktop', text: 'An authored layout: three columns, drawn by hand for wide screens. Its cards stretch to fill until the next layout takes over.' },
+      v2: { term: 'Tablet', text: 'An authored layout: two columns, drawn by hand for middling widths. Between it and the next one, the cards just stretch.' },
+      v1: { term: 'Mobile', text: 'An authored layout: one column, drawn by hand for phones.' },
     },
     // The formed clusters, before a box names them. `aside` prepends the
     // post's own definition of that term (the .kh-scrolly__define copy).
@@ -368,124 +369,43 @@
     CLOUD[g] = [];
     for (let i = 0; i < COUNTS[g]; i += 1) CLOUD[g].push(g === 'K' ? chain('K', i) : g === 'F' ? DRIFT[i] : cloud());
   });
-  // "Two layout engines" (stage w): the same content dots (S, T, B; no F
-  // yet) fall under two rule sets either side of a seam at x = SEAM. Each
-  // dot's side is fixed at build by its index (alternating). Left, "flow":
-  // ragged wrapping rows, like CSS flow. Right, "frames": rigid grids with
-  // fixed padding and gap inside dashed Auto-Layout frames, which hug their
-  // content in `clash` and fill their column in `clash2`, so the dots
-  // re-grid and the misfits shift. Five right-side dots are stuck at the
-  // seam (ringed in the fault colour); one left-side dot crosses once, by
-  // hand, in clash2 (a CSS animation, see --kh-cx/--kh-cy).
+  // The layout demo (stage w) lives in an HTML layer over the graphic (see
+  // buildDemo); the SVG keeps the seam, the labels, the notes and the hit
+  // targets at these viewBox positions.
   const SEAM = 270;
-  const CONTENT = ['S', 'T', 'B'];
-  const SIDE = {};
-  const CLASH = { clash: {}, clashN: {}, clash2: {} };
-  const FRAMES = { clash: [], clashN: [], clash2: [] };
-  // The flow side's container ("bucket"): wide, and narrowed for the resize.
-  const BUCKET = { x: 10, y: 50, h: 268, w: { clash: 240, clashN: 184 } };
-  const SEAM_PTS = [70, 130, 190, 250, 310].map((y) => ({ x: SEAM, y }));
-  let CROSS = null;
-  const rr = (x, y, w, h, r = 6) => `M${x + r} ${y} H${x + w - r} A${r} ${r} 0 0 1 ${x + w} ${y + r} V${y + h - r} A${r} ${r} 0 0 1 ${x + w - r} ${y + h} H${x + r} A${r} ${r} 0 0 1 ${x} ${y + h - r} V${y + r} A${r} ${r} 0 0 1 ${x + r} ${y} Z`;
-  (function buildClash() {
-    const r2 = mulberry32(7);
-    const left = [];
-    const right = [];
-    let n = 0;
-    CONTENT.forEach((g) => {
-      for (let i = 0; i < COUNTS[g]; i += 1) {
-        const key = `${g}${i}`;
-        SIDE[key] = n % 2 ? 'R' : 'L';
-        (n % 2 ? right : left).push(key);
-        n += 1;
-      }
-    });
-    // Flow: rows of a random length (16-27 dots), 8.5 apart, 18 down. In
-    // the narrowed container the same stream rewraps at 20 a row, like
-    // text, so the level rises.
-    let row = 0;
-    let col = 0;
-    let len = 16 + Math.floor(r2() * 12);
-    left.forEach((key, idx) => {
-      if (col >= len) {
-        row += 1;
-        col = 0;
-        len = 16 + Math.floor(r2() * 12);
-      }
-      const pt = { x: 16 + col * 8.5, y: 60 + row * 18 };
-      CLASH.clash[key] = pt;
-      CLASH.clash2[key] = pt;
-      CLASH.clashN[key] = { x: 16 + (idx % 20) * 8.5, y: 60 + Math.floor(idx / 20) * 17 };
-      col += 1;
-    });
-    // Frames: fixed padding 10 and gap 9. Hug: as many columns as the frame
-    // was drawn for, rows as needed. Fill: wider frames, more columns.
-    const seamKeys = right.slice(-SEAM_PTS.length);
-    const framed = right.slice(0, right.length - SEAM_PTS.length);
-    const plan = {
-      clash: [{ x: 292, y: 56, cols: 20, cap: 120 }, { x: 292, y: 142, cols: 9, cap: 108 }, { x: 404, y: 142, cols: 9, cap: 108 }],
-      // Narrowed: fewer columns, same padding and gap, so rows are added.
-      clashN: [{ x: 292, y: 56, cols: 15, cap: 120 }, { x: 292, y: 142, cols: 7, cap: 108 }, { x: 404, y: 142, cols: 7, cap: 108 }],
-      clash2: [{ x: 292, y: 56, cols: 24, cap: 120, fill: { w: 232, h: 68 } }, { x: 292, y: 142, cols: 11, cap: 108, fill: { w: 112, h: 230 } }, { x: 414, y: 142, cols: 11, cap: 108, fill: { w: 110, h: 230 } }],
-    };
-    Object.keys(plan).forEach((lay) => {
-      let k = 0;
-      plan[lay].forEach((f) => {
-        const take = framed.slice(k, k + f.cap);
-        k += f.cap;
-        take.forEach((key, j) => {
-          CLASH[lay][key] = { x: f.x + 10 + (j % f.cols) * 9, y: f.y + 10 + Math.floor(j / f.cols) * 9 };
-        });
-        const rows = Math.ceil(take.length / f.cols);
-        const hug = { w: 20 + (Math.min(take.length, f.cols) - 1) * 9, h: 20 + (rows - 1) * 9 };
-        FRAMES[lay].push({ x: f.x, y: f.y, w: f.fill ? f.fill.w : hug.w, h: f.fill ? f.fill.h : hug.h });
-      });
-    });
-    seamKeys.forEach((key, j) => {
-      CLASH.clash[key] = SEAM_PTS[j];
-      CLASH.clashN[key] = SEAM_PTS[j];
-      CLASH.clash2[key] = SEAM_PTS[j];
-      SIDE[key] = 'seam';
-    });
-    // The crossing dot: the last dot of the third flow row goes to the
-    // third frame's next free cell (in the fill layout), by hand.
-    const rowEnd = left.find((key, idx) => idx > 0 && CLASH.clash[left[idx + 1]] && CLASH.clash[left[idx + 1]].y > CLASH.clash[key].y && CLASH.clash[key].y === 60 + 2 * 18);
-    const f3 = plan.clash2[2];
-    const n3 = framed.length - plan.clash2[0].cap - plan.clash2[1].cap;
-    if (rowEnd && n3 >= 0 && n3 < f3.cap) {
-      const from = CLASH.clash2[rowEnd];
-      const to = { x: f3.x + 10 + (n3 % f3.cols) * 9, y: f3.y + 10 + Math.floor(n3 / f3.cols) * 9 };
-      CROSS = { key: rowEnd, dx: (to.x - from.x).toFixed(1), dy: (to.y - from.y).toFixed(1), to };
-    }
-  }());
-  const clash = (g, i) => CLASH.clash[`${g}${i}`] || settled(g, i);
-  const clashN = (g, i) => CLASH.clashN[`${g}${i}`] || settled(g, i);
-  const clash2 = (g, i) => CLASH.clash2[`${g}${i}`] || settled(g, i);
+  const DEMO = {
+    css: { x: 16, y: 58, w: 236 },
+    fig: { x: 292, y: 58, w: 236 },
+    tabs: { y: 300, w: 66, h: 16, gap: 8 },
+    // Width thresholds (viewBox units) where Figma swaps layouts, and each
+    // layout's comfortable range; the gap width in w.1 sits outside all of
+    // them.
+    swap: { v3: 196, v2: 128 },
+    comfy: { v3: [196, 236], v2: [128, 160], v1: [84, 118] },
+    sweep: { wide: 236, narrow: 84 },
+    gap: 182,
+  };
 
-  const LAYOUT = { cloud: (g, i) => CLOUD[g][i], c1, c2, settled, spread, born, full, chain, clash, clashN, clash2 };
+  const LAYOUT = { cloud: (g, i) => CLOUD[g][i], c1, c2, settled, spread, born, full, chain };
   // Which clusters have formed in each layout (so can be labelled, hovered).
   // The variants (F) only form at stage 3, when their box names them, so
   // their drift answers no hover before that.
-  const FORMED = { cloud: [], c1: ['S'], c2: ['S', 'T', 'B'], settled: ['S', 'T', 'B'], spread: ['S'], born: ['S', 'T', 'B'], full: ['S', 'T', 'B', 'F'], chain: [], clash: [], clashN: [], clash2: [] };
+  const FORMED = { cloud: [], c1: ['S'], c2: ['S', 'T', 'B'], settled: ['S', 'T', 'B'], spread: ['S'], born: ['S', 'T', 'B'], full: ['S', 'T', 'B', 'F'], chain: [] };
 
   function buildDotLayer() {
     const dot = (g, i) => {
       const cls = ['kh-sv__dot', `kh-sv__dot--${g}`];
       if (g === 'T' && i >= SHARED) cls.push('kh-sv__dot--brand');
-      const side = SIDE[`${g}${i}`];
-      if (side) cls.push(`kh-sv__dot--${side}`);
-      const cross = CROSS && CROSS.key === `${g}${i}` ? `;--kh-cx:${CROSS.dx}px;--kh-cy:${CROSS.dy}px` : '';
-      if (cross) cls.push('kh-sv__dot--cross');
       // The dots stuck at the seam (stage w) wait 0.35s before any move, so
       // their fault rings (0.2s exit) are always gone before they go.
-      const dl = SIDE[`${g}${i}`] === 'seam' ? '0.35' : (rng() * 0.6).toFixed(2);
+      const dl = (rng() * 0.6).toFixed(2);
       const c0 = CLOUD[g][i];
       // Drift: each dot wanders its own slow loop (duration, phase and two
       // waypoints seeded here); the stage sets the amplitude, see
       // --kh-drift in _kh-scrolly.scss.
       const u = () => (rng() * 2 - 1).toFixed(2);
       const drift = `--kh-dr-d:${(7 + rng() * 6).toFixed(1)}s;--kh-dr-p:${(-rng() * 13).toFixed(1)}s;--kh-dr-x1:${u()};--kh-dr-y1:${u()};--kh-dr-x2:${u()};--kh-dr-y2:${u()};--kh-dr-in:${(rng() * 0.7).toFixed(2)}s`;
-      return `<i class="${cls.join(' ')}" data-g="${g}" data-i="${i}" style="--dl:${dl}s;--x:${c0.x.toFixed(1)}px;--y:${c0.y.toFixed(1)}px;${drift}${cross}"></i>`;
+      return `<i class="${cls.join(' ')}" data-g="${g}" data-i="${i}" style="--dl:${dl}s;--x:${c0.x.toFixed(1)}px;--y:${c0.y.toFixed(1)}px;${drift}"></i>`;
     };
     let out = '';
     Object.keys(COUNTS).forEach((g) => {
@@ -593,39 +513,23 @@
     ${line('ca2', P.ca2, 'kh-sv__line--chain', { head: true, delay: 1.45 })}
     ${line('ca3', P.ca3, 'kh-sv__line--chain', { head: true, delay: 1.8 })}
     ${line('seam', `M${SEAM} 36 V384`, 'kh-sv__line--seam', { delay: 0.6 })}
-    ${'' /* The flow side's container: a dashed box whose top edge is covered by a ground-coloured lid, so it reads as an open bucket. Its width transitions. */}
-    <rect class="kh-sv__el kh-sv__bucket" data-k="bucket" x="${BUCKET.x}" y="${BUCKET.y}" width="${BUCKET.w.clash}" height="${BUCKET.h}" rx="4" style="--d:0.3s"/>
-    <rect class="kh-sv__el kh-sv__bucket-lid" data-k="bucket" x="${BUCKET.x - 2}" y="${BUCKET.y - 3}" width="${BUCKET.w.clash + 4}" height="6" style="--d:0.3s"/>
-    ${'' /* Nine-slice frames: a dashed rect whose edges stretch (width/height transition, stepped) and four fixed-size corner marks that translate with the edges. */}
-    ${FRAMES.clash.map((f, i) => `<rect class="kh-sv__el kh-sv__frame" data-k="fr${'ABC'[i]}" data-frame="${i}" x="${f.x}" y="${f.y}" width="${f.w}" height="${f.h}" rx="6" style="--d:${(0.8 + i * 0.15).toFixed(2)}s"/>`
-      + ['tl', 'tr', 'br', 'bl'].map((c) => { const L = 9; const d = c === 'tl' ? `M${f.x} ${f.y + L} V${f.y + 6} Q${f.x} ${f.y} ${f.x + 6} ${f.y} H${f.x + L}` : c === 'tr' ? `M${f.x + f.w - L} ${f.y} H${f.x + f.w - 6} Q${f.x + f.w} ${f.y} ${f.x + f.w} ${f.y + 6} V${f.y + L}` : c === 'br' ? `M${f.x + f.w} ${f.y + f.h - L} V${f.y + f.h - 6} Q${f.x + f.w} ${f.y + f.h} ${f.x + f.w - 6} ${f.y + f.h} H${f.x + f.w - L}` : `M${f.x + L} ${f.y + f.h} H${f.x + 6} Q${f.x} ${f.y + f.h} ${f.x} ${f.y + f.h - 6} V${f.y + f.h - L}`; return `<path class="kh-sv__el kh-sv__corner" data-k="fr${'ABC'[i]}" data-frame="${i}" data-corner="${c}" d="${d}" style="--d:${(0.8 + i * 0.15).toFixed(2)}s"/>`; }).join('')).join('')}
-    ${FRAMES.clash2.map((f, i) => line(`fr${'ABC'[i]}2`, rr(f.x, f.y, f.w, f.h), 'kh-sv__line--frame', { delay: 0.3 + i * 0.15 })).join('')}
-    ${line('br1', 'M238 112 C258 90, 272 90, 284 104', 'kh-sv__line--bridge', { head: true, delay: 1.2 })}
-    ${line('br2', 'M238 232 C258 210, 272 210, 284 224', 'kh-sv__line--bridge', { head: true, delay: 1.6 })}
-    ${line('anFlow', 'M70 304 V350', 'kh-sv__line--note', { delay: 1.6 })}
-    ${line('anFrames', 'M380 302 V350', 'kh-sv__line--note', { delay: 1.8 })}
-    ${line('anRing', `M${SEAM + 5} ${SEAM_PTS[4].y + 5} L${SEAM + 12} ${SEAM_PTS[4].y + 14}`, 'kh-sv__line--note', { delay: 2 })}
-    ${line('anBr', 'M262 230 V318', 'kh-sv__line--note', { delay: 2.3 })}
-    ${CROSS ? line('anCross', `M${CROSS.to.x} ${CROSS.to.y + 7} V376`, 'kh-sv__line--note', { delay: 5.7 }) : ''}
-    <path class="kh-sv__el kh-sv__hit kh-sv__hit--line" data-k="hitBr1" data-w="bridge" d="M238 112 C258 90, 272 90, 284 104" ${btn('a converter that stops short')}/>
-    <path class="kh-sv__el kh-sv__hit kh-sv__hit--line" data-k="hitBr2" data-w="bridge" d="M238 232 C258 210, 272 210, 284 224" ${btn('a converter that stops short')}/>
+    ${line('anCss', 'M80 302 V350', 'kh-sv__line--note', { delay: 1.2 })}
+    ${line('anFig', 'M380 324 V350', 'kh-sv__line--note', { delay: 1.4 })}
+    ${'' /* Between the Tablet and Mobile tabs, not through one. */}
+    ${line('anGap', 'M436 292 V330', 'kh-sv__line--note', { delay: 1.6 })}
     ${Object.keys(CALLOUTS).map((k) => `<path class="kh-sv__leader" data-leader="${k}" style="--kh-co-delay:${CALLOUTS[k].delay ?? CALLOUT_DELAY}s" d="${CALLOUTS[k].ld}"/>`).join('')}
     <path class="kh-sv__el kh-sv__pulse" data-k="g5T" pathLength="1" d="${P.g5T}"/>
     <path class="kh-sv__el kh-sv__pulse" data-k="g5arc" pathLength="1" d="${P.g5arc}"/>
   </g>
   <g class="kh-sv__dots" aria-hidden="true">${buildDots(id)}</g>
-  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--w" data-k="hitFlow" data-w="flow" x="10" y="52" width="240" height="250" ${btn('the flow side, how the browser lays out')}/>
-  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--w" data-k="hitFrames" data-w="frames" x="288" y="52" width="246" height="326" ${btn('the frames side, how Figma lays out')}/>
-  ${'' /* Rings wait 2.1s: a seam dot can take 1.85s to arrive on a fling. */}
-  ${SEAM_PTS.map((pt) => `<g class="kh-sv__el kh-sv__ring" data-k="ring" data-w="ring" transform="translate(${pt.x} ${pt.y})" style="--d:2.1s" ${btn('a detail that fits neither side')}><circle class="kh-sv__ring-hit" r="12"/><circle class="kh-sv__ring-disc" r="5"/></g>`).join('')}
-  ${CROSS ? `<circle class="kh-sv__el kh-sv__hit kh-sv__hit--cross" data-k="hitCross" data-w="cross" cx="${CROSS.to.x}" cy="${CROSS.to.y}" r="11" style="--d:5.6s" ${btn('the dot carried across by hand')}/>` : ''}
-  ${label('lbFlow', 16, 44, 'flow', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1 })}
-  ${label('lbFrames', 292, 44, 'frames', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1 })}
-  ${label('anFlow', 16, 364, 'CSS flow: content reflows to fit', { cls: 'kh-sv__label--note', anchor: 'start', delay: 1.6 })}
-  ${label('anFrames', 292, 364, 'Auto Layout: frames recalculate', { cls: 'kh-sv__label--note', anchor: 'start', delay: 1.8 })}
-  ${label('anRing', SEAM + 14, SEAM_PTS[4].y + 24, 'fits neither', { cls: 'kh-sv__label--note', anchor: 'start', delay: 2 })}
-  ${label('anBr', 262, 332, 'a converter stops short', { cls: 'kh-sv__label--note', anchor: 'end', delay: 2.3 })}
-  ${CROSS ? label('anCross', Math.min(CROSS.to.x + 40, 534), 390, 'fixed by hand', { cls: 'kh-sv__label--note', anchor: 'end', delay: 5.7 }) : ''}
+  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--w" data-k="hitCss" data-w="css" x="${DEMO.css.x - 6}" y="${DEMO.css.y - 6}" width="${DEMO.css.w + 12}" height="230" ${btn('the Storybook side, laid out by CSS')}/>
+  <rect class="kh-sv__el kh-sv__hit kh-sv__hit--w" data-k="hitFig" data-w="fig" x="${DEMO.fig.x - 6}" y="${DEMO.fig.y - 6}" width="${DEMO.fig.w + 12}" height="230" ${btn('the Figma side, three drawn layouts')}/>
+  ${['v3', 'v2', 'v1'].map((v, i) => `<rect class="kh-sv__el kh-sv__hit kh-sv__hit--tab" data-k="hit${v.toUpperCase()}" data-w="${v}" x="${DEMO.fig.x + i * (DEMO.tabs.w + DEMO.tabs.gap)}" y="${DEMO.tabs.y - 4}" width="${DEMO.tabs.w}" height="${DEMO.tabs.h + 8}" ${btn(`the ${{ v3: 'desktop', v2: 'tablet', v1: 'mobile' }[v]} layout`)}/>`).join('')}
+  ${label('lbCss', 16, 44, 'Storybook (CSS)', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1 })}
+  ${label('lbFig', 292, 44, 'Figma', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1 })}
+  ${label('anCss', 16, 364, 'CSS: one rule, every width', { cls: 'kh-sv__label--note', anchor: 'start', delay: 1.2 })}
+  ${label('anFig', 292, 364, 'Figma: a layout per breakpoint', { cls: 'kh-sv__label--note', anchor: 'start', delay: 1.4 })}
+  ${label('anGap', 436, 344, 'no layout drawn for this width', { cls: 'kh-sv__label--note', delay: 1.6 })}
   ${label('cvS', N.S.x + 4, N.S.y + N.S.h + 16, 'content schemas', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1.4 })}
   ${label('cvT', N.T.x + 4, N.T.y + N.T.h + 16, '540 Figma variables, 69 by brand', { cls: 'kh-sv__label--cover', anchor: 'start', delay: 1.5 })}
   ${label('cvB', cx(N.SB), N.SB.y + N.SB.h + 16, '25 component families', { cls: 'kh-sv__label--cover', delay: 1.6 })}
@@ -771,14 +675,10 @@
   function placeDots(inst, layout) {
     if (inst.svg.dataset.dots === layout) return;
     const fn = LAYOUT[layout];
-    const sq = layout === 'clash' || layout === 'clash2';
     inst.dots.forEach((d) => {
       const p = fn(d.dataset.g, Number(d.dataset.i));
       d.style.setProperty('--x', `${p.x.toFixed(1)}px`);
       d.style.setProperty('--y', `${p.y.toFixed(1)}px`);
-      // Square dots inside the frames: a class, set once per stage, never
-      // animated.
-      d.classList.toggle('is-sq', sq && d.classList.contains('kh-sv__dot--R'));
     });
     inst.svg.dataset.dots = layout;
   }
@@ -800,7 +700,8 @@
     // A formed, unnamed cluster carries its label and answers a hover; the
     // variants' drift has no label (Figma is not in the story yet) but can
     // be asked about.
-    (FORMED[layout] || []).forEach((g) => {
+    // Not while the layout demo has the stage: the dots are hidden then.
+    (spec.demo ? [] : FORMED[layout] || []).forEach((g) => {
       if (named.includes(g)) return;
       if (g !== 'F') sets.on.add(`cv${g}`);
       sets.on.add(`hit${g}`);
@@ -825,56 +726,116 @@
     });
 
     placeDots(inst, layout);
-    resizeW(inst, !!spec.resize);
+    runDemo(inst, spec.demo || '');
     syncPanels(inst, spec);
     syncChain(inst, spec);
     syncFocusables(svg);
   }
 
-  // Stage w's one shared action: the container resizes. The bucket and the
-  // frames narrow (the dots following each in their own way), then widen
-  // again, then hold. Geometry goes on the elements as inline style, so the
-  // CSS transitions (fluid on the left, stepped on the right) do the motion.
-  // Not under reduced motion: the finished, wide state only.
-  function setResize(inst, narrow) {
-    const { svg } = inst;
-    const lay = narrow ? 'clashN' : 'clash';
-    const bw = BUCKET.w[lay];
-    svg.querySelector('.kh-sv__bucket').style.width = `${bw}px`;
-    svg.querySelector('.kh-sv__bucket-lid').style.width = `${bw + 4}px`;
-    FRAMES[lay].forEach((f, i) => {
-      const wide = FRAMES.clash[i];
-      const rect = svg.querySelector(`.kh-sv__frame[data-frame="${i}"]`);
-      rect.style.width = `${f.w}px`;
-      rect.style.height = `${f.h}px`;
-      const dx = `${(f.w - wide.w).toFixed(1)}px`;
-      const dy = `${(f.h - wide.h).toFixed(1)}px`;
-      svg.querySelectorAll(`.kh-sv__corner[data-frame="${i}"]`).forEach((c) => {
-        const k = c.dataset.corner;
-        c.style.setProperty('--kh-cnx', k === 'tr' || k === 'br' ? dx : '0px');
-        c.style.setProperty('--kh-cny', k === 'br' || k === 'bl' ? dy : '0px');
-      });
-    });
-    placeDots(inst, lay);
+  // The layout demo. An HTML layer over the graphic, viewBox-sized and
+  // scaled like the dot layer, holding the same six wireframe cards twice.
+  // Left: a REAL CSS grid (repeat(auto-fit, minmax())) in a container whose
+  // width is set by --kh-demo-w, so the browser itself reflows 3, 2, 1
+  // columns. Right: a Figma frame of the same width, with three authored
+  // layouts (desktop 3-col, tablet 2-col, mobile 1-col) as tabs; the active
+  // one's cards stretch to fill, and at a threshold the frame swaps to the
+  // next. A grey ruler and readout show the shared width.
+  function buildDemo() {
+    const cards = (n) => Array.from({ length: n }, (_, i) => `<i class="kh-sv-demo__card" style="--kh-card-i:${i}"><b></b><s></s><s></s></i>`).join('');
+    const tab = (v, name) => `<span class="kh-sv-demo__tab" data-v="${v}">${name}</span>`;
+    return `<div class="kh-sv-demo" aria-hidden="true">
+      <div class="kh-sv-demo__side kh-sv-demo__side--css" style="left:${DEMO.css.x}px;top:${DEMO.css.y}px">
+        <div class="kh-sv-demo__box kh-sv-demo__grid">${cards(6)}</div>
+        <div class="kh-sv-demo__ruler"><i></i><span class="kh-sv-demo__readout">${DEMO.sweep.wide}px</span></div>
+      </div>
+      <div class="kh-sv-demo__side kh-sv-demo__side--fig" style="left:${DEMO.fig.x}px;top:${DEMO.fig.y}px">
+        <div class="kh-sv-demo__box kh-sv-demo__frame" data-v="v3">${cards(6)}</div>
+        <div class="kh-sv-demo__ghost">${cards(6)}</div>
+        <div class="kh-sv-demo__tabs" style="top:${DEMO.tabs.y - DEMO.fig.y}px">${tab('v3', 'Desktop')}${tab('v2', 'Tablet')}${tab('v1', 'Mobile')}</div>
+      </div>
+    </div>`;
   }
-  function resizeW(inst, on) {
+
+  // Which authored layout Figma shows at a width, and whether that layout
+  // is being stretched past the range it was drawn for.
+  function figVariant(w) {
+    const v = w >= DEMO.swap.v3 ? 'v3' : w >= DEMO.swap.v2 ? 'v2' : 'v1';
+    const [lo, hi] = DEMO.comfy[v];
+    return { v, over: w < lo - 1 || w > hi + 1 };
+  }
+
+  function setDemoWidth(inst, w) {
+    inst.demoLayer.style.setProperty('--kh-demo-w', `${w}px`);
+  }
+
+  // Reads the live width (the transition is in CSS) once a frame while a
+  // sweep runs, to drive the readout and the Figma layout swap; stops when
+  // the sweep settles. Not a standing loop.
+  function watchDemo(inst, until) {
+    const demo = inst.demoLayer;
+    const frame = demo.querySelector('.kh-sv-demo__frame');
+    const readout = demo.querySelector('.kh-sv-demo__readout');
+    const tick = () => {
+      if (inst.demoWatch !== tick) return;
+      const w = frame.getBoundingClientRect().width / (parseFloat(demo.style.getPropertyValue('--kh-sv-s')) || 1);
+      readout.textContent = `${Math.round(w)}px`;
+      const { v, over } = figVariant(w);
+      if (frame.dataset.v !== v) {
+        frame.dataset.v = v;
+        // A quick, visible swap: the frame blinks as the next layout lands.
+        frame.classList.remove('is-swap');
+        void frame.offsetWidth;
+        frame.classList.add('is-swap');
+        demo.querySelectorAll('.kh-sv-demo__tab').forEach((t) => t.classList.toggle('is-on', t.dataset.v === v));
+      }
+      frame.classList.toggle('is-over', over && demo.dataset.demo === 'gap');
+      if (performance.now() < until) requestAnimationFrame(tick);
+      else inst.demoWatch = null;
+    };
+    inst.demoWatch = tick;
+    requestAnimationFrame(tick);
+  }
+
+  function runDemo(inst, mode) {
+    const demo = inst.demoLayer;
     (inst.wTimers || []).forEach(clearTimeout);
     inst.wTimers = [];
-    inst.dotLayer.classList.remove('is-pour');
-    if (!on) {
-      if (inst.svg.querySelector('.kh-sv__frame').style.width) setResize(inst, false);
+    inst.demoWatch = null;
+    if (demo.dataset.demo === mode) return;
+    const was = demo.dataset.demo;
+    demo.dataset.demo = mode;
+    inst.dotLayer.classList.toggle('is-demo', !!mode);
+    if (!mode) {
+      demo.querySelector('.kh-sv-demo__frame').classList.remove('is-over', 'is-swap');
       return;
     }
+    const frame = demo.querySelector('.kh-sv-demo__frame');
+    const settle = (w) => {
+      // Reduced motion, or a stage entered from the other w beat: the
+      // finished state, no sweep.
+      demo.classList.add('is-jump');
+      setDemoWidth(inst, w);
+      void demo.offsetWidth;
+      demo.classList.remove('is-jump');
+      watchDemo(inst, performance.now() + 50);
+    };
+    if (mode === 'gap') {
+      if (reduce.matches || !was) settle(DEMO.gap);
+      else {
+        setDemoWidth(inst, DEMO.gap);
+        watchDemo(inst, performance.now() + 2400);
+      }
+      return;
+    }
+    // sweep: wide, hold, narrow, hold, wide, hold.
     if (reduce.matches) {
-      setResize(inst, false);
+      settle(DEMO.sweep.wide);
       return;
     }
-    // Pour in (CSS: is-pour), settle, narrow, widen, hold.
-    inst.dotLayer.classList.add('is-pour');
-    setResize(inst, false);
-    inst.wTimers.push(setTimeout(() => inst.dotLayer.classList.remove('is-pour'), 1400));
-    inst.wTimers.push(setTimeout(() => setResize(inst, true), 1500));
-    inst.wTimers.push(setTimeout(() => setResize(inst, false), 2800));
+    settle(DEMO.sweep.wide);
+    frame.classList.remove('is-over');
+    inst.wTimers.push(setTimeout(() => { setDemoWidth(inst, DEMO.sweep.narrow); watchDemo(inst, performance.now() + 5200); }, 900));
+    inst.wTimers.push(setTimeout(() => setDemoWidth(inst, DEMO.sweep.wide), 3400));
   }
 
   // Panels: the named one shows over the graphic (wide) and the diagram
@@ -1021,7 +982,7 @@
   //   check -- a check-mark disc: stage-dependent copy
   // Check discs are drawn after the boxes, so over a disc the check wins.
   function targetOf(el) {
-    return el.closest('.kh-sv__check, .kh-sv__hit, .kh-sv__node, .kh-sv__ring');
+    return el.closest('.kh-sv__check, .kh-sv__hit, .kh-sv__node');
   }
 
   function setupTips(region, graphic, svg) {
@@ -1042,11 +1003,11 @@
         return def && { id: `node:${key}`, anchor: t.querySelector('rect'), term: def.term, html: def.html, own: [t], yields: graphic.dataset.callout === key ? key : '' };
       }
       if (t.dataset.w) {
-        // Stage w explainers. The area popups anchor on their word labels;
-        // the ring, bridge and crossing-dot popups on the element itself.
+        // Stage w explainers: the two sides (anchored on their word labels)
+        // and the three Figma layout tabs (anchored on the tab itself).
         const copy = EXPLAINERS.w[t.dataset.w];
-        const anchor = t.dataset.w === 'flow' ? svg.querySelector('[data-k="lbFlow"]') : t.dataset.w === 'frames' ? svg.querySelector('[data-k="lbFrames"]') : t.matches('.kh-sv__ring') ? t.querySelector('.kh-sv__ring-disc') : t;
-        return copy && { id: `w:${t.dataset.w}:${t.dataset.k}`, anchor: anchor || t, term: copy.term, html: copy.text, own: [t] };
+        const anchor = t.dataset.w === 'css' ? svg.querySelector('[data-k="lbCss"]') : t.dataset.w === 'fig' ? svg.querySelector('[data-k="lbFig"]') : t;
+        return copy && { id: `w:${t.dataset.w}`, anchor: anchor || t, term: copy.term, html: copy.text, own: [t] };
       }
       if (t.matches('.kh-sv__hit--cluster')) {
         const g = t.dataset.cluster;
@@ -1282,6 +1243,9 @@
     inst.dotLayer.style.left = left;
     inst.dotLayer.style.top = top;
     inst.dotLayer.style.setProperty('--kh-sv-s', s.toFixed(3));
+    inst.demoLayer.style.left = left;
+    inst.demoLayer.style.top = top;
+    inst.demoLayer.style.setProperty('--kh-sv-s', s.toFixed(3));
     const layer = graphic.querySelector('.kh-scrolly__callouts');
     if (!layer) return;
     layer.style.left = left;
@@ -1318,7 +1282,7 @@
     // callout layer below.
     graphic.hidden = true;
     graphic.setAttribute('data-pagefind-ignore', '');
-    graphic.innerHTML = buildDotLayer() + buildSvg(`kh-sv-${r}`);
+    graphic.innerHTML = buildDotLayer() + buildDemo() + buildSvg(`kh-sv-${r}`);
     // On wide screens the cover note is a caption under the dot field: a
     // copy inside the graphic, aria-hidden (the original stays in the prose
     // for assistive tech and narrow screens, and is visually hidden on wide
@@ -1332,6 +1296,7 @@
     region.appendChild(graphic);
     const svg = graphic.querySelector('svg');
     const dotLayer = graphic.querySelector('.kh-sv-dots');
+    const demoLayer = graphic.querySelector('.kh-sv-demo');
     // The dot CSS keys off the SVG's state attributes (data-dots, data-named,
     // the hover focus, live, hidden) and its is-jump / is-chain classes;
     // mirror them onto the layer so one state drives both.
@@ -1386,7 +1351,7 @@
     const dots = [...dotLayer.querySelectorAll('.kh-sv__dot')];
     const initial = region.dataset.scrollyInitial || 'cover';
     const inst = {
-      region, svg, dotLayer, steps, panels, dots, initial, current: null, active: null, layer: graphic.querySelector('.kh-scrolly__callouts'), tips, timers: [],
+      region, svg, dotLayer, demoLayer, steps, panels, dots, initial, current: null, active: null, layer: graphic.querySelector('.kh-scrolly__callouts'), tips, timers: [],
     };
     instances.push(inst);
 
