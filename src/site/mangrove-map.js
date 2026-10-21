@@ -109,9 +109,9 @@
               <span class="kh-brand-studio__label" id="kh-bs-brand-label">Brand</span>
               <div class="kh-brand-studio__pills">
                 <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn kh-brand-studio__brand-btn--active" aria-pressed="true" data-brand="undrr"><span class="kh-brand-dot" style="background: #004F91;"></span>UNDRR</button>
+                <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn" aria-pressed="false" data-brand="delta"><span class="kh-brand-dot" style="background: #004F91;"></span>DELTA</button>
                 <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn" aria-pressed="false" data-brand="pweb"><span class="kh-brand-dot" style="background: #0A6969;"></span>PreventionWeb</button>
                 <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn" aria-pressed="false" data-brand="mcr"><span class="kh-brand-dot" style="background: #591A61;"></span>MCR2030</button>
-                <button type="button" class="kh-brand-studio__pill kh-brand-studio__brand-btn" aria-pressed="false" data-brand="delta"><span class="kh-brand-dot" style="background: #004F91;"></span>DELTA</button>
               </div>
             </div>
           </div>
