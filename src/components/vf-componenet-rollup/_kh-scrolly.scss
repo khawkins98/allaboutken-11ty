@@ -174,8 +174,10 @@
       width: 1px;
     }
 
+    // Sits just below the graphic box rather than inside its bottom edge,
+    // where it collided with the lowest row of scattered dots.
     .kh-scrolly__dots-caption {
-      bottom: 0;
+      top: 100%;
       color: var(--kh-color--grey--darkest);
       display: block;
       font-size: 0.9rem;

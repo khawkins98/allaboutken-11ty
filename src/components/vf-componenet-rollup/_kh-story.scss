@@ -37,16 +37,6 @@
     text-align: center;
   }
 
-  // The closing rule is the reading column's width, centred, so it lines up
-  // with the prose that follows.
-  .kh-story__cover::after {
-    border-bottom: 1px solid var(--kh-rule--strong);
-    content: '';
-    display: block;
-    margin: 1.75rem auto 0;
-    max-width: var(--kh-story-measure);
-  }
-
   // Breadcrumb and Ref dock to the corners of the wide track (the same outer
   // edges as the scrolly regions and plates), as apparatus framing the
   // centred title rather than competing with it.

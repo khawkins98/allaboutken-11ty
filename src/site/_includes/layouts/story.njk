@@ -3,6 +3,7 @@ layout: layouts/base.njk
 pageClass: posts
 templateEngineOverride: njk
 ---
+{% from "partials/orgs.njk" import orgSummary %}
 {#- Story layout: a quiet full-page frame for scroll-driven pieces.
 
     When to use it: an entry built around one or more `.kh-scrolly` regions
@@ -88,7 +89,7 @@ templateEngineOverride: njk
     {%- endif %}
     <p class="kh-meta kh-story__meta" data-pagefind-ignore>
       <time datetime="{{ date | dateDisplay('yyyy-MM-dd') }}">{% if isImpactStory %}{{ date | dateDisplay('y') }}{% else %}{{ date | dateDisplay }}{% endif %}</time>
-      &middot; {{ words | formatNumber }} words
+      {% if org %}&middot; {{ org }} {% endif %}&middot; {{ words | formatNumber }} words
     </p>
   </header>
 
@@ -111,6 +112,11 @@ templateEngineOverride: njk
         <dd><time datetime="{{ date | dateDisplay('yyyy-MM-dd') }}">{{ date | dateDisplay }}</time></dd>
         <dt class="kh-meta">Length</dt>
         <dd>{{ words | formatNumber }} words</dd>
+        {%- set orgText = orgSummary(org) | trim if org else '' %}
+        {% if orgText %}
+        <dt class="kh-meta">Context</dt>
+        <dd>{{ orgText | safe }}</dd>
+        {% endif %}
         {% if docRef %}
         <dt class="kh-meta">Ref</dt>
         <dd><a class="kh-doc-ref" href="{{ page.url }}" title="Permalink to this entry">{{ docRef }}</a></dd>
