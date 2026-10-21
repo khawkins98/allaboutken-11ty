@@ -174,7 +174,7 @@ image_meta:
 
 **Figma kits often tell a design system's story a second time.** Designers draw the components, engineers build them, and the two versions drift because nothing ties one to the other. Every correction gets made twice, by different people, or often doesn't and the two worlds drift. Double the work and half the benefit.
 
-**UNDRR's Mangrove Figma library is derived instead: a change made once lands everywhere.** When we changed a core spacing value in code and republished, a designer's pilot file updated and kept every one of their edits. Nobody redrew anything or compared design and code by eye.
+**UNDRR's Mangrove Figma library is derived instead: a change made once lands everywhere.** When I changed a core spacing value in code and republished, a designer's pilot file updated and kept every one of their edits. Nobody redrew anything or compared design and code by eye.
 
 **My solution for UNDRR works because three sources already agree on how truth is told.** The content rules (structured content schemas) say what each component contains, the brand settings (design tokens) say how it looks in each of UNDRR's five brands, and the developers' live component catalogue ([Storybook](https://mangrove.undrr.org/)) says how it is laid out. A plugin I built reads all three and generates a native Figma library: 297 variants in 25 component families, real components rather than pictures of them.
 
@@ -200,7 +200,7 @@ image_meta:
 
 ## Where did the truth come from?
 
-**The team had done the hard part already, for a different reason.** UNDRR syndicates content across its websites, which only works when every site agrees what a card, a hero or a landing page is *made of*: which fields, which are optional, how long they can run. That is structure, not appearance, and it was already settled by the time a Figma kit came up. (I've written about [Mangrove as a content architecture that happens to ship a design system](/posts/20260327-content-architecture-shipping-container/).)
+**The hard part was as much the culture change as the technical build.** Getting a broad range of stakeholders to agree on what a card, a hero or a landing page is *made of* took years of working across content teams, developers and leadership. That meant shifting organizational perspectives so teams embraced abstraction: content schemas for structure, design tokens for appearance, and code for layout. By the time a Figma library came up, that discipline was already settled and empowering live syndication. (I've written about [Mangrove as a content architecture that happens to ship a design system](/posts/20260327-content-architecture-shipping-container/).)
 
 {% endmarkdown %}
 <aside class="kh-scrolly__define" data-define="nS"><p><strong><dfn>Content schema</dfn>:</strong> the agreed list of what each piece of content contains and its limits. A Book Card always has a title and a link, may have an image, and its summary has a maximum length. Agreeing this is what lets UNDRR share content across its sites.</p></aside>
@@ -267,7 +267,7 @@ image_meta:
 
 ## What does Storybook add?
 
-**Layout, and only layout.** Storybook is built from the other two: each pattern takes a schema's fields and the tokens' values and arranges them on a page. That arrangement is the one thing Storybook has the final word on.
+**Layout, and only layout.** I worked with our front-end developers to build Mangrove out, and with engineering teams to integrate it into live sites. Storybook is the working catalogue of that effort: each pattern takes a schema's fields and the tokens' values and arranges them on a page. That arrangement is the one thing Storybook has the final word on.
 
 {% endmarkdown %}
 <aside class="kh-scrolly__define" data-define="nSB"><p><strong><dfn>Storybook</dfn>:</strong> the developers' working catalogue of every component, running live in the browser with all its variations.</p></aside>
@@ -473,7 +473,7 @@ image_meta:
 
 **A change at the source carries through to designers' work.** I changed a core UNDRR spacing token from 30px to 32px and republished the library. In a pilot file of 56 linked library instances, a resource page at desktop and mobile widths, the layout updated and every edited title, chosen preset and instance override survived.
 
-**Designers don't need the plugin to use the library.** The pilot was built entirely from the published library, with its own headings and local notes. The plugin is my build tool; designers only ever touch the library.
+**Designers don't need the plugin to use the library.** I worked closely with our designers to ensure this approach supported their craft rather than dictating it. The pilot was built entirely from the published library, with its own headings and local notes; the plugin is my build tool behind the scenes, and designers only ever touch the library.
 
 {% endmarkdown %}
 </div>
@@ -543,7 +543,9 @@ image_meta:
 
 ## Why did this work?
 
-**The truth was defined before I started the plugin.** If the schemas and tokens had been vague, the plugin would have had nothing to triangulate from, and the agents' output nothing to be checked against. Syndication had already forced that work, for reasons unrelated to Figma.
+**The technical build rested on years of culture change.** If the schemas and tokens had been vague, the plugin would have had nothing to triangulate from, and the agents' output nothing to be checked against. Getting stakeholders across editorial, engineering and design to embrace these layers of abstraction took sustained leadership: the plugin simply harvested the alignment we had already built.
+
+**Managing my team meant holding the technical contracts; leading across teams meant building trust.** Content authors needed confidence that schemas would protect their publishing workflows; developers needed patterns they could rely on in production; designers needed Figma components that respected their autonomy.
 
 **Each discipline gets the same story in its own tool.** Designers get Figma and developers get Storybook, both drawing on the same content rules and brand settings. It's the same move I made in [putting analytics into editorial workflows](/work/2026/impact-story-undrr-analytics-overlay-mcp/): meet each team in the tool it already works in.
 
