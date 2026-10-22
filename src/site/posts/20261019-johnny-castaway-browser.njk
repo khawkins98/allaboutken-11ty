@@ -1,7 +1,7 @@
 ---
 title: "Rehabilitating Johnny Castaway for the browser"
 layout: layouts/post.njk
-teaser: "Bringing the '90s screensaver to modern browsers exposed the scripts, story clock and scene director behind Johnny's island."
+teaser: "Bringing the '90s screensaver to modern browsers meant recovering the story clock and scene director that made his island feel alive."
 date: 2026-10-19
 tags:
   - posts
@@ -10,7 +10,7 @@ topics:
   - JavaScript
   - open source
   - AI
-kens_status: draft
+kens_status: ready_for_publication
 image: /blog/johnny-castaway-octopus.png
 image_meta:
   text: "An ambitious fishing trip ends with Johnny up the palm tree and an octopus on the beach. One of his more exciting escapades."
@@ -20,13 +20,13 @@ image_meta:
 
 {% markdown %}
 
-In 1992, Dynamix and Sierra On-Line released *Johnny Castaway*. Whenever a Windows 3.1 PC went idle, a tiny castaway fished, slept, built rafts, and got into trouble on his island. I came across him in 1992 and '93 and was captivated.
+In 1992, Dynamix and Sierra On-Line released *Johnny Castaway*. Your Windows 3.1 PC went idle and Johnny fished, slept, built rafts, and got into trouble on his island. As a young kid, I came across him during a summer holiday trip to my parents' office.
 
-Thirty-four years later, he is hard to visit. Seeing him, or showing him to my kid, means dragging a beige tower out of a closet or coaxing Windows 3.1 to behave inside a virtual machine. That is enough friction that almost nobody bothers.
+Thirty-four years later, he is hard to visit. Sharing it with my kid means dragging a beige tower out of a closet or faffing about with a virtual machine. That is enough friction that almost nobody bothers, and a far cry from the little moment of joy when Johnny just did his thing on the side.
 
-[Now he spends his days in a browser tab](https://khawkins98.github.io/johnny_web/).
+[Now he spends his days in my browser tab](https://khawkins98.github.io/johnny_web/).
 
-Rebuilding his island in JavaScript was only feasible as a side project with AI assistance; by hand, it would have been weeks of detailed work. Earlier ports got a long way, and this one builds on them, but as far as I can tell none had been checked tick by tick against the original program (if I've missed one, please tell me).
+Rebuilding his island paradise faithfully in JavaScript was only feasible with AI assistance; by hand, it would have been weeks of detailed full-time work. Earlier ports got a long way, and this one builds on them, but as far as I can tell none had been checked tick by tick against the original program (if I've missed one, please tell me).
 
 > **tl;dr**
 >
@@ -123,7 +123,5 @@ To run it, you supply the original game data. The [README](https://github.com/kh
 You don't have to wait for the calendar to see everything. Settings (press `S`) controls the display and can run time of day from the original sequence clock or your local clock. The developer panel (press `D`) previews holiday themes without touching your system clock, sets or advances the story day, and replays individual scenes. That said, the calendar is worth trusting at least once: visit between October 29 and 31 and the island is decorated for Halloween.
 
 Next, I want to make the runtime leaner and build a way to map Johnny's eleven-day story as it unfolds. Like my [recent Mac OS 9 work](/posts/20260810-newsheep-sheepshaver-mac-os-9-2-apple-silicon-jit/), this started as an excuse to spend time with vintage software again, and the island held much more engineering than I expected from a screensaver.
-
-If you remember Johnny from back in the day, I'd love to hear which gag stuck with you. It's nice having him get on with his life in the corner of a tab again.
 
 {% endmarkdown %}
