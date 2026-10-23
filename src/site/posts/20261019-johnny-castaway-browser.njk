@@ -51,7 +51,7 @@ That separation explained why earlier web ports felt incomplete. They could pars
 
 ## Asking the original what it actually does
 
-I didn't start from scratch. [Alexandre Fontoura's Castaway](https://github.com/xesf/castaway) provided the working JavaScript foundation for decoding resources. Jérémie Guillaume's [Johnny Reborn](https://github.com/jno6809/jc_reborn), a C port that already had a working scene scheduler, gave me the first scene catalogue. Hans Milling's [C# remake](https://github.com/nivs1978/Johnny-Castaway-Open-Source), and ScummVM's [DGDS engine](https://github.com/scummvm/scummvm/tree/master/engines/dgds) supplied further findings and behavioural references. This project owes a great deal to their work.
+I didn't start from scratch. [Alexandre Fontoura's Castaway](https://github.com/xesf/castaway) provided the working JavaScript foundation for decoding resources. Jérémie Guillaume's [Johnny Reborn](https://github.com/jno6809/jc_reborn), a C port that already had a working scene scheduler, gave me the first scene catalogue. Hans Milling's [C# remake](https://github.com/nivs1978/Johnny-Castaway-Open-Source) and ScummVM's [DGDS engine](https://github.com/scummvm/scummvm/tree/master/engines/dgds), from [Vasco Costa](https://github.com/vcosta/scummvm/tree/master/engines/dgds) and the ScummVM team, supplied further findings and behavioural references. This project owes a great deal to their work.
 
 Still, reverse engineering has an easy trap: an interpretation can look convincing on screen while being wrong underneath. The useful reference is the original 1992 program, running.
 
@@ -90,7 +90,7 @@ With the scripts running faithfully, you can see how carefully Dynamix built the
 
 > “So it generally runs a little loop that is interrupted by random events.”
 
-The variety operates across multiple interlocking clocks. Within a day, the director chooses among eligible everyday scenes and gags using weighted probabilities. Across days, it follows an [eleven-day story](https://github.com/khawkins98/johnny_web/blob/main/docs/story-over-time.md), and its milestones advance as calendar days pass.
+The variety operates across multiple interlocking clocks. Within a day, the director chooses among eligible everyday scenes and gags using weighted probabilities. Across days, it follows an [eleven-day story](https://github.com/khawkins98/johnny_web/blob/main/docs/story-over-time.md), and its milestones advance as calendar days pass. The calendar was in the plan from the start. As Tunnell puts it: “That was my idea from the beginning. I wanted day and night, holidays, etc.”
 
 <figure class="kh-figure">
   <img class="kh-figure__image" src="/images/blog/johnny-castaway-moonlight.png" alt="Johnny sleeps beneath a palm tree on a small island at night. A full moon and stars light the blue sky, with a bright reflection stretching across the sea." />
@@ -102,9 +102,28 @@ Reaching a day's key scene unlocks the next chapter. When your calendar date cha
 
 Environmental details run on their own schedules. The tide moves through sixteen half-hour phases, an eight-hour cycle with about two hours at low tide; holiday decorations appear on specific calendar dates. The raft's construction progress, the island's position, and day-night lighting shifts all belong to the director's scheduler.
 
-That structure is what kept me digging. Johnny's island is an authored story with random permutations running through it, rather than a stream of sight gags. It is why the island felt alive, and it is a design that still isn't widely understood.
+That structure is what kept me digging. Johnny's island is an authored story with random permutations running through it, rather than a stream of sight gags. Tunnell says it “was always pitched as the world's first story telling screen saver.” It is why the island felt alive, and it is a design that still isn't widely understood.
 
-Nostalgia Nerd's retrospective covers the original release and why it caught on with so many of us in the 1990s:
+## The people behind the island
+
+Tunnell's answers come from a [2022 Q&A on his blog](https://jefftunnell.com/johnny-castaway-common-questions/), written after a tweet about the screensaver drew a pile of questions from fans and a gaming historian. It is the best first-hand account of how Johnny came to be, and worth reading in full.
+
+The idea is older than the screensaver. Over beers after work, Tunnell claimed he could make a game out of anything, even the bus stop he was looking at. Someone suggested a little guy stranded on an island instead. He carried that around for years, and when the flying toasters screensaver came along, he “just knew it had to be a screen saver.”
+
+Johnny was one of the first three products from Jeff Tunnell Productions, the small group he split off from Dynamix's main office, built alongside *The Incredible Machine*. Rather than pitch it, Tunnell built a demo of Johnny walking around the island, climbing the palm trees, and fishing. It was green-lit in January and shipped in November.
+
+The team was small:
+
+- **Rich Rayl** worked out how to make a screensaver at all, at a time when Windows barely supported them, and wrote the final code.
+- **Shawn Bird** designed the character.
+- **Brian Hahn** came up with most of the gags, with Tunnell.
+- **Sherry Wheeler**, an ex-Disney animator, drew the animation as pencil frames, which the team scanned and cleaned up for the low-resolution screens of the day.
+
+> “She would bring in a pile of animations every week, and we would put them in the screen saver and then laugh at the result!”
+
+Those cleaned-up frames are the sprites the TTM scripts still load and draw today. Asked how many scenes there are, Tunnell didn't remember, but recalled that “there are sites out there that used to have all of the sequences named and numbered.” The port now generates [an outline for every gag](https://github.com/khawkins98/johnny_web/blob/main/docs/scene-flows/README.md) from the scripts themselves. And he never expected fans to keep Johnny running on new machines: “The only surprise was how long it lasted.”
+
+[Sierra Chest](https://sierrachest.com/index.php?a=games&id=255&title=johnny-castaway&fld=general) keeps the credits and release details, and the Internet Archive can [run the original 1992 version in DOSBox](https://archive.org/details/johnny-castaway-screensaver) if you want to compare. Nostalgia Nerd's retrospective covers the original release and why it caught on with so many of us in the 1990s:
 
 {% endmarkdown %}
 
@@ -118,7 +137,7 @@ Nostalgia Nerd's retrospective covers the original release and why it caught on 
 
 The [browser port](https://khawkins98.github.io/johnny_web/) offers Classic and Enhanced playback. Classic keeps the original 640×480 scale, static clouds, and the original rolling waves; Enhanced adds responsive scaling, drifting clouds, and a small status display. The original Dynamix and Sierra pixel art, audio cues, and gags remain the center of the experience.
 
-To run it, you supply the original game data. The [README](https://github.com/khawkins98/johnny_web#readme) links the floppy archive; dropping its ZIP or extracted `.ima` disk image directly onto the page imports the resources straight into browser storage.
+To run it, you supply the original game data. The [README](https://github.com/khawkins98/johnny_web#readme) links the floppy archive, preserved on the Internet Archive by [Greyfalken](https://archive.org/details/@greyfalken); dropping its ZIP or extracted `.ima` disk image directly onto the page imports the resources straight into browser storage.
 
 You don't have to wait for the calendar to see everything. Settings (press `S`) controls the display and can run time of day from the original sequence clock or your local clock. The developer panel (press `D`) previews holiday themes without touching your system clock, sets or advances the story day, and replays individual scenes. That said, the calendar is worth trusting at least once: visit between October 29 and 31 and the island is decorated for Halloween.
 
