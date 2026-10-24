@@ -45,22 +45,22 @@ The scripts operate on two levels:
 
 The [“Eight Arm Menace” scene flow](https://github.com/khawkins98/johnny_web/blob/main/docs/scene-flows/FISHING.ADS.md#eight-arm-menace-fishingads-tag-3) shows how they fit together: Johnny gets his pole, casts, reels in a heavy catch, and reaches the octopus gag. Several animation threads run concurrently. Their relative order and timing determine whether the result lands as a coherent joke.
 
-Deciding which gag comes next is a separate problem. The original Windows executable wrapped a scene director around these scripts. It picked an eligible story scene, queued up everyday filler scenes before it, and scheduled Johnny's walks between their starting and ending positions. The browser port rebuilds that [scene-selection behaviour](https://github.com/khawkins98/johnny_web/blob/main/docs/johnny-host-behavior.md) outside the script interpreter.
+Deciding which gag comes next is a separate problem. The original Windows executable wrapped a scene director around these scripts. It picked an eligible ending scene, queued up everyday scenes before it, and scheduled Johnny's walks between their starting and ending positions. The browser port rebuilds that [scene-selection behaviour](https://github.com/khawkins98/johnny_web/blob/main/docs/johnny-host-behavior.md) outside the script interpreter.
 
 That separation explained why earlier web ports felt incomplete. They could parse and play individual animations, but without the director, ordinary playback never selected them. Decoding a file tells you how to render an animation, but not when Johnny should decide to walk across the beach.
 
 ## Asking the original what it actually does
 
-I didn't start from scratch. [Alexandre Fontoura's Castaway](https://github.com/xesf/castaway) provided the working JavaScript foundation for decoding resources. Jérémie Guillaume's [Johnny Reborn](https://github.com/jno6809/jc_reborn), a C port that already had a working scene scheduler, gave me the first scene catalogue. Hans Milling's [C# remake](https://github.com/nivs1978/Johnny-Castaway-Open-Source), and ScummVM's [DGDS engine](https://github.com/scummvm/scummvm/tree/master/engines/dgds) supplied further findings and behavioural references. This project owes a great deal to their work.
+I didn't start from scratch. [Alexandre Fontoura's Castaway](https://github.com/xesf/castaway) provided the working JavaScript foundation for decoding resources. Jérémie Guillaume's [Johnny Reborn](https://github.com/jno6809/jc_reborn), a C port that already had a working scene scheduler, gave me the first scene catalogue. Hans Milling's [C# remake](https://github.com/nivs1978/Johnny-Castaway-Open-Source) and ScummVM's [DGDS engine](https://github.com/scummvm/scummvm/tree/master/engines/dgds), from [Vasco Costa](https://github.com/vcosta/scummvm/tree/master/engines/dgds) and the ScummVM team, supplied further findings and behavioural references. This project owes a great deal to their work.
 
-Still, reverse engineering has an easy trap: an interpretation can look convincing on screen while being wrong underneath. The useful reference is the original 1992 program, running.
+Still, reverse engineering has an easy trap: an interpretation can look convincing on screen while being wrong underneath. The useful reference is the original program, running.
 
 To get that, I built [capture tooling](https://github.com/khawkins98/johnny_web/blob/main/tools/faithfulness-oracle/METHODOLOGY.md) around Windows 3.1 in a patched DOSBox-X emulator. The harness hooks the 16-bit executable's main script tick function. Each time it runs, roughly every 55 milliseconds on Windows 3.1's timer, the harness records which script threads are live (the “actors”) and their runstates; separate logs capture delay counters and random-number draws. Each capture is then condensed into a `timeline.jsonl` file. The emulator runs the same game data as the browser port, so a difference can't come from comparing two releases.
 
 <figure class="kh-figure">
   <img class="kh-figure__image" src="/images/blog/johnny-castaway-developer-tools.png" alt="The Developer Tools panel beside Johnny fishing. FISHING.ADS and EIGHT ARM MENACE are selected, with controls for the simulated day, single-scene playback, saved story progress, and downloading a JSONL trace." />
-  <figcaption class="kh-figure__caption">Replaying “Eight Arm Menace” on demand. The developer panel selects a scene and exports a trace for investigation.</figcaption>
   <small class="kh-figure__credit">Screenshot from johnny_web. Original artwork by Dynamix / Sierra On-Line.</small>
+  <figcaption class="kh-figure__caption">Replaying “Eight Arm Menace” on demand. The developer panel selects a scene and exports a trace for investigation.</figcaption>
 </figure>
 
 Comparing threads rather than pixels was a lesson learned. My first tool compared captured screen frames. It found one real bug, a beach background vanishing behind a stale clock graphic, then lasted less than a day because it was slow and thrown off by palette and capture timing.
@@ -76,9 +76,9 @@ This is how the AI assistance worked in practice. LLMs are good at suggesting wh
 
 Opcode `0x2020` shows both sides. A thought bubble in “John's 1st Message” flashed past in a fraction of a second. Working from the decompiled code, an AI agent proposed a rule for the opcode with high confidence, and two fixes built on it were stopped when the traces flagged regressions. Instrumenting the emulator then turned up a handler the decompiler had missed, which sets a random hold on the frame. That was the fix. An AI hypothesis either matched the emulator trace, or it was wrong.
 
-Other bugs were inherited and looked fine on screen. The code I forked picked random branches with equal odds, so Johnny left a fishing sequence about three times too often; the original weights each outcome. Both versions reached a plausible ending, but the port was taking the wrong path far too frequently. Cross-checking against the decompiled executable caught that one, before the traces existed.
+Other bugs were inherited and looked fine on screen. The code I forked picked random branches with equal odds, so Johnny left a fishing sequence about three times too often; the original weights each outcome. Both versions reached a plausible ending, but the port was taking the wrong path far too frequently. The traces caught that one.
 
-Animation timing had similar traps. How long an animation is allowed to run is separate from how long each frame should pause, and mixing up those clocks changed how actions overlapped even when the drawings were correct. The traces also caught an opcode the inherited code treated as a no-op, which in the original ends the sequence. Ignoring it let a “preen” timer in one gag play four dead frames and run about five times too long. For weeks before that, a filter had papered over the symptoms in nineteen gags, on the theory that the reference captures had started mid-scene. Once the opcode was fixed, the filter had nothing left to do.
+Animation timing had similar traps. How long an animation is allowed to run is separate from how long each frame should pause, and mixing up those clocks changed how actions overlapped even when the drawings were correct. The traces also caught an opcode the inherited code treated as a no-op, which in the original ends the sequence. Ignoring it let a “preen” timer in one gag play four dead frames and run about five times too long. Before that, a filter had papered over the symptoms in 29 gags, on the theory that the reference captures had started mid-session. Once the opcode was fixed, almost every entry had nothing left to do.
 
 A second safety net catches regressions: [rendering goldens](https://github.com/khawkins98/johnny_web/blob/main/test/render-goldens.mjs). These replay fragile sequences with fixed inputs and save compact fingerprints of drawing operations and pixels. A later code change that alters the output fails the check, and the difference gets reviewed. They need the original game data, so they run locally rather than in CI.
 
@@ -94,17 +94,36 @@ The variety operates across multiple interlocking clocks. Within a day, the dire
 
 <figure class="kh-figure">
   <img class="kh-figure__image" src="/images/blog/johnny-castaway-moonlight.png" alt="Johnny sleeps beneath a palm tree on a small island at night. A full moon and stars light the blue sky, with a bright reflection stretching across the sea." />
-  <figcaption class="kh-figure__caption">A quieter moment: Johnny asleep under the moon, captured in Enhanced mode.</figcaption>
   <small class="kh-figure__credit">Screenshot from johnny_web. Original artwork by Dynamix / Sierra On-Line.</small>
+  <figcaption class="kh-figure__caption">A quieter moment: Johnny asleep under the moon, captured in Enhanced mode.</figcaption>
 </figure>
 
-Reaching a day's key scene unlocks the next chapter. When your calendar date changes, the saved state advances one step toward that unlocked day. It avoids skipping ahead if you have been away for weeks, and day eleven wraps back to day one. The browser port keeps this progress in local storage.
+Once a visit includes the day's key scene, the next chapter unlocks. When your calendar date changes, the saved state advances one step toward that unlocked day. It avoids skipping ahead if you have been away for weeks, and day eleven wraps back to day one. The browser port keeps this progress in local storage.
 
-Environmental details run on their own schedules. The tide moves through sixteen half-hour phases, an eight-hour cycle with about two hours at low tide; holiday decorations appear on specific calendar dates. The raft's construction progress, the island's position, and day-night lighting shifts all belong to the director's scheduler.
+Environmental details run on their own schedules. A sixteen-phase clock runs in half-hour steps over eight hours, with the last two hours drawn as night, while the tide is a coin flip each visit; holiday decorations appear on specific calendar dates. The raft's construction progress, the island's position, and day-night lighting shifts all belong to the director's scheduler.
 
-That structure is what kept me digging. Johnny's island is an authored story with random permutations running through it, rather than a stream of sight gags. It is why the island felt alive, and it is a design that still isn't widely understood.
+That structure is what kept me digging. Johnny's island is an authored story with random permutations running through it, rather than a stream of sight gags. Tunnell says it “was always pitched as the world's first story telling screen saver.” It is why the island felt alive, and it is a design that still isn't widely understood.
 
-Nostalgia Nerd's retrospective covers the original release and why it caught on with so many of us in the 1990s:
+## The people behind the island
+
+Taking a small diversion here to pull together and acknowledge the motivation and people behind the original art: Tunnell's answers above and below come from a [2022 Q&A on his blog](https://jefftunnell.com/johnny-castaway-common-questions/), written after a tweet about the screensaver drew a pile of questions from fans and a gaming historian. It is the best first-hand account of how Johnny came to be, and worth reading in full.
+
+The idea is older than the screensaver. Over beers after work, Tunnell claimed he could make a game out of anything, even the bus stop he was looking at. Someone riffed on it: how about a little guy stranded on an island? He carried that around for years, and when the flying toasters screensaver came along, he “just knew it had to be a screen saver.”
+
+Johnny was one of the first three products from Jeff Tunnell Productions, the group he split off from Dynamix's main office, built alongside *The Incredible Machine*. Rather than ask permission, Tunnell built a demo of Johnny walking around the island, climbing the palm trees, and fishing. It was green-lit in January and shipped in November.
+
+Key people included:
+
+- **Rich Rayl** worked out how to make a screensaver at all, at a time when Windows barely supported them, and wrote the final code.
+- **Shawn Bird** designed the character.
+- **Brian Hahn** came up with most of the gags, with Tunnell.
+- **Sherry Wheeler**, an ex-Disney animator, did the animation as pencil frames, which the team scanned and cleaned up for the low-resolution screens of the day.
+
+> “She would bring in a pile of animations every week, and we would put them in the screen saver and then laugh at the result!”
+
+Those cleaned-up frames are the sprites the TTM scripts still load and draw today. Asked how many scenes there are, Tunnell didn't remember, but recalled that “there are sites out there that used to have all of the sequences named and numbered.” The port now generates [an outline for every gag](https://github.com/khawkins98/johnny_web/blob/main/docs/scene-flows/README.md) from the scripts themselves. And he never expected fans to keep Johnny running on new machines: “The only surprise was how long it lasted.”
+
+[Sierra Chest](https://sierrachest.com/index.php?a=games&id=255&title=johnny-castaway&fld=making) has the full credits and the making-of story, and the Internet Archive can [run the original in DOSBox](https://archive.org/details/johnny-castaway-screensaver) if you want to compare. Nostalgia Nerd's retrospective covers the original release and why it caught on with so many of us in the 1990s:
 
 {% endmarkdown %}
 
@@ -116,9 +135,9 @@ Nostalgia Nerd's retrospective covers the original release and why it caught on 
 
 ## Back on the island
 
-The [browser port](https://khawkins98.github.io/johnny_web/) offers Classic and Enhanced playback. Classic keeps the original 640×480 scale, static clouds, and the original rolling waves; Enhanced adds responsive scaling, drifting clouds, and a small status display. The original Dynamix and Sierra pixel art, audio cues, and gags remain the center of the experience.
+This [browser port](https://khawkins98.github.io/johnny_web/) offers Classic and Enhanced playback. Classic keeps the original 640×480 scale, static clouds, and the original rolling waves; Enhanced adds responsive scaling, drifting clouds, and a small status display. The original Dynamix and Sierra pixel art, audio cues, and gags remain the center of the experience.
 
-To run it, you supply the original game data. The [README](https://github.com/khawkins98/johnny_web#readme) links the floppy archive; dropping its ZIP or extracted `.ima` disk image directly onto the page imports the resources straight into browser storage.
+To run it, you'll need the original game data: the [README](https://github.com/khawkins98/johnny_web#readme) links the floppy archive, preserved on the Internet Archive by [Greyfalken](https://archive.org/details/@greyfalken); dropping its ZIP or extracted `.ima` disk image directly onto the page imports the resources straight into browser storage.
 
 You don't have to wait for the calendar to see everything. Settings (press `S`) controls the display and can run time of day from the original sequence clock or your local clock. The developer panel (press `D`) previews holiday themes without touching your system clock, sets or advances the story day, and replays individual scenes. That said, the calendar is worth trusting at least once: visit between October 29 and 31 and the island is decorated for Halloween.
 
