@@ -10,18 +10,18 @@ topics:
   - retro computing > Kaleidoscope schemes
   - developer tools
 kens_status: draft
-image: /blog/halcyon-kaleidoscope-system-7.png
+image: /blog/halcyon-kaleidoscope-desktop.png
 image_meta:
-  text: "Halcyon, a new Kaleidoscope scheme, running in the original Kaleidoscope 2.3.1 on System 7.5.5 in an emulator."
+  text: "The finished Halcyon scheme, drawn by the original Kaleidoscope 2.3.1 on System 7.5.5 in an emulator."
   credit: "Own work."
-  altext: "A classic Mac OS desktop with a Finder window titled Shared, listing seven files. The window has a light, flat title bar with a small teal close button on the left and round grey zoom and collapse buttons on the right. Behind it is a second, inactive window with grey buttons, and at the bottom a pale yellow Kaleidoscope shareware reminder."
+  altext: "A classic Mac OS desktop on a pale, finely patterned background. A Finder window titled System Folder is in list view, with underlined Name, Size and Kind column headers, blue disclosure triangles beside the Apple Menu Items and Control Panels folders, and light grey scroll bars with chevron arrows. Its title bar is flat and light, with a teal close button on the left and round zoom and collapse buttons on the right. An inactive window sits behind it, and a pale yellow Kaleidoscope shareware reminder is at the bottom."
 ---
 
 {% markdown %}
 
-[Scriptoscope](https://github.com/khawkins98/scriptoscope), my project that renders classic Mac OS Kaleidoscope themes in the browser, can now make new schemes as well as read old ones. This week it got an authoring toolkit and its first original scheme, Halcyon: light, frosted and modern, and deliberately not a copy of macOS. It loads in the real Kaleidoscope 2.3.1 on System 7.5.5, which is the screenshot above. The work is in [draft PR #540](https://github.com/khawkins98/scriptoscope/pull/540).
+[Scriptoscope](https://github.com/khawkins98/scriptoscope), my project that renders classic Mac OS Kaleidoscope themes in the browser, can now make new schemes as well as read old ones. This week it got an authoring toolkit and its first original scheme, Halcyon: light, frosted and modern, and deliberately not a copy of macOS. It is now a complete scheme, and the screenshot above is the real Kaleidoscope 2.3.1 drawing it on System 7.5.5. The work is in [draft PR #540](https://github.com/khawkins98/scriptoscope/pull/540).
 
-Every control in Halcyon was drawn by code I wrote by hand. That left me with a question: can AI tools draw this kind of art, from the command line, without me signing up for another paid API key?
+All of Halcyon's art is drawn by code, not painted. That left me with a question: can AI tools draw this kind of art, from the command line, without me signing up for another paid API key?
 
 Mostly yes, but not the way I expected.
 
@@ -30,13 +30,14 @@ Mostly yes, but not the way I expected.
 > - An image generator asked for a 16×16 PNG returned a 1,024×1,024 JPEG with a fake transparency checkerboard painted in. Cleanup tools could rescue a picture from it, but never the size I asked for
 > - Asking a language model for text instead worked first time: rows of characters, or drawing code, at the exact size and palette
 > - The best zero-key result was [claude-pxl](https://github.com/crsolver/claude-pxl), a "pixel art as code" Agent Skill. With its docs as context, Gemini wrote all eight Halcyon control sprites in one go, and they went through the real pipeline untouched
+> - Halcyon is now complete: 329 resources, built by four AI agents in parallel, and the real 1990s engine caught a bug our own checks missed
 > - Paid pixel-art services exist and look promising; I have not tried them yet
 
 ## Why this art is awkward
 
-A Kaleidoscope scheme is a binary resource fork full of tiny icons (the `cicn` resource), each with a 1-bit mask, at most 256 colours and an exact pixel size. A checkbox is a checkbox at 14×14 or 16×16 and nothing else. Some icons also carry hidden "swatch" pixels that the engine samples for colours. There is no anti-aliasing to hide behind, and no partial transparency: a pixel is in the mask or it is not.
+A Kaleidoscope scheme is a binary resource fork full of tiny icons (the `cicn` resource), each with a 1-bit mask, at most 256 colours and an exact pixel size. A checkbox is a checkbox at 14×14 or 16×16 and nothing else. Some icons also carry hidden "swatch" pixels that the engine samples for colours. There is no partial transparency: a pixel is in the mask or it is not.
 
-That is a long way from what image models are built for. But it is also a very small amount of information. A 16×16 icon is 256 decisions, which made me wonder whether a model would do better writing the decisions down than painting them.
+That is a long way from what image models are built for. But a 16×16 icon is only 256 decisions, which a model might do better writing down than painting.
 
 ## Route A: ask an image generator
 
@@ -54,7 +55,7 @@ As a picture, it is nice. As an asset, almost nothing about it was what I asked 
 - It was drawn on a grid of about 36 cells, with the box 26 cells wide, not 16
 - It was saved to the tool's own artifact folder (`~/.gemini/antigravity-cli/brain/<conversation-id>/`), not the path I gave it
 
-None of that is the model misbehaving. The `generate_image` tool only takes a prompt, a name, an aspect ratio and reference images. There is no parameter for size, format, transparency or output path, and image generation is not in the official CLI docs at all. The model was aiming for a picture *of* pixel art, and that is what it made.
+None of that is the model misbehaving. The `generate_image` tool only takes a prompt, a name, an aspect ratio and reference images, and image generation is not in the official CLI docs at all. The model was aiming for a picture *of* pixel art, and that is what it made.
 
 ### Cleaning it up
 
@@ -68,7 +69,7 @@ Two open-source tools exist for exactly this job: take a fake pixel-art image an
   <figcaption class="kh-figure__caption">proper-pixel-art's output at 8× on a grey background. The grid is right; the checkerboard is now real pixels, and the border is gone.</figcaption>
 </figure>
 
-A second generation went better. I asked for a flat `#00FF00` background instead of transparency, which gives the cleanup something unambiguous to key out. proper-pixel-art turned that into a 32×33 grid with the green removed and three colours left. It is a usable sprite, but it is still the model's size, not mine: the box is 20×20 rather than 16×16.
+A second generation, prompted for a flat `#00FF00` background to key out, cleaned up well: a 32×33 grid, green removed, three colours. Usable, but still the model's size, not mine: the box is 20×20 rather than 16×16.
 
 <figure class="kh-figure">
   <img class="kh-figure__image" src="/images/blog/pixel-art-green-key-cleanup.png" width="560" eleventy:formats="png" alt="Two panels. On the left, a teal checkbox with a white check mark on a bright green background, as generated. On the right, the cleaned-up version on a transparent checkerboard: the green is gone and the checkbox is reduced to a few flat colours.">
@@ -82,28 +83,20 @@ Then I tried the obvious thing I should have started with. `agy` can run with `-
 - **Route B, sprite rows.** A JSON array of strings, one per row, one character per pixel, plus a palette mapping each character to a colour. For a 14×14 checkbox it got the size and palette exactly right on the first try
 - **Route C, drawing code.** JavaScript against Scriptoscope's tiny Raster API (set a pixel, fill a rect, and so on). It drew a correct slider thumb on the first try
 
-<figure class="kh-figure">
-  <img class="kh-figure__image" src="/images/blog/pixel-art-three-routes.png" width="1064" eleventy:formats="png" alt="Four panels in a row. A: the raw image-generator JPEG of a checkbox on a painted checkerboard. A snapped: the same checkbox snapped to its grid, larger and with a dark teal border. B: a checkbox made from ASCII rows, with a slightly octagonal outline. C: two pale, shield-shaped slider thumbs drawn by generated code, one with a teal centre line and one with a grey line.">
-  <figcaption class="kh-figure__caption">The first round side by side: the image generator, its grid-snapped version, ASCII rows, and generated drawing code.</figcaption>
-</figure>
-
 Text works because the model has to commit to every pixel. There is nothing to approximate, and the result is something I can read, diff and edit by hand.
 
 ### Which model?
 
-`agy` lets you pick between several models, so I ran route B on seven of them, with the same prompt and an automated checker for size, palette and a few shape rules.
+I ran route B on seven of the models `agy` offers, with an automated checker for size, palette and a few shape rules.
 
 <figure class="kh-figure">
   <img class="kh-figure__image" src="/images/blog/pixel-art-model-comparison-rows.png" width="1524" eleventy:formats="png" alt="Eight enlarged teal checkboxes in a row, each labelled with a model name and a score. The first six, from Gemini 3.8 Flash, Gemini 4 Argon and Claude Sonnet and Opus 5.5, all have white check marks and pass 5 of 5 checks. The last two, both from GPT-OSS-120B, pass 4 of 5: one has a broken diagonal line instead of a check, and the other is a small square with teal blocks in its corners.">
   <figcaption class="kh-figure__caption">Seven models on the same 14×14 checkbox prompt. GPT-OSS-120B is on the right, twice.</figcaption>
 </figure>
 
-- Six of the seven passed every automated rule
-- Claude Opus 5.5 Medium was the best overall and also fast: about 33 seconds, against about 200 seconds for most of the Gemini runs (I ran them concurrently, so some of that is contention)
-- Gemini 3.8 Flash High tied with it on looks, but was slow
-- GPT-OSS-120B failed: one run got a 503 "no capacity", and the retry drew nonsense
+Six of the seven passed every automated rule. Claude Opus 5.5 Medium was the best overall and fast, about 33 seconds against about 200 for most Gemini runs (they ran concurrently, so some of that is contention). Gemini 3.8 Flash High tied on looks but was slow. GPT-OSS-120B failed: a 503 "no capacity", then a nonsense drawing.
 
-To be honest about the result: at 14 pixels, all of the checkboxes read slightly octagonal, and the automated rules did not separate the good ones from the merely passing ones. I still had to look.
+Honestly, at 14 pixels all the checkboxes read slightly octagonal, and the rules did not separate the good ones from the merely passing. I still had to look.
 
 I also ran route C on two models for the title bar buttons (close, zoom and collapse). Opus drew them cleanly. Gemini's plus sign sits off-centre, and both models' × marks have a heavy centre at 12 pixels.
 
@@ -116,13 +109,9 @@ I also ran route C on two models for the title bar buttons (close, zoom and coll
 
 [claude-pxl](https://github.com/crsolver/claude-pxl) (MIT) is an Agent Skill for "pixel art as code". The model writes a `.px.js` file containing a palette and text grids or shape operations, and the skill builds PNGs, enlarged previews and an ASCII dump you can check by eye. It is route B with proper tooling around it.
 
-What I liked:
+The PNGs come out at exactly the size in the file, with alpha strictly 0 or 255 (what a 1-bit mask needs). A build takes about 0.1 seconds, with no dependencies beyond Node.
 
-- The PNGs come out at exactly the size in the file, with alpha strictly 0 or 255, which is what a 1-bit mask needs
-- A build takes about 0.1 seconds
-- It has no dependencies beyond Node
-
-It is packaged as a Claude skill, but its docs work fine as plain context for another model. I gave `agy` claude-pxl's own `SKILL.md` and reference docs as context, and Gemini wrote all eight Halcyon control sprites in one go. Every one of them round-tripped exactly through Scriptoscope's encoder and the runtime decoder.
+It is packaged as a Claude skill, but I gave `agy` its `SKILL.md` and reference docs as plain context, and Gemini wrote all eight Halcyon control sprites in one go. Every one of them round-tripped exactly through Scriptoscope's encoder and the runtime decoder.
 
 <figure class="kh-figure">
   <img class="kh-figure__image" src="/images/blog/pixel-art-claude-pxl-sprites.png" width="1150" eleventy:formats="png" alt="Two rows of enlarged control sprites on a transparent checkerboard. The top row, labelled Claude plus claude-pxl, has six: a teal checkbox with a minus, an empty checkbox, a checked checkbox, a round teal button with an x, an empty radio button and a filled radio button. The bottom row, labelled agy Gemini 3.8 Flash plus claude-pxl docs, has eight: empty, checked and mixed checkboxes, an empty radio button, a filled radio button with a square dot, a round teal x button, and pale grey round plus and minus buttons.">
@@ -136,32 +125,55 @@ I then built a Halcyon variant using those sprites, and it rendered correctly in
   <figcaption class="kh-figure__caption">Halcyon in the Scriptoscope runtime: my code-drawn controls on top, the claude-pxl sprites below.</figcaption>
 </figure>
 
+## Finishing Halcyon
+
+Since the sprite experiments, Halcyon has become a complete scheme of 329 resources. Beyond frames, buttons and checkboxes it themes scroll bars, sliders, tabs, bevel and popup buttons, progress bars (a dithered barber pole), list headers, disclosure triangles, menus, a desktop pattern and its own icon in the scheme picker. Real Kaleidoscope draws the menus, desktop pattern, picker icon, list view, scroll bars, tabs and popup buttons from it. Finder icons, cursors, sounds and accent colours are still the defaults.
+
+The control families were built by four AI agents working in parallel, one per family, each writing its own module against the specs Scriptoscope had already decoded. A fifth agent ran the emulator.
+
+### Anti-aliasing with a 1-bit mask
+
+I asked for better anti-aliasing and dithering, and that changed the toolkit more than I expected. A 1-bit mask cannot be half transparent, so the smooth shapes blend each edge pixel by how much of it the shape covers: either with the pixel underneath, or with a "matte" colour the art normally sits on, which for Halcyon is the white window body. Ordered (Bayer) dithering gives smooth gradients in very few colours.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/halcyon-scroll-arrow-anti-aliased.png" width="1400" eleventy:formats="png" alt="A five-times zoom of Halcyon's up scroll arrow in four states, labelled normal, up, down and page. Each is a dark grey chevron on a pale grey-to-white gradient; the pressed state is a white chevron on a teal gradient. The chevron edges are made of intermediate grey or teal pixels that soften the diagonals.">
+  <figcaption class="kh-figure__caption">A scroll arrow at 5×. The in-between pixels on the chevron are coverage blends, since the mask itself can only be on or off.</figcaption>
+</figure>
+
+The gotcha: never dither art the engine stretches or tiles along one axis. A dithered column repeated across a scroll track turns into stripes. Patterns that tile both ways, like the desktop, can be dithered safely.
+
+### The real engine is the best checker
+
+Real Kaleidoscope caught a bug our checks did not. Tab-pane labels were drawn white on white, because the text colour was read from the same pixel as the background. It is fixed, confirmed in a final boot, and there is now a check for it.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/halcyon-kaleidoscope-control-panel.png" width="1280" eleventy:formats="png" alt="The Kaleidoscope 2.3.1 control panel on System 7.5.5 with the Halcyon scheme selected. Two tabs, Scheme Settings and General Options, have dark, readable labels. Below are checkboxes for scheme options with Desktop Pattern checked in teal, a greyed Accent Color popup set to Lavender, and Register and Select Scheme buttons.">
+  <figcaption class="kh-figure__caption">The Kaleidoscope control panel after the fix, with readable tab labels.</figcaption>
+</figure>
+
+It worked the other way too. A plausible checker rule, "scroll pieces must be opaque", fired on 12 of 18 original 1990s schemes. It is a note now, not an error: the originals define what is valid.
+
 ## Gotchas running agy headless
 
-If you try this with `agy -p` (print mode) in a script, a few things caught me out:
-
-- Tools are auto-denied in print mode. That is fine for text-only routes, but it did try to run a shell command after I told it not to
-- Despite `--json-schema`, the JSON sometimes arrived twice, or wrapped in a `` ```json `` fence. Parse defensively
-- Print mode exits before subagents finish unless you tell it to wait
-- `--mode auto` is not available on some accounts
+If you script `agy -p` (print mode): tools are auto-denied, though it still tried to run a shell command after I told it not to. Despite `--json-schema`, the JSON sometimes arrived twice or wrapped in a `` ```json `` fence, so parse defensively. Print mode exits before subagents finish unless told to wait, and `--mode auto` is unavailable on some accounts.
 
 ## What I did not try
 
-Some services are built for this, but they need keys or subscriptions, so for now this is reading, not testing:
+These need keys or subscriptions, so for now this is reading, not testing:
 
-- **Retro Diffusion** is the only image model I found that takes exact small sizes (12 to 512 pixels), with `remove_bg` and a palette lock. Pricing is roughly $0.03 per image for fast, $0.06 for plus and $0.18 for pro, and their pixel fixer is $0.002. Their [API examples](https://github.com/Retro-Diffusion/api-examples) are a good place to start
+- **Retro Diffusion** is the only image model I found that takes exact small sizes (12 to 512 pixels), with `remove_bg` and a palette lock. Pricing is roughly $0.03 per image for fast, $0.06 for plus and $0.18 for pro, and their pixel fixer is $0.002. See their [API examples](https://github.com/Retro-Diffusion/api-examples)
 - **PixelLab** has a pixel-art model on subscription. Most of its tools start at 32 pixels, which is bigger than most Kaleidoscope controls, and I have not verified its prices
 - **OpenRouter** has about 20 general image models, at roughly 1 to 13 cents an image according to [OpenRouter's own September 2026 comparison](https://openrouter.ai/blog/insights/image-generation-models-compared/). Outputs start at 1,024 pixels and I could not find transparency documented, so I would expect the same grid problem as route A
 - **Hugging Face Inference Providers** pass provider costs through, and a PRO account includes $2 a month of credits ([pricing](https://huggingface.co/docs/inference-providers/pricing)). There are community pixel-art LoRAs, but I did not find a priced hosted endpoint for one
 
-There are also Agent Skills besides claude-pxl: a Retro Diffusion skill in [PlayableIntelligence/game-creator](https://github.com/PlayableIntelligence/game-creator), and various skills for Google's Nano Banana, which is general image generation and so has the same grid problem.
+Other Agent Skills exist: a Retro Diffusion skill in [PlayableIntelligence/game-creator](https://github.com/PlayableIntelligence/game-creator), and several Nano Banana skills, which are general image generation with the same grid problem.
 
 Things still on my list: trials of Retro Diffusion and PixelLab, feeding the checker's errors back to the model in a loop, generating a whole window frame rather than single controls, and running more than two models on route C.
 
 ## What I am taking from this
 
-For exact-format pixel art, ask the model for code or text grids, not pictures. An image model aims for a picture of pixel art; text makes it decide each pixel, and what comes back stays editable. Image models are still useful for mood boards. If you have to use one for the asset itself, prompt for a flat key-colour background and run a grid-recovery tool like proper-pixel-art afterwards, then expect to fix the size yourself.
+For exact-format pixel art, ask the model for code or text grids, not pictures. An image model aims for a picture of pixel art; text makes it decide each pixel, and what comes back stays editable. Image models are still useful for mood boards. If you must use one for the asset, prompt for a flat key-colour background, run proper-pixel-art, and expect to fix the size yourself. And boot the real thing: the original engine caught what my checks missed.
 
-If you have tried Retro Diffusion or PixelLab on very small sprites, or you have a Kaleidoscope scheme you would like to see in a browser, I would like to hear about it. The Halcyon work and the authoring toolkit are in [PR #540](https://github.com/khawkins98/scriptoscope/pull/540).
+If you have tried Retro Diffusion or PixelLab on very small sprites, or you have a Kaleidoscope scheme you would like to see in a browser, I would like to hear about it. Halcyon and the authoring toolkit are in [PR #540](https://github.com/khawkins98/scriptoscope/pull/540).
 
 {% endmarkdown %}
