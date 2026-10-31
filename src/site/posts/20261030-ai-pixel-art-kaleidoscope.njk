@@ -1,0 +1,164 @@
+---
+title: 'Making new Kaleidoscope schemes in 2026, and what AI was good for'
+layout: layouts/post.njk
+teaser: 'I set out to see if a classic Mac theme could still be made from scratch. Five schemes later, AI was useful in places I did not expect, and the image generator I had written off ended up doing the concept art.'
+date: 2026-10-30
+tags:
+  - posts
+topics:
+  - AI > image generation
+  - retro computing > Kaleidoscope schemes
+  - developer tools
+kens_status: draft
+image: /blog/castle-kaleidoscope-desktop.png
+image_meta:
+  text: "Castle, one of five new schemes, drawn by the original Kaleidoscope 2.3.1 on System 7.5.5 in an emulator."
+  credit: "Own work."
+  altext: "A classic Mac OS desktop with a pale blue sky pattern. A Finder window is framed as a castle: grey stone walls, a row of merlons along the top, round corner towers with red cone roofs and red pennants, and a red banner carrying the window title Reference Transfer. The scroll thumbs are small wooden barrels, and a portcullis sits in the bottom right corner."
+---
+
+{% markdown %}
+
+[Scriptoscope](https://github.com/khawkins98/scriptoscope) is my project that renders classic Mac OS Kaleidoscope schemes in the browser, from the original 1990s files. This week I wanted to know if it could go the other way: can someone make a *new* Kaleidoscope scheme in 2026, one that loads in the browser and in the real Kaleidoscope on a classic Mac? And where does AI actually help with that?
+
+The answer to the first question is yes. There are now five new schemes, all built in code, and all of them load in the original Kaleidoscope 2.3.1. The work is in [PR #540](https://github.com/khawkins98/scriptoscope/pull/540).
+
+The answer to the second question changed twice along the way.
+
+> **tl;dr**
+>
+> - For the final pixels, ask a model for code or text grids, not pictures. Image generators draw a picture *of* pixel art, on their own grid
+> - But image generators were the missing piece for design. My first schemes passed every check and still looked generated. What fixed them was an AI concept image of the whole window, shrunk back to real pixels and cleaned up by hand
+> - Booting the original engine found bugs that no check of mine did, including one in Scriptoscope itself
+
+## Why this art is awkward
+
+A Kaleidoscope scheme is a binary resource fork full of tiny colour icons (`cicn` resources) plus recipes that tell the engine how to stretch and tile them into a window frame. Each icon has a 1-bit mask and at most 256 colours, and is drawn at an exact pixel size. A checkbox is 14×14 or 16×16 and nothing else. Some colours, like the title text, are not drawn at all: the engine reads them from hidden pixels at fixed positions.
+
+That is a long way from what image models are built for.
+
+## Round one: asking AI for pixels
+
+I started with the [Google Antigravity CLI](https://antigravity.google/docs/cli/reference) (`agy` 1.4.10), because I already had it and it has an image generator subagent. I asked for a 16×16 PNG checkbox.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/pixel-art-agy-raw-checkbox.jpg" width="512" alt="A teal rounded-square checkbox with a white check mark, drawn in a chunky pixel style, sitting on a grey and white checkerboard pattern. Faint smudges of compression noise are visible in the checkerboard near the left and bottom edges.">
+  <figcaption class="kh-figure__caption">What came back, shrunk from 1,024×1,024 for this page. The checkerboard is not transparency; it is painted in.</figcaption>
+</figure>
+
+It was a 1,024×1,024 JPEG with about 5,000 colours of compression noise, a checkerboard painted in where the transparency should be, and a box 26 cells wide on a grid of about 36. It also ignored the path I gave it. Two open-source cleanup tools, [unfake](https://github.com/painebenjamin/unfake.py) and [proper-pixel-art](https://github.com/KennethJAllen/proper-pixel-art), could recover *a* grid from it, but never the size I asked for. The model was not misbehaving. Its `generate_image` tool only takes a prompt, a name, an aspect ratio and reference images.
+
+Asking for text worked straight away. With `--json-schema`, `agy` returned a sprite as rows of characters plus a palette, or as drawing code against Scriptoscope's small Raster API, and both came back at the exact size on the first try. Text makes the model commit to every pixel, and what comes back is something I can read, diff and fix. I tried seven of the models `agy` offers on the same checkbox; six passed every automated check, and Claude Opus 5.5 (medium) was the best overall, in about 33 seconds against around 200 for most Gemini runs.
+
+The best route was [claude-pxl](https://github.com/crsolver/claude-pxl), an Agent Skill for "pixel art as code": the model writes a `.px.js` file of palettes and text grids, and the skill builds exact-size PNGs. I gave `agy` its docs as plain context, and Gemini wrote eight control sprites in one go. Every one went through Scriptoscope's encoder and back without a pixel changing.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/pixel-art-claude-pxl-sprites.png" width="1150" eleventy:formats="png" alt="Two rows of enlarged control sprites on a transparent checkerboard. The top row, labelled Claude plus claude-pxl, has six: a teal checkbox with a minus, an empty checkbox, a checked checkbox, a round teal button with an x, an empty radio button and a filled radio button. The bottom row, labelled agy Gemini 3.8 Flash plus claude-pxl docs, has eight: empty, checked and mixed checkboxes, an empty radio button, a filled radio button with a square dot, a round teal x button, and pale grey round plus and minus buttons.">
+  <figcaption class="kh-figure__caption">claude-pxl sprites. Top: written by Claude. Bottom: written by Gemini in agy, given claude-pxl's docs.</figcaption>
+</figure>
+
+So my first conclusion was simple: ask for code, not pictures. That still holds for final pixels. It turned out to be only half the story.
+
+## Kingfisher, the first scheme
+
+Alongside the sprite tests, Scriptoscope got an authoring toolkit: encoders for every resource type a scheme needs (each the inverse of a reader Scriptoscope already had), a checker that catches mistakes which load but draw wrong, and a guide. The first scheme made with it began as "Halcyon", a light, frosted look, and is now called Kingfisher. Four AI agents built its control families in parallel: scroll bars; sliders, tabs and popups; progress bars and list headers; and menus, patterns and icons.
+
+To prove the files were real, I copied it into an emulator running System 7.5.5 and loaded it in the original Kaleidoscope 2.3.1. It loaded first time. Once the full scheme was done, the real engine caught a bug my checks had missed: tab labels drawn white on white, because the text colour and the background were read from the same pixel. That is fixed, and there is now a check for it.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/kingfisher-kaleidoscope-desktop.png" width="1280" eleventy:formats="png" alt="A classic Mac OS desktop with a pale lavender pattern. A Finder window in icon view has a tall, pale header band in light cyan, lavender and blue, with a kingfisher perched on a green branch at the top left. The title Reference Transfer sits in a white rounded pill, with a round close button on the left and zoom and collapse buttons on the right. The window lists scheme files named Bonn, Brickworks, Castle, Halcyon and Midnight 2027.">
+  <figcaption class="kh-figure__caption">Kingfisher in the real Kaleidoscope. The files on the disk still carry the old name, Halcyon.</figcaption>
+</figure>
+
+## Letting agents build from the guide
+
+The real test of a guide is whether someone else can follow it. So fresh agents built three more schemes using only the docs, each keeping a log of where it got stuck, and I folded the fixes back into the guide and toolkit between rounds:
+
+- **Castle** came first: merlons along the top, corner towers rising above the title bar, a banner title.
+- **Brickworks**, generic toy bricks with a stud row that must never be cut, and **Bonn**, a city skyline, came in the second round.
+
+All three have frames that are not rectangles, which is the hard part of the format. The second-round builders said the first round's fixes worked, and each found new traps, like art that strays one pixel into a tiled cell and then repeats across the whole window.
+
+The most useful finding came from having another agent audit the rounds afterwards. Three fixes had been marked done without taking effect. A lint check promoted from Bonn was never actually called by any scheme. A lesson is not learned until it is applied to the earlier work too.
+
+## They worked, and they looked basic
+
+All four schemes passed every check and loaded in the real Kaleidoscope. Next to the best schemes from the 1990s, like Animals or Evolution, they still looked generated.
+
+A design review pinned it on habits, not on limits of the format. Every surface was outlined and highlighted, so stone read as a grey mesh. Glyphs were drawn with soft strokes thinner than a pixel, which came out as smears. And colours were picked in modern sRGB without checking the 8-bit system palette, so a warm grey turned pink on a real 1990s screen. Underneath all of that, each scheme had been designed one cell at a time, and nothing set the weight of the whole window.
+
+## Concept first, then paint over
+
+What fixed it was designing the whole window as a picture first, which finally gave the image generator a job it was good at.
+
+1. **Write a brief.** An art-director agent wrote one per scheme: the big idea, the one silhouette that carries the theme, the light direction, and a palette on real system-palette colours.
+2. **Render a concept.** `agy`'s image generator drew a mockup of the finished window from the brief, with a few 1990s schemes as references for the period look.
+3. **Implement it.** Agents rebuilt each scheme against its concept. The first pass copied the motifs and missed the scale: the right towers and birds at sticker size, on the old thin frame. A second pass with numbers measured off the concept (band thicknesses, ornament heights, how far ornaments rise above the bar) fixed the size, but the art still looked redrawn by eye. One pass thickened Castle's walls and shrank its cone roofs into pepper pots, so it read less like a castle than before; a third pass put them back.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/castle-concept-passes.jpg" width="1600" alt="Three panels side by side. The first two are Scriptoscope previews of the Castle scheme: grey stone frames with small red-roofed towers at the corners, small merlons, a small red title banner, and pale yellow or beige window bodies. The third is a concept image of a castle window: much thicker stone walls, tall towers with red cone roofs and pennants, a red banner title with a gold fringe, wooden buttons and a portcullis.">
+  <figcaption class="kh-figure__caption">Castle: the first pass against the concept, the third pass, and the concept itself. The right motifs at sticker size.</figcaption>
+</figure>
+
+4. **Paint over.** A new `npm run paint-over` tool shrinks a crop of the concept back to 1× pixels: each output pixel takes the most common palette colour in its block, so one-pixel outlines survive. Then the result is cleaned up by hand: one crisp outline, JPEG speckles voted out, stone redrawn on a grid so it tiles.
+
+The concepts came out at 2.5 to 3.7 screen pixels per art pixel, so the first step of a paint-over is measuring that.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/castle-paint-over.jpg" width="1400" alt="Two panels. On the left, the finished Castle document window, enlarged three times: thick grey stone towers with red cone roofs and red pennants, a red title banner reading Document Window, wooden plank buttons labelled Cancel and OK, a barrel scroll thumb and a portcullis in the corner. On the right, the concept image it was painted over from, with the same towers, banner, buttons and portcullis.">
+  <figcaption class="kh-figure__caption">Castle after the paint-over (left, enlarged 3×) beside its concept (right).</figcaption>
+</figure>
+
+That got close. The gaps that remain are the engine's: titles are set in the runtime's font, stretched cells cannot carry a diagonal sheen, and frame art cannot reach into the window's content.
+
+The paint-over fails on thin detail. One-pixel mortar lines and firework rays lose the vote and come out as noise, so for those the paint-over only measures size, count and colour, and they are redrawn. The concepts also need correcting. They put ornaments outside the window and soft glows the format cannot show, and invent their own text: Midnight 2027's concept has checkboxes labelled "Check uptm 1" and "Light Dotum 2".
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/midnight-2027-paint-over.jpg" width="1400" alt="Two panels. On the left, the finished Midnight 2027 scheme, enlarged: a midnight-navy window frame with firework bursts, a gold title plate, a large 2027 in gold, pocket-watch scroll thumbs and a clock in the corner, with an inactive purple window behind it. On the right, the concept image: the same layout, with checkbox labels in made-up words such as Check uptm 1 and Light Dotum 2.">
+  <figcaption class="kh-figure__caption">Midnight 2027 (left) and its concept (right), including the concept's invented checkbox labels.</figcaption>
+</figure>
+
+Midnight 2027 is the fifth scheme, made for New Year and concept-first from the start. Its concept took five runs; four ended with the subagent cancelled at the timeout and nothing to show for it.
+
+## Back to the real Kaleidoscope
+
+All five repainted schemes loaded in Kaleidoscope 2.3.1 on System 7.5.5 in one boot, switched from the control panel, with no errors. The original engine also behaves like Scriptoscope where it matters. Brickworks tiles a stud row across its title plate, and the seams land at the same offsets from the plate edges in both. Bonn's landmarks sit on the ends of the title in the same places, and both engines drop the title and landmarks together at the same narrow widths.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/brickworks-kaleidoscope-wide.png" width="1280" eleventy:formats="png" alt="A classic Mac OS desktop with two windows framed in toy bricks. The front window, titled System Folder, has a red title bar under a row of red studs, walls of stacked red and blue bricks, a green studded baseplate along the bottom and yellow corner bricks, with a yellow crane lifting a red brick above the top right corner. The Finder list view inside shows the Control Panels folder open. A second, inactive window behind it uses paler pink bricks.">
+  <figcaption class="kh-figure__caption">Brickworks in the real Kaleidoscope, with the stud row tiled over the title.</figcaption>
+</figure>
+
+There are real differences too. Titles are bitmap Chicago 12. Clicks pass through transparent frame pixels. And art above the title bar goes under the menu bar when a window sits at the top of the screen, which is why the guide now says to keep the essential look in the bar itself.
+
+It found a bug in Scriptoscope as well. Plain dialog and alert bodies were white on the web and grey in the real Kaleidoscope. The grey turned out to come from Kaleidoscope's own 68k system patches, which hand dialogs a colour table from the scheme or, failing that, Kaleidoscope's default. That is fixed on main in [PR #585](https://github.com/khawkins98/scriptoscope/pull/585). I would not have found it by reading old schemes; making new ones and comparing them did it.
+
+To check colours before booting, `npm run sim8` simulates an 8-bit classic screen from a browser preview. It picks the same palette entry as the real captures for 92% of frame pixels, and it reproduced every colour problem the first boots found.
+
+## The extras
+
+The Kaleidoscope control panel greys out its "Use This Scheme's" options unless a scheme ships what each needs, and the panel's own help text turned out to be the spec. All five schemes now ship an About This Scheme box, a themed arrow cursor and WindowShade sounds, synthesized in code. With sound off in the emulator I could not hear the sounds, but collapsing a window with them enabled ran without errors.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/midnight-2027-kaleidoscope-about.png" width="1280" eleventy:formats="png" alt="A classic Mac OS desktop with a navy pattern of tiny coloured stars. The Kaleidoscope control panel is open in a lavender frame with 2027 and a firework in the title bar. In front of it, an About This Scheme box framed in navy with a gold edge shows a small firework icon and the text: Midnight 2027. Fireworks over a midnight sky to ring in the New Year 2027. An original first-party scheme for Scriptoscope. 2026.">
+  <figcaption class="kh-figure__caption">Midnight 2027's About This Scheme box, over the Kaleidoscope control panel.</figcaption>
+</figure>
+
+## Bonn
+
+Bonn got the most attention, because it is where I live. The first version had the right buildings, but you had to be told which was which. It now has the Minster with its octagonal tower and spire, the pink Altes Rathaus with its double staircase, the Post Tower in two offset glass halves, and Langer Eugen beside it, where I took [this sunrise](/posts/20261005-sunrise-over-siebengebirge/). Beethoven stands on a plinth by the cherry blossom, after the monument on Münsterplatz. The zoom box is a shield inspired by the city's arms: a black cross on white over a gold lion on red. It is an emblem, not the arms, and the scheme is not official.
+
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/blog/bonn-scheme-document-window.png" width="870" eleventy:formats="png" alt="A Bonn scheme document window rendered in the browser. Above the peach title bar stand small pixel-art buildings: a bust of Beethoven beside cherry blossom on the left, a tall sandstone minster with green spires, a pink town hall with a grey roof and bell lantern, and two tall teal and grey towers on the right. The red title plate reads Document Window. The sides are sandstone bricks, and the bottom edge is the teal Rhine under a single stone bridge arch.">
+  <figcaption class="kh-figure__caption">Bonn in Scriptoscope's authoring preview. Beethoven, the Minster, the Altes Rathaus, the Post Tower and Langer Eugen.</figcaption>
+</figure>
+
+## What I am taking from this
+
+Image generators are bad at final pixels and good at concept art. A concept of the whole window gave each scheme the weight and the one memorable silhouette it was missing, and painting over it kept pose and proportion where redrawing by eye lost them. For the exact pixels, code and text grids are still the way: they come out at the right size, and you can read and edit them.
+
+Checks tell you a scheme is valid. They say nothing about whether it is good. Passing every rule I could write did not make the first four look like they belonged next to the 1990s schemes, and the real engine still found bugs those rules missed. Boot the real thing.
+
+Things I have not tried yet: Retro Diffusion and PixelLab, which are the pixel-art models that need paid keys, and feeding the checker's errors straight back to a model in a loop. The authoring guide, the five schemes and the AI notes are in [PR #540](https://github.com/khawkins98/scriptoscope/pull/540). If you have a Kaleidoscope scheme you would like to see in a browser, or you made schemes back then and want to try making one now, I would like to hear about it.
+
+{% endmarkdown %}
