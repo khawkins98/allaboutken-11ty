@@ -714,19 +714,23 @@
 
   // The open sheet
   // --------------
-  // The homepage hero and every entry list share one three-column grid:
-  // date / text / figure. Nothing here draws a line. Shared left edges are
-  // what let the white space read as structure, so the columns are tokens
-  // and anything that wants to sit on the title axis uses them rather than
-  // picking its own indent.
+  // Entry lists use date / text / figure. The introduction has no date
+  // column: its prose follows the headline's left edge.
   --kh-sheet-date: 7.5rem;
   --kh-sheet-figure: 11rem;
-  --kh-sheet-gap: clamp(1.25rem, 3vw, 2.5rem);
+  --kh-sheet-gap: clamp(1.25rem, 3vw, 2rem);
   --kh-sheet-columns: var(--kh-sheet-date) minmax(0, 1fr) var(--kh-sheet-figure);
   // Vertical rhythm: rows inside a list, and the larger step between the
   // page's sections. Two values, so the page has two kinds of gap and no more.
   --kh-sheet-row-gap: clamp(2rem, 4.5vw, 2.75rem);
-  --kh-sheet-section-gap: clamp(4rem, 9vw, 6.5rem);
+  --kh-sheet-section-gap: clamp(3rem, 6vw, 4.5rem);
+
+  // Cap the whole composition, so figures stay attached to the prose even
+  // when the viewport is much wider than a comfortable reading measure.
+  .kh-sheet,
+  .kh-datasheet-list {
+    max-width: 64rem;
+  }
 
   .kh-sheet-section {
     margin-top: var(--kh-sheet-section-gap);
@@ -748,8 +752,7 @@
     }
   }
 
-  // Hero: no frame, no fill. The headline hangs from the page edge; the bio
-  // and the two notes take the list's text and figure columns.
+  // Hero: the headline and bio share a left edge, with notes beside the prose.
   .kh-hero {
     margin-bottom: 0;
   }
@@ -780,8 +783,19 @@
     max-width: 38rem;
   }
 
+  .kh-hero__work {
+    font-size: 18px;
+    line-height: 1.45;
+    margin-bottom: 0.75rem;
+  }
+
+  .kh-hero__links {
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
   .kh-hero__notes {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
 
   .kh-hero__note {
@@ -812,6 +826,18 @@
     display: block;
   }
 
+  @media (max-width: $kh-breakpoint--md-down) {
+    .kh-hero__notes {
+      display: grid;
+      gap: 1rem 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    }
+
+    .kh-hero__note + .kh-hero__note {
+      margin-top: 0;
+    }
+  }
+
   .kh-hello__lede {
     font-size: 19px;
     margin: 0 0 0.75rem;
@@ -821,16 +847,16 @@
     .kh-hero__layout {
       column-gap: var(--kh-sheet-gap);
       display: grid;
-      grid-template-columns: var(--kh-sheet-columns);
+      grid-template-columns: minmax(0, 38rem) var(--kh-sheet-figure);
     }
 
     .kh-hero__body {
-      grid-column: 2;
+      grid-column: 1;
     }
 
     .kh-hero__notes {
       align-self: end;
-      grid-column: 3;
+      grid-column: 2;
       margin-top: 0;
     }
 

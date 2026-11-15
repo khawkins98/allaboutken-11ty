@@ -20,6 +20,7 @@ IBM Plex ships no variable build, so each weight is a separate static file:
 | `IBMPlexSans-SemiBold.woff2` | IBM Plex Sans | 600 | normal |
 | `IBMPlexMono-Regular.woff2` | IBM Plex Mono | 400 | normal |
 | `RecursiveCasual-Note.woff2` | Recursive Note | 400 | normal |
+| `Anton-Latin.woff2` | Anton | 400 | normal |
 
 `RecursiveCasual-Note.woff2` (14 KB) is the handwriting used by `.kh-hand`. It
 is a static instance cut from the archived variable build below with
@@ -34,6 +35,20 @@ one on the rare `<em><strong>` nesting.
 
 These are the *complete* faces, not the Latin-1 splits. The site uses em
 dashes, curly quotes, `&#8209;` and `↦`, which the splits do not cover.
+
+## Cartridge display face
+
+`Anton-Latin.woff2` (15 KB) is used for display headings on the cartridge
+homepage and article trial. IBM Plex remains the reading and interface face.
+Anton is a single-weight typeface: declare weight 400, not a synthetic 900.
+
+Source: [Google Fonts, Anton](https://github.com/google/fonts/tree/main/ofl/anton),
+`Anton-Regular.ttf`. Its SIL Open Font License is included as `ANTON-OFL.txt`.
+The WOFF2 is produced with FontTools 4.64.0, subset to U+0020–00FF plus
+U+2013–2014, U+2018–2019, U+201C–201D and U+2026. Symbols outside that set use
+the fallback face. The conditional preload lives in `layouts/base.njk`; only
+pages opting into `cartridgeTheme` preload this asset. It is not loaded by the
+older page layouts or the standalone social-card template.
 
 ## Retained but not loaded
 

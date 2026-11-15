@@ -8,9 +8,9 @@ templateEngineOverride: njk
 <!-- kh-entry-date:{{ date | dateDisplay('yyyy-LL-dd') }} -->
 {%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) %}
 {%- set pulseCurrentKey = date | dateDisplay('yyyy-LL') %}
-{% include "partials/pulse-strip.njk" %}
+{% if not cartridgeTheme %}{% include "partials/pulse-strip.njk" %}{% endif %}
 
-<article class="kh-grid kh-grid__col-3">
+<article class="kh-grid kh-grid__col-3{% if cartridgeTheme %} kh-cartridge-article{% endif %}">
   <div class="kh-grid__col--span-1">
     {% set isImpactStory = tags and ('impact-stories' in tags) %}
     {# Document reference: impact stories echo their IS-nn part number from
@@ -81,6 +81,7 @@ templateEngineOverride: njk
     {% include "partials/series-nav.njk" %}
     {%- set tocEntries = content | tocEntries %}
     {%- if tocEntries.length >= 2 %}
+    {% if cartridgeTheme %}<details class="kh-cartridge-contents" data-pagefind-ignore><summary>In this article <span>{{ tocEntries.length }} sections</span></summary>{% endif %}
     <nav class="kh-post-rail" aria-label="Contents" data-pagefind-ignore>
       <p class="kh-meta kh-meta--accent kh-post-rail__label">Contents</p>
       <ol class="kh-post-rail__list">
@@ -94,6 +95,7 @@ templateEngineOverride: njk
         {%- endfor %}
       </ol>
     </nav>
+    {% if cartridgeTheme %}</details>{% endif %}
     {%- endif %}
   </div>
   <div class="kh-post--text kh-content kh-grid__col--span-2">
@@ -159,3 +161,5 @@ templateEngineOverride: njk
 </script>
 
 {% include "partials/entry-foot.njk" %}
+
+{% if cartridgeTheme %}{% include "partials/pulse-strip.njk" %}{% endif %}

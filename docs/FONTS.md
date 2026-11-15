@@ -15,6 +15,7 @@ is a separate static file):
 - `IBMPlexSans-Italic.woff2` — 400 italic
 - `IBMPlexSans-SemiBold.woff2` — 600 normal
 - `IBMPlexMono-Regular.woff2` — 400 normal
+- `Anton-Latin.woff2` — 400 normal, display headings on cartridge pages only (15 KB; SIL OFL, see the font directory README)
 
 `font-weight: 700` resolves to SemiBold 600, the nearest declared weight.
 

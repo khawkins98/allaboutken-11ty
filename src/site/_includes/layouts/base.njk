@@ -7,7 +7,7 @@
     <link rel="preload" as="font" href="/assets/kh-font/IBMPlexMono-Regular.woff2" type="font/woff2" crossorigin>
     <link rel="stylesheet" media="all" href="{{ '/css/styles.css' | url }}" />
     {#- `seoTitle` overrides for pages whose on-page heading is written for the
-        page rather than for a search result. The homepage h1 is "Hello", which
+        page rather than for a search result. The homepage h1 is expressive display copy, which
         is right in the hero and useless as the string that appears in Google,
         browser tabs, bookmarks and Slack unfurls. -#}
     <title>{{ seoTitle or title or (renderData and renderData.title) or siteConfig.siteInformation.title}} | All about Ken Hawkins</title>
@@ -16,6 +16,7 @@
         domain returns "account not found". Senders use the FIRST
         rel="webmention", so a bare-domain link here silently drops mentions. #}
     <link rel="webmention" href="https://webmention.io/www.allaboutken.com/webmention" />
+    {% if cartridgeTheme %}<link rel="preload" href="/assets/kh-font/Anton-Latin.woff2" as="font" type="font/woff2" crossorigin>{% endif %}
     <link rel="pingback" href="https://webmention.io/www.allaboutken.com/xmlrpc" />
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
@@ -97,7 +98,7 @@
     {% endif %}
   </head>
   <body class="kh-stack{% if bodyClass %} {{ bodyClass }}{% endif %}">
-    {% include "partials/ambience.njk" -%}
+    {% if not cartridgeTheme %}{% include "partials/ambience.njk" %}{% endif %}
     <a href="#main-content" class="kh-u-sr-only kh-skip-link">Skip to main content</a>
     <!-- Visible when CSS is off (hidden by CSS when on) -->
     <aside class="kh-css-off-note">If you're reading this the site styles are currently disabled. Toggle the “CSS” checkbox in the footer to restore styling.<hr></aside>
@@ -125,6 +126,17 @@
               to a screen-reader user standing on the CV is simply false; the
               underline is a wayfinding hint for people who can see it, not a
               claim about which page this is. -#}
+          {% if cartridgeTheme %}
+          {% set cartridgeNav = [
+            { label: 'Writing', href: '/all/', section: page.url.startsWith('/posts') or page.url.startsWith('/blog') or page.url.startsWith('/digesting') or page.url.startsWith('/photos') },
+            { label: 'Work', href: '/work/', section: page.url.startsWith('/work/') },
+            { label: 'About', href: '/cv/' },
+            { label: 'Search', href: '/search/' }
+          ] %}
+          {% for item in cartridgeNav %}
+          <li class="kh-navigation__item"><a href="{{ item.href }}" class="kh-navigation__link{% if page.url == item.href %} kh-navigation__link--active{% elif item.section %} kh-navigation__link--section{% endif %}"{% if page.url == item.href %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
+          {% endfor %}
+          {% else %}
           {%- set inWriting = page.url.startsWith('/all') or page.url.startsWith('/blog') or page.url.startsWith('/digesting') or page.url.startsWith('/work') or page.url.startsWith('/posts') or page.url.startsWith('/photos') %}
           <li class="kh-navigation__item">
             <a href="/all/" class="kh-navigation__link{% if page.url == '/all/' %} kh-navigation__link--active{% elif inWriting %} kh-navigation__link--section{% endif %}"{% if page.url == '/all/' %} aria-current="page"{% endif %}>Writing</a>
@@ -143,6 +155,7 @@
           <li class="kh-navigation__item">
             <a href="/search/" class="kh-navigation__link{% if page.url.startsWith('/search') %} kh-navigation__link--active{% endif %}"{% if page.url.startsWith('/search') %} aria-current="page"{% endif %}>Search</a>
           </li>
+          {% endif %}
           <li class="kh-navigation__item">
             <a href="/#hello" class="kh-navigation__link">Contact</a>
           </li>

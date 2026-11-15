@@ -9,6 +9,7 @@
 @use './kh-story' as kh-story;
 @use './kh-story-lab' as kh-story-lab;
 @use './kh-photos' as kh-photos;
+@use './kh-cartridge' as kh-cartridge;
 @use '../kh-ambience/kh-ambience' as kh-ambience;
 
 html {
@@ -1801,6 +1802,8 @@ body:has(#kh-css-toggle:checked) {
     outline: 2px solid var(--kh-color--sun);
     outline-offset: 2px;
   }
+
+  @include kh-cartridge.kh-cartridge();
 
   /* Self-hosted IBM Plex. Static faces: Plex ships no variable build, so each
      weight is its own file. Only Sans 400 and Mono 400 are preloaded; the
