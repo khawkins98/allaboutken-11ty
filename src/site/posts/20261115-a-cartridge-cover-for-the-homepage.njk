@@ -1,0 +1,89 @@
+---
+title: 'A cartridge cover for the homepage'
+layout: layouts/post.njk
+cartridgeTheme: article
+teaser: 'How Japanese Mega Drive packaging led to a louder cover, a quieter reading layout, and clearer routes into my work.'
+date: 2026-11-15
+permalink: /posts/20261115-a-cartridge-cover-for-the-homepage/
+kens_status: draft
+tags:
+  - posts
+topics:
+  - typography
+  - CSS
+  - retro computing
+  - career reflection
+image: /blog/cartridge-homepage-design.png
+image_meta:
+  text: 'The first implementation: an angled headline, a yellow disc, a featured project, and a cobalt writing list.'
+  credit: 'Own work.'
+  altext: 'Screenshot of the homepage, with a tilted black and cobalt Make it make sense headline over a yellow circle, a blue case-study card over a red diagonal, and recent writing below.'
+---
+
+{# Draft accompanying PR #168. The Japanese Sonic cover is the direct
+   reference; Memphis and New Wave are contextual comparisons. Individual
+   packaging-design credits have not been verified against a primary source.
+   This is a draft, not a record of completed editorial or accessibility review. #}
+
+{% markdown %}
+
+A yellow circle, oversized black lettering, cobalt blue, and a red diagonal. The starting point for this redesign is the [Japanese cover of *Sonic the Hedgehog* for Mega Drive](https://vgdensetsu.net/wp-content/uploads/2026/02/Akira-Watanabe-Sonic-the-hedgehog-JPN.jpg), reproduced in [VGDensetsu’s illustration archive](https://vgdensetsu.net/megadrivegallerys3/). The typography and geometry do a remarkable amount of work around the character illustration.
+
+That is the part I wanted to bring into this site: a cover with some energy, followed by somewhere comfortable to read.
+
+> **tl;dr**
+>
+> - The direct reference is Japanese Sonic packaging: flat colour, compressed lettering, tilted labels, and a few geometric marks.
+> - The homepage puts a piece of actual work beside the introduction, then gives recent writing its own blue section.
+> - The article layout borrows the palette and display type while keeping the paragraphs upright and quiet.
+> - This is a first pass on the homepage and an article, with the rest of the site still to reconcile.
+
+## From a datasheet to a cover
+
+The earlier direction leaned into the site as a technical document: graph paper, numbered sections, small labels, and rules around most things. That suited the systems side of my work, but the accumulation made the homepage feel more like a register than an introduction.
+
+I tried opening it up first. Removing the frames helped, although the shared grid introduced an awkward step: the headline started at the page edge, and the biography jumped into the column reserved for article titles. The alignment made sense in the stylesheet and looked awkward on the page.
+
+The cartridge reference gave the introduction a different job. It could be a cover: one large statement, a clear visual identity, and a project worth opening. The writing list could then take over as an index.
+
+My background includes newspaper graphics and print production, alongside the platform and information-architecture work. Large type, a strong colour separation, and the relationship between a cover and its contents feel like useful material to return to here.
+
+## What came across from the packaging
+
+The yellow disc gives the headline a field to sit on. The black and cobalt lines have different weights of attention even though they share a typeface. A black ribbon carries the short description of the practice: “Platforms. Content. People. Connected by design.” The red diagonal makes room for the featured project as a tilted blue plate.
+
+A small cluster of angular marks completes the composition. There are only a few of them, and they stay in the cover. Scattering those marks through every paragraph would make the site exhausting to use.
+
+The period research also led to [Ettore Sottsass’s drawings for *Casablanca* and *Carlton*, reproduced by the V&A](https://www.vam.ac.uk/info/collection-selection-boxes-postmodern-design), and [April Greiman’s work and interview in *Eye on Design*](https://eyeondesign.aiga.org/april-greiman-is-still-ahead-of-the-curve/). The angles, scale changes, and willingness to treat lettering as an image are useful comparisons. They help describe the territory around the reference; I’m not claiming a documented line of influence from those works to Sonic’s packaging.
+
+The site’s marks are newly drawn SVG geometry. The character illustration and SEGA branding stay with the source artwork.
+
+## Give the introduction something to point at
+
+“Make it make sense” is the cover line. The next task is to show what that means in practice.
+
+The featured plate links to [the UNDRR work connecting Storybook, structured content, design tokens, and Figma](/work/2026/impact-story-mangrove-figma/). Its title, image, and description come from the published entry. That puts evidence beside the introduction, where someone arriving for the first time can find it.
+
+Below that, “Ideas in circulation” contains six recent entries from the live collection, with their real dates, teasers, and thumbnails. The masthead offers direct routes to writing, work, my profile, and search. The visual treatment is more assertive, but the navigation still has ordinary jobs to do.
+
+## Let the article settle down
+
+The [first article trial](/posts/20261024-when-one-person-leaves-a-team-leaves/) carries over the cream ground, yellow disc, and condensed title. The reading column uses IBM Plex, upright paragraphs, and restrained cobalt headings. The contents are a native HTML disclosure, so readers can open the outline without another script.
+
+For the display lettering I’m using [Anton from Google Fonts](https://github.com/google/fonts/tree/main/ofl/anton). The self-hosted Latin WOFF2 is about 15 KB, with its SIL Open Font License included in the repository. Plex remains the body and interface face.
+
+The circle and diagonal are CSS shapes; the smaller marks are one SVG. This treatment adds no JavaScript. The existing CSS toggle still removes the styling, and the content remains in document order. Those constraints are useful: the graphic decisions have to work with the page’s structure.
+
+## Still a working direction
+
+This is a first implementation, collected in [PR #168](https://github.com/khawkins98/allaboutken-11ty/pull/168). The [proposal board](/design-lab/megadrive/) keeps the earlier options available for comparison. Other parts of the site still use the previous visual language, so there is more work in finding out how this behaves beyond the cover and one reading layout.
+
+The question I want to keep testing is whether the page gives a clearer sense of the person and the work, while staying easy to read. The cover can be loud. The paragraphs have to earn the next few minutes.
+
+### Artwork and further references
+
+- **Direct reference:** [*Sonic the Hedgehog*, Japanese Mega Drive cover, SEGA, 1991 (cover scan)](https://vgdensetsu.net/wp-content/uploads/2026/02/Akira-Watanabe-Sonic-the-hedgehog-JPN.jpg). [Archive notes](https://vgdensetsu.net/megadrivegallerys3/); [SEGA’s title record](https://sonic.sega.jp/SonicChannel/gametitle/SonicTheHedgehog.html) supplies the release context.
+- **Related visual research:** [Sottsass’s *Casablanca* and *Carlton* drawings, 1981, at the V&A](https://www.vam.ac.uk/info/collection-selection-boxes-postmodern-design).
+- **Related visual research:** [April Greiman’s work, including *Does It Make Sense?*, in *Eye on Design*](https://eyeondesign.aiga.org/april-greiman-is-still-ahead-of-the-curve/).
+
+{% endmarkdown %}
