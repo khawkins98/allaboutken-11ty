@@ -47,7 +47,7 @@ Source: [Google Fonts, Anton](https://github.com/google/fonts/tree/main/ofl/anto
 The WOFF2 is produced with FontTools 4.64.0, subset to U+0020–00FF plus
 U+2013–2014, U+2018–2019, U+201C–201D and U+2026. Symbols outside that set use
 the fallback face. The conditional preload lives in `layouts/base.njk`; only
-pages opting into `cartridgeTheme` preload this asset. It is not loaded by the
+pages opting into `cartridgeTheme: home` or `cartridgeTheme: article` preload this asset. It is not loaded by the
 older page layouts or the standalone social-card template.
 
 ## Retained but not loaded

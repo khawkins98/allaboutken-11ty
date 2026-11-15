@@ -97,7 +97,7 @@
     </script>
     {% endif %}
   </head>
-  <body class="kh-stack{% if bodyClass %} {{ bodyClass }}{% endif %}">
+  <body class="kh-stack{% if bodyClass %} {{ bodyClass }}{% endif %}{% if cartridgeTheme %} kh-cartridge kh-cartridge--{{ cartridgeTheme }}{% endif %}">
     {% if not cartridgeTheme %}{% include "partials/ambience.njk" %}{% endif %}
     <a href="#main-content" class="kh-u-sr-only kh-skip-link">Skip to main content</a>
     <!-- Visible when CSS is off (hidden by CSS when on) -->

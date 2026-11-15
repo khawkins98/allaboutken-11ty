@@ -1,7 +1,7 @@
 @use './settings' as *;
 
 // A cover with energy, followed by a quiet reading surface. Opted into by
-// bodyClass; the rest of the site can adopt the system after this first pass.
+// cartridgeTheme: home / article; the rest can adopt it after this first pass.
 @mixin kh-cartridge() {
   @font-face {
     font-family: 'Anton';
@@ -19,6 +19,9 @@
     --kh-cart-red: #ee3e35;
     --kh-cart-green: #007c55;
     --kh-color--apparatus: var(--kh-cart-blue);
+    --kh-color--blue: var(--kh-cart-blue);
+    --kh-color--blue--dark: #0e2c84;
+    --kh-color--grey: var(--kh-ink-muted);
     --kh-ground: var(--kh-cart-paper);
 
     background: var(--kh-cart-paper);
@@ -64,6 +67,7 @@
     .kh-global-header .kh-navigation__link {
       color: var(--kh-cart-ink);
       font-size: 0.875rem;
+      min-height: 44px;
       padding: 0.5rem 0.25rem;
     }
 
@@ -282,6 +286,7 @@
       .kh-meta,
       .kh-footer__label { color: white; }
       a { text-decoration-color: currentColor; }
+      li a { align-items: center; display: inline-flex; min-height: 40px; }
       .kh-footer__controls { border-color: rgb(255 255 255 / 40%); }
     }
 
@@ -362,6 +367,7 @@
     .kh-post-body h2 { color: var(--kh-cart-blue); text-wrap: balance; }
     .kh-post-body > p { text-wrap: pretty; }
     .kh-figure__image--lead { outline: 1px solid rgb(0 0 0 / 10%); }
+    .kh-figure__credit { color: var(--kh-ink-muted); }
     .kh-entry-foot { padding: 2rem; }
     .kh-timeline-strip { margin: 2rem; }
 
