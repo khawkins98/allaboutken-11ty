@@ -31,7 +31,7 @@ permalink: "/blog/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1
   </div>
 
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="start-here" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Start here</h2>
+    <h2 id="start-here" class="kh-text-heading--2">Start here</h2>
     <span class="kh-meta">Picked, not ranked</span>
   </div>
   <div class="kh-content">
@@ -40,14 +40,14 @@ permalink: "/blog/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1
   {% include "partials/picked.njk" %}
 
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="pace" class="kh-text-heading--2"><span class="kh-section-number">2.0</span>Pace &amp; scale</h2>
+    <h2 id="pace" class="kh-text-heading--2">Pace &amp; scale</h2>
     <span class="kh-meta">Counted at build time</span>
   </div>
   {%- set glanceLabel = "blog posts" %}
   {% include "partials/register-glance.njk" %}
 
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="subjects" class="kh-text-heading--2"><span class="kh-section-number">3.0</span>Recurring subjects</h2>
+    <h2 id="subjects" class="kh-text-heading--2">Recurring subjects</h2>
     <span class="kh-meta">{{ collections.topics | length }} topics in all</span>
   </div>
   <div class="kh-content">
@@ -65,7 +65,7 @@ permalink: "/blog/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1
   {%- endif %}
 
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="posts" class="kh-text-heading--2"><span class="kh-section-number">{% if isFirstPage %}4.0{% else %}1.0{% endif %}</span>All posts</h2>
+    <h2 id="posts" class="kh-text-heading--2">All posts</h2>
     <span class="kh-meta">Newest first{% if not isFirstPage %} &middot; page {{ pagination.pageNumber + 1 }}{% endif %}</span>
   </div>
   {% include "partials/search-box.njk" %}

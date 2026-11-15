@@ -4,6 +4,7 @@ subtitle: 'Digital Platforms & Audience Engagement Lead'
 teaser: 'CV and experience: 20+ years leading public-facing platforms, audience engagement, design systems, and digital transformation for UNDRR, EMBL, and media organizations.'
 date: 2025-09-27 12:24:50
 layout: layouts/base.njk
+cartridgeTheme: profile
 templateEngineOverride: njk, md
 active_path: front
 ---
@@ -32,9 +33,9 @@ active_path: front
     section number -- that every other page uses. It was a boxed outline badge,
     a device found nowhere else on the site, which made the CV read as its own
     design era. -#}
-{%- macro sectionHeader(num, title) %}
+{%- macro sectionHeader(title) %}
 <div class="kh-section-head kh-u-margin__top--1200">
-  <h2 class="kh-text-heading--2"><span class="kh-section-number">{{ num }}</span>{{ title }}</h2>
+  <h2 class="kh-text-heading--2">{{ title }}</h2>
 </div>
 {% endmacro -%}
 
@@ -47,17 +48,17 @@ active_path: front
 {#- Datasheet masthead rather than the full-bleed yellow slab, so the CV
     belongs to the same document as the rest of the site. The wordmark pair
     was two responsive variants of the same line; one line wraps by itself. -#}
-<div class="kh-grid-stylized">
+<div class="kh-grid-stylized kh-profile-cover">
   <div></div>
   <section class="kh-content kh-u-padding__bottom--200">
     <div class="kh-u-do-not-print">
-      <p class="kh-font-headline kh-font-headline--display kh-u-margin__bottom--200">Ken Hawkins.</p>
+      <h1 class="kh-profile-name">Ken Hawkins.</h1>
       <h2 class="kh-font-headline kh-text-heading--2 kh-u-padding__bottom--400">{{subtitle}}</h2>
     </div>
   </section>
 </div>
 
-<div class="kh-grid-stylized">
+<div class="kh-grid-stylized kh-profile-intro">
   <div></div>
   <section class="kh-content kh-u-padding__bottom--200 kh-u-padding__top--800">
     <h2 class="kh-u-for-print-only">{{subtitle}}</h2>
@@ -86,7 +87,7 @@ active_path: front
 <div class="kh-grid-stylized kh-u-padding__top--600 kh-u-padding__bottom--400">
   <div></div>
   <section>
-    {{ sectionHeader('1.0', 'Impact at a glance') }}
+    {{ sectionHeader('Impact at a glance') }}
     <div class="kh-metrics-grid">
       <div class="kh-metric">
         <span class="kh-metric__number">50–70%</span>
@@ -120,7 +121,7 @@ active_path: front
 <div class="kh-grid-stylized kh-u-padding__top--600 kh-u-padding__bottom--600">
   <div></div>
   <section>
-    {{ sectionHeader('2.0', 'Career snapshot') }}
+    {{ sectionHeader('Career snapshot') }}
     <div class="kh-career-snapshot">
       <ul class="kh-snapshot-list">
         <li><strong>Core value:</strong> Strategic bridge-builder who translates between executive vision, technical implementation, and user needs — building working systems, not just strategies</li>
@@ -157,7 +158,7 @@ active_path: front
 {% markdown %}
 
 
-{{ sectionHeader('3.0', 'Professional experience') }}
+{{ sectionHeader('Professional experience') }}
 
 <section class="kh-grid-stylized kh-u-margin__bottom--600">
   <div>
@@ -345,7 +346,7 @@ Co-founded TheDigitel.com in 2009 to revolutionize newspaper methodology for the
 
 {# Core Capabilities #}
 <div id="experience" data-magellan-target="experience"></div>
-{{ sectionHeader('4.0', 'Core capabilities') }}
+{{ sectionHeader('Core capabilities') }}
 
 <section class="kh-grid-stylized kh-u-margin__bottom--600">
   <h2 class="kh-text-heading--2">Strategic Bridge-Building & Systems Thinking</h2>
@@ -428,7 +429,7 @@ Co-founded TheDigitel.com in 2009 to revolutionize newspaper methodology for the
 
 {# {{ position('Education, collaboration, speaking') }} #}
 
-{{ sectionHeader('5.0', 'Education, speaking & community') }}
+{{ sectionHeader('Education, speaking & community') }}
 
 <section class="kh-grid-stylized kh-u-margin__bottom--600">
   <div>

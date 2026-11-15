@@ -8,7 +8,7 @@ Custom styles and static UI assets live under `src/components/`.
 | --- | --- | --- |
 | `src/components/vf-componenet-rollup/` | Main Sass entry and style system | Compiled to `build/css/styles.css` by `yarn sass` / `yarn dev` |
 | `src/components/kh-ambience/` | Decorative ambient background SCSS mixin | Imported into the rollup entrypoint |
-| `src/components/kh-font/` | Self-hosted IBM Plex font files | Copied to `build/assets/kh-font/` via passthrough |
+| `src/components/kh-font/` | Self-hosted Anton, IBM Plex and archived font files | Copied to `build/assets/kh-font/` via passthrough |
 | `src/components/ken-favicon/assets/` | Favicon/manifest assets | Copied to `build/assets/ken-favicon/assets/` via passthrough |
 
 > `vf-componenet-rollup` is intentionally misspelled for path stability. Do not rename it.
@@ -29,7 +29,7 @@ Output:
 
 `index.scss`:
 
-1. Loads base modules (`normalize`, `kh-content`, `semantic-search`, `kh-ambience`).
+1. Loads base and concern modules, then includes the cartridge shell and system after older component rules.
 2. Defines global tokens and component classes.
 3. Scopes custom styling under:
 
@@ -47,7 +47,7 @@ Templates consume component output mainly via class names and static assets:
 - Global stylesheet link in `layouts/base.njk` (`/css/styles.css`)
 - Font preload in `layouts/base.njk` (`/assets/kh-font/...woff2`)
 - Favicon links in `layouts/base.njk` (`/assets/ken-favicon/assets/...`)
-- Ambience markup included from `partials/ambience.njk`
+- Current visual tokens and page families from `kh-cartridge` / `kh-cartridge-system`; ambience is retained as an archived technique
 
 ## Adding a new component
 
@@ -63,3 +63,7 @@ Templates consume component output mainly via class names and static assets:
 - `yarn build`: full production build (bootstrap HTML, semantic data, final Eleventy).
 
 For broader CSS architecture constraints, see [`CSS_ARCHITECTURE.md`](CSS_ARCHITECTURE.md). For Eleventy passthrough details, see [`ELEVENTY_CONFIG.md`](ELEVENTY_CONFIG.md).
+
+## Visual reference
+
+Update the [design guide](../src/site/style-guide/design.njk) and [live component reference](../src/site/style-guide/components.njk) alongside shared component changes. The palette swatches are shared through `partials/design-tokens.njk`.

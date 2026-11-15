@@ -1,7 +1,6 @@
 ---
 title: 'A cartridge cover for the homepage'
 layout: layouts/post.njk
-cartridgeTheme: article
 teaser: 'How Japanese Mega Drive packaging led to a louder cover, a quieter reading layout, and clearer routes into my work.'
 date: 2026-11-15
 permalink: /posts/20261115-a-cartridge-cover-for-the-homepage/
@@ -36,7 +35,7 @@ That is the part I wanted to bring into this site: a cover with some energy, fol
 > - The direct reference is Japanese Sonic packaging: flat colour, compressed lettering, tilted labels, and a few geometric marks.
 > - The homepage puts a piece of actual work beside the introduction, then gives recent writing its own blue section.
 > - The article layout borrows the palette and display type while keeping the paragraphs upright and quiet.
-> - This is a first pass on the homepage and an article, with the rest of the site still to reconcile.
+> - The same visual system now carries through the shared layouts, indexes, profile, search and style reference.
 
 ## From a datasheet to a cover
 
@@ -68,7 +67,7 @@ Below that, “Ideas in circulation” contains six recent entries from the live
 
 ## Let the article settle down
 
-The [first article trial](/posts/20261024-when-one-person-leaves-a-team-leaves/) carries over the cream ground, yellow disc, and condensed title. The reading column uses IBM Plex, upright paragraphs, and restrained cobalt headings. The contents are a native HTML disclosure, so readers can open the outline without another script.
+The [article layout](/posts/20261024-when-one-person-leaves-a-team-leaves/) carries over the cream ground, yellow disc, and condensed title. The reading column uses IBM Plex, upright paragraphs, and restrained cobalt headings. The contents are a native HTML disclosure, so readers can open the outline without another script.
 
 For the display lettering I’m using [Anton from Google Fonts](https://github.com/google/fonts/tree/main/ofl/anton). The self-hosted Latin WOFF2 is about 15 KB, with its SIL Open Font License included in the repository. Plex remains the body and interface face.
 
@@ -76,7 +75,7 @@ The circle and diagonal are CSS shapes; the smaller marks are one SVG. This trea
 
 ## Still a working direction
 
-This is a first implementation, collected in [PR #168](https://github.com/khawkins98/allaboutken-11ty/pull/168). The [proposal board](/design-lab/megadrive/) keeps the earlier options available for comparison. Other parts of the site still use the previous visual language, so there is more work in finding out how this behaves beyond the cover and one reading layout.
+This implementation is collected in [PR #168](https://github.com/khawkins98/allaboutken-11ty/pull/168). The [proposal board](/design-lab/megadrive/) keeps the earlier options available for comparison. The shared layouts now carry the system through articles, notes, photographs, interactive stories, indexes, profile and utility pages. The [design guide](/style-guide/design/) records the principles and the [component reference](/style-guide/components/) shows the live patterns.
 
 The question I want to keep testing is whether the page gives a clearer sense of the person and the work, while staying easy to read. The cover can be loud. The paragraphs have to earn the next few minutes.
 

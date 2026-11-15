@@ -38,21 +38,18 @@ dashes, curly quotes, `&#8209;` and `↦`, which the splits do not cover.
 
 ## Cartridge display face
 
-`Anton-Latin.woff2` (15 KB) is used for display headings on the cartridge
-homepage and article trial. IBM Plex remains the reading and interface face.
+`Anton-Latin.woff2` (15 KB) is used for display headings across the site. IBM Plex remains the reading and interface face.
 Anton is a single-weight typeface: declare weight 400, not a synthetic 900.
 
 Source: [Google Fonts, Anton](https://github.com/google/fonts/tree/main/ofl/anton),
 `Anton-Regular.ttf`. Its SIL Open Font License is included as `ANTON-OFL.txt`.
 The WOFF2 is produced with FontTools 4.64.0, subset to U+0020–00FF plus
 U+2013–2014, U+2018–2019, U+201C–201D and U+2026. Symbols outside that set use
-the fallback face. The conditional preload lives in `layouts/base.njk`; only
-pages opting into `cartridgeTheme: home` or `cartridgeTheme: article` preload this asset. It is not loaded by the
-older page layouts or the standalone social-card template.
+the fallback face. The conditional preload lives in `layouts/base.njk`; site pages inherit `cartridgeTheme` from their layout and preload this asset. The standalone social-card template also declares Anton and Plex using same-origin paths so its preview matches its deployment.
 
 ## Retained but not loaded
 
-Two faces sit in this directory that no `@font-face` rule references. They are
+Archived faces without a global `@font-face` rule are
 kept deliberately. Do not "tidy" them away.
 
 | File | Size | Why it stays |
@@ -104,5 +101,5 @@ The `@font-face` rules in
 
 `src/site/_includes/layouts/base.njk` preloads Sans Regular and Mono Regular.
 `src/site/_includes/layouts/social-card.njk` carries its own copy of the
-`@font-face` rules pointing at absolute production URLs, because the social
+`@font-face` rules pointing at same-origin root-relative URLs, because the social
 card is screenshotted standalone. Update both when filenames change.

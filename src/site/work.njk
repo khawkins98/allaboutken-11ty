@@ -19,15 +19,27 @@ templateEngineOverride: njk
   </section>
 </div>
 
+<section class="kh-work-selection" aria-labelledby="recent-work" data-pagefind-ignore>
+  <div class="kh-section-head"><h2 id="recent-work">Recent work</h2><a href="#impact-record">The full record ↓</a></div>
+  <div class="kh-work-cards">
+  {% for project in collections.impactStories | limitItems(3) %}
+    <article class="kh-work-card"><a href="{{ project.url }}">
+      {% if project.data.image %}<img class="kh-work-card__image" src="/images{{ project.data.image }}" alt="" width="600" sizes="(min-width: 846px) 30vw, 100vw" loading="lazy">{% endif %}
+      <div class="kh-work-card__body"><p class="kh-cartridge-kicker">{{ project.data.org }} / {{ project.date | dateDisplay('y') }}</p><h3>{{ project.data.title }} ↗</h3><p>{{ project.data.teaser | striptags }}</p></div>
+    </a></article>
+  {% endfor %}
+  </div>
+</section>
+
 <section class="kh-content kh-content--wide">
   <section>
     {% set stories = collections.impactStories or [] %}
     {% if stories.length %}
       <div class="kh-section-head">
-        <h2 class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Impact record</h2>
+        <h2 id="impact-record" class="kh-text-heading--2">Impact record</h2>
         <span class="kh-meta">{{ stories.length }} records &middot; figures as reported</span>
       </div>
-      <div class="kh-table-scroll">
+      <div class="kh-table-scroll" data-pagefind-ignore>
       {#- `--stack` opts this table into becoming a list of cards below the md
           breakpoint. As a five-column table on a phone it hid 209px of its
           565px width inside the scroller: the What column collapsed to ~85px
@@ -38,9 +50,9 @@ templateEngineOverride: njk
         <thead>
           <tr>
             <th scope="col">Ref</th>
-            <th scope="col">What</th>
-            <th scope="col">When</th>
-            <th scope="col">Who</th>
+            <th scope="col">Project</th>
+            <th scope="col">Year</th>
+            <th scope="col">Organization</th>
             <th scope="col">Topics</th>
           </tr>
         </thead>
@@ -58,8 +70,8 @@ templateEngineOverride: njk
             {#- data-label supplies the column name once the header row is
                 hidden in the stacked view. Ref and What carry none: a title
                 does not need to be told it is a title. -#}
-            <td data-label="When">{{ post.date | dateDisplay('y') }}</td>
-            <td data-label="Who">{% if post.data.org %}{{ post.data.org }}{% else %}&mdash;{% endif %}</td>
+            <td data-label="Year">{{ post.date | dateDisplay('y') }}</td>
+            <td data-label="Organization">{% if post.data.org %}{{ post.data.org }}{% else %}&mdash;{% endif %}</td>
             <td data-label="Topics">
               {% if post.data.topics -%}
                 {% for t in post.data.topics %}<span class="kh-label">{{ t }}</span>{% endfor %}

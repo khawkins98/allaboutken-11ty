@@ -15,7 +15,7 @@ is a separate static file):
 - `IBMPlexSans-Italic.woff2` — 400 italic
 - `IBMPlexSans-SemiBold.woff2` — 600 normal
 - `IBMPlexMono-Regular.woff2` — 400 normal
-- `Anton-Latin.woff2` — 400 normal, display headings on cartridge pages only (15 KB; SIL OFL, see the font directory README)
+- `Anton-Latin.woff2` — 400 normal, display headings across the shared site layouts (15 KB; SIL OFL, see the font directory README)
 
 `font-weight: 700` resolves to SemiBold 600, the nearest declared weight.
 
@@ -45,7 +45,7 @@ The `@font-face` rule lives in:
 
 - [`src/components/vf-componenet-rollup/index.scss`](../src/components/vf-componenet-rollup/index.scss)
 
-It currently declares four `@font-face` rules pointing at:
+The Plex rules reference:
 
 ```scss
 src: url('/assets/kh-font/IBMPlexSans-Regular.woff2') format('woff2');
@@ -54,11 +54,16 @@ src: url('/assets/kh-font/IBMPlexSans-SemiBold.woff2') format('woff2');
 src: url('/assets/kh-font/IBMPlexMono-Regular.woff2') format('woff2');
 ```
 
+Anton is declared in `_kh-cartridge.scss`, and Recursive Note in `index.scss`.
+The shared base layout defaults to the cartridge theme and preloads Anton along
+with Plex Sans Regular and Mono Regular. Entry layouts choose their reading
+variant; standalone experiments and social cards have separate documents.
+
 Two other places hardcode font paths and must be updated in step:
 
 - `src/site/_includes/layouts/base.njk` preloads Sans Regular and Mono Regular.
 - `src/site/_includes/layouts/social-card.njk` repeats the `@font-face` rules
-  with absolute production URLs, because the card is screenshotted standalone.
+  with same-origin root-relative URLs, so standalone screenshots use the font assets from the deployment being reviewed.
 
 If you change filenames, update all three to match exactly.
 

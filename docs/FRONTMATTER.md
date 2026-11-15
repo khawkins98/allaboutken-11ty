@@ -432,3 +432,12 @@ templateEngineOverride: njk
 - **Impact story:** add `tags: [posts, impact-stories]` and `permalink` under `/work/`.
 - **Digesting entry:** use `layout: layouts/digesting.njk` and `digest_link`.
 - **Controlling social sharing:** use `og_image`, `og_title`, or `og_description` to override defaults.
+
+## `cartridgeTheme` — visual page family
+
+Layout-owned string, inherited by ordinary pages and entries. Values are
+`page`, `home`, `article`, `note`, `story`, `photo`, `profile` and `utility`.
+The base layout defaults to `page`; reading layouts select their own value.
+The base uses it for body classes, navigation and the display-font preload.
+A normal post only needs the correct `layout`, not a repeated theme flag.
+See the [design guide](../src/site/style-guide/design.njk).
