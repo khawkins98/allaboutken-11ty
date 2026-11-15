@@ -11,12 +11,13 @@
   }
 
   &.kh-cartridge {
-    --kh-cart-paper: #f6f0dd;
+    --kh-cart-paper: #faf9f5;
     --kh-cart-ink: #151515;
     --kh-cart-blue: #173ebc;
     --kh-cart-yellow: #f6d92f;
     --kh-cart-red: #ee3e35;
     --kh-cart-green: #007c55;
+    --kh-cart-cut: clamp(1.5rem, 4vw, 3.5rem);
     --kh-color--apparatus: var(--kh-cart-blue);
     --kh-color--blue: var(--kh-cart-blue);
     --kh-color--blue--dark: #0e2c84;
@@ -106,6 +107,7 @@
     }
 
     .kh-cartridge-cover {
+      background: url('/images/cartridge-pattern.svg') right top / 32.5rem 10rem no-repeat;
       display: flex;
       flex-wrap: wrap;
       gap: 3rem;
@@ -141,16 +143,7 @@
 
     .kh-cartridge-intro { flex: 1 1 24rem; min-width: 0; }
 
-    .kh-cartridge-marks {
-      background: url('/images/cartridge-marks.svg') center / contain no-repeat;
-      display: block;
-      height: 8rem;
-      position: absolute;
-      right: 3rem;
-      top: 2rem;
-      width: 8rem;
-      z-index: -1;
-    }
+    .kh-cartridge-marks { display: none; }
 
     .kh-cartridge-title {
       font-family: 'Anton', Impact, sans-serif;
@@ -179,8 +172,22 @@
       max-width: 100%;
       overflow-wrap: anywhere;
       padding: 0.65rem 0.9rem;
+      position: relative;
       text-transform: uppercase;
       transform: rotate(-3deg);
+
+      &::after {
+        background: var(--kh-cart-ink);
+        content: '';
+        height: 7px;
+        left: 0;
+        mask: url('/images/cartridge-edge.svg') left top / 12px 7px repeat-x;
+        pointer-events: none;
+        position: absolute;
+        top: calc(100% - 1px);
+        transform: scaleY(-1);
+        width: 100%;
+      }
     }
 
     .kh-cartridge-bio {
@@ -211,10 +218,27 @@
     }
 
     .kh-cartridge-writing {
-      background: var(--kh-cart-blue);
       color: white;
       container: cartridge-writing / inline-size;
-      padding: 2rem;
+      isolation: isolate;
+      padding: 5.5rem 2rem;
+      position: relative;
+
+      &::before {
+        background: var(--kh-cart-blue);
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--kh-cart-cut)), 0 100%);
+        content: '';
+        display: block;
+        inset: 0;
+        mask-image: url('/images/cartridge-edge.svg'), linear-gradient(black, black);
+        mask-position: top, bottom;
+        mask-repeat: repeat-x, no-repeat;
+        mask-size: 16px 9px, 100% calc(100% - 8px);
+        pointer-events: none;
+        position: absolute;
+        transform: skewY(-2deg);
+        z-index: -1;
+      }
 
       .kh-datasheet-list { max-width: none; }
       a,
@@ -284,13 +308,42 @@
     .kh-cartridge-timeline { padding: 0 2rem 1.5rem; }
 
     .kh-footer {
-      background: var(--kh-cart-green);
+      background: transparent;
       border: 0;
       color: white;
       margin: 0;
       max-width: none;
-      padding: 1rem 2rem 2rem;
+      isolation: isolate;
+      padding: 5.5rem 2rem 2rem;
+      position: relative;
       width: 100%;
+
+      &::before {
+        background: var(--kh-cart-green);
+        clip-path: polygon(0 var(--kh-cart-cut), 100% 0, 100% 100%, 0 100%);
+        content: '';
+        display: block;
+        height: auto;
+        inset: 0;
+        pointer-events: none;
+        position: absolute;
+        width: auto;
+        z-index: -1;
+      }
+
+      &::after {
+        background: var(--kh-cart-yellow);
+        background-image: repeating-linear-gradient(115deg, transparent 0 6px, var(--kh-cart-ink) 6px 8px);
+        clip-path: polygon(0 0, 100% 0, 0 100%);
+        content: '';
+        height: var(--kh-cart-cut);
+        left: 0;
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        width: 35%;
+        z-index: -1;
+      }
 
       a,
       a:visited,
@@ -308,10 +361,9 @@
       .kh-cartridge-cover::before { left: 12%; top: 2rem; width: min(76vw, 27rem); }
       .kh-cartridge-cover::after { bottom: -10rem; height: 34rem; right: -11rem; }
       .kh-cartridge-title { font-size: clamp(3rem, 17vw, 6.4rem); margin-top: 2.5rem; }
-      .kh-cartridge-marks { height: 4rem; right: 1rem; top: 1rem; width: 4rem; }
       .kh-cartridge-ribbon { font-size: 0.6875rem; padding: 0.6rem; }
       .kh-cartridge-feature { justify-self: start; margin: 0 0 0.5rem 0.5rem; max-width: 19rem; width: calc(100% - 1.5rem); }
-      .kh-cartridge-writing { padding: 1.75rem 1rem; }
+      .kh-cartridge-writing { padding: 4.5rem 1rem; }
       .kh-cartridge-writing .kh-summary { gap: 0.75rem 1.25rem; grid-template-columns: minmax(0, 1fr) 6rem; }
       .kh-cartridge-writing .kh-summary__meta { grid-column: 1 / -1; }
       .kh-cartridge-writing .kh-summary__body { grid-column: 1; }

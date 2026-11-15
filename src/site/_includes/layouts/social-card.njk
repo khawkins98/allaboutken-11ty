@@ -8,7 +8,7 @@
 @font-face { font-family: 'IBM Plex Sans'; src: url('/assets/kh-font/IBMPlexSans-Regular.woff2') format('woff2'); font-weight: 400; font-display: block; }
 @font-face { font-family: 'IBM Plex Sans'; src: url('/assets/kh-font/IBMPlexSans-SemiBold.woff2') format('woff2'); font-weight: 600; font-display: block; }
 body:has(#kh-css-toggle:checked) {
-  background: #f6f0dd; color: #151515; font-family: 'IBM Plex Sans', Arial, sans-serif; font-synthesis-weight: none;
+  background: #faf9f5; color: #151515; font-family: 'IBM Plex Sans', Arial, sans-serif; font-synthesis-weight: none;
   height: 630px; margin: 0; overflow: hidden; width: 1200px;
   *, *::before, *::after { box-sizing: border-box; }
   .card { display: flex; flex-direction: column; height: 100%; isolation: isolate; overflow: hidden; position: relative; }
@@ -17,7 +17,7 @@ body:has(#kh-css-toggle:checked) {
   .strap { align-items: center; display: flex; font-size: 21px; gap: 24px; justify-content: space-between; padding: 22px 48px; }
   .strap--top { border-bottom: 3px solid #151515; }
   .strap__mark { color: #173ebc; font-weight: 600; }
-  .strap--bottom { background: #007c55; color: white; font-size: 19px; margin-top: auto; }
+  .strap--bottom { background: #007c55; clip-path: polygon(0 18px, 100% 0, 100% 100%, 0 100%); color: white; font-size: 19px; margin-top: auto; padding-top: 40px; }
   .card-body { display: flex; flex: 1; flex-direction: column; justify-content: center; min-height: 0; padding: 24px 48px; }
   .title { display: -webkit-box; font-family: 'Anton', Impact, sans-serif; font-size: 72px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 18px; max-width: 25ch; overflow: hidden; text-transform: uppercase; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
   .description { display: -webkit-box; font-size: 27px; line-height: 1.4; margin: 0; max-width: 66ch; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
