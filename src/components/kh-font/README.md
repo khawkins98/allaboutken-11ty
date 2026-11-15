@@ -19,6 +19,14 @@ IBM Plex ships no variable build, so each weight is a separate static file:
 | `IBMPlexSans-Italic.woff2` | IBM Plex Sans | 400 | italic |
 | `IBMPlexSans-SemiBold.woff2` | IBM Plex Sans | 600 | normal |
 | `IBMPlexMono-Regular.woff2` | IBM Plex Mono | 400 | normal |
+| `RecursiveCasual-Note.woff2` | Recursive Note | 400 | normal |
+
+`RecursiveCasual-Note.woff2` (14 KB) is the handwriting used by `.kh-hand`. It
+is a static instance cut from the archived variable build below with
+`fontTools.varLib.instancer` at `MONO 0, CASL 1, CRSV 1, slnt -9, wght 480`,
+then subset to Basic Latin plus curly quotes, dashes and the ellipsis. A
+character outside that set falls back to Plex Sans, so recut it if the note
+ever needs one.
 
 `font-weight: 700` resolves to SemiBold 600 (nearest declared weight) rather
 than synthesising a faux bold. There is no bold italic; browsers synthesise

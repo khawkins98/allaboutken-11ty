@@ -712,22 +712,62 @@
     }
   }
 
-  // Hero: the masthead of the document. A hairline frame rather than a
-  // colour band, with a mono strapline above the headline.
-  .kh-hero {
-    background: var(--kh-panel-bg);
-    border: 1px solid var(--kh-rule--strong);
-    margin-bottom: 2.5rem;
+  // The open sheet
+  // --------------
+  // The homepage hero and every entry list share one three-column grid:
+  // date / text / figure. Nothing here draws a line. Shared left edges are
+  // what let the white space read as structure, so the columns are tokens
+  // and anything that wants to sit on the title axis uses them rather than
+  // picking its own indent.
+  --kh-sheet-date: 7.5rem;
+  --kh-sheet-figure: 11rem;
+  --kh-sheet-gap: clamp(1.25rem, 3vw, 2.5rem);
+  --kh-sheet-columns: var(--kh-sheet-date) minmax(0, 1fr) var(--kh-sheet-figure);
+  // Vertical rhythm: rows inside a list, and the larger step between the
+  // page's sections. Two values, so the page has two kinds of gap and no more.
+  --kh-sheet-row-gap: clamp(2rem, 4.5vw, 2.75rem);
+  --kh-sheet-section-gap: clamp(4rem, 9vw, 6.5rem);
+
+  .kh-sheet-section {
+    margin-top: var(--kh-sheet-section-gap);
   }
 
-  .kh-hero__body {
-    padding: 2rem 1.5rem 2.25rem;
+  // A plain label in place of the numbered, ruled head. Still an <h2>; it is
+  // only the dress that is quiet.
+  .kh-section-head--quiet {
+    border-bottom: 0;
+    margin-bottom: 1.75rem;
+    padding-bottom: 0;
+
+    > :first-child {
+      color: var(--kh-ink-muted);
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: 0;
+      line-height: 1.5;
+    }
+  }
+
+  // Hero: no frame, no fill. The headline hangs from the page edge; the bio
+  // and the two notes take the list's text and figure columns.
+  .kh-hero {
+    margin-bottom: 0;
+  }
+
+  .kh-hero__title {
+    margin-bottom: 1.75rem;
+  }
+
+  // One hand-drawn stroke under the name. A background image, so it is
+  // absent with CSS off and costs no markup. `preserveAspectRatio='none'`
+  // stretches it to the width of whatever name it sits under.
+  .kh-pen-underline {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M3 7.5C38 4.5 71 9 118 6.5s96-3.5 131-1.5c19 1 33 2.5 48 1.5' fill='none' stroke='%231c5a9c' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") no-repeat left bottom / 100% 0.16em;
+    padding-bottom: 0.08em;
   }
 
   // The lede repeats the role title; it should sit between the display
-  // headline and the prose, not compete with the headline. kh-text-heading--2
-  // would render it at 30px, so it is re-registered here as an intermediate
-  // step: prose-sized-plus, regular weight, slightly muted.
+  // headline and the prose, not compete with the headline.
   .kh-hero__lede {
     color: var(--kh-color--grey--darkest);
     font-size: 21px;
@@ -736,56 +776,85 @@
     max-width: 46ch;
   }
 
-  // The hero splits into prose + a spec column once there's room. The spec
-  // column is what fills the right-hand void: label/value rows separated by
-  // hairlines, same grammar as .kh-panel. Below the breakpoint it stacks
-  // under the prose behind a horizontal rule.
-  .kh-hero__spec {
-    border-top: 1px solid var(--kh-rule);
+  .kh-hero__body > p {
+    max-width: 38rem;
   }
 
-  .kh-hero__spec-row {
+  .kh-hero__notes {
+    margin-top: 2rem;
+  }
+
+  .kh-hero__note {
     font-size: 15px;
-    line-height: 1.5;
-    padding: 1rem 1.5rem;
+    line-height: 1.45;
+    margin: 0;
   }
 
-  .kh-hero__spec-row + .kh-hero__spec-row {
-    border-top: 1px solid var(--kh-rule);
+  .kh-hero__note + .kh-hero__note {
+    margin-top: 1.5rem;
+  }
+
+  // The hand. One static instance cut from Recursive, the typeface this site
+  // ran on before IBM Plex (see kh-font/README.md). Spend it on things that
+  // are personal and that change; a second use should have to argue for
+  // itself. The slight turn is what stops it reading as an italic.
+  .kh-hand {
+    color: var(--kh-color--apparatus);
+    font-family: 'Recursive Note', var(--kh-font-sans);
+    font-size: 17px;
+    line-height: 1.35;
+    max-width: 16rem;
+    transform: rotate(-1.5deg);
+    transform-origin: left center;
+  }
+
+  .kh-hand__label {
+    display: block;
+  }
+
+  .kh-hello__lede {
+    font-size: 19px;
+    margin: 0 0 0.75rem;
   }
 
   @media (min-width: $kh-breakpoint--md) {
     .kh-hero__layout {
+      column-gap: var(--kh-sheet-gap);
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 18rem;
+      grid-template-columns: var(--kh-sheet-columns);
     }
 
-    .kh-hero__spec {
-      border-left: 1px solid var(--kh-rule);
-      border-top: 0;
+    .kh-hero__body {
+      grid-column: 2;
+    }
+
+    .kh-hero__notes {
+      align-self: end;
+      grid-column: 3;
+      margin-top: 0;
+    }
+
+    // Puts a block on the title axis without making it a grid.
+    .kh-sheet-indent,
+    .kh-section-head--quiet {
+      padding-left: calc(var(--kh-sheet-date) + var(--kh-sheet-gap));
     }
   }
 
-  // Post list as an outlined grid. Not a <table> — the content is a list of
-  // articles, not tabular data — but it reads as one: an outer frame, a
-  // header row, and every row divided into meta / body / media cells.
+  // Entry list. Not a <table> -- the content is a list of articles, not
+  // tabular data -- and no longer dressed as one either: no frame, no header
+  // row, no cell borders. Each row is date / text / figure on the sheet grid
+  // and the rows are separated by space alone.
   // The wrappers in post-summary.njk are `display: contents` elsewhere; here
-  // they become the cells, which is what lets the borders be continuous
-  // instead of drawn per text node.
+  // they become the cells.
   .kh-datasheet-list {
     --kh-list-columns: 1fr;
-
-    background: var(--kh-panel-bg);
-    border: 1px solid var(--kh-rule--strong);
-  }
-
-  .kh-datasheet-list__head {
-    display: none;
   }
 
   .kh-datasheet-list .kh-summary {
+    align-items: start;
     display: grid;
-    gap: 0;
+    gap: 0.35rem var(--kh-sheet-gap);
     grid-template-columns: var(--kh-list-columns);
     margin-bottom: 0;
     max-width: none;
@@ -793,24 +862,24 @@
   }
 
   .kh-datasheet-list .kh-summary + .kh-summary {
-    border-top: 1px solid var(--kh-rule--strong);
+    margin-top: var(--kh-sheet-row-gap);
   }
 
   .kh-datasheet-list .kh-summary__meta,
   .kh-datasheet-list .kh-summary__body,
   .kh-datasheet-list .kh-summary__media {
     display: block;
-    padding: 1.15rem 1.25rem;
   }
 
-  // Media cells are edge-to-edge; the image is the cell.
-  .kh-datasheet-list .kh-summary__media {
-    padding: 0;
+  // An entry without a figure leaves its figure column empty. That is the
+  // point: the gap is read as "no picture", which an em-dash placeholder
+  // used to have to say out loud.
+  .kh-datasheet-list .kh-summary__media:empty {
+    display: none;
   }
 
   // The base .kh-summary__image rule pins a 220px min/max width and a 30px
-  // right margin, which is wider than this cell. Unpin it so the image sizes
-  // to the column instead of overflowing it.
+  // right margin. Unpin it so the image sizes to the column.
   .kh-datasheet-list a.kh-summary__image,
   .kh-datasheet-list img.kh-summary__image {
     margin-right: 0;
@@ -819,45 +888,20 @@
     width: 100%;
   }
 
-  // Stacked, the media cell is full width, so cap it or a single image
-  // outweighs the row it belongs to.
   .kh-datasheet-list a.kh-summary__image {
     display: block;
-    height: 100%;
-    max-height: 11rem;
-    min-height: 8rem;
-    overflow: hidden;
+    margin-top: 0.4rem;
+    max-width: 16rem;
   }
 
-  @media (min-width: $kh-breakpoint--md) {
-    .kh-datasheet-list a.kh-summary__image {
-      max-height: none;
-    }
-
-    // A datasheet never leaves a field blank; an empty figure cell gets an
-    // explicit em-dash the way an empty table field would. Desktop only:
-    // stacked, an empty media cell simply doesn't render as a row.
-    .kh-datasheet-list .kh-summary__media:empty {
-      align-items: center;
-      display: flex;
-      justify-content: center;
-    }
-
-    .kh-datasheet-list .kh-summary__media:empty::before {
-      color: var(--kh-ink-muted);
-      content: '—';
-      font-family: var(--kh-font-mono);
-      font-size: 13px;
-    }
-  }
-
+  // 3:2, so a thumbnail reads as a picture rather than as a record icon.
   .kh-datasheet-list img.kh-summary__image {
-    aspect-ratio: auto;
-    height: 100%;
+    aspect-ratio: 3 / 2;
+    display: block;
+    height: auto;
     object-fit: cover;
   }
 
-  // Cells own their spacing, so the text inside sheds its margins.
   .kh-datasheet-list .kh-summary__title,
   .kh-datasheet-list .kh-summary__text,
   .kh-datasheet-list .kh-summary__date {
@@ -869,33 +913,56 @@
     font-weight: 600;
     letter-spacing: -0.015em;
     line-height: 1.25;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
   }
 
-  // Dates join the data register rather than reading as prose.
+  // The title is the link; an underline on every one of ten rows is ten
+  // drawn lines. It returns on hover and focus.
+  .kh-datasheet-list .kh-summary__link {
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+    }
+  }
+
+  // A step down in size and ink from the title, so the two separate without
+  // a rule between them.
+  .kh-datasheet-list .kh-summary__text {
+    color: var(--kh-ink-muted);
+    font-size: 15.5px;
+    font-weight: 400;
+    line-height: 1.5;
+    max-width: 38rem;
+  }
+
+  // Dates stay in the data register: mono is now kept for dates and the
+  // kind tag, and nothing else in the list.
   .kh-datasheet-list .kh-summary__date {
     color: var(--kh-ink-muted);
     font-family: var(--kh-font-mono);
-    font-size: 11px;
-    letter-spacing: 0.035em;
+    font-size: 12px;
+    letter-spacing: 0.02em;
     line-height: 1.5;
   }
 
-  // The Digesting badge was an absolutely-positioned rotated tab hanging off
-  // the left edge. In a grid it becomes an ordinary label inside its cell.
+  // The Digesting badge: once a rotated tab, then a boxed label, now plain
+  // apparatus-coloured text under the date.
   .kh-datasheet-list .kh-summary__tab {
-    border-color: var(--kh-color--apparatus);
-    border-style: solid;
+    background: none;
     color: var(--kh-color--apparatus);
     display: inline-block;
-    margin-top: 0.6rem;
-    padding: 2px 6px;
+    font-family: var(--kh-font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    padding: 0;
     position: static;
     transform: none;
   }
 
-  // The tinted highlight fights the grid; the apparatus label carries the
-  // distinction on its own.
   .kh-datasheet-list .kh-summary--highlight {
     background: none;
     border-radius: 0;
@@ -904,23 +971,26 @@
 
   @media (min-width: $kh-breakpoint--md) {
     .kh-datasheet-list {
-      --kh-list-columns: 9.5rem minmax(0, 1fr) 13rem;
+      --kh-list-columns: var(--kh-sheet-columns);
     }
 
-    .kh-datasheet-list__head {
-      border-bottom: 1px solid var(--kh-rule--strong);
-      display: grid;
-      grid-template-columns: var(--kh-list-columns);
+    .kh-datasheet-list .kh-summary__meta {
+      padding-top: 0.3rem;
     }
 
-    .kh-datasheet-list__head > * {
-      padding: 0.5rem 1.25rem;
+    .kh-datasheet-list .kh-summary__tab {
+      display: block;
     }
 
-    .kh-datasheet-list__head > * + *,
-    .kh-datasheet-list .kh-summary__body,
-    .kh-datasheet-list .kh-summary__media {
-      border-left: 1px solid var(--kh-rule);
+    // Keep the column even when it is empty, so text measures match from
+    // row to row.
+    .kh-datasheet-list .kh-summary__media:empty {
+      display: block;
+    }
+
+    .kh-datasheet-list a.kh-summary__image {
+      margin-top: 0;
+      max-width: none;
     }
   }
 

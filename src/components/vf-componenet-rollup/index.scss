@@ -1848,4 +1848,15 @@ body:has(#kh-css-toggle:checked) {
     font-style: normal;
     font-display: swap;
   }
+
+  /* The hand (.kh-hand). A 14 KB static instance of Recursive -- casual,
+     cursive, slanted, weight 480, Basic Latin only -- cut from the archived
+     variable build in kh-font/. Fetched only by pages that set type in it. */
+  @font-face {
+    font-family: 'Recursive Note';
+    src: url('/assets/kh-font/RecursiveCasual-Note.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
 }

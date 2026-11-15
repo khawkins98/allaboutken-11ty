@@ -85,6 +85,6 @@ If you change filenames, update all three to match exactly.
 
 ## Notes
 
-- The `Recursive*.woff2` files were removed when IBM Plex landed; they are recoverable from git history. `Datatype.woff2` is still used by a blog post.
+- The `Recursive*.woff2` variable files are retained but unloaded (see `src/components/kh-font/README.md`). `RecursiveCasual-Note.woff2`, a 14 KB static cut of them, is loaded for the handwritten `.kh-hand` note. `Datatype.woff2` is still used by a blog post.
 - These are the *complete* Plex faces, not the Latin-1 splits: the site uses em dashes, curly quotes, `&#8209;` and `↦`, which the splits do not cover.
 - Keep fonts self-hosted in `src/components/kh-font/`; do not rely on runtime CDN font URLs for primary rendering.
