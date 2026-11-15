@@ -65,7 +65,11 @@ cartridgeTheme: page
     <meta property="og:title" content="{{ ogTitleComputed }}" />
     <meta property="og:description" content="{{ ogDescriptionComputed | striptags }}" />
     <meta property="og:image" content="{{ ogImageComputed }}" />
-    {%- set ogImageAlt = image_meta and (image_meta.altext or image_meta.alt) %}
+    {%- if og_image %}
+      {%- set ogImageAlt = og_image_alt %}
+    {%- else %}
+      {%- set ogImageAlt = 'AllAboutKen.com card: ' ~ ((title ~ '') | striptags) %}
+    {%- endif %}
     {%- if ogImageAlt %}<meta property="og:image:alt" content="{{ ogImageAlt }}" />{% endif %}
     {# Twitter Card meta tags #}
     <meta name="twitter:card" content="summary_large_image" />
@@ -131,7 +135,7 @@ cartridgeTheme: page
               claim about which page this is. -#}
           {% if cartridgeTheme %}
           {% set cartridgeNav = [
-            { label: 'Writing', href: '/all/', section: page.url.startsWith('/posts') or page.url.startsWith('/blog') or page.url.startsWith('/digesting') or page.url.startsWith('/photos') },
+            { label: 'Writing', href: '/all/', section: page.url.startsWith('/all/') or page.url.startsWith('/posts') or page.url.startsWith('/blog') or page.url.startsWith('/digesting') or page.url.startsWith('/photos') },
             { label: 'Work', href: '/work/', section: page.url.startsWith('/work/') },
             { label: 'About', href: '/cv/' },
             { label: 'Search', href: '/search/' }

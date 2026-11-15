@@ -1,7 +1,6 @@
 @use './settings' as *;
 
-// A cover with energy, followed by a quiet reading surface. Opted into by
-// cartridgeTheme: home / article; the rest can adopt it after this first pass.
+// Shared cartridge palette and shell, with cover and reading compositions.
 @mixin kh-cartridge() {
   @font-face {
     font-family: 'Anton';
@@ -39,11 +38,11 @@
     main,
     main:has(.kh-timeline-strip) { padding-top: 0; }
 
-    a:focus-visible,
-    button:focus-visible,
-    input:focus-visible {
-      outline: 3px solid currentColor;
-      outline-offset: 5px;
+    :is(a, button, input, select, textarea, summary):focus-visible {
+      // Two tones remain distinguishable on both light and coloured surfaces.
+      outline: 3px solid var(--kh-cart-ink);
+      outline-offset: 3px;
+      box-shadow: 0 0 0 3px white;
     }
 
     .kh-global-header {
@@ -61,6 +60,9 @@
       font-weight: 600;
       letter-spacing: -0.04em;
       margin: 0;
+      max-width: 100%;
+      min-width: 0;
+      overflow-wrap: anywhere;
       padding: 0.35rem 0;
     }
 
@@ -104,9 +106,9 @@
     }
 
     .kh-cartridge-cover {
-      display: grid;
+      display: flex;
+      flex-wrap: wrap;
       gap: 3rem;
-      grid-template-columns: minmax(0, 1fr) 17rem;
       isolation: isolate;
       overflow: hidden;
       padding: 3rem 2rem;
@@ -137,6 +139,8 @@
       }
     }
 
+    .kh-cartridge-intro { flex: 1 1 24rem; min-width: 0; }
+
     .kh-cartridge-marks {
       background: url('/images/cartridge-marks.svg') center / contain no-repeat;
       display: block;
@@ -155,11 +159,12 @@
       letter-spacing: -0.025em;
       line-height: 1.1;
       margin: 2rem 0 1.75rem;
+      overflow-wrap: anywhere;
       text-transform: uppercase;
       transform: rotate(-5deg);
       transform-origin: left center;
 
-      span { display: block; white-space: nowrap; }
+      span { display: block; }
       span + span { color: var(--kh-cart-blue); }
     }
 
@@ -172,6 +177,7 @@
       line-height: 1.5;
       margin: 0 0 2rem;
       max-width: 100%;
+      overflow-wrap: anywhere;
       padding: 0.65rem 0.9rem;
       text-transform: uppercase;
       transform: rotate(-3deg);
@@ -190,6 +196,8 @@
       background: var(--kh-cart-blue);
       box-shadow: 6px 6px 0 var(--kh-cart-ink);
       color: white;
+      flex: 0 1 17rem;
+      overflow-wrap: anywhere;
       padding: 1.25rem;
       transform: rotate(4deg);
 
@@ -205,6 +213,7 @@
     .kh-cartridge-writing {
       background: var(--kh-cart-blue);
       color: white;
+      container: cartridge-writing / inline-size;
       padding: 2rem;
 
       .kh-datasheet-list { max-width: none; }
@@ -239,6 +248,7 @@
         font-weight: 400;
         line-height: 1.15;
         margin: 0;
+        overflow-wrap: anywhere;
         text-transform: uppercase;
       }
 
@@ -266,6 +276,7 @@
         font-weight: 400;
         line-height: 1.1;
         margin: 1rem 0;
+        overflow-wrap: anywhere;
         text-transform: uppercase;
       }
     }
@@ -293,13 +304,12 @@
     @media (max-width: $kh-breakpoint--md-down) {
       .kh-global-header { padding: 1rem; }
       .kh-navigation__list { gap: 0.25rem 0.75rem; }
-      .kh-cartridge-cover { gap: 2rem; grid-template-columns: 1fr; padding: 2rem 1rem; }
+      .kh-cartridge-cover { display: grid; gap: 2rem; grid-template-columns: minmax(0, 1fr); padding: 2rem 1rem; }
       .kh-cartridge-cover::before { left: 12%; top: 2rem; width: min(76vw, 27rem); }
       .kh-cartridge-cover::after { bottom: -10rem; height: 34rem; right: -11rem; }
       .kh-cartridge-title { font-size: clamp(3rem, 17vw, 6.4rem); margin-top: 2.5rem; }
       .kh-cartridge-marks { height: 4rem; right: 1rem; top: 1rem; width: 4rem; }
       .kh-cartridge-ribbon { font-size: 0.6875rem; padding: 0.6rem; }
-      .kh-cartridge-ribbon span { white-space: nowrap; }
       .kh-cartridge-feature { justify-self: start; margin: 0 0 0.5rem 0.5rem; max-width: 19rem; width: calc(100% - 1.5rem); }
       .kh-cartridge-writing { padding: 1.75rem 1rem; }
       .kh-cartridge-writing .kh-summary { gap: 0.75rem 1.25rem; grid-template-columns: minmax(0, 1fr) 6rem; }
@@ -312,6 +322,24 @@
       .kh-cartridge-hello,
       .kh-footer { padding-left: 1rem; padding-right: 1rem; }
       .kh-cartridge-timeline { padding: 0 1rem 1rem; }
+    }
+
+    @container cartridge-writing (max-width: 19rem) {
+      .kh-cartridge-writing .kh-summary { grid-template-columns: minmax(0, 1fr); }
+      .kh-cartridge-writing .kh-summary__body,
+      .kh-cartridge-writing .kh-summary__media { grid-column: 1; }
+      .kh-cartridge-writing .kh-summary__media { max-width: 12rem; }
+    }
+
+    @media (min-width: $kh-breakpoint--md) {
+      // The desktop list has metadata and thumbnail columns as well as text.
+      // Reflow them when enlarged type leaves too little reading space.
+      @container cartridge-writing (max-width: 38rem) {
+        .kh-cartridge-writing .kh-summary { grid-template-columns: minmax(0, 1fr); }
+        .kh-cartridge-writing .kh-summary__body,
+        .kh-cartridge-writing .kh-summary__media { grid-column: 1; }
+        .kh-cartridge-writing .kh-summary__media { max-width: 12rem; }
+      }
     }
   }
 

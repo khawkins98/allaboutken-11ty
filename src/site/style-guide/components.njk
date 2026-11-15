@@ -202,7 +202,8 @@ The fonts are static assets. Do not use variable-font axis settings on Plex or A
 {% markdown %}
 - Keep a single primary page heading and a useful heading order.
 - Use real links, buttons, labels, disclosures and inputs. Primary targets are at least 44px.
-- Maintain visible focus against the active surface and readable contrast in every state.
+- Maintain visible focus against the active surface and readable contrast in every state. Shared controls use an ink outline and white inner ring; check both light and dark surfaces.
+- At 200% text sizing, headings and ribbons must reflow without clipping their content.
 - Do not rely on hover, colour or motion alone to explain data or controls.
 - Keep the CSS checkbox in the DOM. Every custom stylesheet rule is scoped beneath `body:has(#kh-css-toggle:checked)`.
 - Honour reduced motion and preserve the no-JavaScript reading path of stories.
@@ -219,7 +220,7 @@ Layout frontmatter supplies `cartridgeTheme`: `page`, `home`, `article`, `note`,
 
 Use `data-pagefind-ignore` for repeated chrome and other entries’ titles. Use `noindex` for non-destinations and `kens_status: draft` for reviewable unpublished posts. Do not replace those shared mechanisms with path lists.
 
-Production checks: `yarn build`, `yarn lint:css`, `yarn lint:links`, `yarn lint:images`, and `yarn lint:overflow`. Check transformed image output, horizontal overflow, keyboard focus, search, disclosures, CSS-off mode and representative long-form and interactive pages.
+Production checks: `yarn build`, `yarn lint:css`, `yarn lint:links`, `yarn lint:images`, and `yarn lint:overflow`. Check transformed image output, horizontal overflow, 200% text sizing, keyboard focus on light and dark surfaces, search, disclosures, CSS-off mode and representative long-form and interactive pages. Check social-image alt metadata against the card itself, independently of the hero photograph.
 {% endmarkdown %}
 <!-- Former heading anchors remain at this migration note for shared links. -->
 <span id="heading-classes" aria-hidden="true"></span>

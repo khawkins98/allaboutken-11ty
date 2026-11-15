@@ -123,6 +123,32 @@ const PROBE = `(() => {
   return JSON.stringify({ over, items: [...new Set(items)].slice(0, 5) });
 })()`;
 
+// The cover clips decorative shapes intentionally, so document overflow alone
+// cannot detect text disappearing inside it. Check actual text fragments too.
+const RESIZED_COVER_PROBE = `(async () => {
+  await document.fonts.ready;
+  const root = document.documentElement;
+  const previousSize = root.style.fontSize;
+  root.style.fontSize = '200%';
+  try {
+    const cover = document.querySelector('.kh-cartridge-cover');
+    if (!cover) return [];
+    const bounds = cover.getBoundingClientRect();
+    const errors = [];
+    for (const el of cover.querySelectorAll('.kh-cartridge-title span, .kh-cartridge-ribbon')) {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      if ([...range.getClientRects()].some((r) => r.left < bounds.left - 1 || r.right > bounds.right + 1)) {
+        errors.push('Clipped cover text: ' + el.textContent.trim());
+      }
+    }
+    if (root.scrollWidth > root.clientWidth + 1) errors.push('Page overflows at 200% text size');
+    return errors;
+  } finally {
+    root.style.fontSize = previousSize;
+  }
+})()`;
+
 let ws, failures = 0, checked = 0;
 try {
   for (let i = 0; i < 40 && !ws; i++) {
@@ -152,6 +178,15 @@ try {
         console.error(`\n❌ ${page} at ${width}px overflows by ${data.over}px`);
         for (const it of data.items) console.error(`     ${it}`);
       }
+      if (page === '/') {
+        const { result: resized } = await send(ws, 'Runtime.evaluate', {
+          expression: RESIZED_COVER_PROBE, returnByValue: true, awaitPromise: true,
+        });
+        if (resized.value.length) {
+          failures++;
+          console.error(`\n❌ Homepage at ${width}px with 200% text: ${resized.value.join('; ')}`);
+        }
+      }
     }
   }
 } finally {
@@ -161,8 +196,7 @@ try {
 }
 
 if (failures) {
-  console.error(`\n${failures} of ${checked} page/width combinations scroll sideways.`);
-  console.error('A page that scrolls horizontally on a phone is the most-felt layout bug there is.\n');
+  console.error(`\n${failures} overflow or resized-text checks failed across ${checked} page/width combinations.\n`);
   process.exit(1);
 }
-console.log(`✅ No horizontal overflow. ${checked} page/width combinations checked (${WIDTHS.join(', ')}px).`);
+console.log(`✅ No horizontal overflow. ${checked} page/width combinations checked (${WIDTHS.join(', ')}px), including homepage text at 200%.`);

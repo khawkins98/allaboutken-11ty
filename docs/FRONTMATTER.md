@@ -19,6 +19,7 @@ Every field that templates read from YAML frontmatter across post, page, and dig
 | [`series_part`](#series_part) | Optional | post | This post's position in that series |
 | [`permalink`](#permalink) | Optional | all | Override the default output URL |
 | [`og_image`](#og_image) | Optional | base | Full-URL override for social card image |
+| [`og_image_alt`](#og_image_alt) | Optional | base | Description of a custom social image |
 | [`og_title`](#og_title) | Optional | base | Override for OG/Twitter title |
 | [`og_description`](#og_description) | Optional | base | Override for OG/Twitter description |
 | [`noindex`](#noindex) | Optional | base | Add `noindex` robots meta tag |
@@ -271,6 +272,16 @@ og_image: "https://www.allaboutken.com/images/blog/my-image.jpg"
 - **Full absolute URL required.**
 - Overrides the dynamic screenshot service for `og:image` and `twitter:image`.
 - If absent, `{% ogImageUrl %}` shortcode generates a screenshot URL automatically.
+
+### `og_image_alt`
+
+```yaml
+og_image_alt: "Description of the custom social image."
+```
+
+- Describes an explicit `og_image` override in both OpenGraph and Twitter metadata.
+- Generated cards use a title-based description because they contain typography and geometry, not the in-page hero photograph. Hero `image_meta` remains independent.
+- Supply this alongside a custom image; without it, custom-image alt metadata is omitted rather than describing unrelated imagery.
 
 ---
 
