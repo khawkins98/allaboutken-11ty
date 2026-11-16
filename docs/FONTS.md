@@ -38,14 +38,21 @@ by Tyler Finck supplies code and supporting labels. The local WOFF2 retains all
 Declare those ranges in `@font-face` and request them with `font-weight` and
 `font-stretch`. The file defaults are thin and condensed, so request the site
 settings explicitly. There is no slant or optical-size axis. The
-[interactive specimen](/design-lab/type/) exposes width and weight controls
-with mixed-case text, code and accents; it is excluded from search and the
-sitemap with `noindex: true`.
+[interactive playground](/design-lab/type/) exposes width and weight, tracking,
+word spacing, size, line height and supported OpenType features. Its optional
+Plex Mono/Sans variable comparison faces load only when selected. Plex Sans
+provides pair kerning; the two mono files do not contain kerning pairs. The
+playground is excluded from search and the sitemap with `noindex: true`.
 
 Pinned download URLs, original license, checksums and archive members live in
 [`league-mono/README.md`](../src/components/kh-font/league-mono/README.md).
 `IBMPlexMono-Regular.woff2` remains available as an archived former site face;
 it is no longer the globally loaded mono font.
+
+The comparison-only Plex files are pinned, unmodified Roman WOFF2 builds. Their
+source URLs, checksums and original licenses live in
+[`plex-variable/README.md`](../src/components/kh-font/plex-variable/README.md).
+They do not change the shared theme’s Plex Sans static faces.
 
 ## How font assets reach production
 

@@ -1,99 +1,87 @@
 ---
-title: League Mono — width and weight study
+title: Variable type playground
 layout: layouts/base.njk
 permalink: /design-lab/type/
 noindex: true
 cartridgeTheme: utility
-teaser: Try League Mono’s variable width and weight with actual site text and code.
+teaser: Compare real font axes, spacing, kerning and supported OpenType features.
 ---
 <style>
-@font-face {
-  font-family: 'League Mono';
-  src: url('/assets/kh-font/league-mono/LeagueMono-VF.woff2') format('woff2');
-  font-weight: 100 800;
-  font-style: normal;
-  font-stretch: 50% 200%;
-  font-display: swap;
-}
-body:has(#kh-css-toggle:checked) .league-type { --league-width: 100; --league-weight: 400; margin: 0 auto; max-width: 72rem; }
-body:has(#kh-css-toggle:checked) .league-type__kicker { font-family: var(--kh-font-mono); font-size: .75rem; color: #173ebc; }
-body:has(#kh-css-toggle:checked) .league-type__intro { max-width: 65ch; }
-body:has(#kh-css-toggle:checked) .league-type__controls { background: white; border: 2px solid #151515; box-shadow: 4px 4px #173ebc; padding: 1.25rem; margin: 2rem 0; }
-body:has(#kh-css-toggle:checked) .league-type__controls label { display: block; font-weight: 600; margin: 0 0 .5rem; }
-body:has(#kh-css-toggle:checked) .league-type__controls input[type='range'] { accent-color: #173ebc; display: block; width: 100%; min-height: 44px; margin: 0; }
-body:has(#kh-css-toggle:checked) .league-type__controls input[type='text'] { box-sizing: border-box; width: 100%; min-height: 48px; font: inherit; border: 2px solid #151515; padding: .5rem; }
-body:has(#kh-css-toggle:checked) .league-type__range-ends { display: flex; justify-content: space-between; font-family: var(--kh-font-mono); font-size: .75rem; margin-bottom: 1rem; gap: .5rem; }
-body:has(#kh-css-toggle:checked) .league-type__controls input:focus-visible { outline: 3px solid #173ebc; outline-offset: 4px; }
-body:has(#kh-css-toggle:checked) .league-type__sample { font-family: 'League Mono', monospace; font-weight: var(--league-weight); font-stretch: calc(var(--league-width) * 1%); font-synthesis: none; line-height: 1.3; overflow-wrap: anywhere; }
-body:has(#kh-css-toggle:checked) .league-type__hero { font-size: clamp(1.75rem, 5vw, 5rem); color: #173ebc; padding: 1.5rem 0; margin: 0; }
-body:has(#kh-css-toggle:checked) .league-type__row { border-top: 2px solid #151515; padding: 1.5rem 0; }
-body:has(#kh-css-toggle:checked) .league-type__row .league-type__sample { font-size: clamp(1.25rem, 2.8vw, 2.5rem); margin: .75rem 0; }
-body:has(#kh-css-toggle:checked) .league-type__code { box-sizing: border-box; max-width: 100%; overflow-x: auto; white-space: pre; border: 2px solid #151515; padding: 1rem; background: white; font-size: 1rem; }
-body:has(#kh-css-toggle:checked) .league-type__code code { font: inherit; background: transparent; }
-body:has(#kh-css-toggle:checked) .league-type__notes { border-left: 6px solid #f6d92f; padding-left: 1rem; max-width: 70ch; }
+@font-face { font-family:'IBM Plex Mono Variable'; src:url('/assets/kh-font/plex-variable/IBMPlexMonoVar-Roman.woff2') format('woff2'); font-weight:100 700; font-style:normal; font-display:swap; }
+@font-face { font-family:'IBM Plex Sans Variable'; src:url('/assets/kh-font/plex-variable/IBMPlexSansVar-Roman.woff2') format('woff2'); font-weight:100 700; font-stretch:85% 100%; font-style:normal; font-display:swap; }
+body:has(#kh-css-toggle:checked) .league-type { --type-family:'League Mono'; --type-fallback:monospace; --type-weight:400; --type-width:100%; --type-size:48px; --type-leading:1.3; --type-tracking:0em; --type-wordspace:0em; --type-kerning:normal; --type-features:normal; --type-numbers:normal; --type-case:none; --type-align:left; max-width:72rem; margin:auto; }
+body:has(#kh-css-toggle:checked) .league-type__intro { max-width:68ch; }
+body:has(#kh-css-toggle:checked) .league-type__layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start; gap:2rem; margin:2rem 0; }
+body:has(#kh-css-toggle:checked) .league-type__controls fieldset { min-width:0; border:2px solid var(--kh-cart-ink); background:white; margin:0 0 1.5rem; padding:1rem; }
+body:has(#kh-css-toggle:checked) .league-type__controls legend { padding:0 .5rem; font-weight:600; }
+body:has(#kh-css-toggle:checked) .league-type__controls label { display:block; font-weight:600; margin:.75rem 0 .25rem; }
+body:has(#kh-css-toggle:checked) .league-type__controls input[type='range'] { display:block; accent-color:var(--kh-cart-blue); width:100%; margin:0; min-height:44px; }
+body:has(#kh-css-toggle:checked) .league-type__controls input[type='text'],
+body:has(#kh-css-toggle:checked) .league-type__controls select { box-sizing:border-box; width:100%; max-width:100%; min-width:0; min-height:44px; padding:.5rem; border:2px solid var(--kh-cart-ink); background:white; color:var(--kh-cart-ink); font:inherit; }
+body:has(#kh-css-toggle:checked) .league-type__controls input:focus-visible,
+body:has(#kh-css-toggle:checked) .league-type__controls select:focus-visible { outline:3px solid var(--kh-cart-blue); outline-offset:3px; }
+body:has(#kh-css-toggle:checked) .league-type__controls input:disabled,
+body:has(#kh-css-toggle:checked) .league-type__controls select:disabled { opacity:.55; }
+body:has(#kh-css-toggle:checked) .league-type__hint { font-size:.875rem; margin:.35rem 0 .75rem; line-height:1.5; }
+body:has(#kh-css-toggle:checked) .league-type__checks label { display:flex; align-items:center; gap:.6rem; font-size:.875rem; font-weight:400; min-height:44px; margin:0; }
+body:has(#kh-css-toggle:checked) .league-type__checks input { accent-color:var(--kh-cart-blue); width:1.1rem; height:1.1rem; flex-shrink:0; }
+body:has(#kh-css-toggle:checked) .league-type__preview { position:sticky; top:1rem; min-width:0; border-top:6px solid var(--kh-cart-blue); padding-top:1rem; }
+body:has(#kh-css-toggle:checked) .league-type__sample { font-family:var(--type-family),var(--type-fallback); font-weight:var(--type-weight); font-stretch:var(--type-width); font-size:var(--type-size); font-kerning:var(--type-kerning); font-feature-settings:var(--type-features); font-variant-numeric:var(--type-numbers); letter-spacing:var(--type-tracking); word-spacing:var(--type-wordspace); line-height:var(--type-leading); text-transform:var(--type-case); text-align:var(--type-align); font-synthesis:none; overflow-wrap:anywhere; margin:1rem 0; }
+body:has(#kh-css-toggle:checked) .league-type__hero { color:var(--kh-cart-blue); min-height:3em; }
+body:has(#kh-css-toggle:checked) .league-type__code { box-sizing:border-box; max-width:100%; overflow-x:auto; white-space:pre; border:1px solid var(--kh-rule); padding:1rem; background:white; }
+body:has(#kh-css-toggle:checked) .league-type__code code { font:inherit; letter-spacing:inherit; background:transparent; }
+body:has(#kh-css-toggle:checked) .league-type__css { display:block; max-width:100%; overflow:auto; padding:1rem; background:white; border:1px solid var(--kh-rule); font-family:var(--kh-font-mono); font-size:.75rem; white-space:pre; }
+body:has(#kh-css-toggle:checked) .league-type__preview summary { cursor:pointer; min-height:44px; padding:.5rem 0; }
+body:has(#kh-css-toggle:checked) .league-type__notes { border-top:2px solid var(--kh-cart-ink); padding:1rem 0; max-width:70ch; }
+@media(max-width:53rem) { body:has(#kh-css-toggle:checked) .league-type__layout { grid-template-columns:minmax(0,1fr); } body:has(#kh-css-toggle:checked) .league-type__preview { position:static; } }
 </style>
 <article class="league-type">
-  <p class="league-type__kicker">DESIGN LAB / LEAGUE MONO / RELEASE 2.300</p>
-  <h1>League Mono</h1>
-  <p class="league-type__intro">A variable monospace face by <a href="https://github.com/theleagueof/league-mono">Tyler Finck and The League of Moveable Type</a>. Try its width and weight against actual headings, supporting labels and code. The site keeps Anton for display and Plex Sans for reading; League Mono supplies code and metadata.</p>
-  <div class="league-type__controls" data-pagefind-ignore>
-    <label for="league-width">Width: <output id="league-width-value" for="league-width">100%</output></label>
-    <input type="range" id="league-width" min="50" max="200" value="100" step="1" aria-describedby="league-width-help">
-    <div class="league-type__range-ends"><span>50 / condensed</span><span>200 / extended</span></div>
-    <p id="league-width-help">Controls the font’s real <code>wdth</code> axis through CSS <code>font-stretch</code>.</p>
-    <label for="league-weight">Weight: <output id="league-weight-value" for="league-weight">400</output></label>
-    <input type="range" id="league-weight" min="100" max="800" value="400" step="1" aria-describedby="league-weight-help">
-    <div class="league-type__range-ends"><span>100 / thin</span><span>800 / extra bold</span></div>
-    <p id="league-weight-help">Controls the font’s real <code>wght</code> axis through CSS <code>font-weight</code>.</p>
-    <label for="league-text">Try your own text</label>
-    <input type="text" id="league-text" value="Make it make sense." maxlength="140">
-    <p id="league-font-status" role="status">Loading the local variable font…</p>
-  </div>
-  <p class="league-type__sample league-type__hero" id="league-live">Make it make sense.</p>
-  <section class="league-type__row" aria-labelledby="league-real-text">
-    <h2 id="league-real-text">Headlines and supporting text</h2>
-    <p class="league-type__sample">Platforms. Content. People.</p>
-    <p class="league-type__sample">Ideas in circulation</p>
-    <p class="league-type__sample">One shared truth for Storybook and Figma</p>
-    <p class="league-type__sample">16 Nov 2026 · 1,234 words · Bonn, Germany</p>
-  </section>
-  <section class="league-type__row" aria-labelledby="league-code-heading">
-    <h2 id="league-code-heading">Code and ambiguous characters</h2>
-    <pre class="league-type__sample league-type__code"><code>const page = { title: "Make it make sense.", width: 100 };
+<p class="kh-meta">Design lab / local variable fonts</p>
+<h1>{{ title }}</h1>
+<p class="league-type__intro">Try League Mono alongside Plex Mono and Plex Sans. Font axes change the actual letterforms; spacing and layout controls are CSS. OpenType choices are drawn from each local font file’s feature tables. These settings affect this playground only. <a href="#league-live">Jump to the preview</a>.</p>
+<noscript><p>The interactive controls need JavaScript. The static preview uses League Mono at normal width and weight.</p></noscript>
+<div class="league-type__layout">
+<div class="league-type__controls" data-pagefind-ignore>
+<fieldset><legend>Font and real axes</legend>
+<label for="league-family">Typeface</label>
+<select id="league-family"><option value="league">League Mono</option><option value="plex-mono">IBM Plex Mono Variable</option><option value="plex-sans">IBM Plex Sans Variable</option></select>
+<label for="league-weight">Weight: <output id="league-weight-value" for="league-weight">400</output></label>
+<input type="range" id="league-weight" min="100" max="800" value="400" step="1">
+<label for="league-width">Width: <output id="league-width-value" for="league-width">100%</output></label>
+<input type="range" id="league-width" min="50" max="200" value="100" step="1" aria-describedby="league-axis-help">
+<p id="league-axis-help" class="league-type__hint">League Mono: weight 100–800; width 50–200%.</p>
+</fieldset>
+<fieldset><legend>Spacing and layout</legend>
+{% for control in [['size','Type size',12,96,48,1,'px'], ['leading','Line height',0.9,2.2,1.3,0.05,''], ['tracking','Tracking (all letters)',-0.08,0.2,0,0.005,'em'], ['wordspace','Word spacing',-0.15,0.8,0,0.025,'em']] %}
+<label for="league-{{ control[0] }}">{{ control[1] }}: <output id="league-{{ control[0] }}-value" for="league-{{ control[0] }}">{{ control[4] }}{{ control[6] }}</output></label>
+<input type="range" id="league-{{ control[0] }}" min="{{ control[2] }}" max="{{ control[3] }}" value="{{ control[4] }}" step="{{ control[5] }}">
+{% endfor %}
+<label for="league-kerning">Pair kerning</label>
+<select id="league-kerning" aria-describedby="league-kerning-help"><option value="normal">On</option><option value="none">Off</option><option value="auto">Browser default</option></select>
+<p id="league-kerning-help" class="league-type__hint">Kerning adjusts specific pairs; tracking adds spacing between every character.</p>
+<label for="league-case">Letter case</label><select id="league-case"><option value="none">As typed</option><option value="uppercase">Uppercase</option><option value="lowercase">Lowercase</option></select>
+<label for="league-align">Alignment</label><select id="league-align"><option value="left">Left</option><option value="center">Centre</option><option value="right">Right</option></select>
+<label for="league-language">Language for localised forms</label><select id="league-language"><option value="en">English</option><option value="de">German</option><option value="tr">Turkish</option><option value="fr">French</option></select>
+</fieldset>
+<fieldset><legend>Supported OpenType options</legend>
+<p class="league-type__hint">Options change with the selected font. Stylistic sets affect different glyphs in each family. Try the feature-test text in the preview.</p>
+<label for="league-numerals">Numeral shape</label><select id="league-numerals"><option value="normal">Default</option><option value="lining-nums" data-feature="lnum">Lining</option><option value="oldstyle-nums" data-feature="onum">Oldstyle</option></select>
+<label for="league-number-spacing">Numeral spacing</label><select id="league-number-spacing"><option value="normal">Default</option><option value="proportional-nums" data-feature="pnum">Proportional</option><option value="tabular-nums" data-feature="tnum">Tabular</option></select>
+<div id="league-features" class="league-type__checks"></div>
+</fieldset>
+<fieldset><legend>Your sample</legend><label for="league-text">Preview text</label><input type="text" id="league-text" value="Make it make sense." maxlength="500"><p id="league-font-status" role="status" class="league-type__hint">Loading the local font…</p><button class="kh-button" type="button" id="league-reset">Reset all settings</button></fieldset>
+</div>
+<div class="league-type__preview">
+<h2>Live preview</h2>
+<p class="league-type__sample league-type__hero" id="league-live">Make it make sense.</p>
+<p class="league-type__sample">AVATAR WA To Ta fi fl ffi<br>G Q a g i l t 3 · 0O 1Il<br>1/2 3/4 · 1a 2o · 0123456789<br>¿Hola! ¡Qué tal? : ;<br>ä ö ü ß é è ç ñ ø Å Æ Œ</p>
+<details><summary>Code sample</summary><pre class="league-type__sample league-type__code"><code>const page = { title: "Make it make sense." };
 for (let i = 0; i &lt; 10; i++) {
   console.log(`${i}: ${page.title}`);
-}
-// 0O 1Il | {} [] () &lt;&gt; != === =&gt; /* comment */
---kh-font-mono: 'League Mono', monospace;</code></pre>
-    <p class="league-type__sample">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz<br>0123456789 0O 1Il<br>ä ö ü ß é è ç ñ ø Å Æ Œ</p>
-  </section>
-  <section class="league-type__row league-type__notes" aria-labelledby="league-font-notes">
-    <h2 id="league-font-notes">The actual file, not assumed ranges</h2>
-    <p>The unmodified upstream WOFF2 contains 546 encoded code points. Inspection of its <code>fvar</code> table gives weight 100–800, default 100, and width 50–200, default 50. This specimen deliberately starts at weight 400 and width 100. There is no slant or optical-size axis in this file.</p>
-    <p>The complete release font is self-hosted, without subsetting or new outlines. Characters outside its coverage use the fallback face. Code lines keep their formatting and scroll within the sample at wide settings; prose samples wrap.</p>
-    <p><a href="/assets/kh-font/league-mono/LeagueMono-VF.woff2">Download variable WOFF2</a> · <a href="/assets/kh-font/league-mono/LeagueMono-VF.ttf">Download variable TTF</a> · <a href="/assets/kh-font/league-mono/OFL.md">Original SIL Open Font License</a> · <a href="https://github.com/theleagueof/league-mono/releases/tag/2.300">Upstream release</a></p>
-  </section>
+}</code></pre></details>
+<details open><summary>Current CSS</summary><code class="league-type__css" id="league-css">font-family: 'League Mono';</code><button class="kh-button" type="button" id="league-copy">Copy CSS</button><span id="league-copy-status" role="status"></span></details>
+</div>
+</div>
+<section class="league-type__notes"><h2>What these controls can change</h2><p>League Mono has weight and width axes. Plex Mono has weight only; its width control is disabled. Plex Sans adds a width axis and real pair kerning. Both monospace files have no kerning pairs, so their kerning selector is disabled; use tracking for visible spacing changes.</p><p>There is no slant or optical-size axis in these selected files. Required composition and mark positioning remain enabled. The font downloads are unmodified official builds with their original licenses; Plex comparison faces load only when chosen here. Site typography stays unchanged.</p><p><a href="https://github.com/theleagueof/league-mono/releases/tag/2.300">League Mono source</a> · <a href="https://github.com/IBM/plex/tree/bc6a7e4b37634eb79785d59781893db63ee3edcb/packages/plex-mono-variable">Plex Mono source</a> · <a href="https://github.com/IBM/plex/tree/bc6a7e4b37634eb79785d59781893db63ee3edcb/packages/plex-sans-variable">Plex Sans source</a></p></section>
 </article>
-<script>
-(() => {
-  const lab = document.querySelector('.league-type');
-  const width = document.getElementById('league-width');
-  const weight = document.getElementById('league-weight');
-  const text = document.getElementById('league-text');
-  const live = document.getElementById('league-live');
-  width.addEventListener('input', () => {
-    lab.style.setProperty('--league-width', width.value);
-    document.getElementById('league-width-value').value = `${width.value}%`;
-  });
-  weight.addEventListener('input', () => {
-    lab.style.setProperty('--league-weight', weight.value);
-    document.getElementById('league-weight-value').value = weight.value;
-  });
-  text.addEventListener('input', () => { live.textContent = text.value || 'Make it make sense.'; });
-  document.fonts.load('400 48px "League Mono"', 'Make it make sense.').then(fonts => {
-    document.getElementById('league-font-status').textContent = fonts.length ? 'Local League Mono loaded. Width 50–200; weight 100–800.' : 'The font did not load; you are seeing the fallback.';
-  }).catch(() => {
-    document.getElementById('league-font-status').textContent = 'The font did not load; you are seeing the fallback.';
-  });
-})();
-</script>
+<script type="module" src="/type-playground.js"></script>

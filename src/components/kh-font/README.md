@@ -116,3 +116,10 @@ The `@font-face` rules in
 `src/site/_includes/layouts/social-card.njk` carries its own copy of the
 `@font-face` rules pointing at same-origin root-relative URLs, because the social
 card is screenshotted standalone. Update both when filenames change.
+
+## Comparison-only variable faces
+
+`plex-variable/` holds the official Roman Plex Mono and Sans variable builds
+used by `/design-lab/type/`. They load on selection in the playground; ordinary
+site pages keep the current font stack. See the directory README for pinned
+source URLs, checksums and retained OFL licenses.
