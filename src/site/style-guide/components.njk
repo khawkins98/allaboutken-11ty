@@ -370,6 +370,8 @@ Sources: `config/eleventy/markdown.js` and `.kh-demo` in `_kh-content.scss`. To 
 {% markdown %}
 Put source files in `src/site/images/blog/`; entry frontmatter uses `/blog/filename.ext`. The hero image and the social card are separate mechanisms. Provide descriptive alt text, a useful caption and the correct credit. Ken’s photos use `credit: "Own work."` with location context in the caption.
 
+Article layouts put the teaser before the hero image so readers reach the introduction sooner on small screens. Keep the teaser at the reading measure and do not repeat it below the image.
+
 The image transform can produce a `<picture>` wrapper. In grids and flex layouts, target that direct child as well as the image. Use the original colours of photographs, diagrams and project screenshots. A wide image may break the reading measure, but it must not break the viewport.
 
 For portrait-cover comparisons, add `kh-cover-gallery` to a `kh-grid kh-grid__col-3` container of figures. Its 7:10 image frames use `object-fit: contain` to preserve the complete covers and align the captions. It supports generated picture wrappers and stacks through the existing grid breakpoints. The [Sonic reference gallery](/posts/20261115-a-cartridge-cover-for-the-homepage/#what-came-across-from-the-packaging) shows it in use.
@@ -630,7 +632,7 @@ Article metadata separates a yellow date stamp, the word count and a labelled le
 
 Where type is encoded as a mark, preserve shape, colour and the text equivalent together. Avoid inventing new abbreviations in a legend. SVGs may carry their own presentation colours; check the actual generated mark rather than assuming every SVG consumes a CSS token. The current article places its publishing timeline at the end, not in the opening masthead.
 
-Sources: `_kh-dataviz.scss`, `config/eleventy/` filters, `partials/entry-foot.njk` and the individual partials. Add `data-pagefind-ignore` to navigation that repeats other entries' titles. The entry foot renders related posts only when neighbours exist. Its `kh-entry-foot--no-related` modifier lets authorship span the full row and removes the stacked gap when there is no preceding list; otherwise related posts and authorship share two columns on wide screens. The chronological sequence spans the row in both cases.
+Sources: `_kh-dataviz.scss`, `config/eleventy/` filters, `partials/entry-foot.njk` and the individual partials. Add `data-pagefind-ignore` to navigation that repeats other entries' titles. Authorship offers “Follow new posts” through RSS and Mastodon, separately from contact and CV links. The entry foot renders related posts only when neighbours exist. Its `kh-entry-foot--no-related` modifier lets authorship span the full row and removes the stacked gap when there is no preceding list; otherwise related posts and authorship share two columns on wide screens. The chronological sequence spans the row in both cases.
 {% endmarkdown %}
 
 <h2 id="layout">Layout primitives</h2>
