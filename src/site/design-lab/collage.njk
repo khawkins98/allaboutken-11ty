@@ -1,0 +1,73 @@
+---
+title: Fragments into a system — collage study
+layout: layouts/base.njk
+permalink: /design-lab/collage/
+noindex: true
+---
+<style>
+body:has(#kh-css-toggle:checked) .kh-collage-study { max-width:72rem; margin:auto; }
+body:has(#kh-css-toggle:checked) .kh-collage-study > h1 { font-size:clamp(2.5rem,6vw,5rem); max-width:18ch; }
+body:has(#kh-css-toggle:checked) .kh-collage-intro { max-width:65ch; }
+body:has(#kh-css-toggle:checked) .kh-collage-cover { display:grid; grid-template-columns:minmax(0,0.8fr) minmax(0,1.2fr); gap:2rem; align-items:center; margin:3rem 0; padding:3rem 0; border-block:2px solid var(--kh-cart-ink); }
+body:has(#kh-css-toggle:checked) .kh-collage-cover h2 { font-family:Anton,Impact,sans-serif; font-weight:400; font-size:clamp(3rem,6vw,6rem); line-height:1.05; text-transform:uppercase; margin:1rem 0 2rem; }
+body:has(#kh-css-toggle:checked) .kh-collage-cover h2 span { color:var(--kh-cart-blue); display:block; }
+body:has(#kh-css-toggle:checked) .kh-collage-stage { position:relative; isolation:isolate; min-width:0; padding:7rem 1.5rem 5rem; }
+body:has(#kh-css-toggle:checked) .kh-collage-stage::before { z-index:-2; content:''; position:absolute; background:var(--kh-cart-yellow); inset:20% 5% 16% 12%; clip-path:polygon(0 12%,100% 0,85% 100%,10% 85%); }
+body:has(#kh-css-toggle:checked) .kh-collage-stage::after { content:''; position:absolute; z-index:-1; background:var(--kh-cart-ink); width:38%; height:33%; top:0; left:0; clip-path:polygon(0 0,100% 42%,76% 100%,15% 63%); }
+body:has(#kh-css-toggle:checked) .kh-collage-proof { background:var(--kh-cart-ink); color:white; position:relative; margin:0; padding:0.75rem; transform:rotate(-4deg); }
+body:has(#kh-css-toggle:checked) .kh-collage-proof img { display:block; width:100%; height:auto; }
+body:has(#kh-css-toggle:checked) .kh-collage-proof figcaption { color:white; padding:0.75rem 0.25rem 0.25rem; font-size:0.8125rem; }
+body:has(#kh-css-toggle:checked) .kh-collage-shards { position:absolute; inset:0; pointer-events:none; }
+body:has(#kh-css-toggle:checked) .kh-collage-shard { position:absolute; overflow:hidden; width:29%; height:28%; }
+body:has(#kh-css-toggle:checked) .kh-collage-shard img { filter:contrast(1.1); width:100%; height:100%; object-fit:cover; }
+body:has(#kh-css-toggle:checked) .kh-collage-shard picture { display:block; height:100%; }
+body:has(#kh-css-toggle:checked) .kh-collage-shard--a { left:3%; top:1%; clip-path:polygon(0 0,100% 22%,76% 100%); transform:rotate(-12deg); }
+body:has(#kh-css-toggle:checked) .kh-collage-shard--a img { object-position:left top; }
+body:has(#kh-css-toggle:checked) .kh-collage-shard--b { right:8%; top:1%; clip-path:polygon(6% 0,100% 68%,0 100%); transform:rotate(10deg); }
+body:has(#kh-css-toggle:checked) .kh-collage-shard--b img { object-position:right center; }
+body:has(#kh-css-toggle:checked) .kh-collage-shard--c { right:1%; bottom:0; clip-path:polygon(0 0,100% 17%,72% 100%,20% 65%); transform:rotate(13deg); }
+body:has(#kh-css-toggle:checked) .kh-collage-shard--c img { object-position:center bottom; }
+body:has(#kh-css-toggle:checked) .kh-collage-rules { max-width:68ch; margin-bottom:3rem; }
+@media(max-width:53rem) {
+ body:has(#kh-css-toggle:checked) .kh-collage-cover { grid-template-columns:minmax(0,1fr); gap:1rem; padding:2rem 0; }
+ body:has(#kh-css-toggle:checked) .kh-collage-stage { padding:5rem 1rem 4rem; }
+ body:has(#kh-css-toggle:checked) .kh-collage-cover h2 { font-size:clamp(3rem,12vw,5rem); }
+}
+@media print {
+ body:has(#kh-css-toggle:checked) .kh-collage-shards { display:none; }
+ body:has(#kh-css-toggle:checked) .kh-collage-stage::after { content:''; position:absolute; z-index:-1; background:var(--kh-cart-ink); width:38%; height:33%; top:0; left:0; clip-path:polygon(0 0,100% 42%,76% 100%,15% 63%); }
+body:has(#kh-css-toggle:checked) .kh-collage-proof { transform:none; }
+}
+</style>
+<article class="kh-collage-study">
+<p class="kh-breadcrumb"><a href="/style-guide/design/">Design guide</a> / Study</p>
+<h1>Fragments into a system</h1>
+<p class="kh-collage-intro">A secondary image treatment, prompted by the supplied TurboGrafx-16 advertisement: cut-paper fragments, overlapping images and a strong black anchor on an open paper field. This is a study for project covers, not a replacement for the shared theme.</p>
+<section class="kh-collage-cover" aria-labelledby="collage-project-title">
+<div>
+<p class="kh-meta">Art-direction study / UNDRR</p>
+<h2 id="collage-project-title">One shared <span>truth.</span></h2>
+<p>Brand rules and structured content connect working sites and designer Figma files.</p>
+<a href="/work/2026/impact-story-mangrove-figma/">Read the actual project ↗</a>
+</div>
+<div class="kh-collage-stage">
+<div class="kh-collage-shards" aria-hidden="true">
+{% for shard in ['a', 'b', 'c'] %}
+<div class="kh-collage-shard kh-collage-shard--{{ shard }}"><img src="/images/blog/mangrove-figma-library-overview.png" alt="" width="480" loading="lazy" sizes="240px"></div>
+{% endfor %}
+</div>
+<figure class="kh-collage-proof">
+<img src="/images/blog/mangrove-figma-library-overview.png" alt="Overview of the Mangrove component library in Figma, with organised components and design documentation." width="1200" loading="lazy" sizes="(min-width: 846px) 600px, 90vw">
+<figcaption>The complete screenshot stays visible. Cropped fragments around it are decorative duplicates.</figcaption>
+</figure>
+</div>
+</section>
+<div class="kh-content kh-collage-rules">
+<h2>What transfers</h2>
+<p>Use a few unequal cuts and a clear centre of gravity. Preserve wide paper gaps between fragments. Let actual project imagery supply the detail; keep captions, controls and the meaningful screenshot intact.</p>
+<h2>Where it belongs</h2>
+<p>A selected work cover, a redesign article illustration or an occasional social card. Keep ordinary index thumbnails, reading pages, code, navigation and photographs in their current treatments. Avoid a second set of decorative shards around the homepage’s existing disc and project plate.</p>
+<h2>Reference and credit</h2>
+<p>The reference is the TurboGrafx-16 advertisement supplied in this conversation. Its printed NEC and TurboGrafx-16 marks identify the product; the scan does not establish its date, publication, agency or designer, so those credits remain unverified. No advertising artwork, faces, game screenshots or branding from that scan are used here. The composition uses an existing screenshot from Ken’s Mangrove case study and original CSS shapes.</p>
+</div>
+</article>
