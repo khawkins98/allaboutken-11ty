@@ -85,6 +85,9 @@ templateEngineOverride: njk
     {%- endif %}
   </div>
   <div class="kh-post--text kh-content kh-grid__col--span-2">
+    {% if teaser -%}
+    <p class="kh-text-body--1 kh-post-intro">{{ teaser | emdash | safe }}</p>
+    {%- endif %}
     {% if image %}
     <figure class="kh-figure">
       {% if href %}<a href="{{ href }}">{% endif %}
@@ -106,9 +109,6 @@ templateEngineOverride: njk
         I'm getting more active by writing shorter form, more informal updates like this one.
       </div>
       {% endif %}
-      {% if teaser -%}
-      <p class="kh-text-body--1">{{ teaser | emdash | safe }}</p>
-      {%- endif %}
       <!-- kh-entry-content:start -->{{ content | safe }}<!-- kh-entry-content:end -->
     </div>
     {#- Feedback belongs to the reading column: it asks about the sentence the
