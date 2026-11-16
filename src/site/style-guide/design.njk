@@ -39,9 +39,9 @@ Yellow and vermilion are decorative fields, not small text colours on paper. A c
 
 **IBM Plex Sans, 400 and 600**, handles reading, navigation, controls and card titles. Italic uses the real 400 italic face. Long-form reading is 18px at a comfortable line height and a measure of roughly 62 characters; mobile can step down to 17px. Small screens get room to wrap rather than compressed text.
 
-**IBM Plex Mono, 400**, handles dates, references, restrained metadata and code. It has no loaded semibold face. Do not request synthetic heavy mono. Anton also has one declared weight: 400. See the [font reference](/style-guide/components/#font-variations).
+**League Mono** handles dates, references, restrained metadata and code at weight 400 and normal 100% width. Its locally hosted variable build supports weight 100–800 and width 50–200%; stronger or condensed settings belong to deliberate display uses. Anton has one declared weight: 400. See the [font reference](/style-guide/components/#font-variations).
 
-The [custom variable type specimen](/design-lab/type/) tests an original uppercase face with a width axis. It remains an experiment; Anton is the shared display face.
+The [League Mono specimen](/design-lab/type/) lets you compare its width and weight axes. Anton remains the shared display face, and Plex Sans remains the reading and control face.
 
 ## Composition
 
@@ -55,9 +55,9 @@ Profile pages can use a role/experience column beside prose. Utility pages use a
 
 ## Secondary image direction: cut-paper collage
 
-The [supplied TurboGrafx-16 advertisement](/images/blog/turbografx-16-advertisement-reference.png) suggests a complementary image treatment: unequal shards, overlapping crops, a strong black anchor and wide paper gaps. The [collage study](/design-lab/collage/) tests that composition with real project imagery. This is exploratory art direction, not a new default component.
+The [supplied TurboGrafx-16 advertisement](/images/blog/turbografx-16-advertisement-reference.png) suggests a complementary image treatment: unequal shards, overlapping crops, a strong black anchor and wide paper gaps. The [collage study](/design-lab/collage/) tests that composition with real project imagery. The optional [cut-paper figure component](/style-guide/components/#cut-paper-collage) applies it inside the overhaul and Johnny Castaway posts.
 
-Use it selectively for a work cover, an article illustration or a social card. Keep one complete, meaningful image visible; any repeated cropped fragments are decorative and hidden from assistive technology. Keep text, controls and ordinary thumbnails intact. Retain the established palette and type, and avoid adding a competing burst around the homepage’s disc. The reference’s date and design authorship remain unverified; the ad’s artwork and branding are not reused.
+Use `.kh-collage` selectively for an article illustration or a work cover. Keep one complete, meaningful image visible; any repeated cropped fragments are decorative and hidden from assistive technology. Keep text, controls and ordinary thumbnails intact. Retain the established palette and type, and avoid adding a competing burst around the homepage’s disc. The reference’s date and design authorship remain unverified; the ad’s artwork and branding are not reused.
 
 ## Reading
 
@@ -71,7 +71,7 @@ Grouped navigation and facts use white panels with ink frames, small cobalt offs
 
 Use a cobalt button with white text for an action, and ordinary descriptive links for navigation. Buttons and primary navigation have at least a 44px target. Focus must remain visible on both light and dark surfaces. Keep selected search modes visually distinct, and maintain native keyboard behaviour.
 
-Use native links, buttons, radios, ranges and details wherever their behaviour fits. New visual decoration should not require JavaScript. Reduced-motion preferences must be honoured by any existing interactive story or transition. No decorative animation runs across ordinary reading pages.
+Use native links, buttons, radios, ranges and details wherever their behaviour fits. The static visual language works without JavaScript. An optional collage figure may use small pointer-driven parallax; its image and caption remain complete without the enhancement. Reduced-motion preferences must be honoured by any existing interactive story or transition. Decorative motion stays inside an opted-in figure while a fine pointer is over it; ordinary reading content remains still.
 
 ## Atmosphere
 
@@ -83,6 +83,7 @@ The base layout supplies `cartridgeTheme: page`. Entry layouts select `article`,
 
 - `_kh-cartridge.scss`: palette, shell, homepage and article composition.
 - `_kh-cartridge-system.scss`: shared page, index, control, note, photo, story and documentation treatments.
+- `_kh-collage.scss` and `partials/collage.njk`: optional cut-paper figures inside posts.
 - `layouts/base.njk`: theme classes, navigation and display-font preload.
 - [Component reference](/style-guide/components/): live markup and usage details.
 - [Editorial guide](/style-guide/editorial/): voice, structure and interface vocabulary.

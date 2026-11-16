@@ -8,25 +8,44 @@ Keep self-hosted font assets in:
 
 - [`src/components/kh-font/`](../src/components/kh-font/)
 
-The loaded builds are static; each declared weight/style has its own file:
+The current faces are self-hosted:
 
 - `IBMPlexSans-Regular.woff2` — 400 normal
 - `IBMPlexSans-Italic.woff2` — 400 italic
 - `IBMPlexSans-SemiBold.woff2` — 600 normal
-- `IBMPlexMono-Regular.woff2` — 400 normal
+- `league-mono/LeagueMono-VF.woff2` — variable weight 100–800 and width 50–200%
 - `Anton-Latin.woff2` — 400 normal, display headings across the shared site layouts (15 KB; SIL OFL, see the font directory README)
 
-Current controls use Plex Sans 600; code and metadata use Plex Mono 400. Plex Sans requests for 700 resolve to the nearest declared 600 face. Anton and Plex Mono each have one declared weight, 400.
+Current controls use Plex Sans 600; code and metadata use League Mono at weight
+400 and width 100%. Plex Sans requests for 700 resolve to the nearest declared
+600 face. Anton has one declared weight, 400. `font-synthesis-weight: none`
+prevents synthetic bold; League Mono supplies genuine interpolated weights
+within its declared range. Keep the family explicit in shared controls so a
+retained base rule cannot silently select the mono face.
 
-`font-synthesis-weight: none` prevents synthetic bold. A request for Mono 600 therefore still renders the loaded 400 face; it does not provide the semibold used by Sans controls. Add a real face before documenting another supported weight. Keep the declared family explicit in shared controls so a retained base rule cannot silently select Mono.
+## League Mono variable face
 
-## Experimental display face
+The unmodified [League Mono 2.300 release](https://github.com/theleagueof/league-mono/releases/tag/2.300)
+by Tyler Finck supplies code and supporting labels. The local WOFF2 retains all
+546 encoded code points and both variable axes. Inspection of the actual
+`fvar` table gives:
 
-[Ken Cartridge Display](CUSTOM_DISPLAY_FONT.md) is an original width-variable
-prototype, loaded only by the [type specimen](/design-lab/type/). Its `wdth`
-range is 65–115 with a default of 85. Editable source, build instructions,
-coverage and remaining optical work live in that experiment’s document. It does
-not replace Anton or add a request to ordinary pages.
+| Axis | Minimum | File default | Maximum | Site setting |
+| --- | ---: | ---: | ---: | ---: |
+| Weight (`wght`) | 100 | 100 | 800 | 400 |
+| Width (`wdth`) | 50 | 50 | 200 | 100% |
+
+Declare those ranges in `@font-face` and request them with `font-weight` and
+`font-stretch`. The file defaults are thin and condensed, so request the site
+settings explicitly. There is no slant or optical-size axis. The
+[interactive specimen](/design-lab/type/) exposes width and weight controls
+with mixed-case text, code and accents; it is excluded from search and the
+sitemap with `noindex: true`.
+
+Pinned download URLs, original license, checksums and archive members live in
+[`league-mono/README.md`](../src/components/kh-font/league-mono/README.md).
+`IBMPlexMono-Regular.woff2` remains available as an archived former site face;
+it is no longer the globally loaded mono font.
 
 ## How font assets reach production
 
@@ -42,10 +61,10 @@ Font declarations and their consumers have separate owners:
 
 | Concern | Maintained source |
 | --- | --- |
-| Plex faces and optional Recursive Note | `src/components/vf-componenet-rollup/index.scss` |
+| Plex Sans, League Mono and optional Recursive Note | `src/components/vf-componenet-rollup/index.scss` |
 | Anton display face | `src/components/vf-componenet-rollup/_kh-cartridge.scss` |
-| Page preloads | `src/site/_includes/layouts/base.njk`: Sans Regular and Mono Regular, plus Anton on cartridge pages |
-| Standalone social-card faces | `src/site/_includes/layouts/social-card.njk`: Anton and Plex use same-origin asset URLs |
+| Page preloads | `src/site/_includes/layouts/base.njk`: Sans Regular and League Mono variable, plus Anton on cartridge pages |
+| Standalone social-card faces | `src/site/_includes/layouts/social-card.njk`: Anton and Plex Sans use same-origin asset URLs |
 
 All face URLs use `/assets/kh-font/`. When renaming an asset, update its declaration and each consumer in this table. Social cards are standalone documents, so a font loading correctly in the shared layout does not verify a social card.
 
@@ -76,5 +95,5 @@ The [font-directory README](../src/components/kh-font/README.md) records face so
 ## Notes
 
 - The `Recursive*.woff2` variable files are retained but unloaded (see `src/components/kh-font/README.md`). `RecursiveCasual-Note.woff2`, a 14 KB static cut of them, is loaded for the handwritten `.kh-hand` note. `Datatype.woff2` is still used by a blog post.
-- These are the *complete* Plex faces, not the Latin-1 splits: the site uses em dashes, curly quotes, `&#8209;` and `↦`, which the splits do not cover.
+- The retained Plex files are the *complete* faces, not the Latin-1 splits: the site uses em dashes, curly quotes, `&#8209;` and `↦`, which the splits do not cover.
 - Keep fonts self-hosted in `src/components/kh-font/`; do not rely on runtime CDN font URLs for primary rendering.

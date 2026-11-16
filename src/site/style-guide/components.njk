@@ -25,7 +25,7 @@ The [design guide palette](/style-guide/design/#palette) records contrast and co
 <h2 id="typography">Typography</h2>
 <p class="kh-reference-display">Make it make sense.</p>
 {% markdown %}
-Anton 400 is the display voice. IBM Plex Sans 400/600 handles reading and interfaces; Plex Mono 400 handles code and metadata. Copy stays sentence case; display uppercase is CSS. The [design guide](/style-guide/design/#type) describes the hierarchy and [font assets](#font-variations) lists loaded faces.
+Anton 400 is the display voice. IBM Plex Sans 400/600 handles reading and interfaces; League Mono 400 at normal width handles code and metadata. Copy stays sentence case; display uppercase is CSS. The [design guide](/style-guide/design/#type) describes the hierarchy and [font assets](#font-variations) lists loaded faces.
 
 Page-title typography is selected by the page family, not by adding a heavier font weight. Standard titles grow to 4.5rem; utility, note and photo titles are smaller. Long-form reading uses 18px and about 62ch, reducing to 17px on small screens.
 {% endmarkdown %}
@@ -52,7 +52,7 @@ Page-title typography is selected by the page family, not by adding a heavier fo
 <p class="kh-text-body--1">Lead text with an intentional place in the hierarchy.</p>
 <p>Ordinary reading text, with <strong>real semibold</strong>, <em>real italic</em>, <code>inline code</code> and <a href="/blog/">a descriptive link</a>.</p>
 <p class="kh-text-body--3">Supporting text using the retained body utility.</p>
-<p class="kh-meta">24 Oct 2026 / supporting metadata in Plex Mono</p>
+<p class="kh-meta">24 Oct 2026 / supporting metadata in League Mono</p>
 {% endcodeAndDemo %}
 <h3>Display utility</h3>
 {% codeAndDemo 'html' %}
@@ -367,6 +367,36 @@ The live feedback counter is a remote image and must retain `eleventy:ignore`. A
   <figcaption class="kh-figure__caption">Current cover-margin pattern, drawn for this site. The serrated boundaries use the separate <code>cartridge-edge.svg</code> mask.</figcaption>
 </figure>
 {% endcodeAndDemo %}
+
+<h3 id="cut-paper-collage">Cut-paper collage</h3>
+{% markdown %}
+Use `.kh-collage` for an occasional editorial image, with a complete central view and an upright caption. The TG-16 reference supplies unequal cuts, a black anchor and a small colour overlap. Keep data diagrams, comparison figures and ordinary screenshots plain when the decoration would compete with their purpose.
+
+For Nunjucks posts, import the shared macro **before** the Markdown block, then call it at the intended visual pause:
+
+```njk
+{% raw %}{% from "partials/collage.njk" import collageFigure %}
+{{ collageFigure('/images/blog/mangrove-figma-library-overview.png',
+  'Overview of the Mangrove Figma component library.',
+  'The library overview, with details around it.', 'Own work.', 'yellow',
+  '/images/blog/mangrove-figma-card-presets-and-brand-tags.png') }}{% endraw %}
+```
+
+Arguments are the image URL, meaningful alt text, plain-text caption, credit, optional tone (`yellow` or `red`), optional detail-image URL, and optional `parallax` boolean (default `false`). Pass `true` as the seventh argument to load the tiny shared module and enable `.kh-collage--parallax`. Omit the detail URL to crop decorative copies of the main image. Use `/images/blog/…` here: these are in-page URLs, not frontmatter paths. Caption and credit are escaped, so add related links beside the figure rather than passing HTML.
+
+The macro emits `.kh-collage__stage`, three `.kh-collage__fragment` elements and `.kh-collage__main`, followed by the caption. Decorative fragments have empty alt text, `aria-hidden`, `data-pagefind-ignore` and `hidden`; scoped CSS reveals them only in styled viewing. They disappear in CSS-off and print views. The complete image is never clipped; its caption stays upright. The image transform’s `<picture>` wrapper is supported. The optional parallax uses pointer position and CSS transforms, with no image rendering or framework at interaction time. It batches updates with `requestAnimationFrame`, resets on pointer exit, and stays static for touch/coarse pointers and reduced-motion preferences. The caption and hit areas never move.
+
+For hand-authored HTML, the basic figure also works without extra image fragments:
+{% endmarkdown %}
+{% codeAndDemo 'html' %}
+<figure class="kh-collage">
+  <div class="kh-collage__stage">
+    <div class="kh-collage__main"><img src="/images/blog/mangrove-figma-library-overview.png" alt="Overview of the Mangrove Figma component library." width="800" loading="lazy"></div>
+  </div>
+  <figcaption class="kh-collage__caption">Mangrove library overview. <span class="kh-collage__credit">Own work.</span></figcaption>
+</figure>
+{% endcodeAndDemo %}
+<p>Examples: <a href="/posts/20261115-a-cartridge-cover-for-the-homepage/#a-second-reference-fragments-on-paper">design overhaul post</a>, <a href="/posts/20261019-johnny-castaway-browser/">Johnny Castaway</a> and the <a href="/design-lab/collage/">component gallery</a>. Source: <code>partials/collage.njk</code>, <code>_kh-collage.scss</code>.</p>
 
 <h3 id="figure-contexts">Prose figures, page figures and wide media</h3>
 {% markdown %}
@@ -714,12 +744,13 @@ Prefer a component's layout/gap before adding per-child offsets. The existing ut
 | --- | --- | --- |
 | Anton | 400 | Display headings, self-hosted Latin WOFF2, about 15 KB |
 | IBM Plex Sans | 400, 400 italic, 600 | Body and interface |
-| IBM Plex Mono | 400 | Code and metadata |
+| League Mono | 100–800; width 50–200% | Code and metadata use 400 at 100% width |
 | Recursive Note | 400 | Retained optional personal-note treatment |
 
 The shared theme’s loaded faces are static builds. Do not use variable-font axis settings on Plex or Anton. A request for 900 does not create a heavier Anton. Keep archived Recursive and Datatype files: posts document and use them. See [font source notes](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/FONTS.md).
 
-The [Ken Cartridge Display specimen](/design-lab/type/) separately loads an original experimental face with a `wdth` axis from 65 to 115. It does not change the shared theme. Keep its limited uppercase coverage and provisional optical spacing explicit when evaluating it.
+The [League Mono specimen](/design-lab/type/) lets you adjust the official font’s width and weight axes. The shared mono role uses normal 100% width and 400 weight; the specimen is the place to compare more condensed or heavier settings. It is self-hosted with its original OFL license and full upstream glyph coverage. No custom font is shipped.
+
 {% endmarkdown %}
 
 <span id="video-embed" aria-hidden="true"></span>
@@ -843,7 +874,7 @@ Keep reading order and captions useful when colour/backgrounds disappear. Screen
 | `--kh-page-grid-gap` | 1rem; 2rem from 1024px |
 | `--kh-grid-stylized-module--prime` | Legacy 16rem label track, where the layout retains it |
 | `--kh-body-width` | Legacy base-shell setting; the cartridge shell overrides it, so it does not control current full-width fields |
-| `--kh-font-sans`, `--kh-font-mono` | Self-hosted Plex stacks with system fallbacks |
+| `--kh-font-sans`, `--kh-font-mono` | Self-hosted Plex Sans / League Mono stacks with system fallbacks |
 
 <h3 id="theming">Component overrides and ownership</h3>
 

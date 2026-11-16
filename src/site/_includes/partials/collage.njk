@@ -1,0 +1,17 @@
+{# One complete figure with optional decorative detail crops.
+   Paths are in-page image paths (/images/blog/...), not frontmatter paths.
+   Caption and credit are plain text; the macro escapes every authored value. #}
+{% macro collageFigure(src, alt, caption, credit='', tone='yellow', detailSrc='', parallax=false) %}
+<figure class="kh-collage{% if tone == 'red' %} kh-collage--red{% endif %}{% if parallax %} kh-collage--parallax{% endif %}">
+  <div class="kh-collage__stage">
+    <div class="kh-collage__fragments" hidden aria-hidden="true" data-pagefind-ignore>
+      {% for fragment in ['a', 'b', 'c'] %}
+      <div class="kh-collage__fragment kh-collage__fragment--{{ fragment }}"><img src="{{ (detailSrc or src) | escape }}" alt="" width="480" loading="lazy" sizes="240px"></div>
+      {% endfor %}
+    </div>
+    <div class="kh-collage__main"><img src="{{ src | escape }}" alt="{{ alt | escape }}" width="1200" loading="lazy" sizes="(min-width: 846px) 800px, 90vw"></div>
+  </div>
+  <figcaption class="kh-collage__caption">{{ caption | escape }}{% if credit %} <span class="kh-collage__credit">{{ credit | escape }}</span>{% endif %}</figcaption>
+</figure>
+{% if parallax %}<script type="module" src="/collage.js"></script>{% endif %}
+{% endmacro %}

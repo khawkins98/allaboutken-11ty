@@ -41,7 +41,9 @@ const WIDTHS = [320, 360, 390, 414, 600, 2048];
 const PAGES = [
   '/', '/all/', '/blog/', '/digesting/', '/archive/', '/directory/',
   '/cv/', '/stats/', '/search/', '/work/', '/garage/', '/colophon/',
-  '/style-guide/components/',
+  '/style-guide/components/', '/design-lab/type/', '/design-lab/collage/',
+  '/posts/20261115-a-cartridge-cover-for-the-homepage/',
+  '/posts/20261019-johnny-castaway-browser/',
 ];
 const TOLERANCE = 1; // sub-pixel rounding, not a layout fault
 const PORT = 8123;
