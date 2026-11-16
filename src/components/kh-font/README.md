@@ -20,15 +20,7 @@ Plex Sans uses static files; League Mono supplies variable weight and width:
 | `IBMPlexSans-Italic.woff2` | IBM Plex Sans | 400 | italic |
 | `IBMPlexSans-SemiBold.woff2` | IBM Plex Sans | 600 | normal |
 | `league-mono/LeagueMono-VF.woff2` | League Mono | 100–800, width 50–200% | normal |
-| `RecursiveCasual-Note.woff2` | Recursive Note | 400 | normal |
 | `Anton-Latin.woff2` | Anton | 400 | normal |
-
-`RecursiveCasual-Note.woff2` (14 KB) is the handwriting used by `.kh-hand`. It
-is a static instance cut from the archived variable build below with
-`fontTools.varLib.instancer` at `MONO 0, CASL 1, CRSV 1, slnt -9, wght 480`,
-then subset to Basic Latin plus curly quotes, dashes and the ellipsis. A
-character outside that set falls back to Plex Sans, so recut it if the note
-ever needs one.
 
 For Plex Sans, `font-weight: 700` resolves to the loaded SemiBold 600 face.
 No semibold italic face is loaded for Sans. The shared

@@ -74,7 +74,7 @@ Font declarations and their consumers have separate owners:
 
 | Concern | Maintained source |
 | --- | --- |
-| Plex Sans, League Mono and optional Recursive Note | `src/components/vf-componenet-rollup/index.scss` |
+| Plex Sans and League Mono | `src/components/vf-componenet-rollup/index.scss` |
 | Anton and Science Gothic cover faces | `src/components/vf-componenet-rollup/_kh-cartridge.scss` |
 | Page preloads | `src/site/_includes/layouts/base.njk`: Sans Regular and League Mono variable, plus Anton on cartridge pages and the Science Gothic cover instance on home |
 | Standalone social-card faces | `src/site/_includes/layouts/social-card.njk`: Anton and Plex Sans use same-origin asset URLs |
@@ -107,6 +107,6 @@ The [font-directory README](../src/components/kh-font/README.md) records face so
 
 ## Notes
 
-- The `Recursive*.woff2` variable files are retained but unloaded (see `src/components/kh-font/README.md`). `RecursiveCasual-Note.woff2`, a 14 KB static cut of them, is loaded for the handwritten `.kh-hand` note. `Datatype.woff2` is still used by a blog post.
+- The `Recursive*.woff2` variable files are retained but unloaded (see `src/components/kh-font/README.md`). `Datatype.woff2` is still used by a blog post.
 - The retained Plex files are the *complete* faces, not the Latin-1 splits: the site uses em dashes, curly quotes, `&#8209;` and `↦`, which the splits do not cover.
 - Keep fonts self-hosted in `src/components/kh-font/`; do not rely on runtime CDN font URLs for primary rendering.

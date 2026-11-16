@@ -805,24 +805,6 @@
     margin-top: 1.5rem;
   }
 
-  // The hand. One static instance cut from Recursive, the typeface this site
-  // ran on before IBM Plex (see kh-font/README.md). Spend it on things that
-  // are personal and that change; a second use should have to argue for
-  // itself. The slight turn is what stops it reading as an italic.
-  .kh-hand {
-    color: var(--kh-color--apparatus);
-    font-family: 'Recursive Note', var(--kh-font-sans);
-    font-size: 17px;
-    line-height: 1.35;
-    max-width: 16rem;
-    transform: rotate(-1.5deg);
-    transform-origin: left center;
-  }
-
-  .kh-hand__label {
-    display: block;
-  }
-
   @media (max-width: $kh-breakpoint--md-down) {
     .kh-hero__notes {
       display: grid;
