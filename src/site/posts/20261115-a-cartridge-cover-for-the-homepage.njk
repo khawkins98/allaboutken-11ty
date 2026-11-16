@@ -23,9 +23,9 @@ image_meta:
 
 {% markdown %}
 
-In my never-ending quest of middle age, I've been [emulating Mac OS 9](/posts/20260810-newsheep-sheepshaver-mac-os-9-2-apple-silicon-jit/) and [getting Johnny Castaway running in a browser](/posts/20261019-johnny-castaway-browser/). Playing board games with my kids has me revisiting more of that stuff too. I have a rant brewing about the quality of *The Game of Life* these days, but that can wait.
+In the quest of middle age, I've been [emulating Mac OS 9](/posts/20260810-newsheep-sheepshaver-mac-os-9-2-apple-silicon-jit/) and [getting Johnny Castaway running in a browser](/posts/20261019-johnny-castaway-browser/). Playing board games with my kids has me revisiting more of that stuff too. I have a rant brewing about the quality of *The Game of Life* these days, but that can wait.
 
-The '90s seem to be back in style, though much of what I notice is the grungier side: distressed type and rough textures. I keep going back to the chaotic graphics on Japanese Sonic covers. I always thought those were impressive. Enormous lettering, bright colours, squiggles and zigzag edges, all fitted around a character who already takes up most of the cover.
+The '90s seem to be back in style, though much of what I notice is the grungier side: distressed type and rough textures. I keep going back to the chaotic graphics on Japanese Sonic covers and TurboGrafx-16 ads. I always thought these were impressive. On the Sonic covers, enormous lettering, bright colours, squiggles and zigzag edges all fit around a character who already takes up most of the cover.
 
 I wanted some of that personality here. I'd only recently redesigned the site, and the result felt too clinical. The analytical style suited my work, but it was a bit sterile for my own blog.
 
@@ -37,7 +37,7 @@ I wanted some of that personality here. I'd only recently redesigned the site, a
 
 ## From a datasheet to a cover
 
-The previous design had graph paper, numbered sections, small labels and rules around most things. By the time I'd added them all, the homepage looked like a technical document. I wanted to loosen it up.
+A previous design attempt this summer brought a heavy data angle with graph paper, numbered sections, small labels and rules around most things. By the time I'd added them all, the homepage looked like a technical document. It was good, but insufficient. I wanted to loosen it up.
 
 <figure class="kh-bleed-out" id="homepage-design-comparison">
   <div class="kh-compare" style="--kh-compare-split: 50%;">
@@ -64,9 +64,9 @@ The previous design had graph paper, numbered sections, small labels and rules a
 })();
 </script>
 
-I tried removing the frames. That helped, but left an awkward step where the headline started at the page edge and the biography jumped into another column. The alignment made sense in the stylesheet and looked awkward on the page.
+I tried removing the boxy frames. That helped, but the lack of personality was still there.
 
-The cartridge covers gave me something to work with: big type, a few strong colours and room for things to overlap. Having worked in newspaper graphics and print production, I also liked thinking of the homepage as a cover with the writing behind it.
+Cartridge covers gave me something to work with: big type, a few strong colours and room for things to overlap. I could keep the data and give the site more personality. Having worked in newspaper graphics and print production, I also liked thinking of the homepage as a cover with the writing behind it.
 
 ## What came across from the packaging
 
@@ -93,11 +93,9 @@ The squiggles, triangles and serrated edges were fun to work with. Some turned u
 
 Looking into those references also led to [Sottsass’s *Casablanca* and *Carlton* drawings at the V&A](https://www.vam.ac.uk/info/collection-selection-boxes-postmodern-design) and [April Greiman’s work in *Eye on Design*](https://eyeondesign.aiga.org/april-greiman-is-still-ahead-of-the-curve/). I was looking at the angles, oversized lettering and how much the type could do on its own. The Sonic covers were still the main reference.
 
-I used new SVG marks for the site. The character illustrations and SEGA branding appear only in the reference images.
-
 ## A second reference: fragments on paper
 
-I had a TurboGrafx-16 growing up and loved it. [This ad from *Electronic Gaming Monthly*](https://archives.tg-16.com/EGM_1989_07.htm) caught my eye too: a face and game screenshots cut into odd shapes, with bits of red and yellow overlapping them. There is a lot happening, but also a surprising amount of empty paper.
+I also had a TurboGrafx-16 growing up and loved it and its personality. [This ad in *Electronic Gaming Monthly*](https://archives.tg-16.com/EGM_1989_07.htm) caught my eye too: a face and game screenshots cut into odd shapes, with bits of red and yellow overlapping them. There is a lot happening, but also a surprising amount of empty paper.
 
 <figure class="kh-figure">
 <img src="/images/blog/turbografx-16-advertisement-reference.jpg" alt="TurboGrafx-16 print advertisement showing a black-and-white face and colourful game scenes broken into angular fragments across white paper, with narrow text columns and the product logo below." width="1280" loading="lazy" sizes="(min-width: 846px) 800px, 100vw">
@@ -106,7 +104,7 @@ I had a TurboGrafx-16 growing up and loved it. [This ad from *Electronic Gaming 
 
 I wanted to try something similar with images in posts. The [cut-paper collage study](/design-lab/collage/) uses a screenshot of the Mangrove Figma library, with cropped details and a black shape behind it. The whole screenshot is still there to look at.
 
-It's now an optional figure treatment, used here and in the Johnny Castaway article. I haven't applied it to ordinary photographs or thumbnails.
+It's now an optional figure treatment, used here and in the Johnny Castaway article.
 
 {{ collageFigure('/images/blog/mangrove-figma-library-overview.png', 'Overview of the Mangrove Figma component library with organised documentation, component groups and examples.', 'The Mangrove library overview, with details from its card presets in the surrounding fragments.', 'Own work.', 'yellow', '/images/blog/mangrove-figma-card-presets-and-brand-tags.png', true) }}
 
@@ -137,13 +135,15 @@ I kept most of the decoration around the edges of the [article layout](/posts/20
 
 The homepage headline uses [Science Gothic](https://github.com/googlefonts/science-gothic). Its letterforms already lean, so I kept the baseline level and left the rotation to the ribbon and project plate. [Anton](https://github.com/google/fonts/tree/main/ofl/anton) handles the other display headings, Plex Sans the paragraphs and controls, and [League Mono](https://github.com/theleagueof/league-mono) the code and small labels. The fonts are self-hosted; the homepage uses a small, fixed Science Gothic subset rather than the complete variable font.
 
-The circle and diagonals are CSS shapes. SVG assets supply the margin marks and serrated edges. Most of the presentation works without JavaScript; the optional collage parallax is a small enhancement. The CSS toggle still removes the styling and leaves the content in document order.
+The circle and diagonals are CSS shapes. SVG assets supply the margin marks and serrated edges. Most of the presentation works without JavaScript; the optional collage parallax is a small enhancement.
 
 ## A site I recognise
 
 The [design guide](/style-guide/design/) and [component reference](/style-guide/components/) carry these choices through the rest of the site. The [earlier proposals](/design-lab/megadrive/) remain available, and the implementation is in [PR #168](https://github.com/khawkins98/allaboutken-11ty/pull/168).
 
 The analytical bits of the site are still there. I just wanted it to look a bit less corporate and a bit more like somewhere I'd choose to spend time.
+
+CSS is still optional. The [CSS toggle I wrote about last year](/posts/20250906-css-naked-css-only/) removes the styling, leaving native HTML. The text remains readable, links work and the contents list still opens.
 
 ### Artwork and further references
 
