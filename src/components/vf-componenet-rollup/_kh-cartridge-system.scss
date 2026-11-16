@@ -358,6 +358,7 @@
 
     @media (max-width: $kh-breakpoint--md-down) {
       .kh-timeline__label { margin-bottom: 0.5rem; }
+      .kh-content figure:has(> .kh-compare) { margin-inline: 0; }
     }
 
     // Preserve the homepage's reversed-ink list after the generic list rules.
