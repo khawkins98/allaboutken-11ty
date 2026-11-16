@@ -7,7 +7,7 @@ Custom styles and static UI assets live under `src/components/`.
 | Path | Purpose | Build behavior |
 | --- | --- | --- |
 | `src/components/vf-componenet-rollup/` | Main Sass entry and style system | Compiled to `build/css/styles.css` by `yarn sass` / `yarn dev` |
-| `src/components/kh-ambience/` | Decorative ambient background SCSS mixin | Imported into the rollup entrypoint |
+| `src/components/kh-ambience/` | Archived decorative ambient background SCSS | Retained with the lighting tutorial; excluded from the shared CSS bundle |
 | `src/components/kh-font/` | Self-hosted Anton, IBM Plex and archived font files | Copied to `build/assets/kh-font/` via passthrough |
 | `src/components/ken-favicon/assets/` | Favicon/manifest assets | Copied to `build/assets/ken-favicon/assets/` via passthrough |
 

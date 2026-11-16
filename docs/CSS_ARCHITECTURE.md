@@ -22,9 +22,10 @@ The entry point uses `@use` (not `@import`) to pull in partials:
 | `semantic-search` | Search UI styles |
 | `kh-cartridge` | Palette, shared shell, homepage cover and article composition |
 | `kh-cartridge-system` | Indexes, notes, photos, stories, controls and live reference |
-| `../kh-ambience/kh-ambience` | Retained ambient-effect implementation; omitted by the current shell |
 
 ---
+
+The retired ambient-effect source remains in `src/components/kh-ambience/` for the lighting tutorial. It is not imported into the shared bundle.
 
 ## Current visual system
 
