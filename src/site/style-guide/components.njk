@@ -737,14 +737,15 @@ A real embed should earn its loading cost; use a link when readers only need a r
 <span id="design-details" aria-hidden="true"></span>
 <h2 id="feedback-toast">Feedback and confirmation toast</h2>
 {% markdown %}
-The real feedback action and counter are assembled by `partials/feedback.njk`. Keep the action's service URL and `rel="nofollow"`; keep the live remote SVG counter's `eleventy:ignore` so the build never freezes or rasterises it. Use a grammar-neutral label because its count is unknown at build time.
+The real feedback action and counter are assembled by `partials/feedback.njk`. Keep the action's service URL and `rel="nofollow"`; keep the live remote SVG counter's `eleventy:ignore` so the build never freezes or rasterises it. Use a grammar-neutral label because its count is unknown at build time. The action uses the shared `.kh-button` treatment: square cobalt fill, white Plex Sans 600 text, a 44px minimum target, ink hover and visible keyboard focus. `.kh-feedback__action` removes the button’s outer margin; visiting the service must not change its appearance.
 
 <h3 id="how-it-works">Fragment-driven confirmation</h3>
 
 The service redirects back to `#thanks`. That fragment targets the hidden `.kh-feedback-thanks` element; CSS displays the fixed banner, starts the timer and dismisses it after about 15 seconds. The production element carries `aria-live="polite"`. This pattern uses no feedback-submission JavaScript.
 {% endmarkdown %}
 {% codeAndDemo 'html' %}
-<p><a class="kh-button" href="#guide-feedback-toast">Preview local confirmation</a></p>
+<p class="kh-meta">Was this useful?</p>
+<a class="kh-button kh-feedback__action" href="#guide-feedback-toast"><span aria-hidden="true">&#128077;&nbsp;</span> This was useful</a>
 {% endcodeAndDemo %}
 {% markdown %}
 The demo deliberately targets a local example ID and never calls the service. Re-trigger by navigating away from its fragment and back. Check the announcement and focus experience as well as the visual banner. Source: `index.scss` (`.kh-feedback-thanks`, `kh-banner-in`, `kh-banner-out`, `kh-timer`) and the [feedback implementation article](/posts/20260220-feedback-buttons-cgi-pattern/).

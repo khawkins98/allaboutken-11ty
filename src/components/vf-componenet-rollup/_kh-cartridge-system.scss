@@ -84,6 +84,13 @@
       color: white;
     }
 
+    // Feedback uses the shared button without its standalone outer spacing.
+    .kh-feedback__action {
+      margin: 0;
+
+      &:active { transform: scale(0.96); }
+    }
+
     .kh-form__input,
     .kh-form__textarea,
     .kh-form__select {
