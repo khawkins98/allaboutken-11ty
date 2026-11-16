@@ -256,8 +256,9 @@ Consistent casing and formatting for proper nouns and technical terms:
 ### Interface vocabulary
 
 The words in the interface are editorial decisions, not design decisions, and
-they belong to this guide rather than to the components one. The rule is **one
-name per thing**, and the name is the one used here.
+they belong to this guide rather than to the components one. Use **one name
+per thing within each interface context**, with deliberate navigation labels
+recorded here.
 
 This matters because it drifts silently. The same page was at one point called
 *Work* in the footer, *Project notes* on the homepage, *Impact stories* in a
@@ -265,16 +266,23 @@ link, and *My work and impact* in its own heading — four names for one
 destination, none of them wrong on its own. Two first-time readers each
 reported believing they were separate sections.
 
-Two levels, and they are allowed to differ from each other:
+Primary destinations, sections and entry types describe different levels:
 
 | Level | Name | Where it appears |
 | --- | --- | --- |
-| Section | **Blog** | nav, footer, panels, `/blog/` |
-| Section | **Digesting** | nav, footer, panels, `/digesting/` |
-| Section | **Work** | nav, footer, panels, `/work/` |
+| Primary destination | **Writing** | primary nav; `/all/`, the combined writing index |
+| Primary destination | **Work** | primary nav, footer, panels; `/work/`, selected work and the impact record |
+| Primary destination | **About** | primary nav; `/cv/`, the experience and CV page |
+| Primary destination | **Search** | primary nav, footer; `/search/` |
+| Primary destination | **Contact** | primary nav; `/#hello`, the homepage contact section |
+| Section | **Blog** | writing-section links, footer, panels; `/blog/` |
+| Section | **Digesting** | writing-section links, footer, panels; `/digesting/` |
+| Section | **Photos** | writing-section links, footer, panels; `/photos/` |
 | Entry type | **blog post** | prose, chips |
 | Entry type | **digesting entry** | prose, chips |
 | Entry type | **impact story** | prose, chips, the `IS-` reference prefix |
+
+“About” is the navigation label; “Experience & CV” is the explicit recruitment link to the same `/cv/` page. Keep both destinations aligned. “Writing” names the combined index; “Blog” and “Digesting” name its more specific sections.
 
 So an impact story lives in Work. That is one noun for the place and one for
 the thing, which reads correctly in both directions; what is not allowed is a
