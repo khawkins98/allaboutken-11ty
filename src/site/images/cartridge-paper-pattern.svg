@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" fill="none">
+  <!-- A seamless, sparse paper tile using the cover's geometric vocabulary. -->
+  <g opacity=".2" stroke-width="3">
+    <path d="m46 35 7 16-7 16 7 16" stroke="#173ebc"/>
+    <path d="m282 54-8 30m14-27-8 30" stroke="#f6d92f"/>
+    <path d="m541 28 17 5-5 17-17-5Z" stroke="#007c55"/>
+    <path d="M180 171c-15 10 15 17 0 27s15 17 0 27" stroke="#ee3e35"/>
+    <path d="M407 164h5m6 0h5m6 0h5m6 0h5m6 0h5M406 175h50" stroke="#151515" stroke-width="4"/>
+    <circle cx="650" cy="225" r="9" stroke="#173ebc" stroke-width="2"/>
+    <path d="m65 298-14 22 24 2Z" stroke="#007c55" stroke-width="2"/>
+    <path d="m335 327 8-13 8 13 8-13" stroke="#173ebc"/>
+    <path d="m536 328 23-7m-20 14 23-7" stroke="#f6d92f"/>
+  </g>
+</svg>

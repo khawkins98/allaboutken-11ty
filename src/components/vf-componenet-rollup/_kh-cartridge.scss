@@ -118,8 +118,16 @@
       }
     }
 
+    // Sparse, low-contrast marks fill paper areas without decorating the prose.
+    .kh-cartridge-cover,
+    .kh-cartridge-hello,
+    .kh-footer {
+      background-image: url('/images/cartridge-paper-pattern.svg');
+      background-repeat: repeat;
+      background-size: 45rem 25rem;
+    }
+
     .kh-cartridge-cover {
-      background: url('/images/cartridge-pattern.svg') right top / 32.5rem 10rem no-repeat;
       display: flex;
       flex-wrap: wrap;
       gap: 3rem;
@@ -321,7 +329,7 @@
     .kh-cartridge-timeline { margin-inline: auto; max-width: 76rem; padding: 0 2rem 1.5rem; }
 
     .kh-footer {
-      background: transparent;
+      background-color: transparent;
       border: 0;
       color: white;
       margin: 0;
@@ -372,7 +380,7 @@
       --kh-cart-gutter: 1rem;
       .kh-global-header { padding: 1rem; }
       .kh-navigation__list { gap: 0.25rem 0.75rem; }
-      .kh-cartridge-cover { background-image: none; display: grid; gap: 2rem; grid-template-columns: minmax(0, 1fr); padding: 2rem 1rem; }
+      .kh-cartridge-cover { display: grid; gap: 2rem; grid-template-columns: minmax(0, 1fr); padding: 2rem 1rem; }
       .kh-cartridge-cover::before { left: 12%; top: 2rem; width: min(76vw, 27rem); }
       .kh-cartridge-cover::after { bottom: -10rem; clip-path: none; height: 34rem; right: -11rem; transform: rotate(35deg); width: 22rem; }
       .kh-cartridge-title { font-size: clamp(2.5rem, 14vw, 5.7rem); margin-top: 2.5rem; }
