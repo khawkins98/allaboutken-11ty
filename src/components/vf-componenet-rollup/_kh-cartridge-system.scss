@@ -56,22 +56,28 @@
       text-transform: uppercase;
     }
 
-    // A nine-slice frame keeps the pattern outside selectable, scrollable code.
+    // An actual serrated edge and complete margin marks, on the paper ground.
     .kh-content pre,
     .kh-content .kh-demo {
-      background: white;
-      border: 12px solid var(--kh-cart-blue);
-      border-image: url('/images/cartridge-code-frame.svg') 13.3333% round;
-    }
-    .kh-content pre { padding: 1rem; }
-    .kh-content pre code { background: transparent; }
-    .kh-content .kh-demo > pre {
+      background-color: var(--kh-cart-paper);
+      background-image: url('/images/cartridge-code-marks.svg'), url('/images/cartridge-code-edge.svg');
+      background-position: right 1rem top 0.5rem, left top;
+      background-repeat: no-repeat, repeat-y;
+      background-size: 224px 32px, 16px 32px;
       border: 0;
       border-bottom: 2px solid var(--kh-cart-ink);
       border-image: none;
-      padding: 1.25rem;
+      padding: 3.25rem 1.25rem 1.25rem 2rem;
+    }
+    .kh-content pre code { background: transparent; }
+    .kh-content .kh-demo > pre {
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid var(--kh-rule);
+      padding: 0 0 1.25rem;
     }
     .kh-content .kh-demo > pre::before { color: var(--kh-cart-blue); opacity: 1; }
+    .kh-content .kh-demo > .kh-demo__live { background: transparent; padding: 1.25rem 0 0; }
 
     // Native article disclosures share the action palette and panel frame.
     .kh-details,
