@@ -11,7 +11,7 @@ Canonical setup and troubleshooting documentation lives in
 
 ## Current active assets
 
-IBM Plex ships no variable build, so each weight is a separate static file:
+The Plex builds loaded here are static; each declared weight has its own file:
 
 | File | Family | Weight | Style |
 | --- | --- | --- | --- |
@@ -47,6 +47,14 @@ Source: [Google Fonts, Anton](https://github.com/google/fonts/tree/main/ofl/anto
 The WOFF2 is produced with FontTools 4.64.0, subset to U+0020–00FF plus
 U+2013–2014, U+2018–2019, U+201C–201D and U+2026. Symbols outside that set use
 the fallback face. The conditional preload lives in `layouts/base.njk`; site pages inherit `cartridgeTheme` from their layout and preload this asset. The standalone social-card template also declares Anton and Plex using same-origin paths so its preview matches its deployment.
+
+## Experimental local face
+
+`ken-display/` contains the original Ken Cartridge Display width-variable
+prototype and its OFL license. Only `/design-lab/type/` loads it. Its editable
+source and limitations are recorded in
+[`docs/CUSTOM_DISPLAY_FONT.md`](../../../docs/CUSTOM_DISPLAY_FONT.md); the
+current shared display face remains Anton.
 
 ## Retained but not loaded
 

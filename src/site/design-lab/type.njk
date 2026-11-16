@@ -1,0 +1,87 @@
+---
+title: Ken Cartridge Display — variable type study
+layout: layouts/base.njk
+permalink: /design-lab/type/
+noindex: true
+cartridgeTheme: utility
+teaser: An original uppercase variable-font prototype with a width axis.
+---
+<style>
+@font-face {
+  font-family: 'Ken Cartridge Display';
+  src: url('/assets/kh-font/ken-display/KenCartridgeDisplay-Variable.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-stretch: 65% 115%;
+  font-display: swap;
+}
+body:has(#kh-css-toggle:checked) .type-lab { --type-axis: 85; margin: 0 auto; max-width: 72rem; }
+body:has(#kh-css-toggle:checked) .type-lab__kicker { font-family: var(--kh-font-mono); font-size: .75rem; color: #173ebc; }
+body:has(#kh-css-toggle:checked) .type-lab__intro { max-width: 65ch; }
+body:has(#kh-css-toggle:checked) .type-lab__controls { background: white; border: 2px solid #151515; box-shadow: 4px 4px #173ebc; padding: 1.25rem; margin: 2rem 0; }
+body:has(#kh-css-toggle:checked) .type-lab__controls label { display: block; font-weight: 600; margin: 0 0 .5rem; }
+body:has(#kh-css-toggle:checked) .type-lab__controls input[type='range'] { accent-color: #173ebc; display: block; width: 100%; min-height: 44px; margin: 0; }
+body:has(#kh-css-toggle:checked) .type-lab__controls input[type='text'] { box-sizing: border-box; width: 100%; min-height: 48px; font: inherit; border: 2px solid #151515; padding: .5rem; }
+body:has(#kh-css-toggle:checked) .type-lab__range-ends { display: flex; justify-content: space-between; font-family: var(--kh-font-mono); font-size: .75rem; margin-bottom: 1rem; }
+body:has(#kh-css-toggle:checked) .type-lab__controls input:focus-visible { outline: 3px solid #173ebc; outline-offset: 4px; }
+body:has(#kh-css-toggle:checked) .type-lab__sample { font-family: 'Ken Cartridge Display', Impact, sans-serif; font-stretch: 85%; font-variation-settings: 'wdth' var(--type-axis); font-weight: 400; font-synthesis: none; text-transform: uppercase; line-height: 1.15; overflow-wrap: anywhere; }
+body:has(#kh-css-toggle:checked) .type-lab__hero { font-size: clamp(2.25rem, 7vw, 7.5rem); color: #173ebc; padding: 1.5rem 0; margin: 0; }
+body:has(#kh-css-toggle:checked) .type-lab__row { border-top: 2px solid #151515; padding: 1.5rem 0; }
+body:has(#kh-css-toggle:checked) .type-lab__row .type-lab__sample { font-size: clamp(1.75rem, 4.5vw, 4.5rem); margin: .5rem 0; }
+body:has(#kh-css-toggle:checked) .type-lab__proof { font-family: 'Ken Cartridge Display', Impact, sans-serif; font-size: clamp(1.5rem, 3.25vw, 3rem); font-stretch: 85%; font-variation-settings: 'wdth' var(--type-axis); font-weight: 400; line-height: 1.4; overflow-wrap: anywhere; letter-spacing: .03em; margin: 1rem 0; }
+body:has(#kh-css-toggle:checked) .type-lab__notes { border-left: 6px solid #f6d92f; padding-left: 1rem; max-width: 70ch; }
+</style>
+<article class="type-lab">
+  <p class="type-lab__kicker">DESIGN LAB / ORIGINAL TYPE EXPERIMENT / 0.1</p>
+  <h1>Ken Cartridge Display</h1>
+  <p class="type-lab__intro">An original angular uppercase face with a continuous width axis. The narrow and wide drawings share a construction, while stem thickness stays steady and the counters and diagonal angles change. It is a working specimen, not a replacement for the site’s current fonts.</p>
+  <div class="type-lab__controls" data-pagefind-ignore>
+    <label for="type-width">Width: <output id="type-width-value" for="type-width">85</output></label>
+    <input type="range" id="type-width" min="65" max="115" value="85" step="1" aria-describedby="type-width-help">
+    <div class="type-lab__range-ends"><span>65 / condensed</span><span>115 / expanded</span></div>
+    <p id="type-width-help">This controls the font’s real <code>wdth</code> axis. It does not stretch the rendered text with a CSS transform.</p>
+    <label for="type-text">Try a headline</label>
+    <input type="text" id="type-text" value="MAKE IT MAKE SENSE." maxlength="140" aria-describedby="type-coverage">
+    <p id="type-coverage">Uppercase A–Z, numbers and the punctuation shown below. Lowercase input is displayed as uppercase. Accents and other characters use the fallback face.</p>
+    <p id="type-font-status" role="status">Loading the local prototype font…</p>
+  </div>
+  <p class="type-lab__sample type-lab__hero" id="type-live">MAKE IT MAKE SENSE.</p>
+  <section class="type-lab__row" aria-labelledby="type-real-headlines">
+    <h2 id="type-real-headlines">In the site’s voice</h2>
+    <p class="type-lab__sample">Platforms. Content. People.</p>
+    <p class="type-lab__sample">Ideas in circulation</p>
+    <p class="type-lab__sample">One shared truth for Storybook and Figma</p>
+    <p class="type-lab__sample">Let’s make something work.</p>
+  </section>
+  <section class="type-lab__row" aria-labelledby="type-coverage-heading">
+    <h2 id="type-coverage-heading">Coverage and awkward neighbours</h2>
+    <p class="type-lab__proof">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>0123456789<br>. , : ; ! ? ( ) [ ] ' ’ ‘ “ ” " - – — / + = &amp; # * … ↗</p>
+    <p class="type-lab__sample">AV AW AT TA TO VA WA YA LT LY FA</p>
+    <p class="type-lab__sample">B8 G6 O0 P9 Q R S5 M N W</p>
+  </section>
+  <section class="type-lab__row type-lab__notes" aria-labelledby="type-limits">
+    <h2 id="type-limits">What needs another pass</h2>
+    <p>The angular bowls, pointed joins and square terminals are intentional. This first cut needs optical refinement, more kerning pairs, accent coverage and review across browsers before it becomes a site font. The ampersand and small punctuation are especially provisional. There is one drawn weight and no weight, slant or optical-size axis.</p>
+    <p>Body copy, interface controls and code continue to use IBM Plex. Display headings elsewhere still use Anton.</p>
+    <p><a href="/assets/kh-font/ken-display/KenCartridgeDisplay-Variable.woff2">Download variable WOFF2</a> · <a href="/assets/kh-font/ken-display/KenCartridgeDisplay-Variable.ttf">Download variable TTF</a> · <a href="/assets/kh-font/ken-display/OFL.txt">SIL Open Font License</a></p>
+  </section>
+</article>
+<script>
+(() => {
+  const lab = document.querySelector('.type-lab');
+  const width = document.getElementById('type-width');
+  const value = document.getElementById('type-width-value');
+  const text = document.getElementById('type-text');
+  const live = document.getElementById('type-live');
+  width.addEventListener('input', () => {
+    lab.style.setProperty('--type-axis', width.value);
+    value.value = width.value;
+  });
+  text.addEventListener('input', () => { live.textContent = text.value || 'MAKE IT MAKE SENSE.'; });
+  document.fonts.load('400 48px "Ken Cartridge Display"', 'MAKE IT MAKE SENSE.').then(fonts => {
+    document.getElementById('type-font-status').textContent = fonts.length ? 'Local variable font loaded. Width axis: 65–115; default: 85.' : 'The prototype font did not load; you are seeing the fallback.';
+  }).catch(() => {
+    document.getElementById('type-font-status').textContent = 'The prototype font did not load; you are seeing the fallback.';
+  });
+})();
+</script>

@@ -20,6 +20,14 @@ Current controls use Plex Sans 600; code and metadata use Plex Mono 400. Plex Sa
 
 `font-synthesis-weight: none` prevents synthetic bold. A request for Mono 600 therefore still renders the loaded 400 face; it does not provide the semibold used by Sans controls. Add a real face before documenting another supported weight. Keep the declared family explicit in shared controls so a retained base rule cannot silently select Mono.
 
+## Experimental display face
+
+[Ken Cartridge Display](CUSTOM_DISPLAY_FONT.md) is an original width-variable
+prototype, loaded only by the [type specimen](/design-lab/type/). Its `wdth`
+range is 65–115 with a default of 85. Editable source, build instructions,
+coverage and remaining optical work live in that experiment’s document. It does
+not replace Anton or add a request to ordinary pages.
+
 ## How font assets reach production
 
 Eleventy passthrough copies the whole font directory into the build output:
