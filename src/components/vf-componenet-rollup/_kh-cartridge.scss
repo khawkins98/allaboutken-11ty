@@ -445,6 +445,7 @@
 
     .kh-post-meta { color: var(--kh-cart-ink); }
     .kh-cartridge-contents {
+      container-type: inline-size;
       background: white;
       border: 2px solid var(--kh-cart-ink);
       box-shadow: 4px 4px 0 var(--kh-cart-blue);
@@ -486,7 +487,21 @@
       border: 0;
       display: grid;
       gap: 0 1.5rem;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+      grid-template-columns: minmax(0, 1fr);
+    }
+    // Fill each column in source order; row counts come from the entry count.
+    @container (min-width: 40rem) {
+      .kh-post-rail__list {
+        grid-auto-flow: column;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(var(--kh-contents-rows-2), auto);
+      }
+    }
+    @container (min-width: 60rem) {
+      .kh-post-rail__list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(var(--kh-contents-rows-3), auto);
+      }
     }
     .kh-post-rail__item { border: 0; max-width: none; min-width: 0; }
     .kh-post-rail__link,
