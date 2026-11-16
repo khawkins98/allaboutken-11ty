@@ -684,53 +684,14 @@
     }
   }
 
-  // The open sheet
-  // --------------
-  // Entry lists use date / text / figure. The introduction has no date
-  // column: its prose follows the headline's left edge.
+  // Entry-list grid
+  // ---------------
+  // Lists use date / text / figure, with a shared column gap and row rhythm.
   --kh-sheet-date: 7.5rem;
   --kh-sheet-figure: 11rem;
   --kh-sheet-gap: clamp(1.25rem, 3vw, 2rem);
   --kh-sheet-columns: var(--kh-sheet-date) minmax(0, 1fr) var(--kh-sheet-figure);
-  // Vertical rhythm: rows inside a list, and the larger step between the
-  // page's sections. Two values, so the page has two kinds of gap and no more.
   --kh-sheet-row-gap: clamp(2rem, 4.5vw, 2.75rem);
-  --kh-sheet-section-gap: clamp(3rem, 6vw, 4.5rem);
-
-  // Cap the whole composition, so figures stay attached to the prose even
-  // when the viewport is much wider than a comfortable reading measure.
-  .kh-sheet,
-  .kh-datasheet-list {
-    max-width: 64rem;
-  }
-
-  .kh-sheet-section {
-    margin-top: var(--kh-sheet-section-gap);
-  }
-
-  // A plain label in place of the numbered, ruled head. Still an <h2>; it is
-  // only the dress that is quiet.
-  .kh-section-head--quiet {
-    border-bottom: 0;
-    margin-bottom: 1.75rem;
-    padding-bottom: 0;
-
-    > :first-child {
-      color: var(--kh-ink-muted);
-      font-size: 1rem;
-      font-weight: 400;
-      letter-spacing: 0;
-      line-height: 1.5;
-    }
-  }
-
-  @media (min-width: $kh-breakpoint--md) {
-    // Puts a block on the title axis without making it a grid.
-    .kh-sheet-indent,
-    .kh-section-head--quiet {
-      padding-left: calc(var(--kh-sheet-date) + var(--kh-sheet-gap));
-    }
-  }
 
   // Entry list. Not a <table> -- the content is a list of articles, not
   // tabular data -- and no longer dressed as one either: no frame, no header
@@ -740,6 +701,7 @@
   // they become the cells.
   .kh-datasheet-list {
     --kh-list-columns: 1fr;
+    max-width: 64rem;
   }
 
   .kh-datasheet-list .kh-summary {

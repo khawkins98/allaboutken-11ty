@@ -27,7 +27,7 @@ Output:
 
 ### Rollup entrypoint responsibilities
 
-`index.scss` loads the concern modules, then includes the cartridge shell and system after retained component rules. New rules belong in the relevant module inside `body:has(#kh-css-toggle:checked)`, so the CSS toggle continues to work. The ambience mixin remains available for historical material; the current shell omits the effect.
+`index.scss` loads the concern modules, then includes the cartridge shell and system after retained component rules. New rules belong in the relevant module inside `body:has(#kh-css-toggle:checked)`, so the CSS toggle continues to work. The archived ambience stylesheet source remains available for historical material and is excluded from the rollup.
 
 For Sass ownership, nesting limits and compilation checks, use [CSS architecture](CSS_ARCHITECTURE.md). For actual markup, variants and behaviour, use the [component reference](../src/site/style-guide/components.njk).
 

@@ -299,7 +299,6 @@
     .kh-datasheet-list .kh-summary__text { font-size: 1rem; }
     .kh-pager a { align-items: center; display: inline-flex; min-height: 44px; }
     .kh-entry-foot { border-top: 3px solid var(--kh-cart-blue); padding: 2rem; }
-    .kh-near__title { font-family: var(--kh-font-sans); }
 
     .kh-post-meta {
       align-items: center;
@@ -533,6 +532,5 @@
 
   @media print {
     &.kh-cartridge { background: white; color: black; max-width: none; }
-    &.kh-cartridge .kh-cartridge-marks { display: none; }
   }
 }
