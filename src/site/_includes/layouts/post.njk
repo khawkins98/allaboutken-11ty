@@ -82,7 +82,7 @@ templateEngineOverride: njk
     {% include "partials/series-nav.njk" %}
     {%- set tocEntries = content | tocEntries %}
     {%- if tocEntries.length >= 2 %}
-    {% if cartridgeTheme %}<details class="kh-cartridge-contents" data-pagefind-ignore><summary>In this article <span>{{ tocEntries.length }} sections</span></summary>{% endif %}
+    {% if cartridgeTheme %}<details class="kh-cartridge-contents" data-pagefind-ignore><summary><span class="kh-cartridge-contents__title">In this article</span><span class="kh-cartridge-contents__count">{{ tocEntries.length }} sections</span></summary>{% endif %}
     <nav class="kh-post-rail" aria-label="Contents" data-pagefind-ignore>
       <p class="kh-meta kh-meta--accent kh-post-rail__label">Contents</p>
       <ol class="kh-post-rail__list">
