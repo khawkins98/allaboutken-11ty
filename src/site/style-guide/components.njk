@@ -624,6 +624,8 @@ These build-time marks carry text equivalents and links; they must remain meanin
 
 The publishing strip uses a cobalt archive tab with a yellow edge, a cobalt rail and ink dots. Dot area represents monthly entry count; the scale and chronological positions remain unchanged. A yellow ring and a secondary tick identify the current entry’s month, while red slashes mark collapsed empty years. The visible size key, month-link labels and keyboard bypass explain the data without relying on colour. Preserve the explicit track width, recent-end scroll origin and contained horizontal scrolling.
 
+Article metadata separates a yellow date stamp, the word count and a labelled length gauge. The gauge states “Longer than …% of entries” visibly and retains the corpus median in its accessible text and tooltip. Topics wrap as complete links with an attached count and optional detail underneath the parent name. Counts refer to the parent topic, including when a child detail is shown. Preserve real links, 44px targets, wrapping at enlarged text sizes and `data-pagefind-ignore`; these labels belong to the article chrome, not its search excerpt.
+
 <h3 id="entry-type-key">Entry-type key</h3>
 
 Where type is encoded as a mark, preserve shape, colour and the text equivalent together. Avoid inventing new abbreviations in a legend. SVGs may carry their own presentation colours; check the actual generated mark rather than assuming every SVG consumes a CSS token. The current article places its publishing timeline at the end, not in the opening masthead.

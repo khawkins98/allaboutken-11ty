@@ -5,9 +5,9 @@
 
    Encoding: a hairline cell with a centre tick (the median) and an apparatus-colour
    marker at this post's percentile rank. Position is the only encoding, and
-   it's an honest one: percentile along the corpus. The visually-hidden text
-   is the accessible record; the title is the hover detail. With CSS off the
-   spans collapse and only the sentence remains.
+   it's an honest one: percentile along the corpus. A visible label states
+   the percentile; visually-hidden text adds the median. The title carries
+   both details. With CSS off only those text records remain.
 
    Considered and rejected: <meter>. It is the semantically correct element
    for "a value on a defined scale" and carries the meter ARIA role for free,
@@ -16,10 +16,11 @@
    pseudo-elements — and this mark is a hairline cell with a centre tick and
    an off-centre marker, which is not the shape <meter> wants to be. The
    styling fight would have cost more than the free semantics were worth, and
-   the visually-hidden sentence already gives assistive tech the full record. #}
+   the text already gives assistive tech the full record. #}
 {%- if lengthStats -%}
 <span class="kh-length-gauge" title="{{ words | formatNumber }} words — longer than {{ lengthStats.pct }}% of entries (median {{ lengthStats.median | formatNumber }} words)">
   <span class="kh-length-gauge__track" aria-hidden="true"><span class="kh-length-gauge__mid"></span><span class="kh-length-gauge__marker" style="--kh-len: {{ lengthStats.pct }}%;"></span></span>
-  <span class="kh-u-sr-only">(longer than {{ lengthStats.pct }} percent of entries)</span>
+  <span class="kh-length-gauge__label">Longer than {{ lengthStats.pct }}% of entries</span>
+  <span class="kh-u-sr-only">(median {{ lengthStats.median | formatNumber }} words)</span>
 </span>
 {%- endif -%}
