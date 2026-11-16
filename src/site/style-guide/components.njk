@@ -620,6 +620,8 @@ These build-time marks carry text equivalents and links; they must remain meanin
 | Reading-length gauge | `partials/length-gauge.njk`; `lengthFrame` filter | Position among the comparison corpus; keep the word count, percentile and median explanation |
 | Topic tally | `topicTally` filter in the article layout | Number of entries sharing a topic; preserve the visible count |
 
+The publishing strip uses a cobalt archive tab with a yellow edge, a cobalt rail and ink dots. Dot area represents monthly entry count; the scale and chronological positions remain unchanged. A yellow ring and a secondary tick identify the current entry’s month, while red slashes mark collapsed empty years. The visible size key, month-link labels and keyboard bypass explain the data without relying on colour. Preserve the explicit track width, recent-end scroll origin and contained horizontal scrolling.
+
 <h3 id="entry-type-key">Entry-type key</h3>
 
 Where type is encoded as a mark, preserve shape, colour and the text equivalent together. Avoid inventing new abbreviations in a legend. SVGs may carry their own presentation colours; check the actual generated mark rather than assuming every SVG consumes a CSS token. The current article places its publishing timeline at the end, not in the opening masthead.

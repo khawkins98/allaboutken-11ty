@@ -300,7 +300,65 @@
     .kh-pager a { align-items: center; display: inline-flex; min-height: 44px; }
     .kh-entry-foot { border-top: 3px solid var(--kh-cart-blue); padding: 2rem; }
     .kh-near__title { font-family: var(--kh-font-sans); }
-    .kh-timeline-strip { margin-bottom: 2rem; }
+    .kh-timeline-strip {
+      align-items: center;
+      border-top: 3px solid var(--kh-cart-blue);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      padding-top: 1rem;
+    }
+
+    .kh-timeline__label {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin: 0;
+      padding: 0;
+      white-space: normal;
+    }
+
+    .kh-timeline__label a {
+      align-items: center;
+      background: var(--kh-cart-blue);
+      border-bottom: 3px solid var(--kh-cart-yellow);
+      color: white;
+      display: flex;
+      font-family: 'Anton', Impact, sans-serif;
+      font-size: 1.125rem;
+      gap: 0.75rem;
+      letter-spacing: 0;
+      min-height: 44px;
+      padding: 0.5rem 0.75rem;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .kh-timeline__label a:visited { color: white; }
+    .kh-timeline__label a:hover { text-decoration: underline; text-decoration-color: var(--kh-cart-yellow); }
+    .kh-timeline__label a:focus-visible { outline: 3px solid var(--kh-cart-ink); outline-offset: 3px; }
+    .kh-timeline__key { color: var(--kh-ink-muted); font-family: var(--kh-font-sans); font-size: 0.75rem; letter-spacing: 0; }
+    .kh-timeline { margin: 0; }
+    .kh-timeline:focus-within { mask-image: none; }
+    .kh-timeline__track { background-image: linear-gradient(var(--kh-cart-blue), var(--kh-cart-blue)); background-size: 100% 2px; }
+    .kh-timeline__mark,
+    .kh-timeline__break { height: 44px; }
+    .kh-timeline__mark::after { background: var(--kh-cart-ink); }
+    .kh-timeline__mark--empty::after { background: var(--kh-rule); }
+    .kh-timeline__slot--current .kh-timeline__mark::after {
+      background: var(--kh-cart-blue);
+      outline: 3px solid var(--kh-cart-yellow);
+      outline-offset: 2px;
+    }
+    .kh-timeline__slot--current .kh-timeline__mark::before { background: var(--kh-cart-blue); }
+    a.kh-timeline__mark:hover::after,
+    a.kh-timeline__mark:focus-visible::after { background: var(--kh-cart-blue); }
+    a.kh-timeline__mark:focus-visible { outline: 2px solid var(--kh-cart-ink); outline-offset: -2px; }
+    .kh-timeline__break::before,
+    .kh-timeline__break::after { background: var(--kh-cart-red); top: calc(100% - 4px); width: 2px; }
+
+    @media (max-width: $kh-breakpoint--md-down) {
+      .kh-timeline__label { margin-bottom: 0.5rem; }
+    }
 
     // Preserve the homepage's reversed-ink list after the generic list rules.
     .kh-cartridge-writing .kh-summary__link,

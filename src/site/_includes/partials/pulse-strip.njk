@@ -1,6 +1,6 @@
-{# Register timeline — twelve months as marks on a rule.
+{# Publishing timeline — monthly entry counts as marks on a rule.
    Expects:
-     pulse           — array from the pulseMonths filter (12 slots)
+     pulse           — array from the pulseMonths filter
      pulseCurrentKey — 'yyyy-MM' of the current post, if any (marks its month)
 
    Every month since the first post is rendered. The track scrolls
@@ -20,29 +20,21 @@
 
    Type is deliberately NOT encoded here. The strip this replaced stacked
    article/digest/impact ticks, which made it read as a chart to study
-   rather than an ambient stamp. Counts by type stay in the tooltip. #}
+   rather than an ambient stamp. The tooltip states the total entry count. #}
 {%- if pulse and pulse.length -%}
 {#- 35-odd month links sit between the skip link and the page content, so
     the strip needs its own bypass or keyboard users tab through the whole
     archive to reach the first heading. -#}
 <a class="kh-u-sr-only kh-skip-link" href="#kh-after-timeline" data-pagefind-ignore>Skip publishing timeline</a>
-{#- The strip used to carry no visible label, on the argument that the marks
-    should be noticed and worked out rather than announced. Two independent
-    first-time-visitor reviews both stopped at it: one called it "the mystery
-    dot strip", the other said it "looks like decoration". Neither worked out
-    what it was, and its only explanation lives on /archive/ -- which you
-    reach by clicking a dot you have not understood yet.
-
-    One quiet mono line fixes that and doubles as the way out. It sits
-    OUTSIDE the scroller, or it would scroll away with the track.
-
-    The wrapper puts the label beside the track rather than above it. Stacked,
-    the strip cost two bands of vertical space at the very top of every post
-    for what is ambience; beside it, the whole thing is one band. It falls
-    back to stacked below the md breakpoint, where there is no room for
-    both. -#}
+{#- The archive tab and size key sit outside the scroller so they stay visible.
+    The shared theme puts them beside the rail on wide screens and above it
+    on small screens. Mark sizes and the explicit track width keep the same
+    data contract across visual themes. -#}
 <div class="kh-timeline-strip">
-<p class="kh-timeline__label" data-pagefind-ignore><a href="/archive/">Timeline of posts</a></p>
+<p class="kh-timeline__label" data-pagefind-ignore>
+  <a href="/archive/">Timeline of posts <span aria-hidden="true">↗</span></a>
+  <span class="kh-timeline__key">Larger dots, more entries</span>
+</p>
 <nav class="kh-timeline" aria-label="Publishing timeline" data-pagefind-ignore>
   <p class="kh-u-sr-only">Entries published each month since the first post.</p>
   <ol class="kh-timeline__track" style="--kh-track-width: {{ pulse | trackWidth }}px">
@@ -64,7 +56,7 @@
     <li class="kh-timeline__slot{% if m.yearStart %} kh-timeline__slot--year{% endif %}{% if pulseCurrentKey and m.key == pulseCurrentKey %} kh-timeline__slot--current{% endif %}" data-year="{{ m.year }}">
       {%- if m.total and m.url %}
       <a class="kh-timeline__mark" href="/archive/#{{ m.key }}" style="--kh-mark-size: {{ m.size }}px" title="{{ tip }}">
-        <span class="kh-u-sr-only">{{ m.longLabel }}: {{ m.total }}{{ ' entry' if m.total == 1 else ' entries' }}.</span>
+        <span class="kh-u-sr-only">{{ m.longLabel }}: {{ m.total }}{{ ' entry' if m.total == 1 else ' entries' }}.{% if pulseCurrentKey and m.key == pulseCurrentKey %} This entry’s month.{% endif %}</span>
       </a>
       {%- else %}
       <span class="kh-timeline__mark kh-timeline__mark--empty" title="{{ m.longLabel }} — no entries">
