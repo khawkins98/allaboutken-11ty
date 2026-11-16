@@ -372,6 +372,8 @@ Put source files in `src/site/images/blog/`; entry frontmatter uses `/blog/filen
 
 The image transform can produce a `<picture>` wrapper. In grids and flex layouts, target that direct child as well as the image. Use the original colours of photographs, diagrams and project screenshots. A wide image may break the reading measure, but it must not break the viewport.
 
+For portrait-cover comparisons, add `kh-cover-gallery` to a `kh-grid kh-grid__col-3` container of figures. Its 7:10 image frames use `object-fit: contain` to preserve the complete covers and align the captions. It supports generated picture wrappers and stacks through the existing grid breakpoints. The [Sonic reference gallery](/posts/20261115-a-cartridge-cover-for-the-homepage/#what-came-across-from-the-packaging) shows it in use.
+
 The live feedback counter is a remote image and must retain `eleventy:ignore`. A raster still pointing to `/images/` in production, or a `/.11ty/image/` URL in production HTML, is a failed transform; the build checks catch both cases.
 {% endmarkdown %}
 {% codeAndDemo 'html' %}

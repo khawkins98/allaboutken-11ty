@@ -276,6 +276,22 @@
     .kh-label { background: var(--kh-cart-blue); border-radius: 0; color: white; }
     .kh-metric__number { color: var(--kh-cart-blue); font-family: 'Anton', Impact, sans-serif; font-weight: 400; }
     .kh-figure__credit { color: var(--kh-ink-muted); }
+
+    // Equal cover frames preserve the artwork and align the captions, with
+    // or without Eleventy's generated picture wrapper.
+    .kh-cover-gallery > figure > picture,
+    .kh-cover-gallery > figure > img {
+      aspect-ratio: 7 / 10;
+      display: block;
+      width: 100%;
+    }
+
+    .kh-cover-gallery img {
+      height: 100%;
+      object-fit: contain;
+      width: 100%;
+    }
+
     .kh-datasheet-list .kh-summary__link { color: var(--kh-cart-ink); }
     .kh-datasheet-list .kh-summary__link:visited { color: var(--kh-color--visited); }
     .kh-datasheet-list .kh-summary__link:hover { text-decoration: underline; }
