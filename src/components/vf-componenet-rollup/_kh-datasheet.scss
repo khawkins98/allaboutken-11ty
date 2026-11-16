@@ -60,7 +60,7 @@
     vertical-align: 0.22em;
   }
 
-  // Hairline panel. No radius, no shadow — the border is the whole idea.
+  // Base panel structure; the cartridge system supplies the current frame.
   .kh-panel {
     background-color: var(--kh-panel-bg);
     border: 1px solid var(--kh-rule--strong);
@@ -80,10 +80,7 @@
     border-top: 1px solid var(--kh-rule);
   }
 
-  // Muted ink, not accent. These are labels, not marks: the Directory alone
-  // stacks seven of them, and in the apparatus colour they were the loudest text
-  // on a page whose actual content they annotate. It now means one thing --
-  // apparatus -- rather than five.
+  // Base label metrics; the theme supplies colour and case.
   .kh-panel__label {
     color: var(--kh-ink-muted);
     display: block;

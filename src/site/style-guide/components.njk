@@ -17,7 +17,7 @@ permalink: /style-guide/components/
 {% markdown %}
 Use `--kh-cart-paper`, `--kh-cart-ink`, `--kh-cart-blue`, `--kh-cart-yellow`, `--kh-cart-red` and `--kh-cart-green`. The swatches above consume the live tokens. Yellow and red are large decorative accents. Use white/cobalt, white/green, ink/paper and cobalt/paper for text. Muted text uses `--kh-ink-muted` (`#5b5e5a`).
 
-The [design guide palette](/style-guide/design/#palette) records contrast and colour roles. Existing aliases keep earlier components in step: `--kh-ground` maps to paper; `--kh-color--blue` and `--kh-color--apparatus` map to cobalt; rules use neutral ink. `--kh-panel-bg` is a slightly lighter paper, `#fffdf5`. Visited reading links retain `--kh-color--visited` (`#563d82`).
+The [design guide palette](/style-guide/design/#palette) records contrast and colour roles. Existing aliases keep earlier components in step: `--kh-ground` maps to paper; `--kh-color--blue` and `--kh-color--apparatus` map to cobalt; rules use neutral ink. `--kh-panel-bg` is white, `#ffffff`, to lift grouped content from the paper ground. Visited reading links retain `--kh-color--visited` (`#563d82`).
 {% endmarkdown %}
 
 <span id="inline-text-styles" aria-hidden="true"></span>
@@ -96,7 +96,7 @@ The datasheet class names remain stable. Their current presentation uses cobalt 
 {% endcodeAndDemo %}
 {% markdown %}
 - `.kh-section-head` aligns a heading and supporting metadata; it can wrap.
-- `.kh-panel` groups related rows. `.kh-panel__row` and `.kh-panel__cell` supply the structure; `.kh-panel__label` names a value.
+- `.kh-panel` groups related rows on white with a 2px ink frame and a 4px cobalt offset shadow. Internal rules stay light so the values remain easy to scan. `.kh-panel__row` and `.kh-panel__cell` supply the structure; `.kh-panel__label` names a value in uppercase cobalt mono. Direct navigation links use Sans 600. Keep the cells upright and preserve wrapping at narrow widths.
 - Use [tables](#tables) when comparison requires column headings. A panel is not a substitute for table semantics.
 - Navigation, entry footers and bylines are repeated chrome. Put `data-pagefind-ignore` on the wrapper so their content does not leak into Pagefind or embeddings.
 
@@ -834,7 +834,7 @@ Keep reading order and captions useful when colour/backgrounds disappear. Screen
 | `--kh-color--sun--deep`, `--kh-color--yellow--dark` | Cobalt in the cartridge system |
 | `--kh-ink-muted`, `--kh-color--grey` | `#5b5e5a` muted ink |
 | `--kh-color--visited` | `#563d82` for visited reading links |
-| `--kh-panel-bg` | `#fffdf5` |
+| `--kh-panel-bg` | `#ffffff` |
 | `--kh-rule`, `--kh-rule--strong` | Ink at 20% opacity / solid ink |
 | `--kh-cart-gutter` | Fluid outer gutter aligning a 72rem content measure; minimum 2rem, 1rem on mobile |
 | `--kh-cart-cut` | Decorative diagonal depth, clamped from 1.5rem to 3.5rem |

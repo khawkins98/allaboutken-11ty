@@ -4,7 +4,7 @@
 // this layer carries that identity into browsing, reading and tools.
 @mixin kh-cartridge-system() {
   &.kh-cartridge {
-    --kh-panel-bg: #fffdf5;
+    --kh-panel-bg: #ffffff;
     --kh-rule: rgb(21 21 21 / 20%);
     --kh-rule--strong: var(--kh-cart-ink);
     --kh-color--sun: var(--kh-cart-yellow);
@@ -42,13 +42,19 @@
 
     .kh-panel {
       background: var(--kh-panel-bg);
-      border: 0;
-      border-top: 2px solid var(--kh-cart-ink);
+      border: 2px solid var(--kh-cart-ink);
+      box-shadow: 4px 4px 0 var(--kh-cart-blue);
       margin-bottom: 2rem;
     }
 
     .kh-panel__cell { padding: 1.25rem; }
-    .kh-panel__label { color: var(--kh-ink-muted); font-size: 0.75rem; }
+    .kh-panel__cell > a { font-weight: 600; }
+    .kh-panel__label {
+      color: var(--kh-cart-blue);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
 
     .kh-table--spec th,
     .kh-content table:not([class*='kh-']) th {
