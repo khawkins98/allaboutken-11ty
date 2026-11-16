@@ -17,7 +17,7 @@ body:has(#kh-css-toggle:checked) .kh-collage-stage::after { content:''; position
 body:has(#kh-css-toggle:checked) .kh-collage-proof { background:var(--kh-cart-ink); color:white; position:relative; margin:0; padding:0.75rem; transform:rotate(-4deg); }
 body:has(#kh-css-toggle:checked) .kh-collage-proof img { display:block; width:100%; height:auto; }
 body:has(#kh-css-toggle:checked) .kh-collage-proof figcaption { color:white; padding:0.75rem 0.25rem 0.25rem; font-size:0.8125rem; }
-body:has(#kh-css-toggle:checked) .kh-collage-shards { position:absolute; inset:0; pointer-events:none; }
+body:has(#kh-css-toggle:checked) .kh-collage-shards { display:block; position:absolute; inset:0; pointer-events:none; }
 body:has(#kh-css-toggle:checked) .kh-collage-shard { position:absolute; overflow:hidden; width:29%; height:28%; }
 body:has(#kh-css-toggle:checked) .kh-collage-shard img { filter:contrast(1.1); width:100%; height:100%; object-fit:cover; }
 body:has(#kh-css-toggle:checked) .kh-collage-shard picture { display:block; height:100%; }
@@ -51,7 +51,7 @@ body:has(#kh-css-toggle:checked) .kh-collage-proof { transform:none; }
 <a href="/work/2026/impact-story-mangrove-figma/">Read the actual project ↗</a>
 </div>
 <div class="kh-collage-stage">
-<div class="kh-collage-shards" aria-hidden="true">
+<div class="kh-collage-shards" aria-hidden="true" hidden>
 {% for shard in ['a', 'b', 'c'] %}
 <div class="kh-collage-shard kh-collage-shard--{{ shard }}"><img src="/images/blog/mangrove-figma-library-overview.png" alt="" width="480" loading="lazy" sizes="240px"></div>
 {% endfor %}
