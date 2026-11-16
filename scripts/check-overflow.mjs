@@ -43,7 +43,7 @@ const PAGES = [
   '/cv/', '/stats/', '/search/', '/work/', '/garage/', '/colophon/',
   '/style-guide/components/', '/design-lab/type/', '/design-lab/collage/',
   '/posts/20261115-a-cartridge-cover-for-the-homepage/',
-  '/posts/20261019-johnny-castaway-browser/',
+  '/posts/20261019-johnny-castaway-browser/', '/work/2026/impact-story-mangrove-figma/',
 ];
 const TOLERANCE = 1; // sub-pixel rounding, not a layout fault
 const PORT = 8123;
@@ -215,6 +215,21 @@ try {
         failures++;
         console.error(`\n❌ ${page} at ${width}px overflows by ${data.over}px`);
         for (const it of data.items) console.error(`     ${it}`);
+      }
+      if (page === '/work/2026/impact-story-mangrove-figma/') {
+        const { result: diagram } = await send(ws, 'Runtime.evaluate', {
+          expression: `(() => {
+            const code = document.querySelector('.kh-sv-demo__code');
+            if (!code) return ['Diagram code did not initialise'];
+            const style = getComputedStyle(code);
+            return style.backgroundImage !== 'none' || style.padding !== '0px' || style.borderTopWidth !== '0px'
+              ? ['Editorial code decoration or spacing leaked into the diagram'] : [];
+          })()`, returnByValue: true,
+        });
+        if (diagram.value.length) {
+          failures++;
+          console.error(`\n❌ Story diagram at ${width}px: ${diagram.value.join('; ')}`);
+        }
       }
       if (page === '/search/' || page === '/style-guide/components/') {
         const { result: controls } = await send(ws, 'Runtime.evaluate', {

@@ -56,9 +56,12 @@
       text-transform: uppercase;
     }
 
-    // An actual serrated edge and complete margin marks, on the paper ground.
-    .kh-content pre,
-    .kh-content .kh-demo {
+    // Decorate editorial snippets, not component-owned diagram code. A kh-
+    // class opts out; kh-code--decorated is the deliberate opt-in. Demo panes
+    // share their wrapper's treatment, including the plain-wrapper opt-out.
+    .kh-content pre:not([class*='kh-']):not(:where(.kh-demo pre)),
+    .kh-content pre.kh-code--decorated,
+    .kh-content .kh-demo:not(.kh-demo--plain) {
       background-color: var(--kh-cart-paper);
       background-image: url('/images/cartridge-code-marks.svg'), url('/images/cartridge-code-edge.svg');
       background-position: right 1rem top 0.5rem, left top;

@@ -330,6 +330,19 @@ Use fenced Markdown with a language identifier. Code blocks sit on the paper gro
 }
 ```
 
+<h3 id="plain-code">When code should stay plain</h3>
+{% markdown %}
+Use the decorative edge for authored code excerpts. Code that forms part of a diagram, interactive demo, editor or utility owns its own presentation. A `kh-` class on a `pre` excludes it from the decorative treatment automatically; use `.kh-code--decorated` to opt a classed snippet back in deliberately.
+
+For a quiet prose snippet, use `.kh-code--plain`. It keeps the ordinary code formatting and scrolling without the sawtooth edge or margin marks:
+
+```html
+<pre class="kh-code--plain"><code>const width = 100;</code></pre>
+```
+
+For a paired Source/Result wrapper, use `.kh-demo.kh-demo--plain`. The source pane stays plain too. Keep the wrapper’s labels, borders and `data-pagefind-ignore` contract. The Mangrove story’s `.kh-sv-demo__code` is component-owned: its exact spacing is part of the explanatory graphic.
+{% endmarkdown %}
+
 <h3 id="code-live-demo-codeanddemo-shortcode">The paired codeAndDemo shortcode</h3>
 
 Place it **outside** a Markdown block. Its body becomes both escaped source and live HTML:
