@@ -56,6 +56,23 @@
       text-transform: uppercase;
     }
 
+    // A nine-slice frame keeps the pattern outside selectable, scrollable code.
+    .kh-content pre,
+    .kh-content .kh-demo {
+      background: white;
+      border: 12px solid var(--kh-cart-blue);
+      border-image: url('/images/cartridge-code-frame.svg') 13.3333% round;
+    }
+    .kh-content pre { padding: 1rem; }
+    .kh-content pre code { background: transparent; }
+    .kh-content .kh-demo > pre {
+      border: 0;
+      border-bottom: 2px solid var(--kh-cart-ink);
+      border-image: none;
+      padding: 1.25rem;
+    }
+    .kh-content .kh-demo > pre::before { color: var(--kh-cart-blue); opacity: 1; }
+
     // Native article disclosures share the action palette and panel frame.
     .kh-details,
     .kh-content details:not([class]) {

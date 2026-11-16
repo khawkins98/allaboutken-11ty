@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+  <!-- Original nine-slice frame: sawteeth, wavy rails and yellow corners. -->
+  <defs>
+    <pattern id="teeth" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M0 0h16v5l-8 8-8-8Z" fill="#173ebc"/>
+    </pattern>
+  </defs>
+  <path fill="#faf9f5" d="M0 0h120v16H0zM0 104h120v16H0zM0 16h16v88H0zM104 16h16v88h-16z"/>
+  <path fill="url(#teeth)" d="M16 0h88v16H16z"/>
+  <path fill="url(#teeth)" d="M16 0h88v16H16z" transform="rotate(180 60 60)"/>
+  <path d="M8 18c-8 7 8 14 0 21s8 14 0 21 8 14 0 21 8 14 0 21" stroke="#173ebc" stroke-width="2.5"/>
+  <path d="m112 18-5 10 10 10-10 10 10 10-10 10 10 10-10 10 5 14" stroke="#151515" stroke-width="2.5"/>
+  <path fill="#f6d92f" d="M0 0h14v14H0zM106 0h14v14h-14zM0 106h14v14H0zM106 106h14v14h-14z"/>
+  <path fill="#151515" d="M5 5h6v6H5zM109 5h6v6h-6zM5 109h6v6H5zM109 109h6v6h-6z"/>
+</svg>
