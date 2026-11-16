@@ -216,7 +216,7 @@
       transform: rotate(4deg);
 
       a,
-      a:visited { color: inherit; }
+      a:visited { color: inherit; text-decoration-color: currentColor; }
       h2 { font-size: 1.5rem; line-height: 1.15; margin: 0.75rem 0 1rem; }
       h2 a { text-decoration: none; }
       h2 a:hover { text-decoration: underline; }
@@ -249,7 +249,7 @@
 
       .kh-datasheet-list { max-width: none; }
       a,
-      a:visited { color: inherit; }
+      a:visited { color: inherit; text-decoration-color: currentColor; }
       .kh-summary { grid-template-columns: 7rem minmax(0, 1fr) 9rem; padding-bottom: 1.75rem; }
       .kh-summary + .kh-summary { border-top: 1px solid rgb(255 255 255 / 30%); margin-top: 0; padding-top: 1.75rem; }
       .kh-summary__title { color: white; font-size: 1.5rem; line-height: 1.25; }
@@ -356,7 +356,8 @@
       a:visited,
       .kh-meta,
       .kh-footer__label { color: white; }
-      a { text-decoration-color: currentColor; }
+      a,
+      a:visited { text-decoration-color: currentColor; }
       li a { align-items: center; display: inline-flex; min-height: 40px; }
       .kh-footer__controls { border-color: rgb(255 255 255 / 40%); }
     }
