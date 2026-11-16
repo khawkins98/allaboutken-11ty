@@ -1303,7 +1303,7 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-note-box {
-    text-wrap: balance;
+    text-wrap: pretty;
     background: var(--kh-panel-bg);
     border: 1px solid var(--kh-rule--strong);
     border-left: 3px solid var(--kh-color--sun);
@@ -1313,9 +1313,11 @@ body:has(#kh-css-toggle:checked) {
   }
 
   .kh-note-box__label {
-    display: inline-block;
-    font-style: italic;
-    font-weight: 600;
+    display: block;
+    font-style: normal;
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+    width: fit-content;
   }
 
   // .kh-navigation, __list and __item are declared once, in

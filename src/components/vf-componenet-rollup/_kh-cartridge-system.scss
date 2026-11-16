@@ -255,7 +255,24 @@
       .kh-search-widget__form .kh-button { min-width: 44px; padding: 0; width: 44px; }
     }
 
-    .kh-note-box { background: var(--kh-panel-bg); border-left: 4px solid var(--kh-cart-blue); }
+    .kh-note-box {
+      background: var(--kh-panel-bg);
+      border-left: 4px solid var(--kh-cart-blue);
+      padding: 1rem 1.25rem;
+    }
+
+    .kh-note-box__label {
+      background: var(--kh-cart-yellow);
+      color: var(--kh-cart-ink);
+      font-family: var(--kh-font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+      padding: 0.2rem 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .kh-note-box > :last-child { margin-bottom: 0; }
     .kh-label { background: var(--kh-cart-blue); border-radius: 0; color: white; }
     .kh-metric__number { color: var(--kh-cart-blue); font-family: 'Anton', Impact, sans-serif; font-weight: 400; }
     .kh-figure__credit { color: var(--kh-ink-muted); }
