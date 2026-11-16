@@ -81,9 +81,24 @@ I had a TurboGrafx-16 growing up and loved it, so its advertising belongs in thi
 
 That suggested a way to give selected project images some of the same energy. In the [cut-paper collage study](/design-lab/collage/), one complete view of the Mangrove Figma library stays visible, with cropped details and a black angular shape around it. The gaps separate the fragments; the main screenshot still makes sense on its own.
 
-I made this an optional figure treatment for posts, used here and in the Johnny Castaway article. The main image and caption stay intact. Small pointer movements shift the decorative layers at different depths; touch devices and reduced-motion settings get a static composition. It is an occasional illustration treatment, while ordinary photographs and thumbnails retain their complete images.
+I made this an optional figure treatment for posts, used here and in the Johnny Castaway article. The main image and caption stay intact. It is an occasional illustration treatment, while ordinary photographs and thumbnails retain their complete images.
 
 {{ collageFigure('/images/blog/mangrove-figma-library-overview.png', 'Overview of the Mangrove Figma component library with organised documentation, component groups and examples.', 'The Mangrove library overview, with details from its card presets in the surrounding fragments.', 'Own work.', 'yellow', '/images/blog/mangrove-figma-card-presets-and-brand-tags.png', true) }}
+
+### How the collage works
+
+`kh-collage` is ordinary HTML and CSS. A Nunjucks macro puts the complete image in front of three decorative copies, taken from either that image or a separate detail shot. CSS positions those copies around it and cuts their edges with `clip-path`. One static fragment looks like this:
+
+```css
+.kh-collage__fragment--a {
+  clip-path: polygon(0 0, 100% 22%, 76% 100%);
+  transform: rotate(-12deg);
+}
+```
+
+For the optional parallax, a small script maps the pointer position to two CSS custom properties, `--kh-collage-x` and `--kh-collage-y`. Each layer multiplies those values by a different distance in its transform. Updates use `requestAnimationFrame`; there is no canvas or image generation during the interaction.
+
+The caption stays still. Decorative copies have empty alt text and are hidden from assistive technology. Touch devices and reduced-motion settings get the static composition; switching CSS off leaves the main image and caption. The [component reference includes the macro call and implementation details](/style-guide/components/#cut-paper-collage).
 
 ## Give the introduction something to point at
 
