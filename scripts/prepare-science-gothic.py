@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare official Science Gothic for the playground and a small cover instance.
+"""Prepare a small homepage cover instance of official Science Gothic.
 Requires fonttools[woff] (verified with 4.64.0). No new glyphs are drawn.
 """
 from io import BytesIO
@@ -17,9 +17,6 @@ SOURCE = BASE + '/fonts/variable/' + quote('ScienceGothic[CTRS,slnt,wdth,wght].t
 OUT = Path(__file__).resolve().parents[1] / 'src/components/kh-font/science-gothic'
 OUT.mkdir(parents=True, exist_ok=True)
 data = urlopen(SOURCE).read()
-font = TTFont(BytesIO(data), recalcTimestamp=False)
-font.flavor = 'woff2'
-font.save(OUT / 'ScienceGothic-VF.woff2')
 cover = instantiateVariableFont(TTFont(BytesIO(data), recalcTimestamp=False),
     {'wght': 750, 'wdth': 60, 'slnt': -5, 'CTRS': 0}, inplace=False)
 options = subset.Options()

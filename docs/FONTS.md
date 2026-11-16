@@ -38,34 +38,24 @@ by Tyler Finck supplies code and supporting labels. The local WOFF2 retains all
 
 Declare those ranges in `@font-face` and request them with `font-weight` and
 `font-stretch`. The file defaults are thin and condensed, so request the site
-settings explicitly. There is no slant or optical-size axis. The
-[interactive playground](/design-lab/type/) exposes width and weight, tracking,
-word spacing, size, line height and supported OpenType features. Its optional
-Plex Mono/Sans variable comparison faces load only when selected. Plex Sans
-provides pair kerning; the two mono files do not contain kerning pairs. The
-playground is excluded from search and the sitemap with `noindex: true`.
+settings explicitly. There is no slant or optical-size axis.
 
 Pinned download URLs, original license, checksums and archive members live in
 [`league-mono/README.md`](../src/components/kh-font/league-mono/README.md).
 `IBMPlexMono-Regular.woff2` remains available as an archived former site face;
 it is no longer the globally loaded mono font.
 
-The comparison-only Plex files are pinned, unmodified Roman WOFF2 builds. Their
-source URLs, checksums and original licenses live in
-[`plex-variable/README.md`](../src/components/kh-font/plex-variable/README.md).
-They do not change the shared theme’s Plex Sans static faces.
-
 ## Science Gothic cover trial
 
 The homepage cover line uses a fixed, Latin-subset instance of official Science
 Gothic at `wght 750`, `wdth 60`, `slnt -5`, `CTRS 0`. It is about 32 KB and is
 preloaded only on the homepage. Other display headings and social cards remain
-Anton. The full four-axis WOFF2 is available in the playground and loads there
-on selection; the homepage does not download that approximately 909 KB file.
+Anton. Only the cover instance is shipped; the full variable font and the
+experimental type playground are not included.
 
 Source, retained license, actual axis ranges and output checksums live in
 [`science-gothic/README.md`](../src/components/kh-font/science-gothic/README.md).
-Rebuild the official-font conversion and cover instance with
+Rebuild the cover instance with
 `python3 scripts/prepare-science-gothic.py` using `fonttools[woff]`.
 No new outlines are drawn. The inspected custom contrast tag is `CTRS`, even
 though the upstream README currently calls it `CNTR`.

@@ -1,8 +1,8 @@
 # League Mono variable assets
 
 Original, unmodified variable fonts from Tyler Finck / The League of Moveable
-Type, release **2.300**. The site uses the WOFF2 for code and metadata; the TTF
-is retained for inspection and download from the [specimen](/design-lab/type/).
+Type, release **2.300**. The site uses the WOFF2 for code and metadata.
+The unused TTF is not shipped; the original release remains available below.
 Anton remains the display face and Plex Sans the reading/interface face.
 
 ## Provenance
@@ -20,7 +20,6 @@ including the author’s copyright. The full upstream coverage is preserved.
 | Local file | Archive member | Bytes | SHA-256 |
 | --- | --- | ---: | --- |
 | `LeagueMono-VF.woff2` | `LeagueMono-2.300/variable/WOFF2/LeagueMono-VF.woff2` | 56,576 | `0cee06308d282305a2da9c1e677ed44133753bfd2e4684536b6bda2511b512f5` |
-| `LeagueMono-VF.ttf` | `LeagueMono-2.300/variable/TTF/LeagueMono-VF.ttf` | 117,968 | `a6b00613cc05c0071eb8a759a0d7371d72f970506ae4ec56829ec80f2068bb9b` |
 | `OFL.md` | `LeagueMono-2.300/OFL.md` | 4,372 | `93b32079beb34d7f35c0ccdccbf2601f5edf298486e0f76eef9dfad7f431a468` |
 
 ## Inspected font metadata
@@ -34,7 +33,7 @@ FontTools 4.64.0 inspection of the shipped WOFF2 reports version
 | `wdth` | Width | 50 | 50 | 200 |
 
 The file defaults are **thin and condensed**. The site deliberately requests
-weight 400 and width 100%; the specimen starts there too. There is no slant,
+weight 400 and width 100%. There is no slant,
 italic or optical-size axis in this release. A different weight or width is
 real interpolation, rather than synthetic bold or a CSS transform.
 

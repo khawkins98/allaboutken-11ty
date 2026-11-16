@@ -53,9 +53,9 @@ the fallback face. The conditional preload lives in `layouts/base.njk`; site pag
 
 `league-mono/LeagueMono-VF.woff2` is the complete, unmodified upstream variable
 font (56,576 bytes; 546 encoded code points). Its actual axes are weight
-100–800 (file default 100) and width 50–200 (file default 50). The site and
-[specimen](/design-lab/type/) explicitly request weight 400 and width 100%.
-The original license, matching TTF, pinned release URL and SHA-256 hashes are
+100–800 (file default 100) and width 50–200 (file default 50). The site
+explicitly requests weight 400 and width 100%.
+The original license, pinned release URL and SHA-256 hashes are
 recorded in [`league-mono/README.md`](league-mono/README.md). No font build
 dependency is added to the site.
 
@@ -117,16 +117,9 @@ The `@font-face` rules in
 `@font-face` rules pointing at same-origin root-relative URLs, because the social
 card is screenshotted standalone. Update both when filenames change.
 
-## Comparison-only variable faces
-
-`plex-variable/` holds the official Roman Plex Mono and Sans variable builds
-used by `/design-lab/type/`. They load on selection in the playground; ordinary
-site pages keep the current font stack. See the directory README for pinned
-source URLs, checksums and retained OFL licenses.
-
 ## Science Gothic cover trial
 
-`science-gothic/` contains the full four-axis WOFF2 for the playground and a
-small fixed Latin instance used only by the homepage cover line. Other display
+`science-gothic/` contains a small fixed Latin instance used only by the
+homepage cover line. The full variable font is not shipped. Other display
 headings retain Anton. The directory README records official source, retained
 licenses, chosen axes and the preparation command.
