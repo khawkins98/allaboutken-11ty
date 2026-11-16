@@ -1160,6 +1160,10 @@
     margin-top: 2.5rem;
   }
 
+  .kh-entry-foot--no-related .kh-author {
+    margin-top: 0;
+  }
+
   @media (min-width: $kh-breakpoint--lg) {
     .kh-entry-foot .kh-author {
       margin-top: 0;
@@ -1208,11 +1212,10 @@
       grid-column: 1 / -1;
     }
 
-    // Preserve the authorship column when the semantic computation honestly
-    // returns no neighbours; do not manufacture an empty left-hand panel just
-    // to make CSS Grid place the next item in column two.
+    // Without related entries, authorship occupies the available row rather
+    // than reserving an empty navigation column.
     .kh-entry-foot--no-related .kh-author {
-      grid-column: 2;
+      grid-column: 1 / -1;
     }
   }
 

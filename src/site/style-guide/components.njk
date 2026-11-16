@@ -622,7 +622,7 @@ These build-time marks carry text equivalents and links; they must remain meanin
 
 Where type is encoded as a mark, preserve shape, colour and the text equivalent together. Avoid inventing new abbreviations in a legend. SVGs may carry their own presentation colours; check the actual generated mark rather than assuming every SVG consumes a CSS token. The current article places its publishing timeline at the end, not in the opening masthead.
 
-Sources: `_kh-dataviz.scss`, `config/eleventy/` filters, `partials/entry-foot.njk` and the individual partials. Add `data-pagefind-ignore` to navigation that repeats other entries' titles.
+Sources: `_kh-dataviz.scss`, `config/eleventy/` filters, `partials/entry-foot.njk` and the individual partials. Add `data-pagefind-ignore` to navigation that repeats other entries' titles. The entry foot renders related posts only when neighbours exist. Its `kh-entry-foot--no-related` modifier lets authorship span the full row and removes the stacked gap when there is no preceding list; otherwise related posts and authorship share two columns on wide screens. The chronological sequence spans the row in both cases.
 {% endmarkdown %}
 
 <h2 id="layout">Layout primitives</h2>
