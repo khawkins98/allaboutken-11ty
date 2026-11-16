@@ -69,7 +69,7 @@ Use one name per destination, sentence-case labels, and descriptions that add in
 {% markdown %}
 Wrap the shared `partials/post-summary.njk` in `.kh-datasheet-list`. It supplies the date/body/media wrappers and handles notes, digests and photographs. At desktop widths the list aligns dates, text and figures. On mobile the layout stacks or pairs text and image as space permits. Empty media cells do not get placeholders.
 
-The homepage reverses the list inside `.kh-cartridge-writing`. Dates are yellow, text is white and the blue field is structural. Other lists use ink and cobalt on paper. Project cards use `.kh-work-cards` and `.kh-work-card` on the [work page](/work/), with an upright project image and an actual title.
+The homepage reverses the list inside `.kh-cartridge-writing`. Dates are yellow, text is white and the blue field is structural. Other lists use ink and cobalt on paper. Project cards use `.kh-work-cards` and `.kh-work-card` on the [work page](/work/), with an upright project image or a qualified `.kh-work-card__proof` statement and the actual title. The work page’s `selected_work` list supplies an explicit order, leadership angle and summary; the full chronological record remains below. Match each selected URL to a published impact story and keep figures tied to their scope and baseline.
 {% endmarkdown %}
 <div class="kh-reference-demo" data-pagefind-ignore><div class="kh-datasheet-list">{% set post = collections.allContent[0] %}{% include "partials/post-summary.njk" %}</div></div>
 

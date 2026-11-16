@@ -125,6 +125,9 @@
     .kh-work-card > a { color: var(--kh-cart-ink); display: block; height: 100%; text-decoration: none; }
     .kh-work-card > a:hover h3 { text-decoration: underline; }
     .kh-work-card__image { aspect-ratio: 3 / 2; object-fit: cover; width: 100%; }
+    .kh-work-card__proof { aspect-ratio: 3 / 2; background: var(--kh-cart-blue); color: white; display: flex; flex-direction: column; gap: 0.5rem; justify-content: center; overflow-wrap: anywhere; padding: 1.5rem; }
+    .kh-work-card__proof strong { font-family: 'Anton', Impact, sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 400; line-height: 1.1; }
+    .kh-work-card__proof span { font-size: 0.875rem; line-height: 1.5; }
     .kh-work-card__body { padding: 1.25rem; }
     .kh-work-card h3 { font-size: 1.4rem; line-height: 1.2; margin: 0.75rem 0; }
     .kh-work-card__body > p:last-child { font-size: 0.9375rem; line-height: 1.5; margin: 0; }

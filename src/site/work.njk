@@ -1,15 +1,29 @@
 ---
 title: My work and impact
-teaser: 'Evidence-led impact stories: UNDRR platform transformation (50–70% faster), EMBL Visual Framework (50+ sites), editorial efficiency, and governance improvements.'
+teaser: 'Platform leadership in practice: recovering UNDRR’s 15-site ecosystem, improving editorial operations, and building shared standards adopted across 50+ scientific properties.'
 layout: layouts/base.njk
 templateEngineOverride: njk
+selected_work:
+  - url: /work/2025/impact-story-platform-recovery-optimization/
+    angle: Platform transformation
+    proof: 15 sites
+    context: One coordinated recovery
+    summary: 'Coordinated infrastructure, workflows and governance. Median response time fell from 0.88s to 0.45s; quarterly Azure spend fell 20%.'
+  - url: /work/2025/impact-story-editorial-efficiency/
+    angle: Editorial operations
+    proof: 9 → 3 steps
+    context: Publication-cover workflow
+    summary: 'Automated publication-cover preparation from 10 minutes to 1 minute per item, alongside shared publishing patterns across 15 sites.'
+  - url: /work/2019/impact-story-embl-visual-framework/
+    angle: Shared standards
+    summary: 'Built a component library adopted across 50+ scientific properties, giving distributed teams common patterns without requiring a single technology stack.'
 ---
 
 <div>
   <section class="kh-content kh-u-padding__top--800 kh-u-padding__bottom--200">
     <h1 class="kh-text-heading--1">{{title}}</h1>
     <p class="kh-intro__text">
-      Evidence‑backed impact across platforms & performance, design systems, and structured content for AI.
+      I connect strategy, technical delivery and audience needs — leading platform change, improving editorial operations, and building standards that teams choose to use.
     </p>
     <p class="">
       Want the broader picture? Read my <a href="/cv/">CV</a>, get in touch via
@@ -20,13 +34,17 @@ templateEngineOverride: njk
 </div>
 
 <section class="kh-work-selection" aria-labelledby="recent-work" data-pagefind-ignore>
-  <div class="kh-section-head"><h2 id="recent-work">Recent work</h2><a href="#impact-record">The full record ↓</a></div>
+  <div class="kh-section-head"><h2 id="recent-work">Selected work</h2><a href="#impact-record">The full record ↓</a></div>
   <div class="kh-work-cards">
-  {% for project in collections.impactStories | limitItems(3) %}
+  {% for selection in selected_work %}
+  {% for project in collections.impactStories %}
+  {% if project.url == selection.url %}
     <article class="kh-work-card"><a href="{{ project.url }}">
-      {% if project.data.image %}<img class="kh-work-card__image" src="/images{{ project.data.image }}" alt="" width="600" sizes="(min-width: 846px) 30vw, 100vw" loading="lazy">{% endif %}
-      <div class="kh-work-card__body"><p class="kh-cartridge-kicker">{{ project.data.org }} / {{ project.date | dateDisplay('y') }}</p><h3>{{ project.data.title }} ↗</h3><p>{{ project.data.teaser | striptags }}</p></div>
+      {% if selection.proof %}<div class="kh-work-card__proof"><strong>{{ selection.proof }}</strong><span>{{ selection.context }}</span></div>{% elif project.data.image %}<img class="kh-work-card__image" src="/images{{ project.data.image }}" alt="" width="600" sizes="(min-width: 846px) 30vw, 100vw" loading="lazy">{% endif %}
+      <div class="kh-work-card__body"><p class="kh-cartridge-kicker">{{ selection.angle }} / {{ project.data.org }}</p><h3>{{ project.data.title }} ↗</h3><p>{{ selection.summary }}</p></div>
     </a></article>
+  {% endif %}
+  {% endfor %}
   {% endfor %}
   </div>
 </section>
