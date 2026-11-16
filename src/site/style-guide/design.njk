@@ -35,19 +35,21 @@ Yellow and vermilion are decorative fields, not small text colours on paper. A c
 
 ## Type
 
-**Anton, 400** is the display face: cover lines, page titles and section heads. It is self-hosted as a 15 KB Latin WOFF2. The content stays in sentence case; CSS applies uppercase where the display treatment calls for it. Avoid condensed display type for paragraphs, menus, form labels or dense table cells.
+**Science Gothic** is being tried on the homepage cover line: a fixed instance at weight 750, width 60, slant −5 and contrast 0. The homepage loads its small Latin subset; the [playground](/design-lab/type/) exposes the complete variable font and all four axes.
+
+**Anton, 400** handles other page titles and section heads. It is self-hosted as a 15 KB Latin WOFF2. The content stays in sentence case; CSS applies uppercase where the display treatment calls for it. Avoid condensed display type for paragraphs, menus, form labels or dense table cells.
 
 **IBM Plex Sans, 400 and 600**, handles reading, navigation, controls and card titles. Italic uses the real 400 italic face. Long-form reading is 18px at a comfortable line height and a measure of roughly 62 characters; mobile can step down to 17px. Small screens get room to wrap rather than compressed text.
 
 **League Mono** handles dates, references, restrained metadata and code at weight 400 and normal 100% width. Its locally hosted variable build supports weight 100–800 and width 50–200%; stronger or condensed settings belong to deliberate display uses. Anton has one declared weight: 400. See the [font reference](/style-guide/components/#font-variations).
 
-The [variable type playground](/design-lab/type/) compares League Mono and variable Plex builds, with axis, spacing, kerning and supported feature controls. Anton remains the shared display face, and Plex Sans remains the reading and control face.
+The [variable type playground](/design-lab/type/) compares League Mono and variable Plex builds, with axis, spacing, kerning and supported feature controls. The homepage is the Science Gothic trial; Anton handles other display contexts, and Plex Sans remains the reading and control face.
 
 ## Composition
 
 Colour fields, cover geometry, the masthead rule and the footer run to the viewport edges. Their content aligns to a centred 72rem measure with at least 2rem gutters; below the 846px medium breakpoint the gutters become 1rem. Ordinary page layouts remain bounded to 76rem, and article prose keeps its narrower reading measure. Use fluid section padding rather than `100vw` breakout margins, so visible scrollbars do not create horizontal overflow. A heading and its introduction share a left edge. A date rail belongs to a list of dated entries; it must not indent an unrelated biography.
 
-The homepage owns the large yellow disc, angled black/cobalt headline, black ribbon, red diagonal and tilted project plate. The cobalt writing field and green footer use diagonal edges; a yellow wedge marks the footer’s opening. Keep these cuts in decorative background layers, with enough inset for upright text and keyboard focus. Repeat this geometry at section boundaries, rather than tilting reading surfaces or clipping content. The near-white paper ground keeps the primary colours crisp without tinting every page yellow. Small sawtooth cuts belong to the writing-field boundary and black role ribbon. Sparse outline marks occupy the cover’s upper margin; diagonal hatching stays inside the footer’s yellow wedge. These are original SVG/CSS motifs derived from the references, not cropped cover artwork. Keep patterns out of prose, forms and navigation.
+The homepage owns the large yellow disc, angled black/cobalt headline, black ribbon, red diagonal and tilted project plate. The cobalt writing field and green footer use diagonal edges; a yellow wedge marks the footer’s opening. Keep these cuts in decorative background layers, with enough inset for upright text and keyboard focus. Repeat this geometry at section boundaries, rather than tilting reading surfaces or clipping content. The near-white paper ground keeps the primary colours crisp without tinting every page yellow. Small sawtooth cuts belong to the writing-field boundary and black role ribbon. Sparse outline marks occupy the cover’s upper margin on larger screens and disappear on small covers to keep the supporting label clear; diagonal hatching stays inside the footer’s yellow wedge. These are original SVG/CSS motifs derived from the references, not cropped cover artwork. Keep patterns out of prose, forms and navigation.
 
 Indexes use open entry rows and clear section heads. Dates and images remain aligned between rows. An entry without an image gets space, not an invented placeholder. Tables retain rules and explicit column headings when readers are comparing records.
 

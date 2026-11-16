@@ -25,7 +25,7 @@ The [design guide palette](/style-guide/design/#palette) records contrast and co
 <h2 id="typography">Typography</h2>
 <p class="kh-reference-display">Make it make sense.</p>
 {% markdown %}
-Anton 400 is the display voice. IBM Plex Sans 400/600 handles reading and interfaces; League Mono 400 at normal width handles code and metadata. Copy stays sentence case; display uppercase is CSS. The [design guide](/style-guide/design/#type) describes the hierarchy and [font assets](#font-variations) lists loaded faces.
+The homepage cover is trying Science Gothic; Anton 400 remains the display voice elsewhere. IBM Plex Sans 400/600 handles reading and interfaces; League Mono 400 at normal width handles code and metadata. Copy stays sentence case; display uppercase is CSS. The [design guide](/style-guide/design/#type) describes the hierarchy and [font assets](#font-variations) lists loaded faces.
 
 Page-title typography is selected by the page family, not by adding a heavier font weight. Standard titles grow to 4.5rem; utility, note and photo titles are smaller. Long-form reading uses 18px and about 62ch, reducing to 17px on small screens.
 {% endmarkdown %}
@@ -742,14 +742,15 @@ Prefer a component's layout/gap before adding per-child offsets. The existing ut
 {% markdown %}
 | Face | Weight | Role |
 | --- | --- | --- |
-| Anton | 400 | Display headings, self-hosted Latin WOFF2, about 15 KB |
+| Science Gothic Cover | 750 | Homepage trial; width 60, slant −5, contrast 0; fixed Latin instance, about 32 KB |
+| Anton | 400 | Other display headings, self-hosted Latin WOFF2, about 15 KB |
 | IBM Plex Sans | 400, 400 italic, 600 | Body and interface |
 | League Mono | 100–800; width 50–200% | Code and metadata use 400 at 100% width |
 | Recursive Note | 400 | Retained optional personal-note treatment |
 
 The shared theme’s loaded faces are static builds. Do not use variable-font axis settings on Plex or Anton. A request for 900 does not create a heavier Anton. Keep archived Recursive and Datatype files: posts document and use them. See [font source notes](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/FONTS.md).
 
-The [variable type playground](/design-lab/type/) compares League Mono and the official Plex Mono/Sans variable builds. It exposes available axes, tracking, word spacing, size, line height, pair kerning where present and each font’s supported OpenType features. The generated CSS can be copied, and Reset restores the starting settings. The shared mono role uses normal 100% width and 400 weight; the specimen is the place to compare more condensed or heavier settings. It is self-hosted with its original OFL license and full upstream glyph coverage. No custom font is shipped.
+The [variable type playground](/design-lab/type/) compares Science Gothic, League Mono and the official Plex Mono/Sans variable builds. It exposes available axes (including Science Gothic’s slant and `CTRS` contrast), tracking, word spacing, size, line height, pair kerning where present and each font’s supported OpenType features. The generated CSS can be copied, and Reset restores the starting settings. The shared mono role uses normal 100% width and 400 weight; the specimen is the place to compare more condensed or heavier settings. It is self-hosted with its original OFL license and full upstream glyph coverage. No custom font is shipped.
 
 {% endmarkdown %}
 

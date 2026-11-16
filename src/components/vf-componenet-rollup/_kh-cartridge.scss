@@ -10,6 +10,14 @@
     font-display: swap;
   }
 
+  @font-face {
+    font-family: 'Science Gothic Cover';
+    src: url('/assets/kh-font/science-gothic/ScienceGothic-Cover.woff2') format('woff2');
+    font-weight: 750;
+    font-style: normal;
+    font-display: swap;
+  }
+
   &.kh-cartridge {
     --kh-cart-paper: #faf9f5;
     --kh-cart-ink: #151515;
@@ -150,9 +158,9 @@
     .kh-cartridge-marks { display: none; }
 
     .kh-cartridge-title {
-      font-family: 'Anton', Impact, sans-serif;
-      font-size: clamp(3.3rem, 8.2vw, 6.8rem);
-      font-weight: 400;
+      font-family: 'Science Gothic Cover', 'Anton', Impact, sans-serif;
+      font-size: clamp(2.7rem, 7vw, 5.7rem);
+      font-weight: 750;
       letter-spacing: -0.025em;
       line-height: 1.1;
       margin: 2rem 0 1.75rem;
@@ -366,10 +374,10 @@
       --kh-cart-gutter: 1rem;
       .kh-global-header { padding: 1rem; }
       .kh-navigation__list { gap: 0.25rem 0.75rem; }
-      .kh-cartridge-cover { display: grid; gap: 2rem; grid-template-columns: minmax(0, 1fr); padding: 2rem 1rem; }
+      .kh-cartridge-cover { background-image: none; display: grid; gap: 2rem; grid-template-columns: minmax(0, 1fr); padding: 2rem 1rem; }
       .kh-cartridge-cover::before { left: 12%; top: 2rem; width: min(76vw, 27rem); }
       .kh-cartridge-cover::after { bottom: -10rem; clip-path: none; height: 34rem; right: -11rem; transform: rotate(35deg); width: 22rem; }
-      .kh-cartridge-title { font-size: clamp(3rem, 17vw, 6.4rem); margin-top: 2.5rem; }
+      .kh-cartridge-title { font-size: clamp(2.5rem, 14vw, 5.7rem); margin-top: 2.5rem; }
       .kh-cartridge-ribbon { font-size: 0.6875rem; padding: 0.6rem; }
       .kh-cartridge-feature { justify-self: start; margin: 0 0 0.5rem 0.5rem; max-width: 19rem; width: calc(100% - 1.5rem); }
       .kh-cartridge-writing { padding: 4.5rem 1rem; }

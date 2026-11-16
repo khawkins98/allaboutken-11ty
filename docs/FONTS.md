@@ -14,7 +14,8 @@ The current faces are self-hosted:
 - `IBMPlexSans-Italic.woff2` — 400 italic
 - `IBMPlexSans-SemiBold.woff2` — 600 normal
 - `league-mono/LeagueMono-VF.woff2` — variable weight 100–800 and width 50–200%
-- `Anton-Latin.woff2` — 400 normal, display headings across the shared site layouts (15 KB; SIL OFL, see the font directory README)
+- `science-gothic/ScienceGothic-Cover.woff2` — fixed 750-weight instance for the homepage cover trial
+- `Anton-Latin.woff2` — 400 normal, other display headings across the shared site layouts (15 KB; SIL OFL, see the font directory README)
 
 Current controls use Plex Sans 600; code and metadata use League Mono at weight
 400 and width 100%. Plex Sans requests for 700 resolve to the nearest declared
@@ -54,6 +55,21 @@ source URLs, checksums and original licenses live in
 [`plex-variable/README.md`](../src/components/kh-font/plex-variable/README.md).
 They do not change the shared theme’s Plex Sans static faces.
 
+## Science Gothic cover trial
+
+The homepage cover line uses a fixed, Latin-subset instance of official Science
+Gothic at `wght 750`, `wdth 60`, `slnt -5`, `CTRS 0`. It is about 32 KB and is
+preloaded only on the homepage. Other display headings and social cards remain
+Anton. The full four-axis WOFF2 is available in the playground and loads there
+on selection; the homepage does not download that approximately 909 KB file.
+
+Source, retained license, actual axis ranges and output checksums live in
+[`science-gothic/README.md`](../src/components/kh-font/science-gothic/README.md).
+Rebuild the official-font conversion and cover instance with
+`python3 scripts/prepare-science-gothic.py` using `fonttools[woff]`.
+No new outlines are drawn. The inspected custom contrast tag is `CTRS`, even
+though the upstream README currently calls it `CNTR`.
+
 ## How font assets reach production
 
 Eleventy passthrough copies the whole font directory into the build output:
@@ -69,8 +85,8 @@ Font declarations and their consumers have separate owners:
 | Concern | Maintained source |
 | --- | --- |
 | Plex Sans, League Mono and optional Recursive Note | `src/components/vf-componenet-rollup/index.scss` |
-| Anton display face | `src/components/vf-componenet-rollup/_kh-cartridge.scss` |
-| Page preloads | `src/site/_includes/layouts/base.njk`: Sans Regular and League Mono variable, plus Anton on cartridge pages |
+| Anton and Science Gothic cover faces | `src/components/vf-componenet-rollup/_kh-cartridge.scss` |
+| Page preloads | `src/site/_includes/layouts/base.njk`: Sans Regular and League Mono variable, plus Anton on cartridge pages and the Science Gothic cover instance on home |
 | Standalone social-card faces | `src/site/_includes/layouts/social-card.njk`: Anton and Plex Sans use same-origin asset URLs |
 
 All face URLs use `/assets/kh-font/`. When renaming an asset, update its declaration and each consumer in this table. Social cards are standalone documents, so a font loading correctly in the shared layout does not verify a social card.

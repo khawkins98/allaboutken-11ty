@@ -123,3 +123,10 @@ card is screenshotted standalone. Update both when filenames change.
 used by `/design-lab/type/`. They load on selection in the playground; ordinary
 site pages keep the current font stack. See the directory README for pinned
 source URLs, checksums and retained OFL licenses.
+
+## Science Gothic cover trial
+
+`science-gothic/` contains the full four-axis WOFF2 for the playground and a
+small fixed Latin instance used only by the homepage cover line. Other display
+headings retain Anton. The directory README records official source, retained
+licenses, chosen axes and the preparation command.
