@@ -37,7 +37,7 @@ if (!WebSocket) {
   process.exit(0);
 }
 
-const WIDTHS = [320, 360, 390, 414];
+const WIDTHS = [320, 360, 390, 414, 2048];
 const PAGES = [
   '/', '/all/', '/blog/', '/digesting/', '/archive/', '/directory/',
   '/cv/', '/stats/', '/search/', '/work/', '/garage/', '/colophon/',
@@ -179,6 +179,16 @@ try {
         for (const it of data.items) console.error(`     ${it}`);
       }
       if (page === '/') {
+        const { result: bleed } = await send(ws, 'Runtime.evaluate', {
+          expression: `['.kh-cartridge-cover', '.kh-cartridge-writing', '.kh-footer'].filter((selector) => {
+            const bounds = document.querySelector(selector).getBoundingClientRect();
+            return Math.abs(bounds.left) > 1 || Math.abs(bounds.right - document.documentElement.clientWidth) > 1;
+          })`, returnByValue: true,
+        });
+        if (bleed.value.length) {
+          failures++;
+          console.error(`\n❌ Homepage at ${width}px has inset full-width fields: ${bleed.value.join(', ')}`);
+        }
         const { result: resized } = await send(ws, 'Runtime.evaluate', {
           expression: RESIZED_COVER_PROBE, returnByValue: true, awaitPromise: true,
         });

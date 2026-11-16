@@ -18,6 +18,7 @@
     --kh-cart-red: #ee3e35;
     --kh-cart-green: #007c55;
     --kh-cart-cut: clamp(1.5rem, 4vw, 3.5rem);
+    --kh-cart-gutter: max(2rem, calc((100% - 72rem) / 2));
     --kh-color--apparatus: var(--kh-cart-blue);
     --kh-color--blue: var(--kh-cart-blue);
     --kh-color--blue--dark: #0e2c84;
@@ -26,7 +27,7 @@
 
     background: var(--kh-cart-paper);
     color: var(--kh-cart-ink);
-    max-width: 76rem;
+    max-width: none;
     padding: 0;
     -webkit-font-smoothing: antialiased;
 
@@ -38,6 +39,9 @@
 
     main,
     main:has(.kh-timeline-strip) { padding-top: 0; }
+    main { margin-inline: auto; max-width: 76rem; width: 100%; }
+
+    &.kh-cartridge--home main { max-width: none; }
 
     :is(a, button, input, select, textarea, summary):focus-visible {
       // Two tones remain distinguishable on both light and coloured surfaces.
@@ -51,7 +55,7 @@
       border-bottom: 3px solid var(--kh-cart-ink);
       gap: 0.5rem 2rem;
       justify-content: space-between;
-      padding: 1rem 2rem;
+      padding: 1rem var(--kh-cart-gutter);
     }
 
     .kh-global-header a.kh-logo {
@@ -113,7 +117,7 @@
       gap: 3rem;
       isolation: isolate;
       overflow: hidden;
-      padding: 3rem 2rem;
+      padding: 3rem var(--kh-cart-gutter);
       position: relative;
 
       &::before {
@@ -121,7 +125,7 @@
         background: var(--kh-cart-yellow);
         border-radius: 50%;
         content: '';
-        left: 14%;
+        left: calc(var(--kh-cart-gutter) + 8rem);
         position: absolute;
         top: 1rem;
         width: clamp(19rem, 34vw, 27rem);
@@ -130,13 +134,13 @@
 
       &::after {
         background: var(--kh-cart-red);
-        bottom: -10rem;
+        bottom: 0;
+        clip-path: polygon(45% 0, 100% 35%, 100% 100%, 0 100%);
         content: '';
         height: 33rem;
         position: absolute;
-        right: -7rem;
-        transform: rotate(35deg);
-        width: 22rem;
+        right: 0;
+        width: calc(22rem + var(--kh-cart-gutter));
         z-index: -2;
       }
     }
@@ -221,7 +225,7 @@
       color: white;
       container: cartridge-writing / inline-size;
       isolation: isolate;
-      padding: 5.5rem 2rem;
+      padding: 5.5rem var(--kh-cart-gutter);
       position: relative;
 
       &::before {
@@ -285,14 +289,14 @@
       flex-wrap: wrap;
       gap: 1rem 3rem;
       justify-content: space-between;
-      padding: 1.25rem 2rem;
+      padding: 1.25rem var(--kh-cart-gutter);
 
       p { font-size: 0.875rem; margin: 0; }
       span { display: block; margin-bottom: 0.35rem; }
     }
 
     .kh-cartridge-hello {
-      padding: 3rem 2rem;
+      padding: 3rem var(--kh-cart-gutter);
 
       h2 {
         font-family: 'Anton', Impact, sans-serif;
@@ -305,7 +309,7 @@
       }
     }
 
-    .kh-cartridge-timeline { padding: 0 2rem 1.5rem; }
+    .kh-cartridge-timeline { margin-inline: auto; max-width: 76rem; padding: 0 2rem 1.5rem; }
 
     .kh-footer {
       background: transparent;
@@ -314,7 +318,7 @@
       margin: 0;
       max-width: none;
       isolation: isolate;
-      padding: 5.5rem 2rem 2rem;
+      padding: 5.5rem var(--kh-cart-gutter) 2rem;
       position: relative;
       width: 100%;
 
@@ -355,11 +359,12 @@
     }
 
     @media (max-width: $kh-breakpoint--md-down) {
+      --kh-cart-gutter: 1rem;
       .kh-global-header { padding: 1rem; }
       .kh-navigation__list { gap: 0.25rem 0.75rem; }
       .kh-cartridge-cover { display: grid; gap: 2rem; grid-template-columns: minmax(0, 1fr); padding: 2rem 1rem; }
       .kh-cartridge-cover::before { left: 12%; top: 2rem; width: min(76vw, 27rem); }
-      .kh-cartridge-cover::after { bottom: -10rem; height: 34rem; right: -11rem; }
+      .kh-cartridge-cover::after { bottom: -10rem; clip-path: none; height: 34rem; right: -11rem; transform: rotate(35deg); width: 22rem; }
       .kh-cartridge-title { font-size: clamp(3rem, 17vw, 6.4rem); margin-top: 2.5rem; }
       .kh-cartridge-ribbon { font-size: 0.6875rem; padding: 0.6rem; }
       .kh-cartridge-feature { justify-self: start; margin: 0 0 0.5rem 0.5rem; max-width: 19rem; width: calc(100% - 1.5rem); }
