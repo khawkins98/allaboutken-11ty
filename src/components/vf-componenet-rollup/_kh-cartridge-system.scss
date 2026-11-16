@@ -69,6 +69,7 @@
       border-radius: 0;
       color: white;
       display: inline-flex;
+      font-family: var(--kh-font-sans);
       font-weight: 600;
       justify-content: center;
       min-height: 44px;
@@ -100,6 +101,12 @@
     .kh-search-mode__option { color: var(--kh-cart-ink); font-family: var(--kh-font-sans); font-size: 0.875rem; min-height: 44px; }
     .kh-search-mode__option:has(input:checked) { background: var(--kh-cart-blue); color: white; }
     .kh-search-mode__option:has(input:focus-visible) { outline: 3px solid var(--kh-cart-ink); outline-offset: 2px; }
+
+    @media (max-width: $kh-breakpoint--sm) {
+      // Reserve the inset submit target, its gap, and the native clear control.
+      .kh-search-widget__form .kh-form__input { padding-right: calc(44px + 1.75rem); }
+      .kh-search-widget__form .kh-button { min-width: 44px; padding: 0; width: 44px; }
+    }
 
     .kh-note-box { background: var(--kh-panel-bg); border-left: 4px solid var(--kh-cart-blue); }
     .kh-label { background: var(--kh-cart-blue); border-radius: 0; color: white; }

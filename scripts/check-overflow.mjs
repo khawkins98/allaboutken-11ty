@@ -37,10 +37,11 @@ if (!WebSocket) {
   process.exit(0);
 }
 
-const WIDTHS = [320, 360, 390, 414, 2048];
+const WIDTHS = [320, 360, 390, 414, 600, 2048];
 const PAGES = [
   '/', '/all/', '/blog/', '/digesting/', '/archive/', '/directory/',
   '/cv/', '/stats/', '/search/', '/work/', '/garage/', '/colophon/',
+  '/style-guide/components/',
 ];
 const TOLERANCE = 1; // sub-pixel rounding, not a layout fault
 const PORT = 8123;
@@ -149,6 +150,41 @@ const RESIZED_COVER_PROBE = `(async () => {
   }
 })()`;
 
+// Document overflow cannot detect query text concealed by an inset button.
+// Expose both production panels without invoking a model or submitting a query.
+const SEARCH_CONTROLS_PROBE = `(async () => {
+  await document.fonts.ready;
+  const panels = [...document.querySelectorAll('#keyword-section[hidden], #semantic-section[hidden]')];
+  const inputs = [...document.querySelectorAll('.kh-search-widget__form .kh-form__input')];
+  const saved = inputs.map((input) => input.value);
+  const errors = [];
+  panels.forEach((panel) => panel.removeAttribute('hidden'));
+  try {
+    for (const input of inputs) {
+      input.value = 'how to improve search across digital platforms';
+      input.focus();
+      input.setSelectionRange(input.value.length, input.value.length);
+      const button = input.form.querySelector('.kh-button');
+      const field = input.getBoundingClientRect();
+      const target = button.getBoundingClientRect();
+      const fieldStyle = getComputedStyle(input);
+      const buttonStyle = getComputedStyle(button);
+      const textRight = field.right - parseFloat(fieldStyle.borderRightWidth) - parseFloat(fieldStyle.paddingRight);
+      const gap = target.left - textRight;
+      const requiredGap = buttonStyle.position === 'absolute' ? 16 : 0;
+      if (gap < requiredGap - 1) errors.push(input.id + ': text/clear area overlaps submit target');
+      if (target.width < 43 || target.height < 43) errors.push(input.id + ': submit target is below 44px');
+      if (!buttonStyle.fontFamily.includes('IBM Plex Sans') || buttonStyle.fontWeight !== '600') {
+        errors.push(input.id + ': submit typography differs from Sans 600 contract');
+      }
+    }
+    return errors;
+  } finally {
+    inputs.forEach((input, i) => { input.value = saved[i]; });
+    panels.forEach((panel) => panel.setAttribute('hidden', ''));
+  }
+})()`;
+
 let ws, failures = 0, checked = 0;
 try {
   for (let i = 0; i < 40 && !ws; i++) {
@@ -178,6 +214,15 @@ try {
         console.error(`\n❌ ${page} at ${width}px overflows by ${data.over}px`);
         for (const it of data.items) console.error(`     ${it}`);
       }
+      if (page === '/search/' || page === '/style-guide/components/') {
+        const { result: controls } = await send(ws, 'Runtime.evaluate', {
+          expression: SEARCH_CONTROLS_PROBE, returnByValue: true, awaitPromise: true,
+        });
+        if (controls.value.length) {
+          failures++;
+          console.error(`\n❌ ${page} at ${width}px: ${controls.value.join('; ')}`);
+        }
+      }
       if (page === '/') {
         const { result: bleed } = await send(ws, 'Runtime.evaluate', {
           expression: `['.kh-cartridge-cover', '.kh-cartridge-writing', '.kh-footer'].filter((selector) => {
@@ -206,7 +251,7 @@ try {
 }
 
 if (failures) {
-  console.error(`\n${failures} overflow or resized-text checks failed across ${checked} page/width combinations.\n`);
+  console.error(`\n${failures} layout/control checks failed across ${checked} page/width combinations.\n`);
   process.exit(1);
 }
-console.log(`✅ No horizontal overflow. ${checked} page/width combinations checked (${WIDTHS.join(', ')}px), including homepage text at 200%.`);
+console.log(`✅ ${checked} page/width combinations pass (${WIDTHS.join(', ')}px), including search-control geometry and homepage text at 200%.`);
