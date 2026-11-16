@@ -1,8 +1,10 @@
-![allaboutken.com — Hello. I am Ken Hawkins.](.github/site-hero.jpg)
+![Earlier homepage design for allaboutken.com](.github/site-hero.jpg)
+
+*Earlier homepage design. See the [design guide](src/site/style-guide/design.njk) for the current visual system.*
 
 # allaboutken.com
 
-[My personal site](https://www.allaboutken.com/) and digital playground, with writing about digital transformation, web platform engineering, and practical AI. Built on Eleventy v3, hosted on Vercel.
+[My personal site](https://www.allaboutken.com/) and digital playground, with writing about digital transformation, web platform engineering, and practical AI. Built on Eleventy, hosted on Vercel.
 
 Most posts are practitioner-level takes and technical tutorials. The [Work section](https://www.allaboutken.com/work/) collects impact stories from real projects: design systems, platform migrations, editorial tooling, with actual metrics where I have them.
 
@@ -17,24 +19,25 @@ Most posts are practitioner-level takes and technical tutorials. The [Work secti
 
 ## Quick start
 
+Use the [development setup guide](docs/DEVELOPMENT_SETUP.md) for Node/Yarn prerequisites and first-time setup.
+
 ```bash
 yarn install
-yarn dev        # Sass watch + Eleventy --serve
-yarn build      # Full build: bootstrap HTML → semantic data → final Eleventy
-                # The embeddings step downloads ~476 MB of ONNX Runtime on first run for the build-time ML toolchain.
-                # The MiniLM model is cached under .cache/transformers (CI restores it between runs).
-yarn lint:links # Validate internal links/anchors in build/ (run after a build)
+yarn build
+yarn dev
 ```
+
+Open [localhost:8080](http://localhost:8080/). The first build creates semantic-search data and caches its model; it can take several minutes. For routine previews after setup, use `yarn dev`. The [script reference](docs/SCRIPTS.md) covers production checks and the rest of the commands.
 
 ## Stack
 
 | Layer           | Choice                                                                        |
 | --------------- | ----------------------------------------------------------------------------- |
-| Site generator  | [Eleventy v3](https://www.11ty.dev/)                                          |
+| Site generator  | [Eleventy](https://www.11ty.dev/)                                          |
 | CSS             | Sass, scoped to a toggle                                                      |
 | Keyword search  | [Pagefind](https://pagefind.app/)                                             |
 | Semantic search | [Transformers.js](https://huggingface.co/docs/transformers.js) + MiniLM-L6-v2 |
-| Deployment      | Vercel (auto-deploys from GitHub) + GitHub Actions                            |
+| Deployment      | Vercel hosting, GitHub Actions build checks                            |
 | Templates       | Nunjucks + Markdown                                                           |
 
 ## Repository layout

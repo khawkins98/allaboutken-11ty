@@ -27,18 +27,9 @@ Output:
 
 ### Rollup entrypoint responsibilities
 
-`index.scss`:
+`index.scss` loads the concern modules, then includes the cartridge shell and system after retained component rules. New rules belong in the relevant module inside `body:has(#kh-css-toggle:checked)`, so the CSS toggle continues to work. The ambience mixin remains available for historical material; the current shell omits the effect.
 
-1. Loads base and concern modules, then includes the cartridge shell and system after older component rules.
-2. Defines global tokens and component classes.
-3. Scopes custom styling under:
-
-```scss
-body:has(#kh-css-toggle:checked) { ... }
-```
-
-All new custom styles should live inside that scope so CSS-off mode still works.
-4. Imports the ambience mixin from `src/components/kh-ambience/_kh-ambience.scss` so the decorative background stays part of the same build.
+For Sass ownership, nesting limits and compilation checks, use [CSS architecture](CSS_ARCHITECTURE.md). For actual markup, variants and behaviour, use the [component reference](../src/site/style-guide/components.njk).
 
 ## Component integration in templates
 
@@ -54,7 +45,8 @@ Templates consume component output mainly via class names and static assets:
 1. Add/update SCSS in `src/components/` (usually via `index.scss` imports or inline module styles).
 2. Use `kh-` prefix for class naming, matching existing conventions.
 3. If component needs static assets, place them under an existing passthrough path or add a passthrough rule in `config/eleventy/assets-and-search.js`.
-4. Add markup in templates/partials under `src/site/`.
+4. Add markup in templates/partials under `src/site/`, reusing an existing partial where it owns the behaviour.
+5. Update the component reference with the supported markup, states, accessibility requirements and source location. Update the design guide when the visual decision changes.
 
 ## Build requirements and checks
 
@@ -68,4 +60,4 @@ For broader CSS architecture constraints, see [`CSS_ARCHITECTURE.md`](CSS_ARCHIT
 
 Update the [design guide](../src/site/style-guide/design.njk) and [live component reference](../src/site/style-guide/components.njk) alongside shared component changes. The palette swatches are shared through `partials/design-tokens.njk`.
 
-The component reference is implementation documentation, not just a visual overview. For maintained patterns, retain copyable markup, supported variants/states, behavioural and accessibility contracts, and source ownership. A visual redesign should update that guidance; removing it requires a real API retirement or a clearly labelled historical replacement. Keep shared heading anchors beside relevant material. Live examples need unique IDs, harmless actions and `data-pagefind-ignore` wrappers.
+The component reference records the UI’s supported markup and behaviour. For maintained patterns, retain copyable markup, supported variants/states, behavioural and accessibility contracts, and source ownership. A visual redesign should update that guidance; removing it requires a real API retirement or a clearly labelled historical replacement. Keep shared heading anchors beside relevant material. Live examples need unique IDs, harmless actions and `data-pagefind-ignore` wrappers.

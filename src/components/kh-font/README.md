@@ -29,9 +29,10 @@ then subset to Basic Latin plus curly quotes, dashes and the ellipsis. A
 character outside that set falls back to Plex Sans, so recut it if the note
 ever needs one.
 
-`font-weight: 700` resolves to SemiBold 600 (nearest declared weight) rather
-than synthesising a faux bold. There is no bold italic; browsers synthesise
-one on the rare `<em><strong>` nesting.
+For Plex Sans, `font-weight: 700` resolves to the loaded SemiBold 600 face.
+Mono has only 400, and no semibold italic face is loaded for Sans. The shared
+`font-synthesis-weight: none` rule prevents synthetic bold. Controls explicitly
+use Sans 600; code and metadata use Mono 400.
 
 These are the *complete* faces, not the Latin-1 splits. The site uses em
 dashes, curly quotes, `&#8209;` and `↦`, which the splits do not cover.

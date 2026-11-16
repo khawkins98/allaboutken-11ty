@@ -4,12 +4,11 @@ Canonical reference for self-hosted webfont assets and build wiring.
 
 ## Font location
 
-Store IBM Plex assets in:
+Keep self-hosted font assets in:
 
 - [`src/components/kh-font/`](../src/components/kh-font/)
 
-Current active files in CSS (IBM Plex ships no variable build, so each weight
-is a separate static file):
+The loaded builds are static; each declared weight/style has its own file:
 
 - `IBMPlexSans-Regular.woff2` — 400 normal
 - `IBMPlexSans-Italic.woff2` — 400 italic
@@ -17,19 +16,9 @@ is a separate static file):
 - `IBMPlexMono-Regular.woff2` — 400 normal
 - `Anton-Latin.woff2` — 400 normal, display headings across the shared site layouts (15 KB; SIL OFL, see the font directory README)
 
-`font-weight: 700` resolves to SemiBold 600, the nearest declared weight.
+Current controls use Plex Sans 600; code and metadata use Plex Mono 400. Plex Sans requests for 700 resolve to the nearest declared 600 face. Anton and Plex Mono each have one declared weight, 400.
 
-**Mono has one face, and only one.** There is no `IBMPlexMono-SemiBold.woff2`.
-Asking Plex Mono for 600 or 700 does not fall back to 400 -- the browser
-synthesises the bold by smearing the glyphs, which reads as a blurry masthead
-next to crisp Sans body copy and is invisible in code review. This was live on
-the wordmark, the navigation and the buttons.
-
-Every mono rule is therefore 400, and `font-synthesis-weight: none` in
-`index.scss` makes that structural: a stray 600 on mono now renders as 400
-instead of going quietly fuzzy. Style synthesis is untouched, so faux italics
-still work. If a bold mono is ever genuinely wanted, add the SemiBold file
-(~40KB) and declare an `@font-face` for it -- do not just raise the number.
+`font-synthesis-weight: none` prevents synthetic bold. A request for Mono 600 therefore still renders the loaded 400 face; it does not provide the semibold used by Sans controls. Add a real face before documenting another supported weight. Keep the declared family explicit in shared controls so a retained base rule cannot silently select Mono.
 
 ## How font assets reach production
 
@@ -41,31 +30,18 @@ Eleventy passthrough copies the whole font directory into the build output:
 
 ## CSS integration
 
-The `@font-face` rule lives in:
+Font declarations and their consumers have separate owners:
 
-- [`src/components/vf-componenet-rollup/index.scss`](../src/components/vf-componenet-rollup/index.scss)
+| Concern | Maintained source |
+| --- | --- |
+| Plex faces and optional Recursive Note | `src/components/vf-componenet-rollup/index.scss` |
+| Anton display face | `src/components/vf-componenet-rollup/_kh-cartridge.scss` |
+| Page preloads | `src/site/_includes/layouts/base.njk`: Sans Regular and Mono Regular, plus Anton on cartridge pages |
+| Standalone social-card faces | `src/site/_includes/layouts/social-card.njk`: Anton and Plex use same-origin asset URLs |
 
-The Plex rules reference:
+All face URLs use `/assets/kh-font/`. When renaming an asset, update its declaration and each consumer in this table. Social cards are standalone documents, so a font loading correctly in the shared layout does not verify a social card.
 
-```scss
-src: url('/assets/kh-font/IBMPlexSans-Regular.woff2') format('woff2');
-src: url('/assets/kh-font/IBMPlexSans-Italic.woff2') format('woff2');
-src: url('/assets/kh-font/IBMPlexSans-SemiBold.woff2') format('woff2');
-src: url('/assets/kh-font/IBMPlexMono-Regular.woff2') format('woff2');
-```
-
-Anton is declared in `_kh-cartridge.scss`, and Recursive Note in `index.scss`.
-The shared base layout defaults to the cartridge theme and preloads Anton along
-with Plex Sans Regular and Mono Regular. Entry layouts choose their reading
-variant; standalone experiments and social cards have separate documents.
-
-Two other places hardcode font paths and must be updated in step:
-
-- `src/site/_includes/layouts/base.njk` preloads Sans Regular and Mono Regular.
-- `src/site/_includes/layouts/social-card.njk` repeats the `@font-face` rules
-  with same-origin root-relative URLs, so standalone screenshots use the font assets from the deployment being reviewed.
-
-If you change filenames, update all three to match exactly.
+The [font-directory README](../src/components/kh-font/README.md) records face sources, licensing, subsets and archived assets. The [component reference](../src/site/style-guide/components.njk) documents visual roles and control markup.
 
 ## Verification steps
 

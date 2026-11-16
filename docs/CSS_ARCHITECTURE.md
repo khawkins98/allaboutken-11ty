@@ -18,7 +18,7 @@ The entry point uses `@use` (not `@import`) to pull in partials:
 |---|---|
 | `normalize` | CSS normalisation reset |
 | `kh-content` | Main content and layout styles |
-| `settings` | Breakpoint and colour variables |
+| `settings` | Sass breakpoint variables |
 | `semantic-search` | Search UI styles |
 | `kh-cartridge` | Palette, shared shell, homepage cover and article composition |
 | `kh-cartridge-system` | Indexes, notes, photos, stories, controls and live reference |
@@ -28,8 +28,11 @@ The entry point uses `@use` (not `@import`) to pull in partials:
 
 ## Current visual system
 
-The [design guide](../src/site/style-guide/design.njk) is the visual source of truth;
-the [component reference](../src/site/style-guide/components.njk) renders the patterns.
+The [design guide](../src/site/style-guide/design.njk) explains visual intent.
+The [component reference](../src/site/style-guide/components.njk) maintains markup,
+variants and usage contracts. Verify implementation against the named Sass module
+and template before changing either guide; a live sample does not exercise every
+page context.
 The base layout defaults to `cartridgeTheme: page`; entry layouts choose their
 reading variant. The cartridge mixins are included after the older components,
 so stable markup and class names can retain their API while receiving the new

@@ -9,7 +9,7 @@ permalink: /style-guide/components/
 <p class="kh-breadcrumb"><a href="/style-guide/">Style guide</a> / Components</p>
 <h1>{{ title }}</h1>
 <p class="kh-intro__text">{{ teaser }}</p>
-<p>The <a href="/style-guide/design/">design guide</a> explains the visual decisions. The <a href="/style-guide/editorial/">editorial guide</a> covers the words. This page shows the actual components, including shared patterns retained from earlier versions.</p>
+<p>Use this reference to copy markup, compare component states and find the implementation source. The <a href="/style-guide/design/">design guide</a> explains visual decisions; the <a href="/style-guide/editorial/">editorial guide</a> owns voice and naming. Reuse a shared partial where one exists, and give copied controls page-unique IDs and radio names.</p>
 <nav class="kh-guide-links" aria-label="Component sections" data-pagefind-ignore><a href="#colors">Palette</a><a href="#typography">Type</a><a href="#datasheet">Structure</a><a href="#buttons">Controls</a><a href="#summary-cards">Entries</a><a href="#note-boxes">Reading</a><a href="#figures">Media</a><a href="#tables">Tables</a><a href="#forms">Forms</a><a href="#search-mode-toggle">Search</a><a href="#metrics">Data</a><a href="#layout">Layout</a><a href="#pager">Navigation</a><a href="#accessibility">Accessibility</a><a href="#utilities">Utilities &amp; tokens</a></nav>
 
 <h2 id="colors">Colors</h2>
@@ -111,7 +111,7 @@ Sources: `_kh-datasheet.scss` for the stable primitives; `_kh-cartridge-system.s
 <span id="register" aria-hidden="true"></span>
 <h2 id="micro-copy">Labels and micro-copy</h2>
 {% markdown %}
-Use one name per destination, sentence-case labels, and descriptions that add information rather than repeat the heading. The [interface vocabulary](/style-guide/editorial/#interface-vocabulary) is the naming reference.
+Use the [interface vocabulary](/style-guide/editorial/#interface-vocabulary) for destination names and deliberate context-specific labels. Keep labels in sentence case; descriptions should add information rather than repeat the heading.
 
 `.kh-cartridge-kicker`, `.kh-meta` and `.kh-panel__label` are supporting labels. They must remain readable without hover. Put an explanation next to a data mark when its meaning would otherwise depend on a tooltip. Preserve proper names and acronyms; do not author all-caps text just because its display style is uppercase.
 {% endmarkdown %}
@@ -125,7 +125,7 @@ Use one name per destination, sentence-case labels, and descriptions that add in
 <p><a href="/all/">Ordinary navigation stays a link ↗</a></p>
 {% endcodeAndDemo %}
 {% markdown %}
-Buttons use white on cobalt, square corners and at least 44px height. Hover/focus uses ink; keyboard focus has an ink outline and white inner ring. Resize or use a keyboard to inspect the live controls. The example action has no side effect; the disabled example uses the native disabled state.
+Buttons use Plex Sans 600, white on cobalt, square corners and at least 44px height. Hover/focus uses ink; keyboard focus has an ink outline and white inner ring. Resize or use a keyboard to inspect the live controls. The example action has no side effect; the disabled example uses the native disabled state.
 
 | Contract | Use |
 | --- | --- |
@@ -510,9 +510,9 @@ In production, the fieldset starts `hidden`; the search module reveals it when m
 </div>
 {% endcodeAndDemo %}
 {% markdown %}
-The label and arrow spans swap at the small-screen breakpoint. Both are hidden from assistive technology, so the button's `aria-label` supplies its name. Preserve that name when adapting the markup. Keyword submission uses `search_query`; semantic input is owned by the existing search implementation. Use unique demo IDs rather than production controller IDs.
+At widths up to and including 600px, the label and arrow spans swap, and the submit button sits inside the input as a fixed 44px target. The input reserves space for that target, its gap and the browser’s native search-clear control. Long query text and the caret must remain visible before the button in both search modes. Both are hidden from assistive technology, so the button's `aria-label` supplies its name. Preserve that name when adapting the markup. Keyword submission uses `search_query`; semantic input is owned by the existing search implementation. Use unique demo IDs rather than production controller IDs.
 
-Source of truth: `src/site/search.njk`, `_semantic-search.scss` and `_kh-cartridge-system.scss`. Test keyboard mode switching, empty/results/error states and the icon-button state below 600px.
+Source of truth: `src/site/search.njk`, `_semantic-search.scss` and `_kh-cartridge-system.scss`. Test keyboard mode switching, empty/results/error states and the icon-button state at and below 600px.
 {% endmarkdown %}
 
 <span id="semantic-search-interface" aria-hidden="true"></span>

@@ -35,7 +35,8 @@ Use this page as the entry point for repository documentation. It maps each doc 
 
 - **New contributor:** `../README.md` -> `../CONTRIBUTING.md` -> `GIT_HOOKS.md` -> `SCRIPTS.md`
 - **Template work:** `TEMPLATES.md` -> `FRONTMATTER.md` -> `ELEVENTY_CONFIG.md`
-- **Component work:** `COMPONENTS.md` -> `CSS_ARCHITECTURE.md` -> `FONTS.md` -> `ELEVENTY_CONFIG.md`
+- **Visual decisions:** [Design guide](../src/site/style-guide/design.njk) -> [component reference](../src/site/style-guide/components.njk) for supported markup and variants
+- **Component implementation:** [Component reference](../src/site/style-guide/components.njk) -> `COMPONENTS.md` for wiring -> `CSS_ARCHITECTURE.md` for Sass constraints -> `FONTS.md` when typography changes
 - **Local setup/debugging:** `DEVELOPMENT_SETUP.md` -> `SCRIPTS.md`
 - **Offline behavior:** `OFFLINE_SERVICE_WORKER.md` -> `ELEVENTY_CONFIG.md` -> `DEVELOPMENT_SETUP.md`
 - **Content workflow:** `PUBLISHING_WORKFLOW.md` -> `../src/site/style-guide/editorial.njk` -> `IMAGE_GENERATION.md`
