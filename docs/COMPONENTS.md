@@ -67,3 +67,5 @@ For broader CSS architecture constraints, see [`CSS_ARCHITECTURE.md`](CSS_ARCHIT
 ## Visual reference
 
 Update the [design guide](../src/site/style-guide/design.njk) and [live component reference](../src/site/style-guide/components.njk) alongside shared component changes. The palette swatches are shared through `partials/design-tokens.njk`.
+
+The component reference is implementation documentation, not just a visual overview. For maintained patterns, retain copyable markup, supported variants/states, behavioural and accessibility contracts, and source ownership. A visual redesign should update that guidance; removing it requires a real API retirement or a clearly labelled historical replacement. Keep shared heading anchors beside relevant material. Live examples need unique IDs, harmless actions and `data-pagefind-ignore` wrappers.

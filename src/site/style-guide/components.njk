@@ -10,7 +10,7 @@ permalink: /style-guide/components/
 <h1>{{ title }}</h1>
 <p class="kh-intro__text">{{ teaser }}</p>
 <p>The <a href="/style-guide/design/">design guide</a> explains the visual decisions. The <a href="/style-guide/editorial/">editorial guide</a> covers the words. This page shows the actual components, including shared patterns retained from earlier versions.</p>
-<nav class="kh-guide-links" aria-label="Component sections" data-pagefind-ignore><a href="#colors">Palette</a><a href="#typography">Type</a><a href="#datasheet">Structure</a><a href="#buttons">Controls</a><a href="#summary-cards">Entries</a><a href="#note-boxes">Reading</a><a href="#figures">Media</a><a href="#layout">Layout</a><a href="#accessibility">Accessibility</a></nav>
+<nav class="kh-guide-links" aria-label="Component sections" data-pagefind-ignore><a href="#colors">Palette</a><a href="#typography">Type</a><a href="#datasheet">Structure</a><a href="#buttons">Controls</a><a href="#summary-cards">Entries</a><a href="#note-boxes">Reading</a><a href="#figures">Media</a><a href="#tables">Tables</a><a href="#forms">Forms</a><a href="#search-mode-toggle">Search</a><a href="#metrics">Data</a><a href="#layout">Layout</a><a href="#pager">Navigation</a><a href="#accessibility">Accessibility</a><a href="#utilities">Utilities &amp; tokens</a></nav>
 
 <h2 id="colors">Colors</h2>
 {% include "partials/design-tokens.njk" %}
@@ -20,29 +20,95 @@ Use `--kh-cart-paper`, `--kh-cart-ink`, `--kh-cart-blue`, `--kh-cart-yellow`, `-
 The [design guide palette](/style-guide/design/#palette) records contrast and colour roles. Existing aliases keep earlier components in step: `--kh-ground` maps to paper; `--kh-color--blue` and `--kh-color--apparatus` map to cobalt; rules use neutral ink. `--kh-panel-bg` is a slightly lighter paper, `#fffdf5`. Visited reading links retain `--kh-color--visited` (`#563d82`).
 {% endmarkdown %}
 
+<span id="inline-text-styles" aria-hidden="true"></span>
+<span id="display-headlines" aria-hidden="true"></span>
 <h2 id="typography">Typography</h2>
 <p class="kh-reference-display">Make it make sense.</p>
 {% markdown %}
-Anton 400 is the display voice. IBM Plex Sans 400/600 is the reading and interface voice; Plex Mono 400 is for code, dates and reference metadata. All are self-hosted. Authored copy remains sentence case; display uppercase is CSS.
+Anton 400 is the display voice. IBM Plex Sans 400/600 handles reading and interfaces; Plex Mono 400 handles code and metadata. Copy stays sentence case; display uppercase is CSS. The [design guide](/style-guide/design/#type) describes the hierarchy and [font assets](#font-variations) lists loaded faces.
 
-Page titles are fluid, up to 4.5rem on standard pages. Utility and photo titles are smaller; article and homepage compositions have their own scales. Long-form reading uses 18px and about 62ch, reducing to 17px on small screens. Avoid fixed widths on text.
+Page-title typography is selected by the page family, not by adding a heavier font weight. Standard titles grow to 4.5rem; utility, note and photo titles are smaller. Long-form reading uses 18px and about 62ch, reducing to 17px on small screens.
+{% endmarkdown %}
+<h3 id="heading-classes">Heading classes and document outline</h3>
+{% markdown %}
+`.kh-text-heading--1`, `--2` and `--3` are retained type utilities. They do not change a heading's semantic level. Use one page `h1`, then choose heading levels for the document outline. These examples use `h3` because they sit under this reference's Typography section; they demonstrate utility classes, not additional page titles.
 {% endmarkdown %}
 {% codeAndDemo 'html' %}
-<p class="kh-reference-display">An expressive display line</p>
-<p>Reading text in IBM Plex Sans. <strong>Emphasis uses the real semibold.</strong> <em>Italic uses the real italic face.</em></p>
-<p class="kh-meta">24 Oct 2026 / metadata in Plex Mono</p>
+<h3 class="kh-text-heading--1">A large utility heading</h3>
+<h3 class="kh-text-heading--2">A section-scale utility heading</h3>
+<h3 class="kh-text-heading--3">A smaller utility heading</h3>
 {% endcodeAndDemo %}
+<h3 id="content-headings-unstyled-h-tags-inside-kh-content">Content headings</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-content">
+  <h3>A heading inside reading content</h3>
+  <p>Plain heading tags inherit the content rules. Keep paragraphs in the reading face.</p>
+  <h4>A subordinate heading</h4>
+  <p>The tag describes structure, independently of its visual size.</p>
+</div>
+{% endcodeAndDemo %}
+<h3 id="body-text-classes">Body and inline text</h3>
+{% codeAndDemo 'html' %}
+<p class="kh-text-body--1">Lead text with an intentional place in the hierarchy.</p>
+<p>Ordinary reading text, with <strong>real semibold</strong>, <em>real italic</em>, <code>inline code</code> and <a href="/blog/">a descriptive link</a>.</p>
+<p class="kh-text-body--3">Supporting text using the retained body utility.</p>
+<p class="kh-meta">24 Oct 2026 / supporting metadata in Plex Mono</p>
+{% endcodeAndDemo %}
+<h3>Display utility</h3>
+{% codeAndDemo 'html' %}
+<h3 class="kh-font-headline kh-font-headline--display">A retained display-heading utility</h3>
+{% endcodeAndDemo %}
+<p>The retained display utility and the current Anton page-family titles have separate selectors. Use the page layout for a page title; inspect the actual class combination before promising a fixed size.</p>
+<h3 id="intro-pair-hero-heading-lead-text">Intro pair</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-content">
+  <h3 class="kh-intro__heading">A page introduction</h3>
+  <p class="kh-intro__text">The lead adds scope or context instead of repeating the title.</p>
+</div>
+{% endcodeAndDemo %}
+<p>Sources: <code>_kh-content.scss</code>, typography utilities in <code>index.scss</code>, and the page-family overrides in <code>_kh-cartridge-system.scss</code>, all under <code>src/components/vf-componenet-rollup/</code>. Test long titles and 200% text sizing; fixed widths and nowrap must not clip meaningful text.</p>
 
+<span id="micro-labels-and-section-numbers" aria-hidden="true"></span>
+<span id="other-primitives" aria-hidden="true"></span>
+<span id="everyday-chrome" aria-hidden="true"></span>
 <h2 id="datasheet">Shared structure</h2>
 <span id="datasheet-register" aria-hidden="true"></span>
 {% markdown %}
-The original datasheet class names remain for stable markup. Their current styling belongs to the cartridge system: a plain section name, cobalt structural rule, open lists and lightly separated panels. Decorative section numbers have been removed from index templates. Stable project references and ordered instructions still carry real numbers.
+The datasheet class names remain stable. Their current presentation uses cobalt rules, open lists and restrained panels. Decorative section numbers are retired from indexes; stable project references and ordered instructions still carry meaningful numbers.
 {% endmarkdown %}
 {% codeAndDemo 'html' %}
-<div class="kh-section-head"><h3>Recent writing</h3><span class="kh-meta">Newest first</span></div>
-<div class="kh-panel"><div class="kh-panel__row"><div class="kh-panel__cell"><span class="kh-panel__label">Place</span>Bonn, Germany</div><div class="kh-panel__cell"><span class="kh-panel__label">Practice</span>Platforms, content and audiences</div></div></div>
+<div class="kh-section-head">
+  <h3>Recent writing</h3>
+  <span class="kh-meta">Newest first</span>
+</div>
 {% endcodeAndDemo %}
+<h3 id="panels">Panels</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-panel">
+  <div class="kh-panel__row">
+    <div class="kh-panel__cell"><span class="kh-panel__label">Place</span>Bonn, Germany</div>
+    <div class="kh-panel__cell"><span class="kh-panel__label">Practice</span>Platforms, content and audiences</div>
+  </div>
+  <div class="kh-panel__row">
+    <div class="kh-panel__cell"><span class="kh-panel__label">Purpose</span>Group related facts with a shared boundary.</div>
+  </div>
+</div>
+{% endcodeAndDemo %}
+{% markdown %}
+- `.kh-section-head` aligns a heading and supporting metadata; it can wrap.
+- `.kh-panel` groups related rows. `.kh-panel__row` and `.kh-panel__cell` supply the structure; `.kh-panel__label` names a value.
+- Use [tables](#tables) when comparison requires column headings. A panel is not a substitute for table semantics.
+- Navigation, entry footers and bylines are repeated chrome. Put `data-pagefind-ignore` on the wrapper so their content does not leak into Pagefind or embeddings.
 
+Sources: `_kh-datasheet.scss` for the stable primitives; `_kh-cartridge-system.scss` for current surfaces and rules. Do not add an empty left column merely to indent an introduction.
+{% endmarkdown %}
+
+<span id="labels-and-micro-copy" aria-hidden="true"></span>
+<span id="naming" aria-hidden="true"></span>
+<span id="sentence-case-not-title-case" aria-hidden="true"></span>
+<span id="straplines" aria-hidden="true"></span>
+<span id="apparatus-must-be-legible-without-hover" aria-hidden="true"></span>
+<span id="register" aria-hidden="true"></span>
 <h2 id="micro-copy">Labels and micro-copy</h2>
 {% markdown %}
 Use one name per destination, sentence-case labels, and descriptions that add information rather than repeat the heading. The [interface vocabulary](/style-guide/editorial/#interface-vocabulary) is the naming reference.
@@ -50,71 +116,243 @@ Use one name per destination, sentence-case labels, and descriptions that add in
 `.kh-cartridge-kicker`, `.kh-meta` and `.kh-panel__label` are supporting labels. They must remain readable without hover. Put an explanation next to a data mark when its meaning would otherwise depend on a tooltip. Preserve proper names and acronyms; do not author all-caps text just because its display style is uppercase.
 {% endmarkdown %}
 
-<h2 id="buttons">Buttons</h2>
+<h2 id="buttons">Buttons and links</h2>
 {% codeAndDemo 'html' %}
-<a class="kh-button" href="/work/">Explore the work</a>
-<button class="kh-button" type="button">Example action</button>
+<div class="kh-cluster"><a class="kh-button" href="/work/">Explore the work</a>
+  <button class="kh-button" type="button">Example action</button>
+  <button class="kh-button" type="button" disabled>Unavailable action</button>
+</div>
 <p><a href="/all/">Ordinary navigation stays a link ↗</a></p>
 {% endcodeAndDemo %}
-<p>Buttons are cobalt with white text, square corners and a minimum 44px target. Hover uses ink; keyboard focus remains visible. Use a button for an action and an anchor with a real destination for navigation. A colour or tilt is not a substitute for link affordance.</p>
+{% markdown %}
+Buttons use white on cobalt, square corners and at least 44px height. Hover/focus uses ink; keyboard focus has an ink outline and white inner ring. Resize or use a keyboard to inspect the live controls. The example action has no side effect; the disabled example uses the native disabled state.
 
+| Contract | Use |
+| --- | --- |
+| `.kh-button` on an `a` with `href` | Navigation to a real destination |
+| `.kh-button` on `button type="button"` | An action implemented by its owner |
+| `button type="submit"` | Submits the surrounding form |
+| `disabled` | A native unavailable action; supply surrounding explanation when needed |
+| `aria-label` | Required when an icon or hidden text would otherwise leave the control unnamed |
+
+The retained `--primary` and `--sm` class names appear in older content. The cartridge rule defines the common button presentation; do not assume those names provide a new hierarchy or smaller target. The old button-colour custom properties are overridden by the cartridge styling. Add a scoped, documented component modifier when a new variant is actually needed.
+
+Sources: `index.scss` and `_kh-cartridge-system.scss`. Search-specific label/icon spans are documented under [search forms](#search-form).
+{% endmarkdown %}
+
+<span id="badges-and-labels" aria-hidden="true"></span>
+<span id="labels" aria-hidden="true"></span>
 <h2 id="badges-labels">Badges and labels</h2>
 {% codeAndDemo 'html' %}
-<p><span class="kh-label">Design systems</span> <span class="kh-label">CSS</span></p>
-<p class="kh-meta">Supporting metadata, not a second headline</p>
+<p><span class="kh-label">Design systems</span><span class="kh-label">CSS</span></p>
+<p class="kh-meta">IS-03 / supporting metadata, not a second headline</p>
 {% endcodeAndDemo %}
-<p>Subjects are labels; dates and reference IDs are metadata. Content-type labels explain the kind of entry. Keep real type names such as “Digesting” and “Impact story”; avoid invented abbreviations.</p>
+<p>Topics are labels; dates and reference IDs are metadata. Entry-type labels retain real names such as “Digesting” and “Impact story”. A label is a span unless it actually links somewhere; do not style static text as an unexplained control. Sources: <code>index.scss</code>, <code>_kh-datasheet.scss</code> and <code>_kh-cartridge-system.scss</code>.</p>
 
-<h2 id="summary-cards">Entry lists</h2>
+<h2 id="summary-cards">Entry lists and selected-work cards</h2>
 {% markdown %}
-Wrap the shared `partials/post-summary.njk` in `.kh-datasheet-list`. It supplies the date/body/media wrappers and handles notes, digests and photographs. At desktop widths the list aligns dates, text and figures. On mobile the layout stacks or pairs text and image as space permits. Empty media cells do not get placeholders.
-
-The homepage reverses the list inside `.kh-cartridge-writing`. Dates are yellow, text is white and the blue field is structural. Other lists use ink and cobalt on paper. Project cards use `.kh-work-cards` and `.kh-work-card` on the [work page](/work/), with an upright project image or a qualified `.kh-work-card__proof` statement and the actual title. The work page’s `selected_work` list supplies an explicit order, leadership angle and summary; the full chronological record remains below. Match each selected URL to a published impact story and keep figures tied to their scope and baseline.
+Prefer `partials/post-summary.njk` inside `.kh-datasheet-list` to reproducing its branching logic. It derives digest, note, photograph and impact-story states from tags, and supplies date/body/media wrappers. The current layouts align those cells on desktop and reflow on mobile. Keep an imageless media cell empty; do not add placeholder text that defeats `:empty` selectors.
 {% endmarkdown %}
 <div class="kh-reference-demo" data-pagefind-ignore><div class="kh-datasheet-list">{% set post = collections.allContent[0] %}{% include "partials/post-summary.njk" %}</div></div>
+<h3 id="standard-summary">Standard entry structure</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-datasheet-list">
+  <article class="kh-summary kh-summary--news">
+    <div class="kh-summary__meta">
+      <div class="kh-summary__date">16 Nov 2026</div>
+    </div>
+    <div class="kh-summary__body">
+      <h3 class="kh-summary__title"><a class="kh-summary__link" href="/blog/">An entry with a clear title</a></h3>
+      <p class="kh-summary__text">A concise description that adds information.</p>
+    </div>
+    <div class="kh-summary__media"></div>
+  </article>
+</div>
+{% endcodeAndDemo %}
+<h3 id="news-summary">Digesting variant</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-datasheet-list">
+  <article class="kh-summary kh-summary--news kh-summary--highlight">
+    <div class="kh-summary__meta">
+      <div class="kh-summary__date">16 Nov 2026</div>
+      <a class="kh-summary__tab" href="/digesting/">Digesting</a>
+    </div>
+    <div class="kh-summary__body">
+      <h3 class="kh-summary__title"><a class="kh-summary__link" href="/digesting/">A short curatorial observation</a></h3>
+      <p class="kh-summary__text">Digesting and note entries omit the media thumbnail in the shared partial.</p>
+    </div>
+    <div class="kh-summary__media"></div>
+  </article>
+</div>
+{% endcodeAndDemo %}
+<h3 id="summary-with-image">Media and selected-work variants</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-datasheet-list">
+  <article class="kh-summary kh-summary--news">
+    <div class="kh-summary__meta">
+      <div class="kh-summary__date">16 Nov 2026</div>
+    </div>
+    <div class="kh-summary__body">
+      <h3 class="kh-summary__title"><a class="kh-summary__link" href="/style-guide/design/">An image-bearing entry example</a></h3>
+      <p class="kh-summary__text">A local vector stands in for a project image in this example.</p>
+    </div>
+    <div class="kh-summary__media"><a class="kh-summary__image" href="/style-guide/design/">
+      <img class="kh-summary__image" src="/images/cartridge-pattern.svg" width="300" height="92" alt="Geometric cover marks" eleventy:ignore loading="lazy">
+      </a>
+    </div>
+  </article>
+</div>
+{% endcodeAndDemo %}
+{% markdown %}
+For an image-bearing entry, the partial adds a linked image inside `.kh-summary__media`; the image transform may insert `picture`. Never position only the nested `img` when the wrapper is the grid child. The homepage reverses its list inside `.kh-cartridge-writing`: white text, yellow dates and a cobalt field.
+
+The [work page](/work/) uses `.kh-work-cards` and `.kh-work-card`. Its explicit `selected_work` list supplies the URL, leadership angle, summary and optional qualified proof/context. The title and optional image come from the matching published story. Selection represents platform, editorial and standards leadership; the full chronological record remains below.
+{% endmarkdown %}
+{% codeAndDemo 'html' %}
+<div class="kh-work-cards">
+  <article class="kh-work-card"><a href="/work/">
+    <div class="kh-work-card__proof"><strong>15 sites</strong><span>Example scope, not an unqualified outcome</span></div>
+    <div class="kh-work-card__body">
+      <p class="kh-cartridge-kicker">Platform leadership</p>
+      <h3>An inspectable work example ↗</h3>
+      <p>Use a real project image or a scoped proof statement. Keep the baseline and measurement period close to any percentage.</p>
+    </div>
+    </a>
+  </article>
+</div>
+{% endcodeAndDemo %}
+<p>Sources: <code>partials/post-summary.njk</code>, <code>src/site/work.njk</code>, <code>_kh-datasheet.scss</code>, <code>_kh-cartridge.scss</code> and <code>_kh-cartridge-system.scss</code>.</p>
 
 <h2 id="note-boxes">Note boxes</h2>
 {% codeAndDemo 'html' %}
-<aside class="kh-note-box"><span class="kh-note-box__label">Update</span>A short piece of context that changes how the surrounding text should be read.</aside>
+<aside class="kh-note-box"><span class="kh-note-box__label">Update</span>A short correction that changes how the surrounding text should be read.</aside>
 {% endcodeAndDemo %}
-<p>Use a note for context, a correction or a concise summary. Avoid boxing ordinary paragraphs. The left cobalt rule and lighter surface provide emphasis without another display face.</p>
+{% codeAndDemo 'html' %}
+<aside class="kh-note-box"><span class="kh-note-box__label">Context</span>
+  <p>A note may contain more than one block when the structure helps.</p>
+  <ul>
+    <li>A scoped qualification.</li>
+    <li>A link to the <a href="/style-guide/editorial/">editorial guidance</a>.</li>
+  </ul>
+</aside>
+{% endcodeAndDemo %}
+<p>Use <code>aside</code> for contextual content, a concise summary or a correction; keep ordinary paragraphs outside boxes. Use a short label such as “Update” or “Context”. The current treatment is a cobalt left rule and a lighter surface. Sources: <code>index.scss</code> and <code>_kh-cartridge-system.scss</code>; editorial guidance: <a href="/style-guide/editorial/#note-boxes">note boxes</a>.</p>
 
+<span id="margin-notes-and-pull-quotes" aria-hidden="true"></span>
 <h2 id="margin-notes">Margin notes and pull-quotes</h2>
 {% markdown %}
-The `marginnote` shortcode places an aside beside the reading column when room allows and returns it to the flow on small screens. Do not put essential instructions exclusively in a margin. A pull-quote is a selected sentence from the piece, not a replacement for the opening argument. See the [editorial guide](/style-guide/editorial/) for content rules.
+Author using paired shortcodes inside a Markdown block. They render inline Markdown, so links, emphasis, code and `--` punctuation work. Keep each aside to one or two sentences, with no blank paragraphs inside the shortcode.
+
+```njk
+{% raw %}{% marginnote %}Supporting detail with a [source](/colophon/).{% endmarginnote %}
+{% pullquote %}Keep the evidence near the claim.{% endpullquote %}{% endraw %}
+```
+
+A margin note is additional content: it stays in the accessibility tree and search. A pull-quote repeats a phrase from the body: the shortcode adds `aria-hidden="true"` and `data-pagefind-ignore`. **Unique information must never exist only in a pull-quote.**
+
+At 1300px and above, article notes float into the right margin and the reading measure adjusts. Below that and in print they return to the flow. The reference previews below deliberately show the in-flow form; inspect an article with notes to verify the wide-margin behaviour.
 {% endmarkdown %}
 {% codeAndDemo 'html' %}
-<aside class="kh-marginnote"><p>Supporting detail that belongs near this passage.</p></aside>
-<p>The main argument remains readable on its own.</p>
+<div class="kh-reference-asides">
+  <aside class="kh-marginnote">Supporting context, including a <a href="/colophon/">source link</a>.</aside>
+  <p>The main argument remains readable on its own.</p>
+</div>
 {% endcodeAndDemo %}
+{% codeAndDemo 'html' %}
+<div class="kh-reference-asides">
+  <p>Keep the evidence near the claim.</p>
+  <aside class="kh-pullquote" aria-hidden="true" data-pagefind-ignore>Keep the evidence near the claim.</aside>
+</div>
+{% endcodeAndDemo %}
+<p>Sources: shortcode registration in <code>config/eleventy/markdown.js</code>; layout, float arithmetic and print rules in <code>_kh-content.scss</code>. Prefer the shortcodes to hand-written markup so the accessibility/search markers remain intact.</p>
 
 <h2 id="content-boxes">Content boxes</h2>
 {% codeAndDemo 'html' %}
-<div class="kh-box"><h3 class="kh-box__heading">A related resource</h3><p class="kh-box__text">A compact grouping of content with a reason to sit together.</p><a href="/garage/">Explore the garage</a></div>
+<div class="kh-box">
+  <h3 class="kh-box__heading">A related resource</h3>
+  <p class="kh-box__text">A compact grouping of content with a reason to sit together.</p>
+  <a href="/garage/">Explore the garage</a>
+</div>
 {% endcodeAndDemo %}
 
+<p>Content boxes group a related resource with <code>.kh-box__heading</code>, <code>.kh-box__text</code> and a real link. The box reads its documented theme properties; see <a href="#theming">component overrides</a>. Source: <code>index.scss</code>.</p>
+
+<span id="collapsible-details" aria-hidden="true"></span>
+<span id="when-to-use" aria-hidden="true"></span>
+<span id="markup-notes-collapsible-details" aria-hidden="true"></span>
 <h2 id="details">Collapsible details</h2>
 {% codeAndDemo 'html' %}
-<details><summary>More implementation detail</summary><p>The content remains native HTML and is usable without JavaScript.</p></details>
+<details class="kh-details">
+  <summary>
+    <h3>Implementation detail</h3>
+  </summary>
+  <p>The native disclosure works without JavaScript. The summary remains the control.</p>
+</details>
 {% endcodeAndDemo %}
-<p>The article contents uses <code>.kh-cartridge-contents</code> around a native details/summary pair, with its navigation inside. Keep the summary descriptive. Do not replace it with a scripted div.</p>
+<h3 id="open-by-default">Open by default</h3>
+{% codeAndDemo 'html' %}
+<details class="kh-details" open>
+  <summary>Expanded context</summary>
+  <p>Use <code>open</code> when the content should initially be visible.</p>
+</details>
+{% endcodeAndDemo %}
+{% markdown %}
+Use details for secondary material, not to hide the opening argument, a required action or the only explanation of a data point. A summary can contain an appropriate heading; match the page outline. Do not insert a second interactive control inside the summary.
+
+`.kh-details` is the retained bordered content disclosure. `.kh-cartridge-contents` is the separate article-contents treatment, assembled by `layouts/post.njk`; its summary owns the contents navigation. Do not replace either with a clickable div. Source: `index.scss`, `_kh-cartridge.scss` and `src/site/_includes/layouts/post.njk`.
+{% endmarkdown %}
 
 <h2 id="blockquotes">Blockquotes</h2>
+<h3 id="standard-blockquote">Standard quotation</h3>
 {% codeAndDemo 'html' %}
-<blockquote><p>A quotation is evidence or an outside voice. Give it a source.</p></blockquote>
+<blockquote>
+  <p>A quotation supplies evidence or an outside voice.</p>
+  <cite>Demonstration text, not an attributed quotation.</cite>
+</blockquote>
 {% endcodeAndDemo %}
-<p>Ordinary quotes use the reading typeface. The featured quote class remains available for a short, intentional statement, rather than a repeated decoration on every section.</p>
+<h3 id="featured-quote">Featured statement</h3>
+{% codeAndDemo 'html' %}
+<blockquote class="kh-quote kh-quote--featured">
+  <p>I connect strategy, technical delivery and audience needs.</p>
+</blockquote>
+{% endcodeAndDemo %}
+<p>Keep quotation text accurate and provide attribution when quoting another person. The featured class remains available for a short, intentional statement; it is not a default decoration for every section. Sources: standard blockquotes in <code>_kh-content.scss</code>; featured quotes in <code>index.scss</code>.</p>
 
-<h2 id="code">Code</h2>
+<span id="inline-code" aria-hidden="true"></span>
+<span id="code-blocks" aria-hidden="true"></span>
+<h2 id="code">Code and live demos</h2>
 {% markdown %}
-Use fenced Markdown for code, with a language identifier. Code uses Plex Mono and a distinct reading surface. Long lines scroll inside their block; the page must not scroll sideways. Inline code may wrap when it would otherwise overflow.
+Use fenced Markdown with a language identifier. Inline code can wrap when needed; long blocks contain their own overflow. Source text must not force the entire page sideways.
 
-The `codeAndDemo` paired shortcode renders escaped source and the live HTML below it, as in this reference. Its demo becomes real page content: give controls unique IDs and harmless actions. Do not include unsafe sample scripts or live feedback endpoints merely to demonstrate a visual state.
+```scss
+.example {
+  color: var(--kh-cart-ink);
+}
+```
+
+<h3 id="code-live-demo-codeanddemo-shortcode">The paired codeAndDemo shortcode</h3>
+
+Place it **outside** a Markdown block. Its body becomes both escaped source and live HTML:
+
+```njk
+{% raw %}{% codeAndDemo 'html' %}
+<p>A small example with <code>inline code</code>.</p>
+{% endcodeAndDemo %}{% endraw %}
+```
 {% endmarkdown %}
 {% codeAndDemo 'html' %}
-<p>A small live example with <code>inline code</code>.</p>
+<p>A small example with <code>inline code</code>.</p>
 {% endcodeAndDemo %}
+{% markdown %}
+The shortcode adds `.kh-demo` with `data-pagefind-ignore`, a `pre/code` pane, and `.kh-demo__live`. Samples therefore stay out of the site's keyword and semantic indexes. Live markup still needs unique IDs, correct headings and harmless actions. Prefer local placeholders to loading third-party embeds. Never submit sample feedback to the live service.
 
+Sources: `config/eleventy/markdown.js` and `.kh-demo` in `_kh-content.scss`. To show Nunjucks tags rather than execute them, wrap the example in a Nunjucks `raw` block.
+{% endmarkdown %}
+
+<span id="figures-and-images" aria-hidden="true"></span>
+<span id="styled-figure" aria-hidden="true"></span>
+<span id="unstyled-figure-inside-kh-content" aria-hidden="true"></span>
+<span id="bleed-out-image" aria-hidden="true"></span>
 <h2 id="figures">Figures and images</h2>
 {% markdown %}
 Put source files in `src/site/images/blog/`; entry frontmatter uses `/blog/filename.ext`. The hero image and the social card are separate mechanisms. Provide descriptive alt text, a useful caption and the correct credit. Ken’s photos use `credit: "Own work."` with location context in the caption.
@@ -124,59 +362,352 @@ The image transform can produce a `<picture>` wrapper. In grids and flex layouts
 The live feedback counter is a remote image and must retain `eleventy:ignore`. A raster still pointing to `/images/` in production, or a `/.11ty/image/` URL in production HTML, is a failed transform; the build checks catch both cases.
 {% endmarkdown %}
 {% codeAndDemo 'html' %}
-<figure class="kh-figure"><img src="/images/cartridge-pattern.svg" alt="Sparse blue, yellow, green, red and black geometric marks: zigzag, paired strokes, outlined square, wavy line, dotted rule, circle and triangle." width="520" height="160" loading="lazy" eleventy:ignore><figcaption class="kh-figure__caption">Current cover-margin pattern, drawn for this site. The serrated boundaries use the separate <code>cartridge-edge.svg</code> mask.</figcaption></figure>
+<figure>
+  <img src="/images/cartridge-pattern.svg" alt="Sparse blue, yellow, green, red and black geometric marks: zigzag, paired strokes, outlined square, wavy line, dotted rule, circle and triangle." width="520" height="160" loading="lazy" eleventy:ignore>
+  <figcaption class="kh-figure__caption">Current cover-margin pattern, drawn for this site. The serrated boundaries use the separate <code>cartridge-edge.svg</code> mask.</figcaption>
+</figure>
 {% endcodeAndDemo %}
+
+<h3 id="figure-contexts">Prose figures, page figures and wide media</h3>
+{% markdown %}
+Use a plain `figure` inside `.kh-content`. `.kh-figure` is the page-level figure grid; content rules deliberately neutralise that grid when it is nested inside prose. The live example above is a prose figure. A page-level layout can use:
+
+```html
+<figure class="kh-figure">
+  <img class="kh-figure__image" src="/images/cartridge-pattern.svg" width="520" height="160" alt="Describe the meaningful image.">
+  <figcaption class="kh-figure__caption">Caption and credit.</figcaption>
+</figure>
+```
+
+For a deliberate reading-column escape, use `figure class="kh-bleed-out"` and inspect it in the actual article layout. Its left bleed begins at 767px and assumes available space beside the reading column; a general documentation panel is not that context. Preserve captions and alternative text at every width.
+
+The transform may replace `img` with `picture`. Grid areas and overlap layouts must target the direct `picture` wrapper as well as an untransformed image. Sources: `_kh-content.scss`, `index.scss`, and the [image pipeline notes](/style-guide/editorial/#images).
+{% endmarkdown %}
 
 <h2 id="tables">Tables</h2>
 {% markdown %}
-Use tables for records that readers compare. `.kh-table--spec` supplies the current cobalt header and neutral rules. `.kh-table-scroll` contains a wide table; `.kh-table--stack` changes suitable record tables into cards below the medium breakpoint. Supply `scope="col"` and meaningful `data-label` values for stacked metadata.
+`.kh-table--spec` supplies column boundaries and current cobalt headers. Use real `table`, `thead`, `tbody`, `th` and `td` elements when readers compare records. Give headers `scope="col"` or `scope="row"`; use a caption when the surrounding heading does not name the table.
 {% endmarkdown %}
 {% codeAndDemo 'html' %}
-<div class="kh-table-scroll"><table class="kh-table--spec"><thead><tr><th scope="col">Project</th><th scope="col">Year</th><th scope="col">Organization</th></tr></thead><tbody><tr><td>Shared design system</td><td>2026</td><td>UNDRR</td></tr><tr><td>Visual Framework</td><td>2019</td><td>EMBL</td></tr></tbody></table></div>
+<div class="kh-table-scroll">
+  <table class="kh-table--spec">
+    <caption>Example project record</caption>
+    <thead>
+      <tr>
+        <th scope="col">Project</th>
+        <th scope="col">Year</th>
+        <th scope="col">Organization</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Shared design system</th>
+        <td>2026</td>
+        <td>UNDRR</td>
+      </tr>
+      <tr>
+        <th scope="row">Visual Framework</th>
+        <td>2019</td>
+        <td>EMBL</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 {% endcodeAndDemo %}
+<h3 id="spec-table">Stacking versus scrolling</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-table-scroll">
+  <table class="kh-table--spec kh-table--stack">
+    <caption>Example compact record</caption>
+    <thead>
+      <tr>
+        <th scope="col">Project</th>
+        <th scope="col">Year</th>
+        <th scope="col">Organization</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="/work/">Platform recovery</a></td>
+        <td data-label="Year">2025</td>
+        <td data-label="Organization">UNDRR</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endcodeAndDemo %}
+{% markdown %}
+- `.kh-table-scroll` contains a genuinely wide table instead of making the page scroll.
+- `.kh-table--stack` opts a suitable record table into cards below 846px. Add `data-label` to cells that need a header in this view; titles and reference IDs need not repeat obvious labels.
+- Keep the full table when relationships depend on comparing columns. Do not stack a data matrix merely to avoid horizontal scrolling.
+
+Sources: `_kh-datasheet.scss`, `_kh-cartridge-system.scss`; a production example is `src/site/work.njk`.
+{% endmarkdown %}
 
 <h2 id="forms">Forms</h2>
 {% codeAndDemo 'html' %}
-<form action="/search/" method="get"><label class="kh-form__label" for="guide-search">Search the site</label><input class="kh-form__input" id="guide-search" name="search_query" type="search" placeholder="Try design systems"><button class="kh-button" type="submit">Search</button></form>
+<form action="/search/" method="get">
+  <label class="kh-form__label" for="guide-search">Search the site</label>
+  <input class="kh-form__input" id="guide-search" name="search_query" type="search" placeholder="Try design systems">
+  <button class="kh-button" type="submit">Search</button>
+</form>
 {% endcodeAndDemo %}
-<p>Inputs have a real label, a strong neutral boundary and at least 48px height. Placeholder text supports the label rather than replacing it. Native controls, document order and keyboard focus remain the foundation.</p>
-
-<h2 id="search-mode-toggle">Search mode toggle</h2>
 {% codeAndDemo 'html' %}
-<fieldset class="kh-search-mode"><legend>Control preview</legend><label class="kh-search-mode__option"><input type="radio" name="guide-mode" checked>Keyword</label><label class="kh-search-mode__option"><input type="radio" name="guide-mode">Meaning</label></fieldset>
+<label class="kh-form__label" for="guide-context">Supporting context</label>
+<textarea class="kh-form__textarea" id="guide-context" rows="3" aria-describedby="guide-context-help"></textarea>
+<p id="guide-context-help" class="kh-meta">A local control preview; this text is not submitted.</p>
+<label class="kh-form__label" for="guide-disabled">Unavailable field</label>
+<input class="kh-form__input" id="guide-disabled" value="Read-only demonstration" disabled>
 {% endcodeAndDemo %}
-<p>Selected modes use white on cobalt. The actual search page keeps its radio state, keyboard behaviour and URL parameters in sync. This example shows the control styling; use <a href="/search/">Search</a> for working queries.</p>
-
-<h2 id="semantic-search">Semantic search</h2>
-<p>The semantic conversation uses the same form and reading primitives as keyword search. Keep loading, error and empty states readable. Model loading, request handling and result generation belong to the existing search implementation; visual changes should not introduce another data path.</p>
-
-<h2 id="metrics">Metrics and data marks</h2>
 {% codeAndDemo 'html' %}
-<div class="kh-metrics-grid"><div class="kh-metric"><span class="kh-metric__number">20+</span><span class="kh-metric__label">Years of work</span></div><div class="kh-metric"><span class="kh-metric__number">5</span><span class="kh-metric__label">Countries</span></div></div>
+<label class="kh-form__label" for="guide-select">Example topic</label>
+<select class="kh-form__select" id="guide-select">
+  <option>Platforms</option>
+  <option>Editorial operations</option>
+  <option>Shared standards</option>
+</select>
+<label class="kh-form__label" for="guide-invalid">Email validation example</label>
+<input class="kh-form__input" id="guide-invalid" type="email" value="incomplete-address" aria-invalid="true" aria-describedby="guide-invalid-help">
+<p id="guide-invalid-help">Example error: enter a complete email address.</p>
 {% endcodeAndDemo %}
-<p>Counts use real data and a visible explanation. Dates, entry kinds, topic tallies, length gauges and similarity scores have different meanings: preserve their labels. Data visualisations keep readable keys and non-colour cues. Use tabular numbers for values that update.</p>
-
-<h2 id="layout">Layout</h2>
 {% markdown %}
-The shell and colour fields span the viewport. Header, homepage and footer content share a centred 72rem measure with at least 2rem desktop gutters and 1rem mobile gutters. Ordinary page layouts remain capped at 76rem. The medium breakpoint is 846px. Reading is constrained independently, normally around 62ch. A heading and its introduction start on the same axis; date rails are reserved for lists.
+Inputs have an explicit label, a strong boundary and at least 48px height. A placeholder supports a label rather than replacing it. Pair `aria-describedby` with visible help or an error; set `aria-invalid="true"` only after validation finds an error. Keep error text adjacent and useful. Use native `required`, `disabled` and control types where they fit.
 
-- `.kh-grid` and `.kh-grid__col-3` remain general grid utilities.
-- `.kh-grid-stylized` supports label/content layouts. An empty leading placeholder collapses in the current system; do not use an empty column to indent a whole page.
-- `.kh-cluster` is plain wrapping flex with a gap and zero child margins. Keep it that way.
-- `.kh-stack` retains the established vertical-flow utilities.
-- `.kh-bleed-out` is for deliberate wide figures; verify its width at mobile and desktop sizes.
-- `.kh-story` and `.kh-scrolly` retain their own wide/reading tracks for interactive pieces.
+Shared classes: `.kh-form__label`, `.kh-form__input`, `.kh-form__textarea`, `.kh-form__select`. Behaviour and validation belong to the owning form. Sources: `index.scss` and `_kh-cartridge-system.scss`.
 {% endmarkdown %}
+
+<span id="markup-notes-search-mode-toggle" aria-hidden="true"></span>
+<span id="markup-notes-semantic-search" aria-hidden="true"></span>
+<h2 id="search-mode-toggle">Search mode toggle and form</h2>
 {% codeAndDemo 'html' %}
-<div class="kh-cluster"><a href="/blog/">Blog</a><a href="/work/">Work</a><a href="/photos/">Photos</a></div>
+<fieldset class="kh-search-mode">
+  <legend>Control preview</legend>
+  <label class="kh-search-mode__option">
+    <input type="radio" name="guide-mode" value="keyword" checked>
+    Keyword
+  </label>
+  <label class="kh-search-mode__option">
+    <input type="radio" name="guide-mode" value="semantic">
+    Meaning
+  </label>
+</fieldset>
 {% endcodeAndDemo %}
+{% markdown %}
+The checked radio gives its parent a white-on-cobalt selected state through `:has(input:checked)`. `:has(input:focus-visible)` supplies the keyboard indicator. Give each instance a unique radio name and an accessible legend.
 
-<h2 id="pager">Pager</h2>
-<p>The shared pager keeps newer/older destinations and numbered pages as real links. Its accessible label should name the collection. Current-page state belongs only on the current page, while a section underline can identify the parent destination.</p>
+In production, the fieldset starts `hidden`; the search module reveals it when mode switching is available. `/search/` synchronizes the selected radio, panel visibility, input focus and `search_type=semantic` URL parameter. This reference demonstrates native control states; it does not attach a second search controller.
+{% endmarkdown %}
+<h3 id="search-form">Search-form markup</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-search-widget">
+  <div class="kh-search-widget__panel">
+    <form class="kh-search-widget__form" action="/search/" method="get">
+      <label class="kh-u-sr-only" for="guide-keyword">Search my site</label>
+      <input type="search" id="guide-keyword" name="search_query" class="kh-form__input" placeholder="Search my site">
+      <button type="submit" class="kh-button" aria-label="Search"><span class="kh-button__label" aria-hidden="true">Search</span><span class="kh-button__icon" aria-hidden="true">→</span></button>
+    </form>
+  </div>
+</div>
+{% endcodeAndDemo %}
+{% markdown %}
+The label and arrow spans swap at the small-screen breakpoint. Both are hidden from assistive technology, so the button's `aria-label` supplies its name. Preserve that name when adapting the markup. Keyword submission uses `search_query`; semantic input is owned by the existing search implementation. Use unique demo IDs rather than production controller IDs.
 
-<h2 id="spacing">Spacing</h2>
-<p>Prefer the component’s layout and gap to extra margins on each child. The existing spacing utilities remain available; <code>kh-u-margin__top--*</code> and <code>kh-u-padding__top--*</code> should express a deliberate section break. Avoid layering them with a second manual offset.</p>
+Source of truth: `src/site/search.njk`, `_semantic-search.scss` and `_kh-cartridge-system.scss`. Test keyboard mode switching, empty/results/error states and the icon-button state below 600px.
+{% endmarkdown %}
 
+<span id="semantic-search-interface" aria-hidden="true"></span>
+<h2 id="semantic-search">Semantic-search conversation</h2>
+{% codeAndDemo 'html' %}
+<div class="kh-ask" aria-label="Example conversation">
+  <div class="kh-ask__conversation">
+    <p class="kh-ask__message kh-ask__message--user">What has Ken written about design systems?</p>
+    <p class="kh-ask__message kh-ask__message--system">Example response: start with the work record and related writing.</p>
+    <p class="kh-ask__message kh-ask__message--status">Example loading state…</p>
+  </div>
+  <ul class="kh-ask__results">
+    <li class="kh-ask__result"><a href="/work/">Work and impact</a>
+      <p>A real destination used as a harmless result example.</p>
+    </li>
+  </ul>
+</div>
+{% endcodeAndDemo %}
+{% markdown %}
+| Hook | Responsibility |
+| --- | --- |
+| `.kh-ask` | Conversation wrapper |
+| `.kh-ask__conversation` | Message list; production uses `role="log"`, `aria-live="polite"`, `aria-relevant="additions"` |
+| `.kh-ask__message--user` / `--system` | User and response treatments |
+| `.kh-ask__message--status` | Loading/status feedback |
+| `.kh-ask__results` / `__result` | Result list and individual entries |
+
+This static sample does not create a live region or load the model. Production wiring uses `ask-form`, `ask-input` and `ask-conversation`; do not copy those IDs into a second controller instance. Retain loading, empty, failure and retry explanations; model downloading must not look like an unresponsive button.
+
+Behaviour: `src/site/semantic-search.js` and `src/site/search.njk`. Presentation: `_semantic-search.scss`. Use the working [Search page](/search/) for behavioural checks.
+{% endmarkdown %}
+
+<h2 id="metrics">Metrics and snapshots</h2>
+{% codeAndDemo 'html' %}
+<div class="kh-metrics-grid">
+  <div class="kh-metric"><span class="kh-metric__number">20+</span><span class="kh-metric__label">Years of work</span></div>
+  <div class="kh-metric"><span class="kh-metric__number">15</span><span class="kh-metric__label">Sites in the UNDRR ecosystem</span></div>
+</div>
+{% endcodeAndDemo %}
+<h3 id="snapshot-list">Snapshot list</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-career-snapshot">
+  <ul class="kh-snapshot-list">
+    <li><strong>Practice:</strong> Platforms, editorial operations and shared standards.</li>
+    <li><strong>Evidence:</strong> Link a claim to its <a href="/work/">work record</a>.</li>
+  </ul>
+</div>
+{% endcodeAndDemo %}
+<p>Numbers need a visible explanation, a scope and a source. Distinguish response time, database latency, delivery speed and campaign engagement. Use tabular numerals for values that update. Sources: <code>index.scss</code>, <code>_kh-cartridge-system.scss</code> and the production CV.</p>
+
+<span id="the-marks" aria-hidden="true"></span>
+<h2 id="data-marks">Data marks</h2>
+{% markdown %}
+These build-time marks carry text equivalents and links; they must remain meaningful with CSS disabled. They are not interchangeable with headline metric tiles.
+
+| Pattern | Implementation | Meaning and constraint |
+| --- | --- | --- |
+| Publishing timeline / pulse | `partials/pulse-strip.njk`; `pulseMonths` filter | Dated publishing activity, with links and collapsed empty periods; not a decorative progress bar |
+| Neighbour sequence | `partials/sequence-mark.njk`; `neighbourhood` filter | This entry and chronological neighbours; retained in the entry-foot assembly where selected by layout data |
+| Reading-length gauge | `partials/length-gauge.njk`; `lengthFrame` filter | Position among the comparison corpus; keep the word count, percentile and median explanation |
+| Topic tally | `topicTally` filter in the article layout | Number of entries sharing a topic; preserve the visible count |
+
+<h3 id="entry-type-key">Entry-type key</h3>
+
+Where type is encoded as a mark, preserve shape, colour and the text equivalent together. Avoid inventing new abbreviations in a legend. SVGs may carry their own presentation colours; check the actual generated mark rather than assuming every SVG consumes a CSS token. The current article places its publishing timeline at the end, not in the opening masthead.
+
+Sources: `_kh-dataviz.scss`, `config/eleventy/` filters, `partials/entry-foot.njk` and the individual partials. Add `data-pagefind-ignore` to navigation that repeats other entries' titles.
+{% endmarkdown %}
+
+<h2 id="layout">Layout primitives</h2>
+{% markdown %}
+The shell and colour fields span the viewport. Header, homepage and footer content share a centred 72rem measure with at least 2rem desktop gutters and 1rem mobile gutters. Ordinary page layouts remain capped at 76rem; `.kh-content` defaults to 70ch and article prose to about 62ch. `.kh-content--wide` removes the generic content measure, not every enclosing page constraint.
+
+<h3 id="breakpoints">Breakpoints</h3>
+
+| Sass token | Value | Purpose |
+| --- | --- | --- |
+| `$kh-breakpoint--sm` / `--sm-down` | 600px / 599px | Small-screen boundary |
+| `$kh-breakpoint--md` / `--md-down` | 846px / 845px | Main layout changes |
+| `$kh-breakpoint--lg` / `--lg-down` | 1024px / 1023px | Larger grid spacing |
+| `$kh-breakpoint--xl` | 1300px | Wide reading layouts and margin notes |
+
+Use the `-down` partner for max-width rules so adjacent ranges do not both match the same boundary pixel. Source: `_settings.scss`.
+{% endmarkdown %}
+<h3 id="grid-system-kh-grid">General grid</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-grid">
+  <div class="kh-note-box">First cell</div>
+  <div class="kh-note-box">Second cell</div>
+  <div class="kh-note-box">Third cell</div>
+</div>
+{% endcodeAndDemo %}
+<h3 id="three-column-grid-kh-gridcol-3">Three-column grid and spans</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-grid kh-grid__col-3">
+  <div class="kh-grid__col--span-1 kh-note-box">One track</div>
+  <div class="kh-grid__col--span-2 kh-note-box">Two tracks</div>
+</div>
+{% endcodeAndDemo %}
+<h3 id="stylized-grid-kh-grid-stylized">Label and content grid</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-grid-stylized">
+  <div>
+    <p class="kh-meta">A meaningful label</p>
+  </div>
+  <div>
+    <p>Content associated with the label. An empty leading placeholder collapses in the current theme.</p>
+  </div>
+</div>
+{% endcodeAndDemo %}
+<h3 id="stack-kh-stack">Vertical stack</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-stack">
+  <p>First block</p>
+  <p>Second block using the established sibling spacing.</p>
+  <p>Third block</p>
+</div>
+{% endcodeAndDemo %}
+{% codeAndDemo 'html' %}
+<div class="kh-stack kh-stack--800">
+  <p>A larger vertical stack</p>
+  <p>The <code>kh-stack--800</code> modifier uses 2rem sibling spacing.</p>
+  <p>Use the established modifier rather than inventing a numeric suffix.</p>
+</div>
+{% endcodeAndDemo %}
+<p>The default stack uses 1rem; <code>.kh-stack--800</code> uses 2rem. A purpose-built component can supply <code>--kh-stack-margin--custom</code>. The ordinary <code>--kh-stack-margin</code> is reset on stack children and grandchildren, so setting it on a wrapper is not the same override.</p>
+<h3 id="cluster-kh-cluster">Wrapping cluster</h3>
+{% codeAndDemo 'html' %}
+<div class="kh-cluster"><a class="kh-button" href="/blog/">Blog</a><a class="kh-button" href="/work/">Work</a><a class="kh-button" href="/photos/">Photos</a></div>
+{% endcodeAndDemo %}
+{% markdown %}
+`.kh-cluster` is plain wrapping flex with `gap` and zero direct-child margins. It does not impose display or margins on grandchildren. Do not restore the old negative-margin gutter rules or use `!important` spacing overrides. For a denser composition, create a purpose-built component rather than changing this shared primitive.
+
+<h3 id="full-bleed-kh-u-fullbleed">Full-width fields and retained bleed hooks</h3>
+
+Current cover/writing/footer fields use full-width blocks with fluid `--kh-cart-gutter` padding. Keep content centred and extend decorative background layers, instead of widening paragraphs. The full-width regression check covers these fields at mobile and wide viewports. This is page-level markup in the full-width homepage main, not a breakout applied inside an article:
+
+```html
+<section class="kh-cartridge-writing" aria-labelledby="writing-title">
+  <div class="kh-cartridge-section-head">
+    <h2 id="writing-title">Ideas in circulation</h2>
+    <a href="/all/">All writing</a>
+  </div>
+  <div class="kh-datasheet-list">
+    <!-- Render the shared post-summary partial for each entry. -->
+  </div>
+</section>
+```
+
+`.kh-u-fullbleed` remains a legacy pseudo-element helper using viewport arithmetic. It is not the current shell's implementation and should not be the starting point for a new section. `.kh-bleed-out` remains available for wide figures; its left-side escape depends on the surrounding layout and must be checked at real widths.
+
+Sources: `index.scss`, `_kh-cartridge.scss`, `_kh-cartridge-system.scss`. See the [design guide composition](/style-guide/design/#composition) before adding a new page composition.
+{% endmarkdown %}
+
+<h2 id="pager">Pager and navigation states</h2>
+{% codeAndDemo 'html' %}
+<nav class="kh-pager" aria-label="Pagination example">
+  <ul class="kh-pager__list">
+    <li><a href="/all/" class="kh-pager__link">← Newer</a></li>
+    <li><a href="/all/" class="kh-pager__link">1</a></li>
+    <li><a href="#pager" class="kh-pager__link kh-pager__link--current" aria-current="page">2</a></li>
+    <li><a href="/all/3/" class="kh-pager__link">3</a></li>
+    <li><a href="/all/3/" class="kh-pager__link">Older →</a></li>
+  </ul>
+</nav>
+{% endcodeAndDemo %}
+{% markdown %}
+Use the shared `partials/pager.njk` for actual collections. It receives Eleventy's pagination object plus optional `pagerLabel`, `pagerNewer` and `pagerOlder`, and suppresses itself when only one page exists. The current link carries `.kh-pager__link--current` and `aria-current="page"`; newer/older destinations remain real links. The example above labels its own local state, not the page's global navigation.
+
+The primary navigation has two strengths: `.kh-navigation__link--active` marks the exact page; `--section` identifies a parent section. Only exact-page links receive `aria-current`. Writing stays a parent on paginated `/all/` routes. Label destinations using the [interface vocabulary](/style-guide/editorial/#interface-vocabulary).
+
+Sources: `partials/pager.njk`, `layouts/base.njk`, `_kh-datasheet.scss`, `index.scss` and `_kh-cartridge.scss`.
+{% endmarkdown %}
+
+<span id="spacing-utilities" aria-hidden="true"></span>
+<span id="content-width" aria-hidden="true"></span>
+<h2 id="spacing">Spacing utilities</h2>
+{% markdown %}
+Prefer a component's layout/gap before adding per-child offsets. The existing utilities are explicit hooks, not a generated universal scale: do not assume a new numeric suffix exists.
+
+| Class | Property | Value |
+| --- | --- | --- |
+| `.kh-u-margin__bottom--200` | margin-bottom | 0.5rem |
+| `.kh-u-margin__bottom--600` | margin-bottom | 1.5rem |
+| `.kh-u-margin__top--1200` | margin-top | 3rem |
+| `.kh-u-padding__bottom--200` | padding-bottom | 0.75rem |
+| `.kh-u-padding__bottom--400` | padding-bottom | 1rem |
+| `.kh-u-padding__top--500` | padding-top | 1.5rem |
+| `.kh-u-padding__top--600` | padding-top | 2rem |
+| `.kh-u-padding__top--800` | padding-top | 3rem |
+
+`--kh-stack-margin--custom` is the stack's intentional spacing override; the ordinary `--kh-stack-margin` is set/reset by the stack rules; `--kh-page-grid-gap` supplies the shared gap (1rem, rising to 2rem at 1024px). A component-specific gap can override that default. Check the cascade before stacking a utility onto an existing margin. Sources: `index.scss` and `_kh-content.scss`.
+{% endmarkdown %}
+
+<span id="loaded-faces-reference" aria-hidden="true"></span>
 <h2 id="font-variations">Font assets</h2>
 {% markdown %}
 | Face | Weight | Role |
@@ -189,117 +720,152 @@ The shell and colour fields span the viewport. Header, homepage and footer conte
 The fonts are static assets. Do not use variable-font axis settings on Plex or Anton. A request for 900 does not create a heavier Anton. Keep archived Recursive and Datatype files: posts document and use them. See [font source notes](https://github.com/khawkins98/allaboutken-11ty/blob/main/docs/FONTS.md).
 {% endmarkdown %}
 
-<h2 id="video">Video</h2>
-<p>Use the existing responsive video wrapper and a descriptive iframe title. A third-party embed should earn its loading cost; a link is often enough for a reference clip. Keep captions and surrounding explanation useful.</p>
+<span id="video-embed" aria-hidden="true"></span>
+<h2 id="video">Video embeds</h2>
+{% codeAndDemo 'html' %}
+<div class="kh-video">
+  <iframe title="Local video-layout placeholder" srcdoc="&lt;p&gt;16:9 local placeholder. A production video needs a descriptive title and captions.&lt;/p&gt;" sandbox loading="lazy"></iframe>
+</div>
+{% endcodeAndDemo %}
+{% markdown %}
+`.kh-video` is a responsive 16:9 wrapper; its iframe/object/embed fills the wrapper. Use a descriptive iframe title, captions and a useful adjacent explanation. The live sample uses an isolated local placeholder so the reference does not load a video service.
 
-<h2 id="feedback-toast">Feedback</h2>
-<p>The feedback partial keeps a real service link and live SVG counter. Do not transform the counter at build time. The confirmation state is supporting UI, not a new page heading. This reference does not submit fake feedback to demonstrate the component.</p>
+A real embed should earn its loading cost; use a link when readers only need a reference. Production iframe permissions, URLs and playback behaviour belong to that embed's integration. Source: `.kh-video` in `index.scss` and its reading-context spacing in `_kh-content.scss`.
+{% endmarkdown %}
 
+<span id="markup" aria-hidden="true"></span>
+<span id="design-details" aria-hidden="true"></span>
+<h2 id="feedback-toast">Feedback and confirmation toast</h2>
+{% markdown %}
+The real feedback action and counter are assembled by `partials/feedback.njk`. Keep the action's service URL and `rel="nofollow"`; keep the live remote SVG counter's `eleventy:ignore` so the build never freezes or rasterises it. Use a grammar-neutral label because its count is unknown at build time.
+
+<h3 id="how-it-works">Fragment-driven confirmation</h3>
+
+The service redirects back to `#thanks`. That fragment targets the hidden `.kh-feedback-thanks` element; CSS displays the fixed banner, starts the timer and dismisses it after about 15 seconds. The production element carries `aria-live="polite"`. This pattern uses no feedback-submission JavaScript.
+{% endmarkdown %}
+{% codeAndDemo 'html' %}
+<p><a class="kh-button" href="#guide-feedback-toast">Preview local confirmation</a></p>
+{% endcodeAndDemo %}
+{% markdown %}
+The demo deliberately targets a local example ID and never calls the service. Re-trigger by navigating away from its fragment and back. Check the announcement and focus experience as well as the visual banner. Source: `index.scss` (`.kh-feedback-thanks`, `kh-banner-in`, `kh-banner-out`, `kh-timer`) and the [feedback implementation article](/posts/20260220-feedback-buttons-cgi-pattern/).
+{% endmarkdown %}
+
+<span id="atmospheric-background-dappled-light" aria-hidden="true"></span>
 <h2 id="dappled-light">Earlier visual treatments</h2>
 <p>The graph paper, full-site light effect and ruled numbered mastheads are retired from the shared shell. The <a href="/posts/sunlit-dappled-light-effect/">lighting article</a> and <a href="/posts/20250904-switching-to-recursive/">font history</a> preserve the experiments. The <a href="/design-lab/megadrive/">proposal board</a> preserves the design directions. Retaining an archive does not make every archived treatment a current default. Social-sharing cards use the current palette and type in their own fixed-size, noindex document.</p>
 
 <p>Decorative backgrounds use near-white paper, angled colour fields and small sawtooth edges. The writing-field edge and role ribbon use <code>cartridge-edge.svg</code> as a repeated mask; <code>cartridge-pattern.svg</code> supplies sparse cover marks. Patterns belong in margins and section boundaries, with upright content and enough clear space for focus rings.</p>
 
-<h2 id="accessibility">Accessibility</h2>
-{% markdown %}
-- Keep a single primary page heading and a useful heading order.
-- Use real links, buttons, labels, disclosures and inputs. Primary targets are at least 44px.
-- Maintain visible focus against the active surface and readable contrast in every state. Shared controls use an ink outline and white inner ring; check both light and dark surfaces.
-- At 200% text sizing, headings and ribbons must reflow without clipping their content.
-- Do not rely on hover, colour or motion alone to explain data or controls.
-- Keep the CSS checkbox in the DOM. Every custom stylesheet rule is scoped beneath `body:has(#kh-css-toggle:checked)`.
-- Honour reduced motion and preserve the no-JavaScript reading path of stories.
-- Keep alt text, captions, credits and print output useful.
-
-The skip link, CSS toggle and native disclosures are functional parts of the site. Inspect them at a keyboard, not just in a screenshot.
-{% endmarkdown %}
-
-<h2 id="utilities">Utilities and implementation</h2>
-{% markdown %}
-Layout frontmatter supplies `cartridgeTheme`: `page`, `home`, `article`, `note`, `story`, `photo`, `profile` or `utility`. The base layout supplies the body class and font preload. Avoid repeating the flag in every post when its layout already establishes it.
-
-`_kh-cartridge.scss` owns the palette, shell and cover/article composition. `_kh-cartridge-system.scss` adapts shared components and page families. Older class names remain stable to avoid rewriting archived post markup.
-
-Use `data-pagefind-ignore` for repeated chrome and other entries’ titles. Use `noindex` for non-destinations and `kens_status: draft` for reviewable unpublished posts. Do not replace those shared mechanisms with path lists.
-
-Production checks: `yarn build`, `yarn lint:css`, `yarn lint:links`, `yarn lint:images`, and `yarn lint:overflow`. Check transformed image output, horizontal overflow, 200% text sizing, keyboard focus on light and dark surfaces, search, disclosures, CSS-off mode and representative long-form and interactive pages. Check social-image alt metadata against the card itself, independently of the hero photograph.
-{% endmarkdown %}
-<!-- Former heading anchors remain at this migration note for shared links. -->
-<span id="heading-classes" aria-hidden="true"></span>
-<span id="content-headings-unstyled-h-tags-inside-kh-content" aria-hidden="true"></span>
-<span id="body-text-classes" aria-hidden="true"></span>
-<span id="inline-text-styles" aria-hidden="true"></span>
-<span id="intro-pair-hero-heading-lead-text" aria-hidden="true"></span>
-<span id="micro-labels-and-section-numbers" aria-hidden="true"></span>
-<span id="panels" aria-hidden="true"></span>
-<span id="spec-table" aria-hidden="true"></span>
-<span id="other-primitives" aria-hidden="true"></span>
-<span id="everyday-chrome" aria-hidden="true"></span>
-<span id="labels-and-micro-copy" aria-hidden="true"></span>
-<span id="naming" aria-hidden="true"></span>
-<span id="sentence-case-not-title-case" aria-hidden="true"></span>
-<span id="straplines" aria-hidden="true"></span>
-<span id="apparatus-must-be-legible-without-hover" aria-hidden="true"></span>
-<span id="register" aria-hidden="true"></span>
-<span id="data-marks" aria-hidden="true"></span>
-<span id="entry-type-key" aria-hidden="true"></span>
-<span id="the-marks" aria-hidden="true"></span>
-<span id="badges-and-labels" aria-hidden="true"></span>
-<span id="labels" aria-hidden="true"></span>
-<span id="margin-notes-and-pull-quotes" aria-hidden="true"></span>
-<span id="collapsible-details" aria-hidden="true"></span>
-<span id="open-by-default" aria-hidden="true"></span>
-<span id="when-to-use" aria-hidden="true"></span>
-<span id="markup-notes-collapsible-details" aria-hidden="true"></span>
-<span id="standard-blockquote" aria-hidden="true"></span>
-<span id="featured-quote" aria-hidden="true"></span>
-<span id="inline-code" aria-hidden="true"></span>
-<span id="code-blocks" aria-hidden="true"></span>
-<span id="code-live-demo-codeanddemo-shortcode" aria-hidden="true"></span>
-<span id="figures-and-images" aria-hidden="true"></span>
-<span id="styled-figure" aria-hidden="true"></span>
-<span id="unstyled-figure-inside-kh-content" aria-hidden="true"></span>
-<span id="bleed-out-image" aria-hidden="true"></span>
-<span id="markup-notes-search-mode-toggle" aria-hidden="true"></span>
-<span id="search-form" aria-hidden="true"></span>
-<span id="markup-notes-semantic-search" aria-hidden="true"></span>
-<span id="semantic-search-interface" aria-hidden="true"></span>
-<span id="standard-summary" aria-hidden="true"></span>
-<span id="news-summary" aria-hidden="true"></span>
-<span id="summary-with-image" aria-hidden="true"></span>
-<span id="snapshot-list" aria-hidden="true"></span>
-<span id="breakpoints" aria-hidden="true"></span>
-<span id="grid-system-kh-grid" aria-hidden="true"></span>
-<span id="three-column-grid-kh-gridcol-3" aria-hidden="true"></span>
-<span id="stylized-grid-kh-grid-stylized" aria-hidden="true"></span>
-<span id="stack-kh-stack" aria-hidden="true"></span>
-<span id="cluster-kh-cluster" aria-hidden="true"></span>
-<span id="full-bleed-kh-u-fullbleed" aria-hidden="true"></span>
-<span id="spacing-utilities" aria-hidden="true"></span>
-<span id="content-width" aria-hidden="true"></span>
-<span id="display-headlines" aria-hidden="true"></span>
-<span id="loaded-faces-reference" aria-hidden="true"></span>
-<span id="video-embed" aria-hidden="true"></span>
-<span id="how-it-works" aria-hidden="true"></span>
-<span id="markup" aria-hidden="true"></span>
-<span id="design-details" aria-hidden="true"></span>
-<span id="atmospheric-background-dappled-light" aria-hidden="true"></span>
 <span id="accessibility-patterns" aria-hidden="true"></span>
-<span id="skip-link" aria-hidden="true"></span>
-<span id="screen-reader-only" aria-hidden="true"></span>
-<span id="focus-indicators" aria-hidden="true"></span>
-<span id="css-toggle" aria-hidden="true"></span>
-<span id="reduced-motion" aria-hidden="true"></span>
-<span id="high-contrast" aria-hidden="true"></span>
+<h2 id="accessibility">Accessibility contracts</h2>
+<h3 id="skip-link">Skip link</h3>
+{% markdown %}
+The base layout's first link points to `#main-content`. `.kh-u-sr-only.kh-skip-link` hides it visually until keyboard focus; focus restores the size and clip so it is usable. Keep one real target in the layout rather than inserting competing demo IDs.
+
+<h3 id="screen-reader-only">Visually hidden text</h3>
+
+`.kh-u-sr-only` keeps content in the accessibility tree. `aria-hidden="true"` removes content from it. They are not alternatives: use the former for an accessible label, the latter for genuinely redundant decoration. Pull-quotes also carry `data-pagefind-ignore` because they repeat body text.
+
+<h3 id="focus-indicators">Focus and control states</h3>
+
+Shared controls use an ink outline and white inner ring. Check links and buttons on paper, cobalt and green, alongside selected, hovered, disabled and invalid states. Keep visible labels, unique IDs and native control semantics. Primary actions are at least 44px; inputs are at least 48px high.
+
+<h3 id="css-toggle">CSS-off mode</h3>
+
+Every custom rule belongs inside `body:has(#kh-css-toggle:checked)`. The footer owns the real checked checkbox. Do not add a second checkbox with that ID, or put inline presentation styles into a demo that would survive CSS-off. Source order, text alternatives and real links must continue to work without styling.
+
+<h3 id="reduced-motion">Motion and enlarged text</h3>
+
+New motion must honour `prefers-reduced-motion`. Review existing animated components on their own merits; a semantic pattern does not guarantee its animation is already compliant. Test at 200% text sizing: cover text must reflow, and clipping is only for decoration. The overflow checker specifically checks enlarged cover text as well as document width.
+
+<h3 id="high-contrast">Contrast and non-colour meaning</h3>
+
+Use the [palette's measured combinations](/style-guide/design/#palette). Keep charts' text keys and shape cues. Check forced-colour/high-contrast modes in the actual component; do not infer support solely from the ordinary screenshot. Alt text, captions and print content remain part of the component contract.
+{% endmarkdown %}
+
 <span id="utility-classes" aria-hidden="true"></span>
-<span id="visibility" aria-hidden="true"></span>
-<span id="text" aria-hidden="true"></span>
 <span id="color" aria-hidden="true"></span>
 <span id="links" aria-hidden="true"></span>
 <span id="navigation" aria-hidden="true"></span>
-<span id="print" aria-hidden="true"></span>
-<span id="css-custom-properties-reference" aria-hidden="true"></span>
 <span id="color-properties" aria-hidden="true"></span>
 <span id="layout-properties" aria-hidden="true"></span>
-<span id="theming" aria-hidden="true"></span>
+<h2 id="utilities">Utilities, tokens and implementation</h2>
+<h3 id="visibility">Visibility utilities</h3>
+{% markdown %}
+These describe the actual rules in `index.scss`, including legacy naming. Do not infer a breakpoint from a class name.
+
+| Class | Current behaviour |
+| --- | --- |
+| `.kh-u-show-for-mobile-only` | Screen widths below 600px |
+| `.kh-u-show-for-medium-up` | Visible from 600px upward; despite its name, the hide rule ends at 599px |
+| `.kh-u-show-for-medium-only` | 846–1023px |
+| `.kh-u-show-for-large` | 1024px and above |
+| `.kh-u-show-for-print-only`, `.kh-u-for-print-only` | Hidden on screen, available in print |
+| `.kh-u-do-not-print` | Hidden in print |
+| `.kh-u-sr-only` | Visually hidden; available to assistive technology |
+
+Do not use a visibility utility to hide the only navigation at a viewport width. Preserve the legacy names until an intentional migration; document their behaviour here.
+
+<h3 id="text">Text, link and navigation hooks</h3>
+
+| Hook | Contract |
+| --- | --- |
+| `.kh-u-text--nowrap` | Prevents wrapping; use only when the content can still fit at enlarged text sizes |
+| `.kh-u-text-color--grey` | Consumes `--kh-color--grey`, mapped to muted ink by the theme |
+| `.kh-link` | Standalone link styling outside ordinary `.kh-content` prose |
+| `.kh-navigation`, `__list`, `__item`, `__link` | Navigation structure; active/section state described under [Pager](#pager) |
+| `.ken-link--print` | Print wrapper that exposes link destinations |
+
+<h3 id="print">Print</h3>
+
+Keep reading order and captions useful when colour/backgrounds disappear. Screen-only controls use `.kh-u-do-not-print`; print-only contact content uses the existing print utilities. Margin notes return to the flow. Check the CV's print action, a long article, a table and a figure after changing shared typography or widths.
+
+<h3 id="css-custom-properties-reference">Current token reference</h3>
+
+| Property or group | Current role/value |
+| --- | --- |
+| `--kh-cart-paper` / `--kh-cart-ink` | `#faf9f5` / `#151515` |
+| `--kh-cart-blue` / `--kh-cart-yellow` | `#173ebc` / `#f6d92f` |
+| `--kh-cart-red` / `--kh-cart-green` | `#ee3e35` / `#007c55` |
+| `--kh-ground` | Alias of paper |
+| `--kh-color--blue`, `--kh-color--apparatus` | Aliases of cobalt |
+| `--kh-color--sun` | Yellow in the cartridge system; the name is retained for compatibility |
+| `--kh-color--sun--deep`, `--kh-color--yellow--dark` | Cobalt in the cartridge system |
+| `--kh-ink-muted`, `--kh-color--grey` | `#5b5e5a` muted ink |
+| `--kh-color--visited` | `#563d82` for visited reading links |
+| `--kh-panel-bg` | `#fffdf5` |
+| `--kh-rule`, `--kh-rule--strong` | Ink at 20% opacity / solid ink |
+| `--kh-cart-gutter` | Fluid outer gutter aligning a 72rem content measure; minimum 2rem, 1rem on mobile |
+| `--kh-cart-cut` | Decorative diagonal depth, clamped from 1.5rem to 3.5rem |
+| `--kh-page-grid-gap` | 1rem; 2rem from 1024px |
+| `--kh-grid-stylized-module--prime` | Legacy 16rem label track, where the layout retains it |
+| `--kh-body-width` | Legacy base-shell setting; the cartridge shell overrides it, so it does not control current full-width fields |
+| `--kh-font-sans`, `--kh-font-mono` | Self-hosted Plex stacks with system fallbacks |
+
+<h3 id="theming">Component overrides and ownership</h3>
+
+`.kh-box` reads `--kh-box-theme-color--background` and `--kh-box-theme-color--foreground`. Old button-colour properties remain in the base CSS but do not override the cartridge button rule. Prefer a purposeful component modifier to an undocumented inline override. Keep new custom properties declared or provide an intentional fallback; `lint:css-vars` checks unresolved reads.
+
+Layout frontmatter supplies `cartridgeTheme`: `page`, `home`, `article`, `note`, `story`, `photo`, `profile` or `utility`. Base/layout inheritance supplies the body class and display-font preload. Do not repeat a layout's default flag in every post. Standalone lab documents and historical experiments must identify themselves rather than silently becoming alternative site defaults.
+
+| Concern | Source of truth |
+| --- | --- |
+| Palette, shell, cover and article composition | `src/components/vf-componenet-rollup/_kh-cartridge.scss` |
+| Shared controls, page families and guide primitives | `_kh-cartridge-system.scss` in the same directory |
+| Content typography, notes, figures and demos | `_kh-content.scss` |
+| Retained primitives and utilities | `_kh-datasheet.scss`, `index.scss`, `_settings.scss` |
+| Behaviour | The relevant partial/module, not a duplicate controller in this reference |
+| Naming and copy | [Editorial guide](/style-guide/editorial/#interface-vocabulary) |
+
+Use `data-pagefind-ignore` for repeated chrome and other entries' titles. Use `noindex` for non-destinations and `kens_status: draft` for reviewable unpublished posts. Keep those exclusions in their existing shared mechanisms.
+
+<h3 id="reference-verification">Verifying a change</h3>
+
+- Check real source markup and at least one production use before documenting a variant.
+- Exercise keyboard focus, native disclosures, the local toast, search submission and narrow/wide layouts. Keep examples' actions harmless.
+- Check CSS-off, 200% text, print, reduced motion and high-contrast behaviour. A live demo documents a contract; it is not proof of all accessibility states.
+- Run `yarn lint:css`, production rendering, `yarn lint:links`, `yarn lint:images`, `yarn lint:css-vars` and `yarn lint:overflow` as appropriate. Run production link/image gates before restarting dev, whose image endpoints differ.
+- Keep old section IDs next to the replacement material so shared links remain useful. Update this reference and the design guide with implementation changes.
+{% endmarkdown %}
+
 </div></article>
