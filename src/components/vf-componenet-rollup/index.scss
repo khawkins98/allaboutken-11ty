@@ -993,8 +993,8 @@ body:has(#kh-css-toggle:checked) {
     text-wrap: balance;
   }
 
-  // Highlight anchor-linked headings
-  :is(h1, h2, h3, h4, h5, h6):target {
+  // Highlight anchor-linked headings; shard headings already have an underlay.
+  :is(h1, h2, h3, h4, h5, h6):target:not(.kh-shard-heading) {
     border-left: 3px solid var(--kh-color--apparatus);
     padding-left: 0.5em;
   }
