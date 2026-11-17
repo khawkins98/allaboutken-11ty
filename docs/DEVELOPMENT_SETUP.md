@@ -19,10 +19,13 @@ Eleventy 4 alpha. Local and CI are standardized on Node 22.
 nvm use
 corepack enable
 yarn install
+yarn build
 ```
 
 `yarn install` runs the `prepare` script and configures the hooks in `.githooks/`, including commit-subject normalization and validation.
 If your shell does not pick up the right Yarn automatically, `corepack` is the supported path here because `packageManager` pins Yarn 1.22.22.
+
+The initial build generates semantic-search vectors and derived data. It can take several minutes and caches the model under `.cache/transformers`. Run it once before testing semantic search; the development server does not generate embeddings.
 
 ## Daily development workflow
 
@@ -30,7 +33,7 @@ If your shell does not pick up the right Yarn automatically, `corepack` is the s
 yarn dev
 ```
 
-This runs:
+Open [localhost:8080](http://localhost:8080/). This runs:
 
 1. Sass watch: compiles `src/components/vf-componenet-rollup/index.scss` to `build/css/styles.css`
 2. Eleventy dev server: `ELEVENTY_ENV=development eleventy --serve --config=eleventy.js`

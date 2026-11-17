@@ -4,7 +4,7 @@ layout: layouts/digesting.njk
 parentUrl: /directory/
 parentLabel: Directory
 date: 2025-09-10
-lastUpdated: 2026-08-27
+lastUpdated: 2026-11-17
 templateEngineOverride: njk
 ---
 
@@ -15,7 +15,6 @@ templateEngineOverride: njk
 <aside class="kh-note-box">
 <span class="kh-note-box__label">What's a colophon?</span>
 Historically a colophon summarized how a book was made — who printed it, where, and when. On the web, a colophon is a short page describing how a site is built and the principles behind it (see <a href="https://en.wikipedia.org/wiki/Colophon_(publishing)">colophon in publishing</a> and <a href="https://indieweb.org/colophon">IndieWeb colophon</a>).
-</span>
 </aside>
 
 {% markdown %}
@@ -26,14 +25,18 @@ This site is built and published with a small, readable stack and a bias for fle
 
 - **Static site generator**: [Eleventy (11ty) v4](https://www.11ty.dev/)
 - **Language & tooling**: Node.js (Yarn scripts), Nunjucks templates, Markdown via Markdown‑It with `markdown-it-anchor`
-- **Styles**: Sass compiled to a single CSS file; custom utility classes; normalize; type set in IBM Plex Sans and IBM Plex Mono
+- **Styles**: Sass compiled to a single CSS file; custom utility classes; normalize; Science Gothic and Anton for display, IBM Plex Sans for reading and interfaces, and League Mono for code and metadata
   - Previously used the EMBL Visual Framework (VF) and Gulp; the [migration to a simpler Eleventy v3 stack is documented here](/posts/20250831-site-overhaul-eleventy-v3).
 - **Search**: Two modes on the [search page](/search/):
   - [Pagefind](https://pagefind.app/) — static keyword search, indexes built HTML at deploy time, serves chunked index fragments on demand. Source: [search page template](https://github.com/khawkins98/allaboutken-11ty/blob/main/src/site/search.njk)
   - Semantic search — build-time vector embeddings (MiniLM-L6-v2 via [Transformers.js](https://huggingface.co/docs/transformers.js)) + in-browser cosine similarity. Same model runs both sides; no API keys, no server. [Read the post](/posts/20260302-semantic-search-browser-embeddings/)
 - **Hosting**: Vercel (auto‑deploys from GitHub, automatic HTTPS, CDN)
 - **Domain**: Cloudflare (DNS, security, performance)
-- Fonts: IBM Plex Sans and IBM Plex Mono, self-hosted. The site [previously used Recursive](/posts/20250904-switching-to-recursive).
+- **Fonts**: Science Gothic, Anton, IBM Plex Sans and League Mono, all self-hosted. Science Gothic uses a small fixed instance; League Mono is variable. The site [previously used Recursive](/posts/20250904-switching-to-recursive).
+
+## Visual design
+
+The current palette and typography take their starting point from Japanese Mega Drive packaging: a graphic cover, clear browsing surfaces, and a calmer reading column. The [design style guide](/style-guide/design/) records the principles and sources; the [component reference](/style-guide/components/) shows the live patterns. Decorative geometry uses CSS shapes and small original SVG assets for the cover pattern and serrated edges. The CSS toggle remains part of the site, and the older visual experiments stay documented in their posts.
 
 ## Build & source
 

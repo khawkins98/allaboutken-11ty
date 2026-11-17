@@ -1008,7 +1008,8 @@
 
   // The CSS side: a snippet that grows its state selectors (m2) and the
   // token line (w.1), and the real button, which follows the token.
-  .kh-sv-demo__code {
+  // Owned by the scaled diagram; outrank generic prose pre defaults.
+  .kh-sv-demo .kh-sv-demo__code {
     background: none;
     border: 0;
     color: var(--kh-color--grey--darkest);

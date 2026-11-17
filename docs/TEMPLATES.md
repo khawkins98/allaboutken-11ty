@@ -8,7 +8,7 @@ Page templates live in `src/site/`. Layouts and shared fragments are resolved fr
 
 | Layout | File | Used by | Notes |
 | --- | --- | --- | --- |
-| Base | `src/site/_includes/layouts/base.njk` | Most pages | Global `<head>`, OG/Twitter tags, header, footer, scripts, ambience partial |
+| Base | `src/site/_includes/layouts/base.njk` | Most pages | Global `<head>`, OG/Twitter tags, header, footer, scripts and default cartridge theme |
 | Post | `src/site/_includes/layouts/post.njk` | Long-form posts and impact stories | Wraps content in article structure, hero image, JSON-LD, feedback block |
 | Story | `src/site/_includes/layouts/story.njk` | Scroll-driven entries built around `.kh-scrolly` regions | Quiet cover, one centred reading column, full-width scrolly regions and plates, `image` as a closing plate (or placed in the body with `partials/story-plate.njk` when `story_plate: body`), colophon (date, words, topics, ref, contents) at the end. Header comment lists what a post must provide |
 | Digesting | `src/site/_includes/layouts/digesting.njk` | Digest entries and selected standalone pages | Lightweight article layout with digest source link support |
@@ -17,12 +17,21 @@ Page templates live in `src/site/`. Layouts and shared fragments are resolved fr
 
 `post.njk`, `story.njk`, `digesting.njk` and `photo.njk` all use `layout: layouts/base.njk`, so `base.njk` is the shared foundation.
 
+## Visual defaults
+
+`base.njk` supplies `cartridgeTheme: page`. `post.njk`, `digesting.njk`,
+`story.njk` and `photo.njk` override it to `article`, `note`, `story` and
+`photo`. The homepage, CV and utility pages select their variant in page
+frontmatter. The base supplies body classes, navigation and the Anton preload.
+New entries normally need no theme frontmatter. Standalone social cards use
+same-origin fonts and the same palette on their fixed screenshot canvas.
+
 ## Common partials and macros
 
 | Partial / macro | File | Where used |
 | --- | --- | --- |
 | Global footer | `src/site/_includes/footer.njk` | Included by `layouts/base.njk` |
-| Ambience background | `src/site/_includes/partials/ambience.njk` | Included by `base.njk` |
+| Ambience background | `src/site/_includes/partials/ambience.njk` | Retained implementation; omitted by the current shell |
 | Search box | `src/site/_includes/partials/search-box.njk` | Blog, Digesting, All listing pages |
 | Post summary card | `src/site/_includes/partials/post-summary.njk` | Home, Blog, All |
 | Pager | `src/site/_includes/partials/pager.njk` | Paginated index pages |

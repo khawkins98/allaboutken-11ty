@@ -44,7 +44,7 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
       fifteen entries. The footer carries the same four links on every page. -#}
   {%- if isFirstPage %}
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="sections" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Sections</h2>
+    <h2 id="sections" class="kh-text-heading--2">Sections</h2>
     <span class="kh-meta">{{ collections.allContent | length }} entries in total</span>
   </div>
   <div class="kh-panel">
@@ -82,7 +82,7 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
 
   {%- if isFirstPage %}
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="pace" class="kh-text-heading--2"><span class="kh-section-number">2.0</span>Pace &amp; scale</h2>
+    <h2 id="pace" class="kh-text-heading--2">Pace &amp; scale</h2>
     <span class="kh-meta">Counted at build time &middot; <a href="/stats/">more</a></span>
   </div>
   {%- set glanceLabel = "entries" %}
@@ -91,7 +91,7 @@ permalink: "/all/{% if pagination.pageNumber > 0 %}{{ pagination.pageNumber + 1 
 
   <div class="kh-section-head kh-u-margin__top--1200">
     {#- Sole section on a pager page, so it numbers from the top there. -#}
-    <h2 id="everything" class="kh-text-heading--2"><span class="kh-section-number">{% if isFirstPage %}3.0{% else %}1.0{% endif %}</span>Everything</h2>
+    <h2 id="everything" class="kh-text-heading--2">Everything</h2>
     <span class="kh-meta">Newest first{% if not isFirstPage %} &middot; page {{ pagination.pageNumber + 1 }}{% endif %}</span>
   </div>
   {% include "partials/search-box.njk" %}

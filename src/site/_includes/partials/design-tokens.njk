@@ -1,0 +1,13 @@
+<div class="kh-token-grid">
+{% set palette = [
+  { name: 'Paper', key: 'paper', hex: '#faf9f5', role: 'Near-white reading ground' },
+  { name: 'Ink', key: 'ink', hex: '#151515', role: 'Body text and structure' },
+  { name: 'Cobalt', key: 'blue', hex: '#173ebc', role: 'Links, navigation and strong fields' },
+  { name: 'Yellow', key: 'yellow', hex: '#f6d92f', role: 'Cover geometry and highlights' },
+  { name: 'Vermilion', key: 'red', hex: '#ee3e35', role: 'Large decorative accents' },
+  { name: 'Green', key: 'green', hex: '#007c55', role: 'Closing footer field' }
+] %}
+{% for token in palette %}
+<div class="kh-token"><span class="kh-token__swatch kh-token__swatch--{{ token.key }}" aria-hidden="true"></span><strong>{{ token.name }}</strong><br><code>{{ token.hex }}</code><br><small>{{ token.role }}</small></div>
+{% endfor %}
+</div>

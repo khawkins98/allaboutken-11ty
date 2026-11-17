@@ -1,134 +1,80 @@
 ---
-title: Hello
+title: Make it make sense
 seoTitle: 'Ken Hawkins — Digital Platforms & Audience Engagement Lead'
 subtitle: 'Digital Platforms & Audience Engagement Lead'
-teaser: 'Digital Platforms & Audience Engagement Lead helping complex organizations build coherent, measurable public-facing systems, with content and data structured to serve both human and machine audiences.'
+teaser: 'Platforms. Content. People. Connected by design. Ken Hawkins turns fragmented digital estates into services that help organizations reach, serve, and learn from their audiences.'
 date: 2018-08-22 12:24:50
 image: "/blog/drill-bits.jpg"
+lately: "Getting a ’90s screensaver to run in a browser"
+featured_work: /work/2026/impact-story-mangrove-figma/
+cartridgeTheme: home
 layout: layouts/base.njk
-templateEngineOverride: njk
 ---
+<section class="kh-cartridge-cover" aria-labelledby="cover-title">
+  <div class="kh-cartridge-intro">
+    <p class="kh-cartridge-kicker">Ken Hawkins / UN · science · media</p>
+    <h1 class="kh-cartridge-title" id="cover-title"><span>Make it</span> <span>make sense.</span></h1>
+    <p class="kh-cartridge-ribbon">Platforms. Content. People. <span>Connected by design.</span></p>
+    <p class="kh-cartridge-role">{{ subtitle }}</p>
+    <p class="kh-cartridge-bio">I lead platforms and audience engagement at UNDRR, connecting strategy, content and technical delivery. I turn fragmented digital estates into services that help organizations reach, serve, and learn from their audiences.</p>
+    <p class="kh-cartridge-proof">Case study: <a href="/work/2025/impact-story-platform-recovery-optimization/">Platform recovery across 15 UNDRR sites ↗</a><br>Median response time: 0.88s → 0.45s.</p>
+    <p class="kh-cartridge-links" data-pagefind-ignore>
+      <a href="/work/">See my work ↗</a>
+      <a href="/cv/">Experience &amp; CV ↗</a>
+    </p>
+  </div>
+  {%- for story in collections.impactStories %}
+  {%- if story.url == featured_work %}
+  <aside class="kh-cartridge-feature" data-pagefind-ignore aria-label="Featured work">
+    <p class="kh-cartridge-kicker">In practice / {{ story.data.org }}</p>
+    <h2><a href="{{ story.url }}">{{ story.data.title }} <span aria-hidden="true">↗</span></a></h2>
+    {%- if story.data.image %}
+    <a href="{{ story.url }}" tabindex="-1" aria-hidden="true"><img src="/images{{ story.data.image }}" width="320" sizes="(min-width: 846px) 230px, 75vw" alt="" loading="eager" decoding="async"></a>
+    {%- endif %}
+    <p>{{ story.data.teaser | emdash }}</p>
+  </aside>
+  {%- endif %}
+  {%- endfor %}
+</section>
+
+<section class="kh-cartridge-writing" aria-labelledby="recently">
+  <div class="kh-cartridge-section-head">
+    <h2 id="recently">Ideas in circulation</h2>
+    <nav class="kh-cartridge-links" aria-label="Reading routes" data-pagefind-ignore>
+      <a href="/blog/#start-here">Start here: picked posts ↗</a>
+      <a href="/all/">All writing ↗</a>
+    </nav>
+  </div>
+  <div class="kh-datasheet-list">
+  {# Photographs remain in /all/ and /photos/; the homepage leads with writing. #}
+  {%- for post in collections.allContent | withoutTag('photos') | limitItems(6) %}
+    {% include "partials/post-summary.njk" %}
+  {%- endfor %}
+  </div>
+  <nav class="kh-cartridge-links" aria-label="Writing sections" data-pagefind-ignore>
+    <a href="/blog/">Blog ↗</a>
+    <a href="/digesting/">Digesting ↗</a>
+    <a href="/work/">Work ↗</a>
+    <a href="/photos/">Photos ↗</a>
+  </nav>
+</section>
+
+<aside class="kh-cartridge-now" data-pagefind-ignore aria-label="From the workbench">
+  <p><span class="kh-cartridge-kicker">Currently</span> UNDRR (UN) · Bonn, Germany</p>
+  {%- if lately %}<p><span class="kh-cartridge-kicker">Lately</span> {{ lately }}</p>{% endif %}
+</aside>
+
+<section class="kh-cartridge-hello" aria-labelledby="hello">
+  <p class="kh-cartridge-kicker">Next conversation</p>
+  <h2 id="hello" class="kh-shard-heading kh-shard-heading--section">Let’s make<br>something work.</h2>
+  <p>Let’s talk about leading digital platforms, audience engagement and the teams that connect them.</p>
+  <p class="kh-cartridge-links">
+    <a href="mailto:khawkins98@gmail.com">Email Ken ↗</a>
+    <a href="https://www.linkedin.com/in/allaboutken">LinkedIn ↗</a>
+    <a href="https://toot.io/@khawkins98">Mastodon ↗</a>
+  </p>
+</section>
+<div class="kh-cartridge-timeline">
 {%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) %}
 {% include "partials/pulse-strip.njk" %}
-
-<section class="kh-u-padding__top--500">
-  <div class="kh-hero">
-    <div class="kh-hero__layout">
-    <div class="kh-hero__body kh-content">
-    <h1 class="kh-font-headline kh-text-heading--1">
-      <span class="kh-font-headline--display">{{title}}.</span>
-      <span class="kh-font-headline--display">
-        <span class="kh-u-text--nowrap">I am</span> Ken Hawkins.
-      </span>
-    </h1>
-    <h2 class="kh-hero__lede">{{ subtitle }}</h2>
-    {% markdown -%}
-
-I turn fragmented digital estates into coherent, measurable services that help complex organizations reach, serve, and learn from their audiences. I build them so their content and data read clearly to people and to the machines increasingly reading on their behalf.
-
-I ship systems that deliver impact. I understand technology and human organizational dynamics equally -- and how to make them work together. Twenty years with [UN agencies, international science, and media](/cv) have sharpened that.
-
-    {%- endmarkdown %}
-
-    </div>
-    <aside class="kh-hero__spec">
-      <div class="kh-hero__spec-row">
-        {#- No job title here. The headline two inches to the left already
-            gives one, and this cell used to give a different one -- "Web
-            Platform Lead" against "Digital Platforms & Audience Engagement
-            Lead" -- so the first screen showed two current roles. The
-            employment title stays on /cv/, where a formal record belongs. -#}
-        <span class="kh-panel__label">Currently</span>
-        UNDRR (UN) &mdash; Bonn, Germany
-      </div>
-      <div class="kh-hero__spec-row">
-        <span class="kh-panel__label">Experience</span>
-        20+ years &middot; UN, science &amp; media organizations
-      </div>
-      <div class="kh-hero__spec-row">
-        <span class="kh-panel__label">Focus</span>
-        Platforms &middot; design systems &middot; structured content for AI
-      </div>
-    </aside>
-    </div>
-  </div>
-</section>
-
-{#- What Sets Me Apart -#}
-{#- commented out for now
-<section class="kh-grid-stylized kh-u-padding__top--600 kh-u-padding__bottom--600">
-  <span></span>
-  <section class="kh-content">
-    <blockquote class="kh-quote kh-quote--featured">
-      <p>Ken is the rare professional who can sit with executives to discuss strategy, then build the technical architecture to deliver it, while ensuring the content teams and end users actually benefit. He's not just a consultant who talks about transformation — he's someone who ships working systems that last.</p>
-    </blockquote>
-    <blockquote class="kh-quote kh-quote--featured">
-      <p>Ken's not a pure developer or designer — he's a strategic technologist who builds sustainable systems for complex organizations with distributed teams.</p>
-    </blockquote>
-  </section>
-</section>
--#}
-
-<section class="kh-card-container">
-  <section>
-    <div class="kh-section-head">
-      <h2 id="recently" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Recent writing</h2>
-      <span class="kh-meta">Latest 10</span>
-    </div>
-
-    <div class="kh-datasheet-list">
-      <div class="kh-datasheet-list__head" aria-hidden="true">
-        <span class="kh-meta">Date</span>
-        <span class="kh-meta">Article</span>
-        <span class="kh-meta">Figure</span>
-      </div>
-    {#- Photographs are held back from the homepage deliberately. They are a new
-        and so far very small kind of entry, and this list is the first thing a
-        visitor reads; one photograph among ten pieces of writing showcases it
-        before there is anything to showcase. They remain in `allContent`, so
-        /all/, /archive/ and /directory/ all still carry them, and they are
-        reachable from the footer. Revisit when there are enough to stand as a
-        body of work rather than as a single frame. -#}
-    {%- for post in collections.allContent | withoutTag('photos') | limitItems(10) -%}
-    {% include "partials/post-summary.njk" %}
-    {%- endfor -%}
-    </div>
-    <p class="kh-cluster kh-u-margin__top--1200">
-      <a href="/all">All writing ↦</a>
-      <a href="/blog">Blog ↦</a>
-      <a href="/digesting">Digesting ↦</a>
-      <a href="/work">Work ↦</a>
-    </p>
-  </section>
-
-</section>
-
-{#- Contact -#}
-{#- kh-u-padding__top--500 brings the 1.0 → 2.0 gap level with the
-    hero → 1.0 gap (both land at ~4.5rem). -#}
-<section class="kh-u-padding__top--500">
-  <section>
-    <div class="kh-section-head">
-      <h2 id="hello" class="kh-text-heading--2"><span class="kh-section-number">2.0</span>Say hello</h2>
-      <span class="kh-meta">Open to opportunities</span>
-    </div>
-    <div class="kh-panel">
-      <div class="kh-panel__row">
-        <div class="kh-panel__cell">
-          <span class="kh-panel__label">Status</span>
-          Open to strategic opportunities — let’s connect.
-        </div>
-        <div class="kh-panel__cell">
-          <span class="kh-panel__label">Find me</span>
-          <span class="kh-cluster">
-            <a href="https://toot.io/@khawkins98" >Mastodon<span class="kh-u-show-for-large"> @khawkins98@toot.io</span></a>
-            <a href="https://www.linkedin.com/in/allaboutken" >LinkedIn</a>
-            <a href="/cv/" >CV</a>
-            <a href="mailto:khawkins98@gmail.com" >Email</a>
-            <a href="https://untappd.com/user/khawkins98">Beer</a>
-          </span>
-        </div>
-      </div>
-    </div>
-  </section>
-</section>
+</div>

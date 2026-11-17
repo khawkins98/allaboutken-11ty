@@ -10,7 +10,7 @@ active_path: front
 description: Transparent notes on how I use AI in my writing workflow.
 topics:
   - AI
-lastUpdated: 2026-03-03
+lastUpdated: 2026-11-17
 ---
 
 {#
@@ -67,6 +67,7 @@ I do this partly to learn about the tools and their limits. AI-generated outline
 | Tool | Type | Status | Description |
 |------|------|--------|-------------|
 | **[Claude Code](https://claude.ai/code)** | AI coding agent | <span class="kh-badge">Current</span> | CLI agent for longer coding sessions on this site. Project memory, custom skills, and hooks keep it aligned to site conventions without repeating context each time. |
+| **Orca** | Agent workspace | <span class="kh-badge">Current</span> | I've been using Orca a bit for work on this site: keeping coding agents and separate worktrees together, then checking the results in its browser. It helped with the [recent redesign](/posts/20261115-a-cartridge-cover-for-the-homepage/). |
 | **GitHub Copilot** | AI coding agent | <span class="kh-badge">Testing</span> | Exploring the terminal interface for coding tasks. |
 | **Cursor** | IDE | <span class="kh-badge">Past</span> | AI pair‑programming IDE built on VS Code. Replaced by Claude Code for most tasks. |
 | **Fireflies** | Transcription | <span class="kh-badge">Current</span> | Meeting recorder and transcription with integrations for Zoom, Teams, and Google Meet. Quick search, summaries, and action items across calls. |
@@ -77,12 +78,19 @@ I do this partly to learn about the tools and their limits. AI-generated outline
 | **[Claude Code agent profiles](https://github.com/wshobson/agents?tab=readme-ov-file)** | Code agents | <span class="kh-badge">Future</span> | Experimenting with custom sub‑agents (refactorer, security auditor) to tighten prompts and roles. Using community profiles from Claude Code Custom Agents repo. |
 | **Microsoft Copilot Studio** | Assistant builder | <span class="kh-badge">Testing</span> | Certainly not my first choice, but in a Microsoft ecosystem it unlocks useful integrations: grounding assistants on SharePoint/OneDrive content, and experimenting with a parent–child chat agent dispatcher pattern for routing tasks. |
 | **[Context7 MCP](https://context7.com/)** | MCP | <span class="kh-badge">Current</span> | MCP server for fetching library docs at query time -- handy when working with APIs I don't know by heart. |
-| **[Browser MCP](https://browsermcp.io/)** | MCP | <span class="kh-badge">Current</span> | MCP browser client for integrating local tools. |
-| **[Chrome DevTools MCP](https://developer.chrome.com/blog/chrome-devtools-mcp)** | MCP | <span class="kh-badge">Current</span> | MCP server for Chrome DevTools automation and inspection. |
-| **[Awesome ChatGPT Prompts](https://github.com/f/awesome-chatgpt-prompts?tab=readme-ov-file)** | AI agent prompts | <span class="kh-badge">Current</span> | Open collection of LLM prompts. |
-| **Commet Browser** | AI assisted browser | <span class="kh-badge">Current</span> | AI‑assisted browsing for research and summaries. |
-| **[Together AI](https://www.together.ai/) + FLUX.2-dev** | AI image generation | <span class="kh-badge">Current</span> | Hero image generation via the FLUX.2-dev model, run from a browser tool built into this site. Prompt, generate three in parallel, crop, save. About $0.03 a post. See [the post about it](/posts/20260303-generating-blog-art/). |
-| **[Loras](https://www.loras.dev/)** | AI image maker | <span class="kh-badge">Past</span> | Fun and lightweight. Moved to FLUX.2-dev for more control over style and tighter workflow integration. |
+
+## Not used as much
+
+These are tools I've used or tried, but reach for less often now.
+
+| Tool | Type | Notes |
+|------|------|-------|
+| **[Browser MCP](https://browsermcp.io/)** | MCP | MCP browser client for integrating local tools. |
+| **[Chrome DevTools MCP](https://developer.chrome.com/blog/chrome-devtools-mcp)** | MCP | MCP server for Chrome DevTools automation and inspection. |
+| **[Awesome ChatGPT Prompts](https://github.com/f/awesome-chatgpt-prompts?tab=readme-ov-file)** | AI agent prompts | Open collection of LLM prompts. |
+| **Commet Browser** | AI assisted browser | AI‑assisted browsing for research and summaries. |
+| **[Together AI](https://www.together.ai/) + FLUX.2-dev** | AI image generation | Hero image generation via the FLUX.2-dev model, run from a browser tool built into this site. Prompt, generate three in parallel, crop, save. About $0.03 a post. See [the post about it](/posts/20260303-generating-blog-art/). |
+| **[Loras](https://www.loras.dev/)** | AI image maker | Fun and lightweight. Moved to FLUX.2-dev for more control over style and tighter workflow integration. |
 
 </section>
 
@@ -90,7 +98,7 @@ I do this partly to learn about the tools and their limits. AI-generated outline
 
 ## What's next
 
-The image generation workflow is now settled enough that I wrote a post about it. Next I want to see if the audio→draft pipeline can get tighter -- there's still too much manual cleanup between transcription and a usable outline.
+I wrote up the [image generation workflow](/posts/20260303-generating-blog-art/), though I use it less often now. I still want to see if the audio→draft pipeline can get tighter -- there's still too much manual cleanup between transcription and a usable outline.
 
 If you have a tool or approach that's working for you, I'd love to hear it.
 

@@ -2,14 +2,13 @@
 title: Search my site
 date: 2020-09-12 21:24:50
 layout: layouts/base.njk
+cartridgeTheme: utility
 templateEngineOverride: njk
 noindex: true
 ---
 
 <div data-pagefind-ignore>
-  {#- Headline treatment, but NOT `--display`: this is a utility page where
-     the controls are the point, so a 42px display heading would push the
-     search field down the screen for no benefit. -#}
+  {#- Utility mastheads use the compact shard scale to keep controls near the top. -#}
   <h1 id="search-heading" class="kh-font-headline kh-text-heading--1">{{title}}</h1>
 
   <div class="kh-search-widget">

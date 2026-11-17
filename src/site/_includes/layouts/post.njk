@@ -1,5 +1,6 @@
 ---
 layout: layouts/base.njk
+cartridgeTheme: article
 pageClass: posts
 templateEngineOverride: njk
 ---
@@ -8,9 +9,9 @@ templateEngineOverride: njk
 <!-- kh-entry-date:{{ date | dateDisplay('yyyy-LL-dd') }} -->
 {%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) %}
 {%- set pulseCurrentKey = date | dateDisplay('yyyy-LL') %}
-{% include "partials/pulse-strip.njk" %}
+{% if not cartridgeTheme %}{% include "partials/pulse-strip.njk" %}{% endif %}
 
-<article class="kh-grid kh-grid__col-3">
+<article class="kh-grid kh-grid__col-3{% if cartridgeTheme %} kh-cartridge-article{% endif %}">
   <div class="kh-grid__col--span-1">
     {% set isImpactStory = tags and ('impact-stories' in tags) %}
     {# Document reference: impact stories echo their IS-nn part number from
@@ -39,40 +40,25 @@ templateEngineOverride: njk
           {% if isImpactStory %}{{ date | dateDisplay('y') }}{% else %}{{ date | dateDisplay }}{% endif %}
         </time>
         {%- set words = content | wordCount %}
-        &middot; {{ words | formatNumber }} words
+        <span class="kh-post-meta__words">{{ words | formatNumber }} words</span>
         {%- set lengthStats = words | lengthFrame(corpusStats.postLengths) %}
         {% include "partials/length-gauge.njk" %}
       </p>
-      {#- Topics get a line each, not a comma-separated run.
-          Inline, four hierarchical topics wrapped into a five-line blob that
-          broke mid-term -- "career / reflection", "static / sites" -- so a
-          single link's text was split across two lines and the whole thing
-          read as one run-on string. A list is what this always was. -#}
+      {#- Each topic keeps its optional detail and parent-topic count together.
+          The whole unit links to the parent page; the detail is not a second
+          destination. The list remains useful in the CSS-free view. -#}
       {% if topics %}
-      <ul class="kh-meta kh-post-topics" data-pagefind-ignore>
+      <ul class="kh-meta kh-post-topics" role="list" aria-label="Topics" data-pagefind-ignore>
           {%- for topic in topics %}
           {%- set parent = topic | topicParent %}
           {%- set child = topic | topicChild %}
           {%- set tally = collections.allContent | topicTally(topic) %}
           {%- set topicSlug = collections.topics | topicPageSlug(topic) %}
-          {#- Tally closes the group rather than sitting between parent and
-              child, where "retro computing x3 > emulation" reads as though
-              the count belonged to the child.
-
-              The parent is a link when a topic page exists, and plain text
-              when it does not. That contrast is the `>` convention made
-              visible: the parent is the controlled vocabulary and a place you
-              can go; the child is detail. Before this the taxonomy was
-              write-only -- 31 topic pages, and the word "typography" under a
-              typography post was inert. -#}
           <li class="kh-post-topics__item">
-          {%- if topicSlug %}<a href="/topics/{{ topicSlug }}/">{{ parent }}</a>{% else %}{{ parent }}{% endif %}
-          {#- No separator glyph. The `>` is a storage convention, and rendered
-              as a chevron it read as a breadcrumb -- implying the child was a
-              second, clickable level. Columns carry the relationship instead:
-              controlled term, then free-form detail, then the count. -#}
-          <span class="kh-topic-child">{{ child }}</span>
-          {%- if tally > 1 %}<span class="kh-topic-tally" title="{{ tally }} entries on {{ parent }}">×{{ tally }}</span>{% else %}<span></span>{% endif %}
+            {% if topicSlug %}<a class="kh-post-topics__link" href="/topics/{{ topicSlug }}/">{% else %}<span class="kh-post-topics__link">{% endif %}
+              <span class="kh-post-topics__name">{{ parent }}{% if child %}<span class="kh-topic-child">{{ child }}</span>{% endif %}</span>
+              {% if tally > 1 %}<span class="kh-topic-tally" title="{{ tally }} entries on {{ parent }}">{{ tally }}<span class="kh-u-sr-only"> entries on {{ parent }}</span></span>{% endif %}
+            {% if topicSlug %}</a>{% else %}</span>{% endif %}
           </li>
           {%- endfor %}
       </ul>
@@ -81,9 +67,10 @@ templateEngineOverride: njk
     {% include "partials/series-nav.njk" %}
     {%- set tocEntries = content | tocEntries %}
     {%- if tocEntries.length >= 2 %}
+    {% if cartridgeTheme %}<details class="kh-cartridge-contents" data-pagefind-ignore><summary><span class="kh-cartridge-contents__title">In this article</span><span class="kh-cartridge-contents__count">{{ tocEntries.length }} sections</span></summary>{% endif %}
     <nav class="kh-post-rail" aria-label="Contents" data-pagefind-ignore>
       <p class="kh-meta kh-meta--accent kh-post-rail__label">Contents</p>
-      <ol class="kh-post-rail__list">
+      <ol class="kh-post-rail__list" style="--kh-contents-rows-2: {{ (tocEntries.length / 2) | round(0, 'ceil') }}; --kh-contents-rows-3: {{ (tocEntries.length / 3) | round(0, 'ceil') }}">
         {%- for entry in tocEntries %}
         <li class="kh-post-rail__item">
           <a class="kh-post-rail__link" href="#{{ entry.id }}">
@@ -94,9 +81,13 @@ templateEngineOverride: njk
         {%- endfor %}
       </ol>
     </nav>
+    {% if cartridgeTheme %}</details>{% endif %}
     {%- endif %}
   </div>
   <div class="kh-post--text kh-content kh-grid__col--span-2">
+    {% if teaser -%}
+    <p class="kh-text-body--1 kh-post-intro">{{ teaser | emdash | safe }}</p>
+    {%- endif %}
     {% if image %}
     <figure class="kh-figure">
       {% if href %}<a href="{{ href }}">{% endif %}
@@ -118,9 +109,6 @@ templateEngineOverride: njk
         I'm getting more active by writing shorter form, more informal updates like this one.
       </div>
       {% endif %}
-      {% if teaser -%}
-      <p class="kh-text-body--1">{{ teaser | emdash | safe }}</p>
-      {%- endif %}
       <!-- kh-entry-content:start -->{{ content | safe }}<!-- kh-entry-content:end -->
     </div>
     {#- Feedback belongs to the reading column: it asks about the sentence the
@@ -159,3 +147,5 @@ templateEngineOverride: njk
 </script>
 
 {% include "partials/entry-foot.njk" %}
+
+{% if cartridgeTheme %}{% include "partials/pulse-strip.njk" %}{% endif %}

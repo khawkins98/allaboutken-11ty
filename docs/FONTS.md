@@ -4,31 +4,61 @@ Canonical reference for self-hosted webfont assets and build wiring.
 
 ## Font location
 
-Store IBM Plex assets in:
+Keep self-hosted font assets in:
 
 - [`src/components/kh-font/`](../src/components/kh-font/)
 
-Current active files in CSS (IBM Plex ships no variable build, so each weight
-is a separate static file):
+The current faces are self-hosted:
 
 - `IBMPlexSans-Regular.woff2` — 400 normal
 - `IBMPlexSans-Italic.woff2` — 400 italic
 - `IBMPlexSans-SemiBold.woff2` — 600 normal
-- `IBMPlexMono-Regular.woff2` — 400 normal
+- `league-mono/LeagueMono-VF.woff2` — variable weight 100–800 and width 50–200%
+- `science-gothic/ScienceGothic-Cover.woff2` — fixed 750-weight instance for the homepage cover and section mastheads
+- `Anton-Latin.woff2` — 400 normal, other display headings across the shared site layouts (15 KB; SIL OFL, see the font directory README)
 
-`font-weight: 700` resolves to SemiBold 600, the nearest declared weight.
+Current controls use Plex Sans 600; code and metadata use League Mono at weight
+400 and width 100%. Plex Sans requests for 700 resolve to the nearest declared
+600 face. Anton has one declared weight, 400. `font-synthesis-weight: none`
+prevents synthetic bold; League Mono supplies genuine interpolated weights
+within its declared range. Keep the family explicit in shared controls so a
+retained base rule cannot silently select the mono face.
 
-**Mono has one face, and only one.** There is no `IBMPlexMono-SemiBold.woff2`.
-Asking Plex Mono for 600 or 700 does not fall back to 400 -- the browser
-synthesises the bold by smearing the glyphs, which reads as a blurry masthead
-next to crisp Sans body copy and is invisible in code review. This was live on
-the wordmark, the navigation and the buttons.
+## League Mono variable face
 
-Every mono rule is therefore 400, and `font-synthesis-weight: none` in
-`index.scss` makes that structural: a stray 600 on mono now renders as 400
-instead of going quietly fuzzy. Style synthesis is untouched, so faux italics
-still work. If a bold mono is ever genuinely wanted, add the SemiBold file
-(~40KB) and declare an `@font-face` for it -- do not just raise the number.
+The unmodified [League Mono 2.300 release](https://github.com/theleagueof/league-mono/releases/tag/2.300)
+by Tyler Finck supplies code and supporting labels. The local WOFF2 retains all
+546 encoded code points and both variable axes. Inspection of the actual
+`fvar` table gives:
+
+| Axis | Minimum | File default | Maximum | Site setting |
+| --- | ---: | ---: | ---: | ---: |
+| Weight (`wght`) | 100 | 100 | 800 | 400 |
+| Width (`wdth`) | 50 | 50 | 200 | 100% |
+
+Declare those ranges in `@font-face` and request them with `font-weight` and
+`font-stretch`. The file defaults are thin and condensed, so request the site
+settings explicitly. There is no slant or optical-size axis.
+
+Pinned download URLs, original license, checksums and archive members live in
+[`league-mono/README.md`](../src/components/kh-font/league-mono/README.md).
+`IBMPlexMono-Regular.woff2` remains available as an archived former site face;
+it is no longer the globally loaded mono font.
+
+## Science Gothic cover trial
+
+The homepage cover line and section mastheads use a fixed,
+Latin-subset instance of official Science Gothic at `wght 750`, `wdth 60`, `slnt -5`, `CTRS 0`. It is about 32 KB and is
+preloaded on home, section, profile and utility pages. Article titles, reading
+subheadings and social cards remain Anton. Only the cover instance is shipped; the full variable font and the
+experimental type playground are not included.
+
+Source, retained license, actual axis ranges and output checksums live in
+[`science-gothic/README.md`](../src/components/kh-font/science-gothic/README.md).
+Rebuild the cover instance with
+`python3 scripts/prepare-science-gothic.py` using `fonttools[woff]`.
+No new outlines are drawn. The inspected custom contrast tag is `CTRS`, even
+though the upstream README currently calls it `CNTR`.
 
 ## How font assets reach production
 
@@ -40,26 +70,18 @@ Eleventy passthrough copies the whole font directory into the build output:
 
 ## CSS integration
 
-The `@font-face` rule lives in:
+Font declarations and their consumers have separate owners:
 
-- [`src/components/vf-componenet-rollup/index.scss`](../src/components/vf-componenet-rollup/index.scss)
+| Concern | Maintained source |
+| --- | --- |
+| Plex Sans and League Mono | `src/components/vf-componenet-rollup/index.scss` |
+| Anton and Science Gothic cover faces | `src/components/vf-componenet-rollup/_kh-cartridge.scss` |
+| Page preloads | `src/site/_includes/layouts/base.njk`: Sans Regular and League Mono variable, plus Anton on cartridge pages and the Science Gothic instance on home, section, profile and utility pages |
+| Standalone social-card faces | `src/site/_includes/layouts/social-card.njk`: Anton and Plex Sans use same-origin asset URLs |
 
-It currently declares four `@font-face` rules pointing at:
+All face URLs use `/assets/kh-font/`. When renaming an asset, update its declaration and each consumer in this table. Social cards are standalone documents, so a font loading correctly in the shared layout does not verify a social card.
 
-```scss
-src: url('/assets/kh-font/IBMPlexSans-Regular.woff2') format('woff2');
-src: url('/assets/kh-font/IBMPlexSans-Italic.woff2') format('woff2');
-src: url('/assets/kh-font/IBMPlexSans-SemiBold.woff2') format('woff2');
-src: url('/assets/kh-font/IBMPlexMono-Regular.woff2') format('woff2');
-```
-
-Two other places hardcode font paths and must be updated in step:
-
-- `src/site/_includes/layouts/base.njk` preloads Sans Regular and Mono Regular.
-- `src/site/_includes/layouts/social-card.njk` repeats the `@font-face` rules
-  with absolute production URLs, because the card is screenshotted standalone.
-
-If you change filenames, update all three to match exactly.
+The [font-directory README](../src/components/kh-font/README.md) records face sources, licensing, subsets and archived assets. The [component reference](../src/site/style-guide/components.njk) documents visual roles and control markup.
 
 ## Verification steps
 
@@ -85,6 +107,6 @@ If you change filenames, update all three to match exactly.
 
 ## Notes
 
-- The `Recursive*.woff2` files were removed when IBM Plex landed; they are recoverable from git history. `Datatype.woff2` is still used by a blog post.
-- These are the *complete* Plex faces, not the Latin-1 splits: the site uses em dashes, curly quotes, `&#8209;` and `↦`, which the splits do not cover.
+- The `Recursive*.woff2` variable files are retained but unloaded (see `src/components/kh-font/README.md`). `Datatype.woff2` is still used by a blog post.
+- The retained Plex files are the *complete* faces, not the Latin-1 splits: the site uses em dashes, curly quotes, `&#8209;` and `↦`, which the splits do not cover.
 - Keep fonts self-hosted in `src/components/kh-font/`; do not rely on runtime CDN font URLs for primary rendering.

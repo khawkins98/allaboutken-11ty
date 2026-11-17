@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="224" height="32" viewBox="0 0 224 32" fill="none">
+  <!-- Complete, original marks with breathing room; never tiled or cropped. -->
+  <path d="m5 6 9 9-9 10" stroke="#173ebc" stroke-width="3"/>
+  <path d="m43 6 13 4-4 13-13-4Z" stroke="#007c55" stroke-width="2.5"/>
+  <path d="M87 4c-12 8 12 8 0 16-4 3-4 5 0 8" stroke="#ee3e35" stroke-width="3"/>
+  <path d="M119 11h5m6 0h5m6 0h5m6 0h5M118 22h41" stroke="#151515" stroke-width="4"/>
+  <path d="m192 4 24 24h-30Z" fill="#f6d92f" stroke="#151515" stroke-width="2"/>
+</svg>

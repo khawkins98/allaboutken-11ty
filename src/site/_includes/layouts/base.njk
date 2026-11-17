@@ -1,13 +1,16 @@
+---
+cartridgeTheme: page
+---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preload" as="font" href="/assets/kh-font/IBMPlexSans-Regular.woff2" type="font/woff2" crossorigin>
-    <link rel="preload" as="font" href="/assets/kh-font/IBMPlexMono-Regular.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/assets/kh-font/league-mono/LeagueMono-VF.woff2" type="font/woff2" crossorigin>
     <link rel="stylesheet" media="all" href="{{ '/css/styles.css' | url }}" />
     {#- `seoTitle` overrides for pages whose on-page heading is written for the
-        page rather than for a search result. The homepage h1 is "Hello", which
+        page rather than for a search result. The homepage h1 is expressive display copy, which
         is right in the hero and useless as the string that appears in Google,
         browser tabs, bookmarks and Slack unfurls. -#}
     <title>{{ seoTitle or title or (renderData and renderData.title) or siteConfig.siteInformation.title}} | All about Ken Hawkins</title>
@@ -16,6 +19,8 @@
         domain returns "account not found". Senders use the FIRST
         rel="webmention", so a bare-domain link here silently drops mentions. #}
     <link rel="webmention" href="https://webmention.io/www.allaboutken.com/webmention" />
+    {% if cartridgeTheme %}<link rel="preload" href="/assets/kh-font/Anton-Latin.woff2" as="font" type="font/woff2" crossorigin>{% endif %}
+    {% if cartridgeTheme in ["home", "page", "profile", "utility"] %}<link rel="preload" href="/assets/kh-font/science-gothic/ScienceGothic-Cover.woff2" as="font" type="font/woff2" crossorigin>{% endif %}
     <link rel="pingback" href="https://webmention.io/www.allaboutken.com/xmlrpc" />
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/ken-favicon/assets/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/ken-favicon/assets/favicon-32x32.png">
@@ -61,7 +66,11 @@
     <meta property="og:title" content="{{ ogTitleComputed }}" />
     <meta property="og:description" content="{{ ogDescriptionComputed | striptags }}" />
     <meta property="og:image" content="{{ ogImageComputed }}" />
-    {%- set ogImageAlt = image_meta and (image_meta.altext or image_meta.alt) %}
+    {%- if og_image %}
+      {%- set ogImageAlt = og_image_alt %}
+    {%- else %}
+      {%- set ogImageAlt = 'AllAboutKen.com card: ' ~ ((title ~ '') | striptags) %}
+    {%- endif %}
     {%- if ogImageAlt %}<meta property="og:image:alt" content="{{ ogImageAlt }}" />{% endif %}
     {# Twitter Card meta tags #}
     <meta name="twitter:card" content="summary_large_image" />
@@ -96,8 +105,8 @@
     </script>
     {% endif %}
   </head>
-  <body class="kh-stack{% if bodyClass %} {{ bodyClass }}{% endif %}">
-    {% include "partials/ambience.njk" -%}
+  <body class="kh-stack{% if bodyClass %} {{ bodyClass }}{% endif %}{% if cartridgeTheme %} kh-cartridge kh-cartridge--{{ cartridgeTheme }}{% endif %}">
+    {% if not cartridgeTheme %}{% include "partials/ambience.njk" %}{% endif %}
     <a href="#main-content" class="kh-u-sr-only kh-skip-link">Skip to main content</a>
     <!-- Visible when CSS is off (hidden by CSS when on) -->
     <aside class="kh-css-off-note">If you're reading this the site styles are currently disabled. Toggle the “CSS” checkbox in the footer to restore styling.<hr></aside>
@@ -125,6 +134,17 @@
               to a screen-reader user standing on the CV is simply false; the
               underline is a wayfinding hint for people who can see it, not a
               claim about which page this is. -#}
+          {% if cartridgeTheme %}
+          {% set cartridgeNav = [
+            { label: 'Writing', href: '/all/', section: page.url.startsWith('/all/') or page.url.startsWith('/posts') or page.url.startsWith('/blog') or page.url.startsWith('/digesting') or page.url.startsWith('/photos') },
+            { label: 'Work', href: '/work/', section: page.url.startsWith('/work/') },
+            { label: 'About', href: '/cv/' },
+            { label: 'Search', href: '/search/' }
+          ] %}
+          {% for item in cartridgeNav %}
+          <li class="kh-navigation__item"><a href="{{ item.href }}" class="kh-navigation__link{% if page.url == item.href %} kh-navigation__link--active{% elif item.section %} kh-navigation__link--section{% endif %}"{% if page.url == item.href %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
+          {% endfor %}
+          {% else %}
           {%- set inWriting = page.url.startsWith('/all') or page.url.startsWith('/blog') or page.url.startsWith('/digesting') or page.url.startsWith('/work') or page.url.startsWith('/posts') or page.url.startsWith('/photos') %}
           <li class="kh-navigation__item">
             <a href="/all/" class="kh-navigation__link{% if page.url == '/all/' %} kh-navigation__link--active{% elif inWriting %} kh-navigation__link--section{% endif %}"{% if page.url == '/all/' %} aria-current="page"{% endif %}>Writing</a>
@@ -143,6 +163,7 @@
           <li class="kh-navigation__item">
             <a href="/search/" class="kh-navigation__link{% if page.url.startsWith('/search') %} kh-navigation__link--active{% endif %}"{% if page.url.startsWith('/search') %} aria-current="page"{% endif %}>Search</a>
           </li>
+          {% endif %}
           <li class="kh-navigation__item">
             <a href="/#hello" class="kh-navigation__link">Contact</a>
           </li>

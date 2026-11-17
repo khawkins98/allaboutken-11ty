@@ -18,6 +18,8 @@ image_meta:
   altext: "Johnny clings halfway up a palm tree while a red octopus sits below him on a tiny island, with a raft beside the shore and blue sea beyond."
 ---
 
+{% from "partials/collage.njk" import collageFigure %}
+
 {% markdown %}
 
 In 1992, Dynamix and Sierra On-Line released *Johnny Castaway*. Your Windows 3.1 PC went idle and Johnny fished, slept, built rafts, and got into trouble on his island. As a young kid, I came across him during a summer holiday trip to my parents' office.
@@ -33,6 +35,8 @@ Rebuilding his island paradise faithfully in JavaScript was only feasible with A
 > - Johnny's island combines scripted gags and weighted random choices with an eleven-day story that advances at most one step per calendar day.
 > - The browser port builds on earlier reverse-engineering work and interprets the original game resources in JavaScript.
 > - Running the original Windows program under instrumentation provides reference traces, which is what kept AI-suggested interpretations honest. Separate rendering “goldens” catch changes in the port.
+
+{{ collageFigure('/images/blog/johnny-castaway-moonlight.png', 'Johnny Castaway’s island at night, with a moonlit sky over the sea.', 'Johnny’s island after dark, running in the browser port.', 'Screenshot from johnny_web. Original Johnny Castaway artwork by Dynamix / Sierra On-Line.', 'red', '', true) }}
 
 ## Inside a gag, and between gags
 

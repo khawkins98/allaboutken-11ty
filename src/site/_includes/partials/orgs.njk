@@ -13,9 +13,9 @@
 {% macro orgIntro(id) %}
   {%- set text = orgSummary(id) | trim %}
   {% if text %}
-  <div class="kh-note-box">
+  <aside class="kh-note-box">
     <span class="kh-note-box__label">Context</span>
-    {{ text | safe }}
-  </div>
+    <p>{{ text | safe }}</p>
+  </aside>
   {% endif %}
 {% endmacro %}

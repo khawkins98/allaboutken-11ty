@@ -1,15 +1,29 @@
 ---
 title: My work and impact
-teaser: 'Evidence-led impact stories: UNDRR platform transformation (50–70% faster), EMBL Visual Framework (50+ sites), editorial efficiency, and governance improvements.'
+teaser: 'Platform leadership in practice: recovering UNDRR’s 15-site ecosystem, improving editorial operations, and building shared standards adopted across 50+ scientific properties.'
 layout: layouts/base.njk
 templateEngineOverride: njk
+selected_work:
+  - url: /work/2025/impact-story-platform-recovery-optimization/
+    angle: Platform transformation
+    proof: 15 sites
+    context: One coordinated recovery
+    summary: 'Coordinated infrastructure, workflows and governance. Median response time fell from 0.88s to 0.45s; quarterly Azure spend fell 20%.'
+  - url: /work/2025/impact-story-editorial-efficiency/
+    angle: Editorial operations
+    proof: 9 → 3 steps
+    context: Publication-cover workflow
+    summary: 'Automated publication-cover preparation from 10 minutes to 1 minute per item, alongside shared publishing patterns across 15 sites.'
+  - url: /work/2019/impact-story-embl-visual-framework/
+    angle: Shared standards
+    summary: 'Built a component library adopted across 50+ scientific properties, giving distributed teams common patterns without requiring a single technology stack.'
 ---
 
 <div>
   <section class="kh-content kh-u-padding__top--800 kh-u-padding__bottom--200">
-    <h1 class="kh-text-heading--1">{{title}}</h1>
+    <h1 class="kh-text-heading--1 kh-shard-heading">{{title}}</h1>
     <p class="kh-intro__text">
-      Evidence‑backed impact across platforms & performance, design systems, and structured content for AI.
+      I connect strategy, technical delivery and audience needs — leading platform change, improving editorial operations, and building standards that teams choose to use.
     </p>
     <p class="">
       Want the broader picture? Read my <a href="/cv/">CV</a>, get in touch via
@@ -19,15 +33,31 @@ templateEngineOverride: njk
   </section>
 </div>
 
+<section class="kh-work-selection" aria-labelledby="recent-work" data-pagefind-ignore>
+  <div class="kh-section-head"><h2 id="recent-work">Selected work</h2><a href="#impact-record">The full record ↓</a></div>
+  <div class="kh-work-cards">
+  {% for selection in selected_work %}
+  {% for project in collections.impactStories %}
+  {% if project.url == selection.url %}
+    <article class="kh-work-card"><a href="{{ project.url }}">
+      {% if selection.proof %}<div class="kh-work-card__proof"><strong>{{ selection.proof }}</strong><span>{{ selection.context }}</span></div>{% elif project.data.image %}<img class="kh-work-card__image" src="/images{{ project.data.image }}" alt="" width="600" sizes="(min-width: 846px) 30vw, 100vw" loading="lazy">{% endif %}
+      <div class="kh-work-card__body"><p class="kh-cartridge-kicker">{{ selection.angle }} / {{ project.data.org }}</p><h3>{{ project.data.title }} ↗</h3><p>{{ selection.summary }}</p></div>
+    </a></article>
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  </div>
+</section>
+
 <section class="kh-content kh-content--wide">
   <section>
     {% set stories = collections.impactStories or [] %}
     {% if stories.length %}
       <div class="kh-section-head">
-        <h2 class="kh-text-heading--2"><span class="kh-section-number">1.0</span>Impact record</h2>
+        <h2 id="impact-record" class="kh-text-heading--2">Impact record</h2>
         <span class="kh-meta">{{ stories.length }} records &middot; figures as reported</span>
       </div>
-      <div class="kh-table-scroll">
+      <div class="kh-table-scroll" data-pagefind-ignore>
       {#- `--stack` opts this table into becoming a list of cards below the md
           breakpoint. As a five-column table on a phone it hid 209px of its
           565px width inside the scroller: the What column collapsed to ~85px
@@ -38,9 +68,9 @@ templateEngineOverride: njk
         <thead>
           <tr>
             <th scope="col">Ref</th>
-            <th scope="col">What</th>
-            <th scope="col">When</th>
-            <th scope="col">Who</th>
+            <th scope="col">Project</th>
+            <th scope="col">Year</th>
+            <th scope="col">Organization</th>
             <th scope="col">Topics</th>
           </tr>
         </thead>
@@ -58,8 +88,8 @@ templateEngineOverride: njk
             {#- data-label supplies the column name once the header row is
                 hidden in the stacked view. Ref and What carry none: a title
                 does not need to be told it is a title. -#}
-            <td data-label="When">{{ post.date | dateDisplay('y') }}</td>
-            <td data-label="Who">{% if post.data.org %}{{ post.data.org }}{% else %}&mdash;{% endif %}</td>
+            <td data-label="Year">{{ post.date | dateDisplay('y') }}</td>
+            <td data-label="Organization">{% if post.data.org %}{{ post.data.org }}{% else %}&mdash;{% endif %}</td>
             <td data-label="Topics">
               {% if post.data.topics -%}
                 {% for t in post.data.topics %}<span class="kh-label">{{ t }}</span>{% endfor %}

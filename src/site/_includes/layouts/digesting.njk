@@ -1,5 +1,6 @@
 ---
 layout: layouts/base.njk
+cartridgeTheme: note
 pageClass: digesting
 templateEngineOverride: njk
 ---
@@ -12,17 +13,17 @@ templateEngineOverride: njk
     readers the strip is at the top of every page. -#}
 {%- set pulse = collections.allContent | pulseMonths(0) | collapseEmptyYears(timelineGaps) %}
 {%- set pulseCurrentKey = date | dateDisplay('yyyy-LL') %}
-{% include "partials/pulse-strip.njk" %}
+
 
 <article class="kh-grid-stylized kh-u-margin__top--1200">
   <div></div>
-  <div class="kh-content">
+  <div class="kh-content kh-note-reading">
     {#- Overridable, because this layout is not only used by digests. /ai/ is a
         slash page on the same layout and was telling readers its parent was
         Digesting, which it is not. -#}
     <p class="kh-breadcrumb"><a href="{{ parentUrl | default('/digesting') }}">← {{ parentLabel | default('Digesting') }}</a></p>
     <h1 class="kh-font-headline kh-text-heading--1">{{title}}</h1>
-    <p><time datetime="{{ date | dateDisplay('yyyy-MM-dd') }}" class="kh-summary__date">{{ date | dateDisplay }}</time>{#- Parents only, and linked. Printing the raw strings leaked the storage
+    <p data-pagefind-ignore><time datetime="{{ date | dateDisplay('yyyy-MM-dd') }}" class="kh-summary__date">{{ date | dateDisplay }}</time>{#- Parents only, and linked. Printing the raw strings leaked the storage
     convention into the page: "content strategy > misinformation" was rendering
     verbatim as though the ">" were part of the subject's name. -#}
 {% if topics %}<span class="kh-summary__author">Filed in: {%- for parent in topics | topicParents %}{% set topicSlug = collections.topics | topicPageSlug(parent) %} {% if topicSlug %}<a href="/topics/{{ topicSlug }}/">{{ parent }}</a>{% else %}{{ parent }}{% endif %}{{ "," if not loop.last }}{%- endfor %}</span>{% endif %}</p>
@@ -52,3 +53,5 @@ templateEngineOverride: njk
     arriving on a digesting note from a link was a dead end -- nothing related,
     no position in the register, no way onward. -#}
 {% include "partials/entry-foot.njk" %}
+
+{% include "partials/pulse-strip.njk" %}

@@ -18,11 +18,26 @@ The entry point uses `@use` (not `@import`) to pull in partials:
 |---|---|
 | `normalize` | CSS normalisation reset |
 | `kh-content` | Main content and layout styles |
-| `settings` | Breakpoint and colour variables |
+| `settings` | Sass breakpoint variables |
 | `semantic-search` | Search UI styles |
-| `../kh-ambience/kh-ambience` | Ambient / background styles |
+| `kh-cartridge` | Palette, shared shell, homepage cover and article composition |
+| `kh-cartridge-system` | Indexes, notes, photos, stories, controls and live reference |
 
 ---
+
+The retired ambient-effect source remains in `src/components/kh-ambience/` for the lighting tutorial. It is not imported into the shared bundle.
+
+## Current visual system
+
+The [design guide](../src/site/style-guide/design.njk) explains visual intent.
+The [component reference](../src/site/style-guide/components.njk) maintains markup,
+variants and usage contracts. Verify implementation against the named Sass module
+and template before changing either guide; a live sample does not exercise every
+page context.
+The base layout defaults to `cartridgeTheme: page`; entry layouts choose their
+reading variant. The cartridge mixins are included after the older components,
+so stable markup and class names can retain their API while receiving the new
+palette and hierarchy. Do not repeat theme flags in every post.
 
 ## CSS-free viewing mode
 
@@ -64,7 +79,7 @@ Use `@media (min-width: $kh-breakpoint--md)` for mobile-first breakpoints.
 
 The Stylelint configuration enforces:
 
-- **Max nesting depth: 1** for regular rules. Blockless at-rules (`@media`, `@supports`) are exempt and do not count toward the depth.
+- **Max nesting depth: 3** for regular rules. Blockless at-rules (`@media`, `@supports`) are exempt and do not count toward the depth.
 - **Max compound selectors: 3** per rule.
 - **Number precision: 4** decimal places.
 

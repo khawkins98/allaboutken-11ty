@@ -1,0 +1,21 @@
+---
+title: Cut-paper figures
+layout: layouts/base.njk
+permalink: /design-lab/collage/
+noindex: true
+---
+{% from "partials/collage.njk" import collageFigure %}
+<article class="kh-style-guide kh-content kh-content--wide">
+<p class="kh-breadcrumb"><a href="/style-guide/components/#cut-paper-collage">Component reference</a> / Collage</p>
+<h1>{{ title }}</h1>
+<p>The optional <code>.kh-collage</code> figure draws on the supplied TurboGrafx-16 advertisement: unequal image shards, a black angular anchor, a small colour overlap and paper gaps. The complete image and upright caption carry the meaning. Decorative crops disappear in CSS-off and print modes.</p>
+<h2>Project documentation / yellow accent</h2>
+{{ collageFigure('/images/blog/mangrove-figma-library-overview.png', 'Overview of the Mangrove Figma component library and its organised components.', 'A complete library overview, with decorative crops from the card presets.', 'Own work.', 'yellow', '/images/blog/mangrove-figma-card-presets-and-brand-tags.png', true) }}
+<p>Used in the <a href="/posts/20261115-a-cartridge-cover-for-the-homepage/#a-second-reference-fragments-on-paper">design overhaul post</a>. The detail source can differ from the main image while remaining part of the same project.</p>
+<h2>Browser restoration / red accent</h2>
+{{ collageFigure('/images/blog/johnny-castaway-moonlight.png', 'Johnny Castaway’s island under a moonlit night sky.', 'The browser restoration after dark.', 'Screenshot from johnny_web. Original Johnny Castaway artwork by Dynamix / Sierra On-Line.', 'red', '', true) }}
+<p>Used in the <a href="/posts/20261019-johnny-castaway-browser/">Johnny Castaway post</a>. This example repeats crops from the main image.</p>
+<h2>Use and reference</h2>
+<p>Use once at a meaningful visual pause in a post. Keep ordinary screenshots, data diagrams, navigation and photographs intact when decorative fragments would interfere with their purpose. Both examples opt into restrained pointer parallax. The full image moves less than the fragments, while the caption stays still. Touch, reduced-motion and CSS-off views keep the static figure. The default component needs no JavaScript.</p>
+<p>The supplied <a href="https://archives.tg-16.com/EGM_1989_07.htm">TurboGrafx-16 advertisement from Electronic Gaming Monthly #2 (July/August 1989), via TurboPlay Magazine Archives</a> informs the composition; its design credits remain unverified. Its artwork and branding are not used in the component. <a href="/style-guide/components/#cut-paper-collage">Copy the authoring pattern and review the component contract</a>.</p>
+</article>

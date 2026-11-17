@@ -37,10 +37,13 @@ if (!WebSocket) {
   process.exit(0);
 }
 
-const WIDTHS = [320, 360, 390, 414];
+const WIDTHS = [320, 360, 390, 414, 600, 2048];
 const PAGES = [
   '/', '/all/', '/blog/', '/digesting/', '/archive/', '/directory/',
   '/cv/', '/stats/', '/search/', '/work/', '/garage/', '/colophon/',
+  '/style-guide/components/', '/design-lab/collage/',
+  '/posts/20261115-a-cartridge-cover-for-the-homepage/',
+  '/posts/20261019-johnny-castaway-browser/', '/work/2026/impact-story-mangrove-figma/',
 ];
 const TOLERANCE = 1; // sub-pixel rounding, not a layout fault
 const PORT = 8123;
@@ -123,6 +126,67 @@ const PROBE = `(() => {
   return JSON.stringify({ over, items: [...new Set(items)].slice(0, 5) });
 })()`;
 
+// The cover clips decorative shapes intentionally, so document overflow alone
+// cannot detect text disappearing inside it. Check actual text fragments too.
+const RESIZED_COVER_PROBE = `(async () => {
+  await document.fonts.ready;
+  const root = document.documentElement;
+  const previousSize = root.style.fontSize;
+  root.style.fontSize = '200%';
+  try {
+    const cover = document.querySelector('.kh-cartridge-cover');
+    if (!cover) return [];
+    const bounds = cover.getBoundingClientRect();
+    const errors = [];
+    for (const el of cover.querySelectorAll('.kh-cartridge-title span, .kh-cartridge-ribbon')) {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      if ([...range.getClientRects()].some((r) => r.left < bounds.left - 1 || r.right > bounds.right + 1)) {
+        errors.push('Clipped cover text: ' + el.textContent.trim());
+      }
+    }
+    if (root.scrollWidth > root.clientWidth + 1) errors.push('Page overflows at 200% text size');
+    return errors;
+  } finally {
+    root.style.fontSize = previousSize;
+  }
+})()`;
+
+// Document overflow cannot detect query text concealed by an inset button.
+// Expose both production panels without invoking a model or submitting a query.
+const SEARCH_CONTROLS_PROBE = `(async () => {
+  await document.fonts.ready;
+  const panels = [...document.querySelectorAll('#keyword-section[hidden], #semantic-section[hidden]')];
+  const inputs = [...document.querySelectorAll('.kh-search-widget__form .kh-form__input')];
+  const saved = inputs.map((input) => input.value);
+  const errors = [];
+  panels.forEach((panel) => panel.removeAttribute('hidden'));
+  try {
+    for (const input of inputs) {
+      input.value = 'how to improve search across digital platforms';
+      input.focus();
+      input.setSelectionRange(input.value.length, input.value.length);
+      const button = input.form.querySelector('.kh-button');
+      const field = input.getBoundingClientRect();
+      const target = button.getBoundingClientRect();
+      const fieldStyle = getComputedStyle(input);
+      const buttonStyle = getComputedStyle(button);
+      const textRight = field.right - parseFloat(fieldStyle.borderRightWidth) - parseFloat(fieldStyle.paddingRight);
+      const gap = target.left - textRight;
+      const requiredGap = buttonStyle.position === 'absolute' ? 16 : 0;
+      if (gap < requiredGap - 1) errors.push(input.id + ': text/clear area overlaps submit target');
+      if (target.width < 43 || target.height < 43) errors.push(input.id + ': submit target is below 44px');
+      if (!buttonStyle.fontFamily.includes('IBM Plex Sans') || buttonStyle.fontWeight !== '600') {
+        errors.push(input.id + ': submit typography differs from Sans 600 contract');
+      }
+    }
+    return errors;
+  } finally {
+    inputs.forEach((input, i) => { input.value = saved[i]; });
+    panels.forEach((panel) => panel.setAttribute('hidden', ''));
+  }
+})()`;
+
 let ws, failures = 0, checked = 0;
 try {
   for (let i = 0; i < 40 && !ws; i++) {
@@ -152,6 +216,49 @@ try {
         console.error(`\n❌ ${page} at ${width}px overflows by ${data.over}px`);
         for (const it of data.items) console.error(`     ${it}`);
       }
+      if (page === '/work/2026/impact-story-mangrove-figma/') {
+        const { result: diagram } = await send(ws, 'Runtime.evaluate', {
+          expression: `(() => {
+            const code = document.querySelector('.kh-sv-demo__code');
+            if (!code) return ['Diagram code did not initialise'];
+            const style = getComputedStyle(code);
+            return style.backgroundImage !== 'none' || style.padding !== '0px' || style.borderTopWidth !== '0px'
+              ? ['Editorial code decoration or spacing leaked into the diagram'] : [];
+          })()`, returnByValue: true,
+        });
+        if (diagram.value.length) {
+          failures++;
+          console.error(`\n❌ Story diagram at ${width}px: ${diagram.value.join('; ')}`);
+        }
+      }
+      if (page === '/search/' || page === '/style-guide/components/') {
+        const { result: controls } = await send(ws, 'Runtime.evaluate', {
+          expression: SEARCH_CONTROLS_PROBE, returnByValue: true, awaitPromise: true,
+        });
+        if (controls.value.length) {
+          failures++;
+          console.error(`\n❌ ${page} at ${width}px: ${controls.value.join('; ')}`);
+        }
+      }
+      if (page === '/') {
+        const { result: bleed } = await send(ws, 'Runtime.evaluate', {
+          expression: `['.kh-cartridge-cover', '.kh-cartridge-writing', '.kh-footer'].filter((selector) => {
+            const bounds = document.querySelector(selector).getBoundingClientRect();
+            return Math.abs(bounds.left) > 1 || Math.abs(bounds.right - document.documentElement.clientWidth) > 1;
+          })`, returnByValue: true,
+        });
+        if (bleed.value.length) {
+          failures++;
+          console.error(`\n❌ Homepage at ${width}px has inset full-width fields: ${bleed.value.join(', ')}`);
+        }
+        const { result: resized } = await send(ws, 'Runtime.evaluate', {
+          expression: RESIZED_COVER_PROBE, returnByValue: true, awaitPromise: true,
+        });
+        if (resized.value.length) {
+          failures++;
+          console.error(`\n❌ Homepage at ${width}px with 200% text: ${resized.value.join('; ')}`);
+        }
+      }
     }
   }
 } finally {
@@ -161,8 +268,7 @@ try {
 }
 
 if (failures) {
-  console.error(`\n${failures} of ${checked} page/width combinations scroll sideways.`);
-  console.error('A page that scrolls horizontally on a phone is the most-felt layout bug there is.\n');
+  console.error(`\n${failures} layout/control checks failed across ${checked} page/width combinations.\n`);
   process.exit(1);
 }
-console.log(`✅ No horizontal overflow. ${checked} page/width combinations checked (${WIDTHS.join(', ')}px).`);
+console.log(`✅ ${checked} page/width combinations pass (${WIDTHS.join(', ')}px), including search-control geometry and homepage text at 200%.`);

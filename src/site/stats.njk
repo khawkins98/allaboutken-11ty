@@ -2,6 +2,7 @@
 title: Stats
 teaser: "How much there is, when it was written, and how long it runs."
 layout: layouts/base.njk
+cartridgeTheme: utility
 permalink: /stats/
 ---
 {%- set stats = corpusStats.allContent -%}
@@ -18,7 +19,7 @@ permalink: /stats/
 
   {%- if stats %}
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="at-a-glance" class="kh-text-heading--2"><span class="kh-section-number">1.0</span>At a glance</h2>
+    <h2 id="at-a-glance" class="kh-text-heading--2">At a glance</h2>
     <span class="kh-meta">Whole corpus</span>
   </div>
   <div class="kh-panel">
@@ -56,7 +57,7 @@ permalink: /stats/
   {%- endif %}
 
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="by-year" class="kh-text-heading--2"><span class="kh-section-number">2.0</span>By year</h2>
+    <h2 id="by-year" class="kh-text-heading--2">By year</h2>
     <span class="kh-meta">Entries &amp; words</span>
   </div>
   <div class="kh-table-scroll">
@@ -92,7 +93,7 @@ permalink: /stats/
   </div>
 
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="map" class="kh-text-heading--2"><span class="kh-section-number">3.0</span>Map of the corpus</h2>
+    <h2 id="map" class="kh-text-heading--2">Map of the corpus</h2>
     <span class="kh-meta">{{ semanticMap.nodes | length }} entries &middot; {{ semanticMap.edges | length }} links</span>
   </div>
   <div class="kh-content">
@@ -123,7 +124,7 @@ permalink: /stats/
   </details>
 
   <div class="kh-section-head kh-u-margin__top--1200">
-    <h2 id="method" class="kh-text-heading--2"><span class="kh-section-number">4.0</span>Method</h2>
+    <h2 id="method" class="kh-text-heading--2">Method</h2>
     <span class="kh-meta">How these are counted</span>
   </div>
   <div class="kh-content">

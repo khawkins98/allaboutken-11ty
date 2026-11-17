@@ -1,7 +1,7 @@
 ---
 title: 'Creating warm, dappled light with CSS and SVG'
 layout: layouts/post.njk
-teaser: 'I added a sunlit ambience effect to this site using pure CSS and SVG — no JavaScript, just gradients and blend modes.'
+teaser: 'An earlier version of this site used a sunlit ambience effect made with CSS and SVG. Here is how it worked, with a separate demo to try.'
 date: 2025-11-08
 tags:
   - posts
@@ -12,6 +12,8 @@ topics:
 permalink: /posts/sunlit-dappled-light-effect/
 kens_status: published
 ---
+
+<aside class="kh-note-box"><span class="kh-note-box__label">Update, November 2026</span>The lighting effect ran on an earlier version of this site and was retired from the shared theme in November 2026. The <a href="/style-guide/design/#atmosphere">current visual design</a> uses a plain paper background. This tutorial preserves the original experiment; the separate CodePen demo below lets you try a simplified version.</aside>
 
 {% markdown %}
 
@@ -32,38 +34,11 @@ Here's how it works  —  and where I took a different approach.
 
 {% endmarkdown %}
 
-<aside class="kh-note-box" style="margin: 2rem 0; z-index: 3; position: relative;">
-  <span class="kh-note-box__label">Demo</span>
-  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-    <input type="checkbox" id="demo-underlay-toggle" style="cursor: pointer;">
-    <span>Add a grey underlay to make the effect more visible</span>
-  </label>
+<aside class="kh-note-box">
+  <span class="kh-note-box__label">Try the effect</span>
+  <p><a href="https://codepen.io/khawkins98/pen/ZYQgKOw?editors=1000">Open the dappled-light demo on CodePen ↗</a></p>
+  <p>This simplified version runs separately from the page and omits the scroll-driven animation described below.</p>
 </aside>
-
-<style>
-  body.demo-underlay-active::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--kh-color--grey);
-    z-index: 0;
-    pointer-events: none;
-  }
-</style>
-
-<script>
-  (function() {
-    const toggle = document.getElementById('demo-underlay-toggle');
-    if (toggle) {
-      toggle.addEventListener('change', function() {
-        document.body.classList.toggle('demo-underlay-active', this.checked);
-      });
-    }
-  })();
-</script>
 
 {% markdown %}
 

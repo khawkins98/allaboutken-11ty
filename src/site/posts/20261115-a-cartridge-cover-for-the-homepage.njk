@@ -1,0 +1,154 @@
+---
+title: 'A cartridge cover for the homepage'
+layout: layouts/post.njk
+teaser: '<a href="/posts/20260808-making-information-actionable-for-24-years/">My last redesign felt too clinical</a>, so I went back to Japanese Sonic covers and TurboGrafx-16 ads for some colour and personality.'
+date: 2026-11-15
+permalink: /posts/20261115-a-cartridge-cover-for-the-homepage/
+kens_status: published
+tags:
+  - posts
+topics:
+  - typography
+  - CSS
+  - retro computing
+  - career reflection
+image: /blog/cartridge-homepage-design.png
+image_meta:
+  text: 'The first implementation: an angled headline, a yellow disc, a featured project, and a cobalt writing list.'
+  credit: 'Own work.'
+  altext: 'Screenshot of the homepage, with a tilted black and cobalt Make it make sense headline over a yellow circle, a blue case-study card over a red diagonal, and recent writing below.'
+---
+
+{% from "partials/collage.njk" import collageFigure %}
+
+{% markdown %}
+
+In the quest of middle age, I've been [emulating Mac OS 9](/posts/20260810-newsheep-sheepshaver-mac-os-9-2-apple-silicon-jit/) and [getting Johnny Castaway running in a browser](/posts/20261019-johnny-castaway-browser/). Playing board games with my kids has me revisiting more of that stuff too. I have a rant brewing about the quality of *The Game of Life* these days, but that can wait.
+
+The '90s seem to be back in style, though much of what I notice is the grungier side: distressed type and rough textures. I keep going back to the chaotic graphics on Japanese Sonic covers and TurboGrafx-16 ads. I always thought these were impressive. On the Sonic covers, enormous lettering, bright colours, squiggles and zigzag edges all fit around a character who already takes up most of the cover.
+
+I wanted some of that personality here. I'd only recently redesigned the site, and the analytical style suited my work, but it felt too clinical for my own blog.
+
+> **tl;dr**
+>
+> - Japanese Sonic covers supplied the yellow disc, bold colour fields, compressed type and patterned edges.
+> - A TurboGrafx-16 ad suggested a cut-paper treatment for selected images.
+> - The homepage gets the expressive composition; the articles keep a clear reading column and upright text.
+
+## From a datasheet to a cover
+
+My [redesign this summer](/posts/20260808-making-information-actionable-for-24-years/) brought a heavy data angle: graph paper, numbered sections, small labels and rules around most things. By the time I'd added them all, the homepage looked like a technical document.
+
+<figure class="kh-bleed-out" id="homepage-design-comparison">
+  <div class="kh-compare" style="--kh-compare-split: 50%;">
+    <img class="kh-compare__img" src="/images/blog/datasheet-live-home-desktop-2026-11-16.jpg" alt="Before: the homepage on graph paper, with Hello, I am Ken Hawkins in a thin black frame, small labelled facts on the right, and recent writing in ruled rows below." width="1440" height="1000" loading="lazy" sizes="(min-width: 846px) 820px, 100vw">
+    <img class="kh-compare__img kh-compare__img--after" src="/images/blog/cartridge-home-desktop-2026-11-16.jpg" alt="After: Make it make sense in black and cobalt over a yellow disc, with a black ribbon, a blue project card over a red diagonal, and the cobalt writing section below." width="1440" height="1000" loading="lazy" sizes="(min-width: 846px) 820px, 100vw">
+    <span class="kh-compare__label kh-compare__label--before" aria-hidden="true">Before</span>
+    <span class="kh-compare__label kh-compare__label--after" aria-hidden="true">After</span>
+    <span class="kh-compare__handle" aria-hidden="true"></span>
+    <input class="kh-compare__range" type="range" min="0" max="100" value="50" step="1" aria-label="Compare the previous and new homepage" aria-describedby="homepage-comparison-caption">
+  </div>
+  <figcaption class="kh-figure__caption" id="homepage-comparison-caption">The homepage before and after, captured on 16 November 2026 at the same 1440 × 1000 viewport. Drag to compare, or focus the slider and use the arrow keys. Own work. Full screenshots: <a href="/images/blog/datasheet-live-home-desktop-2026-11-16.jpg">before</a> and <a href="/images/blog/cartridge-home-desktop-2026-11-16.jpg">after</a>. Also preserved from the live site: the <a href="/images/blog/datasheet-live-home-mobile-2026-11-16.jpg">mobile homepage</a> and <a href="/images/blog/datasheet-live-article-2026-11-16.jpg">article layout</a>.</figcaption>
+</figure>
+
+<script>
+(function () {
+  var comparison = document.querySelector('#homepage-design-comparison .kh-compare');
+  var range = comparison.querySelector('.kh-compare__range');
+  var apply = function () {
+    comparison.style.setProperty('--kh-compare-split', range.value + '%');
+    range.setAttribute('aria-valuetext', range.value + '% previous design, ' + (100 - range.value) + '% new design');
+  };
+  range.addEventListener('input', apply);
+  apply();
+})();
+</script>
+
+I tried removing the boxy frames. That helped, but I still wanted to loosen it up.
+
+Cartridge covers gave me something to work with: big type, a few strong colours and room for things to overlap. Having worked in newspaper graphics and print production, I also liked thinking of the homepage as a cover with the writing behind it.
+
+## What came across from the packaging
+
+<div class="kh-grid kh-grid__col-3 kh-cover-gallery kh-bleed-out">
+<figure class="kh-grid__col--span-1">
+<img src="/images/blog/sonic-mega-drive-japanese-cover-reference.jpg" alt="Japanese Sonic the Hedgehog cover: Sonic stands over a cobalt band, with a yellow circle, red diagonal, compressed black lettering and scattered geometric marks behind him." width="500" loading="lazy" sizes="(min-width: 846px) 300px, 100vw">
+<figcaption class="kh-figure__caption"><strong>Sonic the Hedgehog (1991).</strong> The yellow disc, colour fields, tilted labels and scattered marks supplied the starting vocabulary.</figcaption>
+</figure>
+<figure class="kh-grid__col--span-1">
+<img src="/images/blog/sonic-2-mega-drive-japanese-cover-reference.jpg" alt="Japanese Sonic the Hedgehog 2 cover: Sonic and Tails sit beside a tall black title strip, with oversized angled lettering on white paper and a coloured zigzag edge." width="350" loading="lazy" sizes="(min-width: 846px) 300px, 100vw">
+<figcaption class="kh-figure__caption"><strong>Sonic the Hedgehog 2 (1992).</strong> A strong black anchor and a narrow serrated edge leave room for the white paper.</figcaption>
+</figure>
+<figure class="kh-grid__col--span-1">
+<img src="/images/blog/sonic-spinball-mega-drive-japanese-cover-reference.jpg" alt="Japanese Sonic Spinball cover: repeated images of Sonic cross white, green and yellow fields, with black angular borders, stripes and a large tilted game title." width="350" loading="lazy" sizes="(min-width: 846px) 300px, 100vw">
+<figcaption class="kh-figure__caption"><strong>Sonic Spinball (1993).</strong> Sharper black shapes, repeated diagonals and patterned edges informed the later border experiments.</figcaption>
+</figure>
+</div>
+
+Japanese Mega Drive covers, reproduced as design references. Artwork and branding © SEGA. [Credits and sources](#artwork-and-further-references).
+
+I borrowed the yellow disc for the headline, with the first line in black and the second in cobalt. The short description of what I do sits on a black ribbon: “Platforms. Content. People. Connected by design.” A red diagonal sits behind the blue project card.
+
+The squiggles, triangles and serrated edges were fun to work with. Some turned up around code blocks and quotations too, with the decoration kept out of the text itself.
+
+The homepage headline uses [Science Gothic](https://github.com/googlefonts/science-gothic). Its letterforms already lean, so I kept the baseline level and left the rotation to the ribbon and project plate. The homepage uses a small, fixed subset rather than the complete variable font.
+
+## Give the introduction something to point at
+
+The homepage still needs to explain what I do. Beside “Make it make sense”, I've put a project card linking to [my work at UNDRR connecting Storybook, structured content, design tokens, and Figma](/work/2026/impact-story-mangrove-figma/). It pulls its title, image and description from the published entry.
+
+Below that are the six latest entries, under “Ideas in circulation”, with dates, short descriptions and thumbnails. The links to writing, work, my profile and search are still at the top.
+
+## A second reference: fragments on paper
+
+I also had a TurboGrafx-16 growing up and loved it and its personality. [This ad in *Electronic Gaming Monthly*](https://archives.tg-16.com/EGM_1989_07.htm) caught my eye too: a face and game screenshots cut into odd shapes, with bits of red and yellow overlapping them. There is a lot happening, but also a surprising amount of empty paper.
+
+<figure class="kh-figure">
+<img src="/images/blog/turbografx-16-advertisement-reference.jpg" alt="TurboGrafx-16 print advertisement showing a black-and-white face and colourful game scenes broken into angular fragments across white paper, with narrow text columns and the product logo below." width="1280" loading="lazy" sizes="(min-width: 846px) 800px, 100vw">
+<figcaption class="kh-figure__caption">TurboGrafx-16 advertisement for NEC. <a href="https://archives.tg-16.com/EGM_1989_07.htm">Electronic Gaming Monthly #2 (July/August 1989), via TurboPlay Magazine Archives</a>. Individual design and art-direction credits remain unconfirmed. <a href="/images/blog/turbografx-16-advertisement-reference.jpg">View larger image</a>.</figcaption>
+</figure>
+
+TurboGrafx advertising ranged from sophisticated to childish. [Christian Nutt's oral history](https://www.gamedeveloper.com/business/stalled-engine-the-turbografx-16-turns-25) follows the change from NEC to Turbo Technologies Inc. (TTI), including the later Johnny Turbo comic-book ads. What I wanted from this particular spread was the fractured photograph, the sharp cuts and the space around the pieces.
+
+The [cut-paper collage study](/design-lab/collage/) applies that composition to a screenshot of the Mangrove Figma library, with cropped details and a black shape behind it. The whole screenshot is still there to look at.
+
+{{ collageFigure('/images/blog/mangrove-figma-library-overview.png', 'Overview of the Mangrove Figma component library with organised documentation, component groups and examples.', 'The Mangrove library overview, with details from its card presets in the surrounding fragments.', 'Own work.', 'yellow', '/images/blog/mangrove-figma-card-presets-and-brand-tags.png', true) }}
+
+It's now an optional figure treatment, used here and in the [Johnny Castaway article](/posts/20261019-johnny-castaway-browser/).
+
+### How the collage works
+
+`kh-collage` is ordinary HTML and CSS. A Nunjucks macro puts the complete image in front of three decorative copies, taken from either that image or a separate detail shot. CSS positions those copies around it and cuts their edges with `clip-path`. One static fragment looks like this:
+
+```css
+.kh-collage__fragment--a {
+  clip-path: polygon(0 0, 100% 22%, 76% 100%);
+  transform: rotate(-12deg);
+}
+```
+
+The optional parallax is a small script that maps the pointer position to two CSS custom properties, `--kh-collage-x` and `--kh-collage-y`. Each layer multiplies those values by a different distance in its transform, so the pieces move different amounts. Updates use `requestAnimationFrame`. Nothing is being redrawn into a canvas or generated as you move the pointer.
+
+The caption stays still. Decorative copies have empty alt text and are hidden from assistive technology. Touch devices and reduced-motion settings get the static composition; switching CSS off leaves the main image and caption. The [component reference includes the macro call and implementation details](/style-guide/components/#cut-paper-collage).
+
+## Let the article settle down
+
+I kept most of the decoration around the edges of the [article layout](/posts/20261024-when-one-person-leaves-a-team-leaves/). The title gets the yellow disc and condensed type; the paragraphs sit on near-white paper in Plex Sans. The contents list is a native HTML disclosure, so opening it doesn't need a script.
+
+[Anton](https://github.com/google/fonts/tree/main/ofl/anton) handles the other display headings, Plex Sans the paragraphs and controls, and [League Mono](https://github.com/theleagueof/league-mono) the code and small labels. The fonts are self-hosted.
+
+The circle and diagonals are CSS shapes. SVG assets supply the margin marks and serrated edges. Most of the presentation works without JavaScript; the optional collage parallax is a small enhancement.
+
+## A site I recognise
+
+The analytical bits of the site are still there. I just wanted it to look a bit less corporate and a bit more like somewhere I'd choose to spend time.
+
+CSS is still optional. The [CSS toggle I wrote about last year](/posts/20250906-css-naked-css-only/) removes the styling, leaving native HTML. The text remains readable, links work and the contents list still opens.
+
+### Artwork and further references
+
+- **Sonic packaging:** [Yoichi Takahashi's account of the original packages](https://game.watch.impress.co.jp/docs/news/1279221.html), including his commission of Akira Watanabe's character illustrations. [Hayato Takebayashi's own post](https://x.com/pantaloon_n/status/1320632944696852482) confirms his *Spinball* packaging credit. [VGDensetsu](https://vgdensetsu.net/megadrivegallerys3/) records the covers and detailed illustration credits. Artwork and branding © SEGA.
+- **TurboGrafx-16 print ad:** [*Electronic Gaming Monthly* #2, July/August 1989, via TurboPlay Magazine Archives](https://archives.tg-16.com/EGM_1989_07.htm). Individual design and art-direction credits remain unconfirmed. [*Television Digest*, 2 October 1989, p. 13](https://www.worldradiohistory.com/Archive-TV-Digest/80s/1989/Television-Digest-1989-10.pdf#page=13), names DDB Needham as the campaign agency that October; it does not credit this spread.
+- **A later graphic comparison:** [SEGA's *Sonic Origins Plus* Japanese cover](https://origins.sonicthehedgehog.com/posters/index.html) returns to the yellow disc, tilted labels, geometric marks and serrated edge.
+
+{% endmarkdown %}

@@ -1,0 +1,100 @@
+---
+title: Design style guide
+teaser: 'An expressive cover, a clear index, and a calm place to read.'
+layout: layouts/base.njk
+permalink: /style-guide/design/
+date: 2026-11-15
+---
+<article class="kh-grid-stylized kh-style-guide">
+<div></div><div class="kh-content kh-content--wide">
+<p class="kh-breadcrumb"><a href="/style-guide/">Style guide</a> / Design</p>
+<h1>{{ title }}</h1>
+<p class="kh-intro__text">{{ teaser }}</p>
+<nav class="kh-guide-links" aria-label="Design guide sections" data-pagefind-ignore><a href="#principles">Principles</a><a href="#palette">Palette</a><a href="#type">Typography</a><a href="#composition">Composition</a><a href="#reading">Reading</a><a href="#interaction">Interaction</a><a href="#implementation">Implementation</a></nav>
+{% markdown %}
+## Principles
+
+The visual starting point is the [Japanese *Sonic the Hedgehog* Mega Drive cover](https://vgdensetsu.net/megadrivegallerys3/): oversized compressed lettering, flat colour, an offset circle, diagonal fields and a small collection of geometric marks. The [V&A’s postmodern design collection](https://www.vam.ac.uk/info/collection-selection-boxes-postmodern-design) and [April Greiman’s work](https://eyeondesign.aiga.org/april-greiman-is-still-ahead-of-the-curve/) are related visual research, rather than a claim about the cover’s historical influences.
+
+The site applies that energy through hierarchy. The homepage is a cover; writing and work indexes help readers choose; an entry settles into a reading surface. Keep the author and the work as the subjects. Use specific titles, real project images and useful routes into the archive.
+
+- **Expression has a location.** Keep the homepage headline’s baseline level; Science Gothic supplies its own slant. The role ribbon and featured plate can tilt. Keep navigation, controls, tables and paragraphs upright.
+- **Colour carries structure.** Cobalt introduces writing and interaction, near-white paper supports reading, green closes the page. Images retain their own colours.
+- **Evidence stays near the claim.** The introduction names the leadership role and links to delivered work. Select work for the range of responsibilities it demonstrates, rather than recency alone. Scope, outcome and baseline belong together; distinguish platform performance, delivery speed and campaign engagement. The work index pairs project imagery or a qualified proof statement with an inspectable record.
+- **Space and shared edges do the grouping.** Add a rule where it clarifies a table, a boundary or a control. Leave room between unrelated sections.
+
+## Palette
+{% endmarkdown %}
+{% include "partials/design-tokens.njk" %}
+{% markdown %}
+The source values live in `_kh-cartridge.scss`. Existing semantic aliases, including link, apparatus and rule colours, are mapped in the cartridge styles so older components participate in the same system.
+
+Use white text on cobalt or green; use ink or cobalt on paper. On coloured surfaces, link underlines follow the text colour in both unvisited and visited states; reserve the purple visited underline for paper surfaces. Key contrast ratios are ink/paper **17.33:1**, white/cobalt **8.57:1**, cobalt/paper **8.13:1**, yellow/cobalt **6.07:1**, and white/green **5.23:1**. Muted text is `#5b5e5a`, **6.24:1** on paper.
+
+Yellow and vermilion are decorative fields, not small text colours on paper. A chart needs readable labels and a visible key; colour alone must not distinguish its categories. Keep the original colour meaning of a diagram or photograph.
+
+## Type
+
+**Science Gothic** is used on the homepage cover line, section mastheads and contact heading (`.kh-shard-heading`): a fixed instance at weight 750, width 60, slant −5 and contrast 0. These share the same small Latin subset; the full variable font is not shipped.
+
+**Anton, 400** handles article titles, reading subheadings and section heads. It is self-hosted as a 15 KB Latin WOFF2. The content stays in sentence case; CSS applies uppercase where the display treatment calls for it. Avoid condensed display type for paragraphs, menus, form labels or dense table cells.
+
+**IBM Plex Sans, 400 and 600**, handles reading, navigation, controls and card titles. Italic uses the real 400 italic face. Long-form reading is 18px at a comfortable line height and a measure of roughly 62 characters; mobile can step down to 17px. Small screens get room to wrap rather than compressed text.
+
+**League Mono** handles dates, references, restrained metadata and code at weight 400 and normal 100% width. Its locally hosted variable build supports weight 100–800 and width 50–200%; stronger or condensed settings belong to deliberate display uses. Anton has one declared weight: 400. See the [font reference](/style-guide/components/#font-variations).
+
+
+## Composition
+
+Colour fields, cover geometry, the masthead rule and the footer run to the viewport edges. Their content aligns to a centred 72rem measure with at least 2rem gutters; below the 846px medium breakpoint the gutters become 1rem. Ordinary page layouts remain bounded to 76rem, and article prose keeps its narrower reading measure. Use fluid section padding rather than `100vw` breakout margins, so visible scrollbars do not create horizontal overflow. A heading and its introduction share a left edge. A date rail belongs to a list of dated entries; it must not indent an unrelated biography.
+
+The homepage owns the large yellow disc, level black/cobalt headline with slanted letterforms, black ribbon, red diagonal and tilted project plate. The cobalt writing field and green footer use diagonal edges; a yellow wedge marks the footer’s opening. Keep these cuts in decorative background layers, with enough inset for upright text and keyboard focus. Repeat this geometry at section boundaries, rather than tilting reading surfaces or clipping content. The near-white paper ground keeps the primary colours crisp without tinting every page yellow. Small sawtooth cuts belong to the writing-field boundary and black role ribbon. Sparse outline marks occupy the cover’s upper margin on larger screens and disappear on small covers to keep the supporting label clear; diagonal hatching stays inside the footer’s yellow wedge. These are original SVG/CSS motifs derived from the references, not cropped cover artwork. Keep patterns out of prose, forms and navigation.
+
+Indexes use open entry rows and clear section heads. Dates and images remain aligned between rows. An entry without an image gets space, not an invented placeholder. Tables retain rules and explicit column headings when readers are comparing records.
+
+Profile pages can use a role/experience column beside prose. Utility pages use a smaller heading so the search field, form or data remains easy to reach. Photographs get an unobstructed image and a quiet caption. Scroll-driven stories retain the space their graphics need.
+
+## Secondary image direction: cut-paper collage
+
+The [TurboGrafx-16 advertisement archived from *Electronic Gaming Monthly* #2 (July/August 1989)](https://archives.tg-16.com/EGM_1989_07.htm) suggests a complementary image treatment: unequal shards, overlapping crops, a strong black anchor and wide paper gaps. The [collage study](/design-lab/collage/) tests that composition with real project imagery. The optional [cut-paper figure component](/style-guide/components/#cut-paper-collage) applies it inside the overhaul and Johnny Castaway posts.
+
+Use `.kh-collage` selectively for an article illustration or a work cover. Keep one complete, meaningful image visible; any repeated cropped fragments are decorative and hidden from assistive technology. Keep text, controls and ordinary thumbnails intact. Retain the established palette and type, and avoid adding a competing burst around the homepage’s disc. The reference’s design authorship remains unverified; the ad’s artwork and branding are not reused.
+
+## Reading
+
+Articles use a graphic masthead followed by upright text. Notes use the same palette in a compact single column. The contents disclosure is native HTML. Figures, code and data can exceed the reading measure when they need the space, inside an appropriate wrapper.
+
+Diagram internals, interactive examples and utilities keep their own presentation. Shared code decoration applies to editorial snippets; use `.kh-code--plain` or `.kh-demo--plain` where a quiet treatment serves the content. Component-owned `kh-` code classes are excluded automatically.
+
+Emphasis comes from a strong opening, subheads, real examples and restrained callouts. Do not turn every paragraph into a card. Related reading, authorship, publishing history and the footer form the closing layer; navigation does not interrupt the opening.
+
+## Interaction
+
+Grouped navigation and facts use white panels with ink frames, small cobalt offset shadows and cobalt mono labels. Keep internal dividers light and text upright; use the larger angular fields at section boundaries.
+
+Use a cobalt button with white text for an action, and ordinary descriptive links for navigation. Buttons and primary navigation have at least a 44px target. Focus must remain visible on both light and dark surfaces. Keep selected search modes visually distinct, and maintain native keyboard behaviour.
+
+Use native links, buttons, radios, ranges and details wherever their behaviour fits. The static visual language works without JavaScript. An optional collage figure may use small pointer-driven parallax; its image and caption remain complete without the enhancement. Reduced-motion preferences must be honoured by any existing interactive story or transition. Decorative motion stays inside an opted-in figure while a fine pointer is over it; ordinary reading content remains still.
+
+## Atmosphere
+
+The graph-paper backdrop and site-wide dappled-light effect belong to the earlier design. They are not part of the current shell. The [dappled-light article](/posts/sunlit-dappled-light-effect/) preserves the technique and its sources; archived typefaces remain alongside the posts that document them.
+
+## Implementation
+
+The base layout supplies `cartridgeTheme: page`. Entry layouts select `article`, `note`, `story` or `photo`; the homepage uses `home`, the CV uses `profile`, and search uses `utility`. Layout defaults supply the theme, so a new post needs only its usual layout and content frontmatter. Standalone experiments keep their own document contexts. Social cards use the same palette and faces in a fixed 1200 × 630 screenshot canvas, with same-origin fonts and noindex metadata.
+
+- `_kh-cartridge.scss`: palette, shell, homepage and article composition.
+- `_kh-cartridge-system.scss`: shared page, index, control, note, photo, story and documentation treatments.
+- `_kh-collage.scss` and `partials/collage.njk`: optional cut-paper figures inside posts.
+- `layouts/base.njk`: theme classes, navigation and display-font preload.
+- [Component reference](/style-guide/components/): live markup and usage details.
+- [Editorial guide](/style-guide/editorial/): voice, structure and interface vocabulary.
+
+All stylesheet rules remain inside `body:has(#kh-css-toggle:checked)`. Decorative geometry disappears when styling is disabled. Content order, headings and links remain useful. Image transforms can wrap an image in a `<picture>`: position the wrapper as well as the image when a layout depends on direct children.
+
+Use `data-pagefind-ignore` on repeated navigation or blocks of other entries’ titles. Use `noindex` for non-destination pages and `kens_status: draft` for reviewable, unpublished writing. Keep those behaviours in their existing shared mechanisms.
+
+Before changing a shared pattern, check a short and long title, a page with and without an image, desktop and mobile widths, 200% text sizing, keyboard focus on light and dark surfaces, CSS-off mode and print. Cover text must reflow rather than disappear inside clipped decoration. Focus uses an ink outline with a white inner ring so it remains distinguishable across the palette. Generated social cards use title-based alternative text; custom images need their own `og_image_alt`. Run the production link and image gates against production output. Keep the reference, tokens and this guide aligned in the same PR.
+{% endmarkdown %}
+</div></article>
