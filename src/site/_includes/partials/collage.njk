@@ -11,7 +11,7 @@
     </div>
     <div class="kh-collage__main"><img src="{{ src | escape }}" alt="{{ alt | escape }}" width="1200" loading="lazy" sizes="(min-width: 846px) 800px, 90vw"></div>
   </div>
-  <figcaption class="kh-collage__caption">{{ caption | escape }}{% if credit %} <span class="kh-collage__credit">{{ credit | escape }}</span>{% endif %}</figcaption>
+  <figcaption class="kh-figure__caption">{{ caption | escape }}{% if credit %} <span class="kh-collage__credit">{{ credit | escape }}</span>{% endif %}</figcaption>
 </figure>
 {% if parallax %}<script type="module" src="/collage.js"></script>{% endif %}
 {% endmacro %}
