@@ -27,7 +27,7 @@ In the quest of middle age, I've been [emulating Mac OS 9](/posts/20260810-newsh
 
 The '90s seem to be back in style, though much of what I notice is the grungier side: distressed type and rough textures. I keep going back to the chaotic graphics on Japanese Sonic covers and TurboGrafx-16 ads. I always thought these were impressive. On the Sonic covers, enormous lettering, bright colours, squiggles and zigzag edges all fit around a character who already takes up most of the cover.
 
-I wanted some of that personality here. I'd only recently redesigned the site, and the result felt too clinical. The analytical style suited my work, but it was a bit sterile for my own blog.
+I wanted some of that personality here. I'd only recently redesigned the site, and the analytical style suited my work, but it felt too clinical for my own blog.
 
 > **tl;dr**
 >
@@ -37,7 +37,7 @@ I wanted some of that personality here. I'd only recently redesigned the site, a
 
 ## From a datasheet to a cover
 
-A previous design attempt this summer brought a heavy data angle with graph paper, numbered sections, small labels and rules around most things. By the time I'd added them all, the homepage looked like a technical document. It was good, but insufficient. I wanted to loosen it up.
+My [redesign this summer](/posts/20260808-making-information-actionable-for-24-years/) brought a heavy data angle: graph paper, numbered sections, small labels and rules around most things. By the time I'd added them all, the homepage looked like a technical document.
 
 <figure class="kh-bleed-out" id="homepage-design-comparison">
   <div class="kh-compare" style="--kh-compare-split: 50%;">
@@ -64,9 +64,9 @@ A previous design attempt this summer brought a heavy data angle with graph pape
 })();
 </script>
 
-I tried removing the boxy frames. That helped, but the lack of personality was still there.
+I tried removing the boxy frames. That helped, but I still wanted to loosen it up.
 
-Cartridge covers gave me something to work with: big type, a few strong colours and room for things to overlap. I could keep the data and give the site more personality. Having worked in newspaper graphics and print production, I also liked thinking of the homepage as a cover with the writing behind it.
+Cartridge covers gave me something to work with: big type, a few strong colours and room for things to overlap. Having worked in newspaper graphics and print production, I also liked thinking of the homepage as a cover with the writing behind it.
 
 ## What came across from the packaging
 
@@ -91,6 +91,14 @@ I borrowed the yellow disc for the headline, with the first line in black and th
 
 The squiggles, triangles and serrated edges were fun to work with. Some turned up around code blocks and quotations too, with the decoration kept out of the text itself.
 
+The homepage headline uses [Science Gothic](https://github.com/googlefonts/science-gothic). Its letterforms already lean, so I kept the baseline level and left the rotation to the ribbon and project plate. The homepage uses a small, fixed subset rather than the complete variable font.
+
+## Give the introduction something to point at
+
+The homepage still needs to explain what I do. Beside “Make it make sense”, I've put a project card linking to [my work at UNDRR connecting Storybook, structured content, design tokens, and Figma](/work/2026/impact-story-mangrove-figma/). It pulls its title, image and description from the published entry.
+
+Below that are the six latest entries, under “Ideas in circulation”, with dates, short descriptions and thumbnails. The links to writing, work, my profile and search are still at the top.
+
 ## A second reference: fragments on paper
 
 I also had a TurboGrafx-16 growing up and loved it and its personality. [This ad in *Electronic Gaming Monthly*](https://archives.tg-16.com/EGM_1989_07.htm) caught my eye too: a face and game screenshots cut into odd shapes, with bits of red and yellow overlapping them. There is a lot happening, but also a surprising amount of empty paper.
@@ -100,13 +108,13 @@ I also had a TurboGrafx-16 growing up and loved it and its personality. [This ad
 <figcaption class="kh-figure__caption">TurboGrafx-16 advertisement for NEC. <a href="https://archives.tg-16.com/EGM_1989_07.htm">Electronic Gaming Monthly #2 (July/August 1989), via TurboPlay Magazine Archives</a>. Individual design and art-direction credits remain unconfirmed. <a href="/images/blog/turbografx-16-advertisement-reference.jpg">View larger image</a>.</figcaption>
 </figure>
 
-TurboGrafx advertising pulled in some very different directions. [Christian Nutt's oral history](https://www.gamedeveloper.com/business/stalled-engine-the-turbografx-16-turns-25) follows the change from NEC to Turbo Technologies Inc. (TTI), including the later Johnny Turbo comic-book ads. Some of the advertising looked sophisticated; some looked childish. This particular spread was the one that caught my eye: the fractured photograph, the sharp cuts and the space around the pieces.
+TurboGrafx advertising ranged from sophisticated to childish. [Christian Nutt's oral history](https://www.gamedeveloper.com/business/stalled-engine-the-turbografx-16-turns-25) follows the change from NEC to Turbo Technologies Inc. (TTI), including the later Johnny Turbo comic-book ads. What I wanted from this particular spread was the fractured photograph, the sharp cuts and the space around the pieces.
 
-I wanted to try that cut-paper composition with images in posts. The [cut-paper collage study](/design-lab/collage/) uses a screenshot of the Mangrove Figma library, with cropped details and a black shape behind it. The whole screenshot is still there to look at.
-
-It's now an optional figure treatment, used here and in the Johnny Castaway article.
+The [cut-paper collage study](/design-lab/collage/) applies that composition to a screenshot of the Mangrove Figma library, with cropped details and a black shape behind it. The whole screenshot is still there to look at.
 
 {{ collageFigure('/images/blog/mangrove-figma-library-overview.png', 'Overview of the Mangrove Figma component library with organised documentation, component groups and examples.', 'The Mangrove library overview, with details from its card presets in the surrounding fragments.', 'Own work.', 'yellow', '/images/blog/mangrove-figma-card-presets-and-brand-tags.png', true) }}
+
+It's now an optional figure treatment, used here and in the [Johnny Castaway article](/posts/20261019-johnny-castaway-browser/).
 
 ### How the collage works
 
@@ -123,17 +131,11 @@ The optional parallax is a small script that maps the pointer position to two CS
 
 The caption stays still. Decorative copies have empty alt text and are hidden from assistive technology. Touch devices and reduced-motion settings get the static composition; switching CSS off leaves the main image and caption. The [component reference includes the macro call and implementation details](/style-guide/components/#cut-paper-collage).
 
-## Give the introduction something to point at
-
-The homepage still needs to explain what I do. Beside “Make it make sense”, I've put a project card linking to [my work at UNDRR connecting Storybook, structured content, design tokens, and Figma](/work/2026/impact-story-mangrove-figma/). It pulls its title, image and description from the published entry.
-
-Below that are the six latest entries, under “Ideas in circulation”, with dates, short descriptions and thumbnails. The links to writing, work, my profile and search are still at the top.
-
 ## Let the article settle down
 
 I kept most of the decoration around the edges of the [article layout](/posts/20261024-when-one-person-leaves-a-team-leaves/). The title gets the yellow disc and condensed type; the paragraphs sit on near-white paper in Plex Sans. The contents list is a native HTML disclosure, so opening it doesn't need a script.
 
-The homepage headline uses [Science Gothic](https://github.com/googlefonts/science-gothic). Its letterforms already lean, so I kept the baseline level and left the rotation to the ribbon and project plate. [Anton](https://github.com/google/fonts/tree/main/ofl/anton) handles the other display headings, Plex Sans the paragraphs and controls, and [League Mono](https://github.com/theleagueof/league-mono) the code and small labels. The fonts are self-hosted; the homepage uses a small, fixed Science Gothic subset rather than the complete variable font.
+[Anton](https://github.com/google/fonts/tree/main/ofl/anton) handles the other display headings, Plex Sans the paragraphs and controls, and [League Mono](https://github.com/theleagueof/league-mono) the code and small labels. The fonts are self-hosted.
 
 The circle and diagonals are CSS shapes. SVG assets supply the margin marks and serrated edges. Most of the presentation works without JavaScript; the optional collage parallax is a small enhancement.
 
