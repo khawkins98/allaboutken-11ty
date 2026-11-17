@@ -393,7 +393,7 @@ The live feedback counter is a remote image and must retain `eleventy:ignore`. A
 {% markdown %}
 Use `.kh-collage` for an occasional editorial image, with a complete central view and an upright caption. The TG-16 reference supplies unequal cuts, a black anchor and a small colour overlap. Keep data diagrams, comparison figures and ordinary screenshots plain when the decoration would compete with their purpose.
 
-For a section-page title, `.kh-shard-heading` carries the cut-paper vocabulary into live text: Science Gothic on a level baseline, an angular yellow underlay and a cobalt corner shard. The [Work page](/work/) uses it on its main heading. Reserve it for short page titles; article subheadings keep their quieter reading treatment. The shapes are decorative CSS and disappear with the CSS toggle.
+Section, profile and utility page H1s share the cut-paper masthead: Science Gothic on a level baseline, an angular yellow underlay and a cobalt corner shard. [Work](/work/), [About](/cv/) and [All writing](/all/) use the display scale; [Search](/search/) uses the compact scale so controls stay near the top. `.kh-shard-heading` applies the same treatment to another short heading; `--section` gives the [homepage contact heading](/#hello) its intermediate scale, and `--compact` supplies the utility scale. Article covers and reading subheadings keep their own hierarchy. The shapes disappear with CSS off and in print.
 
 For Nunjucks posts, import the shared macro **before** the Markdown block, then call it at the intended visual pause:
 

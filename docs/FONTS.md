@@ -14,7 +14,7 @@ The current faces are self-hosted:
 - `IBMPlexSans-Italic.woff2` — 400 italic
 - `IBMPlexSans-SemiBold.woff2` — 600 normal
 - `league-mono/LeagueMono-VF.woff2` — variable weight 100–800 and width 50–200%
-- `science-gothic/ScienceGothic-Cover.woff2` — fixed 750-weight instance for the homepage cover and opt-in shard headings
+- `science-gothic/ScienceGothic-Cover.woff2` — fixed 750-weight instance for the homepage cover and section mastheads
 - `Anton-Latin.woff2` — 400 normal, other display headings across the shared site layouts (15 KB; SIL OFL, see the font directory README)
 
 Current controls use Plex Sans 600; code and metadata use League Mono at weight
@@ -47,10 +47,10 @@ it is no longer the globally loaded mono font.
 
 ## Science Gothic cover trial
 
-The homepage cover line and opt-in `.kh-shard-heading` page titles use a fixed,
+The homepage cover line and section mastheads use a fixed,
 Latin-subset instance of official Science Gothic at `wght 750`, `wdth 60`, `slnt -5`, `CTRS 0`. It is about 32 KB and is
-preloaded only on the homepage; shard headings request the same cached file
-through CSS. Other display headings and social cards remain Anton. Only the cover instance is shipped; the full variable font and the
+preloaded on home, section, profile and utility pages. Article titles, reading
+subheadings and social cards remain Anton. Only the cover instance is shipped; the full variable font and the
 experimental type playground are not included.
 
 Source, retained license, actual axis ranges and output checksums live in
@@ -76,7 +76,7 @@ Font declarations and their consumers have separate owners:
 | --- | --- |
 | Plex Sans and League Mono | `src/components/vf-componenet-rollup/index.scss` |
 | Anton and Science Gothic cover faces | `src/components/vf-componenet-rollup/_kh-cartridge.scss` |
-| Page preloads | `src/site/_includes/layouts/base.njk`: Sans Regular and League Mono variable, plus Anton on cartridge pages and the Science Gothic cover instance on home |
+| Page preloads | `src/site/_includes/layouts/base.njk`: Sans Regular and League Mono variable, plus Anton on cartridge pages and the Science Gothic instance on home, section, profile and utility pages |
 | Standalone social-card faces | `src/site/_includes/layouts/social-card.njk`: Anton and Plex Sans use same-origin asset URLs |
 
 All face URLs use `/assets/kh-font/`. When renaming an asset, update its declaration and each consumer in this table. Social cards are standalone documents, so a font loading correctly in the shared layout does not verify a social card.

@@ -316,7 +316,7 @@
     .kh-cartridge-hello {
       padding: 3rem var(--kh-cart-gutter);
 
-      h2 {
+      h2:not(.kh-shard-heading) {
         font-family: 'Anton', Impact, sans-serif;
         font-size: clamp(2.5rem, 6vw, 4rem);
         font-weight: 400;
