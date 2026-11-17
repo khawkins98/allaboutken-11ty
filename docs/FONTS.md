@@ -14,7 +14,7 @@ The current faces are self-hosted:
 - `IBMPlexSans-Italic.woff2` — 400 italic
 - `IBMPlexSans-SemiBold.woff2` — 600 normal
 - `league-mono/LeagueMono-VF.woff2` — variable weight 100–800 and width 50–200%
-- `science-gothic/ScienceGothic-Cover.woff2` — fixed 750-weight instance for the homepage cover trial
+- `science-gothic/ScienceGothic-Cover.woff2` — fixed 750-weight instance for the homepage cover and opt-in shard headings
 - `Anton-Latin.woff2` — 400 normal, other display headings across the shared site layouts (15 KB; SIL OFL, see the font directory README)
 
 Current controls use Plex Sans 600; code and metadata use League Mono at weight
@@ -47,10 +47,10 @@ it is no longer the globally loaded mono font.
 
 ## Science Gothic cover trial
 
-The homepage cover line uses a fixed, Latin-subset instance of official Science
-Gothic at `wght 750`, `wdth 60`, `slnt -5`, `CTRS 0`. It is about 32 KB and is
-preloaded only on the homepage. Other display headings and social cards remain
-Anton. Only the cover instance is shipped; the full variable font and the
+The homepage cover line and opt-in `.kh-shard-heading` page titles use a fixed,
+Latin-subset instance of official Science Gothic at `wght 750`, `wdth 60`, `slnt -5`, `CTRS 0`. It is about 32 KB and is
+preloaded only on the homepage; shard headings request the same cached file
+through CSS. Other display headings and social cards remain Anton. Only the cover instance is shipped; the full variable font and the
 experimental type playground are not included.
 
 Source, retained license, actual axis ranges and output checksums live in

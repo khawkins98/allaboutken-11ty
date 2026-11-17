@@ -8,7 +8,7 @@ Pinned source commit: `9eae80c1fe8f937e4f7009629c8248a959735c77`.
 The source TTF is `fonts/variable/ScienceGothic[CTRS,slnt,wdth,wght].ttf`.
 Its SHA-256 is `246e4d33a6fcb3846094e5c4c034616f83e9ae10100316df32e2436362deab3d`.
 
-- `ScienceGothic-Cover.woff2`: homepage-only fixed instance at weight 750,
+- `ScienceGothic-Cover.woff2`: fixed instance for the homepage and opt-in shard headings at weight 750,
   width 60, slant -5 and contrast 0; subset to U+0020–024F and U+2000–206F.
   It retains 411 encoded code points. No new outlines are drawn.
 
@@ -23,7 +23,7 @@ python3 scripts/prepare-science-gothic.py
 ```
 
 The script fetches the pinned source and licenses. It adds no authoring
-requirement to the site’s Node build. The homepage cover is a trial; other
+requirement to the site’s Node build. The homepage cover and opt-in shard headings share this instance; other
 display headings and social cards remain Anton.
 
 ## Output checksums

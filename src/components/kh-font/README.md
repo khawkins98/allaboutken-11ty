@@ -111,7 +111,7 @@ card is screenshotted standalone. Update both when filenames change.
 
 ## Science Gothic cover trial
 
-`science-gothic/` contains a small fixed Latin instance used only by the
-homepage cover line. The full variable font is not shipped. Other display
-headings retain Anton. The directory README records official source, retained
+`science-gothic/` contains a small fixed Latin instance used by the homepage
+cover line and opt-in `.kh-shard-heading` page titles. The full variable font
+is not shipped. Other display headings retain Anton. The directory README records official source, retained
 licenses, chosen axes and the preparation command.
