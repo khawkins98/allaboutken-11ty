@@ -1,7 +1,7 @@
 ---
-title: "The interfaces taking shape beyond chat"
+title: "Text gave way to the GUI. What comes next?"
 layout: layouts/post.njk
-teaser: "From Copilot in Microsoft Word to prototypes that combine speech and pointing, the next interface is already taking shape."
+teaser: "For years, learning to use a computer meant learning what to type. Then we learned to point and click. Now that I can ask for almost anything in a chat box, is text the future again?"
 date: 2026-11-25
 tags:
   - posts
@@ -14,23 +14,15 @@ kens_status: draft
 
 {% markdown %}
 
-I was talking about AI today and how easy it’s getting to go from an idea to trying it out without sitting down at a computer. I can type a few lines or talk through what I’m thinking while the idea is still taking shape. In some ways, that’s already the interface. I wrote about [dictating prompts to coding agents](/posts/20260420-let-ai-worry-about-the-code/) earlier this year. I like being able to start before I’ve worked out the whole sentence and change my mind halfway through it.
+When people were still working out how to hold a conversation with a computer, a keyboard and a line of text were a practical place to start. A terminal could print a reply. If I knew the command, I could ask for a list of files or send one to the printer. Knowing what to type was part of knowing how to use the machine.
 
-Soon after that conversation, I came across Lucas F. Costa’s 2018 essay [*In Praise of Plain Text*](https://www.lucasfcosta.com/blog/In-Praise-of-Plaintext). He was writing about what you could do with text and a Unix shell. I started chatting with my computer about how that compares with what I’m doing now, and we followed a few references. I went in thinking about text and voice. I came out curious about what happens when you can talk and still point to the thing you’re working on. That’s how this post started.
-
-In Microsoft Word, you can already select a passage and ask Copilot about it. The highlight tells Copilot which bit you mean. The chat pane gives you room to say why you’re asking. Some of the prototypes I found go further. They let you speak while you point or draw, then show you what the system understood.
-
-> **tl;dr**
->
-> Researchers imagined combining language and pointing decades ago. Today, Microsoft Word connects document selections to chat, and research prototypes are already testing what happens when you speak and point at the same time.
+The Xerox Star team described a different bargain in 1982 as [“seeing and pointing versus remembering and typing”](https://guidebookgallery.org/articles/designingthestaruserinterface/). Put a document on the screen and I can recognize it. Put a printer there too and I can point to where I want the document to go. It’s easy to see why that idea caught on. Decades later, here I am typing into a box again, this time because I can describe what I want in my own words. Does that make text the future again? I doubt it.
 
 ## What Unix and the Mac each got right
 
-Near the end of [The Anti-Mac Interface](https://www.nngroup.com/articles/anti-mac-interface/), Don Gentner and Jakob Nielsen give Unix and the Macintosh their due in consecutive paragraphs. The Unix shell fit programmers who could combine commands to work with a relatively small set of object types, often plain text. The Mac fit people without a programming background who worked with a manageable number of graphical documents. The parts of each interface made sense together for the work people were doing.
+That question was open even in the Macintosh years. In [*The Anti-Mac Interface*](https://www.nngroup.com/articles/anti-mac-interface/) in 1996, Don Gentner and Jakob Nielsen asked what Apple’s interface guidelines had left out. Near the end they give Unix and the Macintosh their due in consecutive paragraphs. A programmer working with text could string Unix commands together to do something nobody had thought to put on a menu. Someone working with a handful of graphical documents could see them on a Mac desktop and move them around. Each made sense for the work people had in front of them.
 
-The Xerox Star team laid out the tradeoff in 1982 as [“seeing and pointing versus remembering and typing”](https://guidebookgallery.org/articles/designingthestaruserinterface/). Put a document on screen and I can recognize it, point at it, and see where it goes when I move it.
-
-Gentner and Nielsen took Apple’s Macintosh guidelines as their starting point in 1996. They asked what capabilities those rules left out and pictured an interface with language, examples, and pointing together. Everyday conversation with a computer seemed remote, so they imagined a more limited language.
+Gentner and Nielsen pictured a computer you could instruct with language, examples, and pointing together. Everyday conversation seemed a stretch at the time, so they imagined a more limited language.
 
 Speech and pointing had already been tried together. In 1980, [Richard Bolt’s *Put-That-There*](https://doi.org/10.1145/800250.807503) let people speak and point to move shapes on a display. The words could stay simple because the gesture gave the system a way to resolve what the person meant.
 
@@ -43,11 +35,15 @@ A chat with a language model can look like a Unix terminal. I type a line and so
 In [Microsoft 365 Copilot in Microsoft Word](https://support.microsoft.com/en-us/word/copilot/chat-with-copilot-about-your-word-document), the document stays in front of you. Select a paragraph and you can ask about that paragraph in the side pane. Selection has become part of how you phrase the question. You don’t have to tell the assistant where on the page to look.
 
 <figure>
-  <img src="/images/blog/after-chat-copilot-in-word.png" width="1038" height="979" loading="lazy" alt="The opening of this post in Microsoft Word, with the Copilot chat pane and suggested questions on the right.">
-  <figcaption class="kh-figure__caption">This post’s draft open in Microsoft Word with the Copilot pane beside it. Used with permission from Microsoft.</figcaption>
+  <img src="/images/blog/after-chat-copilot-in-word.png" width="1038" height="979" loading="lazy" alt="An earlier draft of this post in Microsoft Word, with the Copilot chat pane and suggested questions on the right.">
+  <figcaption class="kh-figure__caption">An earlier draft of this post open in Microsoft Word with the Copilot pane beside it. Used with permission from Microsoft.</figcaption>
 </figure>
 
-With [Office in the Microsoft 365 Copilot app](https://techcommunity.microsoft.com/blog/microsoft-copilot-blog/office-at-ignite-2026-from-apps-to-agentic-system-of-work/4572226), you can go the other way. Start with a request in chat, then click into the Word document it opens alongside the conversation and edit it yourself. I find that reversal more interesting than the position of either pane. You can begin talking through what you need while the document is still taking shape.
+With [Office in the Microsoft 365 Copilot app](https://techcommunity.microsoft.com/blog/microsoft-copilot-blog/office-at-ignite-2026-from-apps-to-agentic-system-of-work/4572226), you can go the other way. Start with a request in chat, then click into the Word document it opens alongside the conversation and edit it yourself. That reversal interests me because sometimes I only find out what I’m making once I’ve started.
+
+Word has always been good at giving me room for that. I can start with a few names, put prices beside them, and make a table when the columns get hard to follow. A few more rows and I find myself wanting to sort by price and work out a total. Somewhere along the way my Word file became a spreadsheet. On another day I might draw the seating plan beside the names and find that the drawing is the part I want to keep.
+
+I’d like that latitude in an AI interface. Opening Word makes a small bet that I’m making a document. Opening a chat makes one too. It assumes the first thing I type is addressed to someone. Sometimes I just want to put a few words down and see where they take me.
 
 ## Speech and sketches in the same workspace
 
@@ -71,15 +67,15 @@ The [VR Mover paper](https://doi.org/10.1145/3746059.3747673) identifies Bolt’
 
 {% marginnote %}Amelia Wattenberger uses Sketchpad, VisiCalc, and Xerox Star as examples in [*Chat is AI’s command line*](https://wattenberger.com/thoughts/ai-is-still-in-its-terminal-era/). In her trip-planning demo, you can drag lunch around on a timeline and see what that does to the rest of the day.{% endmarginnote %}
 
-## A pizza crawl that starts with a sentence
+## What if I could start anywhere on the page?
 
-Here’s one way I can imagine this working. I open a blank page with a place to type and a microphone. I say, “Show me the five nearest pizza places.” A map appears on the page. There’s a small gear on the map, and opening it gives me a few styles I can pick from. Light, dark, terrain. I can see which one makes the streets easiest to read.
+The thing I keep coming back to is a sheet of paper. I can write the names of those pizza places down one side. If Tim asks where the first one is, I can sketch the station in the space beside it and draw the walk from there. Nothing about writing the first name commits the rest of the sheet to being a list.
 
-The same controls give me a place to ask for something more specific. “What’s the shortest walking route that takes in all five?” A line appears on the map and I can see the order it picked. I could just as easily have asked how far apart the places are on average.
+I wonder what the equivalent on a computer would feel like. Imagine I can click anywhere on a blank page and start typing, speak, or insert something I already have. I click near the top and type “Five pizza places near the station”. Halfway through, I realize I’d quite like someone to find them for me. I finish the line, select it and send it to an agent. I could just as easily have pressed Return and carried on writing my own list under that heading.
 
-Then I click beneath the map and type “My pizza crawl” and a note about where to meet. I ask to make the page into a flyer and share it with Tim. When he opens the link, he can change the meeting time himself. The map can still be edited from the flyer if we decide to skip a stop.
+Suppose a map comes back. Looking at the pins, I can see that four places are close together and one is a fair way out. I select the four and ask aloud, “Could we walk between these?” Now the agent has somewhere specific to look. When the route appears, I click beneath it and type “Meet outside the station at six.” That line is for Tim. I’d like to be able to leave it there without the computer answering me.
 
-I can imagine an interface taking shape this way. It starts with something I can say in a sentence, and the things we add to the page bring along the controls we need. I get to decide what I’m making partway through making it.
+By then I’ve more or less made a flyer. I could share the page with Tim, and he could change the meeting time or move a stop. The part I’m still puzzling over is that first line. Its position on the page might give the computer a clue about what I mean, but even I didn’t know where I was going with it until I’d typed half of it. How little interface would it take to leave that choice open? I get to decide what I’m making partway through making it.
 
 ## References
 
