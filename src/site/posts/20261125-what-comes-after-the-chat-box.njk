@@ -69,13 +69,68 @@ The [VR Mover paper](https://doi.org/10.1145/3746059.3747673) identifies Bolt’
 
 ## What if I could start anywhere on the page?
 
-The thing I keep coming back to is a sheet of paper. I can write the names of those pizza places down one side. If Tim asks where the first one is, I can sketch the station in the space beside it and draw the walk from there. Nothing about writing the first name commits the rest of the sheet to being a list.
+The thing I keep coming back to is a sheet of paper. I can write the names of a few pubs down one side. If Tim asks where the first one is, I can sketch the station in the space beside it and draw the walk from there. Nothing about writing the first name commits the rest of the sheet to being a list.
 
-I wonder what the equivalent on a computer would feel like. Imagine I can click anywhere on a blank page and start typing, speak, or insert something I already have. I click near the top and type “Five pizza places near the station”. Halfway through, I realize I’d quite like someone to find them for me. I finish the line, select it and send it to an agent. I could just as easily have pressed Return and carried on writing my own list under that heading.
+I wonder what the equivalent on a computer would feel like. Imagine I can click anywhere on a blank page and start typing, speak, or insert something I already have. I click near the top and type “Five pubs near the station”. Halfway through, I realize I’d quite like someone to find them for me. I finish the line, select it and send it to an agent. I could just as easily have pressed Return and carried on writing my own list under that heading.
 
 Suppose a map comes back. Looking at the pins, I can see that four places are close together and one is a fair way out. I select the four and ask aloud, “Could we walk between these?” Now the agent has somewhere specific to look. When the route appears, I click beneath it and type “Meet outside the station at six.” That line is for Tim. I’d like to be able to leave it there without the computer answering me.
 
-By then I’ve more or less made a flyer. I could share the page with Tim, and he could change the meeting time or move a stop. The part I’m still puzzling over is that first line. Its position on the page might give the computer a clue about what I mean, but even I didn’t know where I was going with it until I’d typed half of it. How little interface would it take to leave that choice open? I get to decide what I’m making partway through making it.
+Seeing the route gives me a better idea of what I want to send Tim. “Make this a flyer for Saturday. Keep the map, but give us somewhere to say where we’re meeting.” Once I see the flyer, I can tell the meeting time is too easy to miss. I select it and make the type bigger.
+
+I’m used to building something like that from the pieces up. Find the addresses, plot the stops, fit the map around the copy. By the time I’ve polished it enough to see the whole thing, changing my mind feels expensive. One thing I like about working with AI is how cheaply I can get a whole first draft in front of me and take it apart again. Sometimes I need to see the thing I asked for before I can tell what I actually want.
+
+If Tim says we should skip the last pub, I’d like him to be able to move the finish on the map himself. A flyer that looks lovely but makes us start over to change the route would lose much of what I liked about the blank page. I get to decide what I’m making partway through making it.
+
+## One shape this could take
+
+Here’s how I imagine the page changing as Tim and I plan our pub crawl.
+
+{% endmarkdown %}
+
+<div class="kh-wireframes">
+  <div class="kh-wireframes__controls" hidden>
+    <button type="button" aria-controls="pub-crawl-frames" disabled>Previous</button>
+    <output aria-live="polite">1 of 9</output>
+    <button type="button" aria-controls="pub-crawl-frames">Next</button>
+  </div>
+  <div class="kh-wireframes__track" id="pub-crawl-frames" role="region" aria-label="Pub crawl wireframes" tabindex="0">
+<figure><img src="/images/blog/pub-crawl/01-begin.png" width="1200" height="1600" loading="lazy" alt="Wireframe 1. Start with a heading on a blank page."><figcaption>Start with a heading on a blank page.</figcaption></figure>
+<figure><img src="/images/blog/pub-crawl/02-hand-to-agent.png" width="1200" height="1600" loading="lazy" alt="Wireframe 2. Select the words and ask the agent for a map."><figcaption>Select the words and ask the agent for a map.</figcaption></figure>
+<figure><img src="/images/blog/pub-crawl/03-choose-stops.png" width="1200" height="1600" loading="lazy" alt="Wireframe 3. Circle four pubs and ask for a walking route."><figcaption>Circle four pubs and ask for a walking route.</figcaption></figure>
+<figure><img src="/images/blog/pub-crawl/04-make-flyer.png" width="1200" height="1600" loading="lazy" alt="Wireframe 4. Turn the route into a flyer, keeping the map."><figcaption>Turn the route into a flyer, keeping the map.</figcaption></figure>
+<figure><img src="/images/blog/pub-crawl/05-add-context.png" width="1200" height="1600" loading="lazy" alt="Wireframe 5. Bring in Tim’s train time and add a meeting note."><figcaption>Bring in Tim’s train time and add a meeting note.</figcaption></figure>
+<figure><img src="/images/blog/pub-crawl/06-edit-detail.png" width="1200" height="1600" loading="lazy" alt="Wireframe 6. Make the time bigger and move a map label."><figcaption>Make the time bigger and move a map label.</figcaption></figure>
+<figure><img src="/images/blog/pub-crawl/07-switch-tools.png" width="1200" height="1600" loading="lazy" alt="Wireframe 7. Switch the itinerary to spreadsheet tools and adjust the timings."><figcaption>Switch the itinerary to spreadsheet tools and adjust the timings.</figcaption></figure>
+<figure><img src="/images/blog/pub-crawl/08-invite-tim.png" width="1200" height="1600" loading="lazy" alt="Wireframe 8. Invite Tim to edit the flyer and move a stop."><figcaption>Invite Tim to edit the flyer and move a stop.</figcaption></figure>
+<figure><img src="/images/blog/pub-crawl/09-remove-access.png" width="1200" height="1600" loading="lazy" alt="Wireframe 9. Remove Tim’s editing access."><figcaption>Remove Tim’s editing access.</figcaption></figure>
+  </div>
+</div>
+<script>
+(() => {
+  const track = document.getElementById('pub-crawl-frames');
+  const controls = track.previousElementSibling;
+  const [previous, next] = controls.querySelectorAll('button');
+  const status = controls.querySelector('output');
+  const count = track.children.length;
+  const current = () => Math.round(track.scrollLeft / track.clientWidth);
+  function update() {
+    const index = current();
+    previous.disabled = index === 0;
+    next.disabled = index >= count - 1;
+    status.value = (index + 1) + ' of ' + count;
+  }
+  function step(direction) {
+    track.scrollTo({ left: (current() + direction) * track.clientWidth });
+  }
+  previous.addEventListener('click', () => step(-1));
+  next.addEventListener('click', () => step(1));
+  track.addEventListener('scroll', update, { passive: true });
+  new ResizeObserver(update).observe(track);
+  controls.hidden = false;
+})();
+</script>
+
+{% markdown %}
 
 ## References
 
