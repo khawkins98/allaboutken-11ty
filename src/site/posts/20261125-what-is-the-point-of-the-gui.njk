@@ -1,0 +1,61 @@
+---
+title: "The text interface I want still has a GUI"
+layout: layouts/post.njk
+teaser: "What if you could talk through a document or photo edit, then get the right controls as soon as you select something?"
+date: 2026-11-25
+tags:
+  - posts
+topics:
+  - UX design
+  - AI
+  - developer tools
+via: 'https://www.lucasfcosta.com/blog/In-Praise-of-Plaintext'
+kens_status: draft
+image: /blog/movable-type-rack.jpg
+image_meta:
+  text: "A divided case of loose letterforms beside an adjustable composing stick."
+  credit: "Draft blockprint illustration (generated for review)."
+  altext: "Woodcut-style print in black ink and warm amber on cream paper showing an angled wooden letterpress job case divided into compartments packed with small metal movable-type letterforms and spacing quads, beside an adjustable metal composing stick with a thumbscrew holding warm amber type blocks and a spacing strip."
+---
+
+{% markdown %}
+
+“Can you turn these notes into a brief for the people who missed the meeting? Put the decision up top and flag what we still need to settle.” I can imagine saying that in a chat box next to the document and talking it through while the draft takes shape. Then I see the phrase “by Friday” buried in a paragraph and decide it should be **bold**. I highlight those two words and the bold button appears right there.
+
+That’s the combination I keep thinking about. We’ve been adding chat boxes to graphical apps. What happens when you start with the chat box and give it a graphical interface? I’d open the conversation first, and once there’s a draft, the document might take up most of my screen. Maybe we can finally have the text interfaces we always wanted and keep the graphical interfaces we’ve spent decades getting good at.
+
+> **tl;dr**
+>
+> I’d like to do more of my work in conversation and have the right controls appear when I select a line of text, a patch of a photo, or whatever I want to change.
+
+## The text interface I had in mind
+
+Lucas F. Costa’s 2018 essay [In Praise of Plain Text](https://www.lucasfcosta.com/blog/In-Praise-of-Plaintext) gets at what I’ve always liked about the shell. I can pull errors out of a log with `grep`, strip the timestamps with `sed`, and count them by type with `awk`. Each program writes text the next one can read. Once I know the tools, I can ask a question nobody designed a screen for.
+
+Chat gives me a different way to ask. Halfway through writing the brief, I might realize the people reading it need to know why we passed on the other option. I can say as much and keep going. I can see the appeal of [Instinct’s](https://instinct.com/) pitch that *“there are no new interfaces.”* A message is already familiar. What’s interesting to me is imagining how much of the work could happen through that familiar interaction.
+
+{% marginnote %}I wrote about a related shift in [Let AI worry about the code, you worry about the work](/posts/20260420-let-ai-worry-about-the-code/). I could describe what I wanted in text and use the project files and diffs to see what the agent had actually done.{% endmarginnote %}
+
+For a long time, if a graphical app was how most people used a tool, its menus, buttons, and dialogs had to carry almost everything. Think about how you’d put the decision up top in a document editor. You can select a paragraph, cut it, find the place it should go, and paste it. Those are useful operations. Sometimes I’m still working out which paragraph even contains the decision. That’s the part I’d like to be able to talk through.
+
+## Where you start
+
+[Gemini in Gmail](https://support.google.com/mail/answer/14355636) and [Copilot in Word](https://support.microsoft.com/en-us/word/copilot/chat-with-copilot-about-your-word-document) put a conversation inside an app you already have open. [ChatGPT Canvas](https://openai.com/index/introducing-canvas/) and [Gemini Canvas](https://blog.google/products-and-platforms/products/gemini/gemini-collaboration-features/) go the other way. Start in a chat interface and open an editable draft when there’s something to work on. Microsoft now does both. [Office inside the Copilot app](https://techcommunity.microsoft.com/blog/microsoft-copilot-blog/office-at-ignite-2026-from-apps-to-agentic-system-of-work/4572226) can open a Word document beside the conversation and let you edit it there.
+
+## What comes up when I select something
+
+The part I like about that little bold button is that it shows up where I’m already looking. Select a phrase and I might get bold, italic, and link. Select a section heading and I might want to change its level. Select a cell in a table and adding a row suddenly makes sense. The selection already tells the editor a lot about what I’m trying to do.
+
+I can imagine a photo editor built around the same idea. I’d type “Cool the colors and bring out the clouds a little” and see how it looks. While I’m looking at the result, I might realize the crop is what’s bothering me. I want just enough room between the cliff and the edge of the frame. I can pull a crop handle and see the effect as I move it. I’d have a hard time describing where that edge should be before I saw it.
+
+## What would it feel like to move between the two
+
+I keep picturing something where the conversation and the work stay together. I could highlight a paragraph and ask “Does this explain why we changed the date?” The selection can tell the editor what “this” means. I could read the answer, change a few words myself, and keep talking about the same draft. I’d want the conversation to pick up from the version I’m looking at, including the changes I made by hand.
+
+There’s a lovely example of pointing and asking in [DirectGPT](https://arxiv.org/abs/2310.03691), a research prototype presented at CHI 2024. You can type “add a line from here to there” and drag two points from the drawing onto the words “here” and “there.” The sentence tells the system what to do. The canvas gives you a way to say exactly where.
+
+Maybe that’s what I mean by text as the primary interface. It’s where I can begin with a question or a half-formed idea. As the work takes shape, I can see it, point to it, change a detail, and carry on. I’m curious how much better the graphical part could get if we designed it for those moments.
+
+Where would you start in conversation, and when would you reach for the controls?
+
+{% endmarkdown %}

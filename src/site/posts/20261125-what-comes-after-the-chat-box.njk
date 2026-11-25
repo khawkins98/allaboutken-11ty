@@ -1,0 +1,99 @@
+---
+title: "The interfaces taking shape beyond chat"
+layout: layouts/post.njk
+teaser: "From Copilot in Microsoft Word to prototypes that combine speech and pointing, the next interface is already taking shape."
+date: 2026-11-25
+tags:
+  - posts
+topics:
+  - UX design
+  - AI
+via: 'https://www.nngroup.com/articles/anti-mac-interface/'
+kens_status: draft
+---
+
+{% markdown %}
+
+I was talking about AI today and how easy it’s getting to go from an idea to trying it out without sitting down at a computer. I can type a few lines or talk through what I’m thinking while the idea is still taking shape. In some ways, that’s already the interface. I wrote about [dictating prompts to coding agents](/posts/20260420-let-ai-worry-about-the-code/) earlier this year. I like being able to start before I’ve worked out the whole sentence and change my mind halfway through it.
+
+Soon after that conversation, I came across Lucas F. Costa’s 2018 essay [*In Praise of Plain Text*](https://www.lucasfcosta.com/blog/In-Praise-of-Plaintext). He was writing about what you could do with text and a Unix shell. I started chatting with my computer about how that compares with what I’m doing now, and we followed a few references. I went in thinking about text and voice. I came out curious about what happens when you can talk and still point to the thing you’re working on. That’s how this post started.
+
+In Microsoft Word, you can already select a passage and ask Copilot about it. The highlight tells Copilot which bit you mean. The chat pane gives you room to say why you’re asking. Some of the prototypes I found go further. They let you speak while you point or draw, then show you what the system understood.
+
+> **tl;dr**
+>
+> Researchers imagined combining language and pointing decades ago. Today, Microsoft Word connects document selections to chat, and research prototypes are already testing what happens when you speak and point at the same time.
+
+## What Unix and the Mac each got right
+
+Near the end of [The Anti-Mac Interface](https://www.nngroup.com/articles/anti-mac-interface/), Don Gentner and Jakob Nielsen give Unix and the Macintosh their due in consecutive paragraphs. The Unix shell fit programmers who could combine commands to work with a relatively small set of object types, often plain text. The Mac fit people without a programming background who worked with a manageable number of graphical documents. The parts of each interface made sense together for the work people were doing.
+
+The Xerox Star team laid out the tradeoff in 1982 as [“seeing and pointing versus remembering and typing”](https://guidebookgallery.org/articles/designingthestaruserinterface/). Put a document on screen and I can recognize it, point at it, and see where it goes when I move it.
+
+Gentner and Nielsen took Apple’s Macintosh guidelines as their starting point in 1996. They asked what capabilities those rules left out and pictured an interface with language, examples, and pointing together. Everyday conversation with a computer seemed remote, so they imagined a more limited language.
+
+Speech and pointing had already been tried together. In 1980, [Richard Bolt’s *Put-That-There*](https://doi.org/10.1145/800250.807503) let people speak and point to move shapes on a display. The words could stay simple because the gesture gave the system a way to resolve what the person meant.
+
+{% marginnote %}A transcript can also miss [what a speaker emphasizes](https://doi.org/10.1111/j.1749-818X.2009.00150.x). “Move the *heading*” and “*Move* the heading” contain the same words, and the emphasis can help a listener tell what’s being corrected.{% endmarginnote %}
+
+A chat with a language model can look like a Unix terminal. I type a line and something comes back. With a shell command, I generally know which operation I want. In chat I can ask for a brief for people who missed a meeting and work out what belongs in it as we go. [Writing about generative AI in 2023, Nielsen](https://www.nngroup.com/articles/ai-paradigm/) expected people to describe outcomes and still use graphical controls to work out the details. You can see that combination in a few different forms today.
+
+## Word and Copilot give you two places to start
+
+In [Microsoft 365 Copilot in Microsoft Word](https://support.microsoft.com/en-us/word/copilot/chat-with-copilot-about-your-word-document), the document stays in front of you. Select a paragraph and you can ask about that paragraph in the side pane. Selection has become part of how you phrase the question. You don’t have to tell the assistant where on the page to look.
+
+<figure>
+  <img src="/images/blog/after-chat-copilot-in-word.png" width="1038" height="979" loading="lazy" alt="The opening of this post in Microsoft Word, with the Copilot chat pane and suggested questions on the right.">
+  <figcaption class="kh-figure__caption">This post’s draft open in Microsoft Word with the Copilot pane beside it. Used with permission from Microsoft.</figcaption>
+</figure>
+
+With [Office in the Microsoft 365 Copilot app](https://techcommunity.microsoft.com/blog/microsoft-copilot-blog/office-at-ignite-2026-from-apps-to-agentic-system-of-work/4572226), you can go the other way. Start with a request in chat, then click into the Word document it opens alongside the conversation and edit it yourself. I find that reversal more interesting than the position of either pane. You can begin talking through what you need while the document is still taking shape.
+
+## Speech and sketches in the same workspace
+
+In [SketchGPT](https://zaynehuang.github.io/SketchGPT/), a prototype presented at UIST 2025, you can draw directly over an app while speaking. In the paper’s travel example, someone traces the route they have in mind and sketches a table for the itinerary. They explain aloud what should go in it. The system turns the request into a list of proposed actions for the person to check before it takes them.
+
+<figure>
+  <a href="/images/blog/after-chat-sketchgpt.webp"><img src="/images/blog/after-chat-sketchgpt.webp" width="1200" height="369" loading="lazy" alt="SketchGPT overview showing a spoken request and a red sketch over a map and document, followed by a checklist of proposed actions and the resulting route and itinerary."></a>
+  <figcaption class="kh-figure__caption">SketchGPT combines a spoken request, map markings, and a hand-drawn table, then shows its proposed actions for confirmation. Figure 1 by Huang et al., <a href="https://doi.org/10.1145/3746059.3747598">UIST 2025</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</figcaption>
+</figure>
+
+The sketch can say where the table should go, and the voice can say what it should contain. I can imagine getting an answer faster by doing both at once. The confirmation step also gives me somewhere to look if the system mistakes a rough mark for something I wanted it to draw.
+
+## Moving things by asking and by hand
+
+The [VR Mover paper](https://doi.org/10.1145/3746059.3747673) identifies Bolt’s *Put-That-There* as its closest precedent. In [one VR Mover demo](https://vr-mover.github.io/), you can point out three destinations in a virtual room and tell the system to move three chairs there. The researchers found that participants liked speech and pointing for broad moves and could still reach for the manipulation handles or use virtual hands for finer adjustments.
+
+<figure>
+  <a href="/images/blog/after-chat-vr-mover.jpg"><img src="/images/blog/after-chat-vr-mover.jpg" width="1406" height="301" loading="lazy" alt="VR Mover screenshots show a cactus moving to a marked spot and three chairs moving from a row into positions around a table after a spoken instruction."></a>
+  <figcaption class="kh-figure__caption">The blue markers show where the person pointed while speaking. The final view shows the three chairs around the table. Figure 2, excerpt from Wang and Sin et al., <a href="https://doi.org/10.1145/3746059.3747673">UIST 2025</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</figcaption>
+</figure>
+
+{% marginnote %}Amelia Wattenberger uses Sketchpad, VisiCalc, and Xerox Star as examples in [*Chat is AI’s command line*](https://wattenberger.com/thoughts/ai-is-still-in-its-terminal-era/). In her trip-planning demo, you can drag lunch around on a timeline and see what that does to the rest of the day.{% endmarginnote %}
+
+## A pizza crawl that starts with a sentence
+
+Here’s one way I can imagine this working. I open a blank page with a place to type and a microphone. I say, “Show me the five nearest pizza places.” A map appears on the page. There’s a small gear on the map, and opening it gives me a few styles I can pick from. Light, dark, terrain. I can see which one makes the streets easiest to read.
+
+The same controls give me a place to ask for something more specific. “What’s the shortest walking route that takes in all five?” A line appears on the map and I can see the order it picked. I could just as easily have asked how far apart the places are on average.
+
+Then I click beneath the map and type “My pizza crawl” and a note about where to meet. I ask to make the page into a flyer and share it with Tim. When he opens the link, he can change the meeting time himself. The map can still be edited from the flyer if we decide to skip a stop.
+
+I can imagine an interface taking shape this way. It starts with something I can say in a sentence, and the things we add to the page bring along the controls we need. I get to decide what I’m making partway through making it.
+
+## References
+
+- Ken Hawkins, [Let AI worry about the code, you worry about the work](/posts/20260420-let-ai-worry-about-the-code/) (April 20, 2026).
+- Lucas Fernandes da Costa, [In Praise of Plain Text](https://www.lucasfcosta.com/blog/In-Praise-of-Plaintext) (August 5, 2018).
+- Don Gentner and Jakob Nielsen, [The Anti-Mac Interface](https://www.nngroup.com/articles/anti-mac-interface/) (August 1996).
+- David Canfield Smith, Charles Irby, Ralph Kimball, Bill Verplank, and Eric Harslem, [Designing the Star User Interface](https://guidebookgallery.org/articles/designingthestaruserinterface/) (April 1982).
+- Richard A. Bolt, [“Put-that-there”: Voice and gesture at the graphics interface](https://www.media.mit.edu/speech/papers/1980/bolt_SIGGRAPH80_put-that-there.pdf) (SIGGRAPH 1980).
+- Katy Carlson, [How Prosody Influences Sentence Comprehension](https://doi.org/10.1111/j.1749-818X.2009.00150.x) (September 10, 2009).
+- Jakob Nielsen, [AI: First New UI Paradigm in 60 Years](https://www.nngroup.com/articles/ai-paradigm/) (June 18, 2023).
+- Microsoft Support, [Chat with Copilot about your Word document](https://support.microsoft.com/en-us/word/copilot/chat-with-copilot-about-your-word-document).
+- Sumit Chauhan, [Office at Ignite 2026: From apps to agentic system of work](https://techcommunity.microsoft.com/blog/microsoft-copilot-blog/office-at-ignite-2026-from-apps-to-agentic-system-of-work/4572226) (November 17, 2026).
+- Zeyuan Huang et al., [SketchGPT: A Sketch-based Multimodal Interface for Application-Agnostic LLM Interaction](https://doi.org/10.1145/3746059.3747598) (UIST 2025).
+- Xiangzhi Eric Wang, Zackary P. T. Sin, Ye Jia, Daniel Archer, Wynonna H. Y. Fong, Qing Li, and Chen Li, [Can You Move These Over There? Exploring an LLM-based VR Mover to Support Natural Multi-object Manipulation](https://doi.org/10.1145/3746059.3747673) (UIST 2025).
+- Amelia Wattenberger, [Chat is AI’s command line](https://wattenberger.com/thoughts/ai-is-still-in-its-terminal-era/).
+
+{% endmarkdown %}
