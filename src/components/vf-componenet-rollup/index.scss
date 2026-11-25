@@ -999,25 +999,6 @@ body:has(#kh-css-toggle:checked) {
     padding-left: 0.5em;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    :is(h1, h2, h3, h4, h5, h6):target {
-      animation: kh-target-pop 0.4s ease-out;
-    }
-  }
-
-  @keyframes kh-target-pop {
-    0% {
-      opacity: 0;
-      letter-spacing: 0.3em;
-      transform: scale(0.95);
-    }
-    100% {
-      opacity: 1;
-      letter-spacing: normal;
-      transform: scale(1);
-    }
-  }
-
   // The smallest heading step. The CV's employer line is an <h3> under the
   // role's <h2>; it was an <h4> (skipping a level) with this class, which
   // then did not exist, so it rendered with the browser's own h4 defaults.
