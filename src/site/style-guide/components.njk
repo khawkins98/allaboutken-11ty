@@ -25,7 +25,7 @@ The [design guide palette](/style-guide/design/#palette) records contrast and co
 <h2 id="typography">Typography</h2>
 <p class="kh-reference-display">Make it make sense.</p>
 {% markdown %}
-The homepage cover is trying Science Gothic; Anton 400 remains the display voice elsewhere. IBM Plex Sans 400/600 handles reading and interfaces; League Mono 400 at normal width handles code and metadata. Copy stays sentence case; display uppercase is CSS. The [design guide](/style-guide/design/#type) describes the hierarchy and [font assets](#font-variations) lists loaded faces.
+The homepage cover is trying Science Gothic; Anton 400 remains the display voice elsewhere. IBM Plex Sans 400/600 handles reading and interfaces; League Mono 400 at normal width handles code and metadata. Display typography preserves authored casing. The [design guide](/style-guide/design/#type) describes the hierarchy and [font assets](#font-variations) lists loaded faces.
 
 Page-title typography is selected by the page family, not by adding a heavier font weight. Standard titles grow to 4.5rem; utility, note and photo titles are smaller. Long-form reading uses 18px and about 62ch, reducing to 17px on small screens.
 {% endmarkdown %}
@@ -96,7 +96,7 @@ The datasheet class names remain stable. Their current presentation uses cobalt 
 {% endcodeAndDemo %}
 {% markdown %}
 - `.kh-section-head` aligns a heading and supporting metadata; it can wrap.
-- `.kh-panel` groups related rows on white with a 2px ink frame and a 4px cobalt offset shadow. Internal rules stay light so the values remain easy to scan. `.kh-panel__row` and `.kh-panel__cell` supply the structure; `.kh-panel__label` names a value in uppercase cobalt mono. Direct navigation links use Sans 600. Keep the cells upright and preserve wrapping at narrow widths.
+- `.kh-panel` groups related rows on white with a 2px ink frame and a 4px cobalt offset shadow. Internal rules stay light so the values remain easy to scan. `.kh-panel__row` and `.kh-panel__cell` supply the structure; `.kh-panel__label` names a value in cobalt mono. Direct navigation links use Sans 600. Keep the cells upright and preserve wrapping at narrow widths.
 - Use [tables](#tables) when comparison requires column headings. A panel is not a substitute for table semantics.
 - Navigation, entry footers and bylines are repeated chrome. Put `data-pagefind-ignore` on the wrapper so their content does not leak into Pagefind or embeddings.
 
@@ -113,7 +113,7 @@ Sources: `_kh-datasheet.scss` for the stable primitives; `_kh-cartridge-system.s
 {% markdown %}
 Use the [interface vocabulary](/style-guide/editorial/#interface-vocabulary) for destination names and deliberate context-specific labels. Keep labels in sentence case; descriptions should add information rather than repeat the heading.
 
-`.kh-cartridge-kicker`, `.kh-meta` and `.kh-panel__label` are supporting labels. They must remain readable without hover. Put an explanation next to a data mark when its meaning would otherwise depend on a tooltip. Preserve proper names and acronyms; do not author all-caps text just because its display style is uppercase.
+`.kh-cartridge-kicker`, `.kh-meta` and `.kh-panel__label` are supporting labels. They must remain readable without hover. Put an explanation next to a data mark when its meaning would otherwise depend on a tooltip. Preserve the casing of proper names and acronyms.
 {% endmarkdown %}
 
 <h2 id="buttons">Buttons and links</h2>

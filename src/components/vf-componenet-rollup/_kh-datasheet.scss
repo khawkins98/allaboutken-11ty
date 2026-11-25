@@ -22,11 +22,11 @@
   // between cells, which is where it belongs.
   --kh-panel-bg: #ffffff;
   // Micro-type ink. The global grey (#707372) is only 4.6:1 on a light
-  // ground — legally AA but squinty at 11–12px letterspaced mono caps.
+  // ground — legally AA but squinty at 11–12px letterspaced mono.
   // This darker grey clears 6:1 at the sizes the datasheet register uses.
   --kh-ink-muted: #5b5e5a;
 
-  // Shared mono treatment: uppercase, letterspaced, small.
+  // Shared mono font for supporting labels.
   .kh-meta,
   .kh-section-number,
   .kh-table--spec th,

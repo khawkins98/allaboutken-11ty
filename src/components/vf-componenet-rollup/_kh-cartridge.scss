@@ -97,7 +97,6 @@
       letter-spacing: 0.06em;
       line-height: 1.5;
       margin: 0;
-      text-transform: uppercase;
     }
 
     .kh-cartridge-links {
@@ -172,7 +171,6 @@
       line-height: 1.1;
       margin: 2rem 0 1.75rem;
       overflow-wrap: anywhere;
-      text-transform: uppercase;
 
       span { display: block; }
       span + span { color: var(--kh-cart-blue); }
@@ -190,7 +188,6 @@
       overflow-wrap: anywhere;
       padding: 0.65rem 0.9rem;
       position: relative;
-      text-transform: uppercase;
       transform: rotate(-3deg);
 
       &::after {
@@ -311,7 +308,6 @@
         line-height: 1.15;
         margin: 0;
         overflow-wrap: anywhere;
-        text-transform: uppercase;
       }
 
       > a { font-size: 0.9375rem; padding: 0.5rem 0; }
@@ -339,7 +335,6 @@
         line-height: 1.1;
         margin: 1rem 0;
         overflow-wrap: anywhere;
-        text-transform: uppercase;
       }
     }
 
@@ -469,7 +464,6 @@
         margin: 1.5rem 0;
         max-width: 22ch;
         padding: 0;
-        text-transform: uppercase;
         text-wrap: balance;
       }
     }
@@ -508,7 +502,6 @@
       font-family: 'Anton', Impact, sans-serif;
       font-size: 1.375rem;
       line-height: 1.3;
-      text-transform: uppercase;
     }
     .kh-cartridge-contents__count { color: var(--kh-cart-yellow); font-family: var(--kh-font-mono); font-size: 0.75rem; }
     .kh-cartridge-contents > summary:focus-visible { outline: 3px solid var(--kh-cart-yellow); outline-offset: -3px; }
